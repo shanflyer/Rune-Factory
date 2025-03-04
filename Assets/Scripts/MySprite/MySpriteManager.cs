@@ -82,10 +82,10 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
 
     private Mesh GetCachedMesh(int spriteId, Sprite sprite)
     {
-        if (!_meshCache.TryGetValue(spriteId, out Mesh mesh))
+        if (!_meshCache.TryGetValue(spriteId, out Mesh mesh)||mesh==null)
         {
             mesh = GenerateSpriteMesh(sprite);
-            _meshCache.Add(spriteId, mesh);
+            _meshCache[spriteId]=( mesh);
         }
         return mesh;
     }
@@ -206,16 +206,12 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
 
     private Material GetCachedMaterial(string materialKey, Material template, Sprite sprite)
     {
-        if (!_materialCache.TryGetValue(materialKey, out Material material))
+        if (!_materialCache.TryGetValue(materialKey, out Material material)||material==null)
         {
             material = CreateMaterialInstance(template, sprite);
-            _materialCache.Add(materialKey, material);
+            _materialCache[materialKey]=( material);
         }
-        else if(material==null)
-        {
-            material = CreateMaterialInstance(template, sprite);
-            _materialCache[materialKey]= material;
-        }
+        
         return material;
     }
 

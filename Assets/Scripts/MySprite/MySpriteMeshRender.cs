@@ -16,7 +16,9 @@ public class MySpriteMeshRender : MonoBehaviour
     [SerializeField]
     private MeshFilter meshFilter; 
     public Sprite m_Sprite;
-   
+
+    public SpriteDrawMode spriteDrawMode;
+    public Vector2 size;
     public Color m_Color;
     public Material m_Material; 
 

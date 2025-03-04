@@ -90,9 +90,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3174954702341050146}
-  - component: {fileID: 4760664915824442905}
-  - component: {fileID: 2848453374419158120}
-  - component: {fileID: 6764719156171972648}
+  - component: {fileID: 2770143036718523204}
+  - component: {fileID: 7958378919627457867}
+  - component: {fileID: 7364115999848672509}
   m_Layer: 0
   m_Name: Fantasy_Inside_C_81
   m_TagString: Untagged
@@ -115,7 +115,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1338490302544845120}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &4760664915824442905
+--- !u!33 &2770143036718523204
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,7 +123,7 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5742763532583889102}
   m_Mesh: {fileID: 0}
---- !u!23 &2848453374419158120
+--- !u!23 &7958378919627457867
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -168,7 +168,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &6764719156171972648
+--- !u!114 &7364115999848672509
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -180,9 +180,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81693969fa2bcc042b7a70b6048adc23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 2848453374419158120}
-  meshFilter: {fileID: 4760664915824442905}
+  meshRenderer: {fileID: 7958378919627457867}
+  meshFilter: {fileID: 2770143036718523204}
   m_Sprite: {fileID: 884247309, guid: 6a334efa69d47b54399183793d2533b0, type: 3}
+  spriteDrawMode: 0
+  size: {x: 0, y: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 4b4599894d31c6b4d884bd1956eb5c28, type: 2}
 --- !u!1 &5897834390069368572

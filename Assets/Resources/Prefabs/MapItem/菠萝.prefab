@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8598005076155170691}
-  - component: {fileID: 684581483395977709}
-  - component: {fileID: 5958713154466130380}
-  - component: {fileID: 1411338060311089178}
+  - component: {fileID: 2794196347444508149}
+  - component: {fileID: 3385662547090989333}
+  - component: {fileID: 1815577437869540545}
   m_Layer: 0
   m_Name: plant
   m_TagString: Untagged
@@ -34,7 +34,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3386766173613667027}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &684581483395977709
+--- !u!33 &2794196347444508149
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,7 +42,7 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 39899345743770075}
   m_Mesh: {fileID: 0}
---- !u!23 &5958713154466130380
+--- !u!23 &3385662547090989333
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -87,7 +87,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1411338060311089178
+--- !u!114 &1815577437869540545
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -99,9 +99,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81693969fa2bcc042b7a70b6048adc23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 5958713154466130380}
-  meshFilter: {fileID: 684581483395977709}
+  meshRenderer: {fileID: 3385662547090989333}
+  meshFilter: {fileID: 2794196347444508149}
   m_Sprite: {fileID: -1103268352, guid: 9791060f00594594ab14708ac6079198, type: 3}
+  spriteDrawMode: 0
+  size: {x: 0, y: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 3b9d8dab0f093974583f4859f993bca0, type: 2}
 --- !u!1 &4599621554569531071

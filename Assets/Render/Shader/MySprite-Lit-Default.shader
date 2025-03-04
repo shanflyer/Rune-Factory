@@ -10,14 +10,12 @@ Shader "MySprite-Lit-Default"
         [Toggle(SNOWBLEND)]_SnowBlend("_SnowBlend",int)=1
         [Toggle(SEASONCOLORBLEND)]seasonColorBlend("seasonColorBlend",int)=0
         [Toggle(SHADOWSTEP)]_shadowStep("ShadowStep",int)=0 
-
-        ObjPos("ObjPos",vector)=(0,0,0,0)
-        [Toggle]NativePos("NativePos",int)=1
+  
         _MainTex("Diffuse", 2D) = "white" {} 
         _MoveMask("_MoveMask", 2D) = "black" {}
         _SnowTex("_SnowTex", 2D) = "black" {}
         _ZWrite("ZWrite", Float) = 0
-
+        _ObjectWorldPos("_ObjectWorldPos",vector)=(0,0,0,0)
         [Toggle]_Character("Character",int)=0
         [Toggle]_HideNormal("HideNormal",int)=0
 
@@ -171,8 +169,7 @@ Shader "MySprite-Lit-Default"
             int _Character;    
             int _Damp;
             int _HideNormal;
-
-            half3 ObjPos;
+ 
             int NativePos;
 
             half3 _PlantSpringColor1;
@@ -182,6 +179,8 @@ Shader "MySprite-Lit-Default"
             half3 _PlantWinterColor;
             half3 _PlantWinterColor1; 
             float _PlantAutumnNoiseScale;  
+
+            float3 _ObjectWorldPos;
               
             half _WetValue; 
 
@@ -1105,7 +1104,10 @@ Shader "MySprite-Lit-Default"
             Varyings UnlitVertex(Attributes attributes)
             {
                 Varyings o = (Varyings)0;
-                 ObjPos=unity_ObjectToWorld._m03_m13_m23; 
+                int stepSetPos=step(0.001,abs(_ObjectWorldPos.x))+step(0.001,abs(_ObjectWorldPos.y))+step(0.001,abs(_ObjectWorldPos.z));
+                stepSetPos=step(0.001,stepSetPos);
+
+                 float3 ObjPos=unity_ObjectToWorld._m03_m13_m23*(1-stepSetPos)+stepSetPos*_ObjectWorldPos; 
                 float3 objWroldPos=TransformObjectToWorld(attributes.positionOS);
                 UNITY_SETUP_INSTANCE_ID(attributes);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
@@ -1120,10 +1122,10 @@ Shader "MySprite-Lit-Default"
                 o.uv = attributes.uv;
 
                 
-                float stepPosZ=1-step(100,ObjPos.z);
+                float stepPosZ=step(ObjPos.z,-10);
 
                 float3 _objSortPos=ObjPos; 
-                //_objSortPos.y+=_objSortPos.z*stepPosZ;
+                 _objSortPos.y+=_objSortPos.z*stepPosZ;
  
 
                 float4 worldClip=TransformWorldToHClip(_objSortPos); 

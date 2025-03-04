@@ -143,9 +143,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5789041611420219704}
-  - component: {fileID: 5048871791517925697}
-  - component: {fileID: 1752365930568819959}
-  - component: {fileID: 5134850972023506656}
+  - component: {fileID: 7029920605817314988}
+  - component: {fileID: 6190948070171728754}
+  - component: {fileID: 1923349052583109569}
   m_Layer: 0
   m_Name: "\u571F\u57300"
   m_TagString: Untagged
@@ -168,7 +168,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8643313050109250891}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &5048871791517925697
+--- !u!33 &7029920605817314988
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -176,7 +176,7 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8169847904864884313}
   m_Mesh: {fileID: 0}
---- !u!23 &1752365930568819959
+--- !u!23 &6190948070171728754
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -221,7 +221,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &5134850972023506656
+--- !u!114 &1923349052583109569
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -233,8 +233,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81693969fa2bcc042b7a70b6048adc23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 1752365930568819959}
-  meshFilter: {fileID: 5048871791517925697}
+  meshRenderer: {fileID: 6190948070171728754}
+  meshFilter: {fileID: 7029920605817314988}
   m_Sprite: {fileID: -1901556687, guid: 6a334efa69d47b54399183793d2533b0, type: 3}
+  spriteDrawMode: 0
+  size: {x: 0, y: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 1219d22ab875e9c4d85d39c3a727be81, type: 2}

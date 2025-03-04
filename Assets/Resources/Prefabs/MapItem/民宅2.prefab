@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1627740019278377705}
-  - component: {fileID: 7384221653783323797}
-  - component: {fileID: 4155835066383163616}
-  - component: {fileID: 6529905836204441864}
+  - component: {fileID: 2497008183540700726}
+  - component: {fileID: 1385441856036462974}
+  - component: {fileID: 973884314984257407}
   m_Layer: 0
   m_Name: house13
   m_TagString: Untagged
@@ -34,7 +34,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7654754194014765414}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &7384221653783323797
+--- !u!33 &2497008183540700726
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,7 +42,7 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 657517718641954333}
   m_Mesh: {fileID: 0}
---- !u!23 &4155835066383163616
+--- !u!23 &1385441856036462974
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -87,7 +87,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &6529905836204441864
+--- !u!114 &973884314984257407
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -99,9 +99,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81693969fa2bcc042b7a70b6048adc23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 4155835066383163616}
-  meshFilter: {fileID: 7384221653783323797}
+  meshRenderer: {fileID: 1385441856036462974}
+  meshFilter: {fileID: 2497008183540700726}
   m_Sprite: {fileID: 21300000, guid: a00e4d8d5eedd094685579821234725b, type: 3}
+  spriteDrawMode: 0
+  size: {x: 0, y: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 2dc112915dc3cb74c9cfcc6707cac796, type: 2}
 --- !u!1 &3170880627950606095

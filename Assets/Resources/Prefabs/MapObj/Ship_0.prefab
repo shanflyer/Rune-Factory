@@ -171,9 +171,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3196484616946101553}
-  - component: {fileID: 8907555570272018902}
-  - component: {fileID: 8497884609902892765}
-  - component: {fileID: 9221133479998718259}
+  - component: {fileID: 1297728923665510248}
+  - component: {fileID: 2236787792924904509}
+  - component: {fileID: 727162131908503134}
   m_Layer: 0
   m_Name: Ship_0
   m_TagString: Untagged
@@ -197,7 +197,7 @@ Transform:
   - {fileID: 9066262240910323335}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &8907555570272018902
+--- !u!33 &1297728923665510248
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -205,7 +205,7 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4580407853973024958}
   m_Mesh: {fileID: 0}
---- !u!23 &8497884609902892765
+--- !u!23 &2236787792924904509
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -250,7 +250,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &9221133479998718259
+--- !u!114 &727162131908503134
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -262,8 +262,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81693969fa2bcc042b7a70b6048adc23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 8497884609902892765}
-  meshFilter: {fileID: 8907555570272018902}
+  meshRenderer: {fileID: 2236787792924904509}
+  meshFilter: {fileID: 1297728923665510248}
   m_Sprite: {fileID: 21300000, guid: 5b28657e68e8cef43a3d32f93c8e1b44, type: 3}
+  spriteDrawMode: 0
+  size: {x: 0, y: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 4b4599894d31c6b4d884bd1956eb5c28, type: 2}

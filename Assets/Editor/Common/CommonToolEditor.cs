@@ -169,6 +169,10 @@ public class CommonToolEditor : MyEditor
         {
             RemoveMissComp();
         }
+        if (GUILayout.Button("增加 spriteRenderer SetPos"))
+        {
+            AddSpriteRendererSet();
+        }
         /*
         if (GUILayout.Button("USE_SHAPE_LIGHT_TYPE_0"))
         {
@@ -368,6 +372,10 @@ public class CommonToolEditor : MyEditor
                     {
                         continue;
                     }
+                    if (spriteRenders[j].drawMode != SpriteDrawMode.Simple)
+                    {
+                        continue;
+                    }
                     GameObject s_obj = spriteRenders[j].gameObject;
                     Sprite sprite = spriteRenders[j].sprite;
                     Material material = spriteRenders[j].sharedMaterial;
@@ -388,7 +396,54 @@ public class CommonToolEditor : MyEditor
         }
        
     }
+    public void AddSpriteRendererSet()
+    {
+        DirectoryInfo directoryInfo = new DirectoryInfo(objPath);
+        try
+        {
+            AssetDatabase.StartAssetEditing();
+            var files = directoryInfo.GetFiles("*.Prefab");
+            for (int i = 0; i < files.Length; i++)
+            {
+                var file = files[i];
+                var prefabPath = objPath + file.Name;
+                GameObject gameObject = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
 
+                HashSet<SpriteRenderer> lightSpriteRenders = new HashSet<SpriteRenderer>();
+                GameObject _obj = (GameObject)PrefabUtility.InstantiatePrefab(gameObject);
+                var myLights = _obj.GetComponentsInChildren<MyLight>(true);
+                foreach (var myLight in myLights)
+                {
+                    foreach (var r in myLight.spriteRenderers)
+                    {
+                        lightSpriteRenders.Add(r);
+                    }
+                }
+                var spriteRenders = _obj.GetComponentsInChildren<SpriteRenderer>(true);
+                for (int j = 0; j < spriteRenders.Length; j++)
+                {
+                    if (lightSpriteRenders.Contains(spriteRenders[j]))
+                    {
+                        continue;
+                    }
+                    if (spriteRenders[j].TryGetComponent(out MyLightSprite myLightSprite))
+                    {
+                        continue;
+                    }
+                   
+                    GameObject s_obj = spriteRenders[j].gameObject;
+                    s_obj.AddComponent<TileSpriteRendererPosSet>();
+                }
+                PrefabUtility.SaveAsPrefabAssetAndConnect(_obj, prefabPath, InteractionMode.AutomatedAction);
+                DestroyImmediate(_obj);
+            }
+        }
+        finally
+        {
+            AssetDatabase.StopAssetEditing();
+        }
+
+    }
     void AddObjPosData(string path)
     {
         LayerMask lightLayer = LayerMask.NameToLayer("Light");

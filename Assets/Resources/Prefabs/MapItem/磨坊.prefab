@@ -44,9 +44,9 @@ GameObject:
   - component: {fileID: 5231624885735469566}
   - component: {fileID: 4201842972042564917}
   - component: {fileID: 6447469239305189594}
-  - component: {fileID: 4271457308978205962}
-  - component: {fileID: 9042400499506482544}
-  - component: {fileID: 8700471338340847245}
+  - component: {fileID: 9099624241691348273}
+  - component: {fileID: 1923359933398791880}
+  - component: {fileID: 8746133943644797475}
   m_Layer: 0
   m_Name: "\u98CE\u8F66"
   m_TagString: Untagged
@@ -174,7 +174,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!33 &4271457308978205962
+--- !u!33 &9099624241691348273
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -182,7 +182,7 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 456585997907594719}
   m_Mesh: {fileID: 0}
---- !u!23 &9042400499506482544
+--- !u!23 &1923359933398791880
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -227,7 +227,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8700471338340847245
+--- !u!114 &8746133943644797475
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -239,9 +239,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81693969fa2bcc042b7a70b6048adc23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 9042400499506482544}
-  meshFilter: {fileID: 4271457308978205962}
+  meshRenderer: {fileID: 1923359933398791880}
+  meshFilter: {fileID: 9099624241691348273}
   m_Sprite: {fileID: 21300000, guid: b44fdf0c15513cc48837f3cafbffe73b, type: 3}
+  spriteDrawMode: 0
+  size: {x: 0, y: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 2dc112915dc3cb74c9cfcc6707cac796, type: 2}
 --- !u!1 &650120453062876898
@@ -802,9 +804,9 @@ GameObject:
   - component: {fileID: 5538714906074543720}
   - component: {fileID: 2922357018365549600}
   - component: {fileID: 1974775173355596240}
-  - component: {fileID: 6437015588002907205}
-  - component: {fileID: 1936772290032081813}
-  - component: {fileID: 1871633281261055259}
+  - component: {fileID: 531646206209060154}
+  - component: {fileID: 2218102477169575851}
+  - component: {fileID: 8264645355259193336}
   m_Layer: 0
   m_Name: feng1
   m_TagString: Untagged
@@ -976,7 +978,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!33 &6437015588002907205
+--- !u!33 &531646206209060154
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -984,7 +986,7 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4281667528620425341}
   m_Mesh: {fileID: 0}
---- !u!23 &1936772290032081813
+--- !u!23 &2218102477169575851
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1029,7 +1031,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &1871633281261055259
+--- !u!114 &8264645355259193336
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1041,9 +1043,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81693969fa2bcc042b7a70b6048adc23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 1936772290032081813}
-  meshFilter: {fileID: 6437015588002907205}
+  meshRenderer: {fileID: 2218102477169575851}
+  meshFilter: {fileID: 531646206209060154}
   m_Sprite: {fileID: 21300000, guid: 426d8852d95c7f246ac931e505369f6a, type: 3}
+  spriteDrawMode: 0
+  size: {x: 0, y: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 4b4599894d31c6b4d884bd1956eb5c28, type: 2}
 --- !u!1 &4554996731971633586
