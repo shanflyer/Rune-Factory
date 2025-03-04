@@ -627,6 +627,19 @@ public class GameTimeManager : Singleton<GameTimeManager>
 #if UNITY_EDITOR
 
 #endif
+
+    public float timeLightValue
+    {
+        get
+        {
+            if (night)
+            {
+              float value=1.0f-math.abs(Day - 15) / 15.0f;
+                return math.lerp(0.6f, 1.2f, value);
+            }
+            return 1;
+        }
+    }
     public bool night => nowGameTime.night;
     public float timeValue => nowGameTime.TimeValue;
     public float SeasonValue => nowGameTime.SeasonValue;

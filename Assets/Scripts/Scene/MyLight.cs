@@ -78,7 +78,11 @@ public class MyLight : MonoBehaviour
             _intensity = value;
             float weatherLight = 0;
             if (Application.isPlaying)
+            {
                 weatherLight = EnvironmentManger.instance.weatherLight + EnvironmentManger.instance.lightningLight;
+                weatherLight *= GameTimeManager.instance.timeLightValue;
+            }
+                
             
             float trueValue= blendWeatherLight ? value * weatherLight : value;
             if (myLightBase != null)

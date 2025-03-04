@@ -61,18 +61,20 @@ public struct Weather
         float waterFallValue = 1.0f - waterFall * 4;
         waterFallValue = waterFallValue < 0 ? 0 : waterFallValue;
 
+        float timelightValue = GameTimeManager.instance.timeLightValue;
+
         if (fogValue > cloudValue || fogValue > waterFallValue)
         {
             if (cloudValue > waterFallValue)
             {
-                return waterFallValue;
+                return waterFallValue* timelightValue;
             }
             else
             {
-                return cloudValue;
+                return cloudValue * timelightValue; ;
             }
         }
-        return fogValue;
+        return fogValue * timelightValue;
     }
 }
 
