@@ -11,6 +11,8 @@ public class MyTalkPanel : GamePanel<IReferenceData>
     [SerializeField]
     Button Rate, Share, Committer, Help0, Help1, Help2;
     [SerializeField]
+    Button about, developer;
+    [SerializeField]
     Button CloseBtn;
     protected override void Awake()
     {
@@ -34,6 +36,14 @@ public class MyTalkPanel : GamePanel<IReferenceData>
         Help2.onClick.AddListener(() =>
         {
             AppStoreManager.instance.BuyProduct("help2");
+        });
+        about.onClick.AddListener(() =>
+        {
+            UIManager.instance.ShowGamePanel<AboutPanel>();
+        });
+        developer.onClick.AddListener(() =>
+        {
+            UIManager.instance.ShowGamePanel<DeveloperPanel>();
         });
 
         CloseBtn.onClick.AddListener(Close);
@@ -59,7 +69,9 @@ public class MyTalkPanel : GamePanel<IReferenceData>
         Committer = FindChildGameObject<Button>("Committer");
         Help0 = FindChildGameObject<Button>("Help0");
         Help1 = FindChildGameObject<Button>("Help1"); 
-        Help2 = FindChildGameObject<Button>("Help2"); 
+        Help2 = FindChildGameObject<Button>("Help2");
+        about = FindChildGameObject<Button>("About");
+        developer = FindChildGameObject<Button>("Developer");
     }
     public override void InitReferenceData(IReferenceData v)
     {
