@@ -10,7 +10,7 @@ Shader "MySprite-Lit-Default"
         [Toggle(SNOWBLEND)]_SnowBlend("_SnowBlend",int)=1
         [Toggle(SEASONCOLORBLEND)]seasonColorBlend("seasonColorBlend",int)=0
         [Toggle(SHADOWSTEP)]_shadowStep("ShadowStep",int)=0 
-  
+        _FixedColor("FixedColor",color)=(1,1,1,0)
         _MainTex("Diffuse", 2D) = "white" {} 
         _MoveMask("_MoveMask", 2D) = "black" {}
         _SnowTex("_SnowTex", 2D) = "black" {}
@@ -169,6 +169,7 @@ Shader "MySprite-Lit-Default"
             int _Character;    
             int _Damp;
             int _HideNormal;
+            float4 _FixedColor;
  
             int NativePos;
 
@@ -747,7 +748,7 @@ Shader "MySprite-Lit-Default"
                 #endif
 
                 
-               
+                result.xyz=result.xyz*(1-_FixedColor.a)+_FixedColor.xyz*_FixedColor.a;
 
                 return result;
             }

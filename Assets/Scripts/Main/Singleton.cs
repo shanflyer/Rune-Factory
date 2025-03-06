@@ -12,24 +12,37 @@ public class Singleton<T> where T : Singleton<T>
     {
         get
         {
-            if (_instance == null&&!SingletonType.Cleared)
+            if (Application.isPlaying)
             {
-                _instance = Activator.CreateInstance<T>();
-                _instance.Init();
-                if (typeof(T) != typeof(SingletonType))
-                { 
-                    SingletonType.instance.AddType(_instance.Clear);
+                if (_instance == null && !SingletonType.Cleared)
+                {
+                    _instance = Activator.CreateInstance<T>();
+                    _instance.Init();
+                    if (typeof(T) != typeof(SingletonType))
+                    {
+                        SingletonType.instance.AddType(_instance.Clear);
 
-                    if (_instance.NeedUpdata)
-                    {
-                        SingletonType.instance.AddUpDataAction(_instance.UpData);
+                        if (_instance.NeedUpdata)
+                        {
+                            SingletonType.instance.AddUpDataAction(_instance.UpData);
+                        }
+                        if (_instance.NeedLateUpdata)
+                        {
+                            SingletonType.instance.AddUpDataAction(_instance.LateUpData);
+                        }
                     }
-                    if (_instance.NeedLateUpdata)
-                    {
-                        SingletonType.instance.AddUpDataAction(_instance.LateUpData);
-                    }
-                } 
+                }
             }
+            else
+            {
+                if (_instance == null)
+                {
+                    _instance = Activator.CreateInstance<T>();
+                    _instance.Init();
+                   
+                }
+            }
+           
             return _instance;
         }
     }
