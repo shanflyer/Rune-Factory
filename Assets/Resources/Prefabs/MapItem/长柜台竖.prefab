@@ -436,7 +436,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   myLightBase:
-  - {fileID: 5473556141480656321}
+  - {fileID: 5930306204431377133}
   spriteRenderers: []
   autoLerpValue: 0
   lerpCurve:
@@ -706,7 +706,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0.73524946, b: 0.37647057, a: 0}
+      maxColor: {r: 1, g: 0.73524946, b: 0.37647057, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -5896,7 +5896,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0.48343477, b: 0.25098038, a: 0}
+      maxColor: {r: 1, g: 0.48343477, b: 0.25098038, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -10675,7 +10675,7 @@ Transform:
   m_GameObject: {fileID: 7685996310917025428}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.071, y: 0.887, z: -0.47}
+  m_LocalPosition: {x: -0.071, y: 0.887, z: -0.93}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10941,7 +10941,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 1, b: 1, a: 0}
+      maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -15637,7 +15637,7 @@ GameObject:
   - component: {fileID: 3630805441765422670}
   - component: {fileID: 6070884530495204560}
   - component: {fileID: 7164711077455247654}
-  - component: {fileID: 5473556141480656321}
+  - component: {fileID: 5930306204431377133}
   m_Layer: 19
   m_Name: MyLight
   m_TagString: Untagged
@@ -15722,7 +15722,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 1cccd65aaa134f0479883fd0fddcf51e, type: 3}
-  m_Color: {r: 0.99215686, g: 0.7199573, b: 0.023529433, a: 0}
+  m_Color: {r: 0.99215686, g: 0.7199573, b: 0.023529433, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -15732,7 +15732,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5473556141480656321
+--- !u!114 &5930306204431377133
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -15744,7 +15744,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cb9f8b531408e64f8f80dc988c77516, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: {r: 0.99215686, g: 0.7199573, b: 0.023529433, a: 0}
+  color: {r: 0.99215686, g: 0.7199573, b: 0.023529433, a: 1}
   intensity: 1
   value: 1
   renderer: {fileID: 7164711077455247654}

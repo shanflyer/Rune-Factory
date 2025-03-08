@@ -196,6 +196,8 @@ public class MyLight : MonoBehaviour
                 }
             }
         }
+        if (lerpPs)
+            psValue = psCurve.Evaluate(value);
     }
 #endif
     private void Awake()

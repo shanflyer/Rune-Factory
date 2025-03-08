@@ -26,9 +26,9 @@ public class MyLightBase : MonoBehaviour
             if (!fixedColor&&color != value)
             {
                 color = value;
-                RefreshColor();
+              
             }
-            
+            RefreshColor();
         }
     }
     public float Intensity
@@ -39,9 +39,9 @@ public class MyLightBase : MonoBehaviour
             if (intensity != value)
             {
                 intensity = value;
-                RefreshColor();
+              
             }
-           
+            RefreshColor();
         }
     }
     public float Value
