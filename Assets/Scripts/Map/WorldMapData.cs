@@ -80,6 +80,6 @@ public class LinkMapCell
     public List<Direction> directions=new List<Direction>();
     public List<int> girds=new List<int>();
     public int3 targetCell;
-    public int beforAction, afterAction, checkAction;
+    public int beforeAction, afterAction, checkAction;
 
 }

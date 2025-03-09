@@ -104,7 +104,7 @@ public class WorldInstanceEditor : MonoBehaviour
             mapLine.map1 = map1;
 
             mapLine.cells0.girds = new List<int>();
-            mapLine.cells0.targetCell = new int3(coordinate1.xy, map1);
+            mapLine.cells0.targetCell = new int3(coordinate1.xy, map1); 
 
             List<int2> cells = new List<int2>();
             for (int x = tilemap0.cellBounds.min.x; x<= tilemap0.cellBounds.max.x; x++)

@@ -1323,7 +1323,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 {
                     ControllerRuntimeObj = null;
                 }
-                Debug.Log($"{character.name}--SetObjCoordinate:RecycleCharacterOb");
+                //Debug.Log($"{character.name}--SetObjCoordinate:RecycleCharacterOb");
             }
             else 
             {
@@ -1342,7 +1342,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 };
                 GameActionManager.instance.QueueAction(refreshMapTempCharacter);
 
-                Debug.Log($"{character.name}--SetObjCoordinate:{WorldMapObjManager.instance.displayMap}");
+               // Debug.Log($"{character.name}--SetObjCoordinate:{WorldMapObjManager.instance.displayMap}");
             }
         }
         else

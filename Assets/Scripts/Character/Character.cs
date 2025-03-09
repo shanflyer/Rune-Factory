@@ -1042,7 +1042,7 @@ public partial class Character
     {
         MapCellController.instance.SetCharacterCoordinate(objCoordinate, coordinate, instanceId,this is TempCharacter);
         objCoordinate = coordinate;
-        Debug.Log($"{name}--SetObjCoordinate:{coordinate}");
+        //Debug.Log($"{name}--SetObjCoordinate:{coordinate}");
         if (mapInstance == WorldMapObjManager.instance.displayMap)
         {
             if(CharacterManager.instance.GetRuntimeCharacterObj(instanceId,out var characterRuntimeObj))

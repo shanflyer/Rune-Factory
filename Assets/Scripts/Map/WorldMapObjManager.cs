@@ -391,6 +391,10 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             return;
         }
         RecycleMap();
+
+        ClearTempCharacter clearTempCharacter = new ClearTempCharacter();
+        GameActionManager.instance.QueueAction(clearTempCharacter, true);
+
         mapDisplayCompleted.Clear();
         displayMap = mapId;
         DisplayMapRoomData = WorldMapManager.instance.GetWorldMap(mapId).mapRoomData;
@@ -417,8 +421,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         }
         else
         {
-            ClearTempCharacter clearTempCharacter = new ClearTempCharacter();
-            GameActionManager.instance.QueueAction(clearTempCharacter, true);
+            
         } 
         string dataId = DisplayMapRoomData.name;
         SetMapOverrideEnvirmentData(DisplayMapRoomData);

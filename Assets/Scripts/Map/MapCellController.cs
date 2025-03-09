@@ -488,7 +488,7 @@ public class MapCellController : Singleton<MapCellController>
             int4 target = new int4(linkMapCell.targetCell.xyz, directionValue);
             linkMaps.Add(target);
 
-            int3 linkAction = new int3(linkMapCell.beforAction, linkMapCell.afterAction, linkMapCell.checkAction);
+            int3 linkAction = new int3(linkMapCell.beforeAction, linkMapCell.afterAction, linkMapCell.checkAction);
             linkActions.Add(linkAction);
 
             var cells = GameCommon.GridToCells(linkMapCell.girds);
