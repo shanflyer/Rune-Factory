@@ -728,7 +728,7 @@ public class Teamer
             queueCoordinate.Enqueue(targetCoordinate);
         }
         character.SetCoordinate(coordinate);
-       await CharacterManager.instance.RefreshNpcRuntimeObj(character);
+       //await CharacterManager.instance.RefreshNpcRuntimeObj(character);
         canMove = true;
     }
 

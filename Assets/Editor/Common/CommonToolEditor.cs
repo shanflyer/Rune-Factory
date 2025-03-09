@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using TMPro;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -165,6 +166,10 @@ public class CommonToolEditor : MyEditor
         {
             ReplaceSpriteAnimation();
         }
+        if (GUILayout.Button("增加角色 scale 动画"))
+        {
+            AddSpriteScaleAnimation();
+        }
         if (GUILayout.Button("移除miss"))
         {
             RemoveMissComp();
@@ -194,7 +199,77 @@ public class CommonToolEditor : MyEditor
     }
     string objPath = "";
     bool staticObj = true;
+    public void AddSpriteScaleAnimation()
+    {
+        DirectoryInfo directoryInfo = new DirectoryInfo(objPath);
+        try
+        {
+            AssetDatabase.StartAssetEditing();
+            var files = directoryInfo.GetFiles("*.anim");
+            for (int i = 0; i < files.Length; i++)
+            {
+                var file = files[i];
+                var prefabPath = objPath + file.Name;
 
+                AnimationClip animationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(prefabPath);
+                SetAnimation(animationClip);
+
+            }
+            var dirs = directoryInfo.GetDirectories();
+            foreach (var d in dirs)
+            {
+                var files1 = d.GetFiles("*.anim");
+                for (int i = 0; i < files1.Length; i++)
+                {
+                    var file = files1[i];
+                    var prefabPath = objPath + d.Name + "/" + file.Name;
+
+                    AnimationClip animationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(prefabPath);
+                    SetAnimation(animationClip);
+
+                }
+            }
+
+
+            void SetAnimation(AnimationClip animationClip)
+            {
+                if (animationClip.name.Contains("_Left"))
+                {
+                    return;
+                }
+                if (animationClip.name.Contains("_Right"))
+                {
+                    return;
+                }
+
+                EditorCurveBinding editorCurveBinding = new EditorCurveBinding
+                {
+                    type = typeof(Transform),
+                    path = "Body",
+                    propertyName = "m_LocalScale.x",
+                };
+                Keyframe[] keyframes = new Keyframe[]
+                {
+                    new Keyframe
+                    {
+                        time=0,
+                        value=1
+                    }
+                };
+                AnimationCurve animationCurve = new AnimationCurve
+                {
+                    keys = keyframes
+                }; AnimationUtility.SetEditorCurve(animationClip, editorCurveBinding, animationCurve);
+
+                
+                AssetDatabase.SaveAssets();
+            }
+        }
+        finally
+        {
+            AssetDatabase.StopAssetEditing();
+        }
+    }
     public void ReplaceSpriteAnimation()
     {
         DirectoryInfo directoryInfo = new DirectoryInfo(objPath);

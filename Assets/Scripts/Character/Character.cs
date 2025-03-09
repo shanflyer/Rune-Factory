@@ -577,7 +577,7 @@ public delegate void SetCoordinate(int3 coordinate);
 
 public partial class Character
 {
-    private bool isController = false;
+    public bool isController { get; private set; }
     public int linkItem;
     private int oldOperateItem = -1;
     public int OperateItem => oldOperateItem;
@@ -1042,6 +1042,7 @@ public partial class Character
     {
         MapCellController.instance.SetCharacterCoordinate(objCoordinate, coordinate, instanceId,this is TempCharacter);
         objCoordinate = coordinate;
+        Debug.Log($"{name}--SetObjCoordinate:{coordinate}");
         if (mapInstance == WorldMapObjManager.instance.displayMap)
         {
             if(CharacterManager.instance.GetRuntimeCharacterObj(instanceId,out var characterRuntimeObj))
@@ -1485,7 +1486,7 @@ public partial class Character
     /// 设置坐标
     /// </summary>
     /// <param name="coordinate">x.y;z:地图id</param>
-    public void SetCoordinate(int3 coordinate)
+    public void SetCoordinate(int3 coordinate,bool refreshObj=true)
     {
         //int2 forwordCoordinate = objCoordinate.xy + 2 * GameCommon.GetDirectionInt2(direction);
         int2 oldCoordinate = objCoordinate.xy;
@@ -1512,6 +1513,7 @@ public partial class Character
             }
             OldOperaCoordinate = new int2(int.MinValue);
             oldCoordinate = new int2(int.MinValue);
+
         }
 
         MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.角色, coordinate.z, oldCoordinate, coordinate.xy,
@@ -1562,6 +1564,11 @@ public partial class Character
         };
         GameActionManager.instance.QueueAction(characterCoordinateTrigger,true);
 
+        if (refreshObj)
+        {
+             CharacterManager.instance.RefreshNpcRuntimeObj(this,isController);
+        }
+       
         // ForwardTrigger(coordinate, direction);
     }
 

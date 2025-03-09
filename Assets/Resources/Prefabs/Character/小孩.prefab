@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8581832333269530833}
-  - component: {fileID: 2776153828061835269}
   - component: {fileID: 3722928096558111017}
   - component: {fileID: 4659814911951214621}
   - component: {fileID: 2439471328249530556}
@@ -35,18 +34,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1631447705804832246}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2776153828061835269
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 849007315591018107}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc2f98ace6e5f9e4fbe0b5d243047118, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!33 &3722928096558111017
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -115,6 +102,8 @@ MonoBehaviour:
   meshRenderer: {fileID: 4659814911951214621}
   meshFilter: {fileID: 3722928096558111017}
   m_Sprite: {fileID: 0}
+  spriteDrawMode: 0
+  size: {x: 0, y: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 030119b467e4ba9419897fd36907df50, type: 2}
 --- !u!1 &3772394811102255317
@@ -192,7 +181,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7165454924907264627}
-  - component: {fileID: 3634300868856939019}
   - component: {fileID: 2290679038814746855}
   - component: {fileID: 8512671643569288721}
   - component: {fileID: 3673697413285148077}
@@ -218,18 +206,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1631447705804832246}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3634300868856939019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5680701891326196286}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc2f98ace6e5f9e4fbe0b5d243047118, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!33 &2290679038814746855
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -298,6 +274,8 @@ MonoBehaviour:
   meshRenderer: {fileID: 8512671643569288721}
   meshFilter: {fileID: 2290679038814746855}
   m_Sprite: {fileID: 0}
+  spriteDrawMode: 0
+  size: {x: 0, y: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 030119b467e4ba9419897fd36907df50, type: 2}
 --- !u!1 &5703859903360848564
@@ -5580,7 +5558,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7678441389988501486}
-  - component: {fileID: 7219171026831985495}
   - component: {fileID: 5395253493039477795}
   - component: {fileID: 559700985609382992}
   - component: {fileID: 1087061997593482317}
@@ -5606,18 +5583,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4848406602977469395}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7219171026831985495
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8415289123400944408}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc2f98ace6e5f9e4fbe0b5d243047118, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!33 &5395253493039477795
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -5686,6 +5651,8 @@ MonoBehaviour:
   meshRenderer: {fileID: 559700985609382992}
   meshFilter: {fileID: 5395253493039477795}
   m_Sprite: {fileID: 1593534495, guid: 8616b105253e2bb47a66c4376728e5f6, type: 3}
+  spriteDrawMode: 0
+  size: {x: 0, y: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 678dbbf72f56eb541a7c99271f122b4f, type: 2}
 --- !u!1 &8830565433104509572

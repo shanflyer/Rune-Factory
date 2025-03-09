@@ -89,7 +89,7 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
             equip.Translate(offset);
             shadow.Translate(offset);
 
-            GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj, false);
+            GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj, true);
         }
     }
 

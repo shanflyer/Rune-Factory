@@ -3,6 +3,7 @@ using BehaviorDesigner.Runtime.Tasks;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using static MapCellController;
 
 [TaskCategory("Game/Map")]
@@ -56,6 +57,7 @@ public class GetACoordinateForCharacter : Action
     {
         int2 coordinate = int2.zero;
         int mapInstance = 0;
+        Character character=null;
         switch (entityType)
         {
             case EntityType.地图道具:
@@ -68,7 +70,7 @@ public class GetACoordinateForCharacter : Action
                 break;
 
             case EntityType.角色:
-                Character character = CharacterManager.instance.GetCharacter(characterId.Value);
+                character = CharacterManager.instance.GetCharacter(characterId.Value);
                 coordinate = character.coordinate;
                 mapInstance = character.mapInstance;
                 break;
@@ -117,7 +119,7 @@ public class GetACoordinateForCharacter : Action
                 }
                 results.Value = resultValue;
             }
-
+           // Debug.LogError($"{character.name}--behaviorTree:{Owner.ExternalBehavior.name}--{Owner.BehaviorName}-results.Value.Coun:{results.Value.Count}");
             return TaskStatus.Success;
         }
 

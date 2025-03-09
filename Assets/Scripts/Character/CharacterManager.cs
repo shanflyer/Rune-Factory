@@ -194,7 +194,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 characterId = character.instanceId
             };
             GameActionManager.instance.QueueAction(reStartCharacterBehavior);
-           await RefreshNpcRuntimeObj(character);
+            //await RefreshNpcRuntimeObj(character);
 
             if (ChangeCharacterNewMap.setResult != null)
             {
@@ -243,7 +243,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
             character.RemoveMove();
             character.SetCoordinate(new int3(targetCoordinate, character.mapInstance));
-           await RefreshNpcRuntimeObj(character);
+            //await RefreshNpcRuntimeObj(character);
 
             if (setCharacterRandomCoordinate.setResult != null)
             {
@@ -269,7 +269,7 @@ public class CharacterManager : Singleton<CharacterManager>
             {
                 character.SetCoordinate(new int3(targetCoordinate, character.mapInstance));
 
-              await  RefreshNpcRuntimeObj(character);
+             // await  RefreshNpcRuntimeObj(character);
             }
 
             if (SetCharacterRandomPos.setResult != null)
@@ -804,7 +804,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             character.SetCoordinate(setCharacterCoordinate.coordinate);
 
-           await RefreshNpcRuntimeObj(character);
+           //await RefreshNpcRuntimeObj(character);
         }
     }
 
@@ -1130,7 +1130,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 lerpTime = GameCommon.mapChangeLerpTime
             };
             GameActionManager.instance.QueueAction(lerpScreenCycleValue, true);
-            character.SetCoordinate(new int3(targetCoordinate, targetMap));
+            character.SetCoordinate(new int3(targetCoordinate, targetMap),false);
 
             GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), async () =>
             { 
@@ -1191,7 +1191,7 @@ public class CharacterManager : Singleton<CharacterManager>
     public bool CrossMap(int2 targetCoordinate, Character character, out int3 newMap, MoveEndAction EndAction = null)
     {
         // int2 offsetCoordinate = targetCoordinate - character.coordinate;
-        character.SetCoordinate(new int3(targetCoordinate.xy, character.mapInstance));
+        character.SetCoordinate(new int3(targetCoordinate.xy, character.mapInstance), !character.isController);
 
         if (character.CanMoveCrossMap)
         {
@@ -1261,20 +1261,7 @@ public class CharacterManager : Singleton<CharacterManager>
         return null;
     }
 
-    private async void CreatePlayer(CharacterSaveData characterSaveData)
-    {
-        CharacterData characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(characterSaveData.dataId);
-        ProfessionData professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(characterData.profession);
-        player = new Player(characterData, characterSaveData.instanceId, professionData);
-        player.SetCoordinate(new int3(int2.zero, WorldMapObjManager.instance.displayMap));
-        controllerCharacter = player;
-        AddCharacter(player);
-
-        //BehaviorTree behaviorTree = BehaviorManager.Instance.CreatBehaviorTree(GameManager.instance.testTreeData);
-        /*
-        RuntimeObj runtimeObj=await GameRuntimeObjManager.Instance.CreatCharacterRuntimeObj(player);
-        characterRuntionObjs.Add(player, runtimeObj); */
-    }
+ 
   
     public async Task CreateNpc(MapNpcData mapNpcData)
     {
@@ -1291,7 +1278,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 characterDataToInstances[character.dataId] = character.instanceId;
             }
             character.SetCoordinate(new int3(mapNpcData.beginCoordinate, mapNpcData.beginMap));
-            await RefreshNpcRuntimeObj(character);  
+           // await RefreshNpcRuntimeObj(character);  
         }
 
         /*
@@ -1336,8 +1323,9 @@ public class CharacterManager : Singleton<CharacterManager>
                 {
                     ControllerRuntimeObj = null;
                 }
+                Debug.Log($"{character.name}--SetObjCoordinate:RecycleCharacterOb");
             }
-            else
+            else 
             {
                 Vector3 pos = GameCommon.GetMapPos(character.coordinate);
                 var transform = characterRuntimeObj.transform;
@@ -1353,6 +1341,8 @@ public class CharacterManager : Singleton<CharacterManager>
                     characterId = character.instanceId,
                 };
                 GameActionManager.instance.QueueAction(refreshMapTempCharacter);
+
+                Debug.Log($"{character.name}--SetObjCoordinate:{WorldMapObjManager.instance.displayMap}");
             }
         }
         else
