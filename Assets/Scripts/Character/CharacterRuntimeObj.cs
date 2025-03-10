@@ -182,7 +182,7 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
         equip.localPosition = offset;
         offset = shadow.localPosition;
         offset.z = 0;
-        shadow.localPosition = offset;
+        shadow.localPosition = offset; 
 
         /*if(runtimeObj!=null)
             EnvironmentManger.instance.AddCharacterGetFootStep(runtimeObj.linkId, characterGetFootStep);*/

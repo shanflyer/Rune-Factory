@@ -188,7 +188,7 @@ public class GameGuideManager:Singleton<GameGuideManager>
         if (guidSelectableDic.TryGetValue(nowGuideSelectableId, out var selectable))
         {
             selectable.HideSelected = true;
-            Debug.Log($"指引点击01!!-");
+            //Debug.Log($"指引点击01!!-");
             if (selectable is Button button)
             {
                 button.OnPointerClick();

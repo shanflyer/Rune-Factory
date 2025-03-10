@@ -543,6 +543,7 @@ public struct ChangeCharacter : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+ 
 
 /// <summary>
 /// 设置角色动画
@@ -1506,16 +1507,21 @@ public struct SetDirection : GameAction
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int characterId;
     public float2 direction;
+    public Direction directionEnum;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
-        if (parameters.Count > 0)
+        if (parameters.Count > 2)
         {
-            direction.x = float.Parse(parameters[0].value);
+            characterId = int.Parse(parameters[0].value);
+            direction.x = float.Parse(parameters[1].value);
+            direction.y = float.Parse(parameters[2].value);
         }
+        else
         if (parameters.Count > 1)
         {
-            direction.y = float.Parse(parameters[1].value);
+            characterId = int.Parse(parameters[0].value);
+            directionEnum= (Direction)int.Parse(parameters[1].value); 
         }
 
         GameActionManager.instance.QueueAction(this, immediately);

@@ -200,7 +200,7 @@ public class FilmController : Singleton<FilmController>
             film.playableDirector.Pause();
         }
     }
-
+    RefreshMapCamera refreshMapCamera;
     async Task CreatAndPlayFilm(string filmName,string assetName)
     {
         FilmData filmData=await GameDataManager.instance.GetAsyncData<FilmData>(filmName);
@@ -224,7 +224,7 @@ public class FilmController : Singleton<FilmController>
                         if (UIManager.instance != null)
                             UIManager.instance.SetFilmUI(false);
                          
-                        GameActionManager.instance.QueueAction(default(RefreshMapCamera));
+                        GameActionManager.instance.QueueAction(refreshMapCamera);
                     } 
                 };
                 var assetData = filmData.GetTimeLineAsset(assetName);

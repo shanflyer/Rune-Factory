@@ -339,7 +339,7 @@ public class CharacterManager : Singleton<CharacterManager>
             }
         }
         
-        if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
+        if (character!=null&&characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
         {
             characterRuntimeObj.gameObject.SetActive(displayOrHideCharacter.display);
         }
@@ -799,11 +799,11 @@ public class CharacterManager : Singleton<CharacterManager>
     private async void SetCharacterCoordinate(SetCharacterCoordinate setCharacterCoordinate)
     {
         Character character = GetCharacter(setCharacterCoordinate.characterId);
-        character.RemoveMove();
+       
         if (character != null)
         {
-            character.SetCoordinate(setCharacterCoordinate.coordinate);
-
+            character.RemoveMove();
+            character.SetCoordinate(setCharacterCoordinate.coordinate); 
            //await RefreshNpcRuntimeObj(character);
         }
     }
@@ -1709,9 +1709,22 @@ public class CharacterManager : Singleton<CharacterManager>
 
     private void SetDirection(SetDirection SetCharacterDirection)
     {
-        if (characters.TryGetValue(SetCharacterDirection.characterId, out var character))
+        Character character = controllerCharacter;
+        if (SetCharacterDirection.characterId != 0)
         {
-            character.moveDirection = SetCharacterDirection.direction;
+            characters.TryGetValue(SetCharacterDirection.characterId, out character);
+        }
+        if (character!=null)
+        {
+            if (SetCharacterDirection.directionEnum != Direction.Default)
+            {
+                character.SetDirection(SetCharacterDirection.directionEnum);
+            }
+            else
+            {
+                character.moveDirection = SetCharacterDirection.direction;
+            }
+           
         }
     }
 }

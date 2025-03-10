@@ -153,6 +153,7 @@ public class WorldMapController : MonoBehaviour
         yield return 0;
         if (GameController.instance.startPlay)
         {
+            NPCManager.instance.CreateZeroNPC();
             GameActionManager.instance.QueueAction(new SwitchInputMap { UI = false });
         }
         yield return 0;

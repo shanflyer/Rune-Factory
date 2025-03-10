@@ -71,7 +71,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
 
     private async void NextAction()
     {
-        Debug.Log("Talk:NextAction!!!");
+       // Debug.Log("Talk:NextAction!!!");
         nextButton.interactable = false;
         var actionData = await GameDataManager.instance.GetAsyncData<GameActionData>(talkData.actionId.ToString());
         if (actionData != null)
@@ -85,13 +85,17 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
 
     private async void SelectNPCFunctionData(NPCFunctionData NPCFunctionData, bool selected = true)
     {
-       /* HidePanel hidePanel = new HidePanel
+        /* HidePanel hidePanel = new HidePanel
+         {
+             hide = true,
+             type = typeof(TalkPanel)
+         };
+         GameActionManager.instance.QueueAction(hidePanel);*/
+        if (NPCFunctionData.closeTalk)
         {
-            hide = true,
-            type = typeof(TalkPanel)
-        };
-        GameActionManager.instance.QueueAction(hidePanel);*/
-
+            UIManager.instance.CloseGamePanel<TalkPanel>();
+            UIManager.instance.CloseGamePanel<Team>();
+        }
         List<EventReferenceData> eventReferenceDatas = new List<EventReferenceData>();
 
         EventReferenceData eventReferenceData = new EventReferenceData
@@ -108,11 +112,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
         eventReferenceDatas.Add(targetReferenceData);
         var GameEventData = await GameDataManager.instance.GetAsyncData<GameEventData>(NPCFunctionData.OperateAction);
         GameEventManager.instance.AddGameEvent(GameEventData, eventReferenceDatas);
-        if (NPCFunctionData.closeTalk)
-        {
-            UIManager.instance.CloseGamePanel<TalkPanel>();
-            UIManager.instance.CloseGamePanel<Team>();
-        }
+        
     }
 
     public override void InitReferenceData(NPCTalkOperateData v)

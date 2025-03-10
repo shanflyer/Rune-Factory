@@ -379,7 +379,7 @@ public class UIManager : Singleton<UIManager>
 
     private async void OpenPanel(OpenPanelAction openPanelEvent)
     {
-        Debug.Log($"OpenPanelAction :{openPanelEvent.type}");
+        //Debug.Log($"OpenPanelAction :{openPanelEvent.type}");
         await ShowGamePanel(openPanelEvent.type, openPanelEvent.dataId);
     }
 
