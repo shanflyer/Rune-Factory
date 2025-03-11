@@ -31,8 +31,8 @@ public class MapItemData : ScriptableObject, IGameData
     public bool displayTips = true;
     public string playerOperateInfo;
 
-    public Vector2 offsetLinkPos;
-    public Vector2 leftLinkPos, rightLinkPos;
+    public Vector3 offsetLinkPos;
+    public Vector3 leftLinkPos, rightLinkPos;
     public Direction linkDirection;
     public string GetName()
     {

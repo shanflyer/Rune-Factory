@@ -163,6 +163,8 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
             if (speed > 0)
             {
                 animator.speed = animationSpeed;
+                //animator.SetBool(CharacterAnimatorParameter.Set, false);
+               // animator.SetBool(CharacterAnimatorParameter.Fish,false);
             }
         }
         this.speed = animationSpeed;

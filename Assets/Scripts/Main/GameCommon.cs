@@ -74,6 +74,8 @@ public enum FightRuntimeObjType
 
 public static class CharacterAnimatorParameter
 {
+    public static int Fish = Animator.StringToHash("Fish");
+    public static int Set = Animator.StringToHash("Set");
     public static int Speed = Animator.StringToHash("Speed");
     public static int Dir_X = Animator.StringToHash("Dir_X");
     public static int Dir_Y = Animator.StringToHash("Dir_Y");

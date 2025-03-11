@@ -236,7 +236,7 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
     {
         material.SetTexture("_MainTex", sprite.texture);
         SecondarySpriteTexture[] secondarySpriteTextures = new SecondarySpriteTexture[sprite.GetSecondaryTextureCount()];
-        if (secondarySpriteTextures == null && secondarySpriteTextures.Length == 0)
+        if (secondarySpriteTextures.Length == 0)
         {
             return;
         }

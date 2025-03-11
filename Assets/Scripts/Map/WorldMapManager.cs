@@ -186,17 +186,17 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 };
                 if (runtimeMapItem.leftCharacter == character.instanceId)
                 {
-                    setCharacterTempPos.pos = runtimeMapItem.mapItemData.leftLinkPos + runtimeMapItem.pos;
+                    setCharacterTempPos.pos = runtimeMapItem.mapItemData.leftLinkPos +(Vector3) runtimeMapItem.pos;
                     GameActionManager.instance.QueueAction(setCharacterTempPos);
                 }
                 else if (runtimeMapItem.rightCharacter == character.instanceId)
                 {
-                    setCharacterTempPos.pos = runtimeMapItem.mapItemData.rightLinkPos+ runtimeMapItem.pos;
+                    setCharacterTempPos.pos = runtimeMapItem.mapItemData.rightLinkPos+ (Vector3)runtimeMapItem.pos;
                     GameActionManager.instance.QueueAction(setCharacterTempPos);
                 }
                 else if (runtimeMapItem.linkCharacter == character.instanceId)
                 {
-                    setCharacterTempPos.pos = runtimeMapItem.mapItemData.offsetLinkPos + runtimeMapItem.pos;
+                    setCharacterTempPos.pos = runtimeMapItem.mapItemData.offsetLinkPos + (Vector3)runtimeMapItem.pos;
                     GameActionManager.instance.QueueAction(setCharacterTempPos);
                 }
                 character.SetDirection(runtimeMapItem.mapItemData.linkDirection);
@@ -1219,11 +1219,11 @@ public class RuntimeMapItem : INativeData
         operateDatas = new List<int>();
         EventReferenceData = new Dictionary<string, int>();
 
-        if (mapItemData.leftLinkPos == Vector2.zero)
+        if (mapItemData.leftLinkPos == Vector3.zero)
         {
             leftCharacter = -1;
         }
-        if (mapItemData.rightLinkPos == Vector2.zero)
+        if (mapItemData.rightLinkPos == Vector3.zero)
         {
             rightCharacter = -1;
         }
