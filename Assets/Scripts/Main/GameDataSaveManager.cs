@@ -273,7 +273,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         string saveDataPath = $"{DataPath.gameSaveDataPath}{"/"}{userName}";
         if (File.Exists(saveDataPath))
         {
-            LoadDataSuccess = true;
+           
             string dataStr = File.ReadAllText(saveDataPath);
             UserGameSaveDataList userGameSaveDataList = null;
             try
@@ -769,7 +769,8 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         CloudServices.RemoveKey(GameCommon.BlendString(keyStr, "specialMapItemList"));
     }
     public void LoadCloudData()
-    { 
+    {
+        LoadDataSuccess = true;
         userGameSaveDataList = new UserGameSaveDataList();
         int diamond = CloudServices.GetInt("diamond");
         userGameSaveDataList.commonSaveData = new CommonSaveData

@@ -16,7 +16,7 @@ public class CameraManager : Singleton<CameraManager>
     private CinemachineCamera fixedCamera;
     private CinemachineCamera[] followCameras;
     private CinemachineConfiner2D confiner2D;
-
+    private CinemachineCameraOffset cameraOffset;
     private CinemachineCameraOffset[] CinemachineCameraOffsets;
     AudioListener cameraAudioListener;
 
@@ -48,6 +48,7 @@ public class CameraManager : Singleton<CameraManager>
             (CinemachineCamera)mixingCamera.ChildCameras[2]
         };
         fixedCamera = (CinemachineCamera)mixingCamera.ChildCameras[3];
+        cameraOffset = fixedCamera.GetComponent<CinemachineCameraOffset>();
         confiner2D = mixingCamera.GetComponentInChildren<CinemachineConfiner2D>();
         CinemachineCameraOffsets = new CinemachineCameraOffset[3]
         {
@@ -221,7 +222,9 @@ public class CameraManager : Singleton<CameraManager>
                 {
                     fixedCamera.transform.position = followCameras[0].transform.position;
                 }
+               
             }
+            cameraOffset.Offset = setFixedCamera.offsetPos;
             confiner2D.enabled = false;
             //confiner2D.InvalidateBoundingShapeCache();
            // confiner2D.InvalidateLensCache();

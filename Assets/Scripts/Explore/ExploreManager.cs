@@ -147,7 +147,8 @@ public class ExploreManager : Singleton<ExploreManager>
             SetFixedCamera setFixedCamera = new SetFixedCamera
             {
                 fixedCamera = true,
-                fixedPos = Vector3.zero
+                fixedPos = new Vector3(0, -0.86f, 0),
+                offsetPos = new Vector3(0, 0.86f, 0),
             };
             GameActionManager.instance.QueueAction(setFixedCamera);
 

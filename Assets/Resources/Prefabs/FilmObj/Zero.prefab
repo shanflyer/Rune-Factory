@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 5474553713050692675}
   - component: {fileID: 8453683128303414510}
   - component: {fileID: 391387056542946350}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: shadow1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2515,7 +2515,7 @@ GameObject:
   - component: {fileID: 6382035317777159774}
   - component: {fileID: 620102584463233706}
   - component: {fileID: 838999907565446900}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2721,7 +2721,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6462259619311885567}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2771,8 +2771,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81693969fa2bcc042b7a70b6048adc23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 0}
-  meshFilter: {fileID: 0}
+  meshRenderer: {fileID: 209004315460237777}
+  meshFilter: {fileID: 927727181106305587}
   m_Sprite: {fileID: 0}
   spriteDrawMode: 0
   size: {x: 0, y: 0}
@@ -2969,7 +2969,7 @@ PlayableDirector:
   m_GameObject: {fileID: 6745193667350865828}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 4e81be73a4263844d8b6049a8b9e6206, type: 2}
+  m_PlayableAsset: {fileID: 11400000, guid: 25222f53b73313941af392a5be1e54bc, type: 2}
   m_InitialState: 0
   m_WrapMode: 0
   m_DirectorUpdateMode: 1
@@ -3041,6 +3041,16 @@ PlayableDirector:
     value: {fileID: 7536098822022629904}
   - key: {fileID: 8265538255923556038, guid: 4e81be73a4263844d8b6049a8b9e6206, type: 2}
     value: {fileID: 7536098822022629904}
+  - key: {fileID: -1670808728745163428, guid: 4e81be73a4263844d8b6049a8b9e6206, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 2285105024158296500, guid: 6d79e24db132de842a050435864ee5e6, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 3808858319871719399, guid: e3875045bdf54534ea0b4ddef5caa1b1, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 7819404512429202930, guid: ba35fdb2c79dce548bb1c055c363e1de, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -6616339011093651684, guid: 25222f53b73313941af392a5be1e54bc, type: 2}
+    value: {fileID: 0}
   m_ExposedReferences:
     m_References: []
 --- !u!82 &7536098822022629904
@@ -3735,7 +3745,7 @@ GameObject:
   - component: {fileID: 5210472359610655935}
   - component: {fileID: 1012953284784758135}
   - component: {fileID: 8889131612763810194}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4209,7 +4219,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8478633368401121974}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -4259,8 +4269,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81693969fa2bcc042b7a70b6048adc23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 0}
-  meshFilter: {fileID: 0}
+  meshRenderer: {fileID: 1554027486567647670}
+  meshFilter: {fileID: 4512478395470361666}
   m_Sprite: {fileID: 0}
   spriteDrawMode: 0
   size: {x: 0, y: 0}
