@@ -61,6 +61,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 75c822b01a637d547abc69e6f1f590b4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Noise:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _OverlayTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -148,7 +152,7 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColorAddSubDiff: {r: 1, g: 0, b: 0, a: 0}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _ColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _DissolveScroll: {r: 0, g: 0, b: 0, a: 0}
     - _DistortScrolling: {r: 0, g: 0, b: 1, a: 1}
@@ -156,6 +160,7 @@ Material:
     - _OverlayTex_Scroll: {r: 0.1, g: 0.1, b: 1, a: 1}
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
+    - _SpeedMainTexUVNoiseZW: {r: 0, g: 0, b: 0, a: 0}
     - _TintColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

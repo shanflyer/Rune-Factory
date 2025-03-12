@@ -293,7 +293,7 @@ public class FilmController : Singleton<FilmController>
                 playableDirector.transform.localScale = Vector3.one;
                 playableDirector.Play();
                 nowFilms.Add(filmName, film);
-
+                /*
                 if (filmData.stopTimeRun)
                 {
                     TimeRun timeRun = new TimeRun
@@ -306,7 +306,7 @@ public class FilmController : Singleton<FilmController>
                         enable = false,
                     };
                     GameActionManager.instance.QueueAction(setCameraConfiner2D);
-                }
+                }*/
             }
         } 
     }

@@ -201,9 +201,13 @@ public class GameController : MonoBehaviour
             case CloudSavedDataChangeReasonCode.AccountChange:
                 break;
         }
-        hideSave = true;
-        GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr($"云存档数据发生变化！--ChangeReason:{arg.ChangeReason}"), Application.Quit, Application.Quit);
-        Debug.Log($"云存档数据发生变化！--ChangeReason:{arg.ChangeReason}");
+        if (GameDataSaveManager.instance.LoadDataSuccess)
+        {
+            hideSave = true;
+            GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr($"云存档数据发生变化！--ChangeReason:{arg.ChangeReason}"), Application.Quit, Application.Quit);
+            Debug.Log($"云存档数据发生变化！--ChangeReason:{arg.ChangeReason}");
+        }
+       
     }
 
     string nowUserId;

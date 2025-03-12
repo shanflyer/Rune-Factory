@@ -850,6 +850,8 @@ public class GameTimeManager : Singleton<GameTimeManager>
                 npc.SetSleep(false);
             }
 
+            WorldMapObjManager.instance.RefreshMapAudio();
+
             GameTimerController.instance.DelayAction(1200,
                 () =>
                 {
