@@ -160,7 +160,7 @@ public class WorldMapController : MonoBehaviour
         
 
         yield return 0;
-
+       
         //if (GameController.instance == null||GameController.instance.startPlay)
         {
             GameTimeManager.instance.StartTimeRun();

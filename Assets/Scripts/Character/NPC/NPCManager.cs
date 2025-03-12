@@ -891,6 +891,8 @@ public class NPCManager : Singleton<NPCManager>
                 instanceDatas[instanceId] = NPCData.id;
                 FriendManager.instance.ZeroFriendShip(NPCData.id, NPCData.zeroFriendShipLevel);
 
+                FestivalManager.instance.AddNPCBrothDay(npc.npcName, (Season)saveBirthDay.x, saveBirthDay.y,NPCData.id);
+
                 Character character = CharacterManager.instance.GetCharacter(instanceId);
                 if (character==null)
                 {
@@ -903,7 +905,7 @@ public class NPCManager : Singleton<NPCManager>
                 }
             }
         }
-        var shopManager = ShopManager.instance;
-
+        var shopManager = ShopManager.instance; 
+         
     }
 }

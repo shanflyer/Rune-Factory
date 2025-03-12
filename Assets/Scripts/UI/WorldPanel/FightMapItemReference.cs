@@ -28,12 +28,14 @@ public class FightMapItemReference : UIObjReference<MapItemReferenceData>
         if (!t.open)
         {
             Icon.sprite = defaultSprite;
+            Icon.color = Color.red;
         }
         else
         {
             ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(t.itemData);
             if (itemData != null)
             {
+                Icon.color = Color.white;
                 Icon.sprite = itemData.icon; 
             }
         }

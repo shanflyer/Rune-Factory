@@ -155,31 +155,34 @@ public class CalendarPanel : GamePanel<IReferenceData>
         if (value)
         {
             date = _gameDate.date;
-            DataTimeText.text=_gameDate.ToString(year); 
-            List<FestivalData> festivalDatas = FestivalManager.instance.FestivalDatas;
-            List<FestivalData> customFestivalDatas = FestivalManager.instance.customFestivalDatas;
+            DataTimeText.text=_gameDate.ToString(year);  
 
             List<string> festivalStr = new List<string>();
-            foreach (var festivalId in _gameDate.FestivaList)
+            if (_gameDate.FestivaList != null)
             {
-                FestivalData festivalData = festivalDatas.Find(f => f.id == festivalId);
-                festivalStr.Add("·");
-                festivalStr.Add(festivalData.name);
-                festivalStr.Add("\n"); 
-            }
-            if (year == GameTimeManager.instance.Year)
-            {
-                foreach (var festivalId in _gameDate.CustomFestival)
+                foreach (var festivalData in _gameDate.FestivaList)
                 {
-                    FestivalData festivalData = customFestivalDatas.Find(f => f.id == festivalId);
                     festivalStr.Add("·");
                     festivalStr.Add(festivalData.name);
                     festivalStr.Add("\n");
                 }
             }
+            
+            if (year == GameTimeManager.instance.Year)
+            {
+                if (_gameDate.CustomFestival != null)
+                {
+                    foreach (var festivalData in _gameDate.CustomFestival)
+                    {
+                        festivalStr.Add("·");
+                        festivalStr.Add(festivalData.name);
+                        festivalStr.Add("\n");
+                    }
+                } 
+            }
             if (festivalStr.Count > 0)
             {
-                festivaltext.SetADDText("", festivalStr);
+                festivaltext.SetADDText("", festivalStr.ToArray());
             }
             else
             {

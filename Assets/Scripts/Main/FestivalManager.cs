@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-
+using Unity.Mathematics;
 
 public class FestivalManager : Singleton<FestivalManager>
 {
@@ -10,15 +10,27 @@ public class FestivalManager : Singleton<FestivalManager>
     {
         base.Init();
 
-        customFestivalDatas = await GameDataManager.instance.GetAllAsyncData<FestivalData>();
-        FestivalDatas = new List<FestivalData>();
-        CreatNPCBrothDay();
+        var _customFestivalDatas = await GameDataManager.instance.GetAllAsyncData<FestivalData>();
+        FestivalDatas = new Dictionary<int2, List<FestivalData>>();
+        customFestivalDatas = new Dictionary<int2, List<FestivalData>>();
+
+        for(int i = 0; i < _customFestivalDatas.Count; i++)
+        {
+            var data = _customFestivalDatas[i];
+            int2 key = new int2((int)data.season, data.date);
+            if(!customFestivalDatas.TryGetValue(key,out var festivalDatas))
+            {
+                festivalDatas = new List<FestivalData>();
+                customFestivalDatas.Add(key, festivalDatas);
+            }
+            festivalDatas.Add(data);
+        }
         LoadBrothDay();
         GameTimeManager.instance.CreatData();
     }
-    public List<FestivalData> FestivalDatas;
-     
-    public List<FestivalData> customFestivalDatas;
+    public  Dictionary<int2,List<FestivalData>> FestivalDatas;
+
+    public Dictionary<int2, List<FestivalData>> customFestivalDatas;
    
     void LoadBrothDay()
     {
@@ -35,27 +47,31 @@ public class FestivalManager : Singleton<FestivalManager>
                 date = GameDataSaveManager.instance.UserGameSaveData.playerData.brithDay.day,
                 id = 8
             };
-        FestivalDatas.Add(festivalData0);  
-    }
-    void CreatNPCBrothDay()
-    { 
-        /*
-        if (GameDataSaveManager.instance.IsZeroGameSave)
+        int2 key = new int2((int)festivalData0.season, festivalData0.date);
+        if (!FestivalDatas.TryGetValue(key, out var festivalDatas))
         {
-            return;
-        }*/
-        CharacterSaveData characterSaveData = GameDataSaveManager.instance.UserGameSaveData.playerData;
-
-        FestivalData festivalData0 =
-            new FestivalData
-            {
-                name = characterSaveData.name + LanguageManage.SwitchStr(" 的生日"),
-                season = characterSaveData.brithDay.season,
-                date = characterSaveData.brithDay.day,
-                id = 8
-            };
-        FestivalDatas.Add(festivalData0);
-        FestivalDatas.AddRange(NPCManager.instance.GetNpcBirthFestivalDatas());
+            festivalDatas = new List<FestivalData>();
+            FestivalDatas.Add(key, festivalDatas);
+        }
+        festivalDatas.Add(festivalData0);  
+    }
+    
+    public void AddNPCBrothDay(string name,Season season,int date,int id)
+    {
+        FestivalData festivalData = new FestivalData
+        {
+            name = LanguageManage.SwitchStr(name, " 的生日"),
+            season = season,
+            date = date,
+            id = id
+        };
+        int2 key = new int2((int)season,date);
+        if (!FestivalDatas.TryGetValue(key, out var festivalDatas))
+        {
+            festivalDatas = new List<FestivalData>();
+            FestivalDatas.Add(key, festivalDatas);
+        }
+        festivalDatas.Add(festivalData); 
     }
    
 }

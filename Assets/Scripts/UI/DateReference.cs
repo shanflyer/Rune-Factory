@@ -58,7 +58,7 @@ public class DateReference : UIObjReference<GameDate>
        await base.InitData(t, SelectAction, toggleGroup);
         selectToggle.group = toggleGroup;
         ValueText.text = data.date.ToString();
-        festivalTips.enabled = data.FestivaList.Count > 0;
+        festivalTips.enabled = data.FestivaList!=null&& data.FestivaList.Count > 0;
         backGround.color = (data.date - 1) % 6 == 0 ? new Color(1, 0.76f, 0.64f) : Color.white; 
 
     }

@@ -233,6 +233,7 @@ public class ShopPanel : GamePanel<ShopList>
     {
         if (selected)
         {
+            SelectInformation.transform.localScale = Vector3.zero;
             List<ShopItemData> shopItemDatas = shop.GetOpenShopItem();
             shopItems.InitListData(shopItemDatas, SeletShopItem, ItemGroup);
         }
@@ -241,6 +242,7 @@ public class ShopPanel : GamePanel<ShopList>
     public override void InitReferenceData(ShopList v)
     {
         base.InitReferenceData(v);
+        SelectInformation.transform.localScale = Vector3.zero;
         Title.SetSWText(v.groupName);
         ShopGroup.enabled = true;
         ItemGroup.enabled = true;

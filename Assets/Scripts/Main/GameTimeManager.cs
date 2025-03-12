@@ -28,8 +28,30 @@ public class GameDate : IReferenceData, INativeData
 {
     public Season season;
     public int date;
-    public List<int> FestivaList;
-    public List<int> CustomFestival;
+    public List<FestivalData> FestivaList
+    {
+        get
+        {
+            if(FestivalManager.instance.FestivalDatas.TryGetValue(new int2((int)season,date),out var festivalDatas))
+            {
+                return festivalDatas;
+            }
+            return null;
+        }
+    }
+
+     
+    public List<FestivalData> CustomFestival
+    {
+        get
+        {
+            if (FestivalManager.instance.customFestivalDatas.TryGetValue(new int2((int)season, date), out var festivalDatas))
+            {
+                return festivalDatas;
+            }
+            return null;
+        }
+    }
     public  string ToString(int year)
     {
         if (LanguageManage.nowLanguage == SystemLanguage.Chinese)
@@ -43,16 +65,10 @@ public class GameDate : IReferenceData, INativeData
             return str;
         }
     }
-    public GameDate(Season _season, int _date, List<int> _festivals)
+    public GameDate(Season _season, int _date)
     {
         season = _season;
-        date = _date;
-        FestivaList = new List<int>(4);
-        foreach (var festival in _festivals)
-        {
-            FestivaList.Add(festival);
-        }
-        CustomFestival = new List<int>(4);
+        date = _date; 
     }
 
     public void Dispose()
@@ -974,15 +990,8 @@ public class GameTimeManager : Singleton<GameTimeManager>
         {
             int seasonId = (i - 1) / 30 + 1;
             int date = i - (seasonId - 1) * 30;
-            Season season = (Season)seasonId;
-            List<FestivalData> festivals = FestivalManager.instance.FestivalDatas.FindAll(f => f.season == season &&
-            f.date == date);
-            List<int> festivalIds = new List<int>();
-            foreach (var festivalData in festivals)
-            {
-                festivalIds.Add(festivalData.id);
-            }
-            GameDate gameDate = new GameDate(season, date, festivalIds);
+            Season season = (Season)seasonId;  
+            GameDate gameDate = new GameDate(season, date);
             gameDates.Add(gameDate.Key, gameDate);
         }
         //timeDisplayAction.UpdataTime();
