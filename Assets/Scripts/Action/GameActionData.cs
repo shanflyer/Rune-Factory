@@ -36,7 +36,7 @@ public class GameActionData : ScriptableObject, IGameData
                     }
                 }
                
-               // Debug.Log($"Action:{name}--parameters:{parameterStr}");
+               Debug.Log($"Action:{name}--parameters:{parameterStr}");
             }
         }
 

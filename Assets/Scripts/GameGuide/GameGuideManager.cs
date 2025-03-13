@@ -67,7 +67,7 @@ public class GameGuideManager:Singleton<GameGuideManager>
         }
         GameTimerController.instance.DelayAction(1000, () =>
         {
-            GameActionDataManager.instance.Action(data.beforeEventId);
+            //GameActionDataManager.instance.Action(data.beforeEventId);
         });
         
     }
