@@ -174,7 +174,7 @@ public class WeatherManager : Singleton<WeatherManager>
     public float nowWaterFall => nowDayWeathers.Count>nowIndex? nowDayWeathers[nowIndex].waterFall:0;
     public void RefreshWeather(int hour)
     {
-        int hourIndex = (int)math.floor(hour / 6.0f);
+        int hourIndex = (int)math.floor(hour / 3.0f);
         if (hourIndex != nowIndex&& nowDayWeathers.Count>hourIndex)
         {
             nowIndex = hourIndex;
