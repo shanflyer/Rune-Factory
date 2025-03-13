@@ -15,14 +15,6 @@ MonoBehaviour:
   id: 54
   typeName: ActionList
   _parameters:
-  - value: SetCharacterCoordinate
-    parameters:
-    - value: 302
-      parameters:
-      - value: -2
-        parameters: []
-      - value: 16
-        parameters: []
   - value: LerpScreenCycleValue
     parameters:
     - value: 1
@@ -31,13 +23,13 @@ MonoBehaviour:
       parameters: []
     - value: 1
       parameters: []
-    - value: -2.8
+    - value: -2.2
       parameters: []
     - value: 1.5
       parameters: []
   - value: WaitAction
     parameters:
-    - value: 2000
+    - value: 0
       parameters:
       - value: PlayFilm
         parameters:
