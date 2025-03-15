@@ -670,7 +670,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
         else
         {
-            if (!GameDataSaveManager.instance.HaveSaveFileData(mapItem.instanceId))
+            if (!GameDataSaveManager.instance.HaveSaveFileData(instanceId))
             {
                 TryCreatField tryCreatField = new TryCreatField
                 {

@@ -41,6 +41,12 @@ public delegate void SetInt3Value(int3 value);
 
 public delegate void SetResult(bool value);
 
+public struct PayEndAction : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public void Clear() { this = default; }
+}
 public struct PlayCharacterTimeLine : GameAction
 {
     public SetValue setValue { get; set; }

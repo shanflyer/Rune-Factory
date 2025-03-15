@@ -151,7 +151,7 @@ public struct TryCreatField : GameAction
     public int roomId;
     public int itemInstanceId;
     public int2 coordinate;
-
+    public bool noSaveRefresh;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (parameters.Count > 0)

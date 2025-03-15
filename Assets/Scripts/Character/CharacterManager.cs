@@ -342,6 +342,10 @@ public class CharacterManager : Singleton<CharacterManager>
         if (character!=null&&characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
         {
             characterRuntimeObj.gameObject.SetActive(displayOrHideCharacter.display);
+            if (character == controllerCharacter)
+            {
+                CameraManager.instance.SetCameraListener(!displayOrHideCharacter.display);
+            }
         }
     }
 

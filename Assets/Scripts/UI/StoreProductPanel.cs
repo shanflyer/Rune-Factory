@@ -10,6 +10,8 @@ public class StoreProductPanel : GamePanel<IReferenceData>
 
     [SerializeField]
     private Transform productParent;
+    [SerializeField]
+    private Transform mask;
 
     [SerializeField]
     private StoreProductReference productReference;
@@ -27,6 +29,7 @@ public class StoreProductPanel : GamePanel<IReferenceData>
     {
         base.Close();
         storeProductList.ClearSelect();
+        GameActionManager.instance.RemoveListener<PayEndAction>(PayEndAction);
         gameObject.SetActive(false);
     }
     public override void SetPanelUISerializeObj()
@@ -35,21 +38,31 @@ public class StoreProductPanel : GamePanel<IReferenceData>
         closeBtn = FindChildGameObject<Button>("Close");
         productParent = FindChildGameObject("Products");
         productReference = FindChildGameObject<StoreProductReference>("productReference");
+        mask = FindChildGameObject("Mask");
     }
 
+    void PayEndAction(PayEndAction payEndAction)
+    {
+        mask.gameObject.SetActive(false);
+    }
     public override Task InitData(string dataKey)
     {
+        mask.gameObject.SetActive(false);
+        GameActionManager.instance.AddListener<PayEndAction>(PayEndAction);
         storeProductList.InitListData(AppStoreManager.instance.GetAppStoreProductDatas(), SelectProduct);
         return base.InitData(dataKey);
     }
 
     private void SelectProduct(AppStoreProductData productData, bool selected)
     {
-        AppStoreManager.instance.BuyProduct(productData); 
+        AppStoreManager.instance.BuyProduct(productData);
+        mask.gameObject.SetActive(true);
     }
 
     public override void InitReferenceData(IReferenceData v)
     {
+        mask.gameObject.SetActive(false);
+        GameActionManager.instance.AddListener<PayEndAction>(PayEndAction);
         base.InitReferenceData(v);
     }
 

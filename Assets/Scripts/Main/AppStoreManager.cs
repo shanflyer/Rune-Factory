@@ -63,6 +63,7 @@ public class AppStoreManager : MonoBehaviour
         {
             InformationController.instance.AddInformation(LanguageManage.SwitchStr($"感谢您的支持！"), false, true);
         }
+        GameActionManager.instance.QueueAction(new PayEndAction());
 #else
       var goldProductId = $"{appStoreProductData.ProductName}";
         BillingServices.BuyProduct(goldProductId,options:null);
@@ -77,6 +78,7 @@ public class AppStoreManager : MonoBehaviour
     }
     private void OnTransactionStateChange(BillingServicesTransactionStateChangeResult result)
     {
+        GameActionManager.instance.QueueAction(new PayEndAction());
         var transactions = result.Transactions;
         for (int iter = 0; iter < transactions.Length; iter++)
         {

@@ -204,8 +204,8 @@ public class GameController : MonoBehaviour
         if (GameDataSaveManager.instance.LoadDataSuccess)
         {
             hideSave = true;
-            GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr($"云存档数据发生变化！--ChangeReason:{arg.ChangeReason}"), Application.Quit, Application.Quit);
-            Debug.Log($"云存档数据发生变化！--ChangeReason:{arg.ChangeReason}");
+          //  GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr($"云存档数据发生变化！--ChangeReason:{arg.ChangeReason}"), Application.Quit, Application.Quit);
+         //   Debug.Log($"云存档数据发生变化！--ChangeReason:{arg.ChangeReason}");
         }
        
     }
@@ -239,7 +239,7 @@ public class GameController : MonoBehaviour
         if (result.Success)
         {
             if (!startGameCompleted)
-            {
+            { 
                 GameDataSaveManager.instance.LoadCloudData();
                 StartGame();
                 startGameCompleted = true;

@@ -146,7 +146,11 @@ public class FarmManager : Singleton<FarmManager>
                             fieldState = FieldState.待平整
                         };
                         fields.Add(instanceId, field);
-                        field.RefreshField();
+                        if (!tryCreatField.noSaveRefresh)
+                        {
+                            field.RefreshField();
+                        }
+                       
                     }
                 }
             }

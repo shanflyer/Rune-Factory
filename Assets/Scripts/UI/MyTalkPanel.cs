@@ -14,6 +14,8 @@ public class MyTalkPanel : GamePanel<IReferenceData>
     Button about, developer;
     [SerializeField]
     Button CloseBtn;
+    [SerializeField]
+    Transform mask;
     protected override void Awake()
     {
         base.Awake();
@@ -27,14 +29,17 @@ public class MyTalkPanel : GamePanel<IReferenceData>
 
         Help0.onClick.AddListener(() =>
         {
+            mask.gameObject.SetActive(true);
             AppStoreManager.instance.BuyProduct("help0");
         });
         Help1.onClick.AddListener(() =>
         {
+            mask.gameObject.SetActive(true);
             AppStoreManager.instance.BuyProduct("help1");
         });
         Help2.onClick.AddListener(() =>
         {
+            mask.gameObject.SetActive(true);
             AppStoreManager.instance.BuyProduct("help2");
         });
         about.onClick.AddListener(() =>
@@ -47,6 +52,16 @@ public class MyTalkPanel : GamePanel<IReferenceData>
         });
 
         CloseBtn.onClick.AddListener(Close);
+    }
+    public override void OnDisable()
+    {
+        GameActionManager.instance.RemoveListener<PayEndAction>(PayEndAction);
+        base.OnDisable();
+    }
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        GameActionManager.instance.AddListener<PayEndAction>(PayEndAction);
     }
     async void ShareAction()
     {
@@ -72,13 +87,20 @@ public class MyTalkPanel : GamePanel<IReferenceData>
         Help2 = FindChildGameObject<Button>("Help2");
         about = FindChildGameObject<Button>("About");
         developer = FindChildGameObject<Button>("Developer");
+        mask = FindChildGameObject("Mask");
+    }
+    void PayEndAction(PayEndAction payEndAction)
+    {
+        mask.gameObject.SetActive(false);
     }
     public override void InitReferenceData(IReferenceData v)
     {
+        mask.gameObject.SetActive(false);
         base.InitReferenceData(v);
     }
     public override Task InitData(string dataKey)
     {
+        mask.gameObject.SetActive(false);
         return base.InitData(dataKey);
     }
 }

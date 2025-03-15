@@ -766,7 +766,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             string key = GameCommon.BlendString(keyStr, field.Name);
             CloudServices.SetString(key, objStr);
         }
-        CloudServices.RemoveKey(GameCommon.BlendString(keyStr, "specialMapItemList"));
+        //CloudServices.RemoveKey(GameCommon.BlendString(keyStr, "specialMapItemList"));
     }
     public void LoadCloudData()
     {
@@ -798,7 +798,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
 
         UserGameSaveData LoadUserData(string key)
         {
-            CloudServices.RemoveKey(GameCommon.BlendString(key, "specialMapItemList"));
+           // CloudServices.RemoveKey(GameCommon.BlendString(key, "specialMapItemList"));
             UserGameSaveData userData = new UserGameSaveData();
             for(int i = 0; i < UserGameSaveDataIntFields.Count; i++)
             {

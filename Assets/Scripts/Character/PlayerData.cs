@@ -434,6 +434,12 @@ public class UserGameSaveData : IReferenceData
         return userGameSaveData;
     }
 
+    public void AddSpecialMapItem(int2 editorKey, int instanceId)
+    {
+        if (editorKey.y == 0)
+            return;
+        specialMapItem[editorKey] = instanceId;
+    }
     public void AddAnimationStateMapItem(int2 value,int2 editorKey,int instanceId)
     {
         if (editorKey.y == 0)
