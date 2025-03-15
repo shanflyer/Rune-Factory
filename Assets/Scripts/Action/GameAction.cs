@@ -321,6 +321,7 @@ public struct SwitchAutoStore : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+
 public struct SetPlayerStoreOpen : GameAction
 {
     public bool open;

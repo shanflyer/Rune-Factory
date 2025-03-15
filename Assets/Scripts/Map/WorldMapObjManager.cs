@@ -404,7 +404,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             {
                 creatDataId = DisplayMapRoomData.creatTempCharacterId,
                 clearAll = true,
-                prewarm=DisplayMapRoomData.tempNpcPrewarm
+                prewarm=DisplayMapRoomData.tempNpcPrewarm,
             };
             GameActionManager.instance.QueueAction(startCreatTempCharacter);
             

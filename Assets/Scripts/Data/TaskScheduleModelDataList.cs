@@ -73,6 +73,7 @@ public class TaskScheduleModelData : IGameData
     public string modelName;
     public int id; 
     public GameTimeKey gameTimeKey;
+
     public List<DailyTaskDataItem> dailyTaskDataItems = new List<DailyTaskDataItem>();
 
     public string GetKey()
@@ -107,6 +108,7 @@ public class DailyTaskDataItem
 {
     public int itemValue;
     public int weight;
+    public GameActionData GameActionData;
     public AnimationCurve growCurve;
     public DailyTaskDataItem() { }
   

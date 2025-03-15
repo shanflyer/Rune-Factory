@@ -39,6 +39,14 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         GameActionManager.instance.AddListener<TryBuyPlayerGood>(TryBuyPlayerGood);
         GameActionManager.instance.AddListener<SetPlayerStoreOpen>(SetPlayerStoreOpen);
         GameActionManager.instance.AddListener<SwitchAutoStore>(SwitchAutoStore);
+        GameActionManager.instance.AddListener<CheckPlayerStoreOpen>(CheckPlayerStoreOpen);
+    }
+    void CheckPlayerStoreOpen(CheckPlayerStoreOpen checkPlayerStoreOpen)
+    {
+        if (checkPlayerStoreOpen.setResult != null)
+        {
+            checkPlayerStoreOpen.setResult(playerStoreOpen);
+        }
     }
     void SwitchAutoStore(SwitchAutoStore SwitchAutoStore)
     {

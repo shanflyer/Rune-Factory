@@ -74,13 +74,14 @@ public class UserGameSaveData : IReferenceData
         npcBirthDays.CopyData(userGameSaveData.npcBirthDays);
 
         endGuideFilmIndex = userGameSaveData.endGuideFilmIndex;
+        playerStoreOpen = userGameSaveData.playerStoreOpen;
     }
 
     public string saveTime;
     public int index;
 
     public int endGuideFilmIndex;
-
+    public int playerStoreOpen;
     public CharacterSaveData playerData=new CharacterSaveData();
     public OtherSaveData otherSaveData=new OtherSaveData();
     public GameDateSaveData dateData;

@@ -409,15 +409,37 @@ public class NPCTaskScheduleTimeList
         };
         for (int i = 0; i < taskScheduleModelData.dailyTaskDataItems.Count; i++)
         {
-            int2 dailyItem = taskScheduleModelData.dailyTaskDataItems[i].GetNowTaskRandomValue(e_value);
-            RandomItem randomItem = new RandomItem
+            DailyTaskDataItem dailyTaskDataItem = taskScheduleModelData.dailyTaskDataItems[i];
+            if (dailyTaskDataItem.GameActionData != null)
             {
-                itemValue = dailyItem.x,
-                randomValue = dailyItem.y,
-                maxCount = 1,
-                minCount = 1
-            };
-            gameRandomData.randomItems.Add(randomItem);
+                dailyTaskDataItem.GameActionData.Action(setResult: (bool result) =>
+                {
+                    if (result)
+                    {
+                        int2 dailyItem = dailyTaskDataItem.GetNowTaskRandomValue(e_value);
+                        RandomItem randomItem = new RandomItem
+                        {
+                            itemValue = dailyItem.x,
+                            randomValue = dailyItem.y,
+                            maxCount = 1,
+                            minCount = 1
+                        };
+                        gameRandomData.randomItems.Add(randomItem);
+                    }
+                },immediately:true);
+            }
+            else
+            {
+                int2 dailyItem = dailyTaskDataItem.GetNowTaskRandomValue(e_value);
+                RandomItem randomItem = new RandomItem
+                {
+                    itemValue = dailyItem.x,
+                    randomValue = dailyItem.y,
+                    maxCount = 1,
+                    minCount = 1
+                };
+                gameRandomData.randomItems.Add(randomItem);
+            } 
         }
         gameRandomData.Pretreatment();
         var randomResults = GameRandom.instance.GetRandomValue(gameRandomData, 1);
