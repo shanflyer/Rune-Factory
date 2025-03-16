@@ -1540,7 +1540,7 @@ public class MapCellController : Singleton<MapCellController>
         }
     }
 
-    public Stack<int2> FindPathNode(int2 startPos, int2 targetPos, int mapId, bool Nearest = false)
+    public Stack<int2> FindPathNodeNearest(int2 startPos, int2 targetPos, int mapId)
     {
         Stack<int2> outData = FindPathNode(startPos, targetPos, mapId);
         if (outData.Count == 0)
@@ -1604,7 +1604,7 @@ public class MapCellController : Singleton<MapCellController>
         return outData;
     }
 
-    public Stack<int2> FindPathNode(int2 startPos, int2 targetPos, int mapId)
+    public Stack<int2> FindPathNode(int2 startPos, int2 targetPos, int mapId,bool random=true)
     {
         Stack<int2> outData = new Stack<int2>();
         if (runtimeMapRooms.TryGetValue(mapId, out RuntimeMapRoom runtimeMapRoom))
@@ -1618,7 +1618,7 @@ public class MapCellController : Singleton<MapCellController>
                 mapObjBarriers = roomCellDatas[runtimeMapRoom.roomCellDataIndex].mapObjBarriers,
                 startPos = new int2(startPos.x, startPos.y),
                 targetPos = new int2(targetPos.x, targetPos.y),
-                pathCells = pathCells
+                pathCells = pathCells,random=random
             };
 
             findPath.Schedule().Complete();
@@ -2236,7 +2236,7 @@ public class MapCellController : Singleton<MapCellController>
         [ReadOnly] public int2 startPos, targetPos;
 
         [WriteOnly] public NativeList<int2> pathCells;
-
+        [ReadOnly] public bool random;
         public void Execute()
         {
             GetPath();
@@ -2323,6 +2323,10 @@ public class MapCellController : Singleton<MapCellController>
 
                         int cost = CalculateDistanceCost(cell, startPos) +
                              CalculateDistanceCost(cell, targetPos) * 1;
+                       // if (random)
+                        {
+                           // cost =(int)(cost*GameRandom.RandomFloat(0.98f, 1.02f));
+                        }
                         parentCell[cell] = nowCell;
                         checkedCell.Add(cell);
                         openCellList.Add(new int3(cell, cost));

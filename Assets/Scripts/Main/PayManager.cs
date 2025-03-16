@@ -5,22 +5,18 @@ public class PayManager : Singleton<PayManager>
 {
     public override async void Init()
     {
-        base.Init();
-        nowGold = GameDataSaveManager.instance.UserGameSaveData.otherSaveData.gold;
-        nowDiamond = GameDataSaveManager.instance.UserGameSaveDataList.commonSaveData.diamond;
+        base.Init(); 
+     
         goldIcon = await GameSourceManager.instance.GetSprite(DataPath.goldSpritePath);
         diamondIcon = await GameSourceManager.instance.GetSprite(DataPath.diamondSpritePath);
 
         GameActionManager.instance.AddListener<AddPlayerGold>(AddPlayerGold);
     }
  
-    public int NowGold => nowGold;
-    public int NowDiamond => nowDiamond;
+    public int NowGold => GameDataSaveManager.instance.UserGameSaveData.otherSaveData.gold;
+    public int NowDiamond => GameDataSaveManager.instance.UserGameSaveDataList.commonSaveData.diamond;
 
-    private Sprite goldIcon, diamondIcon;
-
-    private int nowGold;
-    private int nowDiamond;
+    private Sprite goldIcon, diamondIcon; 
 
     public Sprite GetPayMoneySprite(PayType payType)
     {
@@ -37,12 +33,12 @@ public class PayManager : Singleton<PayManager>
 
     public void AddGold(int count)
     {
-        nowGold += count;
+        GameDataSaveManager.instance.UserGameSaveData.otherSaveData.gold += count;
         GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
     }
     void AddPlayerGold(AddPlayerGold addPlayerGold)
     {
-        nowGold += addPlayerGold.value;
+        GameDataSaveManager.instance.UserGameSaveData.otherSaveData.gold += addPlayerGold.value;
         GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
     }
     public void AddGold(MoneyCreatData MoneyCreatData)
@@ -52,7 +48,7 @@ public class PayManager : Singleton<PayManager>
                    {
                        if (result)
                        {
-                           nowGold += MoneyCreatData.getValue;
+                           GameDataSaveManager.instance.UserGameSaveData.otherSaveData.gold += MoneyCreatData.getValue;
                            GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
                        }
                    });
@@ -76,9 +72,9 @@ public class PayManager : Singleton<PayManager>
         switch (payType)
         {
             case PayType.金币:
-                if (nowGold >= count)
+                if (NowGold >= count)
                 {
-                    nowGold -= count;
+                    GameDataSaveManager.instance.UserGameSaveData.otherSaveData.gold -= count;
                     GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
                     return true;
                 }
@@ -89,9 +85,9 @@ public class PayManager : Singleton<PayManager>
                 break;
 
             case PayType.钻石:
-                if (nowDiamond >= count)
+                if (NowDiamond >= count)
                 {
-                    nowDiamond -= count;
+                    GameDataSaveManager.instance.UserGameSaveDataList.commonSaveData.diamond -= count;
                     GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
                     return true;
                 }
@@ -112,9 +108,9 @@ public class PayManager : Singleton<PayManager>
 
     public void AddDiamond(int value)
     {
-        nowDiamond += value;
+        GameDataSaveManager.instance.UserGameSaveDataList.commonSaveData.diamond += value;
         GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
-        GameDataSaveManager.instance.RefreshUserCommonSaveData(nowDiamond);
+        GameDataSaveManager.instance.RefreshUserCommonSaveData(NowDiamond);
     }
     public void TryCreatMoney()
     {

@@ -1490,8 +1490,10 @@ public partial class Character
     {
         //int2 forwordCoordinate = objCoordinate.xy + 2 * GameCommon.GetDirectionInt2(direction);
         int2 oldCoordinate = objCoordinate.xy;
+        bool mapCheckRefresh = false;
         if (mapInstance != coordinate.z)
         {
+            mapCheckRefresh = true;
             MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.角色,
                 objCoordinate.z, oldCoordinate, true, TriggerEventAction);
 

@@ -39,6 +39,7 @@ public class CharacterSelectInformationPanel : GamePanel<IReferenceData>
     }
     public override Task InitData(string dataKay)
     {
+        
         CharacterSaveData characterSaveData = GameDataSaveManager.instance.UserGameSaveData.playerData;
 
         Meal.enabled = characterSaveData.gender == Gender.male;
@@ -68,7 +69,7 @@ public class CharacterSelectInformationPanel : GamePanel<IReferenceData>
         {
             filmName = "角色选择",
             assetName= "ZeroStory"
-        }); 
+        });
     }
   
 }

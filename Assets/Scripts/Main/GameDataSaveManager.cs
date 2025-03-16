@@ -49,7 +49,10 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             return null;
         }
     } 
-
+    public void NewPlayerData()
+    {
+        UserGameSaveDataList.nowSaveData = new UserGameSaveData();
+    }
     public bool HaveSaveFileData(int id)
     {
         return UserGameSaveData.fields.ContainsKey(id);

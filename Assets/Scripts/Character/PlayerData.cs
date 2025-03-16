@@ -22,7 +22,6 @@ public class CommonSaveData
 [Serializable]
 public class UserGameSaveData : IReferenceData
 {
-
     public UserGameSaveData() 
     {
         otherSaveData = new OtherSaveData
@@ -76,7 +75,10 @@ public class UserGameSaveData : IReferenceData
         endGuideFilmIndex = userGameSaveData.endGuideFilmIndex;
         playerStoreOpen = userGameSaveData.playerStoreOpen;
     }
+    public void NewPlayer()
+    {
 
+    }
     public string saveTime;
     public int index;
 
@@ -891,6 +893,7 @@ public class CharacterSaveData : IReferenceData
     public bool isMarried;
     public int hp, mp, power;
 
+ 
     public CharacterSaveData(CharacterSaveData characterSaveData)
     {
         name = characterSaveData.name;

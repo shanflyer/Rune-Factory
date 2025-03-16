@@ -125,9 +125,14 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
         {
             nowCharacters.Clear();
             using (var e = characters.GetEnumerator())
-            {
+            { 
                 while (e.MoveNext())
-                { 
+                {
+                    if (CharacterManager.instance.IsTempCharacter(e.Current))
+                    {
+                        continue;
+                    }
+
                     nowCharacters.Add(new MyInt { value = e.Current });
                 }
             }
@@ -164,6 +169,10 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
 
     void RefreshOperateCharacter(RefreshOperateCharacter refreshOperateCharacter)
     {
+        if (CharacterManager.instance.IsTempCharacter(refreshOperateCharacter.characterId))
+        {
+            return;
+        }
         int oldCount = characters.Count;
         if (refreshOperateCharacter.join)
         {

@@ -34,7 +34,15 @@ public class CharacterButtonReference : UIObjReference<MyInt>
         Character character = CharacterManager.instance.GetCharacter(t.value);
         if(character != null)
         {
-            character.characterData.head.SetImageSprite(icon, iconSize,Vector2.zero);
+            try
+            {
+                character.characterData.head.SetImageSprite(icon, iconSize, Vector2.zero);
+            }
+            catch
+            {
+                Debug.LogError($"errr:{character.name}");
+            }
+           
         }
         return base.InitData(t, SelectAction, toggleGroup);
     }

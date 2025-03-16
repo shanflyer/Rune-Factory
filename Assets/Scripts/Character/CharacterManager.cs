@@ -37,8 +37,6 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         return characters.GetValueList();
     }
-
- 
  
     protected override void Clear()
     {
@@ -50,15 +48,19 @@ public class CharacterManager : Singleton<CharacterManager>
     }
     //角色运行显示实体
     private Dictionary<Character, CharacterRuntimeObj> characterRuntionObjs = new Dictionary<Character, CharacterRuntimeObj>();
+    private HashSet<Character> displayCharacters = new HashSet<Character>();
 
     private void RecycleCharacterObj(Character character)
     {
+        Debug.Log($"RecycleCharacterObj:{character.name}");
+
         GameActionManager.instance.QueueAction(new TryRecycleCharacterEmote { id = character.instanceId }, true);
         if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
         {
             characterRuntimeObj.Clear();
             characterRuntionObjs.Remove(character);
         }
+        displayCharacters.Remove(character);
         
         FishController.instance.RecycleFisherObj(character.instanceId);
     }
@@ -67,6 +69,12 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         if (hideCharacter)
             return;
+
+        if (displayCharacters.Contains(character))
+        {
+            return;
+        }
+        displayCharacters.Add(character);
         var runtimeObj = await CreatCharacterRuntimeObj(character.dataId, character.instanceId, character.coordinate);
         CharacterRuntimeObj characterRuntimeObj = runtimeObj.obj as CharacterRuntimeObj;
         characterRuntimeObj.runtimeObj = runtimeObj;
@@ -93,9 +101,12 @@ public class CharacterManager : Singleton<CharacterManager>
                 };
                 GameActionManager.instance.QueueAction(refreshMapTempCharacter);
             }
+
+            Debug.Log($"CreateCharacter:{character.name}");
         }
         else
         {
+            displayCharacters.Remove(character);
             characterRuntimeObj.Clear();
         }
          
@@ -361,7 +372,7 @@ public class CharacterManager : Singleton<CharacterManager>
                     GameActionManager.instance.QueueAction(new TryRecycleCharacterEmote { id = character.instanceId }, true);
                     GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj); 
                     characterRuntionObjs.Remove(character);
-
+                    displayCharacters.Remove(character);
                    await CreateCharacterObjAsync(character);
                 }
             }
@@ -625,6 +636,7 @@ public class CharacterManager : Singleton<CharacterManager>
             GameActionManager.instance.QueueAction(new TryRecycleCharacterEmote { id = character.instanceId }, true);
             GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj); 
             characterRuntionObjs.Remove(character);
+            displayCharacters.Remove(character);
         }
         MapCellController.instance.RemoveCharacterCoordinate(character.ObjCoordinate, character.instanceId, this is TempCharacter);
         CharacterBehaviorManager.instance.DestroyBehavior(character.instanceId);
@@ -1317,11 +1329,15 @@ public class CharacterManager : Singleton<CharacterManager>
     public async Task RefreshNpcRuntimeObj(Character character, bool controller = false)
     {
         CharacterRuntimeObj characterRuntimeObj;
+
+        //Debug.Log($"RefreshNpcRuntimeObj:{character.name}");
+
         if (characterRuntionObjs.TryGetValue(character, out characterRuntimeObj))
         {
             if (character.mapInstance != WorldMapObjManager.instance.displayMap
                 || ExploreManager.instance.isExplore)
             {
+                displayCharacters.Remove(character);
                 RecycleCharacterObj(character);
                 if (character == controllerCharacter)
                 {
@@ -1366,6 +1382,7 @@ public class CharacterManager : Singleton<CharacterManager>
             FishController.instance.RecycleFisherObj(characterRuntime.Key.instanceId);
         }
         characterRuntionObjs.Clear();
+        displayCharacters.Clear();
     }
 
     public async Task RefreshNpcRuntimeObj()
@@ -1384,7 +1401,7 @@ public class CharacterManager : Singleton<CharacterManager>
                     DestroyCharacter(character.instanceId);
                 }
             }
-            else
+            else if(!displayCharacters.Contains(character))
             {
                 if (!characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
                 {
@@ -1426,8 +1443,8 @@ public class CharacterManager : Singleton<CharacterManager>
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
         int2 targetCoordinate = GameCommon.GetMapCoordinateInt(mousePos);
         int2 startCoordinate = controllerCharacter.coordinate;
-        Stack<int2> pathNodes = MapCellController.instance.FindPathNode(startCoordinate, targetCoordinate,
-            controllerCharacter.mapInstance, true);
+        Stack<int2> pathNodes = MapCellController.instance.FindPathNodeNearest(startCoordinate, targetCoordinate,
+            controllerCharacter.mapInstance);
         controllerCharacter.PlayerMove(pathNodes);
     }
 
