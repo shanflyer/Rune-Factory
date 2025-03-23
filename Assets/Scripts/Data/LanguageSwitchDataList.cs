@@ -8,19 +8,14 @@ using UnityEditor;
 public class LanguageSwitchDataList : ScriptableObject, IGameData
 {
 #if UNITY_EDITOR
-    LanguageSwitchEditorData[] datas;
+    LanguageSwitchData[] datas;
 
     public void SetReferenceData()
     {
         languageDatas.Clear();
         for (int i = 0; i < datas.Length; i++)
         {
-            languageDatas[datas[i].cn] = new LanguageSwitchData
-            {
-                en = datas[i].en,
-                jp = datas[i].jp,
-                ko = datas[i].ko
-            };
+            languageDatas[datas[i].cn] = datas[i];
         }
     }
 #endif
@@ -35,25 +30,10 @@ public class LanguageSwitchDataList : ScriptableObject, IGameData
 
     public StringLanguageSwitchDataDictionary languageDatas = new StringLanguageSwitchDataDictionary();
 
-    public string GetValue(SystemLanguage systemLanguage, string str)
-    {
-        if (systemLanguage == SystemLanguage.Chinese)
-        {
-            return str;
-        }
-        if (languageDatas.TryGetValue(str, out var languageSwitchData))
-        {
-            return languageSwitchData.en;
-        }
-        return str;
-    }
+    
 }
 [Serializable]
-public struct LanguageSwitchData
+public class LanguageSwitchData
 {
-    public string en, jp, ko;
-}
-public struct LanguageSwitchEditorData
-{
-    public string cn, en, jp, ko;
+    public string cn, en, tw, ja, ko, fr, de, ru, es, pt, it, tr, vi, th, pl, nl, el, ar, hi, ur, ms, id;
 }

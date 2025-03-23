@@ -72,14 +72,8 @@ public class CalendarPanel : GamePanel<IReferenceData>
     void AfterDisplay()
     {
         date = GameTimeManager.instance.Day;
-        if (LanguageManage.nowLanguage == SystemLanguage.Chinese)
-        {
-            DataTimeText.text = $"{year}年{season}之月";
-        }
-        else
-        {
-            DataTimeText.text = $"{LanguageManage.SwitchStr(season)} In {year}";
-        }
+        DataTimeText.text = LanguageManage.instance.GameTimeToString(year, season);
+        
          
         /* DatesParent.transform.GetChild(date - 1).GetComponentInChildren<Toggle>().isOn =
            true;*/

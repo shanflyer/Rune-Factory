@@ -5799,6 +5799,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -5828,6 +5830,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 5032478292843617367}
+  HideSelected: 0
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -5884,6 +5887,7 @@ MonoBehaviour:
   canvas: {fileID: 0}
   raycaster: {fileID: 0}
   show: 0
+  guideSelectable: {fileID: 0}
   timeText: {fileID: 900964096862210787}
   weatherIcon: {fileID: 8487672034169727709}
 --- !u!1 &9114828806051601276

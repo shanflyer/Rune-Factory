@@ -154,6 +154,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_setUid: 0
+  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -183,6 +185,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 3496951859349109712}
+  HideSelected: 0
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -201,6 +204,7 @@ MonoBehaviour:
   canvas: {fileID: 0}
   raycaster: {fileID: 0}
   show: 0
+  guideSelectable: {fileID: 0}
   button: {fileID: 7853864799543563154}
   Icon: {fileID: 700438427277511459}
   Name: {fileID: 6532929179387176470}
@@ -497,9 +501,9 @@ MonoBehaviour:
   m_fontSize: 18
   m_fontSizeBase: 18
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 10
+  m_fontSizeMax: 18
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512

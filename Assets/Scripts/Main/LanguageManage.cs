@@ -1,79 +1,128 @@
 ﻿using System;
+using System.Globalization;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI; 
-public class LanguageManage : Singleton<LanguageManage>
-{  
-    static List<SystemLanguage> Languages=new List<SystemLanguage> 
-    {
-        SystemLanguage.Chinese,
-        SystemLanguage.Japanese,
-        SystemLanguage.Korean,
-        SystemLanguage.English
-    }; 
+using UnityEngine.UI;
+using System.Reflection;
+using System.Linq;
 
-    public static SystemLanguage nowLanguage;
-    public LanguageSwitchDataList LanguageSwitchDataList { get; private set; }
+public enum MyLanguage
+{
+    英语=22, 简体中文 =1,繁体中文=2,日语=3,韩语=4,法语=5,德语=6,意大利语=7,西班牙语=8,葡萄牙语=9,土耳其语=10,越南语=11,泰语=12, 波兰语=13, 荷兰语=14, 希腊语=15, 阿拉伯语=16,印地语=17,乌尔都语=18,马来语=19,印尼语=20, 俄语=21
+
+}
+public class LanguageManage : Singleton<LanguageManage>
+{
+    private LanguageSwitchDataList LanguageSwitchDataList;
+
+    private Dictionary<string, MyLanguage> LocalLanguages = new Dictionary<string, MyLanguage>();
+    private Dictionary<MyLanguage,LanguageData> allLanguages=new Dictionary<MyLanguage, LanguageData>();
+    private Dictionary<string,FieldInfo> languageFields=new Dictionary<string, FieldInfo>();
+     
+    public static MyLanguage nowLanguage;
+    FieldInfo nowFieldInfo;
+
+    public List<LanguageData> languageDatas => allLanguages.Values.ToList();
     public override async void Init()
     {
-        base.Init();
-        LanguageSwitchDataList =await  GameDataManager.instance.GetAsyncData<LanguageSwitchDataList>("LanguageSwitchDataList");
+        base.Init(); 
         TMP_Text.SwitchString = SwitchStr;
+        LanguageSwitchDataList =GameDataManager.instance.GetData<LanguageSwitchDataList>("LanguageSwitchDataList");
+        languageFields.Clear();
+        Type type = typeof(LanguageSwitchData);
+        var fields = type.GetFields();
+        for(int i = 0; i < fields.Length; i++)
+        {
+            languageFields[fields[i].Name] = fields[i];
+        }
+
+        allLanguages = new Dictionary<MyLanguage, LanguageData>();
+        var Languages = await GameDataManager.instance.GetAllAsyncData<LanguageData>();
+        for(int i = 0; i < Languages.Count; i++)
+        {
+            var languageData = Languages[i];
+            allLanguages[languageData.languageType] = languageData;
+            for(int j = 0; j < languageData.localName.Count; j++)
+            {
+                LocalLanguages.Add(languageData.localName[j], languageData.languageType);
+            }
+        }
     }
     protected override void Clear()
     {
         base.Clear();
         TMP_Text.SwitchString = null;
     }
-    public static void TextFanyi(Text text)
+    public string SwitchString(string source)
     {
-        text.text = SwitchStr(text.text);
-    }
+        if (string.IsNullOrEmpty(source))
+        {
+            return source;
+        }
+        if (LanguageSwitchDataList.languageDatas.TryGetValue(source,out var languageSwitchData) && nowFieldInfo!=null)
+        {
+          return  nowFieldInfo.GetValue(languageSwitchData).ToString();
+        }
+        return source;
+    } 
+    public void SetLanguage(MyLanguage myLanguage)
+    {
+        PlayerPrefs.SetInt("MyLanguage", (int)myLanguage);
+        GetLocalLanguage(myLanguage);
 
-    public void SystemLanguageMatch(bool SetLanguage, SystemLanguage SetSystemLanguage)
+        var allTMP_Text = UnityEngine.Object.FindObjectsByType<TMP_Text>(FindObjectsSortMode.None);
+        for(int i = 0; i < allTMP_Text.Length; i++)
+        {
+            allTMP_Text[i].FixedSwitchString();
+        }
+
+        var languageSwitchImages=UnityEngine.Object.FindObjectsByType<LanguageSwitchImage>(FindObjectsSortMode.None);
+        for(int i = 0; i < languageSwitchImages.Length; i++)
+        {
+            languageSwitchImages[i].SetImage(myLanguage);
+        }
+    }
+    
+    void GetLocalLanguage(MyLanguage overrideLanguage = 0)
     {
-        bool isMatch = false;
-        if (!SetLanguage)
-        { 
-            nowLanguage = Application.systemLanguage;
-            if (nowLanguage == SystemLanguage.ChineseSimplified || nowLanguage == SystemLanguage.ChineseTraditional ||
-                nowLanguage == SystemLanguage.Chinese)
+        if (overrideLanguage == 0)
+        {
+            int value = PlayerPrefs.GetInt("MyLanguage");
+            if (value > 0)
             {
-                nowLanguage = SystemLanguage.Chinese;
+                nowLanguage = (MyLanguage)value;
             }
-            foreach (var systemLanguage in Languages)
+            else
             {
-                if (systemLanguage == nowLanguage)
+                // 获取系统文化信息
+                var culture = CultureInfo.CurrentUICulture;
+                if (!LocalLanguages.TryGetValue(culture.Name, out nowLanguage))
                 {
-                    isMatch = true;
-                    break;
+                    nowLanguage = MyLanguage.英语;
                 }
-            }
-            if (!isMatch)
-            {
-                nowLanguage=SystemLanguage.English;
             }
         }
         else
         {
-            nowLanguage = SetSystemLanguage;
-            foreach (var systemLanguage in Languages)
+            nowLanguage = overrideLanguage;
+        }
+       
+        if(allLanguages.TryGetValue(nowLanguage,out var languageData))
+        {
+            if(languageFields.TryGetValue(languageData.FieldName, out nowFieldInfo))
             {
-                if (systemLanguage == nowLanguage)
-                {
-                    isMatch = true;
-                    break;
-                }
-            }
-            if (!isMatch)
-            {
-                nowLanguage = SystemLanguage.English;
+                return;
             }
         }
-        
+        languageFields.TryGetValue("en", out nowFieldInfo);
+    }
+
+    public void SystemLanguageMatch(MyLanguage SetSystemLanguage=0)
+    {
+        GetLocalLanguage(SetSystemLanguage); 
     }
     public static string SwitchStr(object source, params object[] args)
     {
@@ -106,31 +155,35 @@ public class LanguageManage : Singleton<LanguageManage>
     }
     public static string SwitchStr(string s)
     {
-        if (instance == null|| instance.LanguageSwitchDataList==null)
+        if (instance == null)
         {
             return s;
         }
-        s = instance.LanguageSwitchDataList.GetValue(nowLanguage, s);
+        s = instance.SwitchString(s);
         return s;
     }
     public static string SwitchStr(object obj)
     {
         string s = obj.ToString();
-        s = instance.LanguageSwitchDataList.GetValue(nowLanguage, s);
+        s = instance.SwitchString(s);
         return s;
     }  
     public string GameTimeToString(int year,Season season,int day)
     {
         string result = "";
-        if(nowLanguage == SystemLanguage.English)
+        if(allLanguages.TryGetValue(nowLanguage,out var languageData))
         {
-
-        }
-        else
+            result=string.Format(languageData.timeStr,year, SwitchStr(season), day);
+        } 
+        return result;
+    }
+    public string GameTimeToString(int year, Season season)
+    {
+        string result = "";
+        if (allLanguages.TryGetValue(nowLanguage, out var languageData))
         {
-            result = $"{year}年 {season} {day}日";
+            result = string.Format(languageData.timeStr, year,SwitchStr(season),"");
         }
-
         return result;
     }
 }

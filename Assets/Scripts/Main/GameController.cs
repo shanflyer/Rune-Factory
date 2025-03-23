@@ -135,7 +135,7 @@ public class GameController : MonoBehaviour
 
     public static GameController instance;
     public bool SetLanguage;
-    public SystemLanguage SetSystemLanguage;
+    public MyLanguage SetSystemLanguage;
 
     public Item[] testPlayerItems;
     [SerializeField]
@@ -351,7 +351,7 @@ if (result.Success)
         var audio = transform.Find("Audio");
         AudioController.instance.SetAudioSource(audio.gameObject);
         GameRuntimeObjManager.instance.CreatParent<RuntimeObjType>(transform);
-        LanguageManage.instance.SystemLanguageMatch(SetLanguage, SetSystemLanguage);
+        LanguageManage.instance.SystemLanguageMatch(SetLanguage?SetSystemLanguage:0);
         UIManager.instance.ShowGamePanel<ZeroPanel>();
          
         SwitchInputMap switchInputMap = new SwitchInputMap

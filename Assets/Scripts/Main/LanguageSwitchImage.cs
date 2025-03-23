@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using Unity.Entities.UniversalDelegates;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -13,7 +14,7 @@ using UnityEditor;
 public class LanguageSwitchImage :MonoBehaviour
 {
     [SerializeField]
-    List<LanguageImage> languageImages;
+    LanguageSpriteObj LanguageSpriteObj;
     [SerializeField]
     Image image;
     [SerializeField]
@@ -26,27 +27,20 @@ public class LanguageSwitchImage :MonoBehaviour
         {
             image = gameObject.GetComponent<Image>();
         }
-        SystemLanguage systemLanguage = LanguageManage.nowLanguage;
+        MyLanguage systemLanguage = LanguageManage.nowLanguage;
         SetImage(systemLanguage);
     }
-    public void SetImage(SystemLanguage systemLanguage)
+    public void SetImage(MyLanguage MyLanguage)
     {
-        for(int i = 0; i < languageImages.Count; i++)
-        {
-            if (languageImages[i].systemLanguage == systemLanguage)
-            {
-                image.sprite = languageImages[i].sprite;
-                if (isNativeSize)
-                    image.SetNativeSize();
-                break;
-            }
-        }
+        image.sprite = LanguageSpriteObj.GetSprite(MyLanguage);
+        if (isNativeSize)
+            image.SetNativeSize();
     }
 }
 [Serializable]
 public struct LanguageImage
 {
-    public SystemLanguage systemLanguage;
+    public MyLanguage systemLanguage;
     public Sprite sprite;
 }
 #if UNITY_EDITOR

@@ -113,8 +113,8 @@ namespace TMPro
     {
         public static SwitchString SwitchString;
         public static string AddString(string s0, string s1)
-        { 
-            var span = s1.AsSpan(); 
+        {
+            var span = s1.AsSpan();
             var builder = new StringBuilder(s0);
             builder.Append(span);
             return builder.ToString();
@@ -132,17 +132,17 @@ namespace TMPro
             }
             if (args != null)
             {
-                text = string.Format(source, args);
+                SetNativeText(string.Format(source, args));
             }
             else
             {
-                text = source;
+                SetNativeText(source);
             }
 
         }
         public virtual void SetADDText(object source, params object[] args)
         {
-          
+
             if (SwitchString != null)
             {
                 source = SwitchString(source.ToString());
@@ -159,16 +159,16 @@ namespace TMPro
             if (args != null)
             {
                 var builder = new StringBuilder(source.ToString());
-                for(int i = 0; i < args.Length; i++)
+                for (int i = 0; i < args.Length; i++)
                 {
                     var span = args[i].ToString().AsSpan();
                     builder.Append(span);
                 }
-                text = builder.ToString();
+                SetNativeText(builder.ToString());
             }
             else
             {
-                text = source.ToString();
+                SetNativeText(source.ToString());
             }
 
         }
@@ -184,26 +184,49 @@ namespace TMPro
                         args[i] = SwitchString(args[i].ToString());
                     }
                 }
-                
+
             }
             if (args != null)
             {
-                text = string.Format(source.ToString(), args);
+                SetNativeText(string.Format(source.ToString(), args));
             }
             else
             {
-                text = source.ToString();
+                SetNativeText(source.ToString());
             }
             return text;
-        } 
+        }
+
+        protected string originalText;
         protected override void Awake()
         {
             base.Awake();
-            if (SwitchString != null)
+            FixedSwitchString();
+        }
+        public void FixedSwitchString()
+        {
+            if (string.IsNullOrEmpty(originalText))
             {
-                text = SwitchString(text);
+                originalText = m_text;
+                //return;
             }
-        } 
+            if (SwitchString != null)
+            { 
+                SetNativeText(SwitchString(originalText));
+            }
+        }
+        void SetNativeText(string value)
+        {
+            if (m_IsTextBackingStringDirty == false && m_text != null && value != null && m_text.Length == value.Length && m_text == value)
+                return;
+
+            m_IsTextBackingStringDirty = false;
+            m_text = value;
+            m_inputSource = TextInputSources.TextString;
+            m_havePropertiesChanged = true;
+            SetVerticesDirty();
+            SetLayoutDirty();
+        }
         /// <summary>
         /// A string containing the text to be displayed.
         /// </summary>
@@ -218,6 +241,7 @@ namespace TMPro
             }
             set
             {
+                originalText = value; 
                 if (m_IsTextBackingStringDirty == false && m_text != null && value != null && m_text.Length == value.Length && m_text == value)
                     return;
 

@@ -1277,7 +1277,8 @@ public static class DataPath
         {typeof(GameGuideFilmData),"Data/GameGuideFilmData" },
         {typeof(AppStoreProductData),"Data/AppStoreProductData" },
         {typeof(FunctionInfoData),"Data/FunctionInfoData" },
-        {typeof(DefaultConfigData),"Data/DefaultConfigData" }
+        {typeof(DefaultConfigData),"Data/DefaultConfigData" },
+        {typeof(LanguageData),"Data/LanguageData" }
     };
 
     public static string GetDataPath(Type type)

@@ -806,14 +806,7 @@ public struct GameDateSaveData
 
     public override string ToString()
     {
-        switch (LanguageManage.nowLanguage)
-        {
-            case UnityEngine.SystemLanguage.Chinese:
-                return $"{year}年 {season}之月 {day}日"; 
-            default:
-                return $"{day}年 {season}之月 {day}日";
-               
-        }
+      return  LanguageManage.instance.GameTimeToString(year, season, day); 
     } 
 }
 

@@ -54,16 +54,7 @@ public class GameDate : IReferenceData, INativeData
     }
     public  string ToString(int year)
     {
-        if (LanguageManage.nowLanguage == SystemLanguage.Chinese)
-        {
-            string str = $"{year}年{season}之月{date}日";
-            return str;
-        }
-        else
-        {
-            string str = $"{date}th {LanguageManage.SwitchStr(season)} In {year}";
-            return str;
-        }
+        return LanguageManage.instance.GameTimeToString(year, season, date); 
     }
     public GameDate(Season _season, int _date)
     {
@@ -581,14 +572,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                 float moonOffSet = day / 15.0f;
                 Shader.SetGlobalFloat("_moonOffSet", moonOffSet);
 
-                if (LanguageManage.nowLanguage == SystemLanguage.Chinese)
-                {
-                    InformationController.instance.AddInformation("*" + year + "年" + Season + "之月" + day + "日");
-                }
-                else
-                {
-                    InformationController.instance.AddInformation("*" + day + "," + LanguageManage.SwitchStr(Season.ToString()) + "," + year + LanguageManage.SwitchStr("年"));
-                }
+                LanguageManage.instance.GameTimeToString(year, season, day); 
             }
             int x = day % 6;
             week = (Week)x;

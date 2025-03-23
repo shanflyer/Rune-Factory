@@ -8,14 +8,14 @@ public class LanguageSpriteObj : ScriptableObject
     [System.Serializable]
     public struct LanguageSprite
     {
-        public SystemLanguage systemLanguage;
+        public MyLanguage systemLanguage;
         public Sprite sprite;
     }
 
     public Sprite defaultSprite;
     public List<LanguageSprite> LanguageSprites = new List<LanguageSprite>();
 
-    private Dictionary<SystemLanguage, Sprite> LanguageSpriteDic = new Dictionary<SystemLanguage, Sprite>();
+    private Dictionary<MyLanguage, Sprite> LanguageSpriteDic = new Dictionary<MyLanguage, Sprite>();
 
     void TryInitLanguageData()
     {
@@ -30,14 +30,14 @@ public class LanguageSpriteObj : ScriptableObject
     public Sprite GetSprite()
     {
         TryInitLanguageData();
-        SystemLanguage systemLanguage = Application.systemLanguage;
+        MyLanguage systemLanguage = LanguageManage.nowLanguage;
         if(LanguageSpriteDic.TryGetValue(systemLanguage,out Sprite sprite))
         {
             return sprite;
         }
         return defaultSprite; 
     }
-    public Sprite GetSprite(SystemLanguage systemLanguage)
+    public Sprite GetSprite(MyLanguage systemLanguage)
     {
         TryInitLanguageData(); 
         if (LanguageSpriteDic.TryGetValue(systemLanguage, out Sprite sprite))

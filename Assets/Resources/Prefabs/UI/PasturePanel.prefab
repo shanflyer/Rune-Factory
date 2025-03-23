@@ -278,6 +278,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 1736975037679725028}
+  HideSelected: 0
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -721,6 +722,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 757041598003713895}
+  HideSelected: 0
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -869,6 +871,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 1224699055176353628}
+  HideSelected: 0
   toggleTransition: 1
   graphic: {fileID: 7653965737040326022}
   m_Group: {fileID: 3426419200939141996}
@@ -1615,6 +1618,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 2344887804135345237}
+  HideSelected: 0
   toggleTransition: 1
   graphic: {fileID: 9206035117634482807}
   m_Group: {fileID: 3426419200939141996}
@@ -3245,6 +3249,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 504525618687877477}
+  HideSelected: 0
   toggleTransition: 1
   graphic: {fileID: 7514362311095525335}
   m_Group: {fileID: 0}
@@ -4242,6 +4247,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 6752912553667220753}
+  HideSelected: 0
   toggleTransition: 1
   graphic: {fileID: 6024912449655870585}
   m_Group: {fileID: 3426419200939141996}
@@ -4744,6 +4750,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 6126256622272223120}
+  HideSelected: 0
   toggleTransition: 1
   graphic: {fileID: 5703344312504815679}
   m_Group: {fileID: 3426419200939141996}
@@ -4972,6 +4979,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 5212784671616150863}
+  HideSelected: 0
   toggleTransition: 1
   graphic: {fileID: 8677626543561102403}
   m_Group: {fileID: 3426419200939141996}
@@ -5450,6 +5458,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 4670965148041897341}
+  HideSelected: 0
   toggleTransition: 1
   graphic: {fileID: 2736427292607424804}
   m_Group: {fileID: 3426419200939141996}
@@ -5553,9 +5562,9 @@ MonoBehaviour:
   m_fontSize: 20
   m_fontSizeBase: 20
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 12
+  m_fontSizeMax: 20
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
