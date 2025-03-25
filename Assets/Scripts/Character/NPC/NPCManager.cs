@@ -81,8 +81,7 @@ public class TempCharacter : Character
     public TempCharacter(CharacterData characterData, ProfessionData professionData, int instanceId, TempCharacterData tempCharacterData) : 
         base(characterData, professionData, instanceId,false)
     {
-        this.tempCharacterData = tempCharacterData;
-        CanMoveCrossMap = false;
+        this.tempCharacterData = tempCharacterData; 
         //templevel = 1;
     }
 

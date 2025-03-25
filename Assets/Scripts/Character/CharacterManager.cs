@@ -1257,7 +1257,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
             
         }
-        else
+        else if (!(character is TempCharacter))
         {
             character.moveEnumeratorId = 0;
             character.SetCoordinate(new int3(targetCoordinate, targetMap),refreshMapTemp:false);
@@ -1270,7 +1270,7 @@ public class CharacterManager : Singleton<CharacterManager>
         // int2 offsetCoordinate = targetCoordinate - character.coordinate;
         character.SetCoordinate(new int3(targetCoordinate.xy, character.mapInstance), !character.isController,false);
 
-        if (character.CanMoveCrossMap)
+        if (!(character is TempCharacter))
         {
             MapCellController.instance.ChangeMapAction(targetCoordinate, character.direction, character.mapInstance, ChangeMapAction);
 
