@@ -82,6 +82,7 @@ public class TempCharacter : Character
         base(characterData, professionData, instanceId,false)
     {
         this.tempCharacterData = tempCharacterData;
+        CanMoveCrossMap = false;
         //templevel = 1;
     }
 
@@ -143,6 +144,13 @@ public class TempCharacter : Character
         }
         else
         {
+            TryRemoveLinkMapItemCharacter tryRemoveLinkMapItemCharacter = new TryRemoveLinkMapItemCharacter
+            {
+                linkInstanceId = instanceId,
+                mapItemInstanceId = linkItem
+            };
+            GameActionManager.instance.QueueAction(tryRemoveLinkMapItemCharacter, true);
+
             CharacterBehaviorManager.instance.DestroyBehavior(instanceId);
             CharacterBehaviorManager.instance.AddBehavior(instanceId, externalBehaviorTree);
         }

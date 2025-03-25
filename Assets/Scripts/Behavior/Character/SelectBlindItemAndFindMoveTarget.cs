@@ -45,7 +45,7 @@ public class SelectBlindItemAndFindMoveTarget: Action
             {
                 checkItems = npc.WorkItems;
             }
-            Debug.LogWarning($"尝试寻找:{npc.Character.name}");
+            //Debug.LogWarning($"尝试寻找:{npc.Character.name}");
             for (int i = 0; i < checkItems.Count; i++)
             {
                 int index = i;

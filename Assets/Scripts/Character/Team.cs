@@ -593,7 +593,7 @@ public class Team
                         var forwardCharacter = Teamers[i - 1];
                         nextCharacter.queueCoordinate = forwardCharacter.queueCoordinate;
                         nextCharacter.SetNowCoordinate(forwardCharacter.character.coordinate, forwardCharacter.character.moveDirection,false);
-                       await CharacterManager.instance.RefreshNpcRuntimeObj(nextCharacter.character);
+                       await CharacterManager.instance.RefreshNpcRuntimeObj(nextCharacter.character,RefreshMapTemp:false);
                     }
                 }
                 Teamers[index].character.LeaveTeam();
@@ -667,7 +667,7 @@ public class Teamer
         character.SetCoordinate(this.nowCoordinate);
         if (!holdDisplay)
         {
-            await CharacterManager.instance.RefreshNpcRuntimeObj(character);
+            await CharacterManager.instance.RefreshNpcRuntimeObj(character,RefreshMapTemp:false);
         }
        
         character.moveDirection = directionValue;
@@ -727,7 +727,7 @@ public class Teamer
         {
             queueCoordinate.Enqueue(targetCoordinate);
         }
-        character.SetCoordinate(coordinate);
+        character.SetCoordinate(coordinate, refreshMapTemp: false);
        //await CharacterManager.instance.RefreshNpcRuntimeObj(character);
         canMove = true;
     }

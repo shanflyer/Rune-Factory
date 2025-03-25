@@ -4,6 +4,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Playables;
+using UnityEngine.TextCore.Text;
 using static UnityEngine.ParticleSystem;
 
 #if UNITY_EDITOR
@@ -13,6 +14,14 @@ public delegate void SetFootStepAction(AudioClip audioClip, Color color);
 
 public class CharacterRuntimeObj : MonoBehaviour, IGameData
 {
+    public new Transform transform
+    {
+        get
+        {
+            return base.transform;
+        } 
+    }
+   
     public RuntimeObj runtimeObj
     {
         get
@@ -224,6 +233,7 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
 
     public void SetPosition(Vector3 pos)
     {
+         
         transform.position = pos;
     }
 

@@ -222,13 +222,15 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
         void EnnAction()
         {
            // Debug.Log($"EnnAction()");
+           
+            runIEnumerator.Remove(instanceId);
+            pauseEnumerator.Remove(instanceId);
+            MyInstance.instance.RemoveInstance(instanceId);
+
             if (curveEndAction != null)
             {
                 curveEndAction();
             }
-            runIEnumerator.Remove(instanceId);
-            pauseEnumerator.Remove(instanceId);
-            MyInstance.instance.RemoveInstance(instanceId);
         }
 
         UpDataComponent.StartCoroutine(enumerator);

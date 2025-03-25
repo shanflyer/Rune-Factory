@@ -1249,7 +1249,7 @@ public partial class Character
         if (GameObjectCurveController.instance.StopLineMove(moveEnumeratorId))
         {
             CharacterManager.instance.SetCharacterAnimationSpeed(0, this);
-        };
+        }; 
     }
 
     public void RemoveMove()
@@ -1486,7 +1486,7 @@ public partial class Character
     /// 设置坐标
     /// </summary>
     /// <param name="coordinate">x.y;z:地图id</param>
-    public void SetCoordinate(int3 coordinate,bool refreshObj=true)
+    public void SetCoordinate(int3 coordinate,bool refreshObj=true,bool refreshMapTemp=true)
     {
         //int2 forwordCoordinate = objCoordinate.xy + 2 * GameCommon.GetDirectionInt2(direction);
         int2 oldCoordinate = objCoordinate.xy;
@@ -1568,7 +1568,7 @@ public partial class Character
 
         if (refreshObj)
         {
-             CharacterManager.instance.RefreshNpcRuntimeObj(this,isController);
+             CharacterManager.instance.RefreshNpcRuntimeObj(this,isController, refreshMapTemp);
         }
        
         // ForwardTrigger(coordinate, direction);

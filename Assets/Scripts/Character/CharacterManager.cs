@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks; 
 using Unity.Mathematics;
 using UnityEngine;
-using MyGame;
+using MyGame; 
 
 public delegate void MoveEndAction(); 
  
@@ -53,15 +53,13 @@ public class CharacterManager : Singleton<CharacterManager>
     private void RecycleCharacterObj(Character character)
     {
         Debug.Log($"RecycleCharacterObj:{character.name}");
-
+        displayCharacters.Remove(character);
         GameActionManager.instance.QueueAction(new TryRecycleCharacterEmote { id = character.instanceId }, true);
         if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
         {
             characterRuntimeObj.Clear();
             characterRuntionObjs.Remove(character);
-        }
-        displayCharacters.Remove(character);
-        
+        } 
         FishController.instance.RecycleFisherObj(character.instanceId);
     }
 
@@ -199,7 +197,7 @@ public class CharacterManager : Singleton<CharacterManager>
             }
 
             character.RemoveMove();
-            character.SetCoordinate(newCoordiante);
+            character.SetCoordinate(newCoordiante,refreshMapTemp:false);
             ReStartCharacterBehavior reStartCharacterBehavior = new ReStartCharacterBehavior
             {
                 characterId = character.instanceId
@@ -299,7 +297,17 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
             {
-                characterRuntimeObj.transform.position = GameCommon.GetMapPos(character.coordinate);
+                var pos = GameCommon.GetMapPos(character.coordinate);
+                if (GameDataManager.instance.GlobalData.debug)
+                {
+                    float dX = math.abs(characterRuntimeObj.transform.position.x - pos.x);
+                    if (dX >= 1.5)
+                    {
+                        Debug.Log($"Waring:{character.name}--oldPos{characterRuntimeObj.transform.position}--newPos{pos}");
+                    }
+                }
+                
+                characterRuntimeObj.transform.position = pos;
                 if (RefreshCharacterPos.setResult != null)
                 {
                     RefreshCharacterPos.setResult(true);
@@ -319,6 +327,14 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
             {
+                if (GameDataManager.instance.GlobalData.debug)
+                {
+                    float dX = math.abs(characterRuntimeObj.transform.position.x - setCharacterTempPos.pos.x);
+                    if (dX >= 1.5)
+                    {
+                        Debug.Log($"Waring:{character.name}--oldPos{characterRuntimeObj.transform.position}--newPos{setCharacterTempPos.pos}");
+                    }
+                }
                 characterRuntimeObj.transform.position = setCharacterTempPos.pos;
                 if (setCharacterTempPos.setResult != null)
                 {
@@ -660,7 +676,7 @@ public class CharacterManager : Singleton<CharacterManager>
         AddCharacter(character);
         character.SetObjCoordinate(creatTempCharacter.mapInstance,
             new int2(creatTempCharacter.coordinateX, creatTempCharacter.coordinateY));
-        await RefreshNpcRuntimeObj(character);
+        await RefreshNpcRuntimeObj(character,RefreshMapTemp:false);
 
         character.templevel = level; 
         if (creatTempCharacter.setValue != null)
@@ -885,7 +901,16 @@ public class CharacterManager : Singleton<CharacterManager>
             {
                 if (characterRuntimeObj)
                 {
-                    Vector2 pos = GameCommon.GetMapPos(character.coordinate); 
+                    Vector2 pos = GameCommon.GetMapPos(character.coordinate);
+                    if (GameDataManager.instance.GlobalData.debug)
+                    {
+                        float dX = math.abs(characterRuntimeObj.transform.position.x - pos.x);
+                        if (dX >= 1.5)
+                        {
+                            Debug.Log($"Waring:{character.name}--oldPos{characterRuntimeObj.transform.position}--newPos{pos}");
+                        }
+                    }
+                   
                     characterRuntimeObj.SetPosition(pos);
                     
                     if (refreshDirection)
@@ -911,6 +936,14 @@ public class CharacterManager : Singleton<CharacterManager>
             Vector3 targetPos = new Vector3(pos.x, pos.y, transform.position.z);
            // transform.position = targetPos;
             SetCharacterAnimationSpeed(1, characterRuntimeObj);
+            if (GameDataManager.instance.GlobalData.debug)
+            {
+                float dX = math.abs(characterRuntimeObj.transform.position.x - pos.x);
+                if (dX >= 1.5)
+                {
+                    Debug.Log($"Waring:{character.name}--oldPos{characterRuntimeObj.transform.position}--newPos{pos}");
+                }
+            }
             characterRuntimeObj.SetPosition(targetPos);
            // transform.position = pos;
            
@@ -999,6 +1032,11 @@ public class CharacterManager : Singleton<CharacterManager>
             character.nowSpeed = character.propertySpeed * updataMoveSpeed * math.length(character.moveDirection) / distance;
         }
         Vector2Int offsetCoordinate = Vector2Int.zero;
+
+        if (character.moveEnumeratorId != 0)
+        {
+            Debug.Log($"Waring:{character.name}--noStop");
+        }
         character.moveEnumeratorId =
         GameObjectCurveController.instance.Line(character.nowSpeed, startPos, targetPos, (Vector2 pos) =>
         {
@@ -1012,6 +1050,7 @@ public class CharacterManager : Singleton<CharacterManager>
         },
             () =>
             {
+                character.moveEnumeratorId = 0;
                 character.nowSpeed = 0;
                 if (runtimeObj != null)
                     SetCharacterAnimationSpeed(0, runtimeObj);
@@ -1064,6 +1103,8 @@ public class CharacterManager : Singleton<CharacterManager>
 
         var lineSpeed = slant ? moveSpeed * GameCommon.slantValue : moveSpeed;
         lineSpeed *= character.propertySpeed;
+        if(character.moveEnumeratorId!=0)
+            Debug.Log($"Waring:{character.name}--noStop");
         character.moveEnumeratorId =
         GameObjectCurveController.instance.Line(lineSpeed, startPos, targetPos, (Vector2 pos) =>
              {
@@ -1075,8 +1116,18 @@ public class CharacterManager : Singleton<CharacterManager>
                          var transform = runtimeObj.transform;
                          if (transform)
                          {
-                             runtimeObj.SetPosition(pos);  
+                             if (GameDataManager.instance.GlobalData.debug)
+                             {
+                                 float dX = math.abs(transform.position.x - pos.x);
+                                 if (dX >= 2.5)
+                                 {
+                                     Debug.Log($"Waring:{character.name}--oldPos{transform.position}--newPos{pos}--startPos{startPos}--targetPos{targetPos}");
+                                 }
+                             }
+                             runtimeObj.SetPosition(pos);
                              //transform.Translate(Vector3.zero);
+
+                             //Debug.Log($"{character.name}--SetObjCoordinate0:{character.coordinate}--pos{pos}");
                          }
                      }
                      catch(Exception e)
@@ -1094,10 +1145,11 @@ public class CharacterManager : Singleton<CharacterManager>
              },
             () =>
             {
+                character.moveEnumeratorId = 0;
                //Debug.Log($"pathNodes.count:{pathNodes.Count}");
                 if (pathNodes.Count > 0)
                 {
-                    character.SetCoordinate(new int3(targetCoordinate.xy, character.mapInstance));
+                    character.SetCoordinate(new int3(targetCoordinate.xy, character.mapInstance), refreshMapTemp: false);
 
                     CharacterMoveTarget(character, pathNodes, EndAction, changeCoordinateAction, failedMoveAction);
                 }
@@ -1186,6 +1238,14 @@ public class CharacterManager : Singleton<CharacterManager>
                         if (characterRuntionObjs.TryGetValue(character, out CharacterRuntimeObj characterRuntimeObj))
                         {
                             Vector2 pos = characterRuntimeObj.transform.position;
+                            if (GameDataManager.instance.GlobalData.debug)
+                            {
+                                float dX = math.abs(characterRuntimeObj.transform.position.x - pos.x);
+                                if (dX >= 1.5)
+                                {
+                                    Debug.Log($"Waring1:{character.name}--oldPos{characterRuntimeObj.transform.position}--newPos{pos}");
+                                }
+                            }
                             characterRuntimeObj.SetPosition(pos); 
                             characterRuntimeObj.SetAnimationDirection(character.moveDirection,character.direction); 
                         }
@@ -1199,7 +1259,8 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         else
         {
-            character.SetCoordinate(new int3(targetCoordinate, targetMap));
+            character.moveEnumeratorId = 0;
+            character.SetCoordinate(new int3(targetCoordinate, targetMap),refreshMapTemp:false);
             await SetPlayerPos(character);
         }
     }
@@ -1207,7 +1268,7 @@ public class CharacterManager : Singleton<CharacterManager>
     public bool CrossMap(int2 targetCoordinate, Character character, out int3 newMap, MoveEndAction EndAction = null)
     {
         // int2 offsetCoordinate = targetCoordinate - character.coordinate;
-        character.SetCoordinate(new int3(targetCoordinate.xy, character.mapInstance), !character.isController);
+        character.SetCoordinate(new int3(targetCoordinate.xy, character.mapInstance), !character.isController,false);
 
         if (character.CanMoveCrossMap)
         {
@@ -1319,14 +1380,15 @@ public class CharacterManager : Singleton<CharacterManager>
         if (characterData != null)
         {
             var runtimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.CHARACTER.ToString(), characterData.obj.name,
-               characterData.obj, instacneId);
+               characterData.obj, instacneId); 
+
             (runtimeObj.obj as CharacterRuntimeObj).SetPosition(pos);
             return runtimeObj;
         }
         return null;
     }
 
-    public async Task RefreshNpcRuntimeObj(Character character, bool controller = false)
+    public async Task RefreshNpcRuntimeObj(Character character, bool controller = false,bool RefreshMapTemp=true)
     {
         CharacterRuntimeObj characterRuntimeObj;
 
@@ -1351,18 +1413,30 @@ public class CharacterManager : Singleton<CharacterManager>
                 var transform = characterRuntimeObj.transform;
                 Vector3 oldPos = transform.position;
                 pos.z = oldPos.z;
+                if (GameDataManager.instance.GlobalData.debug)
+                {
+                    float dX = math.abs(characterRuntimeObj.transform.position.x - pos.x);
+                    if (dX >= 1.5)
+                    {
+                        Debug.Log($"Waring:{character.name}--oldPos{characterRuntimeObj.transform.position}--newPos{pos}");
+                    }
+                }
                 characterRuntimeObj.SetPosition(pos);
                 if (controller)
                 { 
                     CameraManager.instance.SetFollowTarget(transform);
                 }
-                RefreshMapTempCharacter refreshMapTempCharacter = new RefreshMapTempCharacter
+                if (RefreshMapTemp)
                 {
-                    characterId = character.instanceId,
-                };
-                GameActionManager.instance.QueueAction(refreshMapTempCharacter);
+                    RefreshMapTempCharacter refreshMapTempCharacter = new RefreshMapTempCharacter
+                    {
+                        characterId = character.instanceId,
+                    };
+                    GameActionManager.instance.QueueAction(refreshMapTempCharacter);
+                }
+               
 
-               // Debug.Log($"{character.name}--SetObjCoordinate:{WorldMapObjManager.instance.displayMap}");
+               //Debug.Log($"{character.name}--SetObjCoordinate:{character.coordinate}--pos{pos}");
             }
         }
         else
@@ -1410,6 +1484,14 @@ public class CharacterManager : Singleton<CharacterManager>
                 else
                 {
                     Vector3 pos = GameCommon.GetMapPos(character.coordinate);
+                    if (GameDataManager.instance.GlobalData.debug)
+                    {
+                        float dX = math.abs(characterRuntimeObj.transform.position.x - pos.x);
+                        if (dX >= 1.5)
+                        {
+                            Debug.Log($"Waring:{character.name}--oldPos{characterRuntimeObj.transform.position}--newPos{pos}");
+                        }
+                    }
                     Transform transform = characterRuntimeObj.transform;
                     transform.localPosition = pos;
                 }

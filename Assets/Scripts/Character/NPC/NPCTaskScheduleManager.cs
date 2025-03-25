@@ -300,7 +300,7 @@ public class NPCTaskScheduleManager:Singleton<NPCTaskScheduleManager>
                         linkInstanceId = characterInstance,
                         mapItemInstanceId = character.linkItem
                     };
-                    GameActionManager.instance.QueueAction(tryRemoveLinkMapItemCharacter);
+                    GameActionManager.instance.QueueAction(tryRemoveLinkMapItemCharacter,true);
                 }
 
                 CharacterBehaviorManager.instance.AddBehavior(characterInstance, externalBehavior,
