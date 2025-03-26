@@ -13,7 +13,9 @@ public class LanguageData : ScriptableObject, IGameData,IReferenceData
     public string ShowName;
     public bool rightStart;
     public MyLanguage languageType;
-    public string timeStr; 
+    public string timeStr;
+    public float lineSpacing;
+    public float characterSpacing;
     public string GetKey()
     {
         return languageType.ToString();

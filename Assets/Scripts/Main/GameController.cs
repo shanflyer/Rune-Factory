@@ -400,10 +400,17 @@ if (result.Success)
         {
             UIManager.instance.ShowGamePanel<AllItemPanel>();
         }
+        if (autoChangeLanguage && myLanguage != SetSystemLanguage)
+        {
+            LanguageManage.instance.SetLanguage(SetSystemLanguage);
+            myLanguage = SetSystemLanguage;
+        }
 #endif
     }
 #if UNITY_EDITOR
     public Transform testObj;
+    public bool autoChangeLanguage;
+    public MyLanguage myLanguage;
     public void TestInstanceId()
     {
         int instanceId = selectable.GetInstanceID();
@@ -430,6 +437,10 @@ if (result.Success)
             weather = weather
         };
         GameActionManager.instance.QueueAction(setWeather);
+    }
+    public void TestLanguage()
+    {
+        LanguageManage.instance.SetLanguage(SetSystemLanguage);
     }
 #endif
 
@@ -476,6 +487,10 @@ public class GameControllerEditor : Editor
         if (GUILayout.Button("TestAction"))
         {
             gameController.TestGameAction();
+        }
+        if (GUILayout.Button("TestLanguage"))
+        {
+            gameController.TestLanguage();
         }
     }
 }

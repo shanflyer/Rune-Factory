@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+ 
 using UnityEngine;
-using UnityEngine.InputSystem;
+using UnityEngine.InputSystem; 
 
 public class ScreenShotAction : MonoBehaviour
 {
@@ -16,10 +18,16 @@ public class ScreenShotAction : MonoBehaviour
     // Update is called once per frame
     void Update()
     { 
-        if (Keyboard.current.sKey.wasPressedThisFrame)
+        if (Keyboard.current.f1Key.wasPressedThisFrame)
         {
             shotnum++;
-            ScreenCapture.CaptureScreenshot("Shot" + System.DateTime.Now.Day + System.DateTime.Now.Hour + System.DateTime.Now.Minute + System.DateTime.Now.Second + shotnum + ".png");
+            MyLanguage myLanguage = GameController.instance.SetSystemLanguage;
+            if (!Directory.Exists(myLanguage.ToString()))
+            {
+                Directory.CreateDirectory(myLanguage.ToString());
+            }
+            
+            ScreenCapture.CaptureScreenshot(myLanguage.ToString()+"/" + System.DateTime.Now.Day + System.DateTime.Now.Hour + System.DateTime.Now.Minute + System.DateTime.Now.Second + shotnum + ".png");
         }; 
     }
 #endif

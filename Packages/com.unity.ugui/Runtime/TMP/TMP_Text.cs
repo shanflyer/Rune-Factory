@@ -106,12 +106,14 @@ namespace TMPro
     public enum FontWeight { Thin = 100, ExtraLight = 200, Light = 300, Regular = 400, Medium = 500, SemiBold = 600, Bold = 700, Heavy = 800, Black = 900 };
 
     public delegate string SwitchString(string inputString);
+    public delegate float GetFloat();
     /// <summary>
     /// Base class which contains common properties and functions shared between the TextMeshPro and TextMeshProUGUI component.
     /// </summary>
     public abstract class TMP_Text : MaskableGraphic
     {
         public static SwitchString SwitchString;
+        public static GetFloat NowLineSpacing,NowCharacterSpacing;
         public static string AddString(string s0, string s1)
         {
             var span = s1.AsSpan();
@@ -198,10 +200,14 @@ namespace TMPro
         }
 
         protected string originalText;
+        float originalLineSpacing, originalCharacterSpacing;
         protected override void Awake()
         {
             base.Awake();
+            originalLineSpacing = lineSpacing;
+            originalCharacterSpacing=characterSpacing;
             FixedSwitchString();
+            
         }
         public void FixedSwitchString()
         {
@@ -219,6 +225,13 @@ namespace TMPro
         {
             if (m_IsTextBackingStringDirty == false && m_text != null && value != null && m_text.Length == value.Length && m_text == value)
                 return;
+
+            if (NowLineSpacing != null)
+                lineSpacing = originalLineSpacing + NowLineSpacing();
+            if (NowCharacterSpacing != null)
+            {
+                characterSpacing = originalCharacterSpacing + NowCharacterSpacing();
+            }
 
             m_IsTextBackingStringDirty = false;
             m_text = value;

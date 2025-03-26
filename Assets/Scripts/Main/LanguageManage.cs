@@ -30,6 +30,8 @@ public class LanguageManage : Singleton<LanguageManage>
     {
         base.Init(); 
         TMP_Text.SwitchString = SwitchStr;
+        TMP_Text.NowLineSpacing = GetLineSpacing;
+        TMP_Text.NowCharacterSpacing = GetCharacterSpacing;
         LanguageSwitchDataList =GameDataManager.instance.GetData<LanguageSwitchDataList>("LanguageSwitchDataList");
         languageFields.Clear();
         Type type = typeof(LanguageSwitchData);
@@ -85,7 +87,8 @@ public class LanguageManage : Singleton<LanguageManage>
             languageSwitchImages[i].SetImage(myLanguage);
         }
     }
-    
+
+    static float nowLineSpacing = 0,nowCharacterSpacing;
     void GetLocalLanguage(MyLanguage overrideLanguage = 0)
     {
         if (overrideLanguage == 0)
@@ -112,7 +115,8 @@ public class LanguageManage : Singleton<LanguageManage>
        
         if(allLanguages.TryGetValue(nowLanguage,out var languageData))
         {
-            if(languageFields.TryGetValue(languageData.FieldName, out nowFieldInfo))
+            nowLineSpacing = languageData.lineSpacing;
+            if (languageFields.TryGetValue(languageData.FieldName, out nowFieldInfo))
             {
                 return;
             }
@@ -152,6 +156,14 @@ public class LanguageManage : Singleton<LanguageManage>
             return source.ToString();
         }
 
+    }
+    public static float GetLineSpacing()
+    {
+        return nowLineSpacing;
+    }
+    public static float GetCharacterSpacing()
+    {
+        return nowCharacterSpacing;
     }
     public static string SwitchStr(string s)
     {
