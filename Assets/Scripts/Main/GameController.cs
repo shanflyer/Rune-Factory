@@ -9,6 +9,7 @@ using Unity.Transforms;
 using VoxelBusters.CoreLibrary;
 using VoxelBusters.EssentialKit;
 using System;
+using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -405,12 +406,15 @@ if (result.Success)
             LanguageManage.instance.SetLanguage(SetSystemLanguage);
             myLanguage = SetSystemLanguage;
         }
+        tempCount = TempCharacterManager.instance.totalCharacterCount;
 #endif
     }
 #if UNITY_EDITOR
     public Transform testObj;
     public bool autoChangeLanguage;
     public MyLanguage myLanguage;
+    public int tempCount;
+    public List<Character> tempCharacters = new List<Character>();
     public void TestInstanceId()
     {
         int instanceId = selectable.GetInstanceID();
@@ -462,10 +466,14 @@ public class GameControllerEditor : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        gameController.runTime = EditorGUILayout.Toggle("RunTime", gameController.runTime);
-        gameController.runTimeDate = EditorGUILayout.IntField("Date", gameController.runTimeDate);
-        gameController.runTimeHour = EditorGUILayout.IntSlider("Hour", gameController.runTimeHour, 0, 24);
-        gameController.runTimeMinute= EditorGUILayout.IntSlider("Minute", gameController.runTimeMinute, 0, 60);
+        if (Application.isPlaying)
+        {
+            gameController.runTime = EditorGUILayout.Toggle("RunTime", gameController.runTime);
+            gameController.runTimeDate = EditorGUILayout.IntField("Date", gameController.runTimeDate);
+            gameController.runTimeHour = EditorGUILayout.IntSlider("Hour", gameController.runTimeHour, 0, 24);
+            gameController.runTimeMinute = EditorGUILayout.IntSlider("Minute", gameController.runTimeMinute, 0, 60);
+        }
+        
         if (GUILayout.Button("test"))
         {
             gameController.Test();
@@ -492,6 +500,7 @@ public class GameControllerEditor : Editor
         {
             gameController.TestLanguage();
         }
+      
     }
 }
 #endif

@@ -406,7 +406,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                 clearAll = true,
                 prewarm=DisplayMapRoomData.tempNpcPrewarm,
             };
-            GameActionManager.instance.QueueAction(startCreatTempCharacter);
+            GameActionManager.instance.QueueAction(startCreatTempCharacter,true);
             
             for(int i = 0; i < DisplayMapRoomData.specialNpcBehaviorAreas.Count; i++)
             {
@@ -416,7 +416,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                     creatDataId = area.tempCreatId,
                     gridRange = new int4(area.grids[0] + area.pos.x, area.grids[1] + area.pos.y, area.grids[2] + area.pos.x, area.grids[3] + area.pos.y)
                 };
-                GameActionManager.instance.QueueAction(startCreatSpecialTempCharacter);
+                GameActionManager.instance.QueueAction(startCreatSpecialTempCharacter, true);
             }
         }
         else

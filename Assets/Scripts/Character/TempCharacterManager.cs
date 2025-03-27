@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using UnityEngine;
 
 public struct SpecialAreaTempCharacterCreatData
 {
@@ -26,7 +27,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
         level = 1;
     }
 
-    private int totalCharacterCount;
+    public int totalCharacterCount { get; private set; }
     public int level { get; private set; }
 
     protected override void Clear()
@@ -49,6 +50,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
         totalCharacterCount = 0;
         if (creatTempDelegate != null)
         {
+           // Debug.Log("ClearTempCharacter!!");
             GameTimerController.instance.RemoveWaiter(creatTempDelegate);
         }
         NowTempCharacterCreatData = null;
@@ -65,8 +67,10 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
     private Action creatTempDelegate;
     private List<int> tempList = new List<int>();
     private int tempRandomId;
-
-
+#if UNITY_EDITOR
+    public List<int> TempList => tempList;
+#endif
+     
     Dictionary<int2, SpecialAreaTempCharacterCreatData> specialTempCharacterCreatDataDic = new Dictionary<int2, SpecialAreaTempCharacterCreatData>();
     private async void StartCreatSpecialTempCharacter(StartCreatSpecialTempCharacter startCreatSpecialTempCharacter)
     {
@@ -251,6 +255,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
             }
         }
         CreatTempCharacter();
+       // Debug.Log("CreatTempCharacter!!");
     }
 
     private int maxTempCount;
@@ -286,7 +291,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
             coordinateX = coordinate.x,
             coordinateY = coordinate.y
         };
-        GameActionManager.instance.QueueAction(creatTempCharacter);
+        GameActionManager.instance.QueueAction(creatTempCharacter,true);
 
         totalCharacterCount++;
     }
@@ -306,6 +311,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
         nowCd += (int)(PlayerStoreManager.instance.GetCustomerCD()*1000);
         // Debug.Log($"creatCD:{nowCd}");
         creatTempDelegate = CreatTempCharacter;
+         
         GameTimerController.instance.DelayAction(nowCd, creatTempDelegate);
         if (totalCharacterCount < maxTempCount)
         {

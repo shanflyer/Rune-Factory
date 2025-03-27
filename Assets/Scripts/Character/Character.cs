@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Unity.Mathematics;
@@ -575,6 +576,7 @@ public struct Equip
 
 public delegate void SetCoordinate(int3 coordinate);
 
+[Serializable]
 public partial class Character
 {
     public bool isController { get; private set; }

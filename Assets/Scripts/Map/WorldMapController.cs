@@ -183,6 +183,7 @@ public class WorldMapController : MonoBehaviour
     void AutoSave()
     {
         GameDataSaveManager.instance.TryAutoSaveData();
+      
         GameTimerController.instance.DelayAction(600000, AutoSave);
     }
     public async void Init()
