@@ -185,9 +185,9 @@ public class GameTimeManager : Singleton<GameTimeManager>
             {
                 GameActionManager.instance.QueueAction(newHour);
             }
-            if (hour > 0)
+            if (hour >= 0)
                 this.hour = hour;
-            if (minute > 0)
+            if (minute >= 0)
                 this.minute = minute;
              
             TimeInit();
@@ -536,7 +536,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             if (minute >= 60)
             {
                 hour += minute / 60;
-                minute = minute % 20;
+                minute = minute % 60;
             }
             if (hour >= 24)
             {
@@ -589,7 +589,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             }
 
             int nowYearHour = ((int)season * 30 - 30 + day - 1) * 24 + hour;
-            seasonValue = nowYearHour / totalYearHour;
+            seasonValue = nowYearHour / totalYearHour*4;
             Shader.SetGlobalFloat("_SeasonValue", SeasonValue);
         }
         const float totalYearHour = (4 * 30) * 24;
@@ -700,6 +700,15 @@ public class GameTimeManager : Singleton<GameTimeManager>
         {
             nowGameTime.SetDate(day);
         }
+    }
+    public void SetSeasonValue(float seasonValue)
+    {
+        int index = (int)math.floor(seasonValue);
+        float dValue = seasonValue - index;
+        index = index >= 4 ? 0 : index;
+        nowGameTime.Season = (Season)(index+1);
+        SetDate((int)math.ceil(dValue * 30));
+        GameActionManager.instance.QueueAction(new NewDay());
     }
     private Dictionary<int, GameDate> gameDates = new Dictionary<int, GameDate>();
 

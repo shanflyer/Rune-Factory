@@ -243,7 +243,7 @@ public class GlobalShaderSetMono : MonoBehaviour
 
             Shader.SetGlobalColor("_DirectionColor", natureLightData.color);
             Shader.SetGlobalVector("_Direction", natureLightData.direction);
-            Vector2 directionValue = new Vector2(-natureLightData.direction.x * math.PI * 0.5f, 1 - natureLightData.direction.y / 90.0f);
+            Vector2 directionValue = new Vector2(-natureLightData.direction.x * math.PI * 0.5f, 1 - natureLightData.direction.y);
             Shader.SetGlobalVector("LightDirection", directionValue);
             Shader.SetGlobalFloat("_ShadowValue", natureLightData.shadowValue );
 

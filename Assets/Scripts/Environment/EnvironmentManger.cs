@@ -250,25 +250,77 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     }
 
     void SetWeather(SetWeather setWeather)
-    { 
-        var lerp = LerpWeather(setWeather.weather); 
-        GameObjectCurveController.instance.StartIEnumerator(lerp); 
+    {
+        if (setWeather.noLerp)
+        {
+          
+            bool oldDamp = !nowWeather.IsSnow() && nowWeather.waterFall > 0;
+            bool newDamp = !setWeather.weather.IsSnow() && setWeather.weather.waterFall > 0;
+            nowWeather = setWeather.weather;
+            lightning.lightning = nowWeather.lightning;
+            skyEnviromentMono.SetWeather(nowWeather, lightning.lightningLight);
+            using (var e = windEffects.GetEnumerator())
+            {
+                while (e.MoveNext())
+                {
+                    e.Current.SetWindValue(nowWeather.wind);
+                }
+            }
+            if (WorldMapObjManager.instance.IsOutSideMap)
+            {
+                if (oldDamp && !newDamp)
+                {
+                    Shader.SetGlobalFloat("_DampValue", 0);
+                }
+                else if (!oldDamp && newDamp)
+                {
+                    Shader.SetGlobalFloat("_DampValue", 1);
+                }
+                else if (newDamp)
+                {
+                    Shader.SetGlobalFloat("_DampValue", 1);
+                }
+                else
+                {
+                    Shader.SetGlobalFloat("_DampValue", 0);
+                }
+            }
+            else
+            {
+                Shader.SetGlobalFloat("_DampValue", 0);
+            }
+
+
+            float weatherLightValue = nowWeather.GetWeatherLight();
+            float flareLight = nowWeather.GetFlareLight();
+            RefreshEnvironment(weatherLightValue, flareLight);
+        }
+        else
+        {
+            var lerp = LerpWeather(setWeather.weather);
+            GameObjectCurveController.instance.StartIEnumerator(lerp);
+        }
+        
     }
 
     WeatherDisplayType weatherDisplayType;
     public void ChangeWeatherDisplayType(WeatherDisplayType weatherDisplayType)
     {
-        this.weatherDisplayType = weatherDisplayType;
-        
-        if (weatherDisplayType == WeatherDisplayType.Inside)
+        if (this.weatherDisplayType != weatherDisplayType)
         {
-            Shader.SetGlobalFloat("_DampValue", 0); 
+            this.weatherDisplayType = weatherDisplayType;
+
+            if (weatherDisplayType == WeatherDisplayType.Inside)
+            {
+                Shader.SetGlobalFloat("_DampValue", 0);
+            }
+            else
+            {
+                Shader.SetGlobalFloat("_DampValue", nowWeather.waterFall > 0 && !nowWeather.IsSnow() ? 1 : 0);
+            }
+            skyEnviromentMono.ChangeWeatherDisplayType(weatherDisplayType);
         }
-        else
-        { 
-            Shader.SetGlobalFloat("_DampValue", nowWeather.waterFall > 0 && !nowWeather.IsSnow() ? 1 : 0);
-        }
-        skyEnviromentMono.ChangeWeatherDisplayType(weatherDisplayType);
+       
     }
    
     IEnumerator LerpWeather(Weather newWeather)
@@ -394,11 +446,11 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
              
 
             Shader.SetGlobalColor("_GlobalColor", natureLightData.globalColor);
-             
-            Shader.SetGlobalColor("_DirectionColor", Color.Lerp(natureLightData.color, lightning.lightningColor, lightning.lightningLight) * weatherLightValue);
+            Color directionColor = Color.Lerp(natureLightData.color, lightning.lightningColor, lightning.lightningLight) * weatherLightValue;
+            Shader.SetGlobalColor("_DirectionColor", directionColor);
             Shader.SetGlobalVector("_Direction", natureLightData.direction);
             direction = natureLightData.direction;
-            Vector2 directionValue = new Vector2(-natureLightData.direction.x * math.PI * 0.5f, 1 - natureLightData.direction.y / 90.0f);
+            Vector2 directionValue = new Vector2(-natureLightData.direction.x * math.PI * 0.5f, 1 - natureLightData.direction.y);
             Shader.SetGlobalVector("LightDirection", directionValue);
             Shader.SetGlobalFloat("_ShadowValue", natureLightData.shadowValue+ lightning.lightningLight*0.5f);
         }
@@ -407,7 +459,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             Color directionColor = Color.Lerp(overrideLightData.color, lightning.lightningColor, lightning.lightningLight); 
             Shader.SetGlobalVector("_Direction", overrideLightData.direction);
             direction = overrideLightData.direction;
-            Vector2 directionValue = new Vector2(-overrideLightData.direction.x * math.PI * 0.5f, 1 - overrideLightData.direction.y / 90.0f);
+            Vector2 directionValue = new Vector2(-overrideLightData.direction.x * math.PI * 0.5f, 1 - overrideLightData.direction.y);
             Shader.SetGlobalVector("LightDirection", directionValue);
             Shader.SetGlobalVector("_DirectionColor", directionColor * weatherLightValue);
             Shader.SetGlobalColor("_GlobalColor", overrideLightData.globalColor);
@@ -468,7 +520,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         overrideEnvironment = false; 
         Shader.SetGlobalVector("_Direction", natureLightData.direction);
         direction = natureLightData.direction;
-        Vector2 directionValue = new Vector2(-natureLightData.direction.x * math.PI * 0.5f, 1 - natureLightData.direction.y / 90.0f);
+        Vector2 directionValue = new Vector2(-natureLightData.direction.x * math.PI * 0.5f, 1 - natureLightData.direction.y);
         Shader.SetGlobalVector("LightDirection", directionValue);
         Shader.SetGlobalVector("_DirectionColor", natureLightData.color);
         Shader.SetGlobalColor("_GlobalColor", natureLightData.globalColor);

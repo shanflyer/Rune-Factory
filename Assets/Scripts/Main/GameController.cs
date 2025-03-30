@@ -22,7 +22,7 @@ public class GameController : MonoBehaviour
 #if UNITY_EDITOR
     public Selectable selectable;
     public Weather weather;
-
+    public bool autoWeather;
     public bool test = false;
     public bool runTime
     {
@@ -381,6 +381,8 @@ if (result.Success)
     {
         SingletonType.instance.LateUpData();
     }
+
+
     private void Update()
     {
         //GraphicsSettings.useScriptableRenderPipelineBatching = false;
@@ -392,9 +394,37 @@ if (result.Success)
             seasonValue = 0;
         }
 
+        if (autoWeather)
+        {
+            if (nowWeather != weather)
+            {
+                nowWeather.temperature = weather.temperature;
+                nowWeather.waterFall = weather.waterFall;
+                nowWeather.cloud = weather.cloud;
+                nowWeather.wind = weather.wind;
+                nowWeather.fog = weather.fog;
+                nowWeather.lightning= weather.lightning;
+                SetWeatherTest();
+            }
+        }
+        if (nowTimeValue != timeValue)
+        {
+            nowTimeValue = timeValue;
+
+            if (autoTime)
+            {
+                int hour = (int)math.floor(nowTimeValue);
+                int minute = (int)math.floor((nowTimeValue - hour) * 60);
+                hour = hour >= 24 ? 0 : hour;
+                GameTimeManager.instance.SetTime(hour, minute);
+            }
+
+        }
+       
         if (seasonValue != _seasonValue)
         {
             _seasonValue = seasonValue;
+            GameTimeManager.instance.SetSeasonValue(seasonValue);
             Shader.SetGlobalFloat("_SeasonValue", seasonValue);
         }
         if (Keyboard.current.pKey.wasPressedThisFrame)
@@ -410,6 +440,11 @@ if (result.Success)
 #endif
     }
 #if UNITY_EDITOR
+    Weather nowWeather;
+    public bool autoTime;
+    [SerializeField]
+    private float timeValue;
+    private float nowTimeValue;
     public Transform testObj;
     public bool autoChangeLanguage;
     public MyLanguage myLanguage;
@@ -438,7 +473,8 @@ if (result.Success)
     {
         SetWeather setWeather = new SetWeather
         {
-            weather = weather
+            weather = weather,
+            noLerp = true
         };
         GameActionManager.instance.QueueAction(setWeather);
     }

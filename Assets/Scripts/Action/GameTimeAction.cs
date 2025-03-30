@@ -164,6 +164,7 @@ public struct CreatWeather : GameAction
 public struct SetWeather : GameAction
 {
     public Weather weather;
+    public bool noLerp;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 }

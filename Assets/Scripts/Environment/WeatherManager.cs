@@ -76,6 +76,26 @@ public struct Weather
         }
         return fogValue * timelightValue;
     }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is Weather weather)
+        {
+            return weather.cloud == cloud && weather.temperature == temperature && weather.fog == fog && weather.wind == wind && weather.waterFall == waterFall &&
+           weather.lightning == lightning;
+        }
+        return false;
+    }
+    public static bool operator ==(Weather weather0, Weather weather1)
+    {
+        return weather0.cloud == weather1.cloud && weather0.temperature == weather1.temperature && weather0.fog == weather1.fog && weather0.wind == weather1.wind && weather0.waterFall == weather1.waterFall &&
+            weather0.lightning == weather1.lightning;
+    }
+    public static bool operator !=(Weather weather0, Weather weather1)
+    {
+        return weather0.cloud != weather1.cloud || weather0.temperature != weather1.temperature || weather0.fog != weather1.fog || weather0.wind != weather1.wind || weather0.waterFall != weather1.waterFall ||
+            weather0.lightning != weather1.lightning;
+    }
 }
 
 public class WeatherManager : Singleton<WeatherManager>
@@ -174,6 +194,12 @@ public class WeatherManager : Singleton<WeatherManager>
     public float nowWaterFall => nowDayWeathers.Count>nowIndex? nowDayWeathers[nowIndex].waterFall:0;
     public void RefreshWeather(int hour)
     {
+#if UNITY_EDITOR
+        if (GameController.instance.autoWeather)
+        {
+            return;
+        }
+#endif
         int hourIndex = (int)math.floor(hour / 3.0f);
         if (hourIndex != nowIndex&& nowDayWeathers.Count>hourIndex)
         {

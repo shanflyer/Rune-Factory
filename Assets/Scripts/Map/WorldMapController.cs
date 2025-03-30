@@ -299,10 +299,14 @@ public class WorldMapControllerEditor : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        gameController.runTime = EditorGUILayout.Toggle("RunTime", gameController.runTime);
-        gameController.runTimeDate = EditorGUILayout.IntField("Date", gameController.runTimeDate);
-        gameController.runTimeHour = EditorGUILayout.IntSlider("Hour", gameController.runTimeHour, 0, 24);
-        gameController.runTimeMinute = EditorGUILayout.IntSlider("Minute", gameController.runTimeMinute, 0, 60);
+        if (Application.isPlaying)
+        {
+            gameController.runTime = EditorGUILayout.Toggle("RunTime", gameController.runTime);
+            gameController.runTimeDate = EditorGUILayout.IntField("Date", gameController.runTimeDate);
+            gameController.runTimeHour = EditorGUILayout.IntSlider("Hour", gameController.runTimeHour, 0, 24);
+            gameController.runTimeMinute = EditorGUILayout.IntSlider("Minute", gameController.runTimeMinute, 0, 60);
+        }
+      
     }
 }
 #endif
