@@ -4,6 +4,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class TalkPanel : GamePanel<NPCTalkOperateData>
 {
@@ -42,6 +45,11 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
 
     private TalkData talkData;
     private NPCTalkOperateData NPCTalkOperateData;
+#if UNITY_EDITOR
+    [SerializeField]
+    private SpriteResourceRenference testIcon;
+#endif
+
 
     protected override void Awake()
     {
@@ -136,6 +144,13 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
 
     private bool runNextTalkEvent = false;
     private int talkId;
+#if UNITY_EDITOR
+    public void TestIcon()
+    {
+        testIcon.SetImageSprite(rightHead, headSize);
+    }
+#endif
+
     async Task TalkAction()
     {
         if (talkData == null)
@@ -263,4 +278,20 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
         NPCFunctionReference = FindChildGameObject<NPCFunctionReference>("NPCFunctionReference");
         NPCFunctionParent = FindChildGameObject("Functions");
     }
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(TalkPanel))]
+    public class TalkPanelEditor : Editor
+    {
+        public TalkPanel TalkPanel=>target as TalkPanel;
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+            if (GUILayout.Button("TestIcon"))
+            {
+                TalkPanel.TestIcon();
+            }
+        }
+    }
+#endif
 }

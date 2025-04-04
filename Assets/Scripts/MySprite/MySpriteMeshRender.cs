@@ -23,6 +23,17 @@ public class MySpriteMeshRender : MonoBehaviour
     public Material m_Material;
     public Material materialInstance => meshRenderer.material;
 
+
+#if UNITY_EDITOR
+    [SerializeField]
+    private SpriteResourceRenference SpriteResourceRenference;
+
+    public void SetSpriteRenference()
+    {
+        SpriteResourceRenference.SetSprite(this);
+    }
+#endif
+
     private void OnEnable()
     {
         if (meshRenderer == null)
@@ -120,7 +131,10 @@ public class MySpriteMeshRenderEditor : Editor
         {
             MySpriteMeshRender.TestMesh();
         }
-        
+        if (GUILayout.Button("Refrerence"))
+        {
+            MySpriteMeshRender.SetSpriteRenference();
+        }
     }
 }
 #endif
