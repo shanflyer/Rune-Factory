@@ -10,10 +10,14 @@ Shader "MySprite-Lit-Default"
         [Toggle(SNOWBLEND)]_SnowBlend("_SnowBlend",int)=1
         [Toggle(SEASONCOLORBLEND)]seasonColorBlend("seasonColorBlend",int)=0
         [Toggle(SHADOWSTEP)]_shadowStep("ShadowStep",int)=0 
+        [Toggle(FLOWERSTEP)]_FlowerStep("FlowerStep",int)=0 
         _FixedColor("FixedColor",color)=(1,1,1,0)
         _MainTex("Diffuse", 2D) = "white" {} 
         _MoveMask("_MoveMask", 2D) = "black" {}
-        _SnowTex("_SnowTex", 2D) = "black" {}
+        _SnowTex("_SnowTex", 2D) = "black" {} 
+        _FlowerTex("_FlowerTex",2D)="black" {} 
+        _FlowerRemap("_FlowerRemap",vector)=(0,0,0,0)
+       
         _ZWrite("ZWrite", Float) = 0
         _ObjectWorldPos("_ObjectWorldPos",vector)=(0,0,0,0)
         [Toggle]_Character("Character",int)=0
@@ -116,6 +120,7 @@ Shader "MySprite-Lit-Default"
             Texture2D _NormalMap;
             Texture2D _MoveMask; 
             Texture2D _SnowTex;
+            Texture2D _FlowerTex;
             //exture2D _WaterNormalMap;  
              TEXTURE2D(_WaterMaskTex);
              SAMPLER(sampler_WaterMaskTex);
@@ -172,6 +177,7 @@ Shader "MySprite-Lit-Default"
             float4 _FixedColor;
  
             int NativePos;
+            float4 _FlowerRemap;
 
             half3 _PlantSpringColor1;
             half3 _PlantSpringColor;
@@ -587,6 +593,7 @@ Shader "MySprite-Lit-Default"
             #pragma shader_feature_local _ SNOWBLEND
             #pragma shader_feature_local _ GRASSBLEND
             #pragma shader_feature_local _ SHADOWSTEP
+            #pragma shader_feature_local _ FLOWERSTEP
             #pragma shader_feature_local _ BACKBLEND 
              
             struct Attributes
@@ -705,7 +712,22 @@ Shader "MySprite-Lit-Default"
                 #if SNOWBLEND
                 main=SnowColor(main,uv,s_w);
                 #endif
-                   
+                #if FLOWERSTEP
+                half4 flower=_FlowerTex.Sample(sampler_MainTex,uv);
+                flower.xyz=flower.xyz*flower.a*1.2;
+                half flowerColorValue=(flower.x+flower.y+flower.z)/3;
+                half flowerRemapValue;
+                half flowerRemapValue0;
+                half flowerRemapValue1;
+                Unity_Remap_float(_SeasonValue,_FlowerRemap.xy,float2(0,_FlowerRemap.w),flowerRemapValue0);
+                Unity_Remap_float(_SeasonValue,_FlowerRemap.yz,float2(_FlowerRemap.w,0),flowerRemapValue1);
+                half remapStep=step(_FlowerRemap.y,_SeasonValue);
+                flowerRemapValue=flowerRemapValue0*(1-remapStep)+flowerRemapValue1*remapStep;
+
+                half flowerStep=step(1-flowerRemapValue,flowerColorValue);
+                flowerColorValue*=flowerStep;
+                main.xyz=main.xyz*(1-flowerColorValue)+flower.xyz*flowerColorValue;
+                #endif
  
                 half4 result; 
                 float singleValue=(main.x+main.y+main.z)/3;

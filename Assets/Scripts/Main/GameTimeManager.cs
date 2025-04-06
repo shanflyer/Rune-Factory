@@ -656,8 +656,8 @@ public class GameTimeManager : Singleton<GameTimeManager>
         get
         {
             int d_year = Year-1;
-            int d_season = (int)Season - (int)Season.夏;
-            int d_day = Day - 1;
+            int d_season = (int)Season - (int)Season.春;
+            int d_day = Day - 4;
             return (d_year*4+d_season)*30+d_day;
         }
     }
@@ -708,6 +708,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
         index = index >= 4 ? 0 : index;
         nowGameTime.Season = (Season)(index+1);
         SetDate((int)math.ceil(dValue * 30));
+
         GameActionManager.instance.QueueAction(new NewDay());
     }
     private Dictionary<int, GameDate> gameDates = new Dictionary<int, GameDate>();
@@ -940,7 +941,8 @@ public class GameTimeManager : Singleton<GameTimeManager>
         {
             nowGameTime = new GameTime
             {
-                Season = Season.夏, 
+                Season = Season.春, 
+                day=4
             };
             nowGameTime.SetTime(6, 0);
             // StartTimeRun();

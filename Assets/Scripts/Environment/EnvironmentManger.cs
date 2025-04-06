@@ -226,7 +226,8 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         GameActionManager.instance.AddListener<OverrideEnvironmentLight>(OverrideEnvironmentLight);
         GameActionManager.instance.AddListener<ClearOverrideEnvironmentLight>(ClearOverrideEnvironmentLight);
         GameActionManager.instance.AddListener<SetWeather>(SetWeather);
-         
+        GameActionManager.instance.AddListener<NewDay>(NewDay);
+        GameActionManager.instance.AddListener<NewHour>(NewHour);
     }
 
     private EnvironmentLightData natureLightData;
@@ -249,6 +250,20 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         windEffects.Remove(windEffect);
     }
 
+    void NewDay(NewDay newDay)
+    {
+        foreach(var w in windEffects)
+        {
+            w.SetSeasonValue();
+        }
+    }
+    void NewHour(NewHour newHour)
+    {
+        foreach (var w in windEffects)
+        {
+            w.SetSeasonValue();
+        }
+    }
     void SetWeather(SetWeather setWeather)
     {
         if (setWeather.noLerp)

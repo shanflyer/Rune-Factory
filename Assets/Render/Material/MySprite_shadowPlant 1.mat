@@ -42,6 +42,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _FlowerTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -112,6 +116,7 @@ Material:
     - _EdgeWaveSpeed: 0
     - _EnableExternalAlpha: 0
     - _Fail: 0
+    - _FlowerStep: 0
     - _GrassBlend: 0
     - _HideNormal: 0
     - _HighLighStep: 0
@@ -169,6 +174,7 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DampColor: {r: 0.6247775, g: 0.9379376, b: 0.9811321, a: 1}
     - _FixedColor: {r: 1, g: 1, b: 1, a: 0}
+    - _FlowerRemap: {r: 0, g: 0, b: 0, a: 0}
     - _ForceColor: {r: 0, g: 0, b: 0, a: 0}
     - _HightLightColor: {r: 0.008406067, g: 0.47284126, b: 0.53588676, a: 1}
     - _ObjectWorldPos: {r: 0, g: 0, b: 0, a: 0}

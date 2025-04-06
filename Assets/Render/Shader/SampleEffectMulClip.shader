@@ -11,7 +11,7 @@ Shader "SampleEffectMulClip"
     {
         Tags {"Queue" = "Transparent" "RenderType" = "Transparent" "RenderPipeline" = "UniversalPipeline" }
 
-        Blend SrcAlpha OneMinusSrcAlpha, One OneMinusSrcAlpha
+        Blend SrcAlpha OneMinusSrcAlpha
         Cull Off
         ZWrite off
 		ZTest LEqual
@@ -27,7 +27,11 @@ Shader "SampleEffectMulClip"
             SAMPLER(sampler_MainTex); 
             TEXTURE2D(_Noise);
             SAMPLER(sampler_Noise); 
+            
+            TEXTURE2D(_LightingTex);
+            SAMPLER(sampler_LightingTex);
           ENDHLSL
+
 
         Pass
         {
@@ -52,6 +56,7 @@ Shader "SampleEffectMulClip"
                 float4 color:COLOR;
                 float3 redColor: TEXCOORD1;
                 float3 greenColor: TEXCOORD2;
+                half4 screenUV:TEXCOORD4; 
             };
  
 
@@ -64,6 +69,8 @@ Shader "SampleEffectMulClip"
                 o.noiseUv = v.uv+_SpeedMainTexUVNoiseZW.zw*_TimeParameters.x;
                 o.redColor=v.redColor;
                 o.greenColor=v.greenColor;
+
+                o.screenUV= ComputeScreenPos(o.vertex);
                 return o;
             }
 
@@ -79,6 +86,13 @@ Shader "SampleEffectMulClip"
             
                 float4 result=float4(redColor+greenColor+blueColor,col.a*i.color.a);
                 result*=_Color;
+
+                float2 screenUV=i.screenUV.xy/i.screenUV.w;
+                screenUV=UnityStereoTransformScreenSpaceTex(screenUV);
+                half4 lightCol=SAMPLE_TEXTURE2D(_LightingTex,sampler_LightingTex,screenUV);
+                lightCol.xyz*=4;  
+                result.xyz*=lightCol.xyz;
+            
 
                 return result;
             }

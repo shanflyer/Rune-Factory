@@ -4,19 +4,27 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [Serializable]
-public struct WindEffectData
+public class WindEffectData
 {
     public ParticleSystem particleSystem;
     public float2 windSpeed;
+    private int maxParticle;
+    public bool valueCurve;
     private ParticleSystem.VelocityOverLifetimeModule VelocityOverLifetimeModule;
-    bool isInit;
+    bool isInit; 
     public void Init()
     {
         if (!isInit)
         {
-            isInit = true;
+            isInit = true; 
             VelocityOverLifetimeModule = particleSystem.velocityOverLifetime;
-            VelocityOverLifetimeModule.x = 0;
+            
+            maxParticle = particleSystem.main.maxParticles;
+            if (!valueCurve)
+            {
+                VelocityOverLifetimeModule.x = 0;
+            }
+            particleSystem.Stop();
         }
            
     }
@@ -25,7 +33,34 @@ public struct WindEffectData
         Init();
         float value = (windValue + 1) * 0.5f;
         float speed = math.lerp(windSpeed.x, windSpeed.y, value);
-        VelocityOverLifetimeModule.x = speed;
+        if (valueCurve)
+        {
+          
+            var curve = VelocityOverLifetimeModule.x.curve;
+            var keys = curve.keys;
+            keys[0].value = speed;
+            curve.keys = keys;
+            VelocityOverLifetimeModule.x = new ParticleSystem.MinMaxCurve(1, curve);
+        }
+        else
+        {
+            VelocityOverLifetimeModule.x = speed;
+        }
+
+        if (particleSystem.isStopped)
+        {
+            particleSystem.Play();
+        }
+    }
+    public void SetSeason(float seasonValue)
+    {
+        Init();
+        if (particleSystem.isStopped)
+        {
+            particleSystem.Play();
+        }
+        var main=particleSystem.main;
+        main.maxParticles =(int) (maxParticle * seasonValue);
     }
 }
 public class WindEffect : MonoBehaviour
@@ -33,9 +68,14 @@ public class WindEffect : MonoBehaviour
     public List<WindEffectData> effects=new List<WindEffectData>();
     public List<Animator> animators = new List<Animator>();
     [SerializeField]
-    float windBlendValue = 1;
+    float windBlendValue = 1; 
     [SerializeField]
     bool snowWind = true;
+    [SerializeField]
+    float4 seasonRemap;
+    [SerializeField]
+    bool seasomBlend;
+   
     private void Awake()
     {
         for(int i = 0; i < effects.Count; i++)
@@ -57,6 +97,36 @@ public class WindEffect : MonoBehaviour
         if (Application.isPlaying)
             EnvironmentManger.instance.AddWindEffect(this);
     }
+    public void SetSeasonValue()
+    {
+        float seasomValue = 0;
+        if (seasomBlend)
+        {
+            float seasomValue0 = 0; float seasomValue1 = 0;
+            seasomValue0 = math.remap(seasonRemap.x, seasonRemap.y, 0, seasonRemap.w, GameTimeManager.instance.SeasonValue);
+            seasomValue0 = math.clamp(seasomValue0, 0, 1);
+
+
+            seasomValue1 = math.remap(seasonRemap.y, seasonRemap.z, seasonRemap.w, 0, GameTimeManager.instance.SeasonValue);
+            seasomValue1 = math.clamp(seasomValue1, 0, 1);
+            if (GameTimeManager.instance.SeasonValue > seasonRemap.y)
+            {
+                seasomValue = seasomValue1;
+            }
+            else
+            {
+                seasomValue = seasomValue0;
+            }
+            for (int i = 0; i < effects.Count; i++)
+            { 
+                if (seasomBlend)
+                {
+                    effects[i].SetSeason(seasomValue);
+                }
+            }
+        }
+      
+    }
     public void SetWindValue(float windValue)
     {
         windValue *= windBlendValue;
@@ -68,15 +138,18 @@ public class WindEffect : MonoBehaviour
             {
                 windValue = 0;
             }
+            for (int i = 0; i < effects.Count; i++)
+            {
+                effects[i].SetWindValue(windValue);
+                
+            }
+            for (int i = 0; i < animators.Count; i++)
+            {
+                animators[i].SetFloat("WindValue", windValue);
+            }
+            SetSeasonValue();
         }
-        for (int i = 0; i < effects.Count; i++)
-        {
-            effects[i].SetWindValue(windValue);
-        }
-        for(int i = 0; i < animators.Count; i++)
-        {
-            animators[i].SetFloat("WindValue", windValue);
-        }
+      
     }
     
 }
