@@ -1438,7 +1438,8 @@ public class MapCellController : Singleton<MapCellController>
         int3 newMap = int3.zero;
         if (GetRuntimeMapRoom(nowMap, out RuntimeMapRoom runtimeMapRoom))
         {
-            if (runtimeMapRoom.ChangeMap(nowCoordinate, direction, out newMap, out var changeAction))
+            int3 changeAction=int3.zero;
+            if (direction==Direction.Default|| runtimeMapRoom.ChangeMap(nowCoordinate, direction, out newMap, out changeAction))
             {
                 if (changeAction.z != 0)
                 {
@@ -1470,6 +1471,10 @@ public class MapCellController : Singleton<MapCellController>
                         action.Invoke(newMap, changeAction.y);
                     }
                 }
+            }
+            else
+            {
+               // Debug.Log($"ChangeMapAction Fail：{direction}");
             }
         }
     }

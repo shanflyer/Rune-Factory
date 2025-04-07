@@ -1160,6 +1160,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
                 else
                 {
+                  //  Debug.Log($"character:{character.name}--tryCorssMap");
                     if (runtimeObj != null)
                     {
                         SetCharacterAnimationSpeed(0, runtimeObj);
@@ -1171,7 +1172,7 @@ public class CharacterManager : Singleton<CharacterManager>
                         runtimeObj = null;
                     }
                         
-                    CrossMap(targetCoordinate, character, out int3 newMap, EndAction);
+                    CrossMap(targetCoordinate, character, out int3 newMap, EndAction,true);
                 }
                 if (changeCoordinateAction != null)
                 {
@@ -1270,14 +1271,14 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    public bool CrossMap(int2 targetCoordinate, Character character, out int3 newMap, MoveEndAction EndAction = null)
+    public bool CrossMap(int2 targetCoordinate, Character character, out int3 newMap, MoveEndAction EndAction = null,bool defaultDirection=false)
     {
         // int2 offsetCoordinate = targetCoordinate - character.coordinate;
         character.SetCoordinate(new int3(targetCoordinate.xy, character.mapInstance), !character.isController,false);
 
         if (!(character is TempCharacter))
         {
-            MapCellController.instance.ChangeMapAction(targetCoordinate, character.direction, character.mapInstance, ChangeMapAction);
+            MapCellController.instance.ChangeMapAction(targetCoordinate, defaultDirection?Direction.Default:character.direction, character.mapInstance, ChangeMapAction);
 
             void ChangeMapAction(int3 newMap, int afterAction)
             {
