@@ -425,6 +425,8 @@ public class Team
                 for (int i = 0; i < coordinates.Count; i++)
                 {
                     teamer.queueCoordinate.Enqueue(coordinates[i]);
+                    float2 pos = GameCommon.GetMapPos(coordinates[i].xy);
+                    teamer.queuePos.Enqueue(new float4(pos, coordinates[i].zw));
                 }
                 /*
                 teamer.queueCoordinate.Enqueue(new float4(lastTeamer.nowCoordinate.xy,lastTeamer.character.moveDirection.xy));
@@ -592,6 +594,7 @@ public class Team
                         nextCharacter.index--;
                         var forwardCharacter = Teamers[i - 1];
                         nextCharacter.queueCoordinate = forwardCharacter.queueCoordinate;
+                        nextCharacter.queuePos = forwardCharacter.queuePos;
                         nextCharacter.SetNowCoordinate(forwardCharacter.character.coordinate, forwardCharacter.character.moveDirection,false);
                        await CharacterManager.instance.RefreshNpcRuntimeObj(nextCharacter.character,RefreshMapTemp:false);
                     }
@@ -646,7 +649,11 @@ public class Team
             {
                 var character = Teamers[1];
                 var forwardCharacter = Teamers[0];
-                character.AddQueueCoordinate(forwardCharacter.character.coordinate, forwardCharacter.character.moveDirection);
+                character.AddQueueCoordinate(forwardCharacter.character.coordinate, forwardCharacter.character.moveDirection); 
+                if (CharacterManager.instance.GetRuntimeCharacterObj(forwardCharacter.character.instanceId,out var characterObj))
+                {
+                    character.AddQueuePos(new float2(characterObj.transform.position.x,characterObj.transform.position.y),forwardCharacter.character.moveDirection);
+                }
             }
         }
     }
@@ -658,6 +665,7 @@ public class Teamer
     public int2 nowCoordinate;
     private float2 direction;
     public Queue<float4> queueCoordinate = new Queue<float4>();
+    public Queue<float4> queuePos = new Queue<float4>(); 
     public Character character;
     public Teamer nextTeamer;
 
@@ -688,20 +696,27 @@ public class Teamer
             SetTeamCoordinate();
         }
     }
-
+    public void AddQueuePos(float2 pos, float2 direction)
+    {
+        queuePos.Enqueue(new float4(pos.xy, direction.xy));
+        /*if (!canMove)
+        {
+            SetTeamCoordinate();
+        }*/
+    }
     private bool canMove = false;
 
-    public void SetTeamCoordinate()
+    public void SetTeamCoordinate(bool refreshPos=true)
     {
-        character.SetCoordinate(nowCoordinate);
+        character.SetCoordinate(nowCoordinate,refreshPos);
         if (queueCoordinate.Count > 3)
         {
             var targetCoordinate = queueCoordinate.Dequeue();
             direction = math.normalizesafe(targetCoordinate.xy - nowCoordinate);
-            // Debug.Log($"targetCoordinate：{targetCoordinate}--nowCoordinate:{nowCoordinate}--direction {direction}");
+           // Debug.Log($"targetCoordinate：{targetCoordinate}--nowCoordinate:{nowCoordinate}--direction {direction}");
             startPos = GameCommon.GetMapPos(nowCoordinate);
             nowCoordinate = (int2)targetCoordinate.xy;
-            endPos = GameCommon.GetMapPos(nowCoordinate);
+           //endPos = GameCommon.GetMapPos(nowCoordinate);
             timeValue = 0;
 
             SetDirection setDirection = new SetDirection
@@ -716,16 +731,26 @@ public class Teamer
         {
             canMove = false;
         }
+
+        if (queuePos.Count > 3)
+        {
+            float4 pos= queuePos.Dequeue();
+            endPos = pos.xy;
+        }
     }
 
     public async void SetNewMapCoordinate(int3 coordinate, float2 directionValue)
     {
         nowCoordinate = coordinate.xy;
         queueCoordinate.Clear();
+        queuePos.Clear();
         float4 targetCoordinate = new float4(coordinate.xy, directionValue.xy);
+        float2 pos = GameCommon.GetMapPos(coordinate.xy);
+        float4 targetPos = new float4(pos, directionValue);
         for (int i = 0; i < 3; i++)
         {
             queueCoordinate.Enqueue(targetCoordinate);
+            queuePos.Enqueue(targetPos);
         }
         character.SetCoordinate(coordinate, refreshMapTemp: false);
        //await CharacterManager.instance.RefreshNpcRuntimeObj(character);
@@ -754,8 +779,10 @@ public class Teamer
                 if (nextTeamer != null)
                 {
                     nextTeamer.AddQueueCoordinate(character.coordinate, character.moveDirection);
+                    nextTeamer.AddQueuePos(pos, character.moveDirection);
                 }
-                SetTeamCoordinate();
+               // Debug.Log("TeamMove");
+                SetTeamCoordinate(false);
             }
             //if (character.name == "玛德琳")
             {

@@ -1040,12 +1040,17 @@ public partial class Character
         }
     }
 
-    private void SetObjCoordinate(int3 coordinate)
+    private void SetObjCoordinate(int3 coordinate, bool refreshPos = true)
     {
         MapCellController.instance.SetCharacterCoordinate(objCoordinate, coordinate, instanceId,this is TempCharacter);
+        bool changeMap = mapInstance != coordinate.z;
         objCoordinate = coordinate;
+        if (changeMap)
+        {
+            refreshPos = true;
+        }
         //Debug.Log($"{name}--SetObjCoordinate:{coordinate}");
-        if (mapInstance == WorldMapObjManager.instance.displayMap)
+        if (mapInstance == WorldMapObjManager.instance.displayMap&& refreshPos)
         {
             if(CharacterManager.instance.GetRuntimeCharacterObj(instanceId,out var characterRuntimeObj))
             {
@@ -1576,14 +1581,14 @@ public partial class Character
         // ForwardTrigger(coordinate, direction);
     }
 
-    public void SetCoordinate(int2 coordinate)
+    public void SetCoordinate(int2 coordinate, bool refreshPos = true)
     {
         int2 oldCoordinate = objCoordinate.xy;
         int3 checkCoordinate = new int3(coordinate.xy, mapInstance);
         MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.角色, mapInstance, oldCoordinate, coordinate.xy,
            TriggerEventAction);
 
-        SetObjCoordinate(checkCoordinate);
+        SetObjCoordinate(checkCoordinate,refreshPos);
         CharacterCoordinateTrigger characterCoordinateTrigger = new CharacterCoordinateTrigger
         {
             characterId = instanceId,
