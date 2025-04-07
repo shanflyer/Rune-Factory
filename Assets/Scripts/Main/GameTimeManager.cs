@@ -589,7 +589,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             }
 
             int nowYearHour = ((int)season * 30 - 30 + day - 1) * 24 + hour;
-            seasonValue = nowYearHour / totalYearHour*4;
+            seasonValue = (nowYearHour / totalYearHour)*4.0f;
             Shader.SetGlobalFloat("_SeasonValue", SeasonValue);
         }
         const float totalYearHour = (4 * 30) * 24;
@@ -600,7 +600,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
         {
             fixedSeason = SetFixedSeason.season;
             int nowYearHour = ((int)season * 30 - 30 + day - 1) * 24 + hour;
-            seasonValue = nowYearHour / totalYearHour;
+            seasonValue = nowYearHour / totalYearHour*4;
             Shader.SetGlobalFloat("_SeasonValue", SeasonValue);
             EnvironmentManger.instance.ChangeWeatherDisplayType(SetFixedSeason.weatherDisplayType);
             WorldMapObjManager.instance.RefreshMapAudio();
@@ -657,7 +657,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
         {
             int d_year = Year-1;
             int d_season = (int)Season - (int)Season.春;
-            int d_day = Day - 4;
+            int d_day = Day - 5;
             return (d_year*4+d_season)*30+d_day;
         }
     }
@@ -942,7 +942,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             nowGameTime = new GameTime
             {
                 Season = Season.春, 
-                day=4
+                day=5
             };
             nowGameTime.SetTime(6, 0);
             // StartTimeRun();

@@ -244,6 +244,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     {
         windEffects.Add(windEffect);
         windEffect.SetWindValue(nowWeather.wind);
+        windEffect.SetSeasonValue();
     }
     public void RemoveWindEffect(WindEffect windEffect)
     {

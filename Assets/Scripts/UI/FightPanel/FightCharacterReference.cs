@@ -194,7 +194,7 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
             CharacterProperty characterProperty = fightPlayer.characterProperty;
             if (character == CharacterManager.instance.controllerCharacter)
             {
-                NameText.text=(characterInformationData.name);
+                NameText.text=GameDataSaveManager.instance.UserGameSaveData.playerData.name;
             }
             else
             {
