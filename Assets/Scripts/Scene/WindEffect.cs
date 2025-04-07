@@ -2,7 +2,7 @@ using System;
 using Unity.Mathematics;
 using UnityEngine;
 using System.Collections.Generic;
-
+ 
 [Serializable]
 public class WindEffectData
 {
@@ -24,7 +24,11 @@ public class WindEffectData
             {
                 VelocityOverLifetimeModule.x = 0;
             }
-            particleSystem.Stop();
+           // particleSystem.Stop();
+            if (particleSystem.particleCount > 0)
+            {
+                particleSystem.SetParticles(new ParticleSystem.Particle[0], 0);
+            }
         }
            
     }
@@ -61,6 +65,27 @@ public class WindEffectData
         }
         var main=particleSystem.main;
         main.maxParticles =(int) (maxParticle * seasonValue);
+
+        if (particleSystem.particleCount > main.maxParticles)
+        {
+            ParticleSystem.Particle[] Particle = new ParticleSystem.Particle[particleSystem.particleCount];
+            particleSystem.GetParticles(Particle);
+            if (particleSystem.particleCount > main.maxParticles)
+            {
+                for(int i = main.maxParticles; i < Particle.Length; i++)
+                {
+                    Particle[i].remainingLifetime = 0;
+                    Particle[i].startLifetime = 0;
+                }
+                particleSystem.SetParticles(Particle, Particle.Length);
+            }
+        }
+        else
+        {
+            particleSystem.Play();
+        }
+
+       
     }
 }
 public class WindEffect : MonoBehaviour
