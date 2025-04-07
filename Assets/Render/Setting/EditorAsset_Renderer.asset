@@ -1,0 +1,582 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7288142204840512331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
+  m_Name: Shadow
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  VolumeLevel: 0
+  settings:
+    m_transparencySortMode: 3
+    m_transparencySortAxis: {x: 0, y: 1, z: 1}
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 0
+    overrideStencilState: 0
+    stencilStateData:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    opaque: 0
+    renderPassEvent: 450
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 64
+    overrideMat: {fileID: 0}
+    ShaderTags:
+    - Shadow
+    afterRenderMaterial: {fileID: 0}
+    afterPassId: 0
+    textureName: _ShadowTex
+    blitScale: 1
+    blitToCameraTarget: 0
+    clearFlag: -1
+    clearColor: {r: 0, g: 0, b: 0, a: 1}
+--- !u!114 &-5474757902061538131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
+  m_Name: NormalBaker
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  VolumeLevel: 0
+  settings:
+    m_transparencySortMode: 3
+    m_transparencySortAxis: {x: 0, y: 1, z: 1}
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 1
+    overrideStencilState: 0
+    stencilStateData:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    opaque: 0
+    renderPassEvent: 250
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 456081
+    overrideMat: {fileID: 0}
+    ShaderTags:
+    - NormalsRendering
+    afterRenderMaterial: {fileID: 0}
+    afterPassId: 0
+    textureName: _Normalmap
+    blitScale: 1
+    blitToCameraTarget: 0
+    clearFlag: 1
+    clearColor: {r: 0, g: 0, b: 0, a: 1}
+--- !u!114 &-2331962285970830670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
+  m_Name: Mirror
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  VolumeLevel: 0
+  settings:
+    m_transparencySortMode: 3
+    m_transparencySortAxis: {x: 0, y: 1, z: 1}
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 0
+    overrideStencilState: 0
+    stencilStateData:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    opaque: 0
+    renderPassEvent: 210
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 69632
+    overrideMat: {fileID: 0}
+    ShaderTags: []
+    afterRenderMaterial: {fileID: 0}
+    afterPassId: 0
+    textureName: _MirrorTex
+    blitScale: 1
+    blitToCameraTarget: 0
+    clearFlag: 0
+    clearColor: {r: 0, g: 0, b: 0, a: 1}
+--- !u!114 &-1776151732405309921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
+  m_Name: GrassBaker
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  VolumeLevel: 0
+  settings:
+    m_transparencySortMode: 3
+    m_transparencySortAxis: {x: 0, y: 1, z: 1}
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 0
+    overrideStencilState: 0
+    stencilStateData:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    opaque: 0
+    renderPassEvent: 250
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 262144
+    overrideMat: {fileID: 0}
+    ShaderTags:
+    - Grass
+    afterRenderMaterial: {fileID: 0}
+    afterPassId: 0
+    textureName: _GrassTex
+    blitScale: 1
+    blitToCameraTarget: 0
+    clearFlag: 0
+    clearColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+--- !u!114 &-601572069951543656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
+  m_Name: RedMask
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    passTag: RedMask
+    Event: 500
+    filterSettings:
+      RenderQueueType: 1
+      LayerMask:
+        serializedVersion: 2
+        m_Bits: 32768
+      PassNames: []
+    overrideMaterial: {fileID: 2100000, guid: 5b104531ee088d84bab33c2a6680306a, type: 2}
+    overrideMaterialPassIndex: 0
+    overrideShader: {fileID: 0}
+    overrideShaderPassIndex: 0
+    overrideMode: 1
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 1
+    stencilSettings:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    cameraSettings:
+      overrideCamera: 0
+      restoreCamera: 1
+      offset: {x: 0, y: 0, z: 0, w: 0}
+      cameraFieldOfView: 60
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de640fe3d0db1804a85f9fc8f5cadab6, type: 3}
+  m_Name: EditorAsset_Renderer
+  m_EditorClassIdentifier: 
+  debugShaders:
+    debugReplacementPS: {fileID: 4800000, guid: cf852408f2e174538bcd9b7fda1c5ae7,
+      type: 3}
+    hdrDebugViewPS: {fileID: 4800000, guid: 573620ae32aec764abd4d728906d2587, type: 3}
+    probeVolumeSamplingDebugComputeShader: {fileID: 7200000, guid: 53626a513ea68ce47b59dc1299fe3959,
+      type: 3}
+  probeVolumeResources:
+    probeVolumeDebugShader: {fileID: 0}
+    probeVolumeFragmentationDebugShader: {fileID: 0}
+    probeVolumeOffsetDebugShader: {fileID: 0}
+    probeVolumeSamplingDebugShader: {fileID: 0}
+    probeSamplingDebugMesh: {fileID: 0}
+    probeSamplingDebugTexture: {fileID: 0}
+    probeVolumeBlendStatesCS: {fileID: 0}
+  m_RendererFeatures:
+  - {fileID: -5474757902061538131}
+  - {fileID: 456928630779868892}
+  - {fileID: -7288142204840512331}
+  - {fileID: -2331962285970830670}
+  - {fileID: 5134069765528978960}
+  - {fileID: 6637365475024894066}
+  - {fileID: 9085957355817898148}
+  - {fileID: -601572069951543656}
+  - {fileID: 7841165557427339075}
+  - {fileID: -1776151732405309921}
+  - {fileID: 4297080464677166692}
+  - {fileID: 962430835441920808}
+  m_RendererFeatureMap: adf45bd0b1c005b4dcf656352b565706b5f4f2674751db9ab2ca19fba734a3df10866d1240e13f4772f84cb7bba81c5ca490df5d13ce177e98e6bdbf63c9a6f743ff7bbb876ad16c1f6ec9ea68d759e7645e5a6cea4ba23b28eb65e3be3d5b0d
+  m_UseNativeRenderPass: 1
+  xrSystemData: {fileID: 0}
+  postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
+  m_transparencySortMode: 3
+  m_transparencySortAxis: {x: 0, y: 1, z: 1}
+  m_AssetVersion: 2
+  m_OpaqueLayerMask:
+    serializedVersion: 2
+    m_Bits: 520593
+  m_TransparentLayerMask:
+    serializedVersion: 2
+    m_Bits: 4652945
+  m_DefaultStencilState:
+    overrideStencilState: 0
+    stencilReference: 0
+    stencilCompareFunction: 8
+    passOperation: 2
+    failOperation: 0
+    zFailOperation: 0
+  m_ShadowTransparentReceive: 0
+  m_RenderingMode: 0
+  m_DepthPrimingMode: 0
+  m_CopyDepthMode: 0
+  m_DepthAttachmentFormat: 0
+  m_DepthTextureFormat: 0
+  m_AccurateGbufferNormals: 0
+  m_IntermediateTextureMode: 1
+--- !u!114 &456928630779868892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
+  m_Name: LightBaker
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  VolumeLevel: 0
+  settings:
+    m_transparencySortMode: 3
+    m_transparencySortAxis: {x: 0, y: 1, z: 1}
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 1
+    overrideStencilState: 0
+    stencilStateData:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    opaque: 0
+    renderPassEvent: 450
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 524288
+    overrideMat: {fileID: 0}
+    ShaderTags:
+    - Lighting
+    afterRenderMaterial: {fileID: 2100000, guid: bdb88c8327cb20a43bbba780951954c9,
+      type: 2}
+    afterPassId: 0
+    textureName: _LightingTex
+    blitScale: 1
+    blitToCameraTarget: 0
+    clearFlag: 0
+    clearColor: {r: 0, g: 0, b: 0, a: 1}
+--- !u!114 &962430835441920808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
+  m_Name: CharacterDepth
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  VolumeLevel: 1
+  settings:
+    m_transparencySortMode: 3
+    m_transparencySortAxis: {x: 0, y: 1, z: 1}
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 1
+    overrideStencilState: 0
+    stencilStateData:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    opaque: 0
+    renderPassEvent: 450
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 128
+    overrideMat: {fileID: 0}
+    ShaderTags:
+    - CharacterDepth
+    afterRenderMaterial: {fileID: 0}
+    afterPassId: 0
+    textureName: _CharacterDepthTex
+    blitScale: 1
+    blitToCameraTarget: 0
+    clearFlag: 1
+    clearColor: {r: 0, g: 0, b: 0, a: 1}
+--- !u!114 &4297080464677166692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
+  m_Name: ObjDepth
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  VolumeLevel: 1
+  settings:
+    m_transparencySortMode: 3
+    m_transparencySortAxis: {x: 0, y: 1, z: 1}
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 1
+    overrideStencilState: 0
+    stencilStateData:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    opaque: 0
+    renderPassEvent: 450
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 455057
+    overrideMat: {fileID: 0}
+    ShaderTags:
+    - ObjDepth
+    afterRenderMaterial: {fileID: 0}
+    afterPassId: 0
+    textureName: _ObjDepthTex
+    blitScale: 1
+    blitToCameraTarget: 0
+    clearFlag: -1
+    clearColor: {r: 0, g: 0, b: 0, a: 1}
+--- !u!114 &5134069765528978960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
+  m_Name: BackMask
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  VolumeLevel: 0
+  settings:
+    m_transparencySortMode: 3
+    m_transparencySortAxis: {x: 0, y: 1, z: 1}
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 0
+    overrideStencilState: 0
+    stencilStateData:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    opaque: 0
+    renderPassEvent: 250
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 128
+    overrideMat: {fileID: 0}
+    ShaderTags:
+    - BackColor
+    afterRenderMaterial: {fileID: 0}
+    afterPassId: 0
+    textureName: _BackMaskTex
+    blitScale: 1
+    blitToCameraTarget: 0
+    clearFlag: 1
+    clearColor: {r: 0, g: 0, b: 0, a: 1}
+--- !u!114 &6637365475024894066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
+  m_Name: BlueMask
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    passTag: BlueMask
+    Event: 500
+    filterSettings:
+      RenderQueueType: 1
+      LayerMask:
+        serializedVersion: 2
+        m_Bits: 8192
+      PassNames: []
+    overrideMaterial: {fileID: 2100000, guid: 0b7a3dca5a53d544db378afbc087882a, type: 2}
+    overrideMaterialPassIndex: 0
+    overrideShader: {fileID: 0}
+    overrideShaderPassIndex: 0
+    overrideMode: 1
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 1
+    stencilSettings:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    cameraSettings:
+      overrideCamera: 0
+      restoreCamera: 1
+      offset: {x: 0, y: 0, z: 0, w: 0}
+      cameraFieldOfView: 60
+--- !u!114 &7841165557427339075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
+  m_Name: WaterBaker
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  VolumeLevel: 0
+  settings:
+    m_transparencySortMode: 3
+    m_transparencySortAxis: {x: 0, y: 1, z: 1}
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 0
+    overrideStencilState: 0
+    stencilStateData:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    opaque: 0
+    renderPassEvent: 450
+    layerMask:
+      serializedVersion: 2
+      m_Bits: 16
+    overrideMat: {fileID: 0}
+    ShaderTags:
+    - Water
+    afterRenderMaterial: {fileID: 0}
+    afterPassId: 0
+    textureName: _WaterTex
+    blitScale: 1
+    blitToCameraTarget: 0
+    clearFlag: 0
+    clearColor: {r: 0, g: 0, b: 0, a: 1}
+--- !u!114 &9085957355817898148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
+  m_Name: GreenMask
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    passTag: GreenMask
+    Event: 500
+    filterSettings:
+      RenderQueueType: 1
+      LayerMask:
+        serializedVersion: 2
+        m_Bits: 16384
+      PassNames: []
+    overrideMaterial: {fileID: 2100000, guid: edf0133c2aab50e45a66fee3c9053191, type: 2}
+    overrideMaterialPassIndex: 0
+    overrideShader: {fileID: 0}
+    overrideShaderPassIndex: 0
+    overrideMode: 1
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 1
+    stencilSettings:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    cameraSettings:
+      overrideCamera: 0
+      restoreCamera: 1
+      offset: {x: 0, y: 0, z: 0, w: 0}
+      cameraFieldOfView: 60

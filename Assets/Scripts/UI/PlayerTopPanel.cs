@@ -46,6 +46,8 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
     private TextMeshProUGUI FPSText;
     [SerializeField]
     private Button playerButton;
+    [SerializeField]
+    private Vector2 headSize = new Vector2(448, 512);
 
     public override void SetPanelUISerializeObj()
     {
@@ -134,8 +136,8 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
 
         PlayerName.text = GameDataSaveManager.instance.UserGameSaveData.playerData.name;
         var headSprite = CharacterManager.instance.controllerCharacter.characterData.head;
-        headSprite.SetImageSprite(PlayerHead);
-        PlayerHead.SetNativeSize();
+        headSprite.SetImageSprite(PlayerHead, headSize);
+       // PlayerHead.SetNativeSize();
         var characterProperty = CharacterManager.instance.controllerCharacter.CharacterProperty;
         HPSlider.fillAmount = characterProperty.HP / (float)characterProperty.MaxHP;
         RPSlider.fillAmount = characterProperty.Power / (float)characterProperty.MaxPower;

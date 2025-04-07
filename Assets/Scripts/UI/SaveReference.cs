@@ -25,6 +25,8 @@ public class SaveReference : UIObjReference<UserGameSaveData>
 
     [SerializeField]
     private TextMeshProUGUI SaveTime;
+    [SerializeField]
+    private Vector2 headSize=new Vector2(48,48);
 
     public override void SelectDefault()
     {
@@ -56,7 +58,7 @@ public class SaveReference : UIObjReference<UserGameSaveData>
         {
             Icon.enabled = true;
             CharacterData characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(data.playerData.dataId);
-            characterData.head.SetImageSprite(Icon);
+            characterData.head.SetImageSprite(Icon,headSize);
             //Icon.sprite = characterData.icon.sprite;
             Level.text = GameCommon.AddString("Lv.", data.playerData.level.ToString());
             Name.text = data.playerData.name;
