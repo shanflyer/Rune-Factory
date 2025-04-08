@@ -58,12 +58,21 @@ public class LanguageManage : Singleton<LanguageManage>
         base.Clear();
         TMP_Text.SwitchString = null;
     }
+
+    static Dictionary<string, string> replacements = new Dictionary<string, string>
+    {
+        //{"\\n","\n" },
+        {
+            "\r\n","\n"
+        }
+    };
     public string SwitchString(string source)
     {
         if (string.IsNullOrEmpty(source))
         {
             return source;
         }
+        source = SpanStringReplacer.ReplaceMultipleStrings(source, replacements);
         if (LanguageSwitchDataList.languageDatas.TryGetValue(source,out var languageSwitchData) && nowFieldInfo!=null)
         {
           return  nowFieldInfo.GetValue(languageSwitchData).ToString();

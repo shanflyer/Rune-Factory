@@ -4,8 +4,10 @@ using UnityEngine;
 using UnityEngine.UI; 
 using System.Threading.Tasks;
 using TMPro;
+using UnityEngine.Analytics;
+using VoxelBusters.EssentialKit.GameServicesCore;
 
-public class CharacterSelectInformationPanel : GamePanel<IReferenceData>
+public class CharacterSelectInformationPanel : GamePanel<SelectCharacterData>
 {
     public override bool changeInputModel => false;
     [SerializeField]
@@ -37,22 +39,20 @@ public class CharacterSelectInformationPanel : GamePanel<IReferenceData>
         yes.onClick.AddListener(YesButtonAction);
         Return.onClick.AddListener(NoButtonAction);
     }
-    public override Task InitData(string dataKay)
+    public override void InitReferenceData(SelectCharacterData v)
     {
-        
-        CharacterSaveData characterSaveData = GameDataSaveManager.instance.UserGameSaveData.playerData;
 
-        Meal.enabled = characterSaveData.gender == Gender.male;
-        Female.enabled = characterSaveData.gender == Gender.female;
-        MealIcon.enabled = characterSaveData.gender == Gender.male;
-        FemaleIcon.enabled = characterSaveData.gender == Gender.female;
+        Meal.enabled = v.gender == Gender.male;
+        Female.enabled = v.gender == Gender.female;
+        MealIcon.enabled = v.gender == Gender.male;
+        FemaleIcon.enabled = v.gender == Gender.female;
 
-        PlayerText.text = characterSaveData.name; 
-        BrothText.SetADDText(characterSaveData.brithDay.season, "之月", characterSaveData.brithDay.day , "日");
+        PlayerText.text = v.name;
+        BrothText.SetADDText(v.brithSeason, "之月", v.brithDay, "日");
 
-        return base.InitData(dataKay);
+        base.InitReferenceData(v);
     }
-     
+ 
 
     void NoButtonAction()
     { 
@@ -70,6 +70,7 @@ public class CharacterSelectInformationPanel : GamePanel<IReferenceData>
             filmName = "角色选择",
             assetName= "ZeroStory"
         });
+        GameDataSaveManager.instance.InitPlayerData(data.name, data.gender, data.brithSeason, data.brithDay);
     }
   
 }

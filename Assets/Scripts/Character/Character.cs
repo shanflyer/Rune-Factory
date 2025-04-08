@@ -893,7 +893,7 @@ public partial class Character
 
     public Exp exp;
 
-    public string name;
+    public string name { get; protected set; }
     private int3 objCoordinate;
     private int2 forwardCoordinate;
 

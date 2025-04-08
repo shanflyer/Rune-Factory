@@ -15,12 +15,12 @@ public class FunctionInfoReference:UIObjReference<InfoData>
  
     public override Task InitData(string dataKey)
     {
-        text.SetText(dataKey);
+        text.SetSWText(dataKey);
         return base.InitData(dataKey);
     }
     public override Task InitData(InfoData t, SelectAction<InfoData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        text.SetText(t.text);
+        text.SetSWText(t.text);
         return base.InitData(t, SelectAction, toggleGroup);
     }
 }

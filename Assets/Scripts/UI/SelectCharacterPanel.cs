@@ -4,6 +4,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+public struct SelectCharacterData:IReferenceData
+{
+    public string name;
+    public Gender gender;
+    public Season brithSeason;
+    public int brithDay;
+}
 public class SelectCharacterPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
@@ -168,8 +175,14 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
 
     private async void OkButtonAction()
     { 
-        GameDataSaveManager.instance.InitPlayerData(playerName, gender, brothSeason, brothDate);
+        
         //DataSaveAndLoadTest.IniteZerodata();
-       await UIManager.instance.ShowGamePanel<CharacterSelectInformationPanel>(layer: 3);
+       await UIManager.instance.ShowGamePanel<CharacterSelectInformationPanel,SelectCharacterData>(new SelectCharacterData
+       {
+           name=playerName,
+           brithDay=brothDate,
+           brithSeason=brothSeason,
+           gender=gender
+       },layer: 3);
     }
 }

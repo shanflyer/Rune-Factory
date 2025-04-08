@@ -158,9 +158,10 @@ public class TempCharacter : Character
 
 public class Player : Character
 {
-    public Player(CharacterData characterData, int instanceId, ProfessionData professionData, int overridePackage = 0) : 
+    public Player(CharacterData characterData, int instanceId, string playerName, ProfessionData professionData, int overridePackage = 0) : 
         base(characterData, professionData, instanceId,true, overridePackage)
     {
+        name = playerName;
     }
 
     protected override async Task CreatCharacterPackage(int overridePackageId = 0, int instanceId = 0)

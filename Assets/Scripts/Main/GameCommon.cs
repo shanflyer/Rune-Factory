@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Unity.Mathematics;
 using UnityEngine;
@@ -123,7 +124,130 @@ public static class AttackType
     /// </summary>
     public static int whipAttack = 6;
 }
+public static class SpanStringReplacer
+{
+    /// <summary>
+    /// 使用 Span 高效替换多个子字符串
+    /// </summary>
+    public static string ReplaceMultipleStrings(string input,
+        Dictionary<string, string> replacements,
+        StringComparison comparison = StringComparison.Ordinal)
+    {
+        if (string.IsNullOrEmpty(input)) return input;
+        if (replacements == null || replacements.Count == 0) return input;
 
+        // 预处理：按长度和优先级排序
+        var sortedReplacements = replacements
+            .OrderByDescending(kv => kv.Key.Length)
+            .ThenByDescending(kv => kv.Key)
+            .ToArray();
+
+        // 使用 ValueStringBuilder 减少内存分配
+        var sb = new ValueStringBuilder(stackalloc char[256]);
+        ReadOnlySpan<char> inputSpan = input.AsSpan();
+        int index = 0;
+
+        while (index < inputSpan.Length)
+        {
+            bool replaced = false;
+
+            // 尝试匹配所有可能的替换项
+            foreach (var (oldValue, newValue) in sortedReplacements)
+            {
+                if (oldValue.Length == 0) continue;
+
+                // 检查当前位置是否匹配
+                if (IsMatchAt(inputSpan, index, oldValue.AsSpan(), comparison))
+                {
+                    sb.Append(newValue);
+                    index += oldValue.Length;
+                    replaced = true;
+                    break;
+                }
+            }
+
+            if (!replaced)
+            {
+                sb.Append(inputSpan[index]);
+                index++;
+            }
+        }
+
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// 检查指定位置是否匹配目标子串
+    /// </summary>
+    private static bool IsMatchAt(
+        ReadOnlySpan<char> source,
+        int startIndex,
+        ReadOnlySpan<char> target,
+        StringComparison comparison)
+    {
+        if (startIndex + target.Length > source.Length) return false;
+
+        return comparison switch
+        {
+            StringComparison.Ordinal => source.Slice(startIndex, target.Length).SequenceEqual(target),
+            StringComparison.OrdinalIgnoreCase => EqualsOrdinalIgnoreCase(
+                source.Slice(startIndex, target.Length), target),
+            _ => source.Slice(startIndex, target.Length).ToString().Equals(
+                target.ToString(), comparison)
+        };
+    }
+
+    /// <summary>
+    /// 高性能的 OrdinalIgnoreCase 比较
+    /// </summary>
+    private static bool EqualsOrdinalIgnoreCase(ReadOnlySpan<char> a, ReadOnlySpan<char> b)
+    {
+        if (a.Length != b.Length) return false;
+        for (int i = 0; i < a.Length; i++)
+        {
+            if (char.ToUpperInvariant(a[i]) != char.ToUpperInvariant(b[i]))
+                return false;
+        }
+        return true;
+    }
+}
+
+// ValueStringBuilder（简化版，实际使用可引用 System.Text.Private.CoreLib）
+internal ref struct ValueStringBuilder
+{
+    private Span<char> _buffer;
+    private int _length;
+
+    public ValueStringBuilder(Span<char> initialBuffer)
+    {
+        _buffer = initialBuffer;
+        _length = 0;
+    }
+
+    public void Append(ReadOnlySpan<char> value)
+    {
+        if (value.Length == 0) return;
+        EnsureCapacity(_length + value.Length);
+        value.CopyTo(_buffer.Slice(_length));
+        _length += value.Length;
+    }
+
+    public void Append(char c)
+    {
+        EnsureCapacity(_length + 1);
+        _buffer[_length++] = c;
+    }
+
+    private void EnsureCapacity(int requiredCapacity)
+    {
+        if (requiredCapacity <= _buffer.Length) return;
+        Span<char> newBuffer = new char[Math.Max(requiredCapacity, _buffer.Length * 2)];
+        _buffer.CopyTo(newBuffer);
+        _buffer = newBuffer;
+    }
+
+    public override string ToString() => _buffer.Slice(0, _length).ToString();
+}
 public static class GameCommon
 {
     public static List<MyString> GetMyStrings(this List<string> strs)
@@ -477,6 +601,8 @@ public static class GameCommon
         return value;
     }
 
+
+    
     /// <summary>
     /// 转换方向为值
     /// </summary>

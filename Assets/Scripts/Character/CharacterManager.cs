@@ -595,7 +595,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    public async Task CreatePlayer(int id, int bag, int instanceId = 0)
+    public async Task CreatePlayer(int id, string playerName,int bag, int instanceId = 0)
     {
         var playerData = await GameDataManager.instance.GetAsyncData<CharacterData>(id);
         if (instanceId == 0)
@@ -603,7 +603,7 @@ public class CharacterManager : Singleton<CharacterManager>
             instanceId = MyInstance.instance.uid;
         }
         ProfessionData professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(playerData.profession);
-        player = new Player(playerData, instanceId, professionData);
+        player = new Player(playerData,  instanceId, playerName, professionData);
         controllerCharacter = player;
         AddCharacter(player);
         RefreshShortcut refreshShortcut = new RefreshShortcut
@@ -702,7 +702,7 @@ public class CharacterManager : Singleton<CharacterManager>
         Character character;
         if (creatCharacter.isPlayer)
         {
-            await CreatePlayer(creatCharacter.characterId, 0);
+            await CreatePlayer(creatCharacter.characterId,creatCharacter.playerName, 0);
             character = player;
         }
         else
