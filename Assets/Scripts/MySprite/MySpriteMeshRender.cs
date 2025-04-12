@@ -18,7 +18,7 @@ public class MySpriteMeshRender : MonoBehaviour
     public Sprite m_Sprite;
 
     public SpriteDrawMode spriteDrawMode;
-    public Vector2 size;
+    public float size=1;
     public Color m_Color;
     public Material m_Material;
     public Material materialInstance => meshRenderer.material;

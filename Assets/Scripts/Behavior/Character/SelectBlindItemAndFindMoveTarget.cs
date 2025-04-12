@@ -59,30 +59,34 @@ public class SelectBlindItemAndFindMoveTarget: Action
                         if (value)
                         {
                             items.Add(checkItems[index]);
-                           
-                        }
-                        if (index >= checkItems.Count - 1)
-                        {
-                            if (items.Count > 0)
+                            if (index >= checkItems.Count - 1)
                             {
-                                taskStatus = TaskStatus.Running;
-
-                                int index = GameRandom.RandomInt(0, items.Count);
-                                SelectItem.Value = items[index];
-                                SetMapEditorItemLinkCharacter setMapEditorItemLinkCharacter = new SetMapEditorItemLinkCharacter
+                                if (items.Count > 0)
                                 {
-                                    mapId = SelectItem.Value.x,
-                                    mapItemEditorId = SelectItem.Value.y,
-                                    linkInstanceId = characterId.Value,
-                                    setResult = SetMapEditorItemLinkResult
-                                };
-                                GameActionManager.instance.QueueAction(setMapEditorItemLinkCharacter,true);
-                            }
-                            else
-                            {
-                                taskStatus = TaskStatus.Failure;
+                                    taskStatus = TaskStatus.Running;
+
+                                    int index = GameRandom.RandomInt(0, items.Count);
+                                    SelectItem.Value = items[index];
+                                    SetMapEditorItemLinkCharacter setMapEditorItemLinkCharacter = new SetMapEditorItemLinkCharacter
+                                    {
+                                        mapId = SelectItem.Value.x,
+                                        mapItemEditorId = SelectItem.Value.y,
+                                        linkInstanceId = characterId.Value,
+                                        setResult = SetMapEditorItemLinkResult
+                                    };
+                                    GameActionManager.instance.QueueAction(setMapEditorItemLinkCharacter, true);
+                                }
+                                else
+                                {
+                                    taskStatus = TaskStatus.Failure;
+                                }
                             }
                         }
+                        else
+                        {
+                            taskStatus = TaskStatus.Failure;
+                        }
+                       
                     }
                 };
                 GameActionManager.instance.QueueAction(checkMapEditorItemLinkCharacter, true);

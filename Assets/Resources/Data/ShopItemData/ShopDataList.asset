@@ -428,28 +428,28 @@ MonoBehaviour:
         type: 2
         payType: 0
         priceValue: 100
-        openFriendLevel: 0
+        openFriendLevel: 3
         buyLimitOne: 1
         buyAction: 0
       - item: 2101
         type: 2
         payType: 0
         priceValue: 100
-        openFriendLevel: 1
+        openFriendLevel: 3
         buyLimitOne: 1
         buyAction: 0
       - item: 2102
         type: 2
         payType: 0
         priceValue: 100
-        openFriendLevel: 1
+        openFriendLevel: 2
         buyLimitOne: 1
         buyAction: 0
       - item: 2103
         type: 2
         payType: 0
         priceValue: 100
-        openFriendLevel: 1
+        openFriendLevel: 2
         buyLimitOne: 1
         buyAction: 0
       - item: 2104
@@ -463,14 +463,14 @@ MonoBehaviour:
         type: 2
         payType: 0
         priceValue: 100
-        openFriendLevel: 1
+        openFriendLevel: 3
         buyLimitOne: 1
         buyAction: 0
       - item: 2107
         type: 2
         payType: 0
         priceValue: 100
-        openFriendLevel: 1
+        openFriendLevel: 2
         buyLimitOne: 1
         buyAction: 0
       - item: 2108
@@ -484,14 +484,14 @@ MonoBehaviour:
         type: 2
         payType: 0
         priceValue: 100
-        openFriendLevel: 1
+        openFriendLevel: 3
         buyLimitOne: 1
         buyAction: 0
       - item: 2110
         type: 2
         payType: 0
         priceValue: 100
-        openFriendLevel: 1
+        openFriendLevel: 4
         buyLimitOne: 1
         buyAction: 0
       - item: 2111
@@ -512,7 +512,7 @@ MonoBehaviour:
         type: 2
         payType: 0
         priceValue: 100
-        openFriendLevel: 1
+        openFriendLevel: 2
         buyLimitOne: 1
         buyAction: 0
     - shopName: "\u5BB6\u5177"
@@ -614,10 +614,17 @@ MonoBehaviour:
         type: 1
         payType: 0
         priceValue: 100
-        openFriendLevel: 3
+        openFriendLevel: 2
         buyLimitOne: 1
         buyAction: 0
       - item: 3503
+        type: 1
+        payType: 0
+        priceValue: 100
+        openFriendLevel: 3
+        buyLimitOne: 1
+        buyAction: 0
+      - item: 3504
         type: 1
         payType: 0
         priceValue: 100
@@ -631,18 +638,32 @@ MonoBehaviour:
         openFriendLevel: 4
         buyLimitOne: 1
         buyAction: 0
-      - item: 3504
+      - item: 3506
+        type: 1
+        payType: 0
+        priceValue: 100
+        openFriendLevel: 4
+        buyLimitOne: 1
+        buyAction: 0
+      - item: 3507
         type: 1
         payType: 0
         priceValue: 100
         openFriendLevel: 5
         buyLimitOne: 1
         buyAction: 0
-      - item: 3506
+      - item: 3508
         type: 1
         payType: 0
         priceValue: 100
         openFriendLevel: 6
+        buyLimitOne: 1
+        buyAction: 0
+      - item: 3509
+        type: 1
+        payType: 0
+        priceValue: 100
+        openFriendLevel: 7
         buyLimitOne: 1
         buyAction: 0
     - shopName: "\u52A8\u7269\u4EA7\u7269"
@@ -652,14 +673,14 @@ MonoBehaviour:
         type: 0
         payType: 0
         priceValue: 100
-        openFriendLevel: 2
+        openFriendLevel: 1
         buyLimitOne: 0
         buyAction: 0
       - item: 3007
         type: 0
         payType: 0
         priceValue: 100
-        openFriendLevel: 1
+        openFriendLevel: 2
         buyLimitOne: 0
         buyAction: 0
       - item: 302
@@ -680,21 +701,42 @@ MonoBehaviour:
         type: 0
         payType: 0
         priceValue: 100
-        openFriendLevel: 1
+        openFriendLevel: 3
         buyLimitOne: 0
         buyAction: 0
       - item: 3006
         type: 0
         payType: 0
         priceValue: 100
-        openFriendLevel: 5
+        openFriendLevel: 4
         buyLimitOne: 0
         buyAction: 0
       - item: 276
         type: 0
         payType: 0
         priceValue: 100
+        openFriendLevel: 4
+        buyLimitOne: 0
+        buyAction: 0
+      - item: 241
+        type: 0
+        payType: 0
+        priceValue: 100
+        openFriendLevel: 5
+        buyLimitOne: 0
+        buyAction: 0
+      - item: 229
+        type: 0
+        payType: 0
+        priceValue: 100
         openFriendLevel: 6
+        buyLimitOne: 0
+        buyAction: 0
+      - item: 203
+        type: 0
+        payType: 0
+        priceValue: 100
+        openFriendLevel: 7
         buyLimitOne: 0
         buyAction: 0
   - name: "\u996E\u98DF\u5E97"

@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42ea687c6ae2c2e40a3e7a52f1347575, type: 3}
+  m_Name: 3018
+  m_EditorClassIdentifier: 
+  animalName: "\u7F8A\u9A7C"
+  id: 3018
+  goodId: 0
+  linkCharacter: 3018
+  age: 1
+  foods: 64000000
+  produceCycle: 2
+  productCount: 1
+  productCD: 1
+  getFoodEmote: 8
+  hungerEmote: 24
+  productEmote: 14
+  talkId:
+    x: 8111
+    y: 8111
+  dailyTasks: 140000001500000016000000
+  behavior: "\u52A8\u7269"
+  externalBehavior: {fileID: 11400000, guid: 784277b561517f44e861c50e5ddf4293, type: 2}
+  GrowthStageStr: "\u5E7C\u7F8A\u9A7C,15,0,3114|\u7F8A\u9A7C,225,203,3114|\u7F8A\u9A7C,100,0,3114"
+  growthStages:
+  - stageName: "\u5E7C\u7F8A\u9A7C"
+    stage: 0
+    growthHour: 15
+    productValue: 0
+    stageObj: 3114
+  - stageName: "\u7F8A\u9A7C"
+    stage: 1
+    growthHour: 225
+    productValue: 203
+    stageObj: 3114
+  - stageName: "\u7F8A\u9A7C"
+    stage: 2
+    growthHour: 100
+    productValue: 0
+    stageObj: 3114
+  functionIds: 04000000090000000a0000000b000000

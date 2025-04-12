@@ -416,7 +416,12 @@ public class Team
                 Character forwardCharacter = Teamers[Teamers.Count - 1].character;
                 List<float4> coordinates;
                 float4 targetCoordinate = SetLastCoordianteAndDircet(forwardCharacter, out coordinates);
-                teamer.SetNowCoordinate(targetCoordinate.xy, targetCoordinate.zw,holdDisplay);
+                Vector2 endPos = GameCommon.GetMapPos(forwardCharacter.coordinate);
+                if(CharacterManager.instance.GetRuntimeCharacterObj(forwardCharacter.instanceId,out var characterRuntimeObj))
+                {
+                    endPos = characterRuntimeObj.transform.position;
+                }
+                teamer.SetNowCoordinate(targetCoordinate.xy, targetCoordinate.zw,holdDisplay, endPos);
                 // teamer.character.SetDirection(direction);
                 // teamer.character.SetCellOffset(forwardCharacter.GetCellOffset());
 
@@ -595,7 +600,7 @@ public class Team
                         var forwardCharacter = Teamers[i - 1];
                         nextCharacter.queueCoordinate = forwardCharacter.queueCoordinate;
                         nextCharacter.queuePos = forwardCharacter.queuePos;
-                        nextCharacter.SetNowCoordinate(forwardCharacter.character.coordinate, forwardCharacter.character.moveDirection,false);
+                        nextCharacter.SetNowCoordinate(forwardCharacter.character.coordinate, forwardCharacter.character.moveDirection,false, forwardCharacter.endPos);
                        await CharacterManager.instance.RefreshNpcRuntimeObj(nextCharacter.character,RefreshMapTemp:false);
                     }
                 }
@@ -654,6 +659,10 @@ public class Team
                 {
                     character.AddQueuePos(new float2(characterObj.transform.position.x,characterObj.transform.position.y),forwardCharacter.character.moveDirection);
                 }
+                else
+                {
+                    character.AddQueuePos(GameCommon.GetMapPos(forwardCharacter.character.coordinate), forwardCharacter.character.moveDirection);
+                }
             }
         }
     }
@@ -669,7 +678,7 @@ public class Teamer
     public Character character;
     public Teamer nextTeamer;
 
-    public async void SetNowCoordinate(float2 nowCoordinate, float2 directionValue,bool holdDisplay)
+    public async void SetNowCoordinate(float2 nowCoordinate, float2 directionValue,bool holdDisplay,Vector2 endPos)
     {
         this.nowCoordinate = (int2)nowCoordinate;
         character.SetCoordinate(this.nowCoordinate);
@@ -677,7 +686,8 @@ public class Teamer
         {
             await CharacterManager.instance.RefreshNpcRuntimeObj(character,RefreshMapTemp:false);
         }
-       
+        startPos = GameCommon.GetMapPos(nowCoordinate);
+       this.endPos = endPos;
         character.moveDirection = directionValue;
         direction = directionValue;
     }
@@ -709,22 +719,24 @@ public class Teamer
     public void SetTeamCoordinate(bool refreshPos=true)
     {
         character.SetCoordinate(nowCoordinate,refreshPos);
+        CharacterManager.instance.GetRuntimeCharacterObj(character.instanceId, out var characterRuntimeObj);
         if (queueCoordinate.Count > 3)
         {
             var targetCoordinate = queueCoordinate.Dequeue();
             direction = math.normalizesafe(targetCoordinate.xy - nowCoordinate);
-           // Debug.Log($"targetCoordinate：{targetCoordinate}--nowCoordinate:{nowCoordinate}--direction {direction}");
-            startPos = GameCommon.GetMapPos(nowCoordinate);
+            // Debug.Log($"targetCoordinate：{targetCoordinate}--nowCoordinate:{nowCoordinate}--direction {direction}");
+            if (characterRuntimeObj == null)
+                startPos = GameCommon.GetMapPos(nowCoordinate);
             nowCoordinate = (int2)targetCoordinate.xy;
            //endPos = GameCommon.GetMapPos(nowCoordinate);
             timeValue = 0;
 
-            SetDirection setDirection = new SetDirection
+           /* SetDirection setDirection = new SetDirection
             {
                 characterId = character.instanceId,
                 direction = targetCoordinate.zw
             };
-            GameActionManager.instance.QueueAction(setDirection, true);
+            GameActionManager.instance.QueueAction(setDirection, true);*/
             canMove = true;
         }
         else
@@ -736,6 +748,11 @@ public class Teamer
         {
             float4 pos= queuePos.Dequeue();
             endPos = pos.xy;
+            if (characterRuntimeObj != null)
+            {
+                startPos = characterRuntimeObj.transform.position;
+            }
+                character.moveDirection= math.normalizesafe(endPos - startPos, character.moveDirection);
         }
     }
 
@@ -757,8 +774,9 @@ public class Teamer
         canMove = true;
     }
 
-    private Vector2 startPos, endPos;
+    private Vector2 startPos;
     private float timeValue;
+    public Vector2 endPos { get; private set; }
 
     public const float perCellTime = GameCommon.cellSize * 2;
     private float timeSpeed = 1 / perCellTime;

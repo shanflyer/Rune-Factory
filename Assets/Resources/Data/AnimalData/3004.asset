@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42ea687c6ae2c2e40a3e7a52f1347575, type: 3}
   m_Name: 3004
   m_EditorClassIdentifier: 
-  animalName: "\u5BB6\u5154"
+  animalName: "\u5154\u5B50"
   id: 3004
   goodId: 0
   linkCharacter: 3004
@@ -30,19 +30,19 @@ MonoBehaviour:
   dailyTasks: 140000001500000016000000
   behavior: "\u52A8\u7269"
   externalBehavior: {fileID: 11400000, guid: 784277b561517f44e861c50e5ddf4293, type: 2}
-  GrowthStageStr: "\u5E7C\u5154,6,0,3004|\u5BB6\u5154,114,302,3005|\u5BB6\u5154,100,0,3005"
+  GrowthStageStr: "\u5E7C\u5154,6,0,3004|\u5154\u5B50,114,302,3005|\u5154\u5B50,100,0,3005"
   growthStages:
   - stageName: "\u5E7C\u5154"
     stage: 0
     growthHour: 6
     productValue: 0
     stageObj: 3004
-  - stageName: "\u5BB6\u5154"
+  - stageName: "\u5154\u5B50"
     stage: 1
     growthHour: 114
     productValue: 302
     stageObj: 3005
-  - stageName: "\u5BB6\u5154"
+  - stageName: "\u5154\u5B50"
     stage: 2
     growthHour: 100
     productValue: 0
