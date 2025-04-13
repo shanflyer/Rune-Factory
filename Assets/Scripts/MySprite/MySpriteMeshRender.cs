@@ -17,6 +17,7 @@ public class MySpriteMeshRender : MonoBehaviour
     private MeshFilter meshFilter; 
     public Sprite m_Sprite;
 
+    public bool flip = false;
     public SpriteDrawMode spriteDrawMode;
     public float size=1;
     public Color m_Color;
@@ -46,6 +47,14 @@ public class MySpriteMeshRender : MonoBehaviour
         if (meshRenderer.sharedMaterial == null || meshFilter.sharedMesh == null)
         {
             CreateMesh();
+        }
+        if (!flip)
+        {
+            transform.localScale = Vector3.one * size;
+        }
+        else
+        {
+            transform.localScale = new Vector3(-size, 1, 1);
         }
     }
     private void OnDisable()
@@ -101,6 +110,8 @@ public class MySpriteMeshRender : MonoBehaviour
       
         nowColor = m_Color;
     }
+
+    bool oldflip;
     private void LateUpdate()
     {
         if (nowSprite != m_Sprite|| nowMaterial != m_Material)
@@ -111,7 +122,18 @@ public class MySpriteMeshRender : MonoBehaviour
         {
             SetMeshColor();
         }
-       
+        if (oldflip != flip)
+        {
+            oldflip = flip;
+            if (!flip)
+            {
+                transform.localScale = Vector3.one * size;
+            }
+            else
+            {
+                transform.localScale = new Vector3(-size, 1, 1);
+            }
+        }
     }
     public void TestMesh()
     {

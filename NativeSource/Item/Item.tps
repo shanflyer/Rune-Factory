@@ -211,6 +211,7 @@
             <key type="filename">仙人掌.png</key>
             <key type="filename">伏特加$Normal.png</key>
             <key type="filename">伏特加.png</key>
+            <key type="filename">兔子.png</key>
             <key type="filename">兔子脚$Normal.png</key>
             <key type="filename">兔子脚.png</key>
             <key type="filename">兰寿金鱼$Normal.png</key>
@@ -323,6 +324,7 @@
             <key type="filename">尖刺.png</key>
             <key type="filename">尖角头盔$Normal.png</key>
             <key type="filename">尖角头盔.png</key>
+            <key type="filename">山羊.png</key>
             <key type="filename">巨型蛇头鱼$Normal.png</key>
             <key type="filename">巨型蛇头鱼.png</key>
             <key type="filename">巨型鲶鱼$Normal.png</key>
@@ -511,6 +513,7 @@
             <key type="filename">火晶石.png</key>
             <key type="filename">火氛卷轴$Normal.png</key>
             <key type="filename">火氛卷轴.png</key>
+            <key type="filename">火鸡.png</key>
             <key type="filename">炖煮条石鲷$Normal.png</key>
             <key type="filename">炖煮条石鲷.png</key>
             <key type="filename">炖菜$Normal.png</key>
@@ -663,6 +666,7 @@
             <key type="filename">罗非鱼.png</key>
             <key type="filename">羊毛$Normal.png</key>
             <key type="filename">羊毛.png</key>
+            <key type="filename">羊驼.png</key>
             <key type="filename">翻车鱼$Normal.png</key>
             <key type="filename">翻车鱼.png</key>
             <key type="filename">肥料$Normal.png</key>
@@ -1000,7 +1004,6 @@
                 <false/>
             </struct>
             <key type="filename">奶牛.png</key>
-            <key type="filename">家兔.png</key>
             <key type="filename">猪.png</key>
             <key type="filename">绵羊.png</key>
             <struct type="IndividualSpriteSettings">

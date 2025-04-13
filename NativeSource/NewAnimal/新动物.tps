@@ -550,6 +550,8 @@
             <key type="filename">images/绵羊_行走_10.png</key>
             <key type="filename">images/绵羊_行走_11.png</key>
             <key type="filename">images/绵羊_行走_12.png</key>
+            <key type="filename">images/羊驼_吃_07.png</key>
+            <key type="filename">images/羊驼_吃_08.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.65</point_f>
@@ -776,47 +778,24 @@
                 <false/>
             </struct>
             <key type="filename">images/羊驼_吃_01.png</key>
-            <key type="filename">images/羊驼_行走_02.png</key>
-            <key type="filename">images/羊驼_行走_04.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.517241,0.884058</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>32,32,64,64</rect>
-                <key>scale9Paddings</key>
-                <rect>32,32,64,64</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
             <key type="filename">images/羊驼_吃_02.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.517241,0.885246</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>32,32,64,64</rect>
-                <key>scale9Paddings</key>
-                <rect>32,32,64,64</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
             <key type="filename">images/羊驼_吃_03.png</key>
             <key type="filename">images/羊驼_吃_04.png</key>
             <key type="filename">images/羊驼_吃_09.png</key>
+            <key type="filename">images/羊驼_吃_10.png</key>
             <key type="filename">images/羊驼_吃_11.png</key>
             <key type="filename">images/羊驼_吃_12.png</key>
+            <key type="filename">images/羊驼_行走_01.png</key>
+            <key type="filename">images/羊驼_行走_02.png</key>
+            <key type="filename">images/羊驼_行走_03.png</key>
+            <key type="filename">images/羊驼_行走_04.png</key>
+            <key type="filename">images/羊驼_行走_09.png</key>
             <key type="filename">images/羊驼_行走_10.png</key>
+            <key type="filename">images/羊驼_行走_11.png</key>
             <key type="filename">images/羊驼_行走_12.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.517241,0.888889</point_f>
+                <point_f>0.517241,0.65</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -829,12 +808,13 @@
                 <false/>
             </struct>
             <key type="filename">images/羊驼_吃_05.png</key>
+            <key type="filename">images/羊驼_行走_05.png</key>
             <key type="filename">images/羊驼_行走_06.png</key>
             <key type="filename">images/羊驼_行走_07.png</key>
             <key type="filename">images/羊驼_行走_08.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.509804,0.890625</point_f>
+                <point_f>0.509804,0.65</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -849,85 +829,7 @@
             <key type="filename">images/羊驼_吃_06.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0.507463,0.888889</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>32,32,64,64</rect>
-                <key>scale9Paddings</key>
-                <rect>32,32,64,64</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">images/羊驼_吃_07.png</key>
-            <key type="filename">images/羊驼_吃_08.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.888889</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>32,32,64,64</rect>
-                <key>scale9Paddings</key>
-                <rect>32,32,64,64</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">images/羊驼_吃_10.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.517241,0.897959</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>32,32,64,64</rect>
-                <key>scale9Paddings</key>
-                <rect>32,32,64,64</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">images/羊驼_行走_01.png</key>
-            <key type="filename">images/羊驼_行走_03.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.517241,0.887324</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>32,32,64,64</rect>
-                <key>scale9Paddings</key>
-                <rect>32,32,64,64</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">images/羊驼_行走_05.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.509804,0.892308</point_f>
-                <key>spriteScale</key>
-                <double>1</double>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>32,32,64,64</rect>
-                <key>scale9Paddings</key>
-                <rect>32,32,64,64</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">images/羊驼_行走_09.png</key>
-            <key type="filename">images/羊驼_行走_11.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.517241,0.892308</point_f>
+                <point_f>0.507463,0.65</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>

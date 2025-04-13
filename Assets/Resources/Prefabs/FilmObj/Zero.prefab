@@ -296,7 +296,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.06, y: 0.06, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3442944605622911092}
@@ -369,10 +369,12 @@ MonoBehaviour:
   meshRenderer: {fileID: 7972782589437484096}
   meshFilter: {fileID: 3756546914371361407}
   m_Sprite: {fileID: 21300000, guid: d08a785fbb14aec429da8bb5461be1d1, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: f1e60959e881fce4ba0fd4d0251a121e, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &1736432817135196161
 GameObject:
   m_ObjectHideFlags: 0
@@ -402,7 +404,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 25.59, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1736665323072463240}
@@ -475,10 +477,12 @@ MonoBehaviour:
   meshRenderer: {fileID: 2323041083267466010}
   meshFilter: {fileID: 2432035312552874786}
   m_Sprite: {fileID: 21300000, guid: d9c950818ab85984b87b29ddc4f1350e, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 1219d22ab875e9c4d85d39c3a727be81, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &2053428126864955379
 GameObject:
   m_ObjectHideFlags: 0
@@ -508,7 +512,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 17.06, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7163158018684700121}
@@ -581,10 +585,12 @@ MonoBehaviour:
   meshRenderer: {fileID: 2489778899785671372}
   meshFilter: {fileID: 6748361653360936203}
   m_Sprite: {fileID: 21300000, guid: 7ab94c09266f4714a9d2b52259dbea46, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 1219d22ab875e9c4d85d39c3a727be81, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &2209563580579184282
 GameObject:
   m_ObjectHideFlags: 0
@@ -781,7 +787,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.041, y: -1.1600001, z: 150.06}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3770849648726530982}
@@ -801,7 +807,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2229961628495384410}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -854,10 +860,12 @@ MonoBehaviour:
   meshRenderer: {fileID: 4368067136206477687}
   meshFilter: {fileID: 956795154917559219}
   m_Sprite: {fileID: 21300000, guid: 97b40540879ca5f45a27d745a3e1cc91, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 1219d22ab875e9c4d85d39c3a727be81, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &2258991304397299556
 GameObject:
   m_ObjectHideFlags: 0
@@ -984,7 +992,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1564874757354064518}
@@ -1057,10 +1065,12 @@ MonoBehaviour:
   meshRenderer: {fileID: 3590003466499197472}
   meshFilter: {fileID: 7904310111898834910}
   m_Sprite: {fileID: 0}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 678dbbf72f56eb541a7c99271f122b4f, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &2520938501107640566
 GameObject:
   m_ObjectHideFlags: 0
@@ -1376,13 +1386,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81693969fa2bcc042b7a70b6048adc23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 0}
-  meshFilter: {fileID: 0}
+  meshRenderer: {fileID: 9031424349521140120}
+  meshFilter: {fileID: 7493181783588857104}
   m_Sprite: {fileID: 21300000, guid: e2e5247820af5944b9a1a3d0130c2198, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: f20970a71e590374aa4a09f143d213d4, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &2937066599358368784
 GameObject:
   m_ObjectHideFlags: 0
@@ -1412,7 +1424,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4622063772268195524}
@@ -1485,10 +1497,12 @@ MonoBehaviour:
   meshRenderer: {fileID: 2776646108040096360}
   meshFilter: {fileID: 608952630750585320}
   m_Sprite: {fileID: 51577376, guid: 8616b105253e2bb47a66c4376728e5f6, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 678dbbf72f56eb541a7c99271f122b4f, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &3461345903673128232
 GameObject:
   m_ObjectHideFlags: 0
@@ -1594,10 +1608,12 @@ MonoBehaviour:
   meshRenderer: {fileID: 3719120017395726322}
   meshFilter: {fileID: 5375556480626622676}
   m_Sprite: {fileID: 21300000, guid: d9c950818ab85984b87b29ddc4f1350e, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 1219d22ab875e9c4d85d39c3a727be81, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &3876951231167261667
 GameObject:
   m_ObjectHideFlags: 0
@@ -1716,7 +1732,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3442944605622911092}
@@ -1789,10 +1805,12 @@ MonoBehaviour:
   meshRenderer: {fileID: 2690126867230976514}
   meshFilter: {fileID: 4820489789765974177}
   m_Sprite: {fileID: 1708999476, guid: 8616b105253e2bb47a66c4376728e5f6, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 7fd994eedd4c2f34d86dfb2c63b46b16, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &4850278256885620021
 GameObject:
   m_ObjectHideFlags: 0
@@ -1892,13 +1910,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81693969fa2bcc042b7a70b6048adc23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 0}
-  meshFilter: {fileID: 0}
+  meshRenderer: {fileID: 3281316175736356739}
+  meshFilter: {fileID: 8442824764663312064}
   m_Sprite: {fileID: 21300000, guid: e2e5247820af5944b9a1a3d0130c2198, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: f20970a71e590374aa4a09f143d213d4, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &4929475775851283209
 GameObject:
   m_ObjectHideFlags: 0
@@ -1928,7 +1948,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.072, y: 0.61, z: -0.06}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4498173722088642072}
@@ -1950,7 +1970,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4929475775851283209}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2003,10 +2023,12 @@ MonoBehaviour:
   meshRenderer: {fileID: 4737574936352167554}
   meshFilter: {fileID: 472498254564955904}
   m_Sprite: {fileID: 21300000, guid: a3d2a86e33e6ca344bfcca054038dfe3, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 4b4599894d31c6b4d884bd1956eb5c28, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &5108309788336551086
 GameObject:
   m_ObjectHideFlags: 0
@@ -2113,10 +2135,12 @@ MonoBehaviour:
   meshFilter: {fileID: 9016950181108902884}
   m_Sprite: {fileID: 8144728413176581339, guid: 367a54dd95482ac4388a9ffaddd24b50,
     type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 7fd994eedd4c2f34d86dfb2c63b46b16, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &5291654855567127475
 GameObject:
   m_ObjectHideFlags: 0
@@ -2202,7 +2226,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.02, z: -0.55}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8927547213459633160}
@@ -2275,10 +2299,12 @@ MonoBehaviour:
   meshRenderer: {fileID: 4868801472301947272}
   meshFilter: {fileID: 7240622007002258776}
   m_Sprite: {fileID: 1215604321, guid: 367a54dd95482ac4388a9ffaddd24b50, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 678dbbf72f56eb541a7c99271f122b4f, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &6084896932486225002
 GameObject:
   m_ObjectHideFlags: 0
@@ -2721,7 +2747,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6462259619311885567}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -2774,10 +2800,12 @@ MonoBehaviour:
   meshRenderer: {fileID: 209004315460237777}
   meshFilter: {fileID: 927727181106305587}
   m_Sprite: {fileID: 0}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 678dbbf72f56eb541a7c99271f122b4f, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &6501239525065070104
 GameObject:
   m_ObjectHideFlags: 0
@@ -2807,7 +2835,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 25.59, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7163158018684700121}
@@ -2880,10 +2908,12 @@ MonoBehaviour:
   meshRenderer: {fileID: 7071375713533399866}
   meshFilter: {fileID: 2872405599383693593}
   m_Sprite: {fileID: 21300000, guid: 7ab94c09266f4714a9d2b52259dbea46, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 1219d22ab875e9c4d85d39c3a727be81, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &6745193667350865828
 GameObject:
   m_ObjectHideFlags: 0
@@ -2969,7 +2999,7 @@ PlayableDirector:
   m_GameObject: {fileID: 6745193667350865828}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 25222f53b73313941af392a5be1e54bc, type: 2}
+  m_PlayableAsset: {fileID: 11400000, guid: aa1f9ddb9bd3ada4aad4f1a9cf951b22, type: 2}
   m_InitialState: 0
   m_WrapMode: 0
   m_DirectorUpdateMode: 1
@@ -3050,6 +3080,8 @@ PlayableDirector:
   - key: {fileID: 7819404512429202930, guid: ba35fdb2c79dce548bb1c055c363e1de, type: 2}
     value: {fileID: 0}
   - key: {fileID: -6616339011093651684, guid: 25222f53b73313941af392a5be1e54bc, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 2466069924625499698, guid: aa1f9ddb9bd3ada4aad4f1a9cf951b22, type: 2}
     value: {fileID: 0}
   m_ExposedReferences:
     m_References: []
@@ -3180,7 +3212,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 17.06, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1736665323072463240}
@@ -3253,10 +3285,12 @@ MonoBehaviour:
   meshRenderer: {fileID: 7343427769140849626}
   meshFilter: {fileID: 2687551813528952490}
   m_Sprite: {fileID: 21300000, guid: d9c950818ab85984b87b29ddc4f1350e, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 1219d22ab875e9c4d85d39c3a727be81, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &7250550885557426884
 GameObject:
   m_ObjectHideFlags: 0
@@ -3362,10 +3396,12 @@ MonoBehaviour:
   meshRenderer: {fileID: 5850098900381068913}
   meshFilter: {fileID: 2635556957762135437}
   m_Sprite: {fileID: 21300000, guid: 7ab94c09266f4714a9d2b52259dbea46, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 1219d22ab875e9c4d85d39c3a727be81, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &7872038503525844893
 GameObject:
   m_ObjectHideFlags: 0
@@ -3928,7 +3964,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 8.53, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7163158018684700121}
@@ -4001,10 +4037,12 @@ MonoBehaviour:
   meshRenderer: {fileID: 9042494916259931376}
   meshFilter: {fileID: 6987346271796399713}
   m_Sprite: {fileID: 21300000, guid: 7ab94c09266f4714a9d2b52259dbea46, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 1219d22ab875e9c4d85d39c3a727be81, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &8398858672327320949
 GameObject:
   m_ObjectHideFlags: 0
@@ -4106,13 +4144,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81693969fa2bcc042b7a70b6048adc23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meshRenderer: {fileID: 0}
-  meshFilter: {fileID: 0}
+  meshRenderer: {fileID: 1091505523887396625}
+  meshFilter: {fileID: 3567449858315891924}
   m_Sprite: {fileID: 21300000, guid: e2e5247820af5944b9a1a3d0130c2198, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: f20970a71e590374aa4a09f143d213d4, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &8474997191667625402
 GameObject:
   m_ObjectHideFlags: 0
@@ -4219,7 +4259,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8478633368401121974}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -4272,10 +4312,12 @@ MonoBehaviour:
   meshRenderer: {fileID: 1554027486567647670}
   meshFilter: {fileID: 4512478395470361666}
   m_Sprite: {fileID: 0}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 678dbbf72f56eb541a7c99271f122b4f, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &8670064949828340161
 GameObject:
   m_ObjectHideFlags: 0
@@ -4305,7 +4347,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 8.53, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1736665323072463240}
@@ -4378,10 +4420,12 @@ MonoBehaviour:
   meshRenderer: {fileID: 5642665926012235801}
   meshFilter: {fileID: 3192716737518221737}
   m_Sprite: {fileID: 21300000, guid: d9c950818ab85984b87b29ddc4f1350e, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 1219d22ab875e9c4d85d39c3a727be81, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &8705216678854781135
 GameObject:
   m_ObjectHideFlags: 0

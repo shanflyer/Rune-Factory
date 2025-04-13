@@ -929,7 +929,7 @@ public partial class Character
                     return;
                 }
                 direction = GameCommon.GetCharacterDirect(moveDirection, direction);
-                //Debug.Log($"direction:{moveDirection}--{direction}");
+               Debug.Log($"direction:{moveDirection}--{direction}");
                 if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var runtimeObj))
                 { 
                     runtimeObj.SetAnimationDirection(_moveDirection, direction); 
