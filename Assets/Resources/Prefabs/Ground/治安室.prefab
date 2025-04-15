@@ -203,8 +203,10 @@ MonoBehaviour:
   meshRenderer: {fileID: 4149692432671070096}
   meshFilter: {fileID: 6670320034929853050}
   m_Sprite: {fileID: -1769563336, guid: 6a334efa69d47b54399183793d2533b0, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
+  Size: {x: 1, y: 1}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 655718fcfc88eec4aba338e2758ae9f5, type: 2}
   SpriteResourceRenference: {fileID: 0}
@@ -774,8 +776,10 @@ MonoBehaviour:
   meshRenderer: {fileID: 8837469575395542248}
   meshFilter: {fileID: 247346983794952175}
   m_Sprite: {fileID: 1984659431, guid: 6a334efa69d47b54399183793d2533b0, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
+  Size: {x: 1, y: 1}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: fd078cb3204b6f54d8a97389421dd153, type: 2}
   SpriteResourceRenference: {fileID: 0}
@@ -1987,8 +1991,10 @@ MonoBehaviour:
   meshRenderer: {fileID: 145508189913887025}
   meshFilter: {fileID: 6833742360513820780}
   m_Sprite: {fileID: 21300000, guid: 1c8f071f15721f14e97bbb063ee9c102, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
+  Size: {x: 1, y: 1}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: fd078cb3204b6f54d8a97389421dd153, type: 2}
   SpriteResourceRenference: {fileID: 0}
@@ -3142,8 +3148,10 @@ MonoBehaviour:
   meshRenderer: {fileID: 2607521523865168855}
   meshFilter: {fileID: 4407043838636152076}
   m_Sprite: {fileID: -1455673978, guid: 6a334efa69d47b54399183793d2533b0, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
+  Size: {x: 1, y: 1}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: fd078cb3204b6f54d8a97389421dd153, type: 2}
   SpriteResourceRenference: {fileID: 0}
@@ -3249,8 +3257,10 @@ MonoBehaviour:
   meshRenderer: {fileID: 896937251468219944}
   meshFilter: {fileID: 3406050988579431987}
   m_Sprite: {fileID: 21300000, guid: bbe69340af82b4049b7d04c17c9cc141, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
+  Size: {x: 1, y: 1}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 655718fcfc88eec4aba338e2758ae9f5, type: 2}
   SpriteResourceRenference: {fileID: 0}
@@ -3356,8 +3366,10 @@ MonoBehaviour:
   meshRenderer: {fileID: 8792333414919132613}
   meshFilter: {fileID: 6145147912861096609}
   m_Sprite: {fileID: 1672558107, guid: 6a334efa69d47b54399183793d2533b0, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
+  Size: {x: 1, y: 1}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: fd078cb3204b6f54d8a97389421dd153, type: 2}
   SpriteResourceRenference: {fileID: 0}
@@ -3626,8 +3638,10 @@ MonoBehaviour:
   meshRenderer: {fileID: 3913012494356838093}
   meshFilter: {fileID: 7542150840414755223}
   m_Sprite: {fileID: -42666682, guid: 6a334efa69d47b54399183793d2533b0, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
+  Size: {x: 1, y: 1}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 655718fcfc88eec4aba338e2758ae9f5, type: 2}
   SpriteResourceRenference: {fileID: 0}
@@ -3896,6 +3910,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: other_27
+      objectReference: {fileID: 0}
+    - target: {fileID: 1231227196557625717, guid: cb4f3d11f65c6c34494dd5ed66ebd854,
+        type: 3}
+      propertyPath: Size.x
+      value: 1.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1231227196557625717, guid: cb4f3d11f65c6c34494dd5ed66ebd854,
+        type: 3}
+      propertyPath: Size.y
+      value: 1.4
       objectReference: {fileID: 0}
     - target: {fileID: 7184708363196944375, guid: cb4f3d11f65c6c34494dd5ed66ebd854,
         type: 3}
@@ -4806,6 +4830,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3893028973118893348, guid: 61b3c55546acb4d40824218e943f05b9,
+        type: 3}
+      propertyPath: Size.x
+      value: 1.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3893028973118893348, guid: 61b3c55546acb4d40824218e943f05b9,
+        type: 3}
+      propertyPath: Size.y
+      value: 1.4
+      objectReference: {fileID: 0}
     - target: {fileID: 5141911118362342098, guid: 61b3c55546acb4d40824218e943f05b9,
         type: 3}
       propertyPath: m_Name
@@ -5143,6 +5177,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2580762261687114226, guid: 9f8d852e61f834346b138aa72479bcd5,
+        type: 3}
+      propertyPath: Size.x
+      value: 1.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2580762261687114226, guid: 9f8d852e61f834346b138aa72479bcd5,
+        type: 3}
+      propertyPath: Size.y
+      value: 1.4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5865,6 +5909,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3293830289914592031, guid: 7195651676edd71408d76b97d14f00f7,
+        type: 3}
+      propertyPath: Size.x
+      value: 1.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3293830289914592031, guid: 7195651676edd71408d76b97d14f00f7,
+        type: 3}
+      propertyPath: Size.y
+      value: 1.4
       objectReference: {fileID: 0}
     - target: {fileID: 6933063294058172701, guid: 7195651676edd71408d76b97d14f00f7,
         type: 3}

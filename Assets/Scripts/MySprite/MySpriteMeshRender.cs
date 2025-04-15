@@ -19,7 +19,8 @@ public class MySpriteMeshRender : MonoBehaviour
 
     public bool flip = false;
     public SpriteDrawMode spriteDrawMode;
-    public float size=1;
+     public float size=1;
+    public Vector2 Size = Vector2.one;
     public Color m_Color;
     public Material m_Material;
     public Material materialInstance => meshRenderer.material;
@@ -48,14 +49,7 @@ public class MySpriteMeshRender : MonoBehaviour
         {
             CreateMesh();
         }
-        if (!flip)
-        {
-            transform.localScale = Vector3.one * size;
-        }
-        else
-        {
-            transform.localScale = new Vector3(-size, 1, 1);
-        }
+        
     }
     private void OnDisable()
     {
@@ -127,11 +121,13 @@ public class MySpriteMeshRender : MonoBehaviour
             oldflip = flip;
             if (!flip)
             {
-                transform.localScale = Vector3.one * size;
+                Vector3 scale = Vector2.one * Size;
+                scale.z = 1;
+                transform.localScale = scale;
             }
             else
             {
-                transform.localScale = new Vector3(-size, 1, 1);
+                transform.localScale = new Vector3(-Size.x, Size.y, 1);
             }
         }
     }

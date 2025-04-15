@@ -102,8 +102,10 @@ MonoBehaviour:
   meshRenderer: {fileID: 4443993735362413729}
   meshFilter: {fileID: 3704448141387394643}
   m_Sprite: {fileID: 0}
+  flip: 0
   spriteDrawMode: 0
   size: 1
+  Size: {x: 1, y: 1}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 030119b467e4ba9419897fd36907df50, type: 2}
   SpriteResourceRenference: {fileID: 0}
@@ -376,8 +378,10 @@ MonoBehaviour:
   meshRenderer: {fileID: 3852962319728006816}
   meshFilter: {fileID: 1744636904424478258}
   m_Sprite: {fileID: 0}
+  flip: 0
   spriteDrawMode: 0
   size: 0.75
+  Size: {x: 0.75, y: 0.75}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 5e39dd4b3c14ae1468d512a907350b29, type: 2}
   SpriteResourceRenference: {fileID: 0}
@@ -483,8 +487,10 @@ MonoBehaviour:
   meshRenderer: {fileID: 6836860638525279502}
   meshFilter: {fileID: 5597366889210428862}
   m_Sprite: {fileID: 0}
+  flip: 0
   spriteDrawMode: 0
   size: 1
+  Size: {x: 1, y: 1}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 030119b467e4ba9419897fd36907df50, type: 2}
   SpriteResourceRenference: {fileID: 0}
@@ -549,7 +555,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5816087072497617257}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.174, y: -2.48, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

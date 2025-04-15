@@ -50,6 +50,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -139,6 +142,9 @@ LineRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -239,29 +245,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilemap0: {fileID: 2774981885459790050}
   tilemap1: {fileID: 5767196274001784115}
-  directions0: 
-  directions1: 
   mapLine:
+    instanceId: 0
+    zeroInit: 0
     map0: 0
     map1: 0
     cells0:
       directions: 
-      cells: []
+      girds: 
       targetCell:
         x: 0
         y: 0
         z: 0
-      beforAction: 0
+      beforeAction: 0
       afterAction: 0
+      checkAction: 0
     cells1:
       directions: 
-      cells: []
+      girds: 
       targetCell:
         x: 0
         y: 0
         z: 0
-      beforAction: 0
+      beforeAction: 0
       afterAction: 0
+      checkAction: 0
     beforeActionId: 0
     afterActionId: 0
 --- !u!156049354 &2642559772799770385
@@ -364,6 +372,9 @@ TilemapRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -484,6 +495,9 @@ TilemapRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -566,6 +580,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

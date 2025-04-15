@@ -123,6 +123,7 @@ public class CommonToolEditor : MyEditor
         {
             ReSavePrefab();
         }
+
         oldSourcePath=EditorGUILayout.TextField("dataPath",oldSourcePath);
         newSourecePath = EditorGUILayout.TextField("newSourcePath", newSourecePath);
        // if (GUILayout.Button("Test serial"))
@@ -144,18 +145,9 @@ public class CommonToolEditor : MyEditor
         }
         objPath = EditorGUILayout.TextField("物体路径", objPath);
         staticObj = EditorGUILayout.Toggle("静态物体", staticObj);
-        if (GUILayout.Button("AddObjPosData"))
+        if (GUILayout.Button("改变物体缩放组织形式"))
         {
-            try
-            {
-                AssetDatabase.StartAssetEditing();
-                AddObjPosData(objPath);
-            }
-            finally
-            {
-                AssetDatabase.StopAssetEditing();
-            }
-           
+            ChangeObjScale(objPath); 
         }
 
         if (GUILayout.Button("替换SpriteRenderer"))
@@ -518,6 +510,57 @@ public class CommonToolEditor : MyEditor
             AssetDatabase.StopAssetEditing();
         }
 
+    }
+    void ChangeObjScale(string path)
+    {
+        DirectoryInfo directoryInfo = new DirectoryInfo(path);
+        try
+        {
+            AssetDatabase.StartAssetEditing();
+            InitObjScale(directoryInfo, path);
+            void InitObjScale(DirectoryInfo directoryInfo, string path)
+            {
+                var files = directoryInfo.GetFiles("*.Prefab");
+                for (int i = 0; i < files.Length; i++)
+                {
+                    string objPath = $"{path}/{files[i].Name}";
+                    GameObject obj = AssetDatabase.LoadAssetAtPath<GameObject>(objPath);
+                    GameObject _obj =(GameObject)PrefabUtility.InstantiatePrefab(obj);
+                   
+                    var spriteMeshRenders = _obj.GetComponentsInChildren<MySpriteMeshRender>(true);
+                    foreach (var s in spriteMeshRenders)
+                    {
+                        s.flip = s.transform.localScale.x < 0;
+                        if (math.abs(s.transform.localScale.x) != 1|| math.abs(s.transform.localScale.y) != 1)
+                        {
+                            s.Size = new Vector2(s.transform.localScale.x, s.transform.localScale.y);
+                        }
+                         else if (s.size != 1)
+                        {
+                          s.Size = new Vector2(s.size, math.abs(s.size));
+                            
+                        }
+                        if (math.abs(s.transform.localScale.x) != math.abs(s.transform.localScale.y))
+                        {
+                            Debug.Log($"{_obj.name}-{s.transform.name}");
+                        }
+                    }
+                    PrefabUtility.SaveAsPrefabAsset(_obj, objPath);
+                    GameObject.DestroyImmediate(_obj);
+                    AssetDatabase.Refresh();
+                }
+                var dirs = directoryInfo.GetDirectories();
+                foreach (var dir in dirs)
+                {
+                    InitObjScale(dir, $"{path}/{dir.Name}");
+                }
+            }
+        }
+        finally
+        {
+            AssetDatabase.StopAssetEditing();
+        }
+       
     }
     void AddObjPosData(string path)
     {

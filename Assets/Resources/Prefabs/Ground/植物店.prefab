@@ -3415,8 +3415,10 @@ MonoBehaviour:
   meshRenderer: {fileID: 582929345381488573}
   meshFilter: {fileID: 4278329178645150381}
   m_Sprite: {fileID: -2070103148, guid: 6a334efa69d47b54399183793d2533b0, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
+  Size: {x: 1, y: 1}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: fd078cb3204b6f54d8a97389421dd153, type: 2}
   SpriteResourceRenference: {fileID: 0}
@@ -3672,8 +3674,10 @@ MonoBehaviour:
   meshRenderer: {fileID: 4820663427092795296}
   meshFilter: {fileID: 3770682458746811747}
   m_Sprite: {fileID: 21300000, guid: 720f7b67dd442a04186df8af52dd9eb8, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
+  Size: {x: 1, y: 1}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 655718fcfc88eec4aba338e2758ae9f5, type: 2}
   SpriteResourceRenference: {fileID: 0}
@@ -3811,8 +3815,10 @@ MonoBehaviour:
   meshRenderer: {fileID: 8695551216282328242}
   meshFilter: {fileID: 5311635560820366884}
   m_Sprite: {fileID: 1658693365, guid: 6a334efa69d47b54399183793d2533b0, type: 3}
+  flip: 1
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
+  Size: {x: 1, y: 1}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: fd078cb3204b6f54d8a97389421dd153, type: 2}
   SpriteResourceRenference: {fileID: 0}
@@ -3919,8 +3925,10 @@ MonoBehaviour:
   meshRenderer: {fileID: 6211107876424072200}
   meshFilter: {fileID: 2638026227919590812}
   m_Sprite: {fileID: 1174796948, guid: 6a334efa69d47b54399183793d2533b0, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
+  Size: {x: 1, y: 1}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 4b4599894d31c6b4d884bd1956eb5c28, type: 2}
   SpriteResourceRenference: {fileID: 0}
@@ -5121,8 +5129,10 @@ MonoBehaviour:
   meshRenderer: {fileID: 7174649402649727102}
   meshFilter: {fileID: 8220616524196238921}
   m_Sprite: {fileID: 21300000, guid: ced15667888c1ea40b6bac934f3b43e1, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
+  Size: {x: 1, y: 1}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: fd078cb3204b6f54d8a97389421dd153, type: 2}
   SpriteResourceRenference: {fileID: 0}
@@ -6708,6 +6718,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: "\u5916\u7A97_02 "
       objectReference: {fileID: 0}
+    - target: {fileID: 7461431462059283507, guid: a96465fab8319504286e49613b0d960d,
+        type: 3}
+      propertyPath: Size.x
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 7461431462059283507, guid: a96465fab8319504286e49613b0d960d,
+        type: 3}
+      propertyPath: Size.y
+      value: 0.75
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7001,6 +7021,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: "\u5916\u7A97_02  (1)"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7461431462059283507, guid: a96465fab8319504286e49613b0d960d,
+        type: 3}
+      propertyPath: Size.x
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 7461431462059283507, guid: a96465fab8319504286e49613b0d960d,
+        type: 3}
+      propertyPath: Size.y
+      value: 0.75
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7425,6 +7455,16 @@ PrefabInstance:
       propertyPath: renderer
       value: 
       objectReference: {fileID: 6375162024807155945}
+    - target: {fileID: 6818539275134225264, guid: d0774b59913b5aa498a800c80626497f,
+        type: 3}
+      propertyPath: Size.x
+      value: 0.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 6818539275134225264, guid: d0774b59913b5aa498a800c80626497f,
+        type: 3}
+      propertyPath: Size.y
+      value: 0.75
+      objectReference: {fileID: 0}
     - target: {fileID: 8703874076142583976, guid: d0774b59913b5aa498a800c80626497f,
         type: 3}
       propertyPath: m_Name

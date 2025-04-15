@@ -4955,9 +4955,16 @@ MonoBehaviour:
     windSpeed:
       x: 4
       y: -4
+    valueCurve: 0
   animators: []
   windBlendValue: 1
   snowWind: 1
+  seasonRemap:
+    x: 0
+    y: 0
+    z: 0
+    w: 0
+  seasomBlend: 0
 --- !u!1 &1735748887766956134
 GameObject:
   m_ObjectHideFlags: 0
@@ -5938,10 +5945,13 @@ MonoBehaviour:
   meshRenderer: {fileID: 486932831960872409}
   meshFilter: {fileID: 7756670319394354509}
   m_Sprite: {fileID: 21300000, guid: 8d987c23c3639ac40a1f80d6da2ed40b, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
+  Size: {x: 1, y: 1}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 2dc112915dc3cb74c9cfcc6707cac796, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &5964191794270474847
 GameObject:
   m_ObjectHideFlags: 0

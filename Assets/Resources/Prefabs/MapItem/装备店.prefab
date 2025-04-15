@@ -4981,9 +4981,16 @@ MonoBehaviour:
     windSpeed:
       x: 4
       y: -4
+    valueCurve: 0
   animators: []
   windBlendValue: 1
   snowWind: 1
+  seasonRemap:
+    x: 0
+    y: 0
+    z: 0
+    w: 0
+  seasomBlend: 0
 --- !u!1 &1704944114272495206
 GameObject:
   m_ObjectHideFlags: 0
@@ -5415,10 +5422,13 @@ MonoBehaviour:
   meshRenderer: {fileID: 5535856600411129709}
   meshFilter: {fileID: 6421109153822793427}
   m_Sprite: {fileID: 21300000, guid: a6ddbbfb1094d8a4781e5a0e1c71ec27, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
+  Size: {x: 1, y: 1}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 2dc112915dc3cb74c9cfcc6707cac796, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &4150737522303700111
 GameObject:
   m_ObjectHideFlags: 0
@@ -5521,10 +5531,13 @@ MonoBehaviour:
   meshRenderer: {fileID: 9147857045017860129}
   meshFilter: {fileID: 8826747510689423388}
   m_Sprite: {fileID: 21300000, guid: 0797ca9b8f757034ab599db11fcc411b, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
+  Size: {x: 1, y: 1}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: a4bf052378ef65942a980040d260b050, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &5162751151922519095
 GameObject:
   m_ObjectHideFlags: 0
@@ -6946,10 +6959,13 @@ MonoBehaviour:
   meshRenderer: {fileID: 2038787505134067636}
   meshFilter: {fileID: 6296934524705109712}
   m_Sprite: {fileID: 21300000, guid: 46feac82cb961d648ab43aabea2f7d98, type: 3}
+  flip: 0
   spriteDrawMode: 0
-  size: {x: 0, y: 0}
+  size: 1
+  Size: {x: 1, y: 1}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Material: {fileID: 2100000, guid: 1219d22ab875e9c4d85d39c3a727be81, type: 2}
+  SpriteResourceRenference: {fileID: 0}
 --- !u!1 &8312726121575022942
 GameObject:
   m_ObjectHideFlags: 0

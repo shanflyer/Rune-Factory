@@ -455,8 +455,11 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             Shader.SetGlobalInt("_Sun", natureLightData.sunValue);
             if (sunTransform)
             {
+               float screenScale=  Screen.width / (float)Screen.height;
+                float screenScaleX=1f+screenScale;
+                float screenScaleY = 1f + screenScale*0.5f;
                 sunTransform.localScale = new Vector3(natureLightData.sunScale, natureLightData.sunScale, 1);
-                sunTransform.localPosition = natureLightData.sunPos;
+                sunTransform.localPosition = natureLightData.sunPos* new Vector2(screenScaleX, screenScaleY);
             }
             flare.GlobalTintColor = flareColor;
              
