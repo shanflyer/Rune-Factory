@@ -697,6 +697,7 @@ namespace TMPro
                 if (SetPropertyUtility.SetClass(ref m_TextComponent, value))
                 {
                     SetTextComponentWrapMode();
+                    m_TextComponent.InitOther();
                 }
             }
         }

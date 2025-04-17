@@ -107,6 +107,7 @@ namespace TMPro
 
     public delegate string SwitchString(string inputString);
     public delegate float GetFloat();
+    public delegate bool GetBool();
     /// <summary>
     /// Base class which contains common properties and functions shared between the TextMeshPro and TextMeshProUGUI component.
     /// </summary>
@@ -114,6 +115,22 @@ namespace TMPro
     {
         public static SwitchString SwitchString;
         public static GetFloat NowLineSpacing,NowCharacterSpacing;
+        public static GetBool IsRTL;
+
+        public bool isSwLanguage = true;
+        public void InitOther()
+        {
+            if (NowLineSpacing != null)
+                lineSpacing = originalLineSpacing + NowLineSpacing();
+            if (NowCharacterSpacing != null)
+            {
+                characterSpacing = originalCharacterSpacing + NowCharacterSpacing();
+            }
+            if (IsRTL != null)
+            {
+                isRightToLeftText = IsRTL();
+            }
+        }
         public static string AddString(string s0, string s1)
         {
             var span = s1.AsSpan();
@@ -211,15 +228,23 @@ namespace TMPro
         }
         public void FixedSwitchString()
         {
-            if (string.IsNullOrEmpty(originalText))
+            if (isSwLanguage)
             {
-                originalText = m_text;
-                //return;
+                if (string.IsNullOrEmpty(originalText))
+                {
+                    originalText = m_text;
+                    //return;
+                }
+                if (SwitchString != null)
+                {
+                    SetNativeText(SwitchString(originalText));
+                }
             }
-            if (SwitchString != null)
-            { 
-                SetNativeText(SwitchString(originalText));
+            else
+            {
+                InitOther();
             }
+           
         }
         void SetNativeText(string value)
         {
@@ -232,7 +257,10 @@ namespace TMPro
             {
                 characterSpacing = originalCharacterSpacing + NowCharacterSpacing();
             }
-
+            if (IsRTL != null)
+            {
+                isRightToLeftText = IsRTL();
+            }
             m_IsTextBackingStringDirty = false;
             m_text = value;
             m_inputSource = TextInputSources.TextString;

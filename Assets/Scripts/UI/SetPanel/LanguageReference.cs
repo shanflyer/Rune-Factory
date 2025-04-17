@@ -33,6 +33,7 @@ public class LanguageReference : UIObjReference<LanguageData>
     public override Task InitData(LanguageData t, SelectAction<LanguageData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         text.text = t.ShowName;
+        text.isRightToLeftText = t.rightStart;
         toggle.SetIsOnWithoutNotify(LanguageManage.nowLanguage == t.languageType);
         return base.InitData(t, SelectAction, toggleGroup);
     }

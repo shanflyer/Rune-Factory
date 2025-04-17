@@ -537,11 +537,13 @@ namespace TMPro
             }
 
             if (m_CaptionText)
-            {
+            { 
                 if (data != null && data.text != null)
                     m_CaptionText.text = data.text;
                 else
                     m_CaptionText.text = "";
+
+                m_CaptionText.InitOther();
             }
 
             if (m_CaptionImage)

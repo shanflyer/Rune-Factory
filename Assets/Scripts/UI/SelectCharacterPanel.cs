@@ -161,7 +161,7 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
         userChangeName = false; 
         foreach (var optionData in SeasonDropdown.options)
         {
-            optionData.text = LanguageManage.SwitchStr(optionData.text);
+            optionData.text = LanguageManage.SwitchStr(optionData.text); 
         }
 
         //DataSaveAndLoadTest.isJsonData = false; 

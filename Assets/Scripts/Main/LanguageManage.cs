@@ -11,7 +11,9 @@ using System.Linq;
 
 public enum MyLanguage
 {
-    英语=22, 简体中文 =1,繁体中文=2,日语=3,韩语=4,法语=5,德语=6,意大利语=7,西班牙语=8,葡萄牙语=9,土耳其语=10,越南语=11,泰语=12, 波兰语=13, 荷兰语=14, 希腊语=15, 阿拉伯语=16,印地语=17,乌尔都语=18,马来语=19,印尼语=20, 俄语=21
+    英语=22, 简体中文 =1,繁体中文=2,日语=3,韩语=4,法语=5,德语=6,意大利语=7,西班牙语=8,葡萄牙语=9,土耳其语=10,越南语=11,泰语=12, 波兰语=13, 荷兰语=14, 希腊语=15, 阿拉伯语=16,印地语=17,乌尔都语=18,马来语=19,印尼语=20, 俄语=21,
+    希伯来语=22,瑞典语=23,捷克语=24,乌克兰语=25,罗马尼亚语=26,挪威语=27,匈牙利语=28,斯瓦希里语=29,塞尔维亚语=30
+
 
 }
 public class LanguageManage : Singleton<LanguageManage>
@@ -24,7 +26,12 @@ public class LanguageManage : Singleton<LanguageManage>
      
     public static MyLanguage nowLanguage;
     FieldInfo nowFieldInfo;
+    public bool isRTL = false;
 
+    public bool IsRTL()
+    {
+        return isRTL;
+    }
     public List<LanguageData> languageDatas => allLanguages.Values.ToList();
     public override async void Init()
     {
@@ -32,6 +39,8 @@ public class LanguageManage : Singleton<LanguageManage>
         TMP_Text.SwitchString = SwitchStr;
         TMP_Text.NowLineSpacing = GetLineSpacing;
         TMP_Text.NowCharacterSpacing = GetCharacterSpacing;
+        TMP_Text.IsRTL = IsRTL;
+
         LanguageSwitchDataList =GameDataManager.instance.GetData<LanguageSwitchDataList>("LanguageSwitchDataList");
         languageFields.Clear();
         Type type = typeof(LanguageSwitchData);
@@ -121,12 +130,13 @@ public class LanguageManage : Singleton<LanguageManage>
         {
             nowLanguage = overrideLanguage;
         }
-       
+        isRTL = false;
         if(allLanguages.TryGetValue(nowLanguage,out var languageData))
         {
             nowLineSpacing = languageData.lineSpacing;
             if (languageFields.TryGetValue(languageData.FieldName, out nowFieldInfo))
             {
+                isRTL = languageData.rightStart;
                 return;
             }
         }

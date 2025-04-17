@@ -1,34 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine; 
-using UnityEngine.UI; 
-using System.Threading.Tasks;
-using TMPro;
-using UnityEngine.Analytics;
-using VoxelBusters.EssentialKit.GameServicesCore;
+﻿using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class CharacterSelectInformationPanel : GamePanel<SelectCharacterData>
 {
     public override bool changeInputModel => false;
+
     [SerializeField]
-    TextMeshProUGUI PlayerText, BrothText;
+    private TextMeshProUGUI PlayerText, BrothText;
+
     [SerializeField]
-    Image MealIcon, FemaleIcon;
+    private Image MealIcon, FemaleIcon;
+
     [SerializeField]
-    Image Meal,Female;
+    private Image Meal, Female;
+
     [SerializeField]
-    Button yes, Return;
-     
+    private Button yes, Return;
 
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
-        PlayerText=FindChildGameObject<TextMeshProUGUI>("NameValue");
+        PlayerText = FindChildGameObject<TextMeshProUGUI>("NameValue");
         BrothText = FindChildGameObject<TextMeshProUGUI>("BrothValue");
         MealIcon = FindChildGameObject<Image>("MealIcon");
         FemaleIcon = FindChildGameObject<Image>("FemaleIcon");
         Meal = FindChildGameObject<Image>("Meal");
-        Female=FindChildGameObject<Image>("Female");
+        Female = FindChildGameObject<Image>("Female");
         yes = FindChildGameObject<Button>("Yes");
         Return = FindChildGameObject<Button>("Return");
     }
@@ -39,9 +37,9 @@ public class CharacterSelectInformationPanel : GamePanel<SelectCharacterData>
         yes.onClick.AddListener(YesButtonAction);
         Return.onClick.AddListener(NoButtonAction);
     }
+
     public override void InitReferenceData(SelectCharacterData v)
     {
-
         Meal.enabled = v.gender == Gender.male;
         Female.enabled = v.gender == Gender.female;
         MealIcon.enabled = v.gender == Gender.male;
@@ -52,14 +50,14 @@ public class CharacterSelectInformationPanel : GamePanel<SelectCharacterData>
 
         base.InitReferenceData(v);
     }
- 
 
-    void NoButtonAction()
-    { 
+    private void NoButtonAction()
+    {
         Close();
     }
-    void YesButtonAction()
-    { 
+
+    private void YesButtonAction()
+    {
         Close();
         var teamManager = TeamManager.instance;
         NPCManager.instance.CreateZeroNPC();
@@ -68,9 +66,8 @@ public class CharacterSelectInformationPanel : GamePanel<SelectCharacterData>
         GameActionManager.instance.QueueAction(new PlayFilm
         {
             filmName = "角色选择",
-            assetName= "ZeroStory"
+            assetName = "ZeroStory"
         });
         GameDataSaveManager.instance.InitPlayerData(data.name, data.gender, data.brithSeason, data.brithDay);
     }
-  
 }
