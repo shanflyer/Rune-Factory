@@ -35,5 +35,6 @@ public class LanguageSwitchDataList : ScriptableObject, IGameData
 [Serializable]
 public class LanguageSwitchData
 {
-    public string cn, en, tw, ja, ko, fr, de, ru, es, pt, it, tr, vi, th, pl, nl, el, ar, hi, ur, ms, id;
+    public string cn, en, tw, ja, ko, fr, de, ru, es, pt, it, tr, vi, th, pl, nl, el, ar, hi, ur, ms, id,
+        he, sv, cs, uk, ro, no, hu, sw, sr;
 }
