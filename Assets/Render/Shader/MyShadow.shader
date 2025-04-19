@@ -100,10 +100,10 @@ Shader "MyShadow"
                 o.color=attributes.color;
                 o.color.xyz=o.color.xyz*(1-o.uv.x)*(1-_SpriteShadow)+o.color.xyz*_SpriteShadow;
 
-                _ShadowValue=_ShadowValue*(1-_ClearDir)+_ShadowValue*_ClearDir*
-                                         (step(1,_DirIndex)*step(_Direction.x,0)+
-                                           step(1,-_DirIndex)*(1-step(_Direction.x,0)));
-                o.color.xyz*=_ShadowValue;
+                // _ShadowValue=_ShadowValue*(1-_ClearDir)+_ShadowValue*_ClearDir*
+                //                          (step(1,_DirIndex)*step(_Direction.x,0)+
+                //                            step(1,-_DirIndex)*(1-step(_Direction.x,0)));
+               // o.color.xyz*=_ShadowValue;
                 return o;
             }
 
@@ -111,7 +111,14 @@ Shader "MyShadow"
             {
                 half4 mainTex = i.color *_MainTex.Sample(sampler_MainTex,i.uv);  
                 mainTex.xyz=mainTex.aaa; 
-                return i.color*(1-_SpriteShadow)+mainTex*_SpriteShadow;
+
+               _ShadowValue=_ShadowValue*(1-_ClearDir)+_ShadowValue*_ClearDir*
+                                         (step(1,_DirIndex)*step(_Direction.x,0)+
+                                            step(1,-_DirIndex)*(1-step(_Direction.x,0)));
+
+                float4 result=i.color*(1-_SpriteShadow)+mainTex*_SpriteShadow;
+                result*=_ShadowValue;
+                return result;
             }
             ENDHLSL
         }

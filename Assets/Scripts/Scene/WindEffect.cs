@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Unity.Mathematics;
 using UnityEngine;
 using System.Collections.Generic;
@@ -88,12 +88,18 @@ public class WindEffectData
        
     }
 }
+public enum AnimatorWindType
+{
+    控制参数,动画速度,混合
+}
 public class WindEffect : MonoBehaviour
 {
     public List<WindEffectData> effects=new List<WindEffectData>();
     public List<Animator> animators = new List<Animator>();
     [SerializeField]
-    float windBlendValue = 1; 
+    float windBlendValue = 1;
+    [SerializeField]
+    AnimatorWindType AnimatorWindType;
     [SerializeField]
     bool snowWind = true;
     [SerializeField]
@@ -168,10 +174,29 @@ public class WindEffect : MonoBehaviour
                 effects[i].SetWindValue(windValue);
                 
             }
-            for (int i = 0; i < animators.Count; i++)
+            switch (AnimatorWindType)
             {
-                animators[i].SetFloat("WindValue", windValue);
+                case AnimatorWindType.控制参数:
+                    for (int i = 0; i < animators.Count; i++)
+                    {
+                        animators[i].SetFloat("WindValue", windValue);
+                    }
+                    break;
+                case AnimatorWindType.动画速度:
+                    for (int i = 0; i < animators.Count; i++)
+                    {
+                        animators[i].speed = math.abs(windValue); 
+                    }
+                    break;
+                case AnimatorWindType.混合:
+                    for (int i = 0; i < animators.Count; i++)
+                    {
+                        animators[i].speed = math.abs(windValue);
+                        animators[i].SetFloat("WindValue", windValue);
+                    }
+                    break;
             }
+            
             SetSeasonValue();
         }
       

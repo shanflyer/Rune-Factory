@@ -95,7 +95,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 0.20000045
+  m_Length: 0.20000033
   m_ChildTransform: {fileID: 6103192640762923804}
   m_AttachedIK: {fileID: 0}
 --- !u!1 &412053835423540083
@@ -429,6 +429,7 @@ MonoBehaviour:
   animators:
   - {fileID: 3522386923678653157}
   windBlendValue: 0.7
+  AnimatorWindType: 0
   snowWind: 0
   seasonRemap:
     x: 0
@@ -484,7 +485,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 0.16000035
+  m_Length: 0.16000028
   m_ChildTransform: {fileID: 2475162306252989821}
   m_AttachedIK: {fileID: 0}
 --- !u!1 &2490460931213442349
@@ -857,7 +858,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 0.20000023
+  m_Length: 0.20000035
   m_ChildTransform: {fileID: 3767915521507346420}
   m_AttachedIK: {fileID: 0}
 --- !u!1 &6529309838956035797
@@ -1165,7 +1166,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 0.19312458
+  m_Length: 0.19312447
   m_ChildTransform: {fileID: 8775069056156997055}
   m_AttachedIK: {fileID: 0}
 --- !u!1 &7551692937514538130
@@ -1599,7 +1600,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 0.16528249
+  m_Length: 0.16528237
   m_ChildTransform: {fileID: 6745567904436187241}
   m_AttachedIK: {fileID: 0}
 --- !u!1 &8419905537665521306
@@ -1769,6 +1770,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6779862715476021744, guid: 1367f5f0014eaf24db179bd2add41ed8,
         type: 3}
+      propertyPath: VelocityModule.z.scalar
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6779862715476021744, guid: 1367f5f0014eaf24db179bd2add41ed8,
+        type: 3}
       propertyPath: ForceModule.inWorldSpace
       value: 1
       objectReference: {fileID: 0}
@@ -1874,6 +1880,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6779862715476021744, guid: 1367f5f0014eaf24db179bd2add41ed8,
         type: 3}
+      propertyPath: VelocityModule.z.maxCurve.m_Curve.Array.data[1].time
+      value: 0.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 6779862715476021744, guid: 1367f5f0014eaf24db179bd2add41ed8,
+        type: 3}
       propertyPath: VelocityModule.x.maxCurve.m_Curve.Array.data[0].value
       value: 0
       objectReference: {fileID: 0}
@@ -1884,13 +1895,48 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6779862715476021744, guid: 1367f5f0014eaf24db179bd2add41ed8,
         type: 3}
+      propertyPath: VelocityModule.z.maxCurve.m_Curve.Array.data[1].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6779862715476021744, guid: 1367f5f0014eaf24db179bd2add41ed8,
+        type: 3}
+      propertyPath: VelocityModule.z.maxCurve.m_Curve.Array.data[1].inSlope
+      value: 1.4754333
+      objectReference: {fileID: 0}
+    - target: {fileID: 6779862715476021744, guid: 1367f5f0014eaf24db179bd2add41ed8,
+        type: 3}
       propertyPath: VelocityModule.x.maxCurve.m_Curve.Array.data[1].inWeight
       value: 0.33333334
       objectReference: {fileID: 0}
     - target: {fileID: 6779862715476021744, guid: 1367f5f0014eaf24db179bd2add41ed8,
         type: 3}
+      propertyPath: VelocityModule.z.maxCurve.m_Curve.Array.data[0].outSlope
+      value: 1.4925373
+      objectReference: {fileID: 0}
+    - target: {fileID: 6779862715476021744, guid: 1367f5f0014eaf24db179bd2add41ed8,
+        type: 3}
+      propertyPath: VelocityModule.z.maxCurve.m_Curve.Array.data[1].inWeight
+      value: 0.9959332
+      objectReference: {fileID: 0}
+    - target: {fileID: 6779862715476021744, guid: 1367f5f0014eaf24db179bd2add41ed8,
+        type: 3}
+      propertyPath: VelocityModule.z.maxCurve.m_Curve.Array.data[1].outSlope
+      value: Infinity
+      objectReference: {fileID: 0}
+    - target: {fileID: 6779862715476021744, guid: 1367f5f0014eaf24db179bd2add41ed8,
+        type: 3}
       propertyPath: VelocityModule.x.maxCurve.m_Curve.Array.data[1].outWeight
       value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 6779862715476021744, guid: 1367f5f0014eaf24db179bd2add41ed8,
+        type: 3}
+      propertyPath: VelocityModule.z.maxCurve.m_Curve.Array.data[0].tangentMode
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: 6779862715476021744, guid: 1367f5f0014eaf24db179bd2add41ed8,
+        type: 3}
+      propertyPath: VelocityModule.z.maxCurve.m_Curve.Array.data[1].tangentMode
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1939,6 +1985,7 @@ MonoBehaviour:
     valueCurve: 1
   animators: []
   windBlendValue: 0.8
+  AnimatorWindType: 0
   snowWind: 0
   seasonRemap:
     x: 0.1

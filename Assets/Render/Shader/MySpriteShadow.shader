@@ -71,17 +71,19 @@ Shader "MySpriteShadow"
                 
                 o.uv = attributes.uv;   
 
-                _ShadowValue=_ShadowValue*(1-_ClearDir)+_ShadowValue*_ClearDir*
-                                         (step(1,_DirIndex)*step(_Direction.x,0)+
-                                           step(1,-_DirIndex)*(1-step(_Direction.x,0)));
-                o.color.xyz*=_ShadowValue;
+                 
                 return o;
             }
 
             half4 UnlitFragment(Varyings i) : SV_Target
             {
                 half4 mainTex = i.color *_MainTex.Sample(sampler_MainTex,i.uv);  
+
+                _ShadowValue=_ShadowValue*(1-_ClearDir)+_ShadowValue*_ClearDir*
+                                         (step(1,_DirIndex)*step(_Direction.x,0)+
+                                           step(1,-_DirIndex)*(1-step(_Direction.x,0)));
                 mainTex.xyz=mainTex.aaa; 
+                 mainTex*=_ShadowValue;
                 return mainTex;
             }
             ENDHLSL
