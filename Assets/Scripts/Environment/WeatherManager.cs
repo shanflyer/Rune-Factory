@@ -191,7 +191,7 @@ public class WeatherManager : Singleton<WeatherManager>
     }
 
     private int nowIndex = 0;
-    public float nowWaterFall => nowDayWeathers.Count>nowIndex? nowDayWeathers[nowIndex].waterFall:0;
+    
     public void RefreshWeather(int hour)
     {
 #if UNITY_EDITOR

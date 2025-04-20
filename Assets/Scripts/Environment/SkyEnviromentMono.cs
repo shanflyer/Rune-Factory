@@ -58,7 +58,19 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
     [SerializeField]
     SpriteRenderer sky;
     [SerializeField]
-    SkyCloudData skyCloud;
+    ParticleSystem farCloud;
+    [SerializeField]
+    ParticleSystem nearCloud;
+    [SerializeField]
+    Vector2 farCloudCount;
+    [SerializeField]
+    Vector2 nearCloudCount;
+    [SerializeField]
+    Vector4 farCloudSize;
+    [SerializeField]
+    Vector4 nearCloudSize;
+    [SerializeField]
+    Vector4 environmentLerpOffset;
 
     [SerializeField]
     SpriteRenderer bg,sea;
@@ -89,23 +101,55 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
             return sun.transform;
         }
     }
+    ParticleSystem.VelocityOverLifetimeModule farVelocity, nearVelocity;
+    ParticleSystem.EmissionModule farEmission, nearEmission;
+    ParticleSystem.MainModule farMain, nearMain;
     private void Awake()
-    {
-        skyCloud.InitParticle();
+    { 
         GameActionManager.instance.AddListener<DisplaySky>(DisplaySky);
+
+        farVelocity = farCloud.velocityOverLifetime;
+        nearVelocity = nearCloud.velocityOverLifetime;
+        farEmission = farCloud.emission;
+        nearEmission = nearCloud.emission;
+        farMain = farCloud.main;
+        nearMain = nearCloud.main;
+
+        float screenHeight = Screen.height;
+        float dt = screenHeight - environmentLerpOffset.x;
+        dt *= environmentLerpOffset.y;
+        dt = math.clamp(dt, environmentLerpOffset.z, environmentLerpOffset.w);
+        transform.localPosition = new Vector3(0, dt, 0);
     }
+
+    /*
+    float cloudTime = 0;
+    private void Update()
+    {
+        if (displayCloud)
+        {
+            cloudTime += Time.deltaTime;
+            if (cloudTime > 0.5f)
+            {
+                cloudTime = 0;
+                
+               // farCloud.Emit((int)math.lerp(farCloudCount.x,farCloudCount.y,cloud));
+               // nearCloud.Emit((int)math.lerp(nearCloudCount.x, nearCloudCount.y, cloud));
+            }
+        } 
+    }*/
+
     Vector2 skyBgStartPos, skyBgEndPos;
     Vector2 mapSize;
     float4 bgOffset;
     float2 cameraOffset;
 
     public SetFloatValue setWindValue;
-
- 
-   
+    bool displayCloud=false;
    
     async void DisplaySky(DisplaySky displaySky)
     {
+        displayCloud = displaySky.display;
         bgOffset =float4.zero;
         if (displaySky.display)
         {
@@ -113,11 +157,16 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
             sun.enabled = true;
             bg.enabled = true;
             sea.enabled = true;
-            skyCloud.DisplayEnable(true); 
+            
             sun.gameObject.SetActive(true);
             sunClollider.enabled = true;
             ProFlareBatch.gameObject.SetActive(true);
             ProFlareBatch.ForceRefresh();
+
+            farEmission.rateOverTime = (int)math.lerp(farCloudCount.x, farCloudCount.y, cloud);
+            nearEmission.rateOverTime = (int)math.lerp(nearCloudCount.x, nearCloudCount.y, cloud);
+            farCloud.Play();
+            nearCloud.Play();
         }
         else
         {
@@ -125,7 +174,8 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
             sun.enabled = false;
             bg.enabled = false;
             sea.enabled = false;
-            skyCloud.DisplayEnable(false);
+            farCloud.Stop();
+            nearCloud.Stop();
             sun.gameObject.SetActive(false);
             sunClollider.enabled = false;
             if (displaySky.displaySunlight)
@@ -157,6 +207,8 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
         skyBgEndPos = displaySky.endPos;
         mapSize = skyBgEndPos - skyBgStartPos;
         SetBgPos(CameraManager.instance.mainCamera.transform.position);
+
+        
     }
 
     public void SetBgPos(Vector2 cameraPos)
@@ -176,6 +228,38 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
         weatherMono.HideWeather(weatherDisplayType == WeatherDisplayType.Inside);
         weatherMono.ChangeWeatherAudio((int)weatherDisplayType);
     }
+
+    float cloud
+    {
+        get
+        {
+            return _cloud;
+        }
+        set
+        {
+            _cloud = value;
+            if (!farCloud.isPlaying)
+            {
+                farCloud.Play();
+            }
+            if (!nearCloud.isPlaying)
+            {
+                nearCloud.Play();
+            }
+            farEmission.rateOverTime = math.lerp(farCloudCount.x, farCloudCount.y, cloud);
+            nearEmission.rateOverTime =math.lerp(nearCloudCount.x, nearCloudCount.y, cloud); 
+            var farStartSize = farMain.startSize;
+            farStartSize.constantMin = math.lerp(farCloudSize.x, farCloudSize.y, cloud);
+            farStartSize.constantMax = math.lerp(farCloudSize.z, farCloudSize.w, cloud);
+            farMain.startSize = farStartSize;
+
+            var nearStartSize = nearMain.startSize;
+            nearStartSize.constantMin = math.lerp(nearCloudSize.x, nearCloudSize.y, cloud);
+            nearStartSize.constantMax = math.lerp(nearCloudSize.z, nearCloudSize.w, cloud);
+            nearMain.startSize = nearStartSize;
+        }
+    }
+    float _cloud = 0;
     public void SetWeather(Weather weather,float lightningLight,bool immediatelyStop=false)
     { 
         if (weather.IsSnow())
@@ -191,52 +275,37 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
         weatherMono.SetFog(weather.fog, immediatelyStop);
         weatherMono.SetWind(weather.wind, immediatelyStop);
         float cloudValue = weather.waterFall * 3;
-        float cloud = weather.cloud;
+         cloud = weather.cloud;
         if (cloudValue > weather.cloud)
         {
             cloud = cloudValue;
         }
         cloud = cloud > 1 ? 1 : cloud;
-        cloud *= (1 - lightningLight);
-        skyCloud.SetCloudValue(cloud);
-        skyCloud.SetWindValue(weather.wind);
-        Shader.SetGlobalFloat("_CloudValue", cloud);
+
+        float windValue = weather.wind;
+        windValue = EnvironmentManger.instance.nowWaterFall > 0 ? windValue * 0.5f : windValue;
+        if (windValue < 0.2f && windValue > -0.2f)
+        {
+            if (windValue < 0)
+            {
+                windValue = -0.2f;
+            }
+            else
+            {
+                windValue = 0.2f;
+            }
+        }
+
+        farVelocity.speedModifier = -windValue;
+        nearVelocity.speedModifier = -windValue;
+        Shader.SetGlobalFloat("_CloudValue", cloud * (1 - lightningLight));
 
         if (setWindValue != null)
         {
             setWindValue(weather.wind);
         }
     }
-    public void SetWeather(float waterFall,float fog,float wind,float cloud)
-    {
-        float seasonValue = GameTimeManager.instance.SeasonValue;
-        bool snow = seasonValue >= 3 || seasonValue < 0.05f;
-        if (snow)
-        {
-            weatherMono.SetRain(0);
-            weatherMono.SetSnow(waterFall);
-        }
-        else
-        {
-            weatherMono.SetSnow(0);
-            weatherMono.SetRain(waterFall);
-        }
-        weatherMono.SetFog(fog);
-        weatherMono.SetWind(wind);
-        float cloudValue = waterFall * 3;
-        if (cloudValue > cloud)
-        {
-            cloud = cloudValue;
-        }
-        cloud = cloud > 1 ? 1 : cloud;
-        skyCloud.SetCloudValue(cloud);
-        skyCloud.SetWindValue(wind);
-        Shader.SetGlobalFloat("_CloudValue", cloud);
-        if (setWindValue != null)
-        {
-            setWindValue(wind);
-        }
-    }
+    
     public string GetKey()
     {
         return ToString();

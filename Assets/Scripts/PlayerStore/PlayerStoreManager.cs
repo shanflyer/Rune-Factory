@@ -82,7 +82,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
 
             float nowCd = GameRandom.RandomFloat(GameCommon.autoCustomerCD);
             nowCd += timeCurve.Evaluate(GameTimeManager.instance.timeValue);
-            nowCd += weatherCurve.Evaluate(WeatherManager.instance.nowWaterFall);
+            nowCd += weatherCurve.Evaluate(EnvironmentManger.instance.nowWaterFall);
             nowCd = nowCd / cdValue;
             return nowCd;
         }
@@ -126,7 +126,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
 
                 nowCd = GameRandom.RandomFloat(GameCommon.autoCustomerCD);
                 nowCd += timeCurve.Evaluate(GameTimeManager.instance.timeValue);
-                nowCd += weatherCurve.Evaluate(WeatherManager.instance.nowWaterFall);
+                nowCd += weatherCurve.Evaluate(EnvironmentManger.instance.nowWaterFall);
                 nowCd = nowCd / cdValue;
             }
             yield return 0;

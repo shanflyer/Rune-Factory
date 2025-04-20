@@ -524,7 +524,7 @@ public class Field
     }
     public void NewHour()
     { 
-        if (WeatherManager.instance.nowWaterFall > 0)
+        if (EnvironmentManger.instance.nowWaterFall > 0)
         {
             waterHour=0;
         }

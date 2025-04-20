@@ -252,6 +252,25 @@ public class GlobalShaderSetMono : MonoBehaviour
             {
                 MySpriteShadows[i].SetDirectionAngle(natureLightData.direction.x );
             }
+            if (skyEnviromentMono == null)
+            {
+                skyEnviromentMono = FindFirstObjectByType<SkyEnviromentMono>();
+            }
+            if (skyEnviromentMono != null)
+            {
+                float screenScale = Screen.width / (float)Screen.height;
+                float screenScaleX = 1f + screenScale;
+                float screenScaleY = 1f + screenScale * 0.5f;
+                Vector2 sunPos = natureLightData.sunPos * new Vector2(screenScaleX, screenScaleY);
+                if (skyEnviromentMono.Sun)
+                {
+
+                    skyEnviromentMono.Sun.localScale = new Vector3(natureLightData.sunScale, natureLightData.sunScale, 1);
+                    skyEnviromentMono.Sun.localPosition = sunPos;
+                } 
+                Shader.SetGlobalVector("_SunPos", skyEnviromentMono.Sun.position); 
+
+            }
         }
 
         var MyLights = FindObjectsByType<MyLight>(FindObjectsInactive.Include,FindObjectsSortMode.InstanceID);
@@ -262,7 +281,7 @@ public class GlobalShaderSetMono : MonoBehaviour
 
         
     }
-
+    SkyEnviromentMono skyEnviromentMono;
     public void TestGUID()
     {
         byte[] buffer=Guid.NewGuid().ToByteArray();

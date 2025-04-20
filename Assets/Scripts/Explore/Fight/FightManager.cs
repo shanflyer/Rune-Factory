@@ -133,7 +133,7 @@ public class FightManager : Singleton<FightManager>
 
         AudioController.instance.PlayBGM(null, audioClearType: AudioClearType.All, Group: BGMGroup.Battle.ToString());
         AudioController.instance.SetBGMGroupValue(BGMGroup.Map.ToString(), 1);
-        AudioController.instance.SetBGSGroupValue(BGSGroup.Map.ToString(), 1);
+        AudioController.instance.SetBGSGroupValue(BGSGroup.Map.ToString(), EnvironmentManger.instance.badWeather);
         AudioController.instance.SetBGSGroupValue(BGSGroup.Rain.ToString(), 1);
         AudioController.instance.SetBGSGroupValue(BGSGroup.Wind.ToString(), 1);
         AudioController.instance.SetBGSGroupValue(BGSGroup.Lightning.ToString(), 1); 

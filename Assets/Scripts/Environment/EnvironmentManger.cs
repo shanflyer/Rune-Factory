@@ -194,8 +194,8 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     public List<CharacterFootStep> GetCharacterFootSteps()
     {
        return CharacterFootStepDic.GetValueList(true);
-    } 
- 
+    }
+    public float nowWaterFall => nowWeather.waterFall;
     public override async void Init()
     {
         base.Init();
@@ -265,6 +265,8 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             w.SetSeasonValue();
         }
     }
+
+    public float badWeather { get; private set; }
     void SetWeather(SetWeather setWeather)
     {
         if (setWeather.noLerp)
@@ -305,11 +307,18 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             {
                 Shader.SetGlobalFloat("_DampValue", 0);
             }
-
+            badWeather =math.abs(nowWeather.wind) + nowWaterFall;
+            badWeather = badWeather > 1 ? 1 : badWeather;
+            AudioController.instance.SetBGSGroupValue(BGSGroup.Map.ToString(), 1 - badWeather);
 
             float weatherLightValue = nowWeather.GetWeatherLight();
             float flareLight = nowWeather.GetFlareLight();
             RefreshEnvironment(weatherLightValue, flareLight);
+
+            if (ExploreManager.instance.isExplore)
+            {
+
+            }
         }
         else
         {
@@ -453,19 +462,22 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             Shader.SetGlobalFloat("_SkyHalfValue", natureLightData.skyHalfValue);
             Shader.SetGlobalColor("_SunColor", sunColor);
             Shader.SetGlobalInt("_Sun", natureLightData.sunValue);
+
+            float screenScale = Screen.width / (float)Screen.height;
+            float screenScaleX = 1f + screenScale;
+            float screenScaleY = 1f + screenScale * 0.5f;
+            Vector2 sunPos= natureLightData.sunPos * new Vector2(screenScaleX, screenScaleY);
             if (sunTransform)
             {
-               float screenScale=  Screen.width / (float)Screen.height;
-                float screenScaleX=1f+screenScale;
-                float screenScaleY = 1f + screenScale*0.5f;
+
                 sunTransform.localScale = new Vector3(natureLightData.sunScale, natureLightData.sunScale, 1);
-                sunTransform.localPosition = natureLightData.sunPos* new Vector2(screenScaleX, screenScaleY);
+                sunTransform.localPosition = sunPos;
             }
             flare.GlobalTintColor = flareColor;
-             
+            Shader.SetGlobalVector("_SunPos", sunPos);
 
             Shader.SetGlobalColor("_GlobalColor", natureLightData.globalColor);
-            Color directionColor = Color.Lerp(natureLightData.color, lightning.lightningColor, lightning.lightningLight) * weatherLightValue;
+            Color directionColor = Color.Lerp(natureLightData.color * weatherLightValue, lightning.lightningColor, lightning.lightningLight) ;
             Shader.SetGlobalColor("_DirectionColor", directionColor);
             Shader.SetGlobalVector("_Direction", natureLightData.direction);
             direction = natureLightData.direction;
@@ -510,12 +522,21 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
                 Shader.SetGlobalFloat("_SkyHalfValue", overrideLightData.skyHalfValue);
                 Shader.SetGlobalColor("_SunColor", overrideLightData.sunColor);
                 Shader.SetGlobalInt("_Sun", overrideLightData.sunValue);
+
+
+                float screenScale = Screen.width / (float)Screen.height;
+                float screenScaleX = 1f + screenScale;
+                float screenScaleY = 1f + screenScale * 0.5f;
+                Vector2 sunPos = overrideLightData.sunPos * new Vector2(screenScaleX, screenScaleY);
                 if (sunTransform)
                 {
+
                     sunTransform.localScale = new Vector3(overrideLightData.sunScale, overrideLightData.sunScale, 1);
-                    sunTransform.localPosition = overrideLightData.sunPos;
+                    sunTransform.localPosition = sunPos;
                 }
                 flare.GlobalTintColor = flareColor;
+                Shader.SetGlobalVector("_SunPos", sunPos);
+                
             }
             Shader.SetGlobalFloat("_ShadowValue", overrideLightData.shadowValue + lightning.lightningLight * 0.5f);
         }
@@ -551,12 +572,17 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         Shader.SetGlobalColor("_SkyBottomColor", natureLightData.skyBottomColor);
         Shader.SetGlobalFloat("_SkyHalfValue", natureLightData.skyHalfValue);
         Shader.SetGlobalColor("_SunColor", natureLightData.sunColor);
-        Shader.SetGlobalInt("_Sun", natureLightData.sunValue);
+        float screenScale = Screen.width / (float)Screen.height;
+        float screenScaleX = 1f + screenScale;
+        float screenScaleY = 1f + screenScale * 0.5f;
+        Vector2 sunPos = natureLightData.sunPos * new Vector2(screenScaleX, screenScaleY);
         if (sunTransform)
         {
+
             sunTransform.localScale = new Vector3(natureLightData.sunScale, natureLightData.sunScale, 1);
-            sunTransform.localPosition = natureLightData.sunPos;
+            sunTransform.localPosition = sunPos;
         } 
+        Shader.SetGlobalVector("_SunPos", sunPos);
     }
 
     protected override void Clear()
@@ -608,7 +634,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
                 if (LightningData.sounds!=null&&LightningData.sounds.Length>0)
                 {
                     int index = GameRandom.RandomInt(0, LightningData.sounds.Length);
-                    AudioController.instance.PlayAudio(LightningData.sounds[index],audioClearType:AudioClearType.All,Group: BGSGroup.Lightning.ToString());
+                    AudioController.instance.PlayAudio(LightningData.sounds[index],false,audioClearType:AudioClearType.All,Group: BGSGroup.Lightning.ToString());
                 }
                 LightningCD = 0;
                 waitLightningTime = 0;
