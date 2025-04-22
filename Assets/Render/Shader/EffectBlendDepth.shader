@@ -98,6 +98,8 @@ Shader "EffectBlendDepth"
                  half4 objDepthColor=SAMPLE_TEXTURE2D(_ObjDepthTex,sampler_ObjDepthTex, IN.uv);
                 half4 characterDepthColor=SAMPLE_TEXTURE2D(_CharacterDepthTex,sampler_CharacterDepthTex, IN.uv);
                 int stepCharacter=step(objDepthColor.r+objDepthColor.g+objDepthColor.b,0);
+                int stepV=step(characterDepthColor.r+characterDepthColor.g+characterDepthColor.b,0);
+                stepV*=stepCharacter;
                 half4 myDepthColor=stepCharacter*characterDepthColor+(1-stepCharacter)*objDepthColor; 
 
                 float x=myDepthColor.x;
@@ -114,6 +116,7 @@ Shader "EffectBlendDepth"
                 mul_a=clamp(mul_a,0,1);
                 half resultA=x*mul_a+(1-step(mul_a,0))*mul_a;
                 resultA=clamp(resultA,0,1);
+                resultA=resultA*(1-stepV)+stepV;
  
                 color.a*=resultA;
                 return color;

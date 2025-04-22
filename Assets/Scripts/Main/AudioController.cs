@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -437,8 +438,26 @@ public class AudioController : Singleton<AudioController>
         }
 
         var count = childMixer.GetInputCount();
+        bool haveAudio = false;
+        for (int i = count - 1; i >= 0; i--)
+        {
+            var playable = childMixer.GetInput(i);
+            AudioClipPlayable _audioClipPlayable = (AudioClipPlayable)playable;
+            if (_audioClipPlayable.GetClip() == audioClip)
+            {
+                childMixer.SetInputWeight(i, weight);
+                haveAudio = true;
+                break;
+            }
+        }
+        if (haveAudio)
+        {
+            return;
+        }
+     
         if (!isLerp)
         {
+              
             TryEndLerpAudioIEnumerator(playableGraph);
             AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(playableGraph, audioClip, loop);
 
@@ -501,8 +520,7 @@ public class AudioController : Singleton<AudioController>
         {
             
             if (count > 0)
-            {
-                
+            { 
                 if (audioClearType == AudioClearType.All)
                 {
                     if (lerpIEnumeratorDic.TryGetValue(playableGraph, out var enumerator))
@@ -710,7 +728,30 @@ public class AudioController : Singleton<AudioController>
             audioMixer.AddInput(childMixer, 0, 1);
         }
 
-        var count = childMixer.GetInputCount();
+        var count = childMixer.GetInputCount(); 
+
+        for (int i = count - 1; i >= 0; i--)
+        {
+            var playable = childMixer.GetInput(i);
+            AudioClipPlayable _audioClipPlayable = (AudioClipPlayable)playable;
+            for (int index = audioClips.Count - 1; index >= 0; index--)
+            {
+                var clip = audioClips[index].audioClip;
+
+                if (_audioClipPlayable.GetClip() == clip)
+                {
+                    childMixer.SetInputWeight(i, audioClips[index].weight);
+                    audioClips.RemoveAt(index);
+                    break;
+                }
+                if (audioClips.Count == 0)
+                {
+                    return;
+                }
+            }           
+        }
+        
+
         if (!isLerp)
         {
             TryEndLerpAudioIEnumerator(playableGraph) ;
@@ -756,6 +797,7 @@ public class AudioController : Singleton<AudioController>
                     else
                     {
                         childMixer.SetInputCount(audioClips.Count);
+                       //Debug.Log($"childMixer.SetInputCount:{audioClips.Count}");
                         if (audioClips.Count > 0)
                         {
                             for (int i = 0; i < audioClips.Count; i++)
@@ -771,6 +813,7 @@ public class AudioController : Singleton<AudioController>
                     if (audioClips.Count > 0)
                     {
                         childMixer.SetInputCount(count + audioClips.Count);
+                       // Debug.Log($"childMixer.SetInputCount:{count + audioClips.Count}");
                         for (int i = count - 1; i >= 0; i--)
                         {
                             var playable = childMixer.GetInput(i);
@@ -821,6 +864,8 @@ public class AudioController : Singleton<AudioController>
                     var enumerator = LerpAudio(startWeights);
                     GameObjectCurveController.instance.StartIEnumerator(enumerator);
                     SetLerpAudioIEnumerator(playableGraph,enumerator);
+
+                   // Debug.Log($"SetLerpAudioIEnumerator");
                     IEnumerator LerpAudio(List<float> startWeights)
                     {
                         float timeValue = 0;
@@ -828,6 +873,7 @@ public class AudioController : Singleton<AudioController>
                         { 
                             for (int i = 0; i < startWeights.Count; i++)
                             {
+                                //Debug.Log($"childMixer.count0:{childMixer.GetInputCount()}--startWeights{startWeights.Count}");
                                 childMixer.SetInputWeight(i, startWeights[i] * (1 - timeValue));
                             }
                             if (audioClips.Count > 0)
@@ -841,13 +887,26 @@ public class AudioController : Singleton<AudioController>
                             yield return 0;
                         }
 
-                        childMixer.SetInputCount(0);
+                       // childMixer.SetInputCount(0);
+                        int mixerCount = childMixer.GetInputCount();
+                      //  Debug.Log($"childMixer.SetInputCount(0)--");
                         if (audioClips.Count > 0)
                         {
                             for (int i = 0; i < audioClips.Count; i++)
                             {
                                 AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(playableGraph, audioClips[i].audioClip, audioClips[i].loop);
-                                childMixer.AddInput(audioClipPlayable, 0, audioClips[i].weight);
+                                
+                                if (mixerCount > i)
+                                {
+                                    var oldPlayable=  childMixer.GetInput(i);
+                                    oldPlayable.Destroy();
+                                    playableGraph.Connect(audioClipPlayable, 0, childMixer, i);
+                                    childMixer.SetInputWeight(i, audioClips[i].weight);
+                                }
+                                else
+                                {
+                                    childMixer.AddInput(audioClipPlayable, 0, audioClips[i].weight);
+                                }
                             }
                         }
                         lerpAudioIEnumeratorDic.Remove(playableGraph);
@@ -925,6 +984,8 @@ public class AudioController : Singleton<AudioController>
                     if (audioClips.Count > 0)
                     {
                         childMixer.SetInputCount(count + audioClips.Count);
+
+                       // Debug.Log($"childMixer.SetInputCount(count + audioClips.Count);{count + audioClips.Count}");
                         for (int i = count - 1; i >= 0; i--)
                         {
                             var playable = childMixer.GetInput(i);
@@ -979,6 +1040,7 @@ public class AudioController : Singleton<AudioController>
                             timeValue += Time.deltaTime;
                             for (int i = 0; i < audioClips.Count; i++)
                             {
+                               // Debug.Log($"childMixer.count1:{childMixer.GetInputCount()}--audioClips{audioClips.Count}");
                                 childMixer.SetInputWeight(i, timeValue * audioClips[i].weight);
                             }
 

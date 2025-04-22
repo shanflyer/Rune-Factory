@@ -301,9 +301,7 @@ Shader "Sky"
             struct Varyings
             {
                 float4  positionCS      : SV_POSITION; 
-                float2  uv              : TEXCOORD0;
-                float4  screenUV        : TEXCOORD1; 
-                float4  worldScreenPos  : TEXCOORD2;
+                float2  uv              : TEXCOORD0;  
             };
             
             
@@ -311,86 +309,19 @@ Shader "Sky"
             Varyings UnlitVertex(Attributes attributes)
             {
                 Varyings o = (Varyings)0; 
-
-                attributes.positionOS = UnityFlipSprite( attributes.positionOS, unity_SpriteProps.xy);
-                o.positionCS = TransformObjectToHClip(attributes.positionOS);
-                float3 objWroldPos=TransformObjectToWorld(attributes.positionOS); 
-                o.uv = attributes.uv;
-
-                float3 ObjPos=unity_ObjectToWorld._m03_m13_m23;
-                float stepPosZ=1-step(100,ObjPos.z);
-
-                float3 _objSortPos=ObjPos; 
-               // _objSortPos.y+=_objSortPos.z;
  
-
-                float4 worldClip=TransformWorldToHClip(_objSortPos); 
-             
-
-                float high=stepPosZ*(objWroldPos.y-ObjPos.y)*0.5;
-                float positionCSY=o.positionCS.y;   
-                //stepPosZ+=stepFixed; 
-              
-                stepPosZ=clamp(stepPosZ,0,1);
-                worldClip.y=(1-stepPosZ)*positionCSY+stepPosZ*worldClip.y;  
-                o.worldScreenPos=ComputeScreenPos(worldClip); 
-                o.screenUV=ComputeScreenPos(o.positionCS); 
-                o.screenUV.z=clamp(high,0,1);    
-               
+                o.positionCS = TransformObjectToHClip(attributes.positionOS); 
+                o.uv = attributes.uv; 
                 return o;
             }
 
             float4 UnlitFragment(Varyings i) : SV_Target
             {
                 float4 mainTex =_MainTex.Sample(sampler_MainTex,i.uv); 
-                float4 DepthTex =_DepthTex.Sample(sampler_MainTex,i.uv); 
-                float clipA=1-step(DepthTex.a,0);
-                DepthTex.xyz*=clipA; 
                  
-                half depthStep_R=1-step(abs(DepthTex.r-0.5),0.01);
-                half depthStep_G=1-step(abs(DepthTex.g-0.5),0.01);
-                half depthStep_B=1-step(abs(DepthTex.b-0.5),0.01);
-                half depthStep_ZeroB=1-step(DepthTex.b,0);
-                half stepDepthOne=step(1,DepthTex.b);
-                 depthStep_ZeroB*=(1-stepDepthOne);
-
-                int clearColor=1-step(DepthTex.b,0)*step(DepthTex.r,0)*step(DepthTex.g,0);
-
-                half otherStep=depthStep_R*depthStep_G+depthStep_B; 
-                
-                otherStep=clamp(otherStep,0,1)*depthStep_ZeroB; 
-                
-                float2 worldScreenPos=i.worldScreenPos.xy/i.worldScreenPos.w;
-                worldScreenPos=UnityStereoTransformScreenSpaceTex(worldScreenPos);
-                float2 screenUV=i.screenUV.xy/i.screenUV.w;
-                screenUV=UnityStereoTransformScreenSpaceTex(screenUV); 
-
-                half depthValue=(DepthTex.r-0.5)*(1-otherStep)+(DepthTex.r+DepthTex.b-1)*(1-stepDepthOne)*otherStep; 
-                half offset=depthValue*512*4/_ScreenParams.y;
-                  
-                half depth=worldScreenPos.y +offset*clearColor;
-                half setpHigh=depthStep_G; 
-                 //return float4(i.color.zzz,mainTex.a);
-               
-
-                //return float4(i.color.zzz,mainTex.a);
-
-                half high= i.screenUV.z*(1-setpHigh)+DepthTex.g*2*setpHigh;
-                
-                mainTex.xyz=half3(depth,high,0.5+stepDepthOne);
-               
-                // mainTex.xyz=depth.xxx;
-
-                half absUv=length(screenUV-worldScreenPos); 
-                
-
-                mainTex.a=mainTex.a*(1-stepDepthOne)+DepthTex.a*stepDepthOne;
-
-                //return mainTex.aaaa;
-                //clip(mainTex.a);
-
-               // mainTex.xyz=otherStep.xxx;
-                
+                mainTex.x=0;
+                mainTex.y=1;
+                mainTex.z=1;
 
                 return mainTex;
                 

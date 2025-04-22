@@ -211,7 +211,11 @@ Shader "SampleEffectMulCloud"
             v2f vert (appdata v)
             {
                 v2f o;
-                o.vertex = TransformObjectToHClip(v.vertex);
+                float3 worldPos=TransformObjectToWorld(v.vertex);
+                float offsetY=worldPos.y-_WorldSpaceCameraPos.y;
+ 
+                worldPos.y=-offsetY*0.75+_WorldSpaceCameraPos.y+2*_HightOffset;
+                o.vertex =TransformWorldToHClip(worldPos);
                 o.color=v.color*_Color;
                 o.uv = v.uv+_SpeedMainTexUVNoiseZW.xy*_TimeParameters.x;
                 o.noiseUv = v.uv+_SpeedMainTexUVNoiseZW.zw*_TimeParameters.x;

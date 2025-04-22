@@ -3,6 +3,7 @@ using System;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+using static UnityEngine.ParticleSystem;
 
 [Serializable]
 public struct SkyCloudData
@@ -33,6 +34,7 @@ public struct SkyCloudData
     {
         Color color=Color.Lerp(startColor,endColor,value);
         mainModule.startColor = color; 
+       
         emissionModule.rateOverTime=math.lerp(0.25f,30,value); 
     }
     public void SetWindValue(float windValue)
@@ -61,6 +63,10 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
     ParticleSystem farCloud;
     [SerializeField]
     ParticleSystem nearCloud;
+    [SerializeField]
+    ParticleSystem star;
+    [SerializeField]
+    AnimationCurve timeStarRange, dateStarRange;
     [SerializeField]
     Vector2 farCloudCount;
     [SerializeField]
@@ -102,11 +108,12 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
         }
     }
     ParticleSystem.VelocityOverLifetimeModule farVelocity, nearVelocity;
-    ParticleSystem.EmissionModule farEmission, nearEmission;
+    ParticleSystem.EmissionModule farEmission, nearEmission,starEmission;
     ParticleSystem.MainModule farMain, nearMain;
     private void Awake()
     { 
         GameActionManager.instance.AddListener<DisplaySky>(DisplaySky);
+        GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
 
         farVelocity = farCloud.velocityOverLifetime;
         nearVelocity = nearCloud.velocityOverLifetime;
@@ -114,6 +121,7 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
         nearEmission = nearCloud.emission;
         farMain = farCloud.main;
         nearMain = nearCloud.main;
+        starEmission = star.emission;
 
         float screenHeight = Screen.height;
         float dt = screenHeight - environmentLerpOffset.x;
@@ -147,6 +155,12 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
     public SetFloatValue setWindValue;
     bool displayCloud=false;
    
+    void UpdateGameTime(UpdateGameTime updateGameTime)
+    {
+        float timeValue =timeStarRange.Evaluate(GameTimeManager.instance.timeValue);
+        float dateValue = dateStarRange.Evaluate(updateGameTime.day/30.0f);
+        starEmission.rateOverTime = timeValue * dateValue;
+    }
     async void DisplaySky(DisplaySky displaySky)
     {
         displayCloud = displaySky.display;
@@ -167,6 +181,7 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
             nearEmission.rateOverTime = (int)math.lerp(nearCloudCount.x, nearCloudCount.y, cloud);
             farCloud.Play();
             nearCloud.Play();
+            star.Play();
         }
         else
         {
@@ -176,6 +191,7 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
             sea.enabled = false;
             farCloud.Stop();
             nearCloud.Stop();
+            star.Stop();
             sun.gameObject.SetActive(false);
             sunClollider.enabled = false;
             if (displaySky.displaySunlight)
@@ -238,16 +254,51 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
         set
         {
             _cloud = value;
-            if (!farCloud.isPlaying)
+            //Debug.Log($"Cloud:{value}");
+            
+            float farCount = math.lerp(farCloudCount.x, farCloudCount.y, cloud);
+            if (farCount < farEmission.rateOverTime.constant)
             {
-                farCloud.Play();
+                Particle[] particles = new Particle[farCloud.particleCount];
+                farCloud.GetParticles(particles);
+                for (int i = 0; i < particles.Length; i++)
+                {
+
+                    if (particles[i].remainingLifetime > particles[i].startLifetime * 0.15f)
+                    {
+                        
+                        particles[i].remainingLifetime = particles[i].startLifetime * 0.15f;
+                    }
+
+                }
+                farCloud.SetParticles(particles);
             }
-            if (!nearCloud.isPlaying)
+
+            farEmission.rateOverTime = farCount;
+
+
+            float nearCount = math.lerp(nearCloudCount.x, nearCloudCount.y, cloud);
+            if (nearCount < nearEmission.rateOverTime.constant)
             {
-                nearCloud.Play();
+                Particle[] particles = new Particle[nearCloud.particleCount];
+                nearCloud.GetParticles(particles);
+                for (int i = 0; i < particles.Length; i++)
+                {
+                    if (particles[i].remainingLifetime > particles[i].startLifetime * 0.8f)
+                    {
+                        particles[i].remainingLifetime = 1- particles[i].remainingLifetime;
+                    }else
+                    if (particles[i].remainingLifetime > particles[i].startLifetime * 0.15f)
+                    {
+                        particles[i].remainingLifetime = particles[i].startLifetime * 0.15f;
+                    }
+
+                }
+               nearCloud.SetParticles(particles);
             }
-            farEmission.rateOverTime = math.lerp(farCloudCount.x, farCloudCount.y, cloud);
-            nearEmission.rateOverTime =math.lerp(nearCloudCount.x, nearCloudCount.y, cloud); 
+            nearEmission.rateOverTime = nearCount;
+
+
             var farStartSize = farMain.startSize;
             farStartSize.constantMin = math.lerp(farCloudSize.x, farCloudSize.y, cloud);
             farStartSize.constantMax = math.lerp(farCloudSize.z, farCloudSize.w, cloud);
@@ -259,6 +310,7 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
             nearMain.startSize = nearStartSize;
         }
     }
+    
     float _cloud = 0;
     public void SetWeather(Weather weather,float lightningLight,bool immediatelyStop=false)
     { 
@@ -274,12 +326,12 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
         }
         weatherMono.SetFog(weather.fog, immediatelyStop);
         weatherMono.SetWind(weather.wind, immediatelyStop);
-        float cloudValue = weather.waterFall * 3;
+        float cloudValue = cloud+ weather.waterFall * 3;
          cloud = weather.cloud;
-        if (cloudValue > weather.cloud)
+        /*if (cloudValue > weather.cloud)
         {
             cloud = cloudValue;
-        }
+        }*/
         cloud = cloud > 1 ? 1 : cloud;
 
         float windValue = weather.wind;

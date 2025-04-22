@@ -183,6 +183,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                 Debug.Log($"hour:{hour}--minute:{minute}");
             if (this.hour != hour)
             {
+                WorldMapObjManager.instance.RefreshMapAudio();
                 GameActionManager.instance.QueueAction(newHour);
             }
             if (hour >= 0)
@@ -580,6 +581,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
 
             if (oldhour != hour)
             {
+                WorldMapObjManager.instance.RefreshMapAudio();
                 GameActionManager.instance.QueueAction(newHour);
             }
 
