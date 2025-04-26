@@ -9,7 +9,8 @@ public class SetPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
     private Slider masterSlider, bgmSlider, seSlider;
-
+    [SerializeField]
+    private Slider cameraSlider;
     [SerializeField]
     private Button saveButton, returnButton,languageButton;
     [SerializeField]
@@ -37,6 +38,7 @@ public class SetPanel : GamePanel<IReferenceData>
         colorASlider = FindChildGameObject<Slider>("ASlider");
         changeColorButton = FindChildGameObject<Button>("ChangeButton");
         JoyStickColor = FindChildGameObject<Image>("ColorPreviewBackground");
+        cameraSlider = FindChildGameObject<Slider>("CameraSlider");
     }
 
     protected override void Awake()
@@ -103,6 +105,10 @@ public class SetPanel : GamePanel<IReferenceData>
             color.a = value;
             JoyStickColorChange(color);
         });
+        cameraSlider.onValueChanged.AddListener((float value) =>
+        {
+            GameVolumeManager.instance.DepthFieldValue = value;
+        });
     }
     void JoyStickColorChange(Color color)
     {
@@ -136,6 +142,8 @@ public class SetPanel : GamePanel<IReferenceData>
         color.a = 1;
         JoyStickColor.color = color;
         colorASlider.SetValueWithoutNotify(UIManager.instance.JoyStickColor.a);
+
+        cameraSlider.SetValueWithoutNotify(GameVolumeManager.instance.DepthFieldValue);
     } 
     private async void SaveSet()
     {

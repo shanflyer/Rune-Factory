@@ -1,6 +1,8 @@
 ﻿using System;
 using Unity.Cinemachine;
+using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
 public class CameraManager : Singleton<CameraManager>
@@ -19,12 +21,21 @@ public class CameraManager : Singleton<CameraManager>
     private CinemachineCameraOffset cameraOffset;
     private CinemachineCameraOffset[] CinemachineCameraOffsets;
     AudioListener cameraAudioListener;
+    Volume volume;
+    DepthOfField DepthOfField;
 
     //CinemachinePositionComposer[] cinemachineFramingTransposers;
     public override bool NeedUpdata => true;
     public override bool NeedLateUpdata => true;
     public bool fixedView { get; private set; }
     
+    public void RefreshDepthOfField()
+    {
+        if (DepthOfField != null)
+        {
+            DepthOfField.ReMapValueY.value = math.lerp(0.2f, 2.0f, GameVolumeManager.instance.DepthFieldValue);
+        }
+    }
     public override void Init()
     {
         base.Init();
@@ -35,7 +46,11 @@ public class CameraManager : Singleton<CameraManager>
             worldUICamera = mainCamera.transform.GetChild(0).GetComponent<Camera>();
             WorldUIPixelPerfectCamera = worldUICamera.GetComponent<PixelPerfectCamera>();
         }
-        cameraAudioListener=mainCamera.GetComponent<AudioListener>();
+        volume= mainCamera.GetComponent<Volume>();
+        volume.sharedProfile.TryGet<DepthOfField>(out DepthOfField);
+        RefreshDepthOfField();
+
+        cameraAudioListener =mainCamera.GetComponent<AudioListener>();
         uiCamera = mainCamera.transform.parent.GetChild(0).GetComponent<Camera>();
         universalAdditionalCameraData = uiCamera.GetComponent<UniversalAdditionalCameraData>();
         pixelPerfectCamera = mainCamera.GetComponent<PixelPerfectCamera>();

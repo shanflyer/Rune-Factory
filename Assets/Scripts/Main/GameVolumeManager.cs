@@ -17,6 +17,7 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
         int width = Screen.width;
         int heigh = Screen.height;
         volumeLevel = PlayerPrefs.GetInt("VolumeLevel", 1);
+        depthFieldValue= PlayerPrefs.GetFloat("DepthField", 1);
 
         screenMat.SetFloat("_CycleSize", width > heigh ? width : heigh);
         GameActionManager.instance.AddListener<LerpScreenCycleValue>(LerpScreenCycleValue);
@@ -51,7 +52,17 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
             return _volumeLevel;
         }
     }
-
+    private float depthFieldValue = 1.0f;
+    public float DepthFieldValue
+    {
+        get { return depthFieldValue; } 
+        set 
+        { 
+            depthFieldValue = value;
+            PlayerPrefs.SetFloat("DepthField", depthFieldValue);
+            CameraManager.instance.RefreshDepthOfField();
+        }
+    }
     private void SetPlayerShaderPos(SetPlayerShaderPos SetPlayerShaderPos)
     {
         Shader.SetGlobalVector("_PlayerPos", SetPlayerShaderPos.pos);
