@@ -257,8 +257,8 @@ Shader "Hidden/Universal Render Pipeline/BokehDepthOfField"
         Unity_Remap_float(x1,float2(centerY-_BlurOffsetPos,0),_ReMapValue.xy,x1);
         x1=clamp(x1,0,1)*(1-step(centerY-_BlurOffsetPos,myDepthColor.x));
         x+=x1; 
-        x*=stepV;
-        outColor=outColor*x+color*(1-x); 
+        //x*=stepV;
+       outColor=outColor*x+color*(1-x); 
 
         #if defined(UNITY_COLORSPACE_GAMMA)
             outColor = GetLinearToSRGB(outColor);
