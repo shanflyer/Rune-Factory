@@ -4,7 +4,11 @@ using Unity.Mathematics;
 using UnityEngine;
 using System;
  
-
+public struct MyColor: IReferenceData
+{
+    public Color color;
+    public ColorEvent colorEvent;
+}
 public struct MyString : IReferenceData
 {
     public string value;

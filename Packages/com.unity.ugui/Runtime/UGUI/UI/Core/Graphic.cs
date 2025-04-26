@@ -104,6 +104,11 @@ namespace UnityEngine.UI
         [SerializeField] protected Material m_Material;
 
         [SerializeField] private Color m_Color = Color.white;
+        [SerializeField] private Color m_ColorTL = Color.white;
+        [SerializeField] private Color m_ColorTR = Color.white;
+        [SerializeField] private Color m_ColorBL = Color.white;
+        [SerializeField] private Color m_ColorBR = Color.white;
+        [SerializeField] private bool m_ColorGradient;
 
         [NonSerialized] protected bool m_SkipLayoutUpdate;
         [NonSerialized] protected bool m_SkipMaterialUpdate;
@@ -154,7 +159,11 @@ namespace UnityEngine.UI
         ///</code>
         /// </example>
         public virtual Color color { get { return m_Color; } set { if (SetPropertyUtility.SetColor(ref m_Color, value)) SetVerticesDirty(); } }
-
+        public virtual Color colorTL { get { return m_ColorTL; } set { if (SetPropertyUtility.SetColor(ref m_ColorTL, value)) SetVerticesDirty(); } }
+        public virtual Color colorTR { get { return m_ColorTR; } set { if (SetPropertyUtility.SetColor(ref m_ColorTR, value)) SetVerticesDirty(); } }
+        public virtual Color colorBL { get { return m_ColorBL; } set { if (SetPropertyUtility.SetColor(ref m_ColorBL, value)) SetVerticesDirty(); } }
+        public virtual Color colorBR { get { return m_ColorBR; } set { if (SetPropertyUtility.SetColor(ref m_ColorBR, value)) SetVerticesDirty(); } }
+        public virtual bool colorGradient { get { return m_ColorGradient; } set { if (SetPropertyUtility.SetStruct(ref m_ColorGradient, value)) SetVerticesDirty(); } }
         [SerializeField] private bool m_RaycastTarget = true;
 
         private bool m_RaycastTargetCache = true;
@@ -781,9 +790,25 @@ namespace UnityEngine.UI
 
             Color32 color32 = color;
             vh.Clear();
+            if (colorGradient)
+            {
+                color32 = colorBL;
+            }
             vh.AddVert(new Vector3(v.x, v.y), color32, new Vector2(0f, 0f));
+            if (colorGradient)
+            {
+                color32 = colorTL;
+            }
             vh.AddVert(new Vector3(v.x, v.w), color32, new Vector2(0f, 1f));
+            if (colorGradient)
+            {
+                color32 = colorTR;
+            }
             vh.AddVert(new Vector3(v.z, v.w), color32, new Vector2(1f, 1f));
+            if (colorGradient)
+            {
+                color32 = colorBR;
+            }
             vh.AddVert(new Vector3(v.z, v.y), color32, new Vector2(1f, 0f));
 
             vh.AddTriangle(0, 1, 2);

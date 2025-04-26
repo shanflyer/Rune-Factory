@@ -1,3 +1,4 @@
+ 
 using System.Threading.Tasks;
 using TMPro;
 using Unity.Mathematics;
@@ -10,16 +11,17 @@ public class SetPanel : GamePanel<IReferenceData>
     private Slider masterSlider, bgmSlider, seSlider;
 
     [SerializeField]
-    private Button saveButton, returnButton;
+    private Button saveButton, returnButton,languageButton;
     [SerializeField]
     private Toggle level0, level1, level2;
     [SerializeField]
-    private TMP_Dropdown dropdown;
+    private TMP_Dropdown dropdown; 
     [SerializeField]
-    private LanguageReference languageReference;
+    Button changeColorButton;
     [SerializeField]
-    private Transform languageParent;
-    DisplayList<LanguageReference, LanguageData> languages;
+    Slider colorASlider;
+    [SerializeField]
+    Image JoyStickColor;
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -27,19 +29,19 @@ public class SetPanel : GamePanel<IReferenceData>
         bgmSlider = FindChildGameObject<Slider>("BGMSlider");
         seSlider = FindChildGameObject<Slider>("SESlider");
         saveButton = FindChildGameObject<Button>("SaveButton");
-        returnButton = FindChildGameObject<Button>("ReturnButton"); 
+        returnButton = FindChildGameObject<Button>("ReturnButton");
+        languageButton = FindChildGameObject<Button>("LanguageButton");
         level0 = FindChildGameObject<Toggle>("Level0");
         level1 = FindChildGameObject<Toggle>("Level1");
         level2 = FindChildGameObject<Toggle>("Level2");
-        languageReference = FindChildGameObject<LanguageReference>("LanguageReference");
-        languageParent = FindChildGameObject("LanguageParent");
-
+        colorASlider = FindChildGameObject<Slider>("ASlider");
+        changeColorButton = FindChildGameObject<Button>("ChangeButton");
+        JoyStickColor = FindChildGameObject<Image>("ColorPreviewBackground");
     }
 
     protected override void Awake()
     {
         base.Awake();
-        languages = new DisplayList<LanguageReference, LanguageData>(languageReference, languageParent);
 
         returnButton.onClick.AddListener(() =>
         {
@@ -52,7 +54,7 @@ public class SetPanel : GamePanel<IReferenceData>
         bgmSlider.onValueChanged.AddListener((float value) =>
         {
             AudioController.instance.SetBGMVolume(value);
-        }); 
+        });
 
         seSlider.onValueChanged.AddListener((float value) =>
         {
@@ -64,7 +66,7 @@ public class SetPanel : GamePanel<IReferenceData>
         {
             if (value)
             {
-                GameVolumeManager.instance.volumeLevel = 0; 
+                GameVolumeManager.instance.volumeLevel = 0;
             }
         });
         level1.onValueChanged.AddListener((bool value) =>
@@ -86,6 +88,28 @@ public class SetPanel : GamePanel<IReferenceData>
         {
             Shader.SetGlobalInt("testShowType", value);
         });
+        languageButton.onClick.AddListener(() =>
+        {
+            UIManager.instance.ShowGamePanel<LanguagePanel>();
+        });
+        changeColorButton.onClick.AddListener(async () =>
+        {
+            ColorPickerPanel ColorPickerPanel=await UIManager.instance.ShowGamePanel<ColorPickerPanel,MyColor>(
+                new MyColor { color =UIManager.instance.JoyStickColor,colorEvent= JoyStickColorChange });
+        });
+        colorASlider.onValueChanged.AddListener((float value) =>
+        {
+            Color color=UIManager.instance.JoyStickColor;
+            color.a = value;
+            JoyStickColorChange(color);
+        });
+    }
+    void JoyStickColorChange(Color color)
+    {
+        JoyStickColor.color = color;
+        color.a = colorASlider.value;
+        
+        UIManager.instance.SetJoyStickColor(color);
     }
     public override async Task InitData(string dataKey)
     {
@@ -108,18 +132,11 @@ public class SetPanel : GamePanel<IReferenceData>
                 level2.SetIsOnWithoutNotify(true);
                 break;
         }
-        RefreshLanguage();
-    }
-    void RefreshLanguage()
-    {
-        languages.InitListData(LanguageManage.instance.languageDatas, (LanguageData languageData, bool selected) =>
-        {
-            if (selected)
-            {
-                LanguageManage.instance.SetLanguage(languageData.languageType);
-            }
-        });
-    }
+        var color = UIManager.instance.JoyStickColor;
+        color.a = 1;
+        JoyStickColor.color = color;
+        colorASlider.SetValueWithoutNotify(UIManager.instance.JoyStickColor.a);
+    } 
     private async void SaveSet()
     {
         Close();

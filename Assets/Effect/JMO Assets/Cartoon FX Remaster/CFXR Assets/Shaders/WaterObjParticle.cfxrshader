@@ -191,7 +191,7 @@ Shader "WaterObjParticle"
 			Pass
 			{
 				Name "BASE_URP"
-				Tags { "LightMode"="UniversalForward" }
+				Tags { "LightMode"="Mirror" }
 
 				CGPROGRAM
 

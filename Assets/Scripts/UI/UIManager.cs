@@ -11,7 +11,8 @@ public class UIManager : Singleton<UIManager>
 
     private Transform canvasParent;
     private CanvasGroup canvasGroup;
-
+    public Color JoyStickColor=>joyStickColor;
+    private  Color joyStickColor=new Color(0.03f,0.87f,1.0f,0.15f);
     static HashSet<Type> pluralUISet = new HashSet<Type>
     {
         { typeof(CharacterResponsePanel)},
@@ -117,7 +118,30 @@ public class UIManager : Singleton<UIManager>
         {
             tagUIAudioDic[tagAudioDataList.tagAudioDatas[i].tag] = tagAudioDataList.tagAudioDatas[i].audioClip;
         }
+
+        string JoyStickColorStr=PlayerPrefs.GetString("JoyStickColor");
+        if (!string.IsNullOrEmpty(JoyStickColorStr))
+        {
+            var colorS = JoyStickColorStr.Split(',');
+            joyStickColor = new Color(float.Parse(colorS[0]), float.Parse(colorS[1]), float.Parse(colorS[2]), float.Parse(colorS[3]));
+            var ScreenControllerPanel = await GetGamePanel<ScreenControllerPanel>();
+            if (ScreenControllerPanel)
+            {
+                ScreenControllerPanel.RefreshJoyStickColor();
+            }
+        }
     } 
+    public async void SetJoyStickColor(Color color)
+    {
+        joyStickColor = color;
+        PlayerPrefs.SetString("JoyStickColor", $"{color.r},{color.g},{color.b},{color.a}");
+        var ScreenControllerPanel = await GetGamePanel<ScreenControllerPanel>();
+        if (ScreenControllerPanel)
+        {
+            ScreenControllerPanel.RefreshJoyStickColor();
+        }
+    }
+
     Dictionary<string, AudioClip> tagUIAudioDic = new Dictionary<string, AudioClip>();
 
      void SetFilmUI(SetFilmUI setFilmUI)

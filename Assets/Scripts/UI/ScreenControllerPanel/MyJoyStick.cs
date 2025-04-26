@@ -1,8 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
-public delegate void Vector2Delegate(Vector2 value);
+ 
 public class MyJoyStick : UIObjReference<IReferenceData>, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
     [SerializeField]
@@ -11,10 +10,7 @@ public class MyJoyStick : UIObjReference<IReferenceData>, IPointerDownHandler, I
     private Camera uiCamera;
 
     [SerializeField]
-    private Image JoyBg, JoyStickImage;
-
-    [SerializeField]
-    private float defaultA;
+    private Image JoyBg, JoyStickImage; 
 
     Vector2Delegate moveDelegate;
     public override void SetPanelUISerializeObj()
@@ -22,8 +18,7 @@ public class MyJoyStick : UIObjReference<IReferenceData>, IPointerDownHandler, I
         base.SetPanelUISerializeObj();
         JoyStickImage = GetComponent<Image>();
         JoyBg = transform.parent.GetComponent<Image>();
-
-        defaultA = JoyBg.color.a;
+         
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -33,8 +28,8 @@ public class MyJoyStick : UIObjReference<IReferenceData>, IPointerDownHandler, I
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Color color = JoyBg.color;
-        color.a = defaultA * 2;
+        Color color = UIManager.instance.JoyStickColor;
+        color.a= color.a*2;
         JoyBg.color = JoyStickImage.color = color;
     }
 
@@ -42,14 +37,17 @@ public class MyJoyStick : UIObjReference<IReferenceData>, IPointerDownHandler, I
     {
         ((RectTransform)transform).anchoredPosition = m_StartPos;
 
-        Color color = JoyBg.color;
-        color.a = defaultA;
+        Color color = UIManager.instance.JoyStickColor; 
         JoyBg.color = JoyStickImage.color = color;
         moveDelegate(Vector2.zero);
     }
 
     private Vector2 m_PointerDownPos, m_StartPos;
-
+    public void RefreshJoyStickColor()
+    {
+        Color color = UIManager.instance.JoyStickColor;
+        JoyBg.color = JoyStickImage.color = color;
+    }
     private void MoveStick(Vector2 pointerPosition)
     {
         var canvasRect = transform.parent?.GetComponentInParent<RectTransform>();

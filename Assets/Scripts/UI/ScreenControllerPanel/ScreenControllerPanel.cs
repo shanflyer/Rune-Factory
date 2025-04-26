@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -16,9 +17,19 @@ public class ScreenControllerPanel : GamePanel<IReferenceData>
     [SerializeField]
     private RectTransform panelRect;
    
+    public void RefreshJoyStickColor()
+    {
+        MyJoyStick.RefreshJoyStickColor();
+    }
     public override void InitReferenceData(IReferenceData v)
     {
+        RefreshJoyStickColor();
         base.InitReferenceData(v); 
+    }
+    public override Task InitData(string dataKey)
+    {
+        RefreshJoyStickColor();
+        return base.InitData(dataKey);
     }
     public override void SetPanelUISerializeObj()
     {

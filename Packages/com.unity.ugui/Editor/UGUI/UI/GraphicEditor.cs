@@ -16,6 +16,8 @@ namespace UnityEditor.UI
     {
         protected SerializedProperty m_Script;
         protected SerializedProperty m_Color;
+        protected SerializedProperty m_ColorTL,m_ColorTR,m_ColorBL,m_ColorBR;
+        protected SerializedProperty m_ColorGradient;
         protected SerializedProperty m_Material;
         protected SerializedProperty m_RaycastTarget;
         protected SerializedProperty m_RaycastPadding;
@@ -49,6 +51,11 @@ namespace UnityEditor.UI
 
             m_Script = serializedObject.FindProperty("m_Script");
             m_Color = serializedObject.FindProperty("m_Color");
+            m_ColorBL = serializedObject.FindProperty("m_ColorBL");
+            m_ColorBR = serializedObject.FindProperty("m_ColorBR");
+            m_ColorTL = serializedObject.FindProperty("m_ColorTL");
+            m_ColorTR = serializedObject.FindProperty("m_ColorTR");
+            m_ColorGradient = serializedObject.FindProperty("m_ColorGradient");
             m_Material = serializedObject.FindProperty("m_Material");
             m_RaycastTarget = serializedObject.FindProperty("m_RaycastTarget");
             m_RaycastPadding = serializedObject.FindProperty("m_RaycastPadding");
@@ -149,7 +156,19 @@ namespace UnityEditor.UI
         /// </summary>
         protected void AppearanceControlsGUI()
         {
-            EditorGUILayout.PropertyField(m_Color);
+            EditorGUILayout.PropertyField(m_ColorGradient);
+            if(m_ColorGradient.boolValue)
+            {
+                EditorGUILayout.PropertyField(m_ColorBL);
+                EditorGUILayout.PropertyField(m_ColorBR);
+                EditorGUILayout.PropertyField(m_ColorTL);
+                EditorGUILayout.PropertyField(m_ColorTR);
+            }
+            else
+            {
+                EditorGUILayout.PropertyField(m_Color);
+            }
+            
             EditorGUILayout.PropertyField(m_Material);
         }
 
