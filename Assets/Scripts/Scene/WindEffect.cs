@@ -1,11 +1,12 @@
 ﻿using System;
 using Unity.Mathematics;
 using UnityEngine;
-using System.Collections.Generic;
- 
+using System.Collections.Generic; 
+
 [Serializable]
 public class WindEffectData
 {
+
     public ParticleSystem particleSystem;
     public float2 windSpeed;
     private int maxParticle;
@@ -29,6 +30,8 @@ public class WindEffectData
             {
                 particleSystem.SetParticles(new ParticleSystem.Particle[0], 0);
             }
+
+            
         }
            
     }
@@ -55,6 +58,7 @@ public class WindEffectData
         {
             particleSystem.Play();
         }
+        
     }
     public void SetSeason(float seasonValue)
     {
@@ -94,6 +98,8 @@ public enum AnimatorWindType
 }
 public class WindEffect : MonoBehaviour
 {
+    public AudioSource audioSource;
+    public AnimationCurve audioCurve;
     public List<WindEffectData> effects=new List<WindEffectData>();
     public List<Animator> animators = new List<Animator>();
     [SerializeField]
@@ -112,6 +118,10 @@ public class WindEffect : MonoBehaviour
         for(int i = 0; i < effects.Count; i++)
         {
             effects[i].Init();
+        }
+        if (audioSource)
+        {
+            audioSource.pitch = 1;
         }
     }
     private void OnDisable()
@@ -199,7 +209,10 @@ public class WindEffect : MonoBehaviour
             
             SetSeasonValue();
         }
-      
+        if (audioSource)
+        {
+            audioSource.pitch = audioCurve.Evaluate(windValue);
+        }
     }
     
 }
