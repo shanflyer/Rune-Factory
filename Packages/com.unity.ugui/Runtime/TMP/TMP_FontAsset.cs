@@ -6,6 +6,7 @@ using UnityEngine.Serialization;
 using UnityEngine.TextCore;
 using UnityEngine.TextCore.LowLevel;
 using Unity.Profiling;
+using Unity.Jobs.LowLevel.Unsafe;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -807,11 +808,20 @@ namespace TMPro
                     m_AtlasPadding = (int)material.GetFloat(ShaderUtilities.ID_GradientScale) - 1;
             }
 
-            #if TEXTCORE_FONT_ENGINE_1_5_OR_NEWER
+#if TEXTCORE_FONT_ENGINE_1_5_OR_NEWER
             // Update Units per EM for pre-existing font assets.
-            if (m_FaceInfo.unitsPerEM == 0)
-                m_FaceInfo.unitsPerEM = FontEngine.GetFaceInfo().unitsPerEM;
-            #endif
+            if (m_FaceInfo.unitsPerEM == 0 && atlasPopulationMode != AtlasPopulationMode.Static)
+            {
+                // Only retrieve Units Per EM if we are on the main thread.
+                if (!JobsUtility.IsExecutingJob)
+                {
+                    m_FaceInfo.unitsPerEM = FontEngine.GetFaceInfo().unitsPerEM;
+                    Debug.Log("Font Asset [" + name + "] Units Per EM set to " + m_FaceInfo.unitsPerEM + ". Please commit the newly serialized value.");
+                }
+                else
+                    Debug.LogError("Font Asset [" + name + "] is missing Units Per EM. Please select the 'Reset FaceInfo' menu item on Font Asset [" + name + "] to ensure proper serialization.");
+            }
+#endif
 
             // Compute hash codes for various properties of the font asset used for lookup.
             hashCode = TMP_TextUtilities.GetHashCode(this.name);
@@ -1145,19 +1155,22 @@ namespace TMPro
 
         //internal HashSet<int> FallbackSearchQueryLookup = new HashSet<int>();
 
-        internal void AddCharacterToLookupCache(uint unicode, TMP_Character character)
+        internal void AddCharacterToLookupCache(uint unicode, TMP_Character character, FontStyles fontStyle = FontStyles.Normal, FontWeight fontWeight = FontWeight.Regular, bool isAlternativeTypeface = false)
         {
-            m_CharacterLookupDictionary.Add(unicode, character);
+            uint lookupKey = unicode;
 
-            // Add font asset to fallback references.
-            //FallbackSearchQueryLookup.Add(character.textAsset.instanceID);
+            // Compute composite lookup key if a font style or weight is used.
+            if (fontStyle != FontStyles.Normal || fontWeight != FontWeight.Regular)
+                lookupKey = (((isAlternativeTypeface ? 0x80u : 0u) | ((uint)fontStyle << 4) | ((uint)fontWeight / 100)) << 24) | unicode;
+
+            m_CharacterLookupDictionary.TryAdd(lookupKey, character);
         }
 
         /// <summary>
         ///
         /// </summary>
         /// <returns></returns>
-        FontEngineError LoadFontFace()
+        internal FontEngineError LoadFontFace()
         {
             if (m_AtlasPopulationMode == AtlasPopulationMode.Dynamic)
             {

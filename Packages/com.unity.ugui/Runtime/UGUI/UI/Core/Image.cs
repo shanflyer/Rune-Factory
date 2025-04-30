@@ -285,7 +285,7 @@ namespace UnityEngine.UI
                     if (m_Sprite != value)
                     {
                         m_SkipLayoutUpdate = m_Sprite.rect.size.Equals(value ? value.rect.size : Vector2.zero);
-                        m_SkipMaterialUpdate = m_Sprite.texture == (value ? value.texture : null);
+                        m_SkipMaterialUpdate = (m_Sprite.texture == (value ? value.texture : null)) && !CheckSecondaryTexturesChanged(value);
                         m_Sprite = value;
 
                         ResetAlphaHitThresholdIfNeeded();
@@ -296,7 +296,7 @@ namespace UnityEngine.UI
                 else if (value != null)
                 {
                     m_SkipLayoutUpdate = value.rect.size == Vector2.zero;
-                    m_SkipMaterialUpdate = value.texture == null;
+                    m_SkipMaterialUpdate = (value.texture == null) && (value.GetSecondaryTextureCount() == 0);
                     m_Sprite = value;
 
                     ResetAlphaHitThresholdIfNeeded();
@@ -733,17 +733,6 @@ namespace UnityEngine.UI
                 SetVerticesDirty();
             }
         }
-        [SerializeField]
-        private bool m_NullClear;
-        public bool NullClear
-        {
-            get { return m_NullClear; }
-            set
-            {
-                m_NullClear = NullClear;
-                SetVerticesDirty();
-            }
-        }
 
         // case 1066689 cache referencePixelsPerUnit when canvas parent is disabled;
         private float m_CachedReferencePixelsPerUnit = 100;
@@ -885,10 +874,6 @@ namespace UnityEngine.UI
                 rectTransform.sizeDelta = new Vector2(w, h);
                 SetAllDirty();
             }
-            else
-            {
-                rectTransform.sizeDelta = Vector2.zero;
-            }
         }
 
         /// <summary>
@@ -898,11 +883,6 @@ namespace UnityEngine.UI
         {
             if (activeSprite == null)
             {
-                if (NullClear)
-                {
-                    toFill.Clear();
-                    return;
-                }
                 base.OnPopulateMesh(toFill);
                 return;
             }
@@ -950,6 +930,96 @@ namespace UnityEngine.UI
                 UnTrackImage(this);
         }
 
+        static SecondarySpriteTexture[] s_TempNewSecondaryTextures = {};
+        SecondarySpriteTexture [] m_SecondaryTextures;
+
+        internal SecondarySpriteTexture [] secondaryTextures => m_SecondaryTextures; // Internal for testing only
+
+        static void ClearArray(SecondarySpriteTexture[] array)
+        {
+            Array.Resize(ref array, 0);
+        }
+
+        bool CheckSecondaryTexturesChanged(Sprite sprite)
+        {
+            var changed = CheckSecondaryTexturesChanged(sprite, ref s_TempNewSecondaryTextures);
+            ClearArray(s_TempNewSecondaryTextures);
+            return changed;
+        }
+
+        bool CheckSecondaryTexturesChanged(Sprite sprite, ref SecondarySpriteTexture [] newSecondaryTextures)
+        {
+            newSecondaryTextures ??= new SecondarySpriteTexture[0];
+
+            bool Compare(SecondarySpriteTexture[] array1, SecondarySpriteTexture[] array2)
+            {
+                if (array1.Length != array2.Length)
+                    return false;
+
+                for (var i = 0; i < array1.Length; ++i)
+                {
+                    if (array1[i] != array2[i])
+                        return false;
+                }
+
+                return true;
+            }
+
+            var oldSecondaryTexCount = m_SecondaryTextures == null ? 0 : m_SecondaryTextures.Length;
+            var newSecondaryTexCount = sprite != null ? sprite.GetSecondaryTextureCount() : 0;
+
+            // If the secondary texture count remained 0 then return
+            if (oldSecondaryTexCount == 0 && newSecondaryTexCount == 0)
+                return false;
+
+            if (sprite != null)
+            {
+                Array.Resize(ref newSecondaryTextures, newSecondaryTexCount);
+                sprite.GetSecondaryTextures(newSecondaryTextures);
+            }
+            else
+            {
+                ClearArray(newSecondaryTextures);
+            }
+
+            // If the list of secondary textures has not changed then return
+            if (m_SecondaryTextures != null && Compare(m_SecondaryTextures, newSecondaryTextures))
+                return false;
+
+            return true;
+        }
+
+        internal void SetSecondaryTextures(CanvasRenderer renderer)
+        {
+            if (CheckSecondaryTexturesChanged(activeSprite, ref s_TempNewSecondaryTextures))
+            {
+                if (s_TempNewSecondaryTextures.Length == 0)
+                    m_SecondaryTextures = null;
+                else
+                {
+                    if (m_SecondaryTextures == null)
+                        m_SecondaryTextures = new SecondarySpriteTexture[s_TempNewSecondaryTextures.Length];
+                    else
+                        Array.Resize(ref m_SecondaryTextures, s_TempNewSecondaryTextures.Length);
+                    Array.Copy(s_TempNewSecondaryTextures, m_SecondaryTextures, s_TempNewSecondaryTextures.Length);
+                }
+            }
+
+            renderer.SetSecondaryTextureCount(m_SecondaryTextures?.Length ?? 0);
+
+            if (m_SecondaryTextures != null)
+            {
+                for (var i = 0; i < m_SecondaryTextures.Length; ++i)
+                {
+                    var secondaryTex = m_SecondaryTextures[i];
+                
+                    renderer.SetSecondaryTexture(i, secondaryTex.name, secondaryTex.texture);
+                }
+            }
+
+            ClearArray(s_TempNewSecondaryTextures);
+        }
+
         /// <summary>
         /// Update the renderer's material.
         /// </summary>
@@ -972,6 +1042,8 @@ namespace UnityEngine.UI
             {
                 canvasRenderer.SetAlphaTexture(alphaTex);
             }
+
+            SetSecondaryTextures(canvasRenderer);
         }
 
         protected override void OnCanvasHierarchyChanged()
@@ -1946,7 +2018,6 @@ namespace UnityEngine.UI
             base.OnValidate();
             m_PixelsPerUnitMultiplier = Mathf.Max(0.01f, m_PixelsPerUnitMultiplier);
         }
-
 #endif
     }
 }

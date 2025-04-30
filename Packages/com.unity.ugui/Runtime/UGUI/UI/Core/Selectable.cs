@@ -1240,7 +1240,7 @@ namespace UnityEngine.UI
                 EventSystem.current.SetSelectedGameObject(gameObject, eventData);
 
             isPointerDown = true;
-            EvaluateAndTransitionToSelectionState();  
+            EvaluateAndTransitionToSelectionState();
         }
 
         /// <summary>

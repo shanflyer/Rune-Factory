@@ -13,7 +13,7 @@ namespace UnityEngine.UI
     /// </summary>
     [AddComponentMenu("UI/Button", 30)]
     public class Button : Selectable, IPointerClickHandler, ISubmitHandler
-    { 
+    {
         [Serializable]
         /// <summary>
         /// Function definition for a button click event.
@@ -111,14 +111,13 @@ namespace UnityEngine.UI
         /// ]]>
         ///</code>
         /// </example>
-      
+
         public virtual void OnPointerClick(PointerEventData eventData)
         {
-           
             if (eventData.button != PointerEventData.InputButton.Left)
                 return;
 
-            Press(); 
+            Press();
         }
         protected override void OnEnable()
         {
@@ -185,6 +184,5 @@ namespace UnityEngine.UI
 
             DoStateTransition(currentSelectionState, false);
         }
-        
     }
 }

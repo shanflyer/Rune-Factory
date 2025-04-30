@@ -65,7 +65,7 @@ namespace TMPro
         private static TMP_Character GetCharacterFromFontAsset_Internal(uint unicode, TMP_FontAsset sourceFontAsset, bool includeFallbacks, FontStyles fontStyle, FontWeight fontWeight, out bool isAlternativeTypeface)
         {
             isAlternativeTypeface = false;
-            TMP_Character character = null;
+            TMP_Character character;
 
             #region FONT WEIGHT AND FONT STYLE HANDLING
             // Determine if a font weight or style is used. If so check if an alternative typeface is assigned for the given weight and / or style.
@@ -73,6 +73,20 @@ namespace TMPro
 
             if (isItalic || fontWeight != FontWeight.Regular)
             {
+                // Check if character is already cached using the composite Unicode value the takes into consideration the font style and weight
+                uint compositeUnicodeLookupKey = ((0x80u | ((uint)fontStyle << 4) | ((uint)fontWeight / 100)) << 24) | unicode;
+                if (sourceFontAsset.characterLookupTable.TryGetValue(compositeUnicodeLookupKey, out character))
+                {
+                    // Set isAlternativeTypeface
+                    isAlternativeTypeface = true;
+
+                    if (character.textAsset != null)
+                        return character;
+
+                    // Remove character from lookup table
+                    sourceFontAsset.characterLookupTable.Remove(unicode);
+                }
+
                 // Get reference to the font weight pairs of the given font asset.
                 TMP_FontWeightPair[] fontWeights = sourceFontAsset.fontWeightTable;
 
@@ -132,29 +146,18 @@ namespace TMPro
 
                             return character;
                         }
-
-                        // Check if the source font file contains the requested character.
-                        //if (TryGetCharacterFromFontFile(unicode, fontAsset, out characterData))
-                        //{
-                        //    isAlternativeTypeface = true;
-
-                        //    return characterData;
-                        //}
-
-                        // If we find the requested character, we add it to the font asset character table
-                        // and return its character data.
-                        // We also add this character to the list of characters we will need to add to the font atlas.
-                        // We assume the font atlas has room otherwise this font asset should not be marked as dynamic.
-                        // Alternatively, we could also add multiple pages of font atlas textures (feature consideration).
                     }
-
-                    // At this point, we were not able to find the requested character in the alternative typeface
-                    // so we check the source font asset and its potential fallbacks.
                 }
+
+                // Search potential fallbacks of the source font asset
+                if (includeFallbacks && sourceFontAsset.fallbackFontAssetTable != null)
+                    return SearchFallbacksForCharacter(unicode, sourceFontAsset, fontStyle, fontWeight, out isAlternativeTypeface);
+
+                return null;
             }
             #endregion
 
-            // Search the source font asset for the requested character.
+            // Search the source font asset for the requested character
             if (sourceFontAsset.characterLookupTable.TryGetValue(unicode, out character))
             {
                 if (character.textAsset != null)
@@ -171,36 +174,40 @@ namespace TMPro
             }
 
             // Search fallback font assets if we still don't have a valid character and include fallback is set to true.
-            if (character == null && includeFallbacks && sourceFontAsset.fallbackFontAssetTable != null)
+            if (includeFallbacks && sourceFontAsset.fallbackFontAssetTable != null)
+                return SearchFallbacksForCharacter(unicode, sourceFontAsset, fontStyle, fontWeight, out isAlternativeTypeface);
+
+            return null;
+        }
+
+        private static TMP_Character SearchFallbacksForCharacter(uint unicode, TMP_FontAsset sourceFontAsset, FontStyles fontStyle, FontWeight fontWeight, out bool isAlternativeTypeface)
+        {
+            isAlternativeTypeface = false;
+
+            // Get reference to the list of fallback font assets.
+            List<TMP_FontAsset> fallbackFontAssets = sourceFontAsset.fallbackFontAssetTable;
+            int fallbackCount = fallbackFontAssets.Count;
+
+            if (fallbackCount == 0)
+                return null;
+
+            for (int i = 0; i < fallbackCount; i++)
             {
-                // Get reference to the list of fallback font assets.
-                List<TMP_FontAsset> fallbackFontAssets = sourceFontAsset.fallbackFontAssetTable;
-                int fallbackCount = fallbackFontAssets.Count;
+                TMP_FontAsset temp = fallbackFontAssets[i];
 
-                if (fallbackCount == 0)
-                    return null;
+                if (temp == null)
+                    continue;
 
-                for (int i = 0; i < fallbackCount; i++)
-                {
-                    TMP_FontAsset temp = fallbackFontAssets[i];
+                int id = temp.instanceID;
 
-                    if (temp == null)
-                        continue;
+                // Try adding font asset to search list. If already present skip to the next one otherwise check if it contains the requested character.
+                if (k_SearchedAssets.Add(id) == false)
+                    continue;
 
-                    int id = temp.instanceID;
+                TMP_Character character = GetCharacterFromFontAsset_Internal(unicode, temp, true, fontStyle, fontWeight, out isAlternativeTypeface);
 
-                    // Try adding font asset to search list. If already present skip to the next one otherwise check if it contains the requested character.
-                    if (k_SearchedAssets.Add(id) == false)
-                        continue;
-
-                    // Add reference to this search query
-                    //sourceFontAsset.FallbackSearchQueryLookup.Add(id);
-
-                    character = GetCharacterFromFontAsset_Internal(unicode, temp, true, fontStyle, fontWeight, out isAlternativeTypeface);
-
-                    if (character != null)
-                        return character;
-                }
+                if (character != null)
+                    return character;
             }
 
             return null;

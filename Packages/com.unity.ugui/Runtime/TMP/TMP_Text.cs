@@ -3136,7 +3136,13 @@ namespace TMPro
 
                             if (ReplaceOpeningStyleTag(ref styleDefinition, i, out int offset, ref charBuffer, ref writeIndex))
                             {
+                                int remainChar = styleLength - offset;
                                 i = offset;
+
+                                //Increase the buffer if the buffer might overflow after processing styles.
+                                if ( writeIndex + remainChar >= charBuffer.Length)
+                                    ResizeInternalArray(ref charBuffer, writeIndex + remainChar);
+
                                 continue;
                             }
                             break;
@@ -4836,8 +4842,8 @@ namespace TMPro
 
                     if ((isWhiteSpace || charCode == 0x200B || charCode == 0x2D || charCode == 0xAD) && (!m_isNonBreakingSpace || ignoreNonBreakingSpace) && charCode != 0xA0 && charCode != 0x2007 && charCode != 0x2011 && charCode != 0x202F && charCode != 0x2060)
                     {
-                        // Ignore Hyphen (0x2D) when preceded by a whitespace
-                        if ((charCode == 0x2D && m_characterCount > 0 && char.IsWhiteSpace(m_textInfo.characterInfo[m_characterCount - 1].character)) == false)
+                        // Case 1391990 - Text after hyphen breaks when the hyphen is connected to the text
+                        if (!(charCode == 0x2D && m_characterCount > 0 && char.IsWhiteSpace(m_textInfo.characterInfo[m_characterCount - 1].character) && m_textInfo.characterInfo[m_characterCount - 1].lineNumber == m_lineNumber))
                         {
                             isFirstWordOfLine = false;
                             shouldSaveHardLineBreak = true;
@@ -5137,7 +5143,7 @@ namespace TMPro
 
             m_textInfo.lineInfo[m_lineNumber].characterCount = m_textInfo.lineInfo[m_lineNumber].lastCharacterIndex - m_textInfo.lineInfo[m_lineNumber].firstCharacterIndex + 1;
             m_textInfo.lineInfo[m_lineNumber].visibleCharacterCount = m_lineVisibleCharacterCount;
-            m_textInfo.lineInfo[m_lineNumber].visibleSpaceCount = m_lineVisibleSpaceCount;
+            m_textInfo.lineInfo[m_lineNumber].visibleSpaceCount = (m_textInfo.lineInfo[m_lineNumber].lastVisibleCharacterIndex + 1 - m_textInfo.lineInfo[m_lineNumber].firstCharacterIndex) - m_lineVisibleCharacterCount;
             m_textInfo.lineInfo[m_lineNumber].lineExtents.min = new Vector2(m_textInfo.characterInfo[m_firstVisibleCharacterOfLine].bottomLeft.x, lineDescender);
             m_textInfo.lineInfo[m_lineNumber].lineExtents.max = new Vector2(m_textInfo.characterInfo[m_lastVisibleCharacterOfLine].topRight.x, lineAscender);
             m_textInfo.lineInfo[m_lineNumber].length = m_textInfo.lineInfo[m_lineNumber].lineExtents.max.x;
@@ -5571,6 +5577,8 @@ namespace TMPro
                 c2 = m_tintSprite ? c2.Multiply(m_colorGradientPreset.topRight) : c2;
                 c3 = m_tintSprite ? c3.Multiply(m_colorGradientPreset.bottomRight) : c3;
             }
+
+            m_tintSprite = false;
 
             m_textInfo.characterInfo[m_characterCount].vertex_BL.color = c0;
             m_textInfo.characterInfo[m_characterCount].vertex_TL.color = c1;
@@ -6248,19 +6256,13 @@ namespace TMPro
         {
             //Debug.Log("Unicode: " + unicode.ToString("X8"));
 
-            TMP_Character character = TMP_FontAssetUtilities.GetCharacterFromFontAsset(unicode, fontAsset, false, fontStyle, fontWeight, out isUsingAlternativeTypeface);
-
-            if (character != null)
-                return character;
-
-            // Search potential list of fallback font assets assigned to the font asset.
-            if (fontAsset.m_FallbackFontAssetTable != null && fontAsset.m_FallbackFontAssetTable.Count > 0)
-                character = TMP_FontAssetUtilities.GetCharacterFromFontAssets(unicode, fontAsset, fontAsset.m_FallbackFontAssetTable, true, fontStyle, fontWeight, out isUsingAlternativeTypeface);
+            // Search the font asset and potential fallback for the requested character
+            TMP_Character character = TMP_FontAssetUtilities.GetCharacterFromFontAsset(unicode, fontAsset, true, fontStyle, fontWeight, out isUsingAlternativeTypeface);
 
             if (character != null)
             {
                 // Add character to font asset lookup cache
-                fontAsset.AddCharacterToLookupCache(unicode, character);
+                fontAsset.AddCharacterToLookupCache(unicode, character, fontStyle, fontWeight, isUsingAlternativeTypeface);
 
                 return character;
             }
@@ -6274,11 +6276,8 @@ namespace TMPro
                 // Use material and index of primary font asset.
                 if (character != null)
                 {
-                    m_currentMaterialIndex = 0;
-                    m_currentMaterial = m_materialReferences[0].material;
-
                     // Add character to font asset lookup cache
-                    fontAsset.AddCharacterToLookupCache(unicode, character);
+                    fontAsset.AddCharacterToLookupCache(unicode, character, fontStyle, fontWeight, isUsingAlternativeTypeface);
 
                     return character;
                 }
@@ -6290,7 +6289,7 @@ namespace TMPro
                 if (character != null)
                 {
                     // Add character to font asset lookup cache
-                    fontAsset.AddCharacterToLookupCache(unicode, character);
+                    fontAsset.AddCharacterToLookupCache(unicode, character, fontStyle, fontWeight, isUsingAlternativeTypeface);
 
                     return character;
                 }
@@ -6312,7 +6311,7 @@ namespace TMPro
             if (character != null)
             {
                 // Add character to font asset lookup cache
-                fontAsset.AddCharacterToLookupCache(unicode, character);
+                fontAsset.AddCharacterToLookupCache(unicode, character, fontStyle, fontWeight, isUsingAlternativeTypeface);
 
                 return character;
             }
@@ -6324,7 +6323,7 @@ namespace TMPro
             if (character != null)
             {
                 // Add character to font asset lookup cache
-                fontAsset.AddCharacterToLookupCache(unicode, character);
+                fontAsset.AddCharacterToLookupCache(unicode, character, fontStyle, fontWeight, isUsingAlternativeTypeface);
 
                 return character;
             }
@@ -6336,6 +6335,44 @@ namespace TMPro
 
                 if (spriteCharacter != null)
                     return spriteCharacter;
+            }
+
+            // Since we have been unable to locate the character thus far using the designated font style and weight. Attempt to locate this character using normal style and regular font weight in order to synthesize it.
+            if (fontStyle != FontStyles.Normal || fontWeight != FontWeight.Regular)
+            {
+                character = TMP_FontAssetUtilities.GetCharacterFromFontAsset(unicode, fontAsset, true, FontStyles.Normal, FontWeight.Regular, out isUsingAlternativeTypeface);
+
+                if (character != null)
+                {
+                    // Add character to font asset lookup cache
+                    fontAsset.AddCharacterToLookupCache(unicode, character, FontStyles.Normal, FontWeight.Regular, isUsingAlternativeTypeface);
+
+                    return character;
+                }
+
+                // Search potential Global fallback font assets.
+                if (TMP_Settings.fallbackFontAssets != null && TMP_Settings.fallbackFontAssets.Count > 0)
+                    character = TMP_FontAssetUtilities.GetCharacterFromFontAssets(unicode, fontAsset, TMP_Settings.fallbackFontAssets, true, FontStyles.Normal, FontWeight.Regular, out isUsingAlternativeTypeface);
+
+                if (character != null)
+                {
+                    // Add character to font asset lookup cache
+                    fontAsset.AddCharacterToLookupCache(unicode, character, FontStyles.Normal, FontWeight.Regular, isUsingAlternativeTypeface);
+
+                    return character;
+                }
+
+                // Search for the character in the Default Font Asset assigned in the TMP Settings file.
+                if (TMP_Settings.defaultFontAsset != null)
+                    character = TMP_FontAssetUtilities.GetCharacterFromFontAsset(unicode, TMP_Settings.defaultFontAsset, true, FontStyles.Normal, FontWeight.Regular, out isUsingAlternativeTypeface);
+
+                if (character != null)
+                {
+                    // Add character to font asset lookup cache
+                    fontAsset.AddCharacterToLookupCache(unicode, character, FontStyles.Normal, FontWeight.Regular, isUsingAlternativeTypeface);
+
+                    return character;
+                }
             }
 
             return null;
@@ -7260,6 +7297,7 @@ namespace TMPro
                     case MarkupTag.SUBSCRIPT:
                         m_fontScaleMultiplier *= m_currentFontAsset.faceInfo.subscriptSize > 0 ? m_currentFontAsset.faceInfo.subscriptSize : 1;
                         m_baselineOffsetStack.Push(m_baselineOffset);
+                        m_materialReferenceStack.Push(m_materialReferences[m_currentMaterialIndex]);
                         fontScale = (m_currentFontSize / m_currentFontAsset.faceInfo.pointSize * m_currentFontAsset.faceInfo.scale * (m_isOrthographic ? 1 : 0.1f));
                         m_baselineOffset += m_currentFontAsset.faceInfo.subscriptOffset * fontScale * m_fontScaleMultiplier;
 
@@ -7269,10 +7307,11 @@ namespace TMPro
                     case MarkupTag.SLASH_SUBSCRIPT:
                         if ((m_FontStyleInternal & FontStyles.Subscript) == FontStyles.Subscript)
                         {
+                            var previousFontAsset = m_materialReferenceStack.Pop().fontAsset;
                             if (m_fontScaleMultiplier < 1)
                             {
                                 m_baselineOffset = m_baselineOffsetStack.Pop();
-                                m_fontScaleMultiplier /= m_currentFontAsset.faceInfo.subscriptSize > 0 ? m_currentFontAsset.faceInfo.subscriptSize : 1;
+                                m_fontScaleMultiplier /= previousFontAsset.faceInfo.subscriptSize > 0 ? previousFontAsset.faceInfo.subscriptSize : 1;
                             }
 
                             if (m_fontStyleStack.Remove(FontStyles.Subscript) == 0)
@@ -7282,6 +7321,7 @@ namespace TMPro
                     case MarkupTag.SUPERSCRIPT:
                         m_fontScaleMultiplier *= m_currentFontAsset.faceInfo.superscriptSize > 0 ? m_currentFontAsset.faceInfo.superscriptSize : 1;
                         m_baselineOffsetStack.Push(m_baselineOffset);
+                        m_materialReferenceStack.Push(m_materialReferences[m_currentMaterialIndex]);
                         fontScale = (m_currentFontSize / m_currentFontAsset.faceInfo.pointSize * m_currentFontAsset.faceInfo.scale * (m_isOrthographic ? 1 : 0.1f));
                         m_baselineOffset += m_currentFontAsset.faceInfo.superscriptOffset * fontScale * m_fontScaleMultiplier;
 
@@ -7291,10 +7331,11 @@ namespace TMPro
                     case MarkupTag.SLASH_SUPERSCRIPT:
                         if ((m_FontStyleInternal & FontStyles.Superscript) == FontStyles.Superscript)
                         {
+                            var previousFontAsset = m_materialReferenceStack.Pop().fontAsset;
                             if (m_fontScaleMultiplier < 1)
                             {
                                 m_baselineOffset = m_baselineOffsetStack.Pop();
-                                m_fontScaleMultiplier /= m_currentFontAsset.faceInfo.superscriptSize > 0 ? m_currentFontAsset.faceInfo.superscriptSize : 1;
+                                m_fontScaleMultiplier /= previousFontAsset.faceInfo.superscriptSize > 0 ? previousFontAsset.faceInfo.superscriptSize : 1;
                             }
 
                             if (m_fontStyleStack.Remove(FontStyles.Superscript) == 0)
