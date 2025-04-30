@@ -76,6 +76,13 @@ namespace UnityEngine.Rendering
             if (serializedBakingSet == null)
                 return;
 
+            #if UNITY_EDITOR
+            // Check if we are trying to load APV data for a scene which has not enabled APV (or it was removed)
+            var bakedData = serializedBakingSet.GetSceneBakeData(sceneGUID, addIfMissing: false);
+            if (bakedData != null && bakedData.hasProbeVolume == false)
+                return;
+            #endif
+
             var refVol = ProbeReferenceVolume.instance;
             refVol.AddPendingSceneLoading(sceneGUID, serializedBakingSet);
         }
@@ -90,9 +97,10 @@ namespace UnityEngine.Rendering
         {
             #if UNITY_EDITOR
             // In the editor, always refresh the GUID as it may become out of date is scene is duplicated or other weird things
-            // This field is serialized, so it will be available in standalones, where it can't change anymore
+            // This field is serialized, so it will be available in standalones, where it can't change anymore.
+            // Only change the GUID if the new one is valid.
             var newGUID = gameObject.scene.GetGUID();
-            if (newGUID != sceneGUID)
+            if (newGUID != sceneGUID && new GUID(newGUID) != default)
             {
                 sceneGUID = newGUID;
                 EditorUtility.SetDirty(this);

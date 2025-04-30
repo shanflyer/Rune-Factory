@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEditor.Rendering;
 using UnityEditor.SceneManagement;
@@ -220,6 +221,7 @@ namespace UnityEngine.Rendering
             Initialize();
 
             var prv = ProbeReferenceVolume.instance;
+
             // In single scene mode, user can't control active set, so we automatically create a new one
             // in case the active scene doesn't have a baking set so that we can display baking settings
             // Clone the current activeSet if possible so that it's seamless when eg. duplicating a scene
@@ -510,7 +512,9 @@ namespace UnityEngine.Rendering
             string path = string.IsNullOrEmpty(scene.path) ?
                 ProbeVolumeBakingSet.GetDirectory("Assets/", "Untitled") :
                 ProbeVolumeBakingSet.GetDirectory(scene.path, scene.name);
-            path = System.IO.Path.Combine(path, activeSet.name + ".asset");
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            path = Path.Combine(path, activeSet.name + ".asset");
             path = AssetDatabase.GenerateUniqueAssetPath(path);
 
             AssetDatabase.CreateAsset(activeSet, path);
@@ -784,10 +788,14 @@ namespace UnityEngine.Rendering
                 // Find the set in which the new active scene belongs
                 var set = ProbeVolumeBakingSet.GetBakingSetForScene(scene);
 
-                if (set != null)
-                {
-                    activeSet = set;
+                activeSet = set;
 
+                if (set == null)
+                {
+                    m_SingleSceneMode = true;
+                }
+                else
+                {
                     // If we load a new scene that doesn't have the current scenario, change it
                     if (!set.m_LightingScenarios.Contains(prv.lightingScenario))
                         prv.SetActiveScenario(set.m_LightingScenarios[0], false);
@@ -1012,7 +1020,7 @@ namespace UnityEngine.Rendering
             if (AdaptiveProbeVolumes.partialBakeSceneList.Count == activeSet.sceneGUIDs.Count)
                 AdaptiveProbeVolumes.partialBakeSceneList = null;
 
-            if (ProbeReferenceVolume.instance.supportLightingScenarios && !activeSet.m_LightingScenarios.Contains(activeSet.lightingScenario))
+            if (ProbeReferenceVolume.instance.supportLightingScenarios && !activeSet.m_LightingScenarios.Contains(activeSet.lightingScenario) && activeSet.m_LightingScenarios.Count > 0)
                 activeSet.SetActiveScenario(activeSet.m_LightingScenarios[0], false);
 
             // Layout has changed and is incompatible.

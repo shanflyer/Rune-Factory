@@ -733,6 +733,17 @@ namespace UnityEngine.UI
                 SetVerticesDirty();
             }
         }
+        [SerializeField]
+        private bool m_NullClear;
+        public bool NullClear
+        {
+            get { return m_NullClear; }
+            set
+            {
+                m_NullClear = NullClear;
+                SetVerticesDirty();
+            }
+        }
 
         // case 1066689 cache referencePixelsPerUnit when canvas parent is disabled;
         private float m_CachedReferencePixelsPerUnit = 100;
@@ -874,6 +885,10 @@ namespace UnityEngine.UI
                 rectTransform.sizeDelta = new Vector2(w, h);
                 SetAllDirty();
             }
+            else
+            {
+                rectTransform.sizeDelta = Vector2.zero;
+            }
         }
 
         /// <summary>
@@ -883,6 +898,11 @@ namespace UnityEngine.UI
         {
             if (activeSprite == null)
             {
+                if (NullClear)
+                {
+                    toFill.Clear();
+                    return;
+                }
                 base.OnPopulateMesh(toFill);
                 return;
             }
@@ -2018,6 +2038,7 @@ namespace UnityEngine.UI
             base.OnValidate();
             m_PixelsPerUnitMultiplier = Mathf.Max(0.01f, m_PixelsPerUnitMultiplier);
         }
+
 #endif
     }
 }

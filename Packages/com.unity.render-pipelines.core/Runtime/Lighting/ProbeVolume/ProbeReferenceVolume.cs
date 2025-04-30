@@ -727,6 +727,7 @@ namespace UnityEngine.Rendering
         List<string> m_ActiveScenes = new List<string>();
 
         ProbeVolumeBakingSet m_CurrentBakingSet = null;
+        ProbeVolumeBakingSet m_LazyBakingSet = null;
 
         bool m_NeedLoadAsset = false;
         bool m_ProbeReferenceVolumeInit = false;
@@ -858,6 +859,39 @@ namespace UnityEngine.Rendering
         }
 
         /// <summary>
+        /// Setting a BakingSet while it is uninitialized schedules it to be set after initialization.
+        /// </summary>
+        /// <param name="bakingSet">BakingSet to set.</param>
+        /// <returns>Returns true when scheduled.</returns>
+        internal bool ScheduleBakingSet(ProbeVolumeBakingSet bakingSet)
+        {
+            if (m_IsInitialized)
+            {
+                return false;
+            }
+
+            m_LazyBakingSet = bakingSet;
+            return true;
+        }
+
+        /// <summary>
+        /// Set the scheduled BakingSet if it exists.
+        /// </summary>
+        /// <returns>Returns true if the scheduling is executed.</returns>
+        internal bool ProcessScheduledBakingSet()
+        {
+            if (m_LazyBakingSet == null)
+            {
+                return false;
+            }
+
+            SetActiveBakingSet(m_LazyBakingSet);
+            m_LazyBakingSet = null;
+
+            return true;
+        }
+
+        /// <summary>
         /// Loads the baking set the given scene is part of if it exists.
         /// </summary>
         /// <param name="scene">The scene for which to load the baking set.</param>
@@ -876,6 +910,11 @@ namespace UnityEngine.Rendering
         {
             if (m_CurrentBakingSet == bakingSet)
                 return;
+
+            if (ScheduleBakingSet(bakingSet))
+            {
+                return;
+            }
 
             foreach (var data in perSceneDataList)
                 data.QueueSceneRemoval();
@@ -1015,6 +1054,8 @@ namespace UnityEngine.Rendering
 
             foreach (var data in perSceneDataList)
                 data.Initialize();
+
+            ProcessScheduledBakingSet();
         }
 
         /// <summary>
@@ -1347,7 +1388,7 @@ namespace UnityEngine.Rendering
                 return;
             }
 
-            if (m_CurrentBakingSet != null && bakingSet != m_CurrentBakingSet)
+            if (m_CurrentBakingSet != null && !m_CurrentBakingSet.HasSameSceneGUIDs(bakingSet))
             {
                 // Trying to load data for a scene from a different baking set than currently loaded ones.
                 // This should not throw an error, but it's not supported
@@ -1379,7 +1420,7 @@ namespace UnityEngine.Rendering
         {
             if (m_PendingScenesToBeLoaded.ContainsKey(sceneGUID))
                 m_PendingScenesToBeLoaded.Remove(sceneGUID);
-            if (m_ActiveScenes.Contains(sceneGUID))
+            if (m_ActiveScenes.Contains(sceneGUID) && m_CurrentBakingSet != null)
                 m_PendingScenesToBeUnloaded.TryAdd(sceneGUID, m_CurrentBakingSet.GetSceneCellIndexList(sceneGUID));
         }
 
@@ -1546,6 +1587,7 @@ namespace UnityEngine.Rendering
         /// </summary>
         public void PerformPendingOperations()
         {
+
 #if UNITY_EDITOR
             checksDuringBakeAction?.Invoke();
 #endif

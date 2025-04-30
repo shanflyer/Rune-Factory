@@ -29,6 +29,14 @@ namespace UnityEngine.Rendering.RenderGraphModule
         public TextureAccess[] colorBufferAccess { get; protected set; } = new TextureAccess[RenderGraph.kMaxMRTCount];
         public int colorBufferMaxIndex { get; protected set; } = -1;
 
+        public bool hasShadingRateImage { get; protected set; }
+        public TextureAccess shadingRateAccess { get; protected set; }
+
+        public bool hasShadingRateStates { get; protected set; }
+        public ShadingRateFragmentSize shadingRateFragmentSize { get; protected set; }
+        public ShadingRateCombiner primitiveShadingRateCombiner { get; protected set; }
+        public ShadingRateCombiner fragmentShadingRateCombiner { get; protected set; }
+
         // Used by native pass compiler only
         public TextureAccess[] fragmentInputAccess { get; protected set; } = new TextureAccess[RenderGraph.kMaxMRTCount];
         public int fragmentInputMaxIndex { get; protected set; } = -1;
@@ -100,6 +108,12 @@ namespace UnityEngine.Rendering.RenderGraphModule
             // We do not need to clear colorBufferAccess and fragmentInputAccess as we have the colorBufferMaxIndex and fragmentInputMaxIndex
             // which are reset above so we only clear depthAccess here.
             depthAccess = default(TextureAccess);
+
+            hasShadingRateImage = false;
+            hasShadingRateStates = false;
+            shadingRateFragmentSize = ShadingRateFragmentSize.FragmentSize1x1;
+            primitiveShadingRateCombiner = ShadingRateCombiner.Keep;
+            fragmentShadingRateCombiner = ShadingRateCombiner.Keep;
         }
 
         // Check if the pass has any render targets set-up
@@ -113,7 +127,15 @@ namespace UnityEngine.Rendering.RenderGraphModule
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool IsTransient(in ResourceHandle res)
         {
-            return transientResourceList[res.iType].Contains(res);
+            // Versioning doesn't matter much for transient resources as they are only used within a single pass
+            for (int i = 0; i < transientResourceList[res.iType].Count; i++)
+            {
+                if (transientResourceList[res.iType][i].index == res.index)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -328,7 +350,6 @@ namespace UnityEngine.Rendering.RenderGraphModule
 #endif
         }
 
-
         // Here we want to keep computation to a minimum and only hash what will influence NRP compiler: Pass merging, load/store actions etc.
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         void ComputeTextureHash(ref HashFNV1A32 generator, in ResourceHandle handle, RenderGraphResourceRegistry resources)
@@ -339,9 +360,12 @@ namespace UnityEngine.Rendering.RenderGraphModule
             if (resources.IsRenderGraphResourceImported(handle))
             {
                 var res = resources.GetTextureResource(handle);
-                if (res.graphicsResource.externalTexture != null) // External texture
+                var graphicsResource = res.graphicsResource;
+                ref var desc = ref res.desc;
+                
+                var externalTexture = graphicsResource.externalTexture;
+                if (externalTexture != null) // External texture
                 {
-                    var externalTexture = res.graphicsResource.externalTexture;
                     generator.Append((int) externalTexture.graphicsFormat);
                     generator.Append((int) externalTexture.dimension);
                     generator.Append(externalTexture.width);
@@ -349,27 +373,26 @@ namespace UnityEngine.Rendering.RenderGraphModule
                     if (externalTexture is RenderTexture externalRT)
                         generator.Append(externalRT.antiAliasing);
                 }
-                else if (res.graphicsResource.rt != null) // Regular RTHandle
+                else if (graphicsResource.rt != null) // Regular RTHandle
                 {
-                    var rt = res.graphicsResource.rt;
+                    var rt = graphicsResource.rt;
                     generator.Append((int) rt.graphicsFormat);
                     generator.Append((int) rt.dimension);
                     generator.Append(rt.antiAliasing);
-                    if (res.graphicsResource.useScaling)
-                        if (res.graphicsResource.scaleFunc != null)
-                            generator.Append(res.graphicsResource.scaleFunc);
+                    if (graphicsResource.useScaling)
+                        if (graphicsResource.scaleFunc != null)
+                            generator.Append(DelegateHashCodeUtils.GetFuncHashCode(graphicsResource.scaleFunc));
                         else
-                            generator.Append(res.graphicsResource.scaleFactor);
+                            generator.Append(graphicsResource.scaleFactor);
                     else
                     {
                         generator.Append(rt.width);
                         generator.Append(rt.height);
                     }
                 }
-                else if (res.graphicsResource.nameID != default) // External RTI
+                else if (graphicsResource.nameID != default) // External RTI
                 {
                     // The only info we have is from the provided desc upon importing.
-                    ref var desc = ref res.desc;
                     generator.Append((int) desc.format);
                     generator.Append((int) desc.dimension);
                     generator.Append((int) desc.msaaSamples);
@@ -378,8 +401,8 @@ namespace UnityEngine.Rendering.RenderGraphModule
                 }
 
                 // Add the clear/discard buffer flags to the hash (used in all the cases above)
-                generator.Append(res.desc.clearBuffer);
-                generator.Append(res.desc.discardBuffer);
+                generator.Append(desc.clearBuffer);
+                generator.Append(desc.discardBuffer);
             }
             else
             {
@@ -399,10 +422,19 @@ namespace UnityEngine.Rendering.RenderGraphModule
                         generator.Append(desc.scale);
                         break;
                     case TextureSizeMode.Functor:
-                        generator.Append(desc.func);
+                        generator.Append(DelegateHashCodeUtils.GetFuncHashCode(desc.func));
                         break;
                 }
             }
+        }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        static void ComputeHashForTextureAccess(ref HashFNV1A32 generator, in ResourceHandle handle, in TextureAccess textureAccess)
+        {
+            generator.Append(handle.index);
+            generator.Append((int) textureAccess.flags);
+            generator.Append(textureAccess.mipLevel);
+            generator.Append(textureAccess.depthSlice);
         }
 
         // This function is performance sensitive.
@@ -435,6 +467,22 @@ namespace UnityEngine.Rendering.RenderGraphModule
 
             generator.Append(colorBufferMaxIndex);
 
+            generator.Append(hasShadingRateImage);
+            if (hasShadingRateImage)
+            {
+                var handle = shadingRateAccess.textureHandle.handle;
+                if (handle.IsValid())
+                {
+                    ComputeTextureHash(ref generator, handle, resources);
+                    ComputeHashForTextureAccess(ref generator, handle, shadingRateAccess);
+                }
+            }
+
+            generator.Append(hasShadingRateStates);
+            generator.Append((int)shadingRateFragmentSize);
+            generator.Append((int)primitiveShadingRateCombiner);
+            generator.Append((int)fragmentShadingRateCombiner);
+
             for (int i = 0; i < fragmentInputMaxIndex + 1; ++i)
             {
                 var fragmentInputAccessElement = fragmentInputAccess[i];
@@ -463,22 +511,27 @@ namespace UnityEngine.Rendering.RenderGraphModule
             for (int resType = 0; resType < (int)RenderGraphResourceType.Count; resType++)
             {
                 var resourceReads = resourceReadLists[resType];
-                for (int i = 0; i < resourceReads.Count; ++i)
+                var resourceReadsCount = resourceReads.Count;
+                for (int i = 0; i < resourceReadsCount; ++i)
                     generator.Append(resourceReads[i].index);
 
                 var resourceWrites = resourceWriteLists[resType];
-                for (int i = 0; i < resourceWrites.Count; ++i)
+                var resourceWritesCount = resourceWrites.Count;
+                for (int i = 0; i < resourceWritesCount; ++i)
                     generator.Append(resourceWrites[i].index);
 
                 var resourceTransient = transientResourceList[resType];
-                for (int i = 0; i < resourceTransient.Count; ++i)
+                var resourceTransientCount = resourceTransient.Count;
+                for (int i = 0; i < resourceTransientCount; ++i)
                     generator.Append(resourceTransient[i].index);
             }
 
-            for (int i = 0; i < usedRendererListList.Count; ++i)
+            var usedRendererListListCount = usedRendererListList.Count;
+            for (int i = 0; i < usedRendererListListCount; ++i)
                 generator.Append(usedRendererListList[i].handle);
 
-            for (int i = 0; i < setGlobalsList.Count; ++i)
+            var setGlobalsListCount = setGlobalsList.Count;
+            for (int i = 0; i < setGlobalsListCount; ++i)
             {
                 var global = setGlobalsList[i];
                 generator.Append(global.Item1.handle.index);
@@ -486,19 +539,49 @@ namespace UnityEngine.Rendering.RenderGraphModule
             }
             generator.Append(useAllGlobalTextures);
 
-            for (int i = 0; i < implicitReadsList.Count; ++i)
+            var implicitReadsListCount = implicitReadsList.Count;
+            for (int i = 0; i < implicitReadsListCount; ++i)
                 generator.Append(implicitReadsList[i].index);
 
             generator.Append(GetRenderFuncHash());
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        static void ComputeHashForTextureAccess(ref HashFNV1A32 generator, in ResourceHandle handle, in TextureAccess textureAccess)
+        public void SetShadingRateImage(in TextureHandle shadingRateImage, AccessFlags accessFlags, int mipLevel, int depthSlice)
         {
-            generator.Append(handle.index);
-            generator.Append((int) textureAccess.flags);
-            generator.Append(textureAccess.mipLevel);
-            generator.Append(textureAccess.depthSlice);
+            if (ShadingRateInfo.supportsPerImageTile)
+            {
+                hasShadingRateImage = true;
+                shadingRateAccess = new TextureAccess(shadingRateImage, accessFlags, mipLevel, depthSlice);
+                AddResourceRead(shadingRateAccess.textureHandle.handle);
+            }
+        }
+
+        public void SetShadingRateFragmentSize(ShadingRateFragmentSize shadingRateFragmentSize)
+        {
+            if (ShadingRateInfo.supportsPerDrawCall)
+            {
+                hasShadingRateStates = true;
+                this.shadingRateFragmentSize = shadingRateFragmentSize;
+            }
+        }
+
+        public void SetShadingRateCombiner(ShadingRateCombinerStage stage, ShadingRateCombiner combiner)
+        {
+            if (ShadingRateInfo.supportsPerImageTile)
+            {
+                switch (stage)
+                {
+                    case ShadingRateCombinerStage.Primitive:
+                        hasShadingRateStates = true;
+                        primitiveShadingRateCombiner = combiner;
+                        break;
+
+                    case ShadingRateCombinerStage.Fragment:
+                        hasShadingRateStates = true;
+                        fragmentShadingRateCombiner = combiner;
+                        break;
+                }
+            }
         }
     }
 
@@ -540,7 +623,7 @@ namespace UnityEngine.Rendering.RenderGraphModule
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetRenderFuncHash()
         {
-            return renderFunc != null ? HashFNV1A32.GetFuncHashCode(renderFunc) : 0;
+            return renderFunc != null ? DelegateHashCodeUtils.GetFuncHashCode(renderFunc) : 0;
         }
     }
 
