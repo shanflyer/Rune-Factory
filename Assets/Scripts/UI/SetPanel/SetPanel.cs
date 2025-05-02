@@ -43,7 +43,7 @@ public class SetPanel : GamePanel<IReferenceData>
 
     protected override void Awake()
     {
-        base.Awake();
+        base.Awake(); 
 
         returnButton.onClick.AddListener(() =>
         {
