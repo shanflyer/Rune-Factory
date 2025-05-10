@@ -9,6 +9,7 @@ using UnityEditor.PackageManager.UI;
 using UnityEditor.ShortcutManagement;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
+using System.IO;
 
 namespace UnityEngine.InputSystem.Editor
 {
@@ -29,7 +30,7 @@ namespace UnityEngine.InputSystem.Editor
             InputActionAssetEditor.RegisterType<InputActionsEditorWindow>();
         }
 
-        static readonly Vector2 k_MinWindowSize = new Vector2(650, 450);
+        static readonly Vector2 k_MinWindowSize = new Vector2(740, 450);
         // For UI testing purpose
         internal InputActionAsset currentAssetInEditor => m_AssetObjectForEditing;
         [SerializeField] private InputActionAsset m_AssetObjectForEditing;
@@ -232,12 +233,12 @@ namespace UnityEngine.InputSystem.Editor
             rootVisualElement.Clear();
             if (!rootVisualElement.styleSheets.Contains(InputActionsEditorWindowUtils.theme))
                 rootVisualElement.styleSheets.Add(InputActionsEditorWindowUtils.theme);
-            m_View = new InputActionsEditorView(rootVisualElement, m_StateContainer, false, () => Save(isAutoSave: false));
+            m_View = new InputActionsEditorView(rootVisualElement, m_StateContainer, false, () => Save(isAutoSave: false), SaveNameDataData);
 
             m_StateContainer.Initialize(rootVisualElement.Q("action-editor"));
         }
 
-        private void OnStateChanged(InputActionsEditorState newState)
+        private void OnStateChanged(InputActionsEditorState newState, UIRebuildMode editorRebuildMode)
         {
             DirtyInputActionsEditorWindow(newState);
             m_State = newState;
@@ -260,7 +261,35 @@ namespace UnityEngine.InputSystem.Editor
         {
             return m_State.serializedObject.targetObject as InputActionAsset;
         }
+        internal void SaveNameDataData()
+        {
+            var importedAsset = InputSystem.actions;
+            if (importedAsset == null)
+            {
+                return;
+            }
 
+            string property = "";
+            var path = AssetDatabase.GUIDToAssetPath(m_AssetGUID);
+            foreach (var actionMap in importedAsset.actionMaps)
+            {
+                foreach (var d in actionMap.actions)
+                {
+                    string title = $"{actionMap.m_Name}_{d.m_Name}";
+                    title = title.Replace(" ", "_");
+
+                    string value = $"\"{d.m_Name}\"";
+                    property = $"{property}{"public const string "}{title}{"= "}{value}{";"}\n";
+                }
+            }
+
+            string propertyStr = String.Format("{{{0}}}", property);
+            string dataStr = $"public class MyInputNameData\n{propertyStr}";
+
+            string dataPath = path.Replace(".inputactions", "NameData.cs");
+            File.WriteAllText(dataPath, dataStr);
+            AssetDatabase.ImportAsset(dataPath);
+        }
         private void Save(bool isAutoSave)
         {
             var path = AssetDatabase.GUIDToAssetPath(m_AssetGUID);

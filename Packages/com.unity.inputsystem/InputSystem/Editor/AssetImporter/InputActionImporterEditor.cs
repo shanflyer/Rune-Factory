@@ -143,14 +143,14 @@ namespace UnityEngine.InputSystem.Editor
         {
 #if UNITY_INPUT_SYSTEM_PROJECT_WIDE_ACTIONS
             // Redirect to Project-settings Input Actions editor if this is the project-wide actions asset
-            if (IsProjectWideActionsAsset(asset))
-            {
-                SettingsService.OpenProjectSettings(InputSettingsPath.kSettingsRootPath);
-                return;
-            }
+          //  if (IsProjectWideActionsAsset(asset))
+          {
+          //      SettingsService.OpenProjectSettings(InputSettingsPath.kSettingsRootPath);
+           //     return;
+           }
 
             // Redirect to UI-Toolkit window editor if not configured to use IMGUI explicitly
-            if (!InputSystem.settings.IsFeatureEnabled(InputFeatureNames.kUseIMGUIEditorForAssets))
+            if (!InputSystem.settings.useIMGUIEditorForAssets)
                 InputActionsEditorWindow.OpenEditor(asset);
             else
                 InputActionEditorWindow.OpenEditor(asset);
