@@ -295,6 +295,39 @@ public class SourceTool : MonoBehaviour
         }
     }
 
+
+    [MenuItem("Assets/去除动画曲线")]
+    public static void OutAnimationClipSource()
+    {
+        foreach (var obj in Selection.GetFiltered<Object>(SelectionMode.Assets))
+        {
+            var path = AssetDatabase.GetAssetPath(obj);
+            if (obj is AnimationClip animationClip)
+            {
+                var editorBinds = AnimationUtility.GetCurveBindings(animationClip);
+                for(int i = 0; i < editorBinds.Length; i++)
+                {
+                    var curve = AnimationUtility.GetEditorCurve(animationClip, editorBinds[i]);
+                    var keys=  curve.keys;
+                    for(int j = 0; j < keys.Length; j++)
+                    {
+                        keys[j].outTangent = float.PositiveInfinity;
+                        keys[j].inTangent= float.PositiveInfinity;
+                        keys[j].inWeight = 0;
+                    }
+                    curve.keys = keys;
+                    AnimationUtility.SetEditorCurve(animationClip, editorBinds[i],curve); 
+                }
+            }
+
+            if (string.IsNullOrEmpty(path))
+                continue;
+        }
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+    }
+
     [MenuItem("Assets/输出精灵资源X2")]
     public static void OutSpriteSource2()
     {
