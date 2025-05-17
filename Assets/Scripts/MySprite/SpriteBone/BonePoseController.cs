@@ -10,8 +10,7 @@ public class BonePoseController : MonoBehaviour
 {
     public SpriteBonePose spriteBone;
     public FrameAnimationData frameAnimationData;
-    public AnimationClip animationClip;
-    public List<Transform> groups;
+    public AnimationClip animationClip; 
     public void TransformToPoseData()
     {
         if (spriteBone == null)
@@ -20,7 +19,7 @@ public class BonePoseController : MonoBehaviour
         }
         spriteBone.Clear();
         spriteBone.DisplayGroup = null;
-        foreach(Transform group in groups)
+        foreach(Transform group in transform)
         {
             if (!group.gameObject.activeSelf)
             {
