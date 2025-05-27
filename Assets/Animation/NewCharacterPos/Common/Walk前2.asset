@@ -1,0 +1,143 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4213e64e68dd1914c9727a230cf99324, type: 3}
+  m_Name: "Walk\u524D2"
+  m_EditorClassIdentifier: 
+  DisplayBonePoses:
+  - name: Front_Root/Front_Body
+    position: {x: 0.1627, y: 0.0022, z: 0}
+    scale: {x: 0.99999976, y: 0.99999976, z: 1}
+    angle: {x: -0, y: 0, z: 0}
+  - name: Front_Root/Front_Body/Front_Head
+    position: {x: 0.222, y: -0.0049, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 0}
+  - name: Front_Root/Front_Body/Front_Head/Front_Hat
+    position: {x: 0.14097922, y: 0.0000000030585126, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 359.26617}
+  - name: Front_Root/Front_Body/Front_Head/Front_Hair_Front
+    position: {x: 0.265, y: 0.0173, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 177.77596}
+  - name: Front_Root/Front_Body/Front_Head/Front_Hair_Front/Front_Hair_Front_Left
+    position: {x: 0.00092787674, y: -0.081193015, z: 0}
+    scale: {x: 1.0000001, y: 1.0000001, z: 1}
+    angle: {x: -0, y: 0, z: 338.80585}
+  - name: Front_Root/Front_Body/Front_Head/Front_Hair_Front/Front_Hair_Front_Right
+    position: {x: 0.013166582, y: 0.13312818, z: 0}
+    scale: {x: 1.0000001, y: 1.0000001, z: 1}
+    angle: {x: -0, y: 0, z: 23.045393}
+  - name: Front_Root/Front_Body/Front_Head/Front_Hair_Back
+    position: {x: 0.19097255, y: -0.01841055, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 180}
+  - name: Front_Root/Front_Body/Front_Head/Front_Hair_Back/Front_Hair_Back_Left
+    position: {x: 0.009095072, y: -0.10458478, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 341.37033}
+  - name: Front_Root/Front_Body/Front_Head/Front_Hair_Back/Front_Hair_Back_Right
+    position: {x: 0.013204416, y: 0.07869105, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 23.912916}
+  - name: Front_Root/Front_Body/Front_LeftArm_Up
+    position: {x: 0.2169, y: 0.0699, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 161.12917}
+  - name: Front_Root/Front_Body/Front_LeftArm_Up/Front_LeftArm_Down
+    position: {x: 0.12299953, y: 0.0000000015162118, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 19.35672}
+  - name: Front_Root/Front_Body/Front_LeftArm_Up/Front_LeftArm_Down/Front_LeftHand
+    position: {x: 0.073117904, y: 0.000000035270457, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 9.506123}
+  - name: Front_Root/Front_Body/Front_LeftArm_Up/Front_LeftArm_Down/Front_LeftHand/Front_LeftWeapon
+    position: {x: 0.018160278, y: 0.023998411, z: 0}
+    scale: {x: 1.0000001, y: 1.0000001, z: 1}
+    angle: {x: -0, y: 0, z: 42.954426}
+  - name: Front_Root/Front_Body/Front_LeftArm_Up/Front_LeftShoulder
+    position: {x: 0.00816512, y: -0.019578544, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 354.71225}
+  - name: Front_Root/Front_Body/Front_RightShoulder
+    position: {x: 0.2209, y: -0.0742, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 210.31313}
+  - name: Front_Root/Front_Body/Front_RightShoulder/Front_RightArm_Down
+    position: {x: 0.08666308, y: -0.00045179576, z: 0}
+    scale: {x: 1.0000002, y: 1.0000002, z: 1}
+    angle: {x: -0, y: 0, z: 6.501027}
+  - name: Front_Root/Front_Body/Front_RightShoulder/Front_RightArm_Down/Front_RightHand
+    position: {x: 0.055880398, y: -0.000004280656, z: 0}
+    scale: {x: 0.99999976, y: 0.99999976, z: 1}
+    angle: {x: -0, y: 0, z: 17.32758}
+  - name: Front_Root/Front_Body/Front_RightShoulder/Front_RightArm_Down/Front_RightHand/Front_RightWeapon
+    position: {x: 0.028829629, y: -0.02220209, z: 0}
+    scale: {x: 1.0000001, y: 1.0000001, z: 1}
+    angle: {x: -0, y: 0, z: 328.18085}
+  - name: Front_Root/Front_Body/Front_RightShoulder/Front_RightArm_Up_3
+    position: {x: 0.009236139, y: 0.023649853, z: 0}
+    scale: {x: 1.0000002, y: 1.0000002, z: 1}
+    angle: {x: -0, y: 0, z: 7.1494603}
+  - name: Front_Root/Front_Body/Front_Coak_Center
+    position: {x: 0.20807214, y: 0.0044051763, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 180}
+  - name: Front_Root/Front_Body/Front_Coak_Center/Front_Coak_Left
+    position: {x: -0.017436486, y: -0.046207406, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 327.2839}
+  - name: Front_Root/Front_Body/Front_Coak_Center/Front_Coak_Right
+    position: {x: -0.006102781, y: 0.05492446, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 50.901047}
+  - name: Front_Root/Front_Body/Front_Skirt_Right
+    position: {x: 0.06334896, y: -0.0060568606, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 181.91391}
+  - name: Front_Root/Front_Body/Front_Skirt_Right/Front_Skirt_Center_1
+    position: {x: 0.0008718094, y: -0.06102859, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 342.2099}
+  - name: Front_Root/Front_Body/Front_Skirt_Right/Front_Skirt_Left_2
+    position: {x: -0.000000008304284, y: 0.04184692, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 35.522503}
+  - name: Front_Root/Front_LeftLeg_Up
+    position: {x: 0.2403, y: 0.0404, z: 0}
+    scale: {x: 0.99999976, y: 0.99999976, z: 1}
+    angle: {x: -0, y: 0, z: 174.07446}
+  - name: Front_Root/Front_LeftLeg_Up/Front_LeftLeg_Down
+    position: {x: 0.117157094, y: 0.00000017176704, z: 0}
+    scale: {x: 0.9999999, y: 0.9999999, z: 1}
+    angle: {x: -0, y: 0, z: 1.157986}
+  - name: Front_Root/Front_LeftLeg_Up/Front_LeftLeg_Down/Front_LeftFoot
+    position: {x: 0.0773, y: 0.0108, z: 0}
+    scale: {x: 1.0000002, y: 1.0000002, z: 1}
+    angle: {x: -0, y: 0, z: 297.54175}
+  - name: Front_Root/Front_RightLeg_Up
+    position: {x: 0.1894, y: -0.0381, z: 0}
+    scale: {x: 0.99999976, y: 0.99999976, z: 1}
+    angle: {x: -0, y: 0, z: 189.08533}
+  - name: Front_Root/Front_RightLeg_Up/Front_RightLeg_Down
+    position: {x: 0.11637292, y: 0.00000000696148, z: 0}
+    scale: {x: 0.9999999, y: 0.9999999, z: 1}
+    angle: {x: -0, y: 0, z: 357.56308}
+  - name: Front_Root/Front_RightLeg_Up/Front_RightLeg_Down/Front_RightFoot
+    position: {x: 0.0735, y: -0.0051, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 61.18357}
+  HideGroup:
+  - Left_Root
+  - Back_Root
+  DisplayGroup: Front_Root

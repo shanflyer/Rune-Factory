@@ -10,7 +10,11 @@ public class BonePoseController : MonoBehaviour
 {
     public SpriteBonePose spriteBone;
     public FrameAnimationData frameAnimationData;
-    public AnimationClip animationClip; 
+    public AnimationClip animationClip;
+    HashSet<string> SpecialParts = new HashSet<string>
+    {
+        {"Ç°"},{"×ó"},{"ºó"},{"Shadow"},{"Other"}
+    };
     public void TransformToPoseData()
     {
         if (spriteBone == null)
@@ -21,6 +25,10 @@ public class BonePoseController : MonoBehaviour
         spriteBone.DisplayGroup = null;
         foreach(Transform group in transform)
         {
+            if (SpecialParts.Contains(group.name))
+            {
+                continue;
+            }
             if (!group.gameObject.activeSelf)
             {
                 spriteBone.HideGroup.Add(group.name);
@@ -28,9 +36,9 @@ public class BonePoseController : MonoBehaviour
             if (!string.IsNullOrEmpty(spriteBone.DisplayGroup))
             {
                 group.gameObject.SetActive(false);
-                return;
+                continue;
             }
-            var root = group.Find("root");
+            var root = group;
             var children = root.GetComponentsInChildren<Transform>(true);
             spriteBone.DisplayGroup = group.name;
             for (int i = 0; i < children.Length; i++)

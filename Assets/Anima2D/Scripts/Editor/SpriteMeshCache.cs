@@ -281,7 +281,11 @@ namespace Anima2D
 				AssetDatabase.SaveAssets();
 				AssetDatabase.Refresh();
 				TextureImporter textureImporter = AssetImporter.GetAtPath(spriteAssetPath) as TextureImporter;
-				textureImporter.userData = textureImporter.assetTimeStamp.ToString();
+				if (textureImporter != null)
+				{
+                    textureImporter.userData = textureImporter.assetTimeStamp.ToString();
+                }
+				
 				AssetDatabase.StartAssetEditing();
 				AssetDatabase.ImportAsset(spriteAssetPath);
 				AssetDatabase.StopAssetEditing();

@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using TriangleNet.Geometry;
+using UnityEditor.U2D.PSD;
 
 namespace Anima2D 
 {
@@ -292,8 +293,15 @@ namespace Anima2D
 				Texture2D texture = SpriteUtility.GetSpriteTexture(sprite,false);
 				
 				TextureImporter textureImporter = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(texture)) as TextureImporter;
-				
-				GetWidthAndHeight(textureImporter,ref width, ref height);
+				if (textureImporter == null && texture != null)
+				{
+					 PSDImporter pSDImporter = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(sprite)) as PSDImporter; 
+                    width = texture.width; height= texture.height;
+				}
+				else
+				{
+                    GetWidthAndHeight(textureImporter, ref width, ref height);
+                } 
 			}
 		}
 		
@@ -313,8 +321,16 @@ namespace Anima2D
 		public static float GetSpritePixelsPerUnit(Sprite sprite)
 		{
 			TextureImporter textureImporter = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(sprite)) as TextureImporter;
-			
-			return textureImporter.spritePixelsPerUnit;
+			if (textureImporter == null)
+			{
+                PSDImporter pSDImporter = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(sprite)) as PSDImporter;
+				return pSDImporter.spritePixelsPerUnit;
+			}
+			else
+			{
+                return textureImporter.spritePixelsPerUnit;
+            } 
+          
 		}
 		
 		static void InitFromSprite(SpriteMesh spriteMesh, Sprite sprite)

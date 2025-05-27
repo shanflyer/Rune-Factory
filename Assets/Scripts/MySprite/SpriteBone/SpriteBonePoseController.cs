@@ -13,6 +13,10 @@ public class SpriteBonePoseController : MonoBehaviour
     public SpriteBonePose spriteBone;
     public FrameAnimationData frameAnimationData;
     public AnimationClip animationClip;
+    HashSet<string> SpecialParts = new HashSet<string>
+    {
+        {"Ç°"},{"×ó"},{"ºó"},{"Shadow"},{"Other"}
+    };
     public void TransformToPoseData()
     {
         if (spriteBone == null)
@@ -23,6 +27,10 @@ public class SpriteBonePoseController : MonoBehaviour
         spriteBone.DisplayGroup = null;
         foreach(Transform group in transform)
         {
+            if (SpecialParts.Contains(group.name))
+            {
+                continue;
+            }
             if (!group.gameObject.activeSelf)
             {
                 spriteBone.HideGroup.Add(group.name);

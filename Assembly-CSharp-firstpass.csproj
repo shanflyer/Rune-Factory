@@ -1085,10 +1085,6 @@
       <HintPath>D:\Unity\6000.1.0f1\Editor\Data\NetStandard\compat\2.1.0\shims\netfx\System.Xml.Serialization.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="PsdPlugin">
-      <HintPath>Library\ScriptAssemblies\PsdPlugin.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Unity.2D.Common.Path.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Common.Path.Editor.dll</HintPath>
       <Private>False</Private>
@@ -1191,10 +1187,6 @@
     </Reference>
     <Reference Include="Unity.2D.Sprite.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Unity.2D.Psdimporter.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.Psdimporter.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.Recorder.Editor">
@@ -1391,6 +1383,10 @@
       <Project>{E8E901E2-1D21-EC8C-720F-0CECE483E82D}</Project>
       <Name>Unity.PlayableGraphVisualizer.Editor</Name>
     </ProjectReference>
+    <ProjectReference Include="PsdPlugin.csproj">
+      <Project>{798850BD-FA09-1508-FB56-C2AC5BBB5ED3}</Project>
+      <Name>PsdPlugin</Name>
+    </ProjectReference>
     <ProjectReference Include="VoxelBusters.CoreLibrary.NativePlugins.iOSModule.csproj">
       <Project>{2FAA92A9-5C84-86FD-DDB6-717D0DFC328D}</Project>
       <Name>VoxelBusters.CoreLibrary.NativePlugins.iOSModule</Name>
@@ -1466,6 +1462,10 @@
     <ProjectReference Include="Unity.RenderPipelines.Universal.Runtime.csproj">
       <Project>{64A618A7-4C0D-3AC3-1BC7-98C20C8BF76D}</Project>
       <Name>Unity.RenderPipelines.Universal.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.2D.Psdimporter.Editor.csproj">
+      <Project>{B639AAC1-C661-4F85-F185-7C4112C21327}</Project>
+      <Name>Unity.2D.Psdimporter.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Core.Runtime.csproj">
       <Project>{44DB9725-DD7A-7012-CCE0-9DD1CF03DAF2}</Project>
