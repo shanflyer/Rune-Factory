@@ -32,6 +32,7 @@ public class BonePoseController : MonoBehaviour
             if (!group.gameObject.activeSelf)
             {
                 spriteBone.HideGroup.Add(group.name);
+                continue;
             }
             if (!string.IsNullOrEmpty(spriteBone.DisplayGroup))
             {

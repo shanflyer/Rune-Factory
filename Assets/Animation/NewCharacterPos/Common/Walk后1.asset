@@ -1,0 +1,147 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4213e64e68dd1914c9727a230cf99324, type: 3}
+  m_Name: "Walk\u540E1"
+  m_EditorClassIdentifier: 
+  DisplayBonePoses:
+  - name: Back_Root/Back_Body
+    position: {x: 0.0973, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 0.38174686}
+  - name: Back_Root/Back_Body/Back_Head
+    position: {x: 0.2732, y: 0.0019, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 358.93835}
+  - name: Back_Root/Back_Body/Back_Head/Back_Hat
+    position: {x: 0.18874167, y: -0.000000050508966, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 1.0094746}
+  - name: Back_Root/Back_Body/Back_Head/Back_Hair_Center0
+    position: {x: 0.17616163, y: -0.0065692216, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 185.12985}
+  - name: Back_Root/Back_Body/Back_Head/Back_Hair_Center0/Back_Hair_Left0
+    position: {x: -0.015159181, y: -0.10496555, z: 0}
+    scale: {x: 0.99999976, y: 0.99999976, z: 1}
+    angle: {x: -0, y: 0, z: 342.81882}
+  - name: Back_Root/Back_Body/Back_Head/Back_Hair_Center0/Back_Hair_Left0/Back_Hair_Left1
+    position: {x: 0.1095995, y: -0.000000019100874, z: 0}
+    scale: {x: 1.0000001, y: 1.0000001, z: 1}
+    angle: {x: -0, y: 0, z: 0.09591976}
+  - name: Back_Root/Back_Body/Back_Head/Back_Hair_Center0/Back_Hair_Right0
+    position: {x: 0.009108578, y: 0.08740077, z: 0}
+    scale: {x: 0.99999976, y: 0.99999976, z: 1}
+    angle: {x: -0, y: 0, z: 5.7422786}
+  - name: Back_Root/Back_Body/Back_Head/Back_Hair_Center0/Back_Hair_Right0/Back_Hair_Right1
+    position: {x: 0.110613495, y: 0.000000030732238, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 358.6756}
+  - name: Back_Root/Back_Body/Back_Head/Back_Hair_Center0/Back_Hair_Center1
+    position: {x: 0.13191375, y: -0.000000022850877, z: 0}
+    scale: {x: 0.99999976, y: 0.99999976, z: 1}
+    angle: {x: -0, y: 0, z: 351.84586}
+  - name: Back_Root/Back_Body/Back_LeftArm_Up
+    position: {x: 0.29891753, y: 0.074709296, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 154.88753}
+  - name: Back_Root/Back_Body/Back_LeftArm_Up/Back_LeftArm_Down
+    position: {x: 0.13365343, y: 0.0029001087, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 352.91342}
+  - name: Back_Root/Back_Body/Back_LeftArm_Up/Back_LeftArm_Down/Back_LeftHand
+    position: {x: 0.080670655, y: -0.000000025941201, z: 0}
+    scale: {x: 0.99999976, y: 0.99999976, z: 1}
+    angle: {x: -0, y: 0, z: 345.96048}
+  - name: Back_Root/Back_Body/Back_LeftArm_Up/Back_LeftArm_Down/Back_LeftHand/Back_Left_Weapon
+    position: {x: 0.0021266658, y: 0.014106888, z: 0}
+    scale: {x: 1.0000002, y: 1.0000002, z: 1}
+    angle: {x: -0, y: 0, z: 4.824342}
+  - name: Back_Root/Back_Body/Back_RightArm_Up
+    position: {x: 0.3119482, y: -0.06739631, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 212.92247}
+  - name: Back_Root/Back_Body/Back_RightArm_Up/Back_RightArm_Down
+    position: {x: 0.10213242, y: 0.00021400303, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 346.29245}
+  - name: Back_Root/Back_Body/Back_RightArm_Up/Back_RightArm_Down/Back_RightHand
+    position: {x: 0.07697527, y: -0.0014073399, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 344.13315}
+  - name: Back_Root/Back_Body/Back_RightArm_Up/Back_RightArm_Down/Back_RightHand/Back_Right_Weapon
+    position: {x: -0.00026027436, y: -0.020988006, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 357.34256}
+  - name: Back_Root/Back_Body/Back_Skirt_Center
+    position: {x: 0.14121147, y: -0.0011289336, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 176.93147}
+  - name: Back_Root/Back_Body/Back_Skirt_Center/Back_Skirt_Left
+    position: {x: -0.0037336834, y: -0.042480554, z: 0}
+    scale: {x: 0.9999999, y: 0.9999999, z: 1}
+    angle: {x: -0, y: 0, z: 345.85052}
+  - name: Back_Root/Back_Body/Back_Skirt_Center/Back_Skirt_Right
+    position: {x: 0.014627253, y: 0.06672013, z: 0}
+    scale: {x: 0.9999999, y: 0.9999999, z: 1}
+    angle: {x: -0, y: 0, z: 13.138905}
+  - name: Back_Root/Back_Body/Back_Cock_Center0
+    position: {x: 0.33525667, y: 0.016511474, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: -0, z: 179.86884}
+  - name: Back_Root/Back_Body/Back_Cock_Center0/Back_Cock_Center1
+    position: {x: 0.1718043, y: 0.0000012750324, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 356.5208}
+  - name: Back_Root/Back_Body/Back_Cock_Center0/Back_Cock_Left0
+    position: {x: -0.0066487743, y: -0.056786582, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 335.09097}
+  - name: Back_Root/Back_Body/Back_Cock_Center0/Back_Cock_Left0/Back_Cock_Left1
+    position: {x: 0.15097752, y: 0.000000019505297, z: 0}
+    scale: {x: 1.0000001, y: 1.0000001, z: 1}
+    angle: {x: -0, y: 0, z: 359.1958}
+  - name: Back_Root/Back_Body/Back_Cock_Center0/Back_Cock_Right0
+    position: {x: -0.0042501036, y: 0.092786044, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 19.731873}
+  - name: Back_Root/Back_Body/Back_Cock_Center0/Back_Cock_Right0/Back_Cock_Right1
+    position: {x: 0.15026878, y: -0.0000000127150335, z: 0}
+    scale: {x: 0.9999999, y: 0.9999999, z: 1}
+    angle: {x: -0, y: 0, z: 338.80896}
+  - name: Back_Root/Back_LeftLeg_Up
+    position: {x: 0.26437598, y: 0.035699993, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 176.0274}
+  - name: Back_Root/Back_LeftLeg_Up/Back_LeftLeg_Down
+    position: {x: 0.111437, y: 0.0064757657, z: 0}
+    scale: {x: 0.99999964, y: 0.99999964, z: 1}
+    angle: {x: -0, y: 0, z: 358.1025}
+  - name: Back_Root/Back_LeftLeg_Up/Back_LeftLeg_Down/Back_LeftFoot
+    position: {x: 0.08126008, y: 0.004234104, z: 0}
+    scale: {x: 1.0000001, y: 1.0000001, z: 1}
+    angle: {x: -0, y: 0, z: 275.4567}
+  - name: Back_Root/Back_RightLeg_Up
+    position: {x: 0.228, y: -0.041, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 186.73277}
+  - name: Back_Root/Back_RightLeg_Up/Back_RightLeg_Down
+    position: {x: 0.12713362, y: -0.0023948895, z: 0}
+    scale: {x: 0.99999964, y: 0.99999964, z: 1}
+    angle: {x: -0, y: 0, z: 4.9363713}
+  - name: Back_Root/Back_RightLeg_Up/Back_RightLeg_Down/Back_RightFoot
+    position: {x: 0.083523765, y: -0.01760336, z: 0}
+    scale: {x: 1, y: 1.0000002, z: 1}
+    angle: {x: -0, y: 0, z: 67.75642}
+  HideGroup:
+  - Front_Root
+  - Left_Root
+  DisplayGroup: Back_Root
