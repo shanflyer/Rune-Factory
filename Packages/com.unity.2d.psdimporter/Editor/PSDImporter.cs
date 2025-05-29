@@ -130,9 +130,9 @@ namespace UnityEditor.U2D.PSD
 
 #if ENABLE_2D_ANIMATION
         // CharacterData for shared rig mode
-        [SerializeField] CharacterData m_SharedRigCharacterData = new CharacterData();
+        [SerializeField] public CharacterData m_SharedRigCharacterData = new CharacterData();
         // CharacterData for Rig mode
-        [SerializeField] CharacterData m_CharacterData = new CharacterData();
+        [SerializeField] public CharacterData m_CharacterData = new CharacterData();
 #endif
 
         [SerializeField]

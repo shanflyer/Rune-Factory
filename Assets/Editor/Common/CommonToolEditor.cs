@@ -9,7 +9,9 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEditor.Animations;
-using UnityEngine; 
+using UnityEditor.U2D.PSD;
+using UnityEngine;
+using UnityEngine.U2D;
 
 public class CommonToolEditor : MyEditor
 {
@@ -166,9 +168,12 @@ public class CommonToolEditor : MyEditor
         {
             RemoveMissComp();
         }
-        if (GUILayout.Button("增加 spriteRenderer SetPos"))
+         
+        originalPsbPath= EditorGUILayout.TextField("源Psd", originalPsbPath);
+        targePsbPath = EditorGUILayout.TextField("目标路径", targePsbPath);
+        if (GUILayout.Button("复制"))
         {
-            AddSpriteRendererSet();
+            CopyPsdImporter();
         }
         /*
         if (GUILayout.Button("USE_SHAPE_LIGHT_TYPE_0"))
@@ -373,6 +378,46 @@ public class CommonToolEditor : MyEditor
         {
             AssetDatabase.StopAssetEditing();
         }
+    }
+
+    string originalPsbPath;
+    string targePsbPath;
+    public void CopyPsdImporter()
+    {
+        try
+        {
+            AssetDatabase.StartAssetEditing();
+            DirectoryInfo directoryInfo = new DirectoryInfo(targePsbPath);
+            var files = directoryInfo.GetFiles("*.psb");
+            foreach (var file in files)
+            {
+                var filePath = $"{targePsbPath}/{file.Name}";
+                CopyBone(originalPsbPath, filePath);
+            }
+        }
+        finally
+        {
+            AssetDatabase.StopAssetEditing();
+        }
+       
+    }
+    void CopyBone(string originalPath,string targetPath)
+    {
+        if (originalPath == targetPath)
+        {
+            return;
+        }
+        PSDImporter original = (AssetImporter.GetAtPath(originalPath) as PSDImporter);
+        PSDImporter target = (AssetImporter.GetAtPath(targetPath) as PSDImporter);
+        var data2 = target.m_CharacterData;
+        var data1= original.m_CharacterData;
+        data2.bones = data1.bones;
+
+        List<SpriteBone> spriteBones = original.m_CharacterData.bones.ToList();
+
+        target.m_CharacterData.bones=spriteBones.ToArray();
+        target.SaveAndReimport();
+
     }
 
     public void RemoveMissComp()
