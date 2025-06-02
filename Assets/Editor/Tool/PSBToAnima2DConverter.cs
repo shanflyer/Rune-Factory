@@ -323,10 +323,11 @@ public class PSBToAnima2DConverter : EditorWindow
                         AddBone2D(tr,root);
                     }
                 }
+                /*
                 if (child.parent != null && child.parent.gameObject.TryGetComponent<Bone2D>(out var parentBone) && parentBone.child == null)
                 {
                     parentBone.child = newBone;
-                }
+                }*/
 
             }
 
@@ -460,25 +461,7 @@ public class PSBToAnima2DConverter : EditorWindow
       
     }
 
-
-
-   
-    BoneWeight CreateBoneWeightFromUnityBoneWeight(UnityEngine.BoneWeight unityBoneWeight)
-    {
-        BoneWeight boneWeight = new BoneWeight();
-
-        boneWeight.boneIndex0 = unityBoneWeight.boneIndex0;
-        boneWeight.boneIndex1 = unityBoneWeight.boneIndex1;
-        boneWeight.boneIndex2 = unityBoneWeight.boneIndex2;
-        boneWeight.boneIndex3 = unityBoneWeight.boneIndex3;
-        boneWeight.weight0 = unityBoneWeight.weight0;
-        boneWeight.weight1 = unityBoneWeight.weight1;
-        boneWeight.weight2 = unityBoneWeight.weight2;
-        boneWeight.weight3 = unityBoneWeight.weight3;
-
-        return boneWeight;
-    }
-
+     
 
     /// <summary>
     /// 递归复制原始 Prefab 的 Transform 层级，只创建非骨骼节点的空 GameObject，

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!43 &-3359977080621014609
+--- !u!43 &-8357836324997829489
 Mesh:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -18,7 +18,7 @@ Mesh:
     vertexCount: 4
     localAABB:
       m_Center: {x: 0, y: 0, z: 0}
-      m_Extent: {x: 0.055, y: 0.035, z: 0}
+      m_Extent: {x: 0.05, y: 0.035, z: 0}
   m_Shapes:
     vertices: []
     shapes: []
@@ -28,11 +28,11 @@ Mesh:
   - e00: 1
     e01: 0
     e02: 0
-    e03: -0.0710752
+    e03: 0.07591224
     e10: 0
     e11: 1
     e12: 0
-    e13: 0.020483885
+    e13: 0.02746239
     e20: 0
     e21: 0
     e22: 1
@@ -41,14 +41,14 @@ Mesh:
     e31: 0
     e32: 0
     e33: 1
-  - e00: -0.91914546
-    e01: -0.393919
+  - e00: 0.98003167
+    e01: -0.19884165
     e02: 0
-    e03: 0.018577678
-    e10: 0.393919
-    e11: -0.91914546
+    e03: 0.013591439
+    e10: 0.19884165
+    e11: 0.98003167
     e12: 0
-    e13: -0.010256946
+    e13: -0.0035557256
     e20: 0
     e21: 0
     e22: 1
@@ -62,8 +62,8 @@ Mesh:
   m_BonesAABB:
   - m_Min: {x: Infinity, y: Infinity, z: Infinity}
     m_Max: {x: -Infinity, y: -Infinity, z: -Infinity}
-  - m_Min: {x: -0.045762487, y: -0.064092584, z: 0}
-    m_Max: {x: 0.08291785, y: 0.04357869, z: 0}
+  - m_Min: {x: -0.042369604, y: -0.04779892, z: 0}
+    m_Max: {x: 0.06955248, y: 0.040687468, z: 0}
   m_VariableBoneCountWeights:
     m_Data: 
   m_MeshCompression: 0
@@ -133,7 +133,7 @@ Mesh:
       format: 10
       dimension: 4
     m_DataSize: 320
-    _typelessdata: ae4761bd295c0f3d000000000000000000000000000080bf0000803f0000000000000000000080bfae47613d295c0f3d000000000000000000000000000080bf0000803f0000000000000000000080bfae4761bd295c0fbd000000000000000000000000000080bf0000803f0000000000000000000080bfae47613d295c0fbd000000000000000000000000000080bf0000803f0000000000000000000080bf0000073f0000d03d0000123f0000d03d0000073f0000983d0000123f0000983d0000803f000000800000000000000000010000000000000000000000000000000000803f000000000000000000000000010000000000000000000000000000000000803f000000800000000000000000010000000000000000000000000000000000803f00000000000000000000000001000000000000000000000000000000
+    _typelessdata: cdcc4cbd295c0f3d000000000000000000000000000080bf0000803f0000000000000000000080bfcdcc4c3d295c0f3d000000000000000000000000000080bf0000803f0000000000000000000080bfcdcc4cbd295c0fbd000000000000000000000000000080bf0000803f0000000000000000000080bfcdcc4c3d295c0fbd000000000000000000000000000080bf0000803f0000000000000000000080bf00000a3f0000923e0000143f0000923e00000a3f0000843e0000143f0000843e0000803f000000000000000000000000010000000000000000000000000000000000803f000000000000000000000000010000000000000000000000000000000000803f000000000000000000000000010000000000000000000000000000000000803f00000080000000000000000001000000000000000000000000000000
   m_CompressedMesh:
     m_Vertices:
       m_NumItems: 0
@@ -188,7 +188,7 @@ Mesh:
     m_UVInfo: 0
   m_LocalAABB:
     m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.055, y: 0.035, z: 0}
+    m_Extent: {x: 0.05, y: 0.035, z: 0}
   m_MeshUsageFlags: 0
   m_CookingOptions: 30
   m_BakedConvexCollisionMesh: 
@@ -201,23 +201,7 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c10c0be6d28fe4d539c4a39822fe301c, type: 3}
-  m_Name: "\u5DE6\u811A 1"
-  m_EditorClassIdentifier: 
-  m_ApiVersion: 4
-  m_Sprite: {fileID: -1405648083, guid: 7ba74f0aa6cc4744099933b51ce08638, type: 3}
-  m_SharedMesh: {fileID: -3359977080621014609}
-  m_SharedMaterials: []
---- !u!114 &7020885521286243605
+--- !u!114 &-7523816076396783667
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -229,15 +213,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e715ea371f114f4a8d2584ad476634d, type: 3}
   m_Name: "\u5DE6\u811A 1_Data"
   m_EditorClassIdentifier: 
-  m_PivotPoint: {x: 140.5, y: 22.5}
+  m_PivotPoint: {x: 143, y: 69.5}
   m_Vertices:
-  - {x: 135, y: 26}
-  - {x: 146, y: 26}
-  - {x: 135, y: 19}
-  - {x: 146, y: 19}
+  - {x: 138, y: 73}
+  - {x: 148, y: 73}
+  - {x: 138, y: 66}
+  - {x: 148, y: 66}
   m_BoneWeights:
   - weight0: 1
-    weight1: -0
+    weight1: 0
+    weight2: 0
+    weight3: 0
+    boneIndex0: 1
+    boneIndex1: 0
+    boneIndex2: 0
+    boneIndex3: 0
+  - weight0: 1
+    weight1: 0
     weight2: 0
     weight3: 0
     boneIndex0: 1
@@ -254,14 +246,6 @@ MonoBehaviour:
     boneIndex3: 0
   - weight0: 1
     weight1: -0
-    weight2: 0
-    weight3: 0
-    boneIndex0: 1
-    boneIndex1: 0
-    boneIndex2: 0
-    boneIndex3: 0
-  - weight0: 1
-    weight1: 0
     weight2: 0
     weight3: 0
     boneIndex0: 1
@@ -284,11 +268,11 @@ MonoBehaviour:
       e00: 1
       e01: 0
       e02: 0
-      e03: -0.0710752
+      e03: 0.07591224
       e10: 0
       e11: 1
       e12: 0
-      e13: 0.020483885
+      e13: 0.02746239
       e20: 0
       e21: 0
       e22: 1
@@ -299,18 +283,18 @@ MonoBehaviour:
       e33: 1
     boneLength: 0
     path: 
-    name: Front_Root
+    name: Back_Root
     color: {r: 1, g: 0, b: 0, a: 1}
     zOrder: 0
   - bindPose:
-      e00: -0.91914546
-      e01: -0.393919
+      e00: 0.98003167
+      e01: -0.19884165
       e02: 0
-      e03: 0.018577678
-      e10: 0.393919
-      e11: -0.91914546
+      e03: 0.013591439
+      e10: 0.19884165
+      e11: 0.98003167
       e12: 0
-      e13: -0.010256946
+      e13: -0.0035557256
       e20: 0
       e21: 0
       e22: 1
@@ -320,8 +304,24 @@ MonoBehaviour:
       e32: 0
       e33: 1
     boneLength: 0.0325
-    path: Front_LeftLeg_Up/Front_LeftLeg_Down/Front_LeftFoot
-    name: Front_LeftFoot
+    path: Back_RightLeg_Up/Back_RightLeg_Down/Back_RightFoot
+    name: Back_RightFoot
     color: {r: 1, g: 0.75, b: 0, a: 1}
     zOrder: 0
   m_Blendshapes: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c10c0be6d28fe4d539c4a39822fe301c, type: 3}
+  m_Name: "\u5DE6\u811A 1"
+  m_EditorClassIdentifier: 
+  m_ApiVersion: 4
+  m_Sprite: {fileID: 1029471228, guid: 7ba74f0aa6cc4744099933b51ce08638, type: 3}
+  m_SharedMesh: {fileID: -8357836324997829489}
+  m_SharedMaterials: []
