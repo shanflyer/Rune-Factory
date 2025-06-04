@@ -133,7 +133,7 @@ namespace UnityEngine.U2D.Animation
         // The order of storage if present is POSITION, NORMALS, TANGENTS.
         NativeByteArray m_DeformedVertices;
         int m_CurrentDeformVerticesLength = 0;
-        SpriteRenderer m_SpriteRenderer;
+        public SpriteRenderer m_SpriteRenderer;
         int m_CurrentDeformSprite = 0;
         int m_SpriteId = 0;
         bool m_IsValid = false;
@@ -188,7 +188,7 @@ namespace UnityEngine.U2D.Animation
         /// </summary>
         internal int vertexDeformationHash => m_VertexDeformationHash;
 
-        internal Sprite sprite => m_Sprite;
+        public Sprite sprite => m_Sprite;
         internal SpriteRenderer spriteRenderer => m_SpriteRenderer;
         internal NativeCustomSlice<BoneWeight> spriteBoneWeights => m_SpriteBoneWeights;
 
@@ -868,7 +868,7 @@ namespace UnityEngine.U2D.Animation
             m_StaticOutlineVertexCache = vertexCache;
         }
 #endif
-        internal void CopyToSpriteSkinData(ref SpriteSkinData data)
+        public void CopyToSpriteSkinData(ref SpriteSkinData data)
         {
             if (!m_BoneCacheUpdateToDate)
                 RefreshBoneTransforms();

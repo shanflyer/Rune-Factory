@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;  
-using System.Linq; 
+using System.Linq;
 #if UNITY_EDITOR
 using System;
 using UnityEditor;
@@ -13,7 +13,7 @@ public class BonePoseController : MonoBehaviour
     public AnimationClip animationClip;
     HashSet<string> SpecialParts = new HashSet<string>
     {
-        {"前"},{"左"},{"后"},{"Shadow"},{"Other"}
+          {"前"},{"左"},{"后"},{"鱼线"},{"鱼竿"},{"Shadow"},{"Other"},{"Equip"}
     };
     public void TransformToPoseData()
     {
@@ -27,6 +27,20 @@ public class BonePoseController : MonoBehaviour
         {
             if (SpecialParts.Contains(group.name))
             {
+                if (group.gameObject.activeSelf)
+                {
+                    var spriteRenderers = group.GetComponentsInChildren<SpriteRenderer>();
+                    for (int i = 0; i < spriteRenderers.Length; i++)
+                    {
+                        var path = GetPartPath(spriteRenderers[i].transform, transform);
+                        LayerPart layerPart = new LayerPart
+                        {
+                            layerOrder = spriteRenderers[i].sortingOrder,
+                            name = path
+                        };
+                        spriteBone.LayerParts.Add(layerPart);
+                    }
+                }
                 continue;
             }
             if (!group.gameObject.activeSelf)
@@ -48,10 +62,12 @@ public class BonePoseController : MonoBehaviour
                 if (child == group)
                 {
                     continue;
-                }
+                } 
+               
                 BonePose bonePose = new BonePose(child,GetPartPath(child,transform));
                 spriteBone.DisplayBonePoses.Add(bonePose);
             }
+           
         }
 #if UNITY_EDITOR
         EditorUtility.SetDirty(spriteBone);
@@ -171,6 +187,10 @@ public class BonePoseController : MonoBehaviour
         Dictionary<string, Transform> transformDic = new Dictionary<string, Transform>();
         for (int i = 0; i < children.Length; i++)
         {
+            if (children[i] == transform || SpecialParts.Contains(children[i].name))
+            {
+                continue;
+            }
             transformDic.Add(children[i].name, children[i]);
         }
         if (transformDic.TryGetValue(spriteBone.DisplayGroup, out var displayChild))
@@ -198,6 +218,15 @@ public class BonePoseController : MonoBehaviour
                     child.localEulerAngles = bonePose.angle;
                     child.localPosition = bonePose.position;
                     child.localScale = bonePose.scale; 
+                }
+            }
+            for(int i = 0; i < spriteBone.LayerParts.Count; i++)
+            {
+                var layerPart = spriteBone.LayerParts[i];
+                var child= transform.Find(layerPart.name);
+                if(child.TryGetComponent<SpriteRenderer>(out var SpriteRenderer))
+                {
+                    SpriteRenderer.sortingOrder = layerPart.layerOrder;
                 }
             }
              

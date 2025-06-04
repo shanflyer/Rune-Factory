@@ -15,7 +15,7 @@ public class SpriteBonePoseController : MonoBehaviour
     public AnimationClip animationClip;
     HashSet<string> SpecialParts = new HashSet<string>
     {
-        {"前"},{"左"},{"后"},{"Shadow"},{"Other"}
+        {"前"},{"左"},{"后"},{"鱼线"},{"鱼竿"},{"Shadow"},{"Other"}
     };
     public void TransformToPoseData()
     {
@@ -34,14 +34,19 @@ public class SpriteBonePoseController : MonoBehaviour
             if (!group.gameObject.activeSelf)
             {
                 spriteBone.HideGroup.Add(group.name);
+                continue;
             }
-            if (!string.IsNullOrEmpty(spriteBone.DisplayGroup))
+            else
             {
-                group.gameObject.SetActive(false);
-                return;
+                spriteBone.DisplayGroup = group.name;
+            }
+           // if (!string.IsNullOrEmpty(spriteBone.DisplayGroup))
+            {
+          //      group.gameObject.SetActive(false);
+         //       return;
             } 
             var children = group.GetComponentsInChildren<Transform>(true);
-            spriteBone.DisplayGroup = group.name;
+          
             for (int i = 0; i < children.Length; i++)
             {
                 Transform child = children[i];
@@ -200,7 +205,17 @@ public class SpriteBonePoseController : MonoBehaviour
                     child.localScale = bonePose.scale; 
                 }
             }
-             
+            for (int i = 0; i < spriteBone.LayerParts.Count; i++)
+            {
+                var layerPart = spriteBone.LayerParts[i];
+                var child = transform.Find(layerPart.name);
+                if (child.TryGetComponent<SpriteRenderer>(out var SpriteRenderer))
+                {
+                    Undo.RecordObject(SpriteRenderer, "Load Pose");
+                    SpriteRenderer.sortingOrder = layerPart.layerOrder;
+                }
+            }
+
         }
         catch { }
       

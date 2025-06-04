@@ -58,7 +58,7 @@ namespace TexturePackerImporter
         }
 
 
-        private static ISpriteEditorDataProvider GetSpriteEditorDataProvider(TextureImporter importer)
+        public static ISpriteEditorDataProvider GetSpriteEditorDataProvider(TextureImporter importer)
         {
             var dataProviderFactories = new SpriteDataProviderFactories();
             dataProviderFactories.Init();

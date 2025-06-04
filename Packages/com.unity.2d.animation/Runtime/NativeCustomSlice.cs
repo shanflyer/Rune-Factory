@@ -6,7 +6,7 @@ using Unity.Collections.LowLevel.Unsafe;
 
 namespace UnityEngine.U2D.Animation
 {
-    internal struct NativeCustomSlice<T> where T : struct
+    public struct NativeCustomSlice<T> where T : struct
     {
         [NativeDisableUnsafePtrRestriction]
         public IntPtr data;

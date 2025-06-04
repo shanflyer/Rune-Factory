@@ -14,7 +14,7 @@ namespace UnityEngine.U2D.Animation
         public int2 verticesIndex;
     }
 
-    internal struct SpriteSkinData
+    public struct SpriteSkinData
     {
         public NativeCustomSlice<Vector3> vertices;
         public NativeCustomSlice<BoneWeight> boneWeights;

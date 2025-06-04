@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using UnityEditor.U2D.PSD;
 
 namespace Anima2D 
 {
@@ -49,7 +48,6 @@ namespace Anima2D
 		Bone2D hoveredBone { get; set; }
 		
 		TextureImporter m_TextureImporter = null;
-		PSDImporter m_PsDImporter = null;
 		Texture2D m_OriginalTexture = null;
 		
 		List<Color> m_BindPoseColors;
@@ -448,7 +446,7 @@ namespace Anima2D
 			
 			Matrix4x4 old = Handles.matrix;
 			Handles.matrix = m_SpriteMeshMatrix;
-			float radius = 7.5f / (m_TextureImporter!=null?m_TextureImporter.spritePixelsPerUnit / m_Zoom: m_PsDImporter.spritePixelsPerUnit / m_Zoom);
+			float radius = 7.5f / m_TextureImporter.spritePixelsPerUnit / m_Zoom;
 			
 			for (int i = 0; i < m_SpriteMeshCache.spriteMeshInstance.bones.Count; i++)
 			{
@@ -515,9 +513,9 @@ namespace Anima2D
 		{
 			Matrix4x4 old = Handles.matrix;
 			Handles.matrix = m_SpriteMeshMatrix;
-			float radius = 7.5f / (m_TextureImporter != null ? m_TextureImporter.spritePixelsPerUnit / m_Zoom : m_PsDImporter.spritePixelsPerUnit / m_Zoom);
-
-            for (int i = 0; i < m_SpriteMeshCache.bindPoses.Count; i++)
+			float radius = 7.5f / m_TextureImporter.spritePixelsPerUnit / m_Zoom;
+			
+			for (int i = 0; i < m_SpriteMeshCache.bindPoses.Count; i++)
 			{
 				int controlID = GUIUtility.GetControlID ("BindPoseHandle".GetHashCode(), FocusType.Passive);
 				EventType eventType = Event.current.GetTypeForControl(controlID);
@@ -1310,7 +1308,7 @@ namespace Anima2D
 				new Vector3(textureRect.x, textureRect.y + textureRect.height, 0f) +
 				Vector3.Scale(m_SpriteMeshCache.pivotPoint,invertY) * m_Zoom,
 				Quaternion.Euler(0f, 0f, 0f),
-				invertY * m_Zoom *(m_TextureImporter != null ? m_TextureImporter.spritePixelsPerUnit:m_PsDImporter.spritePixelsPerUnit));
+				invertY * m_Zoom * m_TextureImporter.spritePixelsPerUnit);
 		}
 		
 		void DrawMesh(Vector3[] vertices, Vector2[] uvs, Color[] colors, int[] triangles, Material material)
@@ -1545,15 +1543,8 @@ namespace Anima2D
 			
 			int width = 1;
 			int height = 1;
-			if (m_TextureImporter != null)
-			{
-                SpriteMeshUtils.GetWidthAndHeight(m_TextureImporter, ref width, ref height);
-			}
-			else
-			{
-                m_PsDImporter.GetTextureSize(ref width, ref height);
-            }
 			
+			SpriteMeshUtils.GetWidthAndHeight(m_TextureImporter,ref width,ref height);
 			
 			m_ScrollPosition = Vector2.Scale((m_SpriteMeshCache.rect.center - new Vector2(width,height) * 0.5f),new Vector2(1f,-1f)) * m_Zoom;
 		}
@@ -1571,9 +1562,8 @@ namespace Anima2D
 			{
 				m_OriginalTexture = spriteTexture;
 				m_TextureImporter = (AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(m_OriginalTexture)) as TextureImporter);
-                m_PsDImporter= (AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(m_OriginalTexture)) as PSDImporter);
-
-                if (m_Texture)
+				
+				if(m_Texture)
 				{
 					DestroyImmediate(m_Texture);
 				}
@@ -1582,17 +1572,8 @@ namespace Anima2D
 				{
 					int width = 0;
 					int height = 0;
-
-					if (m_TextureImporter)
-					{
-                        SpriteMeshUtils.GetWidthAndHeight(m_TextureImporter, ref width, ref height);
-                    }
-					else
-					{
-						m_PsDImporter.GetTextureSize(ref width,ref height);
-						//m_PsDImporter.
-					}
 					
+					SpriteMeshUtils.GetWidthAndHeight(m_TextureImporter,ref width, ref height);
 					
 					m_Texture = CreateTemporaryDuplicate(m_OriginalTexture,width,height);
 					m_Texture.filterMode = UnityEngine.FilterMode.Point;

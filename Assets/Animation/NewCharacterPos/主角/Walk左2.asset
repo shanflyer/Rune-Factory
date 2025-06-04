@@ -13,14 +13,38 @@ MonoBehaviour:
   m_Name: "Walk\u5DE62"
   m_EditorClassIdentifier: 
   DisplayBonePoses:
+  - name: Left_Root/Left_BackLeg_Up
+    position: {x: -0.010485724, y: 0.25166956, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 290.171}
+  - name: Left_Root/Left_BackLeg_Up/Left_BackLeg_Down
+    position: {x: 0.15216641, y: 0.00000016500398, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: 0, y: 0, z: 2.0459461}
+  - name: Left_Root/Left_BackLeg_Up/Left_BackLeg_Down/Left_BackFoot
+    position: {x: 0.09963378, y: -2.0304469e-10, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 273.93198}
+  - name: Left_Root/Left_FrontLeg_Up
+    position: {x: 0.029652283, y: 0.2626311, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 235.885}
+  - name: Left_Root/Left_FrontLeg_Up/Left_FrontLeg_Down
+    position: {x: 0.14940956, y: 0.000000014901161, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: 0, y: 0, z: 23.206987}
+  - name: Left_Root/Left_FrontLeg_Up/Left_FrontLeg_Down/Left_FrontLeg_Foot
+    position: {x: 0.09916309, y: -0.000000026309863, z: 0}
+    scale: {x: 1.0000001, y: 1.0000001, z: 1}
+    angle: {x: -0, y: 0, z: 303.58698}
   - name: Left_Root/Left_Body
-    position: {x: 0.2076, y: 0.0042, z: 0}
-    scale: {x: 0.99999976, y: 0.99999976, z: 1}
-    angle: {x: -0, y: 0, z: 1.8842516}
+    position: {x: -0.004200056, y: 0.2111999, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 91.61001}
   - name: Left_Root/Left_Body/Left_Head
     position: {x: 0.18181807, y: 0.000001505112, z: 0}
     scale: {x: 1, y: 1, z: 1}
-    angle: {x: -0, y: 0, z: 358.02783}
+    angle: {x: -0, y: 0, z: 357.78796}
   - name: Left_Root/Left_Body/Left_Head/Left_Hat
     position: {x: 0.1522235, y: -0.00000012189133, z: 0}
     scale: {x: 1.0000001, y: 1.0000001, z: 1}
@@ -32,116 +56,94 @@ MonoBehaviour:
   - name: Left_Root/Left_Body/Left_Head/Left_Hair_Front0/Left_Hair_Front1
     position: {x: 0.06641498, y: 0.000000007441482, z: 0}
     scale: {x: 0.99999976, y: 0.99999976, z: 1}
-    angle: {x: -0, y: 0, z: 6.235181}
+    angle: {x: -0, y: 0, z: 5.06048}
   - name: Left_Root/Left_Body/Left_Head/Left_Hair_Back0
     position: {x: 0.26606816, y: -0.056366052, z: 0}
     scale: {x: 1.0000001, y: 1.0000001, z: 1}
     angle: {x: -0, y: 0, z: 204.93385}
   - name: Left_Root/Left_Body/Left_Head/Left_Hair_Back0/Left_Hair_Back1
-    position: {x: 0.16494933, y: -0.00000003588142, z: 0}
-    scale: {x: 1, y: 1, z: 1}
-    angle: {x: -0, y: 0, z: 0.83173144}
-  - name: Left_Root/Left_Body/Left_Head/Left_Hair_Back0/Left_Hair_Back1/Left_Hair_Back2
-    position: {x: 0.077066205, y: -0.00000005648385, z: 0}
-    scale: {x: 1, y: 1, z: 1}
-    angle: {x: -0, y: 0, z: 7.547231}
-  - name: Left_Root/Left_Body/Left_Cloak_Center
-    position: {x: 0.17653266, y: -0.027483175, z: 0}
-    scale: {x: 1, y: 1, z: 1}
-    angle: {x: -0, y: 0, z: 181.93988}
-  - name: Left_Root/Left_Body/Left_Cloak_Center/Left_Cloak_Front
-    position: {x: -0.014799121, y: -0.06448203, z: 0}
-    scale: {x: 1, y: 1, z: 1}
-    angle: {x: -0, y: 0, z: 324.46228}
-  - name: Left_Root/Left_Body/Left_Cloak_Center/Left_Cloak_Back0
-    position: {x: 0.046511695, y: 0.046511617, z: 0}
-    scale: {x: 1, y: 1, z: 1}
-    angle: {x: -0, y: 0, z: 19.554012}
-  - name: Left_Root/Left_Body/Left_Cloak_Center/Left_Cloak_Back0/Left_Cloak_Back1
-    position: {x: 0.09614802, y: 0.00000001063933, z: 0}
-    scale: {x: 1.0000001, y: 1.0000001, z: 1}
-    angle: {x: -0, y: 0, z: 6.3761907}
-  - name: Left_Root/Left_Body/Left_FrontArm_Up
-    position: {x: 0.16807592, y: -0.053910233, z: 0}
-    scale: {x: 1, y: 1, z: 1}
-    angle: {x: -0, y: 0, z: 196.30188}
-  - name: Left_Root/Left_Body/Left_FrontArm_Up/Left_FrontArm_Down
-    position: {x: 0.11549039, y: 0.00000009844806, z: 0}
-    scale: {x: 1, y: 1, z: 1}
-    angle: {x: -0, y: 0, z: 349.76898}
-  - name: Left_Root/Left_Body/Left_FrontArm_Up/Left_FrontArm_Down/Left_FrontHand
-    position: {x: 0.06692877, y: 0.00000008757865, z: 0}
+    position: {x: 0.16494928, y: -0.000000004321846, z: 0}
     scale: {x: 0.9999999, y: 0.9999999, z: 1}
-    angle: {x: -0, y: 0, z: 0.26691198}
-  - name: Left_Root/Left_Body/Left_FrontArm_Up/Left_FrontArm_Down/Left_FrontHand/Left_Body_11
-    position: {x: 0.012432229, y: -0.020607539, z: 0}
-    scale: {x: 1.0000001, y: 1.0000001, z: 1}
-    angle: {x: -0, y: 0, z: 352.78925}
-  - name: Left_Root/Left_Body/Left_FrontArm_Up/Left_FrontArm_Down/Left_FrontHand/Left_Front_Weapon
-    position: {x: -0.004062164, y: -0.016851798, z: 0}
-    scale: {x: 1.0000001, y: 1.0000001, z: 1}
-    angle: {x: -0, y: 0, z: 353.55734}
-  - name: Left_Root/Left_Body/Left_FrontArm_Up/Left_FrontShoulder
-    position: {x: 0.01097085, y: 0.013760405, z: 0}
+    angle: {x: -0, y: 0, z: 355.55402}
+  - name: Left_Root/Left_Body/Left_Head/Left_Hair_Back0/Left_Hair_Back1/Left_Hair_Back2
+    position: {x: 0.077066176, y: -0.000000040537554, z: 0}
     scale: {x: 1, y: 1, z: 1}
-    angle: {x: -0, y: 0, z: 1.0664248}
+    angle: {x: -0, y: 0, z: 2.3429525}
+  - name: Left_Root/Left_Body/Left_Cloak_Center
+    position: {x: 0.21401487, y: -0.02748318, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 180}
+  - name: Left_Root/Left_Body/Left_Cloak_Center/Left_Cloak_Front
+    position: {x: -0.0006836693, y: -0.06347377, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 312.78296}
+  - name: Left_Root/Left_Body/Left_Cloak_Center/Left_Cloak_Back0
+    position: {x: -0.009446051, y: 0.06818899, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 15.307004}
+  - name: Left_Root/Left_Body/Left_Cloak_Center/Left_Cloak_Back0/Left_Cloak_Back1
+    position: {x: 0.109975345, y: -0.000000007866005, z: 0}
+    scale: {x: 1.0000001, y: 1.0000001, z: 1}
+    angle: {x: -0, y: 0, z: 13.358997}
+  - name: Left_Root/Left_Body/Left_FrontArm_Up
+    position: {x: 0.16838354, y: -0.060985424, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 196.207}
+  - name: Left_Root/Left_Body/Left_FrontArm_Up/Left_FrontArm_Down
+    position: {x: 0.12398581, y: 0.004319437, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: 0, y: 0, z: 7.269945}
+  - name: Left_Root/Left_Body/Left_FrontArm_Up/Left_FrontArm_Down/Left_FrontHand
+    position: {x: 0.07530961, y: 0.010024163, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 329.302}
+  - name: Left_Root/Left_Body/Left_FrontArm_Up/Left_FrontArm_Down/Left_FrontHand/Left_Body_11
+    position: {x: 0.02724538, y: -0.032265387, z: 0}
+    scale: {x: 1.0000002, y: 1.0000002, z: 1}
+    angle: {x: 0, y: 0, z: 11.609975}
+  - name: Left_Root/Left_Body/Left_FrontArm_Up/Left_FrontArm_Down/Left_FrontHand/Left_Front_Weapon
+    position: {x: 0.003698934, y: -0.018284617, z: 0}
+    scale: {x: 1.0000002, y: 1.0000002, z: 1}
+    angle: {x: -0, y: 0, z: 356.736}
+  - name: Left_Root/Left_Body/Left_FrontArm_Up/Left_FrontShoulder
+    position: {x: 0.00094293716, y: 0.01510945, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: 0, y: 0, z: 357.818}
   - name: Left_Root/Left_Body/Left_Skirt_Center
     position: {x: 0.06342468, y: 0.0042293095, z: 0}
     scale: {x: 1, y: 1, z: 1}
-    angle: {x: -0, y: 0, z: 175.58858}
+    angle: {x: -0, y: 0, z: 180}
   - name: Left_Root/Left_Body/Left_Skirt_Center/Left_Skirt_Left
     position: {x: -0.000000113652796, y: -0.04016915, z: 0}
     scale: {x: 1, y: 1, z: 1}
-    angle: {x: -0, y: 0, z: 332.14966}
+    angle: {x: -0, y: 0, z: 342.3954}
   - name: Left_Root/Left_Body/Left_Skirt_Center/Left_Skirt_Right
     position: {x: 0.0013517863, y: 0.040180035, z: 0}
     scale: {x: 1, y: 1, z: 1}
-    angle: {x: -0, y: 0, z: 23.261705}
+    angle: {x: -0, y: 0, z: 26.284883}
   - name: Left_Root/Left_Body/Left_BackArm_Up
-    position: {x: 0.16239114, y: 0.022003934, z: 0}
+    position: {x: 0.16709936, y: 0.0075019896, z: 0}
     scale: {x: 1, y: 1, z: 1}
-    angle: {x: -0, y: 0, z: 156.003}
+    angle: {x: -0, y: 0, z: 157.21999}
   - name: Left_Root/Left_Body/Left_BackArm_Up/Left_BackArm_Down
-    position: {x: 0.109, y: 0.0069, z: 0}
+    position: {x: 0.10245639, y: 0.000000073070666, z: 0}
     scale: {x: 1, y: 1, z: 1}
-    angle: {x: -0, y: 0, z: 336.90503}
+    angle: {x: -0, y: 0, z: 343.587}
   - name: Left_Root/Left_Body/Left_BackArm_Up/Left_BackArm_Down/Left_BackHand
-    position: {x: 0.07734662, y: 0.0000000055149143, z: 0}
-    scale: {x: 0.9999999, y: 0.9999999, z: 1}
-    angle: {x: -0, y: 0, z: 340.1923}
-  - name: Left_Root/Left_Body/Left_BackArm_Up/Left_BackArm_Down/Left_BackHand/Left_Back_Weapon
-    position: {x: -0.00038314526, y: -0.014016776, z: 0}
-    scale: {x: 1.0000004, y: 1.0000004, z: 1}
-    angle: {x: -0, y: 0, z: 358.14334}
-  - name: Left_Root/Left_Body/Left_BackArm_Up/Left_BackShoulder
-    position: {x: 0.002242518, y: -0.013617516, z: 0}
+    position: {x: 0.08247771, y: -0.010882266, z: 0}
     scale: {x: 1, y: 1, z: 1}
-    angle: {x: -0, y: 0, z: 357.44263}
-  - name: Left_Root/Left_FrontLeg_Up
-    position: {x: 0.2761546, y: -0.023905069, z: 0}
-    scale: {x: 0.99999976, y: 0.99999976, z: 1}
-    angle: {x: -0, y: 0, z: 149.5117}
-  - name: Left_Root/Left_FrontLeg_Up/Left_FrontLeg_Down
-    position: {x: 0.15275125, y: -0.00814903, z: 0}
-    scale: {x: 0.99999976, y: 0.99999976, z: 1}
-    angle: {x: -0, y: 0, z: 19.106112}
-  - name: Left_Root/Left_FrontLeg_Up/Left_FrontLeg_Down/Left_FrontLeg_Foot
-    position: {x: 0.093726926, y: -0.0040918286, z: 0}
-    scale: {x: 1.0000001, y: 1.0000001, z: 1}
-    angle: {x: -0, y: 0, z: 302.67188}
-  - name: Left_Root/Left_BackLeg_Up
-    position: {x: 0.2696686, y: 0.029723275, z: 0}
-    scale: {x: 0.99999976, y: 0.99999976, z: 1}
-    angle: {x: -0, y: 0, z: 192.89233}
-  - name: Left_Root/Left_BackLeg_Up/Left_BackLeg_Down
-    position: {x: 0.15216583, y: -0.00000003246465, z: 0}
-    scale: {x: 1.0000001, y: 1.0000001, z: 1}
-    angle: {x: -0, y: 0, z: 7.3252635}
-  - name: Left_Root/Left_BackLeg_Up/Left_BackLeg_Down/Left_BackFoot
-    position: {x: 0.103444114, y: 0.006427312, z: 0}
-    scale: {x: 0.9999999, y: 0.9999999, z: 1}
-    angle: {x: -0, y: 0, z: 266.7985}
+    angle: {x: -0, y: 0, z: 325.17996}
+  - name: Left_Root/Left_Body/Left_BackArm_Up/Left_BackArm_Down/Left_BackHand/Left_Back_Weapon
+    position: {x: 0.0013217482, y: -0.019401632, z: 0}
+    scale: {x: 1.0000002, y: 1.0000002, z: 1}
+    angle: {x: -0, y: 0, z: 358.269}
+  - name: Left_Root/Left_Body/Left_BackArm_Up/Left_BackShoulder
+    position: {x: 0.0005757285, y: -0.013788797, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 350.481}
+  LayerParts: []
   HideGroup:
   - Front_Root
   - Back_Root
+  - Curve
   DisplayGroup: Left_Root

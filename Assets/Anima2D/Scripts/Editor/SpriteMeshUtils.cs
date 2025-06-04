@@ -7,7 +7,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using TriangleNet.Geometry;
-using UnityEditor.U2D.PSD;
 
 namespace Anima2D 
 {
@@ -293,15 +292,8 @@ namespace Anima2D
 				Texture2D texture = SpriteUtility.GetSpriteTexture(sprite,false);
 				
 				TextureImporter textureImporter = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(texture)) as TextureImporter;
-				if (textureImporter == null && texture != null)
-				{
-					 PSDImporter pSDImporter = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(sprite)) as PSDImporter; 
-                    width = texture.width; height= texture.height;
-				}
-				else
-				{
-                    GetWidthAndHeight(textureImporter, ref width, ref height);
-                } 
+				
+				GetWidthAndHeight(textureImporter,ref width, ref height);
 			}
 		}
 		
@@ -321,16 +313,8 @@ namespace Anima2D
 		public static float GetSpritePixelsPerUnit(Sprite sprite)
 		{
 			TextureImporter textureImporter = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(sprite)) as TextureImporter;
-			if (textureImporter == null)
-			{
-                PSDImporter pSDImporter = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(sprite)) as PSDImporter;
-				return pSDImporter.spritePixelsPerUnit;
-			}
-			else
-			{
-                return textureImporter.spritePixelsPerUnit;
-            } 
-          
+			
+			return textureImporter.spritePixelsPerUnit;
 		}
 		
 		static void InitFromSprite(SpriteMesh spriteMesh, Sprite sprite)
@@ -748,114 +732,128 @@ namespace Anima2D
 		{
 			return spriteMeshInstance.spriteMesh && !HasNullBones(spriteMeshInstance) && spriteMeshInstance.bones.Count > 0 && (spriteMeshInstance.spriteMesh.sharedMesh.bindposes.Length == spriteMeshInstance.bones.Count);
 		}
-		
-		public static void UpdateRenderer(SpriteMeshInstance spriteMeshInstance, bool undo = true)
-		{
-			if(!spriteMeshInstance)
-			{
-				return;
-			}
-			
-			SerializedObject spriteMeshInstaceSO = new SerializedObject(spriteMeshInstance);
-			
-			SpriteMesh spriteMesh = spriteMeshInstaceSO.FindProperty("m_SpriteMesh").objectReferenceValue as SpriteMesh;
-			
-			if(spriteMesh)
-			{
-				Mesh sharedMesh = spriteMesh.sharedMesh;
-				
-				if(sharedMesh.bindposes.Length > 0 && spriteMeshInstance.bones.Count > sharedMesh.bindposes.Length)
-				{
-					spriteMeshInstance.bones = spriteMeshInstance.bones.GetRange(0,sharedMesh.bindposes.Length);
-				}
-				
-				if(CanEnableSkinning(spriteMeshInstance))
-				{
-					MeshFilter meshFilter = spriteMeshInstance.cachedMeshFilter;
-					MeshRenderer meshRenderer = spriteMeshInstance.cachedRenderer as MeshRenderer;
-					
-					if(meshFilter)
-					{
-						if(undo)
-						{
-							Undo.DestroyObjectImmediate(meshFilter);
-						}else{
-							GameObject.DestroyImmediate(meshFilter);
-						}
-					}
-					if(meshRenderer)
-					{
-						if(undo)
-						{
-							Undo.DestroyObjectImmediate(meshRenderer);
-						}else{
-							GameObject.DestroyImmediate(meshRenderer);
-						}
-					}
-					
-					SkinnedMeshRenderer skinnedMeshRenderer = spriteMeshInstance.cachedSkinnedRenderer;
-					
-					if(!skinnedMeshRenderer)
-					{
-						if(undo)
-						{
-							skinnedMeshRenderer = Undo.AddComponent<SkinnedMeshRenderer>(spriteMeshInstance.gameObject);
-						}else{
-							skinnedMeshRenderer = spriteMeshInstance.gameObject.AddComponent<SkinnedMeshRenderer>();
-						}
-					}
-					
-					skinnedMeshRenderer.bones = spriteMeshInstance.bones.ConvertAll( bone => bone.transform ).ToArray();
-					
-					if(spriteMeshInstance.bones.Count > 0)
-					{
-						skinnedMeshRenderer.rootBone = spriteMeshInstance.bones[0].transform;
-					}
 
-					EditorUtility.SetDirty(skinnedMeshRenderer);
-				}else{
-					SkinnedMeshRenderer skinnedMeshRenderer = spriteMeshInstance.cachedSkinnedRenderer;
-					MeshFilter meshFilter = spriteMeshInstance.cachedMeshFilter;
-					MeshRenderer meshRenderer = spriteMeshInstance.cachedRenderer as MeshRenderer;
-					
-					if(skinnedMeshRenderer)
-					{
-						if(undo)
-						{
-							Undo.DestroyObjectImmediate(skinnedMeshRenderer);
-						}else{
-							GameObject.DestroyImmediate(skinnedMeshRenderer);
-						}
-					}
-					
-					if(!meshFilter)
-					{
-						if(undo)
-						{
-							meshFilter = Undo.AddComponent<MeshFilter>(spriteMeshInstance.gameObject);
-						}else{
-							meshFilter = spriteMeshInstance.gameObject.AddComponent<MeshFilter>();
-						}
+        public static void UpdateRenderer(SpriteMeshInstance spriteMeshInstance, bool undo = true)
+        {
+            if (!spriteMeshInstance)
+            {
+                return;
+            }
 
-						EditorUtility.SetDirty(meshFilter);
-					}
-					
-					if(!meshRenderer)
-					{
-						if(undo)
-						{
-							meshRenderer = Undo.AddComponent<MeshRenderer>(spriteMeshInstance.gameObject);
-						}else{
-							meshRenderer = spriteMeshInstance.gameObject.AddComponent<MeshRenderer>();
-						}
-						
-						EditorUtility.SetDirty(meshRenderer);
-					}
-				}
-			}
-		}
-		
-		public static bool NeedsOverride(SpriteMesh spriteMesh)
+            SerializedObject spriteMeshInstaceSO = new SerializedObject(spriteMeshInstance);
+
+            SpriteMesh spriteMesh = spriteMeshInstaceSO.FindProperty("m_SpriteMesh").objectReferenceValue as SpriteMesh;
+
+            if (spriteMesh)
+            {
+                Mesh sharedMesh = spriteMesh.sharedMesh;
+
+                if (sharedMesh.bindposes.Length > 0 && spriteMeshInstance.bones.Count > sharedMesh.bindposes.Length)
+                {
+                    spriteMeshInstance.bones = spriteMeshInstance.bones.GetRange(0, sharedMesh.bindposes.Length);
+                }
+
+                if (CanEnableSkinning(spriteMeshInstance))
+                {
+                    MeshFilter meshFilter = spriteMeshInstance.cachedMeshFilter;
+                    MeshRenderer meshRenderer = spriteMeshInstance.cachedRenderer as MeshRenderer;
+
+                    if (meshFilter)
+                    {
+                        if (undo)
+                        {
+                            Undo.DestroyObjectImmediate(meshFilter);
+                        }
+                        else
+                        {
+                            GameObject.DestroyImmediate(meshFilter);
+                        }
+                    }
+                    if (meshRenderer)
+                    {
+                        if (undo)
+                        {
+                            Undo.DestroyObjectImmediate(meshRenderer);
+                        }
+                        else
+                        {
+                            GameObject.DestroyImmediate(meshRenderer);
+                        }
+                    }
+
+                    SkinnedMeshRenderer skinnedMeshRenderer = spriteMeshInstance.cachedSkinnedRenderer;
+
+                    if (!skinnedMeshRenderer)
+                    {
+                        if (undo)
+                        {
+                            skinnedMeshRenderer = Undo.AddComponent<SkinnedMeshRenderer>(spriteMeshInstance.gameObject);
+                        }
+                        else
+                        {
+                            skinnedMeshRenderer = spriteMeshInstance.gameObject.AddComponent<SkinnedMeshRenderer>();
+                        }
+                    }
+
+                    skinnedMeshRenderer.bones = spriteMeshInstance.bones.ConvertAll(bone => bone.transform).ToArray();
+
+                    if (spriteMeshInstance.bones.Count > 0)
+                    {
+                        skinnedMeshRenderer.rootBone = spriteMeshInstance.bones[0].transform;
+                    }
+
+                    EditorUtility.SetDirty(skinnedMeshRenderer);
+                }
+                else
+                {
+                    SkinnedMeshRenderer skinnedMeshRenderer = spriteMeshInstance.cachedSkinnedRenderer;
+                    MeshFilter meshFilter = spriteMeshInstance.cachedMeshFilter;
+                    MeshRenderer meshRenderer = spriteMeshInstance.cachedRenderer as MeshRenderer;
+
+                    if (skinnedMeshRenderer)
+                    {
+                        if (undo)
+                        {
+                            Undo.DestroyObjectImmediate(skinnedMeshRenderer);
+                        }
+                        else
+                        {
+                            GameObject.DestroyImmediate(skinnedMeshRenderer);
+                        }
+                    }
+
+                    if (!meshFilter)
+                    {
+                        if (undo)
+                        {
+                            meshFilter = Undo.AddComponent<MeshFilter>(spriteMeshInstance.gameObject);
+                        }
+                        else
+                        {
+                            meshFilter = spriteMeshInstance.gameObject.AddComponent<MeshFilter>();
+                        }
+
+                        EditorUtility.SetDirty(meshFilter);
+                    }
+
+                    if (!meshRenderer)
+                    {
+                        if (undo)
+                        {
+                            meshRenderer = Undo.AddComponent<MeshRenderer>(spriteMeshInstance.gameObject);
+                        }
+                        else
+                        {
+                            meshRenderer = spriteMeshInstance.gameObject.AddComponent<MeshRenderer>();
+                        }
+
+                        EditorUtility.SetDirty(meshRenderer);
+                    }
+                }
+            }
+        }
+
+        public static bool NeedsOverride(SpriteMesh spriteMesh)
 		{
 			if(!spriteMesh || !spriteMesh.sprite) return false;
 			

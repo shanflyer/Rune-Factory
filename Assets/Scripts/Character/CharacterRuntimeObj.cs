@@ -290,9 +290,9 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
             }
         }
     }
-
+     
     private void LateUpdate()
-    {
+    { 
         if (isDisplayFootStep && footStep && speed > 0)
         {
             if (waitFootTime <= 0)

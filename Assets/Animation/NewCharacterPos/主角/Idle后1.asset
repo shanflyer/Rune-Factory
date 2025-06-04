@@ -13,10 +13,34 @@ MonoBehaviour:
   m_Name: "Idle\u540E1"
   m_EditorClassIdentifier: 
   DisplayBonePoses:
-  - name: Back_Root/Back_Body
-    position: {x: 0.0961, y: 0, z: 0}
+  - name: Back_Root/Back_RightLeg_Up
+    position: {x: 0.040869057, y: 0.23442625, z: 0}
     scale: {x: 1, y: 1, z: 1}
-    angle: {x: -0, y: 0, z: 0}
+    angle: {x: 0, y: 0, z: 274.39868}
+  - name: Back_Root/Back_RightLeg_Up/Back_RightLeg_Down
+    position: {x: 0.12126085, y: 0.000000013723909, z: 0}
+    scale: {x: 0.99999964, y: 0.99999964, z: 1}
+    angle: {x: -0, y: 0, z: 4.9363813}
+  - name: Back_Root/Back_RightLeg_Up/Back_RightLeg_Down/Back_RightFoot
+    position: {x: 0.080944985, y: -0.00000006578022, z: 0}
+    scale: {x: 1.0000002, y: 1.0000002, z: 1}
+    angle: {x: -0, y: 0, z: 69.19563}
+  - name: Back_Root/Back_LeftLeg_Up
+    position: {x: -0.03572148, y: 0.23387931, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: 0, y: 0, z: 265.19446}
+  - name: Back_Root/Back_LeftLeg_Up/Back_LeftLeg_Down
+    position: {x: 0.12407524, y: -0.00000007187221, z: 0}
+    scale: {x: 0.99999964, y: 0.99999964, z: 1}
+    angle: {x: -0, y: 0, z: 0.8602596}
+  - name: Back_Root/Back_LeftLeg_Up/Back_LeftLeg_Down/Back_LeftFoot
+    position: {x: 0.079514325, y: 0.000000022747383, z: 0}
+    scale: {x: 1.0000001, y: 1.0000001, z: 1}
+    angle: {x: -0, y: 0, z: 287.98154}
+  - name: Back_Root/Back_Body
+    position: {x: 0, y: 0.096100084, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: -0, z: 90}
   - name: Back_Root/Back_Body/Back_Head
     position: {x: 0.2646, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
@@ -40,7 +64,7 @@ MonoBehaviour:
   - name: Back_Root/Back_Body/Back_Head/Back_Hair_Center0/Back_Hair_Right0
     position: {x: 0.009108578, y: 0.08740077, z: 0}
     scale: {x: 1, y: 1, z: 1}
-    angle: {x: -0, y: 0, z: 10.900004}
+    angle: {x: -0, y: 0, z: 10.900003}
   - name: Back_Root/Back_Body/Back_Head/Back_Hair_Center0/Back_Hair_Right0/Back_Hair_Right1
     position: {x: 0.11061348, y: -0.000000047237673, z: 0}
     scale: {x: 1, y: 1, z: 1}
@@ -65,6 +89,10 @@ MonoBehaviour:
     position: {x: 0.0021266658, y: 0.014106888, z: 0}
     scale: {x: 1.0000002, y: 1.0000002, z: 1}
     angle: {x: -0, y: 0, z: 4.8243394}
+  - name: Back_Root/Back_Body/Back_LeftArm_Up/Back_LeftArm_Shoulder
+    position: {x: 0.0072082425, y: -0.02837829, z: 0}
+    scale: {x: 0.9999999, y: 0.9999999, z: 1}
+    angle: {x: 0, y: 0, z: 355.63815}
   - name: Back_Root/Back_Body/Back_RightArm_Up
     position: {x: 0.3119482, y: -0.06739631, z: 0}
     scale: {x: 1, y: 1, z: 1}
@@ -81,6 +109,10 @@ MonoBehaviour:
     position: {x: -0.00026027436, y: -0.020988006, z: 0}
     scale: {x: 1, y: 1, z: 1}
     angle: {x: -0, y: 0, z: 357.34253}
+  - name: Back_Root/Back_Body/Back_RightArm_Up/Back_RightArm_Shoulder
+    position: {x: 0.010121273, y: 0.028178155, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 2.5269296}
   - name: Back_Root/Back_Body/Back_Skirt_Center
     position: {x: 0.14121147, y: -0.0011289336, z: 0}
     scale: {x: 1, y: 1, z: 1}
@@ -100,7 +132,7 @@ MonoBehaviour:
   - name: Back_Root/Back_Body/Back_Cock_Center0/Back_Cock_Center1
     position: {x: 0.16712351, y: -0.000019675237, z: 0}
     scale: {x: 1, y: 1, z: 1}
-    angle: {x: -0, y: 0, z: 0.25793192}
+    angle: {x: -0, y: 0, z: 0.25793195}
   - name: Back_Root/Back_Body/Back_Cock_Center0/Back_Cock_Left0
     position: {x: -0.0066487743, y: -0.056786582, z: 0}
     scale: {x: 1, y: 1, z: 1}
@@ -117,30 +149,7 @@ MonoBehaviour:
     position: {x: 0.15026878, y: -0.0000000127150335, z: 0}
     scale: {x: 0.9999999, y: 0.9999999, z: 1}
     angle: {x: -0, y: 0, z: 343.657}
-  - name: Back_Root/Back_LeftLeg_Up
-    position: {x: 0.23387934, y: 0.035721444, z: 0}
-    scale: {x: 1, y: 1, z: 1}
-    angle: {x: -0, y: 0, z: 175.19444}
-  - name: Back_Root/Back_LeftLeg_Up/Back_LeftLeg_Down
-    position: {x: 0.12407524, y: -0.00000007187221, z: 0}
-    scale: {x: 0.99999964, y: 0.99999964, z: 1}
-    angle: {x: -0, y: 0, z: 0.86025953}
-  - name: Back_Root/Back_LeftLeg_Up/Back_LeftLeg_Down/Back_LeftFoot
-    position: {x: 0.079514325, y: 0.000000022747383, z: 0}
-    scale: {x: 1.0000001, y: 1.0000001, z: 1}
-    angle: {x: -0, y: 0, z: 287.98154}
-  - name: Back_Root/Back_RightLeg_Up
-    position: {x: 0.23442636, y: -0.040869094, z: 0}
-    scale: {x: 1, y: 1, z: 1}
-    angle: {x: -0, y: 0, z: 184.39868}
-  - name: Back_Root/Back_RightLeg_Up/Back_RightLeg_Down
-    position: {x: 0.12126085, y: 0.000000013723909, z: 0}
-    scale: {x: 0.99999964, y: 0.99999964, z: 1}
-    angle: {x: -0, y: 0, z: 4.936381}
-  - name: Back_Root/Back_RightLeg_Up/Back_RightLeg_Down/Back_RightFoot
-    position: {x: 0.080944985, y: -0.00000006578022, z: 0}
-    scale: {x: 1.0000002, y: 1.0000002, z: 1}
-    angle: {x: -0, y: 0, z: 69.19563}
+  LayerParts: []
   HideGroup:
   - Front_Root
   - Left_Root

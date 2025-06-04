@@ -6,6 +6,7 @@ using UnityEngine;
 public class SpriteBonePose : ScriptableObject
 {
     public List<BonePose> DisplayBonePoses = new List<BonePose>();
+    public List<LayerPart> LayerParts = new List<LayerPart>();
     public List<string> HideGroup = new List<string>();
     public string DisplayGroup;
 
@@ -13,6 +14,17 @@ public class SpriteBonePose : ScriptableObject
     {
         DisplayBonePoses.Clear();
         HideGroup.Clear();
+    }
+}
+[Serializable]
+public struct LayerPart
+{
+    public string name;
+    public int layerOrder;
+    public LayerPart(SpriteRenderer spriteRenderer, string name)
+    {
+        this.name = name;
+        layerOrder = spriteRenderer.sortingOrder;
     }
 }
 [Serializable]

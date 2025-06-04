@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Mathematics;
@@ -28,7 +28,7 @@ namespace UnityEngine.U2D.Animation
         public void Dispose() => array.Dispose();
     }
 
-    internal static class SpriteSkinUtility
+    public static class SpriteSkinUtility
     {
         internal static bool CanUseGpuDeformation()
         {
@@ -88,7 +88,7 @@ namespace UnityEngine.U2D.Animation
             return SpriteSkinState.Ready;
         }
 
-        internal static void CreateBoneHierarchy(this SpriteSkin spriteSkin)
+        public static void CreateBoneHierarchy(this SpriteSkin spriteSkin)
         {
             if (spriteSkin.spriteRenderer.sprite == null)
                 throw new InvalidOperationException("SpriteRenderer has no Sprite set");
@@ -184,43 +184,69 @@ namespace UnityEngine.U2D.Animation
             return boneTransformHash;
         }
 
-        internal unsafe static void Deform(Sprite sprite, Matrix4x4 rootInv, NativeSlice<Vector3> vertices, NativeSlice<Vector4> tangents, NativeSlice<BoneWeight> boneWeights, NativeArray<Matrix4x4> boneTransforms, NativeSlice<Matrix4x4> bindPoses, NativeArray<byte> deformableVertices)
+        public unsafe static void Deform(Sprite sprite, Matrix4x4 rootInv, NativeSlice<Vector3> vertices, NativeSlice<Vector4> tangents, NativeSlice<BoneWeight> boneWeights, NativeArray<Matrix4x4> boneTransforms, NativeSlice<Matrix4x4> bindPoses, NativeArray<byte> deformableVertices)
         {
             var verticesFloat3 = vertices.SliceWithStride<float3>();
             var tangentsFloat4 = tangents.SliceWithStride<float4>();
             var bindPosesFloat4x4 = bindPoses.SliceWithStride<float4x4>();
             var spriteVertexCount = sprite.GetVertexCount();
             var spriteVertexStreamSize = sprite.GetVertexStreamSize();
+
+
+            NativeArray<float3> normals = new NativeArray<float3>(spriteVertexStreamSize, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
+
+            // 初始化 normals 都是 (0, 0, 1)
+            for (int i = 0; i < normals.Length; ++i)
+                normals[i] = new float3(0, 0, 1);
+
             var boneTransformsFloat4x4 = NativeArrayUnsafeUtility.ConvertExistingDataToNativeArray<float4x4>(boneTransforms.GetUnsafePtr(), boneTransforms.Length, Allocator.None);
 
             byte* deformedPosOffset = (byte*)NativeArrayUnsafeUtility.GetUnsafePtr(deformableVertices);
+            // 位置偏移 0
             NativeSlice<float3> deformableVerticesFloat3 = NativeSliceUnsafeUtility.ConvertExistingDataToNativeSlice<float3>(deformedPosOffset, spriteVertexStreamSize, spriteVertexCount);
+
+            // 法线偏移 12字节
+            byte* deformedNormalOffset = deformedPosOffset + 12;
+            NativeSlice<float3> deformableNormalsFloat3 = NativeSliceUnsafeUtility.ConvertExistingDataToNativeSlice<float3>(deformedNormalOffset, spriteVertexStreamSize, spriteVertexCount);
             NativeSlice<float4> deformableTangentsFloat4 = NativeSliceUnsafeUtility.ConvertExistingDataToNativeSlice<float4>(deformedPosOffset, spriteVertexStreamSize, 1); // Just Dummy.
+                                                                                                                                                                            // ⬇️ 加 normals slice 
+
             if (sprite.HasVertexAttribute(Rendering.VertexAttribute.Tangent))
             {
-                byte* deformedTanOffset = deformedPosOffset + sprite.GetVertexStreamOffset(Rendering.VertexAttribute.Tangent);
+                byte* deformedTanOffset = deformedNormalOffset + sprite.GetVertexStreamOffset(Rendering.VertexAttribute.Tangent);
                 deformableTangentsFloat4 = NativeSliceUnsafeUtility.ConvertExistingDataToNativeSlice<float4>(deformedTanOffset, spriteVertexStreamSize, spriteVertexCount);
             }
 
 #if ENABLE_UNITY_COLLECTIONS_CHECKS
             var handle1 = CreateSafetyChecks<float4x4>(ref boneTransformsFloat4x4);
             var handle2 = CreateSafetyChecks<float3>(ref deformableVerticesFloat3);
-            var handle3 = CreateSafetyChecks<float4>(ref deformableTangentsFloat4);
+            var handle3 = CreateSafetyChecks<float3>(ref deformableNormalsFloat3); // 🔥 新增法线的SafetyCheck
+            var handle4 = CreateSafetyChecks<float4>(ref deformableTangentsFloat4);
 #endif
 
             if (sprite.HasVertexAttribute(Rendering.VertexAttribute.Tangent))
-                Deform(rootInv, verticesFloat3, tangentsFloat4, boneWeights, boneTransformsFloat4x4, bindPosesFloat4x4, deformableVerticesFloat3, deformableTangentsFloat4);
+                Deform(rootInv, verticesFloat3, normals, tangentsFloat4, boneWeights, boneTransformsFloat4x4, bindPosesFloat4x4, deformableVerticesFloat3, deformableNormalsFloat3, deformableTangentsFloat4);
             else
-                Deform(rootInv, verticesFloat3, boneWeights, boneTransformsFloat4x4, bindPosesFloat4x4, deformableVerticesFloat3);
+                Deform(rootInv, verticesFloat3, normals, boneWeights, boneTransformsFloat4x4, bindPosesFloat4x4, deformableVerticesFloat3, deformableNormalsFloat3);
 
 #if ENABLE_UNITY_COLLECTIONS_CHECKS
             DisposeSafetyChecks(handle1);
             DisposeSafetyChecks(handle2);
             DisposeSafetyChecks(handle3);
+            DisposeSafetyChecks(handle4);
 #endif
         }
 
-        internal static void Deform(float4x4 rootInv, NativeSlice<float3> vertices, NativeSlice<BoneWeight> boneWeights, NativeArray<float4x4> boneTransforms, NativeSlice<float4x4> bindPoses, NativeSlice<float3> deformed)
+        public static void Deform(
+     float4x4 rootInv,
+     NativeSlice<float3> vertices,
+     NativeSlice<float3> normals,        // 🔥 新增 normals 输入
+     NativeSlice<BoneWeight> boneWeights,
+     NativeArray<float4x4> boneTransforms,
+     NativeSlice<float4x4> bindPoses,
+     NativeSlice<float3> deformed,
+     NativeSlice<float3> deformedNormals // 🔥 新增 deform normals 输出
+ )
         {
             if (boneTransforms.Length == 0)
                 return;
@@ -240,15 +266,32 @@ namespace UnityEngine.U2D.Animation
                 var bone3 = boneWeights[i].boneIndex3;
 
                 var vertex = vertices[i];
+                var normal = normals[i]; // 🔥 Normal 取进来
+
+                // 顶点位置 deform
                 deformed[i] =
                     math.transform(boneTransforms[bone0], vertex) * boneWeights[i].weight0 +
                     math.transform(boneTransforms[bone1], vertex) * boneWeights[i].weight1 +
                     math.transform(boneTransforms[bone2], vertex) * boneWeights[i].weight2 +
                     math.transform(boneTransforms[bone3], vertex) * boneWeights[i].weight3;
+
+                // 法线 normal deform
+                var normal0 = math.mul((float3x3)boneTransforms[bone0], normal);
+                var normal1 = math.mul((float3x3)boneTransforms[bone1], normal);
+                var normal2 = math.mul((float3x3)boneTransforms[bone2], normal);
+                var normal3 = math.mul((float3x3)boneTransforms[bone3], normal);
+
+                var deformedNormal = normal0 * boneWeights[i].weight0 +
+                                      normal1 * boneWeights[i].weight1 +
+                                      normal2 * boneWeights[i].weight2 +
+                                      normal3 * boneWeights[i].weight3;
+
+                deformedNormals[i] = math.normalize(deformedNormal); // 🔥 归一化
             }
         }
 
-        internal static void Deform(float4x4 rootInv, NativeSlice<float3> vertices, NativeSlice<float4> tangents, NativeSlice<BoneWeight> boneWeights, NativeArray<float4x4> boneTransforms, NativeSlice<float4x4> bindPoses, NativeSlice<float3> deformed, NativeSlice<float4> deformedTangents)
+
+        public static void Deform(float4x4 rootInv, NativeSlice<float3> vertices, NativeSlice<float3> normals, NativeSlice<float4> tangents, NativeSlice<BoneWeight> boneWeights, NativeArray<float4x4> boneTransforms, NativeSlice<float4x4> bindPoses, NativeSlice<float3> deformed, NativeSlice<float3> deformedNormals, NativeSlice<float4> deformedTangents)
         {
             if (boneTransforms.Length == 0)
                 return;
@@ -268,6 +311,21 @@ namespace UnityEngine.U2D.Animation
                 var bone3 = boneWeights[i].boneIndex3;
 
                 var vertex = vertices[i];
+                var normal = normals[i];
+                // 法线 normal deform
+                var normal0 = math.mul((float3x3)boneTransforms[bone0], normal);
+                var normal1 = math.mul((float3x3)boneTransforms[bone1], normal);
+                var normal2 = math.mul((float3x3)boneTransforms[bone2], normal);
+                var normal3 = math.mul((float3x3)boneTransforms[bone3], normal);
+
+                var deformedNormal = normal0 * boneWeights[i].weight0 +
+                                      normal1 * boneWeights[i].weight1 +
+                                      normal2 * boneWeights[i].weight2 +
+                                      normal3 * boneWeights[i].weight3;
+
+                deformedNormals[i] = math.normalize(deformedNormal); // 🔥 归一化
+
+
                 deformed[i] =
                     math.transform(boneTransforms[bone0], vertex) * boneWeights[i].weight0 +
                     math.transform(boneTransforms[bone1], vertex) * boneWeights[i].weight1 +
@@ -286,7 +344,7 @@ namespace UnityEngine.U2D.Animation
             }
         }
 
-        internal static void Deform(Sprite sprite, Matrix4x4 invRoot, Transform[] boneTransformsArray, NativeArray<byte> deformVertexData)
+        public static void Deform(Sprite sprite, Matrix4x4 invRoot, Transform[] boneTransformsArray, NativeArray<byte> deformVertexData)
         {
             Debug.Assert(sprite != null);
             Debug.Assert(sprite.GetVertexCount() == (deformVertexData.Length / sprite.GetVertexStreamSize()));
@@ -344,7 +402,7 @@ namespace UnityEngine.U2D.Animation
             Deform(sprite, Matrix4x4.identity, boneTransformsArray, deformVertexData);
         }
 
-        internal static unsafe void CalculateBounds(this SpriteSkin spriteSkin)
+        public static unsafe void CalculateBounds(this SpriteSkin spriteSkin)
         {
             Debug.Assert(spriteSkin.isValid);
             var sprite = spriteSkin.sprite;

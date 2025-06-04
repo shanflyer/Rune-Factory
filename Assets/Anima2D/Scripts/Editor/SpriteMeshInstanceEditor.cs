@@ -227,11 +227,6 @@ namespace Anima2D
 				{
 					EditorGUILayout.HelpBox("Warning:\nBone list contains null references.", MessageType.Warning);
 				}
-				if (m_SpriteMeshInstance.spriteMesh.sharedMesh == null)
-				{
-                    EditorGUILayout.HelpBox($"m_SpriteMeshInstance:{m_SpriteMeshInstance.sharedMesh.name}.spriteMesh.sharedMesh is null", MessageType.Warning);
-                    return;
-				}
 				
 				if(m_SpriteMeshInstance.spriteMesh.sharedMesh.bindposes.Length != m_SpriteMeshInstance.bones.Count)
 				{

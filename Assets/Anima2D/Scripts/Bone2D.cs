@@ -56,7 +56,15 @@ namespace Anima2D
 
 			set {
 				m_CachedChild = value;
-				m_ChildTransform = m_CachedChild.transform;
+				if (value != null)
+				{
+                    m_ChildTransform = m_CachedChild.transform;
+				}
+				else
+				{
+                    m_ChildTransform = null;
+                }
+				
 			}
 		}
 
@@ -117,6 +125,10 @@ namespace Anima2D
 				}
 				
 				return m_ParentBone;
+			}
+			set
+			{
+				m_ParentBone = value;
 			}
 		}
 
