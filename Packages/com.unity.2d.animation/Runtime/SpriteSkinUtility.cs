@@ -303,45 +303,53 @@ namespace UnityEngine.U2D.Animation
                 boneTransforms[i] = math.mul(rootInv, math.mul(boneTransformMat, bindPoseMat));
             }
 
-            for (var i = 0; i < vertices.Length; i++)
+            try
             {
-                var bone0 = boneWeights[i].boneIndex0;
-                var bone1 = boneWeights[i].boneIndex1;
-                var bone2 = boneWeights[i].boneIndex2;
-                var bone3 = boneWeights[i].boneIndex3;
+                for (var i = 0; i < vertices.Length; i++)
+                {
+                    var bone0 = boneWeights[i].boneIndex0;
+                    var bone1 = boneWeights[i].boneIndex1;
+                    var bone2 = boneWeights[i].boneIndex2;
+                    var bone3 = boneWeights[i].boneIndex3;
 
-                var vertex = vertices[i];
-                var normal = normals[i];
-                // 法线 normal deform
-                var normal0 = math.mul((float3x3)boneTransforms[bone0], normal);
-                var normal1 = math.mul((float3x3)boneTransforms[bone1], normal);
-                var normal2 = math.mul((float3x3)boneTransforms[bone2], normal);
-                var normal3 = math.mul((float3x3)boneTransforms[bone3], normal);
+                    var vertex = vertices[i];
+                    var normal = normals[i];
+                    // 法线 normal deform
+                    var normal0 = math.mul((float3x3)boneTransforms[bone0], normal);
+                    var normal1 = math.mul((float3x3)boneTransforms[bone1], normal);
+                    var normal2 = math.mul((float3x3)boneTransforms[bone2], normal);
+                    var normal3 = math.mul((float3x3)boneTransforms[bone3], normal);
 
-                var deformedNormal = normal0 * boneWeights[i].weight0 +
-                                      normal1 * boneWeights[i].weight1 +
-                                      normal2 * boneWeights[i].weight2 +
-                                      normal3 * boneWeights[i].weight3;
+                    var deformedNormal = normal0 * boneWeights[i].weight0 +
+                                          normal1 * boneWeights[i].weight1 +
+                                          normal2 * boneWeights[i].weight2 +
+                                          normal3 * boneWeights[i].weight3;
 
-                deformedNormals[i] = math.normalize(deformedNormal); // 🔥 归一化
+                    deformedNormals[i] = math.normalize(deformedNormal); // 🔥 归一化
 
 
-                deformed[i] =
-                    math.transform(boneTransforms[bone0], vertex) * boneWeights[i].weight0 +
-                    math.transform(boneTransforms[bone1], vertex) * boneWeights[i].weight1 +
-                    math.transform(boneTransforms[bone2], vertex) * boneWeights[i].weight2 +
-                    math.transform(boneTransforms[bone3], vertex) * boneWeights[i].weight3;
+                    deformed[i] =
+                        math.transform(boneTransforms[bone0], vertex) * boneWeights[i].weight0 +
+                        math.transform(boneTransforms[bone1], vertex) * boneWeights[i].weight1 +
+                        math.transform(boneTransforms[bone2], vertex) * boneWeights[i].weight2 +
+                        math.transform(boneTransforms[bone3], vertex) * boneWeights[i].weight3;
 
-                var tangent = new float4(tangents[i].xyz, 0.0f);
+                    var tangent = new float4(tangents[i].xyz, 0.0f);
 
-                tangent =
-                    math.mul(boneTransforms[bone0], tangent) * boneWeights[i].weight0 +
-                    math.mul(boneTransforms[bone1], tangent) * boneWeights[i].weight1 +
-                    math.mul(boneTransforms[bone2], tangent) * boneWeights[i].weight2 +
-                    math.mul(boneTransforms[bone3], tangent) * boneWeights[i].weight3;
+                    tangent =
+                        math.mul(boneTransforms[bone0], tangent) * boneWeights[i].weight0 +
+                        math.mul(boneTransforms[bone1], tangent) * boneWeights[i].weight1 +
+                        math.mul(boneTransforms[bone2], tangent) * boneWeights[i].weight2 +
+                        math.mul(boneTransforms[bone3], tangent) * boneWeights[i].weight3;
 
-                deformedTangents[i] = new float4(math.normalize(tangent.xyz), tangents[i].w);
+                    deformedTangents[i] = new float4(math.normalize(tangent.xyz), tangents[i].w);
+                }
             }
+            catch
+            {
+                Debug.Log("Error");
+            }
+           
         }
 
         public static void Deform(Sprite sprite, Matrix4x4 invRoot, Transform[] boneTransformsArray, NativeArray<byte> deformVertexData)
