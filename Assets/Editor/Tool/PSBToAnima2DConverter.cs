@@ -8,14 +8,18 @@ using Anima2D;
 using System.Linq;
 using System.Net.WebSockets;
 using BoneWeight = Anima2D.BoneWeight;
+using UnityEditor.Animations;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 
 public class PSBToAnima2DConverter : EditorWindow
 {
     private GameObject _psbPrefab;
     private string _outputFolder = "Assets/Texture/NewPsbTexture";
     private Material newMat = null;
+    private string animationDir = "Assets/Animation/NewAnimation";
+    private string copyAnimationDir = "Assets/Animation/NewAnimation/主角";
    
-    [MenuItem("Window/PSB To Anima2D Converter")]
+    [MenuItem("工具/PSB To Anima2D Converter")]
     private static void ShowWindow()
     {
         var window = GetWindow<PSBToAnima2DConverter>();
@@ -35,6 +39,16 @@ public class PSBToAnima2DConverter : EditorWindow
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField("PSB Prefab", GUILayout.Width(80));
         _psbPrefab = (GameObject)EditorGUILayout.ObjectField(_psbPrefab, typeof(GameObject), false);
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.LabelField("Copy AnimationPath", GUILayout.Width(80));
+        copyAnimationDir = EditorGUILayout.TextField(copyAnimationDir);
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.LabelField("输出动画目录", GUILayout.Width(80));
+        animationDir= EditorGUILayout.TextField(animationDir);
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.BeginHorizontal();
@@ -114,6 +128,97 @@ public class PSBToAnima2DConverter : EditorWindow
             GameObject gameObject = AssetDatabase.LoadAssetAtPath<GameObject>(outputFolder);
             SetBone(gameObject);
         }
+        if(GUILayout.Button("动画初始化", GUILayout.Height(30)))
+        {
+            InitOverrideAnimation();
+        }
+    }
+
+    AnimatorController copyController;
+    AnimationClip[] copyClips;
+
+    AnimatorController CopyController
+    {
+        get
+        {
+            if(copyController == null)
+            {
+                var strs= copyAnimationDir.Split('/');
+                copyController = AssetDatabase.LoadAssetAtPath<AnimatorController>($"{copyAnimationDir}/{strs[strs.Length-1]}.controller");
+
+                var dir = new DirectoryInfo(copyAnimationDir);
+                var clipPs = dir.GetFiles("*.anim");
+                copyClips = new AnimationClip[clipPs.Length];
+                for(int i = 0; i < clipPs.Length; i++)
+                {
+                    AnimationClip clip = AssetDatabase.LoadAssetAtPath<AnimationClip>($"{copyAnimationDir}/{clipPs[i].Name}");
+                    copyClips[i] = clip;
+                }
+            }
+            return copyController;
+        }
+    }
+    AnimationClip[] CopyClips;
+     
+    void InitOverrideAnimation()
+    {
+        DirectoryInfo parentDir = new DirectoryInfo(animationDir);
+        var dirs = parentDir.GetDirectories();
+
+        DirectoryInfo characterDir = null;
+        foreach(var dir in dirs )
+        {
+            if (dir.Name == _psbPrefab.name)
+            {
+                characterDir = dir;
+                break;
+            }
+        }
+        if (characterDir == null)
+        { 
+            Directory.CreateDirectory($"{parentDir}/{_psbPrefab.name}");
+            AnimatorOverrideController animatorOverrideController = new AnimatorOverrideController(CopyController);
+            AssetDatabase.CreateAsset(animatorOverrideController, $"{animationDir}/{_psbPrefab.name}/{_psbPrefab.name}.overrideController");
+
+            string[] oldAssetPath = new string[copyClips.Length];
+            string[] newAssetPath = new string[copyClips.Length];
+            for (int i = 0; i < copyClips.Length; i++)
+            {
+                oldAssetPath[i] = AssetDatabase.GetAssetPath(copyClips[i]);
+                var strs = oldAssetPath[i].Split('/');
+                newAssetPath[i] = oldAssetPath[i].Replace(strs[strs.Length - 2], _psbPrefab.name);
+            }
+            AssetDatabase.CopyAssets(oldAssetPath, newAssetPath);
+
+            AssetDatabase.Refresh();
+            
+            AssetDatabase.Refresh();
+            characterDir = new DirectoryInfo($"{parentDir}/{_psbPrefab.name}");
+
+        }
+
+        var animations = characterDir.GetFiles("*.anim");
+        var controllerFile = characterDir.GetFiles("*.overrideController");
+
+        Dictionary<string, AnimationClip> clipDic = new Dictionary<string, AnimationClip>();
+        foreach (var animationP in animations)
+        {
+            AnimationClip animationClip = AssetDatabase.LoadAssetAtPath<AnimationClip>($"{animationDir}/{characterDir.Name}/{animationP.Name}");
+            clipDic.Add(animationClip.name, animationClip);
+        }
+
+        var overrideController = AssetDatabase.LoadAssetAtPath<AnimatorOverrideController>($"{animationDir}/{characterDir.Name}/{controllerFile[0].Name}");
+        List<KeyValuePair<AnimationClip, AnimationClip>> animationClips = new List<KeyValuePair<AnimationClip, AnimationClip>>();
+        overrideController.GetOverrides(animationClips);
+        for (int i = 0; i < animationClips.Count; i++)
+        {
+            var animationKV = animationClips[i];
+            if (clipDic.TryGetValue(animationKV.Key.name, out var animationClip))
+            {
+                animationClips[i] = new KeyValuePair<AnimationClip, AnimationClip>(animationKV.Key, animationClip);
+            }
+        }
+        overrideController.ApplyOverrides(animationClips);
     }
 
     void CreateSpriteMesh(string outputFolder)

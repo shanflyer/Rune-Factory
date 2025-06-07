@@ -109,7 +109,7 @@ public class CommonTool : MonoBehaviour
                             // 转相对路径
                             outputFolder = "Assets" + outputFolder.Substring(Application.dataPath.Length);
 
-                            string pngPath = Path.Combine(outputFolder, Path.GetFileNameWithoutExtension(psbPath) + ".png");
+                            string pngPath = Path.Combine(outputFolder, obj + ".png");
                             byte[] pngData = texture.EncodeToPNG();
                             File.WriteAllBytes(pngPath, pngData);
                             AssetDatabase.ImportAsset(pngPath, ImportAssetOptions.ForceUpdate);
@@ -376,7 +376,7 @@ public class CommonTool : MonoBehaviour
             string psbFileName = Path.GetFileNameWithoutExtension(assetPath);
             // 有些 Sprite 名称中会包含 "/", 替换为下划线以免文件夹路径混乱
             string safeSpriteName = texture.name.Replace("/", "_");
-            string fileName = psbFileName + "_" + safeSpriteName + ".png";
+            string fileName = psbFileName +  ".png";
             string fullPath = Path.Combine(outputFolder, fileName);
 
             // 写入磁盘（覆盖同名文件）

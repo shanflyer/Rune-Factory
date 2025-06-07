@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;  
 using System.Linq;
+using Anima2D;
 #if UNITY_EDITOR
 using System;
 using UnityEditor;
@@ -29,7 +30,7 @@ public class BonePoseController : MonoBehaviour
             {
                 if (group.gameObject.activeSelf)
                 {
-                    var spriteRenderers = group.GetComponentsInChildren<SpriteRenderer>();
+                    var spriteRenderers = group.GetComponentsInChildren<SpriteMeshInstance>();
                     for (int i = 0; i < spriteRenderers.Length; i++)
                     {
                         var path = GetPartPath(spriteRenderers[i].transform, transform);
@@ -227,6 +228,11 @@ public class BonePoseController : MonoBehaviour
                 if(child.TryGetComponent<SpriteRenderer>(out var SpriteRenderer))
                 {
                     SpriteRenderer.sortingOrder = layerPart.layerOrder;
+                }
+                if (child.TryGetComponent<SpriteMeshInstance>(out var SpriteMeshInstance))
+                {
+                    Undo.RecordObject(SpriteMeshInstance, "Load layer");
+                    SpriteMeshInstance.sortingOrder = layerPart.layerOrder;
                 }
             }
              

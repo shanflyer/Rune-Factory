@@ -13,6 +13,7 @@ public class SpriteBonePose : ScriptableObject
     public void Clear()
     {
         DisplayBonePoses.Clear();
+        LayerParts.Clear();
         HideGroup.Clear();
     }
 }
