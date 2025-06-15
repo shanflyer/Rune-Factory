@@ -1,0 +1,194 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4213e64e68dd1914c9727a230cf99324, type: 3}
+  m_Name: "\u9493\u9C7C\u524DUp2"
+  m_EditorClassIdentifier: 
+  DisplayBonePoses:
+  - name: Front_Root/Front_RightLeg_Up
+    position: {x: 0.03805401, y: 0.21548957, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 271.14038}
+  - name: Front_Root/Front_RightLeg_Up/Front_RightLeg_Down
+    position: {x: 0.11637285, y: 0.00000000829009, z: 0}
+    scale: {x: 0.9999999, y: 0.9999999, z: 1}
+    angle: {x: -0, y: 0, z: 2.0840013}
+  - name: Front_Root/Front_RightLeg_Up/Front_RightLeg_Down/Front_RightFoot
+    position: {x: 0.07557144, y: 0.00000010096095, z: 0}
+    scale: {x: 1.0000001, y: 1.0000001, z: 1}
+    angle: {x: -0, y: 0, z: 67.33599}
+  - name: Front_Root/Front_LeftLeg_Up
+    position: {x: -0.04039434, y: 0.21944118, z: 0}
+    scale: {x: 0.99999976, y: 0.99999976, z: 1}
+    angle: {x: 0, y: 0, z: 268.44016}
+  - name: Front_Root/Front_LeftLeg_Up/Front_LeftLeg_Down
+    position: {x: 0.117157094, y: 0.00000019083345, z: 0}
+    scale: {x: 0.9999999, y: 0.9999999, z: 1}
+    angle: {x: 0, y: 0, z: 357.2168}
+  - name: Front_Root/Front_LeftLeg_Up/Front_LeftLeg_Down/Front_LeftFoot
+    position: {x: 0.08419497, y: -0.00000006420678, z: 0}
+    scale: {x: 1.0000002, y: 1.0000002, z: 1}
+    angle: {x: 0, y: 0, z: 297.5416}
+  - name: Front_Root/Front_Body
+    position: {x: -0.0021505207, y: 0.18064515, z: 0}
+    scale: {x: 0.99999976, y: 0.99999976, z: 1}
+    angle: {x: -0, y: -0, z: 90}
+  - name: Front_Root/Front_Body/Front_Head
+    position: {x: 0.2245942, y: -0.0024666588, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 0}
+  - name: Front_Root/Front_Body/Front_Head/Front_Hat
+    position: {x: 0.14097922, y: 0.0000000030585126, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: 0, y: 0, z: 359.26617}
+  - name: Front_Root/Front_Body/Front_Head/Front_Hair_Front
+    position: {x: 0.26594964, y: 0.017334314, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: 0, y: 0, z: 177.77596}
+  - name: Front_Root/Front_Body/Front_Head/Front_Hair_Front/Front_Hair_Front_Left
+    position: {x: 0.00092787674, y: -0.081193015, z: 0}
+    scale: {x: 1.0000001, y: 1.0000001, z: 1}
+    angle: {x: 0, y: 0, z: 340.69504}
+  - name: Front_Root/Front_Body/Front_Head/Front_Hair_Front/Front_Hair_Front_Right
+    position: {x: 0.013166582, y: 0.13312818, z: 0}
+    scale: {x: 1.0000001, y: 1.0000001, z: 1}
+    angle: {x: -0, y: 0, z: 20.20546}
+  - name: Front_Root/Front_Body/Front_Head/Front_Hair_Back
+    position: {x: 0.19097255, y: -0.01841055, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 180}
+  - name: Front_Root/Front_Body/Front_Head/Front_Hair_Back/Front_Hair_Back_Left
+    position: {x: 0.009095072, y: -0.10458478, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: 0, y: 0, z: 345.47754}
+  - name: Front_Root/Front_Body/Front_Head/Front_Hair_Back/Front_Hair_Back_Right
+    position: {x: 0.013204416, y: 0.07869105, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 21.63088}
+  - name: Front_Root/Front_Body/Front_LeftArm_Up
+    position: {x: 0.21948558, y: 0.07606122, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: 0, y: 0, z: 171.923}
+  - name: Front_Root/Front_Body/Front_LeftArm_Up/Front_LeftArm_Down
+    position: {x: 0.12487095, y: 0.03284226, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 32.524998}
+  - name: Front_Root/Front_Body/Front_LeftArm_Up/Front_LeftArm_Down/Front_LeftHand
+    position: {x: 0.06907186, y: 0.005096893, z: 0}
+    scale: {x: 1.0000001, y: 1.0000001, z: 1}
+    angle: {x: -0, y: 0, z: 1.7690026}
+  - name: Front_Root/Front_Body/Front_LeftArm_Up/Front_LeftArm_Down/Front_LeftHand/Front_LeftWeapon
+    position: {x: 0.018160278, y: 0.023998411, z: 0}
+    scale: {x: 1.0000002, y: 1.0000002, z: 1}
+    angle: {x: -0, y: -0, z: 42.954426}
+  - name: Front_Root/Front_Body/Front_LeftArm_Up/Front_LeftShoulder
+    position: {x: -0.01875897, y: -0.019323813, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: 0, y: 0, z: 354.71225}
+  - name: Front_Root/Front_Body/Front_RightArm_Up
+    position: {x: 0.21489085, y: -0.07828622, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: -0, z: 178.6589}
+  - name: Front_Root/Front_Body/Front_RightArm_Up/Front_RightArm_Down
+    position: {x: 0.10646982, y: -0.02914507, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: 0, y: 0, z: 325.933}
+  - name: Front_Root/Front_Body/Front_RightArm_Up/Front_RightArm_Down/Front_RightHand
+    position: {x: 0.035633445, y: -0.00010872143, z: 0}
+    scale: {x: 0.9999999, y: 0.9999999, z: 1}
+    angle: {x: 0, y: 0, z: 359.132}
+  - name: Front_Root/Front_Body/Front_RightArm_Up/Front_RightArm_Down/Front_RightHand/Front_RightWeapon
+    position: {x: 0.028829629, y: -0.02220209, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: 0, y: 0, z: 328.18085}
+  - name: Front_Root/Front_Body/Front_RightArm_Up/Front_RightShoulder
+    position: {x: -0.013577395, y: 0.009132725, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: 0, y: 0, z: 30.856993}
+  - name: Front_Root/Front_Body/Front_Coak_Center
+    position: {x: 0.20807214, y: 0.0044051763, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: 0, y: 0, z: 180}
+  - name: Front_Root/Front_Body/Front_Coak_Center/Front_Coak_Left
+    position: {x: -0.017436486, y: -0.046207406, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: 0, y: 0, z: 321.428}
+  - name: Front_Root/Front_Body/Front_Coak_Center/Front_Coak_Right
+    position: {x: -0.006102781, y: 0.05492446, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 45.465794}
+  - name: Front_Root/Front_Body/Front_Skirt_Right
+    position: {x: 0.06334896, y: -0.0060568606, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: 0, y: 0, z: 180}
+  - name: Front_Root/Front_Body/Front_Skirt_Right/Front_Skirt_Center_1
+    position: {x: 0.0008718094, y: -0.06102859, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: 0, y: 0, z: 340.42688}
+  - name: Front_Root/Front_Body/Front_Skirt_Right/Front_Skirt_Center_1/Front_Skirt_Center1
+    position: {x: 0.08327655, y: -0.000000011124089, z: 0}
+    scale: {x: 1.0000001, y: 1.0000001, z: 1}
+    angle: {x: -0, y: 0, z: 5.493607}
+  - name: Front_Root/Front_Body/Front_Skirt_Right/Front_Skirt_Left_2
+    position: {x: -0.000000008304284, y: 0.04184692, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 32.13724}
+  - name: Front_Root/Front_Body/Front_Skirt_Right/Front_Skirt_Left_2/Front_Skirt_Left1
+    position: {x: 0.080307506, y: 0.000000011684883, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: 0, y: 0, z: 342.6638}
+  - name: Front_Root/Front_Body/Front_Skirt_Right/Front_Skirt_Right1
+    position: {x: 0.09789584, y: -0.0049104244, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 1.6302689}
+  LayerParts:
+  - name: "\u524D/\u53F3\u81C2/\u53F3\u81C2\u4E0A"
+    layerOrder: 70
+  - name: "\u524D/\u53F3\u81C2/\u53F3\u624B"
+    layerOrder: 69
+  - name: "\u524D/\u53F3\u81C2/\u53F3\u81C2\u4E0B"
+    layerOrder: 68
+  - name: "\u524D/\u5DE6\u81C2/\u5DE6\u81C2\u4E0A"
+    layerOrder: 66
+  - name: "\u524D/\u5DE6\u81C2/\u5DE6\u624B"
+    layerOrder: 65
+  - name: "\u524D/\u5DE6\u81C2/\u5DE6\u81C2\u4E0B"
+    layerOrder: 64
+  - name: "\u524D/\u5934\u90E8"
+    layerOrder: 63
+  - name: "\u524D/\u7761\u7720"
+    layerOrder: 62
+  - name: "\u524D/\u80A9\u5E26"
+    layerOrder: 61
+  - name: "\u524D/\u8EAB\u4F53"
+    layerOrder: 60
+  - name: "\u524D/\u88D9\u5B50/\u88D9\u5B50\u4E2D"
+    layerOrder: 58
+  - name: "\u524D/\u88D9\u5B50/\u88D9\u5B50\u5DE6"
+    layerOrder: 57
+  - name: "\u524D/\u88D9\u5B50/\u88D9\u5B50\u53F3"
+    layerOrder: 56
+  - name: "\u524D/\u53F3\u817F/\u53F3\u817F\u4E0A"
+    layerOrder: 54
+  - name: "\u524D/\u53F3\u817F/\u53F3\u811A"
+    layerOrder: 53
+  - name: "\u524D/\u53F3\u817F/\u53F3\u817F\u4E0B"
+    layerOrder: 52
+  - name: "\u524D/\u5DE6\u817F/\u5DE6\u817F\u4E0A"
+    layerOrder: 50
+  - name: "\u524D/\u5DE6\u817F/\u5DE6\u811A"
+    layerOrder: 49
+  - name: "\u524D/\u5DE6\u817F/\u5DE6\u817F\u4E0B"
+    layerOrder: 48
+  HideGroup:
+  - Left_Root
+  - Back_Root
+  DisplayGroup: Front_Root
