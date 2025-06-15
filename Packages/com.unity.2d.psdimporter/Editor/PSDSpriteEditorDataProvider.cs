@@ -138,7 +138,7 @@ namespace UnityEditor.U2D.PSD
             return GetSpriteRects();
         }
 
-        internal SpriteRect[] GetSpriteRects()
+        public SpriteRect[] GetSpriteRects()
         {
             if (spriteImportModeToUse == SpriteImportMode.Multiple)
             {
