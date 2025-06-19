@@ -1,0 +1,153 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: "\u9EDB\u8299\u59AE_Mat"
+  m_Shader: {fileID: 4800000, guid: d4053574458c62242a70fd1300243b57, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - SKINNED_SPRITE
+  m_InvalidKeywords:
+  - _CHARACTER_ON
+  - _GRASSBLEND_ON
+  - _SNOWBLEND_ON
+  - __SNOWBLEND_ON
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _AlphaTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _DepthTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FlowerTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 4d9d6bdea56528b409bad08cf64b4bda, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MoveMask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: e14a5b991b4f14c459df1c6348167ccc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SnowTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WaterMaskTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WaterNormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _WindNoiseTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - EdgeValue: 0.1
+    - _BackBlend: 0
+    - _BlendRmapMin: 0
+    - _BlendValue: 0
+    - _BlendVertexColor: 0
+    - _Character: 1
+    - _ClipValue: 0.5
+    - _Comp: 8
+    - _Damp: 0
+    - _DampBlend: 0
+    - _EdgeWaveOffset: 0
+    - _EdgeWaveSpeed: 0
+    - _EnableExternalAlpha: 0
+    - _Fail: 0
+    - _FlowerStep: 0
+    - _GrassBlend: 0
+    - _HideNormal: 0
+    - _LightBlend: 1
+    - _LightMask: 0
+    - _Move: 0
+    - _MoveSelfUV: 0
+    - _NatureNormalMap: 0
+    - _NoiseAlpha: 1
+    - _NoiseValue: 500
+    - _Pass: 0
+    - _PlantAutumnBlend: 0
+    - _PlantAutumnNoiseScale: 1
+    - _ScaleValue: 0.5
+    - _SnowBlend: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _Tree3D: 0
+    - _Water: 0
+    - _WaterBottom: 1
+    - _WaterHigh: 0
+    - _WaterZero: 0
+    - _WaveAngle0: 0
+    - _WaveAngle1: 0
+    - _WaveSpeed0: 0
+    - _WaveSpeed1: 0
+    - _WetValue: 0
+    - _WindJitter: 0.1
+    - _WindNoiseValue: 0
+    - _WindScroll: 0.1
+    - _WindValue: 1
+    - _ZWrite: 0
+    - __BlendVertexColor: 0
+    - __Damp: 0
+    - __DampBlend: 0
+    - __SnowBlend: 1
+    - __shadowStep: 0
+    - _shadowStep: 0
+    - seasonColorBlend: 0
+    - waterNoiseScale: 0
+    - waterValue: 0.2
+    m_Colors:
+    - EdgeColor: {r: 0.990566, g: 0.9765486, b: 0.9765486, a: 0}
+    - WaveScale0: {r: 1, g: 1, b: 0, a: 0}
+    - WaveScale1: {r: 1, g: 1, b: 0, a: 0}
+    - _BlendColor: {r: 0, g: 1, b: 1, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _FixedColor: {r: 1, g: 1, b: 1, a: 0}
+    - _FlowerRemap: {r: 0, g: 0, b: 0, a: 0}
+    - _ForceColor: {r: 0, g: 0, b: 0, a: 0}
+    - _ObjectWorldPos: {r: 0, g: 0, b: 0, a: 0}
+    - _PlantAutumnColor0: {r: 0, g: 0, b: 0, a: 1}
+    - _PlantAutumnColor1: {r: 1, g: 1, b: 1, a: 1}
+    - _PlantSpringColor: {r: 0, g: 0, b: 0, a: 1}
+    - _PlantSpringColor1: {r: 0, g: 0, b: 0, a: 1}
+    - _PlantWinterColor: {r: 0, g: 0, b: 0, a: 1}
+    - _PlantWinterColor1: {r: 0, g: 0, b: 0, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SnowColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SnowRange: {r: 0, g: 1, b: 0, a: 1}
+    - waterColor: {r: 0, g: 0.5, b: 0.5, a: 0.5}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
