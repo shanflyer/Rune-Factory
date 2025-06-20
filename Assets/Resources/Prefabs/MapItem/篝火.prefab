@@ -9998,6 +9998,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 486d7738ca24a884184bbe3daf67135c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioSource: {fileID: 0}
+  audioCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   effects:
   - particleSystem: {fileID: 508516128489077332}
     windSpeed:
@@ -14959,7 +14966,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5299961068209464760}
-  - component: {fileID: -3571665276229346387}
   m_Layer: 0
   m_Name: "\u7BDD\u706B"
   m_TagString: Untagged
@@ -14985,25 +14991,6 @@ Transform:
   - {fileID: 1699403609265351728}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-3571665276229346387
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7577121796449484791}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55087fb195f968a4994e34fdf4316498, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  renderers:
-  - {fileID: 0}
-  - {fileID: 7166075784355752225}
-  - {fileID: 954574316694556562}
-  - {fileID: 6133285879709174349}
-  - {fileID: 3887189331495189354}
-  - {fileID: 5294542798852087000}
 --- !u!1 &8396597491526881821
 GameObject:
   m_ObjectHideFlags: 0
