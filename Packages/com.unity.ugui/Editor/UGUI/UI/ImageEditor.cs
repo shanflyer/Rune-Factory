@@ -24,10 +24,12 @@ namespace UnityEditor.UI
         SerializedProperty m_Type;
         SerializedProperty m_FillCenter;
         SerializedProperty m_Sprite;
+        SerializedProperty m_NullClear;
         SerializedProperty m_PreserveAspect;
         SerializedProperty m_UseSpriteMesh;
         SerializedProperty m_PixelsPerUnitMultiplier;
         GUIContent m_SpriteContent;
+        GUIContent m_NullClearContent;
         GUIContent m_SpriteTypeContent;
         GUIContent m_ClockwiseContent;
         AnimBool m_ShowSlicedOrTiled;
@@ -81,10 +83,12 @@ namespace UnityEditor.UI
         {
             base.OnEnable();
 
+            m_NullClearContent = EditorGUIUtility.TrTextContent("NullClear");
             m_SpriteContent = EditorGUIUtility.TrTextContent("Source Image");
             m_SpriteTypeContent     = EditorGUIUtility.TrTextContent("Image Type");
             m_ClockwiseContent      = EditorGUIUtility.TrTextContent("Clockwise");
 
+            m_NullClear             = serializedObject.FindProperty("m_NullClear");
             m_Sprite                = serializedObject.FindProperty("m_Sprite");
             m_Type                  = serializedObject.FindProperty("m_Type");
             m_FillCenter            = serializedObject.FindProperty("m_FillCenter");
@@ -176,6 +180,7 @@ namespace UnityEditor.UI
         {
             EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(m_Sprite, m_SpriteContent);
+            EditorGUILayout.PropertyField(m_NullClear, m_NullClearContent);
             if (EditorGUI.EndChangeCheck())
             {
                 var newSprite = m_Sprite.objectReferenceValue as Sprite;
