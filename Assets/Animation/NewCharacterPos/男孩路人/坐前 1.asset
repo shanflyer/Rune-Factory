@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4213e64e68dd1914c9727a230cf99324, type: 3}
+  m_Name: "\u5750\u524D 1"
+  m_EditorClassIdentifier: 
+  DisplayBonePoses:
+  - name: Front_Root/Front_RightLeg_Up
+    position: {x: 0.032211114, y: 0.27486527, z: 0}
+    scale: {x: 0.9999999, y: 0.9999999, z: 1}
+    angle: {x: 43.336, y: 0.0000023476548, z: 277.09802}
+  - name: Front_Root/Front_RightLeg_Up/Front_RightLeg_Down
+    position: {x: 0.09788991, y: 0.0037773256, z: -0.028532535}
+    scale: {x: 0.9999999, y: 0.9999999, z: 1}
+    angle: {x: 356.85, y: 332.162, z: 356.289}
+  - name: Front_Root/Front_RightLeg_Up/Front_RightLeg_Down/Front_RightFoot
+    position: {x: 0.058904774, y: 0.0011539101, z: -0.0026221585}
+    scale: {x: 1.0000002, y: 1.0000002, z: 1}
+    angle: {x: -0, y: 0, z: 66.62}
+  - name: Front_Root/Front_LeftLeg_Up
+    position: {x: -0.026143532, y: 0.2742755, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: 44.571, y: 0, z: 264.156}
+  - name: Front_Root/Front_LeftLeg_Up/Front_LeftLeg_Down
+    position: {x: 0.09429525, y: 0.0008540489, z: -0.030622251}
+    scale: {x: 0.9999999, y: 0.9999999, z: 1}
+    angle: {x: 4.436996, y: 325.669, z: 0.33700353}
+  - name: Front_Root/Front_LeftLeg_Up/Front_LeftLeg_Down/Front_LeftFoot
+    position: {x: 0.05837329, y: 0.0007581889, z: -0.004151006}
+    scale: {x: 0.9999999, y: 0.9999999, z: 1}
+    angle: {x: 0, y: 0, z: 300.372}
+  - name: Front_Root/Front_Body
+    position: {x: 0.0021152217, y: 0.24597286, z: 0}
+    scale: {x: 0.99999976, y: 0.99999976, z: 1}
+    angle: {x: -0, y: 0, z: 90}
+  - name: Front_Root/Front_Body/Front_Head
+    position: {x: 0.17176892, y: -0.0030809052, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 0}
+  - name: Front_Root/Front_Body/Front_RightArm_Up
+    position: {x: 0.18029673, y: 0.043768194, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: 0, y: 0, z: 159.65901}
+  - name: Front_Root/Front_Body/Front_RightArm_Up/Front_RightArm_Down
+    position: {x: 0.09048272, y: 0.0016420409, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 19.553999}
+  - name: Front_Root/Front_Body/Front_RightArm_Up/Front_RightArm_Down/Front_RightHand
+    position: {x: 0.05894345, y: 0.0007477836, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 11.892001}
+  - name: Front_Root/Front_Body/Front_LeftArm_Up
+    position: {x: 0.17129625, y: -0.0613426, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+    angle: {x: -0, y: 0, z: 205.15198}
+  - name: Front_Root/Front_Body/Front_LeftArm_Up/Front_LeftArm_Down
+    position: {x: 0.06640566, y: 0.00809535, z: 0}
+    scale: {x: 1.0000001, y: 1.0000001, z: 1}
+    angle: {x: 0, y: 0, z: 319.201}
+  - name: Front_Root/Front_Body/Front_LeftArm_Up/Front_LeftArm_Down/Front_LeftHand
+    position: {x: 0.08000354, y: -0.000000017363995, z: 0}
+    scale: {x: 0.9999999, y: 0.9999999, z: 1}
+    angle: {x: 0, y: 0, z: 336.60034}
+  LayerParts:
+  - name: "\u524D/\u53F3\u81C2/\u53F3\u81C2\u4E0A"
+    layerOrder: 57
+  - name: "\u524D/\u53F3\u81C2/\u53F3\u624B"
+    layerOrder: 56
+  - name: "\u524D/\u53F3\u81C2/\u53F3\u81C2\u4E0B"
+    layerOrder: 55
+  - name: "\u524D/\u5DE6\u81C2/\u5DE6\u81C2\u4E0A"
+    layerOrder: 53
+  - name: "\u524D/\u5DE6\u81C2/\u5DE6\u624B"
+    layerOrder: 52
+  - name: "\u524D/\u5DE6\u81C2/\u5DE6\u81C2\u4E0B"
+    layerOrder: 51
+  - name: "\u524D/\u5934\u90E8"
+    layerOrder: 50
+  - name: "\u524D/\u7761\u7720"
+    layerOrder: 49
+  - name: "\u524D/\u8EAB\u4F53"
+    layerOrder: 48
+  - name: "\u524D/\u53F3\u817F/\u53F3\u817F\u4E0A"
+    layerOrder: 46
+  - name: "\u524D/\u53F3\u817F/\u53F3\u811A"
+    layerOrder: 45
+  - name: "\u524D/\u53F3\u817F/\u53F3\u817F\u4E0B"
+    layerOrder: 44
+  - name: "\u524D/\u5DE6\u817F/\u5DE6\u817F\u4E0A"
+    layerOrder: 42
+  - name: "\u524D/\u5DE6\u817F/\u5DE6\u811A"
+    layerOrder: 41
+  - name: "\u524D/\u5DE6\u817F/\u5DE6\u817F\u4E0B"
+    layerOrder: 40
+  HideGroup:
+  - Left_Root
+  - Back_Root
+  DisplayGroup: Front_Root
