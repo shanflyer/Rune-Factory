@@ -324,7 +324,7 @@ public class FightPlayer : FightCharacter
 
     public override string Name { get => character.name; }
     public Character character;
-    public override Sprite icon { get => character.characterData.icon.sprite; set => base.icon = value; }
+    public override Sprite icon { get => character.characterData.icon; set => base.icon = value; }
     public override AttributeType AttackAttributeType => character.AttackAttributeType;
     public override AttributeType DefenceAttributeType => character.DefenceAttributeType;
     private int characterSkill, equipSkill;
