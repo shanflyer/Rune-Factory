@@ -7,7 +7,7 @@ public struct SpecialAreaTempCharacterCreatData
 {
     public int2 areaKey;
     public int4 areaRange;
-    public TempCharacterCreatData tempCharacterCreatData;
+    public TempCharacterCreateData tempCharacterCreatData;
     public Action creatSpecialTempDelegate;
     public int specialTempRandomId;
 
@@ -22,7 +22,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
         GameActionManager.instance.AddListener<DestoryCharacter>(DestoryCharacter);
         GameActionManager.instance.AddListener<ClearTempCharacter>(ClearTempCharacter);
         GameActionManager.instance.AddListener<StartCreatTempCharacter>(StartCreatTempCharacter);
-        GameActionManager.instance.AddListener<StartCreatSpecialTempCharacter>(StartCreatSpecialTempCharacter);
+        GameActionManager.instance.AddListener<StartCreatSpecialTempCharacter>(StartCreateSpecialTempCharacter);
         GameActionManager.instance.AddListener<StopTempCharacterCreat>(StopTempCharacterCreat);
         level = 1;
     }
@@ -72,11 +72,11 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
 #endif
      
     Dictionary<int2, SpecialAreaTempCharacterCreatData> specialTempCharacterCreatDataDic = new Dictionary<int2, SpecialAreaTempCharacterCreatData>();
-    private async void StartCreatSpecialTempCharacter(StartCreatSpecialTempCharacter startCreatSpecialTempCharacter)
+    private async void StartCreateSpecialTempCharacter(StartCreatSpecialTempCharacter startCreatSpecialTempCharacter)
     {
         if (!specialTempCharacterCreatDataDic.ContainsKey(startCreatSpecialTempCharacter.areaKey))
         {
-           var  SpecialTempCharacterCreatData = await GameDataManager.instance.GetAsyncData<TempCharacterCreatData>(startCreatSpecialTempCharacter.creatDataId);
+           var  SpecialTempCharacterCreatData = await GameDataManager.instance.GetAsyncData<TempCharacterCreateData>(startCreatSpecialTempCharacter.creatDataId);
             if (SpecialTempCharacterCreatData == null)
                 return;
 
@@ -88,9 +88,9 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
                 oldSpecialCharacters=new List<int>()
             }; 
             specialTempCharacterCreatDataDic.Add(startCreatSpecialTempCharacter.areaKey, specialAreaTempCharacterCreatData);
-            UpDataTryCreatSpecialTempCharacter();
+            UpDataTryCreateSpecialTempCharacter();
 
-            void UpDataTryCreatSpecialTempCharacter()
+            void UpDataTryCreateSpecialTempCharacter()
             {
                 if (!specialTempCharacterCreatDataDic.TryGetValue(startCreatSpecialTempCharacter.areaKey, out var specialAreaTempCharacterCreatData))
                 {
@@ -114,7 +114,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
                     }
                 }
 
-                Action creatSpecialTempDelegate = UpDataTryCreatSpecialTempCharacter; 
+                Action creatSpecialTempDelegate = UpDataTryCreateSpecialTempCharacter; 
                 GameTimerController.instance.DelayAction(nowCd, creatSpecialTempDelegate);
                 specialAreaTempCharacterCreatData.creatSpecialTempDelegate = creatSpecialTempDelegate;
                 specialTempCharacterCreatDataDic[startCreatSpecialTempCharacter.areaKey] = specialAreaTempCharacterCreatData;
@@ -222,7 +222,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
             ClearTempCharacter clearTempCharacter = new ClearTempCharacter();
             GameActionManager.instance.QueueAction(clearTempCharacter, true);
         }
-        NowTempCharacterCreatData = await GameDataManager.instance.GetAsyncData<TempCharacterCreatData>(startCreatTempCharacter.creatDataId);
+        NowTempCharacterCreatData = await GameDataManager.instance.GetAsyncData<TempCharacterCreateData>(startCreatTempCharacter.creatDataId);
         if (NowTempCharacterCreatData == null)
         {
             return;
@@ -259,7 +259,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
     }
 
     private int maxTempCount;
-    private TempCharacterCreatData NowTempCharacterCreatData;
+    private TempCharacterCreateData NowTempCharacterCreatData;
     private MyList<int> tempCharacters;
 
     private void CreatCharacter(int2 nowTimeKey, BehaviorAreaType behaviorAreaType)

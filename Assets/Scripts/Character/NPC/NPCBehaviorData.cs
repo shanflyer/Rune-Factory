@@ -58,10 +58,8 @@ public class NPCBehaviorData : ScriptableObject, IGameData
                 int index = i * 4;
                 GameTimeKey gameTimeKey = new GameTimeKey
                 {
-                    minHour = gameTimeRanges[index],
-                    minMinute = gameTimeRanges[index + 1],
-                    maxHour = gameTimeRanges[index + 2],
-                    maxMinute = gameTimeRanges[index + 3]
+                    minTime=new int2(gameTimeRanges[index], gameTimeRanges[index + 1]),
+                    maxTime = new int2(gameTimeRanges[index+2], gameTimeRanges[index + 3]), 
                 };
                 gameTimeKeyVisitMapDic.Add(gameTimeKey, visitMaps[i]);
             }

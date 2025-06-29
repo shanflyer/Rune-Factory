@@ -1365,7 +1365,7 @@ public static class DataPath
         {typeof(PackageSetData),"Data/PackageSetData" },
         {typeof(MoneyCreatData), "Data/MoneyCreatData" },
         {typeof(ShopGroup),"Data/ShopItemData/ShopDataList" },
-        {typeof(TempCharacterCreatData),"Data/TempCharacterCreatData" },
+        {typeof(TempCharacterCreateData),"Data/TempCharacterCreatData" },
         {typeof(OperateData),"Data/OperateData" },
         {typeof(StoreCounterData),"Data/StoreCounterData/StoreCounterDataList" },
         {typeof(FestivalData),"Data/FestivalData/FestivalDataList"},

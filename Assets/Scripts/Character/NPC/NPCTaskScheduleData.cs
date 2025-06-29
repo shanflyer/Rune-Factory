@@ -49,17 +49,15 @@ public enum NPCTaskScheduleType
 [Serializable]
 public struct GameTimeKey : IEquatable<int2>, IEquatable<GameTimeKey>
 {
-    public int minHour, minMinute, maxHour, maxMinute;
+    public int2 minTime, maxTime;
 
     public static explicit operator GameTimeKey(string str)
     {
         var strs = str.Split(',');
         GameTimeKey gameTimeKey = new GameTimeKey
         {
-            minHour = int.Parse(strs[0]),
-            minMinute = int.Parse(strs[1]),
-            maxHour = int.Parse(strs[2]),
-            maxMinute = int.Parse(strs[3])
+            minTime =new int2(int.Parse(strs[0]), int.Parse(strs[1])),
+            maxTime = new int2(int.Parse(strs[2]), int.Parse(strs[3])), 
         };
         return gameTimeKey;
     }
@@ -68,53 +66,55 @@ public struct GameTimeKey : IEquatable<int2>, IEquatable<GameTimeKey>
     {
         GameTimeKey gameTimeKey = new GameTimeKey
         {
-            minHour = value.x,
-            minMinute = value.y,
-            maxHour = value.x,
-            maxMinute = value.y
+            minTime=value,
+            maxTime=value
         };
         return gameTimeKey;
     }
-
+    public static explicit operator GameTimeKey(int4 value)
+    {
+        GameTimeKey gameTimeKey = new GameTimeKey
+        {
+            minTime = value.xy,
+            maxTime = value.zw
+        };
+        return gameTimeKey;
+    }
     public override string ToString()
     {
-        return $"{minHour},{minMinute},{maxHour},{maxMinute}";
+        return $"{minTime.x},{minTime.y},{maxTime.x},{maxTime.y}";
     }
 
     public GameTimeKey(int[] timeArray)
     {
-        this.minHour = timeArray[0];
-        this.minMinute = timeArray[1];
-        this.maxHour = timeArray[2];
-        this.maxMinute = timeArray[3];
+        minTime = new int2(timeArray[0], timeArray[1]);
+        maxTime = new int2(timeArray[2], timeArray[3]); 
     }
 
     public GameTimeKey(int minHour, int minMinute, int maxHour, int maxMinute)
     {
-        this.minHour = minHour;
-        this.minMinute = minMinute;
-        this.maxHour = maxHour;
-        this.maxMinute = maxMinute;
+        minTime = new int2(minHour, minMinute);
+        maxTime = new int2(maxHour, maxMinute); 
     }
 
     public override bool Equals(object obj)
     {
         if (obj is GameTimeKey timeKey)
         {
-            if (timeKey.maxHour == timeKey.minHour && timeKey.maxMinute == timeKey.minMinute)
+            if (timeKey.maxTime.x== timeKey.minTime.x && timeKey.maxTime.y== timeKey.minTime.y)
             {
-                if (timeKey.maxHour > minHour)
+                if (timeKey.maxTime.x > minTime.x)
                 {
-                    if (timeKey.maxHour < maxHour)
+                    if (timeKey.maxTime.x < maxTime.x)
                     {
                         return true;
                     }
-                    else if (timeKey.maxMinute < maxMinute)
+                    else if (timeKey.maxTime.y < maxTime.y)
                     {
                         return true;
                     }
                 }
-                else if (timeKey.maxHour == minHour && timeKey.maxMinute >= minMinute)
+                else if (timeKey.maxTime.x == minTime.x && timeKey.maxTime.y >= minTime.y)
                 {
                     return true;
                 }
@@ -122,23 +122,23 @@ public struct GameTimeKey : IEquatable<int2>, IEquatable<GameTimeKey>
             }
             else
             {
-                return timeKey.minHour == minHour && timeKey.minMinute == minMinute && timeKey.maxHour == maxHour && timeKey.maxMinute == maxMinute;
+                return timeKey.minTime.x == minTime.x && timeKey.minTime.y == minTime.y && timeKey.maxTime.x == maxTime.x && timeKey.maxTime.y == maxTime.y;
             }
         }
         else if (obj is int2 time)
         {
-            if (time.x > minHour)
+            if (time.x > minTime.x)
             {
-                if (time.x < maxHour)
+                if (time.x < maxTime.x)
                 {
                     return true;
                 }
-                else if (time.y < maxMinute)
+                else if (time.y < maxTime.y)
                 {
                     return true;
                 }
             }
-            else if (time.x == minHour && time.y >= minMinute)
+            else if (time.x == minTime.x && time.y >= minTime.y)
             {
                 return true;
             }
@@ -149,18 +149,18 @@ public struct GameTimeKey : IEquatable<int2>, IEquatable<GameTimeKey>
 
     public static bool operator ==(GameTimeKey gameTimeKey, int2 timeKey)
     {
-        if (timeKey.x > gameTimeKey.minHour)
+        if (timeKey.x > gameTimeKey.minTime.x)
         {
-            if (timeKey.x < gameTimeKey.maxHour)
+            if (timeKey.x < gameTimeKey.maxTime.x)
             {
                 return true;
             }
-            else if (timeKey.y < gameTimeKey.maxMinute)
+            else if (timeKey.y < gameTimeKey.maxTime.y)
             {
                 return true;
             }
         }
-        else if (timeKey.x == gameTimeKey.minHour && timeKey.y >= gameTimeKey.minMinute)
+        else if (timeKey.x == gameTimeKey.minTime.x && timeKey.y >= gameTimeKey.minTime.y)
         {
             return true;
         }
@@ -169,18 +169,18 @@ public struct GameTimeKey : IEquatable<int2>, IEquatable<GameTimeKey>
 
     public static bool operator !=(GameTimeKey gameTimeKey, int2 timeKey)
     {
-        if (timeKey.x > gameTimeKey.minHour)
+        if (timeKey.x > gameTimeKey.minTime.x)
         {
-            if (timeKey.x < gameTimeKey.maxHour)
+            if (timeKey.x < gameTimeKey.maxTime.x)
             {
                 return false;
             }
-            else if (timeKey.y < gameTimeKey.maxMinute)
+            else if (timeKey.y < gameTimeKey.maxTime.y)
             {
                 return false;
             }
         }
-        else if (timeKey.x == gameTimeKey.minHour && timeKey.y >= gameTimeKey.minMinute)
+        else if (timeKey.x == gameTimeKey.minTime.x && timeKey.y >= gameTimeKey.minTime.y)
         {
             return false;
         }
@@ -194,18 +194,18 @@ public struct GameTimeKey : IEquatable<int2>, IEquatable<GameTimeKey>
 
     public bool Equals(int2 time)
     {
-        if (time.x > minHour)
+        if (time.x > minTime.x)
         {
-            if (time.x < maxHour)
+            if (time.x < maxTime.x)
             {
                 return true;
             }
-            else if (time.y < maxMinute)
+            else if (time.y < maxTime.y)
             {
                 return true;
             }
         }
-        else if (time.x == minHour && time.y >= minMinute)
+        else if (time.x == minTime.x && time.y >= minTime.y)
         {
             return true;
         }
@@ -214,20 +214,20 @@ public struct GameTimeKey : IEquatable<int2>, IEquatable<GameTimeKey>
 
     public bool Equals(GameTimeKey timeKey)
     {
-        if (timeKey.maxHour == timeKey.minHour && timeKey.maxMinute == timeKey.minMinute)
+        if (timeKey.maxTime.x == timeKey.minTime.x && timeKey.maxTime.y == timeKey.minTime.y)
         {
-            if (timeKey.maxHour > minHour)
+            if (timeKey.maxTime.x > minTime.x)
             {
-                if (timeKey.maxHour < maxHour)
+                if (timeKey.maxTime.x < maxTime.x)
                 {
                     return true;
                 }
-                else if (timeKey.maxMinute < maxMinute)
+                else if (timeKey.maxTime.y < maxTime.y)
                 {
                     return true;
                 }
             }
-            else if (timeKey.maxHour == minHour && timeKey.maxMinute >= minMinute)
+            else if (timeKey.maxTime.x == minTime.x && timeKey.maxTime.y >= minTime.y)
             {
                 return true;
             }
@@ -235,7 +235,7 @@ public struct GameTimeKey : IEquatable<int2>, IEquatable<GameTimeKey>
         }
         else
         {
-            return timeKey.minHour == minHour && timeKey.minMinute == minMinute && timeKey.maxHour == maxHour && timeKey.maxMinute == maxMinute;
+            return timeKey.minTime.x == minTime.x && timeKey.minTime.y == minTime.y && timeKey.maxTime.x == maxTime.x && timeKey.maxTime.y == maxTime.y;
         }
     }
 }

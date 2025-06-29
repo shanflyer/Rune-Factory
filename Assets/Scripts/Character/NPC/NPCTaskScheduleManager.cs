@@ -393,8 +393,8 @@ public class NPCTaskScheduleTimeList
             return null;
         }
         TaskScheduleModelData taskScheduleModelData = taskScheduleModelDatas[nowTimeKeyIndex];
-        int startM = taskScheduleModelData.gameTimeKey.minHour * 60 + taskScheduleModelData.gameTimeKey.minMinute;
-        int endM = taskScheduleModelData.gameTimeKey.maxHour * 60 + taskScheduleModelData.gameTimeKey.maxMinute;
+        int startM = taskScheduleModelData.gameTimeKey.minTime.x * 60 + taskScheduleModelData.gameTimeKey.minTime.y;
+        int endM = taskScheduleModelData.gameTimeKey.maxTime.x * 60 + taskScheduleModelData.gameTimeKey.maxTime.y;
         int nowM = time.x * 60 + time.y;
 
         float e_value = (nowM - startM) / (float)(endM - startM);
