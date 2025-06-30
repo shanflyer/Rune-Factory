@@ -29,7 +29,7 @@ public class GetRandomMapCell : Action
         int3 cell = int3.zero;
         if (room != null&& !room.IsNull())
         {
-            cell = MapCellController.instance.GetRandomBehavioCell(room.Value, behaviorAreaType);
+            cell = MapCellController.instance.GetRandomBehaviorCell(room.Value, behaviorAreaType);
             result.SetValue(new int3(cell.xy, room.Value));
             areaId.SetValue(cell.z);
             return TaskStatus.Success;
@@ -41,7 +41,7 @@ public class GetRandomMapCell : Action
             Character character = CharacterManager.instance.GetCharacter(characterId.Value);
             if (cell.x == 0)
             {
-                cell = MapCellController.instance.GetRandomBehavioCell(character.mapInstance, behaviorAreaType);
+                cell = MapCellController.instance.GetRandomBehaviorCell(character.mapInstance, behaviorAreaType);
                 result.SetValue(new int3(cell.xy, character.mapInstance));
                 areaId.SetValue(cell.z);
             }

@@ -31,12 +31,12 @@ public class GetNPCWorkPos : Action
                 int areaId = npc.GetWorkArea();
                 if (areaId == 0)
                 {
-                    var cell = MapCellController.instance.GetRandomBehavioCell(visitMap, BehaviorAreaType.聚集);
+                    var cell = MapCellController.instance.GetRandomBehaviorCell(visitMap, BehaviorAreaType.聚集);
                     result.SetValue(new int3(cell.xy, visitMap));
                 }
                 else
                 {
-                    var cell = MapCellController.instance.GetRandomBehavioCell(visitMap, areaId);
+                    var cell = MapCellController.instance.GetRandomBehaviorCell(visitMap, areaId);
                     result.SetValue(new int3(cell.xy, visitMap));
                 }
                 return TaskStatus.Success;
@@ -47,7 +47,7 @@ public class GetNPCWorkPos : Action
             int room = animal.GetPastureRoom();
             if (room!=0&&!TeamManager.instance.IsInTeam(characterId.Value))
             {
-                var cell = MapCellController.instance.GetRandomBehavioCell(room, BehaviorAreaType.聚集);
+                var cell = MapCellController.instance.GetRandomBehaviorCell(room, BehaviorAreaType.聚集);
                 result.SetValue(new int3(cell.xy, room));
                 return TaskStatus.Success;
             }

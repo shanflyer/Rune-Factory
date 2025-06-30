@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 using static UnityEngine.Rendering.GPUSort;
@@ -577,6 +578,36 @@ public static class GameCommon
         cells.Clear();
         return result;
     }
+
+
+    public static void RemoveValue<TKey, TValue>(
+    ref NativeParallelMultiHashMap<TKey, TValue> map,
+    TKey key,
+    TValue targetToRemove)
+    where TKey : unmanaged, IEquatable<TKey>
+    where TValue : unmanaged, IEquatable<TValue>
+    {
+        if (!map.TryGetFirstValue(key, out var value, out var it)) return;
+
+        var newValues = new NativeList<TValue>(Allocator.Temp);
+
+        do
+        {
+            if (!value.Equals(targetToRemove))
+                newValues.Add(value);
+        }
+        while (map.TryGetNextValue(out value, ref it));
+
+        // 清空旧值
+        map.Remove(key);
+
+        // 重新添加非目标项
+        for (int i = 0; i < newValues.Length; i++)
+            map.Add(key, newValues[i]);
+
+        newValues.Dispose();
+    }
+
     public static int2 GetDirectionInt2(Direction direction)
     {
         int2 value = int2.zero;

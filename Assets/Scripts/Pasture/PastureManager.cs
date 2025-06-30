@@ -816,7 +816,7 @@ public class Pasture : IReferenceData
     public int linkRoom;
     public int Key => instanceId;
 
-    public int2[] GetPastureCells()
+    public List<int2> GetPastureCells()
     {
       return  MapCellController.instance.GetItemTriggerCells(linkItem, linkRoom);
     }

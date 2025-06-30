@@ -29,7 +29,7 @@ public class GetNPCVisitMapPos : Action
             this.visitMap.SetValue(visitMap);
             if (visitMap > 0)
             {
-                var cell = MapCellController.instance.GetRandomBehavioCell(visitMap, BehaviorAreaType.聚集);
+                var cell = MapCellController.instance.GetRandomBehaviorCell(visitMap, BehaviorAreaType.聚集);
                 result.SetValue(new int3(cell.xy, visitMap));
                 
                 return TaskStatus.Success;

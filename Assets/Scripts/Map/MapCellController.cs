@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Unity.Burst;
 using Unity.Collections;
@@ -271,54 +272,7 @@ public class MapCellController : Singleton<MapCellController>
         return cells;
     }
 
-    [BurstCompile]
-    public struct MapTriggerAreas
-    {
-        public NativeList<TriggerArea> triggerAreas;
-        private NativeHashMap<int, int> triggerIndexs;
-
-        public NativeArray<int2> GetItemTriggerCells(int instanceId)
-        {
-            if (triggerIndexs.TryGetValue(instanceId, out var index))
-            {
-                var cells = triggerAreas[index].cells;
-                return cells.ToNativeArray(Allocator.TempJob);
-            }
-            return new NativeArray<int2>(0, Allocator.TempJob);
-        }
-
-        public void InitTriggerData()
-        {
-            triggerAreas = new NativeList<TriggerArea>(4, Allocator.Persistent);
-            triggerIndexs = new NativeHashMap<int, int>(4, Allocator.Persistent);
-        }
-
-        public void AddTriggerCell(TriggerArea trigger)
-        {
-            triggerAreas.Add(trigger);
-            triggerIndexs.Add(trigger.referenceId, triggerAreas.Length - 1);
-        }
-
-        public void RemoveTriggerCell(int refrenceId)
-        {
-            if (triggerIndexs.TryGetValue(refrenceId, out int index))
-            {
-                triggerAreas.RemoveAt(index);
-                triggerIndexs.Remove(refrenceId);
-            }
-        }
-
-        public readonly void Dispose()
-        {
-            for (int i = 0; i < triggerAreas.Length; i++)
-            {
-                triggerAreas[i].Dispose();
-            }
-
-            triggerAreas.Dispose();
-            triggerIndexs.Dispose();
-        }
-    }
+     
 
     //[BurstCompile]
     public class RuntimeMapRoom
@@ -381,13 +335,22 @@ public class MapCellController : Singleton<MapCellController>
             NpcBehaviorAreas = null;
             NpcBehaviorAreaTypeDic.Clear();
 
-            linkMapIndexs.Dispose();
+            linkMapIndexes.Dispose();
             linkMaps.Dispose();
             linkActions.Dispose();
-            neighbourMaps.Dispose();
-            commonTriggerAreas.Dispose();
-            playerTriggerAreas.Dispose();
-            playerForwardTriggerAreas.Dispose();
+            neighborMaps.Dispose();
+
+            commonTriggerDatas.Dispose(); 
+            commonTriggerCellIndexes.Dispose();
+            commonTriggerCells.Dispose();
+             
+            playerTriggerAreaDatas.Dispose();
+            playerForwardTriggerCells.Dispose();
+            playerForwardTriggerIndexes.Dispose();
+             
+            playerForwardTriggerAreaDatas.Dispose();
+            playerForwardTriggerCells.Dispose();
+            playerForwardTriggerIndexes.Dispose();
         }
 
         public int id;
@@ -396,7 +359,7 @@ public class MapCellController : Singleton<MapCellController>
         public int roomCellDataIndex;
         // public RoomCellData roomCellData;
 
-        public NativeHashMap<int2, int> linkMapIndexs;
+        public NativeHashMap<int2, int> linkMapIndexes;
         public NativeList<int4> linkMaps;
 
         /// <summary>
@@ -404,25 +367,70 @@ public class MapCellController : Singleton<MapCellController>
         /// </summary>
         public NativeList<int3> linkActions;
 
-        public NativeHashMap<int, int> neighbourMaps;
+        public NativeHashMap<int, int> neighborMaps;
 
-        public MapTriggerAreas commonTriggerAreas;
-        public MapTriggerAreas playerTriggerAreas;
-        public MapTriggerAreas playerForwardTriggerAreas;
+        /// <summary>
+        /// 地图触发区域
+        /// </summary> 
+        public NativeHashMap<int, int> commonTriggerCellIndexes;
+        public NativeList<TriggerAreaData> commonTriggerDatas;
+        public NativeParallelMultiHashMap<int, int2> commonTriggerCells;
+         
+        public NativeHashMap<int, int> playerTriggerCellIndexes;
+        public NativeList<TriggerAreaData> playerTriggerAreaDatas;
+        public NativeParallelMultiHashMap<int, int2> playerTriggerCells;
+         
+        public NativeHashMap<int, int> playerForwardTriggerIndexes;
+        public NativeList<TriggerAreaData> playerForwardTriggerAreaDatas;
+        public NativeParallelMultiHashMap<int, int2> playerForwardTriggerCells;
+
+
+        public List<int2> GetTriggerAreaCells(int instanceId)
+        {
+            List<int2> cells = new List<int2>();
+            if(commonTriggerCells.TryGetFirstValue(instanceId,out var cell,out var iterator))
+            {
+                do
+                {
+                    cells.Add(cell);
+                } while (commonTriggerCells.TryGetNextValue(out cell, ref iterator));
+            }
+            return cells;
+        }
+        public List<int2> GetPlayerTriggerAreaCells(int instanceId)
+        {
+            List<int2> cells = new List<int2>();
+            if (playerTriggerCells.TryGetFirstValue(instanceId, out var cell, out var iterator))
+            {
+                do
+                {
+                    cells.Add(cell);
+                } while (playerTriggerCells.TryGetNextValue(out cell, ref iterator));
+            }
+            return cells;
+        }
         public int Key => id;
 
         public void InitTriggerData()
-        {
-            commonTriggerAreas.InitTriggerData();
-            playerTriggerAreas.InitTriggerData();
-            playerForwardTriggerAreas.InitTriggerData();
+        { 
+            commonTriggerCells = new NativeParallelMultiHashMap<int, int2>(1024, Allocator.Persistent);
+            commonTriggerCellIndexes=new NativeHashMap<int, int>(1024,Allocator.Persistent);
+            commonTriggerDatas = new NativeList<TriggerAreaData>(512, Allocator.Persistent);
+             
+            playerForwardTriggerCells = new NativeParallelMultiHashMap<int, int2>(1024, Allocator.Persistent);
+            playerForwardTriggerIndexes = new NativeHashMap<int, int>(1024, Allocator.Persistent);
+            playerTriggerAreaDatas = new NativeList<TriggerAreaData>(512, Allocator.Persistent);
+             
+            playerForwardTriggerCells = new NativeParallelMultiHashMap<int, int2>(1024, Allocator.Persistent);
+            playerForwardTriggerIndexes = new NativeHashMap<int, int>(1024, Allocator.Persistent);
+            playerForwardTriggerAreaDatas = new NativeList<TriggerAreaData>(512, Allocator.Persistent);
         }
 
         public bool GetLinkMapInCoordinate(int linkMap, ref int2 inCoordinate)
         {
             NativeList<int2> coordinates = new NativeList<int2>(4, Allocator.Temp);
 
-            using(var e = linkMapIndexs.GetEnumerator())
+            using(var e = linkMapIndexes.GetEnumerator())
             {
                 while (e.MoveNext())
                 {
@@ -464,14 +472,14 @@ public class MapCellController : Singleton<MapCellController>
 
             for (int i = 0; i < cells.Count; i++)
             {
-                linkMapIndexs.Remove(cells[i]);
+                linkMapIndexes.Remove(cells[i]);
             }
-            if (neighbourMaps.TryGetValue(linkMapCell.targetCell.z, out var num))
+            if (neighborMaps.TryGetValue(linkMapCell.targetCell.z, out var num))
             {
                 num--;
                 if (num == 0)
                 {
-                    neighbourMaps.Remove(linkMapCell.targetCell.z);
+                    neighborMaps.Remove(linkMapCell.targetCell.z);
                 }
             }
             return this;
@@ -496,17 +504,17 @@ public class MapCellController : Singleton<MapCellController>
             {
                 try
                 {
-                    linkMapIndexs[cells[i]]=linkMaps.Length - 1;
+                    linkMapIndexes[cells[i]]=linkMaps.Length - 1;
                 }
                 catch
                 {
-                    Debug.LogError($"linkMapCell{linkMapCell.targetCell}--{cells[i]}--old{linkMapIndexs[cells[i]]}");
+                    Debug.LogError($"linkMapCell{linkMapCell.targetCell}--{cells[i]}--old{linkMapIndexes[cells[i]]}");
                 }
                
             }
-            neighbourMaps.TryGetValue(linkMapCell.targetCell.z, out var num);
+            neighborMaps.TryGetValue(linkMapCell.targetCell.z, out var num);
             num++;
-            neighbourMaps[linkMapCell.targetCell.z] = num;
+            neighborMaps[linkMapCell.targetCell.z] = num;
             return this;
         }
 
@@ -514,7 +522,7 @@ public class MapCellController : Singleton<MapCellController>
         {
             newMap = int3.zero;
             changeAction = int3.zero;
-            if (linkMapIndexs.TryGetValue(nowCoordinate, out int index))
+            if (linkMapIndexes.TryGetValue(nowCoordinate, out int index))
             {
                 int4 nextData = linkMaps[index];
                 if (GameCommon.CheckDirectionValue(direction, nextData.w))
@@ -530,7 +538,7 @@ public class MapCellController : Singleton<MapCellController>
         public bool ChangeMap(int2 nowCoordinate, Direction direction, out int3 newMap)
         {
             newMap = int3.zero;
-            if (linkMapIndexs.TryGetValue(nowCoordinate, out int index))
+            if (linkMapIndexes.TryGetValue(nowCoordinate, out int index))
             {
                 int4 nextData = linkMaps[index];
                 if (GameCommon.CheckDirectionValue(direction, nextData.w))
@@ -772,7 +780,7 @@ public class MapCellController : Singleton<MapCellController>
 
     private Dictionary<int, RuntimeMapRoom> runtimeMapRooms = new Dictionary<int, RuntimeMapRoom>();
     private NativeList<RoomCellData> roomCellDatas;
-    public int3 GetRandomBehavioCell(int mapInstance, int areaId)
+    public int3 GetRandomBehaviorCell(int mapInstance, int areaId)
     {
         if (runtimeMapRooms.TryGetValue(mapInstance, out var runtimeMapRoom))
         {
@@ -780,7 +788,7 @@ public class MapCellController : Singleton<MapCellController>
         }
         return int3.zero;
     }
-    public int3 GetRandomBehavioCell(int mapInstance, BehaviorAreaType behaviorAreaType)
+    public int3 GetRandomBehaviorCell(int mapInstance, BehaviorAreaType behaviorAreaType)
     {
         if (runtimeMapRooms.TryGetValue(mapInstance, out var runtimeMapRoom))
         {
@@ -791,17 +799,21 @@ public class MapCellController : Singleton<MapCellController>
     public int2 GetRandomItemPlayerTriggerCell(int roomId,int itemInstanceId)
     {
         var cells = GetItemPlayerTriggerCells(itemInstanceId, roomId);
-        int index = GameRandom.RandomInt(0, cells.Length);
-        return cells[index];
+        if (cells != null)
+        {
+            int index = GameRandom.RandomInt(0, cells.Count);
+            return cells[index];
+        }
+        return int2.zero;
     }
     public int2 GetNearestItemPlayerTriggerCell(int roomId, int itemInstanceId, int2 cell)
     {
         var cells = GetItemPlayerTriggerCells(itemInstanceId, roomId);
-        if (cells != null && cells.Length > 0)
+        if (cells != null && cells.Count> 0)
         {
             int index = 0;
             int distance = int.MaxValue;
-            for (int i = 0; i < cells.Length; i++)
+            for (int i = 0; i < cells.Count; i++)
             {
                 int dx = cell.x - cells[i].x;
                 int dy = cell.y - cells[i].y;
@@ -821,7 +833,7 @@ public class MapCellController : Singleton<MapCellController>
     {
         var cells = GetItemTriggerCells(itemInstanceId, roomId);
         int minX = int.MaxValue, minY = int.MaxValue, maxX = int.MinValue, maxY = int.MinValue;
-        for (int i = 0; i < cells.Length; i++)
+        for (int i = 0; i < cells.Count; i++)
         {
             if (cells[i].x < minX)
             {
@@ -846,11 +858,11 @@ public class MapCellController : Singleton<MapCellController>
     public int2 GetNearestItemCommonTriggerCell(int roomId, int itemInstanceId, int2 cell)
     {
         var cells = GetItemTriggerCells(itemInstanceId, roomId);
-        if (cells != null && cells.Length > 0)
+        if (cells != null && cells.Count > 0)
         {
             int index = 0;
             int distance = int.MaxValue;
-            for (int i = 0; i < cells.Length; i++)
+            for (int i = 0; i < cells.Count; i++)
             {
                 int dx = cell.x - cells[i].x;
                 int dy = cell.y - cells[i].y;
@@ -876,26 +888,21 @@ public class MapCellController : Singleton<MapCellController>
         return new int2(int.MinValue, int.MinValue);
     }
 
-    public int2[] GetItemTriggerCells(int instanceId, int room)
+    public List<int2> GetItemTriggerCells(int instanceId, int room)
     {
         if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
-        {
-            var cells = runtimeMapRoom.commonTriggerAreas.GetItemTriggerCells(instanceId);
-            int2[] cellArray = cells.ToArray();
-            cells.Dispose();
-            return cellArray;
+        { 
+            return runtimeMapRoom.GetTriggerAreaCells(instanceId);
         }
         return null;
     }
 
-    public int2[] GetItemPlayerTriggerCells(int instanceId, int room)
+    public List<int2> GetItemPlayerTriggerCells(int instanceId, int room)
     {
         if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
         {
-            var cells = runtimeMapRoom.playerTriggerAreas.GetItemTriggerCells(instanceId);
-            int2[] cellArray = cells.ToArray();
-            cells.Dispose();
-            return cellArray;
+            var cells = runtimeMapRoom.GetPlayerTriggerAreaCells(instanceId); 
+            return cells;
         }
         return null;
     }
@@ -963,24 +970,24 @@ public class MapCellController : Singleton<MapCellController>
         if (runtimeMapRooms.TryGetValue(room, out RuntimeMapRoom runtimeMapRoom))
         {
             int4 triggerEvent = new int4((int)triggerType, enterEventId, exitEventId, linkId);
-
-            TriggerArea triggerArea = new TriggerArea
+            TriggerAreaData triggerAreaData = new TriggerAreaData
             {
-                cells = new UnsafeHashSet<int2>(cells.Length, Allocator.Persistent),
                 enterLinkEventId = enterEventId,
                 exitLinkEventId = exitEventId,
                 referenceId = linkId,
                 triggerType = triggerType
             };
+              
             for (int i = 0; i < cells.Length; i++)
             {
-                triggerArea.cells.Add(cells[i] + offset);
-            }
-
-            runtimeMapRoom.commonTriggerAreas.AddTriggerCell(triggerArea);
-            // runtimeMapRooms.SetData(runtimeMapRoom);
+                var cell = cells[i] + offset; 
+                runtimeMapRoom.commonTriggerCells.Add(linkId, cell); 
+                runtimeMapRoom.commonTriggerDatas.Add(triggerAreaData);
+                runtimeMapRoom.commonTriggerCellIndexes.Add(linkId, runtimeMapRoom.commonTriggerDatas.Length - 1);
+            } 
         }
     }
+    
 
     /// <summary>
     /// 移除通用触发格子
@@ -992,8 +999,12 @@ public class MapCellController : Singleton<MapCellController>
     {
         if (runtimeMapRooms.TryGetValue(room, out RuntimeMapRoom runtimeMapRoom))
         {
-            runtimeMapRoom.commonTriggerAreas.RemoveTriggerCell(linkId);
-            //runtimeMapRooms.SetData(runtimeMapRoom);
+            if(runtimeMapRoom.commonTriggerCellIndexes.TryGetValue(linkId,out var index))
+            {
+                runtimeMapRoom.commonTriggerDatas.RemoveAt(index);
+                runtimeMapRoom.commonTriggerCellIndexes.Remove(linkId);
+            }  
+            runtimeMapRoom.commonTriggerCells.Remove(linkId);
         }
     }
 
@@ -1009,24 +1020,32 @@ public class MapCellController : Singleton<MapCellController>
     {
         if (runtimeMapRooms.TryGetValue(room, out RuntimeMapRoom runtimeMapRoom))
         {
-            TriggerArea triggerArea = new TriggerArea
-            {
-                cells = new UnsafeHashSet<int2>(4, Allocator.Persistent),
+            TriggerAreaData triggerArea = new TriggerAreaData
+            { 
                 enterLinkEventId = enterEventId,
                 referenceId = linkId,
             };
 
-            for (int i = 0; i < cells.Length; i++)
-            {
-                triggerArea.cells.Add(cells[i] + offset);
-            }
+           
             if (isForward)
             {
-                runtimeMapRoom.playerForwardTriggerAreas.AddTriggerCell(triggerArea);
+                for (int i = 0; i < cells.Length; i++)
+                {
+                    var cell = cells[i] + offset;
+                    runtimeMapRoom.playerForwardTriggerCells.Add(linkId, cell); 
+                }
+                runtimeMapRoom.playerForwardTriggerAreaDatas.Add(triggerArea);
+                runtimeMapRoom.playerForwardTriggerIndexes.Add(linkId, runtimeMapRoom.playerTriggerAreaDatas.Length - 1);
             }
             else
             {
-                runtimeMapRoom.playerTriggerAreas.AddTriggerCell(triggerArea);
+                for (int i = 0; i < cells.Length; i++)
+                {
+                    var cell = cells[i] + offset;
+                    runtimeMapRoom.playerTriggerCells.Add(linkId, cell); 
+                }
+                runtimeMapRoom.playerTriggerAreaDatas.Add(triggerArea);
+                runtimeMapRoom.playerForwardTriggerIndexes.Add(linkId, runtimeMapRoom.playerForwardTriggerAreaDatas.Length - 1);
             }
             
             //runtimeMapRooms.SetData(runtimeMapRoom);
@@ -1043,9 +1062,14 @@ public class MapCellController : Singleton<MapCellController>
     {
         if (runtimeMapRooms.TryGetValue(room, out RuntimeMapRoom runtimeMapRoom))
         {
-            runtimeMapRoom.playerTriggerAreas.RemoveTriggerCell(linkId);
-            runtimeMapRoom.playerForwardTriggerAreas.RemoveTriggerCell(linkId);
-            // runtimeMapRooms.SetData(runtimeMapRoom);
+            if (runtimeMapRoom.playerTriggerCellIndexes.TryGetValue(linkId, out var index))
+            {
+                runtimeMapRoom.playerTriggerAreaDatas.RemoveAt(index);
+                runtimeMapRoom.playerTriggerCellIndexes.Remove(linkId);
+            }
+
+            runtimeMapRoom.playerTriggerCells.Remove(linkId);
+
         }
     }
 
@@ -1054,14 +1078,15 @@ public class MapCellController : Singleton<MapCellController>
         if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
         {
             NativeArray<int3> triggerEvents = new NativeArray<int3>
-                (runtimeMapRoom.commonTriggerAreas.triggerAreas.Length, Allocator.Persistent);
+                (runtimeMapRoom.commonTriggerDatas.Length, Allocator.Persistent);
             SingleTriggerJob triggerJob = new SingleTriggerJob
             {
-                TriggerAreas = runtimeMapRoom.commonTriggerAreas.triggerAreas,
+                TriggerAreas = runtimeMapRoom.commonTriggerDatas,
                 cell = cell,
                 exit = exit,
                 triggerEvents = triggerEvents,
                 triggerType = entityType,
+                areaCellMap=runtimeMapRoom.commonTriggerCells.AsReadOnly()
             };
 
             triggerJob.Schedule(triggerEvents.Length, 8).Complete();
@@ -1085,16 +1110,17 @@ public class MapCellController : Singleton<MapCellController>
         if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
         {
             NativeArray<int3> triggerEvents = new NativeArray<int3>
-                (isForward?runtimeMapRoom.playerForwardTriggerAreas.triggerAreas.Length:runtimeMapRoom.playerTriggerAreas.triggerAreas.Length, Allocator.Persistent);
+                (isForward?runtimeMapRoom.playerForwardTriggerAreaDatas.Length:runtimeMapRoom.playerTriggerAreaDatas.Length, Allocator.Persistent);
 
             SingleTriggerPlayerJob triggerJob = new SingleTriggerPlayerJob
             {
-                TriggerAreas = isForward?runtimeMapRoom.playerForwardTriggerAreas.triggerAreas: runtimeMapRoom.playerTriggerAreas.triggerAreas,
+                TriggerAreas = isForward?runtimeMapRoom.playerForwardTriggerAreaDatas:runtimeMapRoom.playerTriggerAreaDatas,
                 cell = cell,
                 exit = exit,
                 oldLinkId = oldLink,
                 triggerType = EntityType.玩家,
-                triggerEvents = triggerEvents
+                triggerEvents = triggerEvents,
+                areaCellMap= isForward ?runtimeMapRoom.playerForwardTriggerCells.AsReadOnly() :runtimeMapRoom.playerTriggerCells.AsReadOnly(),
             };
             //triggerJob.Run(triggerEvents.Length);
             triggerJob.Schedule(triggerEvents.Length, 8).Complete();
@@ -1160,14 +1186,15 @@ public class MapCellController : Singleton<MapCellController>
         if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
         {
             NativeArray<int3> triggerEvents = new NativeArray<int3>
-                (runtimeMapRoom.commonTriggerAreas.triggerAreas.Length, Allocator.TempJob);
+                (runtimeMapRoom.commonTriggerDatas.Length, Allocator.TempJob);
             TriggerJob triggerJob = new TriggerJob
             {
-                TriggerAreas = runtimeMapRoom.commonTriggerAreas.triggerAreas,
+                TriggerAreas = runtimeMapRoom.commonTriggerDatas,
                 oldCell = oldCell,
                 nowCell = nowCell,
                 triggerEvents = triggerEvents,
                 triggerType = entityType,
+                areaCellMap=runtimeMapRoom.commonTriggerCells.AsReadOnly()
             };
 
             triggerJob.Schedule(triggerEvents.Length, 8).Complete();
@@ -1200,16 +1227,17 @@ public class MapCellController : Singleton<MapCellController>
         if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
         {
             NativeArray<int3> triggerEvents = new NativeArray<int3>
-                (isFroward?runtimeMapRoom.playerForwardTriggerAreas.triggerAreas.Length: runtimeMapRoom.playerTriggerAreas.triggerAreas.Length, Allocator.TempJob);
+                (isFroward?runtimeMapRoom.playerForwardTriggerAreaDatas.Length: runtimeMapRoom.playerTriggerAreaDatas.Length, Allocator.TempJob);
 
             TriggerPlayerJob triggerJob = new TriggerPlayerJob
             {
-                TriggerAreas = isFroward ? runtimeMapRoom.playerForwardTriggerAreas.triggerAreas:runtimeMapRoom.playerTriggerAreas.triggerAreas,
+                TriggerAreas = isFroward ? runtimeMapRoom.playerForwardTriggerAreaDatas : runtimeMapRoom.playerTriggerAreaDatas,
                 oldCell = oldCell,
                 nowCell = nowCell,
                 oldLinkId = oldLink,
                 triggerType = EntityType.玩家,
-                triggerEvents = triggerEvents
+                triggerEvents = triggerEvents,
+                areaCellMap = isFroward ? runtimeMapRoom.playerForwardTriggerCells.AsReadOnly() : runtimeMapRoom.playerTriggerCells.AsReadOnly(),
             };
             // triggerJob.Run(triggerEvents.Length);
             triggerJob.Schedule(triggerEvents.Length, 8).Complete();
@@ -1270,12 +1298,13 @@ public class MapCellController : Singleton<MapCellController>
 
             GetTriggerPlayerItemJob triggerJob = new GetTriggerPlayerItemJob
             {
-                TriggerAreas = runtimeMapRoom.playerTriggerAreas.triggerAreas,
+                TriggerAreas = runtimeMapRoom.playerTriggerAreaDatas,
                 cells= cells,
-                outItems=outItems
+                outItems=outItems,
+                areaCellMap=runtimeMapRoom.playerTriggerCells.AsReadOnly()
             };
             //triggerJob.Run(triggerEvents.Length);
-            triggerJob.Schedule(runtimeMapRoom.playerTriggerAreas.triggerAreas.Length, 8).Complete();
+            triggerJob.Schedule(runtimeMapRoom.playerTriggerAreaDatas.Length, 8).Complete();
 
             List<int> results = new List<int>();
             foreach(var item in outItems)
@@ -1329,13 +1358,17 @@ public class MapCellController : Singleton<MapCellController>
         return null;
     }
 #endif 
-    public MapTriggerAreas GetPlayerTrigger(int roomId)
+    public int2[] GetPlayerTrigger(int roomId)
     {
+        int2[] result=null;
         if (runtimeMapRooms.TryGetValue(roomId, out var runtimeMapRoom))
         {
-            return runtimeMapRoom.playerTriggerAreas;
+            var cells= runtimeMapRoom.playerTriggerCells.GetValueArray(Allocator.Temp);
+            result=cells.ToArray();
+            cells.Dispose();
+             
         }
-        return default(MapTriggerAreas);
+        return result;
     }
 
     public void InitMapData(int roomId, MapRoomData mapRoomData, int3 coordinate)
@@ -1388,10 +1421,10 @@ public class MapCellController : Singleton<MapCellController>
             coordinate = coordinate,
             roomCellDataIndex = roomCellDatas.Length - 1,
             id = roomId,
-            linkMapIndexs = new NativeHashMap<int2, int>(16, Allocator.Persistent),
+            linkMapIndexes = new NativeHashMap<int2, int>(16, Allocator.Persistent),
             linkMaps = new NativeList<int4>(16, Allocator.Persistent),
             linkActions = new NativeList<int3>(16, Allocator.Persistent),
-            neighbourMaps = new NativeHashMap<int, int>(8, Allocator.Persistent),
+            neighborMaps = new NativeHashMap<int, int>(8, Allocator.Persistent),
         };
         runtimeMapRoom.SetNpcBehaviorAreas(mapRoomData.npcBehaviorAreas);
         runtimeMapRoom.InitTriggerData();
@@ -1701,7 +1734,7 @@ public class MapCellController : Singleton<MapCellController>
     {
         if (runtimeMapRooms.TryGetValue(roomId, out RuntimeMapRoom sourceRoom))
         {
-            return sourceRoom.neighbourMaps;
+            return sourceRoom.neighborMaps;
         }
         return default(NativeHashMap<int, int>);
     }
@@ -2364,35 +2397,45 @@ public class MapCellController : Singleton<MapCellController>
     public struct SingleTriggerJob : IJobParallelFor
     {
         // [ReadOnly] public BlobAssetReference<TriggerAreaAsset> triggerAreaAssetRef;
-        [ReadOnly] public NativeList<TriggerArea> TriggerAreas;
+        [ReadOnly] public NativeList<TriggerAreaData> TriggerAreas;
 
         [WriteOnly] public NativeArray<int3> triggerEvents;
         [ReadOnly] public int2 cell;
         [ReadOnly] public bool exit;
         [ReadOnly] public EntityType triggerType;
+        [ReadOnly] public NativeParallelMultiHashMap<int, int2>.ReadOnly areaCellMap;
 
         public void Execute(int index)
         {
-            TriggerArea triggerArea = TriggerAreas[index];
+            var triggerArea = TriggerAreas[index];
             int typeValue = (int)triggerArea.triggerType % (int)triggerType;
             if (typeValue > 0)
             {
                 return;
             }
 
-            if (triggerArea.cells.Contains(cell))
+            if(areaCellMap.TryGetFirstValue(triggerArea.referenceId,out var cell,out var it))
             {
-                if (exit)
+                do
                 {
-                    //离开事件
-                    triggerEvents[index] = new int3(triggerArea.exitLinkEventId, triggerArea.referenceId, 0);
-                }
-                else
-                {
-                    //进入事件
-                    triggerEvents[index] = new int3(triggerArea.enterLinkEventId, triggerArea.referenceId, 1);
-                }
+                    if (cell.Equals(this.cell))
+                    {
+
+                        if (exit)
+                        {
+                            //离开事件
+                            triggerEvents[index] = new int3(triggerArea.exitLinkEventId, triggerArea.referenceId, 0);
+                        }
+                        else
+                        {
+                            //进入事件
+                            triggerEvents[index] = new int3(triggerArea.enterLinkEventId, triggerArea.referenceId, 1);
+                        }
+                        break;
+                    }
+                } while (areaCellMap.TryGetNextValue(out cell, ref it));
             }
+
         }
     }
 
@@ -2400,24 +2443,41 @@ public class MapCellController : Singleton<MapCellController>
     public struct TriggerJob : IJobParallelFor
     {
         // [ReadOnly] public BlobAssetReference<TriggerAreaAsset> triggerAreaAssetRef;
-        [ReadOnly] public NativeList<TriggerArea> TriggerAreas;
+        [ReadOnly] public NativeList<TriggerAreaData> TriggerAreas;
 
         [WriteOnly] public NativeArray<int3> triggerEvents;
         [ReadOnly] public int2 oldCell;
         [ReadOnly] public int2 nowCell;
         [ReadOnly] public EntityType triggerType;
-
+        [ReadOnly] public NativeParallelMultiHashMap<int, int2>.ReadOnly areaCellMap;
         public void Execute(int index)
         {
-            TriggerArea triggerArea = TriggerAreas[index];
+            var triggerArea = TriggerAreas[index];
             int typeValue = (int)triggerArea.triggerType % (int)triggerType;
             if (typeValue > 0)
             {
                 return;
             }
+            bool oldContanins = false;
+            bool nowContanins = false;
+            if (areaCellMap.TryGetFirstValue(triggerArea.referenceId, out var cell, out var it))
+            {
+                do
+                {
 
-            bool oldContanins = triggerArea.cells.Contains(oldCell);
-            bool nowContanins = triggerArea.cells.Contains(nowCell);
+                    if (!oldContanins&& cell.Equals(this.oldCell))
+                    {
+
+                        oldContanins= true; 
+                    }
+                    if (!nowContanins && cell.Equals(this.nowCell))
+                    {
+
+                        nowContanins = true;
+                    }
+                } while (areaCellMap.TryGetNextValue(out cell, ref it));
+            }
+             
 
             if (oldContanins && !nowContanins)
             {
@@ -2436,24 +2496,41 @@ public class MapCellController : Singleton<MapCellController>
     public struct TriggerPlayerJob : IJobParallelFor
     {
         // [ReadOnly] public BlobAssetReference<TriggerAreaAsset> triggerAreaAssetRef;
-        [ReadOnly] public NativeList<TriggerArea> TriggerAreas;
+        [ReadOnly] public NativeList<TriggerAreaData> TriggerAreas;
 
         [WriteOnly] public NativeArray<int3> triggerEvents;
         [ReadOnly] public int oldLinkId;
         [ReadOnly] public int2 oldCell;
         [ReadOnly] public int2 nowCell;
         [ReadOnly] public EntityType triggerType;
-
+        [ReadOnly] public NativeParallelMultiHashMap<int, int2>.ReadOnly areaCellMap;
         public void Execute(int index)
         {
-            TriggerArea triggerArea = TriggerAreas[index];
+            var triggerArea = TriggerAreas[index];
             int typeValue = (int)triggerArea.triggerType % (int)triggerType;
             if (typeValue > 0)
             {
                 return;
             }
-            bool oldContanins = triggerArea.cells.Contains(oldCell);
-            bool nowContanins = triggerArea.cells.Contains(nowCell);
+            bool oldContanins = false;
+            bool nowContanins = false;
+            if (areaCellMap.TryGetFirstValue(triggerArea.referenceId, out var cell, out var it))
+            {
+                do
+                {
+
+                    if (!oldContanins && cell.Equals(this.oldCell))
+                    {
+
+                        oldContanins = true;
+                    }
+                    if (!nowContanins && cell.Equals(this.nowCell))
+                    {
+
+                        nowContanins = true;
+                    }
+                } while (areaCellMap.TryGetNextValue(out cell, ref it));
+            }
             if (triggerArea.referenceId == oldLinkId)
             {
                 if (oldContanins && !nowContanins)
@@ -2477,56 +2554,72 @@ public class MapCellController : Singleton<MapCellController>
     public struct SingleTriggerPlayerJob : IJobParallelFor
     {
         // [ReadOnly] public BlobAssetReference<TriggerAreaAsset> triggerAreaAssetRef;
-        [ReadOnly] public NativeList<TriggerArea> TriggerAreas;
+        [ReadOnly] public NativeList<TriggerAreaData> TriggerAreas;
 
         [WriteOnly] public NativeArray<int3> triggerEvents;
         [ReadOnly] public int oldLinkId;
         [ReadOnly] public int2 cell;
         [ReadOnly] public bool exit;
         [ReadOnly] public EntityType triggerType;
+        [ReadOnly] public NativeParallelMultiHashMap<int, int2>.ReadOnly areaCellMap;
 
         public void Execute(int index)
         {
-            TriggerArea triggerArea = TriggerAreas[index];
+            var triggerArea = TriggerAreas[index];
             int typeValue = (int)triggerArea.triggerType % (int)triggerType;
             if (typeValue > 0)
             {
                 return;
             }
-            bool contanins = triggerArea.cells.Contains(cell);
-            if (contanins)
+            if (areaCellMap.TryGetFirstValue(triggerArea.referenceId, out var cell, out var it))
             {
-                if (triggerArea.referenceId == oldLinkId && exit)
+                do
                 {
-                    //离开事件
-                    triggerEvents[index] = new int3(triggerArea.exitLinkEventId, triggerArea.referenceId, 0);
-                }
-                if (!exit && triggerArea.referenceId != oldLinkId)
-                {
-                    //进入
-                    triggerEvents[index] = new int3(triggerArea.enterLinkEventId, triggerArea.referenceId, 1);
-                }
-            }
+                    if (cell.Equals(this.cell))
+                    {
+                        if (triggerArea.referenceId == oldLinkId && exit)
+                        {
+                            //离开事件
+                            triggerEvents[index] = new int3(triggerArea.exitLinkEventId, triggerArea.referenceId, 0);
+                        }
+                        if (!exit && triggerArea.referenceId != oldLinkId)
+                        {
+                            //进入
+                            triggerEvents[index] = new int3(triggerArea.enterLinkEventId, triggerArea.referenceId, 1);
+                        }
+                        break;
+                    }
+                } while (areaCellMap.TryGetNextValue(out cell, ref it));
+            } 
         }
     }
     [BurstCompile]
     public struct GetTriggerPlayerItemJob : IJobParallelFor
     {
         // [ReadOnly] public BlobAssetReference<TriggerAreaAsset> triggerAreaAssetRef;
-        [ReadOnly] public NativeList<TriggerArea> TriggerAreas;
+        [ReadOnly] public NativeList<TriggerAreaData> TriggerAreas;
  
         [ReadOnly] public NativeHashSet<int2> cells;  
         [NativeDisableParallelForRestriction]
         [WriteOnly]
         public NativeHashSet<int> outItems;
+        [ReadOnly] public NativeParallelMultiHashMap<int, int2>.ReadOnly areaCellMap;
         public void Execute(int index)
         {
-            TriggerArea triggerArea = TriggerAreas[index];
-            var results= triggerArea.cells.Intersect(cells); 
-            if (results.Count()>0)
+            var triggerArea = TriggerAreas[index];
+
+            if (areaCellMap.TryGetFirstValue(triggerArea.referenceId, out var cell, out var it))
             {
-                outItems.Add(triggerArea.referenceId);
+                do
+                {
+                    if (cells.Contains(cell))
+                    {
+                        outItems.Add(triggerArea.referenceId);
+                        break;
+                    }
+                } while (areaCellMap.TryGetNextValue(out cell, ref it));
             }
+             
         }
     }
     /*
@@ -2538,15 +2631,10 @@ public class MapCellController : Singleton<MapCellController>
     }*/
 }
 
-public struct TriggerArea
-{
-    public UnsafeHashSet<int2> cells;
+public struct TriggerAreaData
+{ 
     public EntityType triggerType;
     public int referenceId;
     public int enterLinkEventId, exitLinkEventId;
-
-    public void Dispose()
-    {
-        cells.Dispose();
-    }
+     
 }

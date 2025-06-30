@@ -170,7 +170,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
 
                 if (!prewarm)
                 { 
-                    int2 coordinate = MapCellController.instance.GetRandomBehavioCell(displayMap, BehaviorAreaType.创建).xy;
+                    int2 coordinate = MapCellController.instance.GetRandomBehaviorCell(displayMap, BehaviorAreaType.创建).xy;
 
                     CreatTempCharacter creatTempCharacter = new CreatTempCharacter
                     {
@@ -283,7 +283,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
         tempCharacters.RemoveAt(randomIndex);
 
         int displayMap = WorldMapObjManager.instance.displayMap;
-        int2 coordinate = MapCellController.instance.GetRandomBehavioCell(displayMap, behaviorAreaType).xy;
+        int2 coordinate = MapCellController.instance.GetRandomBehaviorCell(displayMap, behaviorAreaType).xy;
         CreatTempCharacter creatTempCharacter = new CreatTempCharacter
         {
             characterId = characterId,

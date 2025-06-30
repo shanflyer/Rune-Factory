@@ -28,7 +28,7 @@ public class GetAnimalArea : Action
         {
             if (animal.pasture != 0)
             {
-                var cell = MapCellController.instance.GetRandomBehavioCell(animal.pasture, behaviorAreaType);
+                var cell = MapCellController.instance.GetRandomBehaviorCell(animal.pasture, behaviorAreaType);
                 result.SetValue(new int3(cell.xy, animal.pasture));
                 return TaskStatus.Success;
             }

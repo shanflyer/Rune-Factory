@@ -29,9 +29,9 @@ public class GetAnimalPastureLinkItemTrigger : Action
                if(WorldMapManager.instance.GetRuntimeMapItem(pasture.linkItem,out var runtimeMapItem))
                 {
                     var cells = MapCellController.instance.GetItemTriggerCells(pasture.linkItem, runtimeMapItem.mapInstanceId);
-                    if (cells.Length > 0)
+                    if (cells!=null&&cells.Count > 0)
                     {
-                        int index = GameRandom.RandomInt(0, cells.Length);
+                        int index = GameRandom.RandomInt(0, cells.Count);
                         result.SetValue(new int3(cells[index], runtimeMapItem.mapInstanceId));
                         return TaskStatus.Success;
                     }

@@ -33,7 +33,7 @@ public class GetNPCHomePos : Action
                 {
                     try
                     {
-                        var cell = MapCellController.instance.GetRandomBehavioCell(visitMap, BehaviorAreaType.聚集);
+                        var cell = MapCellController.instance.GetRandomBehaviorCell(visitMap, BehaviorAreaType.聚集);
                         result.SetValue(new int3(cell.xy, visitMap));
                     }
                     catch
@@ -44,7 +44,7 @@ public class GetNPCHomePos : Action
                 }
                 else
                 {
-                    var cell = MapCellController.instance.GetRandomBehavioCell(visitMap, areaId);
+                    var cell = MapCellController.instance.GetRandomBehaviorCell(visitMap, areaId);
                     result.SetValue(new int3(cell.xy, visitMap));
                 }
                 return TaskStatus.Success;

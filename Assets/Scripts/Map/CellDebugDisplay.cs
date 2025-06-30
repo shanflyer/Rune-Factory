@@ -45,17 +45,15 @@ public class CellDebugDisplay : MonoBehaviour
             tilemap.SetTile(new Vector3Int(cell.x, cell.y, +roomCoordinate.z), tileBase);
             //tilemap.SetTile(new Vector3Int(cell.x+roomCoordinate.x, cell.y + roomCoordinate.y, +roomCoordinate.z), tileBase);
         }
-        var playerTrigger = MapCellController.instance.GetPlayerTrigger(WorldMapObjManager.instance.displayMap);
-        for (int i = 0; i < playerTrigger.triggerAreas.Length; i++)
+        var cells = MapCellController.instance.GetPlayerTrigger(WorldMapObjManager.instance.displayMap);
+        if (cells != null)
         {
-            var area = playerTrigger.triggerAreas[i];
-            foreach (var cell in area.cells)
+            for (int i = 0; i < cells.Length; i++)
             {
+                var cell = cells[i];
                 tilemap.SetTile(new Vector3Int(cell.x, cell.y, +roomCoordinate.z), triggerTile);
             }
-        }
-
-
+        } 
         tilemap.RefreshAllTiles();
     }
 #endif
