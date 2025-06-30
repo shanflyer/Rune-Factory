@@ -228,6 +228,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\GetDestination.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\Light\SetType.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\LayerMask\SetLayer.cs" />
+    <Compile Include="Assets\Scripts\Map\ECS\Runtime\MapController.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\GetAcceleration.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\Physics\HasExitedTrigger2D.cs" />
     <Compile Include="Assets\Scripts\UI\Sleep\SleepPanel.cs" />
@@ -513,6 +514,7 @@
     <Compile Include="Assets\Scripts\Map\MapTexture.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\GetVisitNPC.cs" />
     <Compile Include="Assets\Scripts\Action\PastureAction.cs" />
+    <Compile Include="Assets\Scripts\Map\ECS\Components\MapComponent.cs" />
     <Compile Include="Assets\Scripts\UI\Operate\OperateButtonPanel.cs" />
     <Compile Include="Assets\Scripts\UI\MainPanel.cs" />
     <Compile Include="Assets\Scripts\Character\TempCharacterCreateData.cs" />
@@ -1050,6 +1052,7 @@
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetRadius.cs" />
     <Compile Include="Assets\Anima2D\Scripts\Ik2D.cs" />
     <Compile Include="Assets\Effect\ProFlares\Demos\DemoScripts\ProFlares_Demo_Space.cs" />
+    <Compile Include="Assets\Scripts\Map\ECS\Components\MapBufferElementData.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Actions\Log.cs" />
     <Compile Include="Assets\Scripts\Main\ExtensionsResources.cs" />
     <Compile Include="Assets\Behavior Designer\Runtime\Tasks\Conditionals\StackedConditional.cs" />

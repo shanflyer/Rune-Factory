@@ -417,8 +417,8 @@ public class MapCellController : Singleton<MapCellController>
             commonTriggerCellIndexes=new NativeHashMap<int, int>(1024,Allocator.Persistent);
             commonTriggerDatas = new NativeList<TriggerAreaData>(512, Allocator.Persistent);
              
-            playerForwardTriggerCells = new NativeParallelMultiHashMap<int, int2>(1024, Allocator.Persistent);
-            playerForwardTriggerIndexes = new NativeHashMap<int, int>(1024, Allocator.Persistent);
+            playerTriggerCells = new NativeParallelMultiHashMap<int, int2>(1024, Allocator.Persistent);
+            playerTriggerCellIndexes = new NativeHashMap<int, int>(1024, Allocator.Persistent);
             playerTriggerAreaDatas = new NativeList<TriggerAreaData>(512, Allocator.Persistent);
              
             playerForwardTriggerCells = new NativeParallelMultiHashMap<int, int2>(1024, Allocator.Persistent);
@@ -981,10 +981,10 @@ public class MapCellController : Singleton<MapCellController>
             for (int i = 0; i < cells.Length; i++)
             {
                 var cell = cells[i] + offset; 
-                runtimeMapRoom.commonTriggerCells.Add(linkId, cell); 
-                runtimeMapRoom.commonTriggerDatas.Add(triggerAreaData);
-                runtimeMapRoom.commonTriggerCellIndexes.Add(linkId, runtimeMapRoom.commonTriggerDatas.Length - 1);
-            } 
+                runtimeMapRoom.commonTriggerCells.Add(linkId, cell);  
+            }
+            runtimeMapRoom.commonTriggerDatas.Add(triggerAreaData);
+            runtimeMapRoom.commonTriggerCellIndexes.Add(linkId, runtimeMapRoom.commonTriggerDatas.Length - 1);
         }
     }
     
