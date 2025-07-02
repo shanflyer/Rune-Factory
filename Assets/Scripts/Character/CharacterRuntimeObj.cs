@@ -30,6 +30,10 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
         }
         set
         {
+            if (value != null)
+            {
+                value.dispose = Dispose;
+            }
             /*if (value != null)
             {
                 EnvironmentManger.instance.AddCharacterGetFootStep(value.linkId, characterGetFootStep);
@@ -198,7 +202,13 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
         /*if(runtimeObj!=null)
             EnvironmentManger.instance.AddCharacterGetFootStep(runtimeObj.linkId, characterGetFootStep);*/
     }
-
+    public void Dispose()
+    {
+        if (singlePlayableGraph.IsValid())
+        {
+            singlePlayableGraph.Destroy();
+        } 
+    }
     private void OnDisable()
     {
         /*iif (runtimeObj != null&&!SingletonType.Cleared)

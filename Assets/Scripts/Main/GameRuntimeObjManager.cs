@@ -13,8 +13,24 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
     public override void Init()
     {
         base.Init();
-    } 
-
+    }
+    protected override void Clear()
+    {
+        base.Clear();
+        foreach(var dc in unusedRuntimeObjs.Values)
+        {
+            foreach(var d in dc.Values)
+            {
+                foreach(var r in d)
+                {
+                    if (r.dispose != null)
+                    {
+                        r.dispose();
+                    }
+                }
+            }
+        }
+    }
     public void ClearRuntime<T>() where T : Enum
     { 
         foreach (var type in typeof(T).GetEnumValues())
@@ -157,4 +173,5 @@ public class RuntimeObj
     public string runtimeObjType;
     public string key;
     public bool use;
+    public Action dispose;
 }

@@ -129,21 +129,22 @@ public class SingletonType : Singleton<SingletonType>
     {
         Cleared = true;
         singleUpdatas.Clear();
-        try
+        foreach (var typeClear in TypeClears)
         {
-            foreach (var typeClear in TypeClears)
+            try
             {
-
                 if (typeClear != null)
                 {
                     typeClear();
                 }
             }
+            catch (Exception e)
+            {
+                Debug.LogError(e.ToString());
+            }
+            
         }
-        catch(Exception e)
-        {
-            Debug.Log(e.ToString());
-        }
+       
         TypeClears.Clear();
         Clear();
     }

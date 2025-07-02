@@ -345,8 +345,8 @@ public class MapCellController : Singleton<MapCellController>
             commonTriggerCells.Dispose();
              
             playerTriggerAreaDatas.Dispose();
-            playerForwardTriggerCells.Dispose();
-            playerForwardTriggerIndexes.Dispose();
+            playerTriggerCells.Dispose();
+            playerTriggerCellIndexes.Dispose();
              
             playerForwardTriggerAreaDatas.Dispose();
             playerForwardTriggerCells.Dispose();
@@ -2124,6 +2124,7 @@ public class MapCellController : Singleton<MapCellController>
         {
             datas.Dispose();
             nextDatas.Dispose();
+            forwardDatas.Dispose();
         }
     }
     [BurstCompile]
@@ -2255,6 +2256,7 @@ public class MapCellController : Singleton<MapCellController>
                         break;
                     }
                 }
+                openCellList.Dispose();
                 neighbourOffsetArray.Dispose();
                 parentCell.Dispose();
                 checkedCell.Dispose();
@@ -2273,7 +2275,7 @@ public class MapCellController : Singleton<MapCellController>
 
         [ReadOnly] public int2 startPos, targetPos;
 
-        [WriteOnly] public NativeList<int2> pathCells;
+        public NativeList<int2> pathCells;
         [ReadOnly] public bool random;
         public void Execute()
         {

@@ -63,6 +63,13 @@ public class EmoteRuntime
         isRecycle = true;
 
     }
+    public void Dispose()
+    {
+        if (playableGraph.IsValid())
+        { 
+            playableGraph.Destroy();
+        }
+    }
 }
 public class EmoteManager : Singleton<EmoteManager>
 {
@@ -72,7 +79,18 @@ public class EmoteManager : Singleton<EmoteManager>
     private Dictionary<int, EmoteRuntime> characterEmoteRuntimes = new Dictionary<int, EmoteRuntime>();
     private Dictionary<int, EmoteRuntime> itemEmoteRuntimes = new Dictionary<int, EmoteRuntime>();
 
-
+    protected override void Clear()
+    {
+        base.Clear();
+        foreach(var e in characterEmoteRuntimes.Values)
+        {
+            e.Dispose();
+        }
+        foreach(var e in itemEmoteRuntimes.Values)
+        {
+            e.Dispose();
+        }
+    }
     public override async void Init()
     {
         base.Init();

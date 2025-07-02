@@ -82,7 +82,7 @@ public class CharacterManager : Singleton<CharacterManager>
             return;
         }
         displayCharacters.Add(character);
-        var runtimeObj = await CreatCharacterRuntimeObj(character.dataId, character.instanceId, character.coordinate);
+        var runtimeObj = await CreateCharacterRuntimeObj(character.dataId, character.instanceId, character.coordinate);
         CharacterRuntimeObj characterRuntimeObj = runtimeObj.obj as CharacterRuntimeObj;
         characterRuntimeObj.runtimeObj = runtimeObj;
         if (characterRuntionObjs.TryAdd(character, characterRuntimeObj))
@@ -1377,7 +1377,7 @@ public class CharacterManager : Singleton<CharacterManager>
         //  behaviorTree.startTask.AddChildTask(logTask);
     }
 
-    private async Task<RuntimeObj> CreatCharacterRuntimeObj(int characterDataId, int instacneId, int2 coordiante)
+    private async Task<RuntimeObj> CreateCharacterRuntimeObj(int characterDataId, int instacneId, int2 coordiante)
     {
         Vector3 pos = GameCommon.GetMapPos(coordiante);
         //pos.z = -100;
@@ -1461,12 +1461,23 @@ public class CharacterManager : Singleton<CharacterManager>
 
     public void RecycleCharacter()
     {
-        foreach (var characterRuntime in characterRuntionObjs)
+        if (!SingletonType.Cleared)
         {
-            characterRuntime.Value.Clear();
-            //GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntime.Value.runtimeObj);
-            FishController.instance.RecycleFisherObj(characterRuntime.Key.instanceId);
+            foreach (var characterRuntime in characterRuntionObjs)
+            {
+                characterRuntime.Value.Clear(); 
+                FishController.instance.RecycleFisherObj(characterRuntime.Key.instanceId);
+            }
         }
+        else
+        {
+            foreach (var characterRuntime in characterRuntionObjs)
+            {
+                characterRuntime.Value.Dispose();
+              
+            }
+        }
+       
         characterRuntionObjs.Clear();
         displayCharacters.Clear();
     }

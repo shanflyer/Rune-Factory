@@ -10,6 +10,7 @@ using VoxelBusters.CoreLibrary;
 using VoxelBusters.EssentialKit;
 using System;
 using System.Collections.Generic;
+using Unity.Collections;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -288,6 +289,8 @@ if (result.Success)
     }
     private void Awake()
     {
+        //Unity.Collections.NativeLeakDetection.Mode = NativeLeakDetectionMode.EnabledWithStackTrace;
+
         var gameDataManager = GameDataManager.instance;
         startGameCompleted = false;
         Screen.SetResolution(Screen.width, Screen.height, true);

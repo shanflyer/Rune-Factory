@@ -13,7 +13,7 @@ Shader "MyLight/EyeMul"
     SubShader
     {
         Tags {"Queue" = "Transparent" "RenderType" = "Transparent" "RenderPipeline" = "UniversalPipeline" }
-        //Blend SrcAlpha One
+        Blend SrcAlpha OneMinusSrcAlpha
         BlendOp Max
         //Blend SrcAlpha OneMinusSrcAlpha, One OneMinusSrcAlpha
         Cull Off
