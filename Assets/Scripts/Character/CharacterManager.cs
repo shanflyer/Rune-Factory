@@ -1548,9 +1548,11 @@ public class CharacterManager : Singleton<CharacterManager>
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
         int2 targetCoordinate = GameCommon.GetMapCoordinateInt(mousePos);
         int2 startCoordinate = controllerCharacter.coordinate;
-        Stack<int2> pathNodes = MapCellController.instance.FindPathNodeNearest(startCoordinate, targetCoordinate,
-            controllerCharacter.mapInstance);
-        controllerCharacter.PlayerMove(pathNodes);
+        MapCellController.instance.FindPathNodeNearest(startCoordinate, targetCoordinate,
+            controllerCharacter.mapInstance, (Stack<int2> pathNodes) =>
+            {
+                controllerCharacter.PlayerMove(pathNodes);
+            }); 
     }
 
     /// <summary>

@@ -562,7 +562,7 @@ public class MapCellController : Singleton<MapCellController>
         }
 
         public NativeHashMap<int, int> mapGroundIndexDatas;
-        public NativeHashMap<int, int> mapObjBarriers;
+        public NativeHashMap<int, ushort> mapObjBarriers;
         public int2 startCoordinate, endCoordinate;
 
         public void AddGroundIndexData(int x, int y, int groundIndex)
@@ -574,7 +574,7 @@ public class MapCellController : Singleton<MapCellController>
         public void AddBarrier(int x, int y)
         {
             int index = GetCoordinateIndex(x, y);
-            mapObjBarriers.TryGetValue(index, out int count);
+            mapObjBarriers.TryGetValue(index, out var count);
             count++;
             mapObjBarriers[index] = count;
         }
@@ -582,7 +582,7 @@ public class MapCellController : Singleton<MapCellController>
         public void AddBarrier(int2 coordinate)
         {
             int index = GetCoordinateIndex(coordinate);
-            mapObjBarriers.TryGetValue(index, out int count);
+            mapObjBarriers.TryGetValue(index, out var count);
             count++;
             mapObjBarriers[index] = count;
         }
@@ -590,7 +590,7 @@ public class MapCellController : Singleton<MapCellController>
         public void RemmoveBarrier(int2 coordinate)
         {
             int index = GetCoordinateIndex(coordinate);
-            mapObjBarriers.TryGetValue(index, out int count);
+            mapObjBarriers.TryGetValue(index, out var count);
             count--;
             if (count == 0)
             {
@@ -781,8 +781,7 @@ public class MapCellController : Singleton<MapCellController>
     }
 
     private Dictionary<int, RuntimeMapRoom> runtimeMapRooms = new Dictionary<int, RuntimeMapRoom>();
-    private NativeList<RoomCellData> roomCellDatas;
-
+    private NativeList<RoomCellData> roomCellDatas; 
     public int3 GetRandomBehaviorCell(int mapInstance, int areaId)
     {
         if (runtimeMapRooms.TryGetValue(mapInstance, out var runtimeMapRoom))
@@ -893,6 +892,31 @@ public class MapCellController : Singleton<MapCellController>
 
         return new int2(int.MinValue, int.MinValue);
     }
+
+    public int4 GetRoomRange(int roomId)
+    {
+        if (runtimeMapRooms.TryGetValue(roomId, out var runtimeMapRoom))
+        {
+            var data = roomCellDatas[runtimeMapRoom.roomCellDataIndex];
+            return   new int4(data.startCoordinate,data.endCoordinate);
+        }
+        return int4.zero;
+    }
+    public NativeHashMap<int, ushort> GetRoomObjBarriers(int roomId)
+    {
+        if (runtimeMapRooms.TryGetValue(roomId, out var runtimeMapRoom))
+        {
+            var data = roomCellDatas[runtimeMapRoom.roomCellDataIndex];
+            return data.mapObjBarriers;
+        }
+        var re= default(NativeHashMap<int, ushort>);
+        if (re.IsCreated)
+        {
+            re.Dispose();
+        }
+        return re;
+    }
+
 
     public List<int2> GetItemTriggerCells(int instanceId, int room)
     {
@@ -1379,7 +1403,7 @@ public class MapCellController : Singleton<MapCellController>
     {
         RoomCellData roomCellData = new RoomCellData
         {
-            mapObjBarriers = new NativeHashMap<int, int>(16, Allocator.Persistent),
+            mapObjBarriers = new NativeHashMap<int, ushort>(16, Allocator.Persistent),
             mapGroundIndexDatas = new NativeHashMap<int, int>(16, Allocator.Persistent),
             startCoordinate = mapRoomData.startCoordinate,
             endCoordinate = mapRoomData.endCoordinate,
@@ -1582,33 +1606,37 @@ public class MapCellController : Singleton<MapCellController>
         }
     }
 
-    public Stack<int2> FindPathNodeNearest(int2 startPos, int2 targetPos, int mapId)
+    public void FindPathNodeNearest(int2 startPos, int2 targetPos, int mapId,MoveWithPath moveWithPath)
     {
-        Stack<int2> outData = FindPathNode(startPos, targetPos, mapId);
-        if (outData.Count == 0)
+        MapCellJobController.instance.AddPathRequest(startPos, targetPos, mapId, (Stack<int2> outData) =>
         {
-            float2 direct = math.normalize(startPos - targetPos);
-            int index = 1;
-            int2 offsetCoordinate = int2.zero;
-            int2 _targetPos = targetPos;
-            while (!_targetPos.Equals(startPos))
+            if (outData.Count == 0)
             {
-                float2 offsetPos = direct * GameCommon.cellWidth * index;
-                int2 _offsetCoordinate = GameCommon.GetMapCoordinateInt(offsetPos);
-                if (!_offsetCoordinate.Equals(offsetCoordinate))
+                float2 direct = math.normalize(startPos - targetPos);
+                int index = 1;
+                int2 offsetCoordinate = int2.zero;
+                int2 _targetPos = targetPos;
+                while (!_targetPos.Equals(startPos))
                 {
-                    offsetCoordinate = _offsetCoordinate;
-                    _targetPos = targetPos + offsetCoordinate;
-                    outData = FindPathNode(startPos, _targetPos, mapId);
-                    if (outData.Count != 0)
+                    float2 offsetPos = direct * GameCommon.cellWidth * index;
+                    int2 _offsetCoordinate = GameCommon.GetMapCoordinateInt(offsetPos);
+                    if (!_offsetCoordinate.Equals(offsetCoordinate))
                     {
-                        return outData;
+                        offsetCoordinate = _offsetCoordinate;
+                        _targetPos = targetPos + offsetCoordinate;
+                        MapCellJobController.instance.AddPathRequest(startPos, _targetPos, mapId, (Stack<int2> outData1) =>
+                        {
+                            if (outData1.Count != 0)
+                            {
+                                moveWithPath.Invoke(outData1);
+                            }
+                        }); 
                     }
+                    index++;
                 }
-                index++;
             }
-        }
-        return outData;
+            moveWithPath.Invoke(outData);
+        }); 
     }
 
     public Stack<int2> FindSamplePathNode(int2 startPos, int2 targetPos, int mapId, int2[] cells)
@@ -1739,7 +1767,7 @@ public class MapCellController : Singleton<MapCellController>
         return false;
     }
 
-    private NativeHashMap<int, int> GetRoomNeighbours(int roomId)
+    private NativeHashMap<int, int> GetRoomNeighbors(int roomId)
     {
         if (runtimeMapRooms.TryGetValue(roomId, out RuntimeMapRoom sourceRoom))
         {
@@ -1766,7 +1794,7 @@ public class MapCellController : Singleton<MapCellController>
         for (int i = 0; i < nowList.Count; i++)
         {
             int checkId = nowList[i];
-            var Neighbours = GetRoomNeighbours(checkId);
+            var Neighbours = GetRoomNeighbors(checkId);
             if (Neighbours.IsEmpty)
             {
                 result = false;
@@ -2302,7 +2330,7 @@ public class MapCellController : Singleton<MapCellController>
             return cost;
         }
 
-        [ReadOnly] public NativeHashMap<int, int> mapObjBarriers;
+        [ReadOnly] public NativeHashMap<int, ushort> mapObjBarriers;
         [ReadOnly] public int2 startCoordinate, endCoordinate;
 
         [ReadOnly] public int2 startPos, targetPos;

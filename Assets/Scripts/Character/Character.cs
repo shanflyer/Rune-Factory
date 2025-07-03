@@ -1677,9 +1677,27 @@ public partial class Character
             int2 inCoordinate = int2.zero;
             if (MapCellController.instance.GetLinkMapInCoordinate(nowMap, target, ref inCoordinate))
             {
-               // Debug.Log($"下一地图{target}：--{inCoordinate}");
-                Stack<int2> pathNodes = MapCellController.instance.FindPathNode(objCoordinate.xy, inCoordinate, nowMap);
-                //Debug.Log($"pathNodes：--{pathNodes.Count}");
+                MapCellJobController.instance.AddPathRequest(objCoordinate.xy, inCoordinate, nowMap, (Stack<int2> path) =>
+                {
+                    PlayerMove(path, () =>
+                    {
+                        if (this == CharacterManager.instance.controllerCharacter)
+                        {
+                            canMove = false;
+                            GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), () =>
+                            {
+                                MoveCrossMap(moveRoomList, targetCoordinate, moveEndAction);
+                            });
+                        }
+                        else
+                        {
+                            MoveCrossMap(moveRoomList, targetCoordinate, moveEndAction);
+                        }
+                    }, changeCoordinateAction, failedMoveAction);
+                }); 
+
+                /*
+                Stack<int2> pathNodes = MapCellController.instance.FindPathNode(objCoordinate.xy, inCoordinate, nowMap); 
                 PlayerMove(pathNodes, () =>
                 {
                     if (this == CharacterManager.instance.controllerCharacter)
@@ -1695,18 +1713,24 @@ public partial class Character
                         MoveCrossMap(moveRoomList, targetCoordinate, moveEndAction);
                     }
                 }, changeCoordinateAction, failedMoveAction);
+                */
             }
         }
         else
         {
-            Stack<int2> pathNodes = MapCellController.instance.FindPathNode(objCoordinate.xy, targetCoordinate, objCoordinate.z);
+            MapCellJobController.instance.AddPathRequest(objCoordinate.xy, targetCoordinate, objCoordinate.z, (Stack<int2> path) =>
+            {
+                PlayerMove(path, moveEndAction, changeCoordinateAction, failedMoveAction);
+            });
 
-            /*
+            /* 
+            Stack<int2> pathNodes = MapCellController.instance.FindPathNode(objCoordinate.xy, targetCoordinate, objCoordinate.z);
+            PlayerMove(pathNodes, moveEndAction, changeCoordinateAction, failedMoveAction);
             if (CellDebugDisplay.Instance)
             {
                 CellDebugDisplay.Instance.DisplayPath(pathNodes.ToArray());
              }*/
-            PlayerMove(pathNodes, moveEndAction, changeCoordinateAction, failedMoveAction);
+
         }
     }
 
