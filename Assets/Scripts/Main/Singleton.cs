@@ -22,13 +22,13 @@ public class Singleton<T> where T : Singleton<T>
                     {
                         SingletonType.instance.AddType(_instance.Clear);
 
-                        if (_instance.NeedUpdata)
+                        if (_instance.NeedUpdate)
                         {
-                            SingletonType.instance.AddUpDataAction(_instance.UpData);
+                            SingletonType.instance.AddUpdateAction(_instance.Update);
                         }
-                        if (_instance.NeedLateUpdata)
+                        if (_instance.NeedLateUpdate)
                         {
-                            SingletonType.instance.AddUpDataAction(_instance.LateUpData);
+                            SingletonType.instance.AddUpdateAction(_instance.LateUpdate);
                         }
                     }
                 }
@@ -48,19 +48,19 @@ public class Singleton<T> where T : Singleton<T>
     }
     private static T _instance;
 
-    public virtual bool NeedUpdata
+    public virtual bool NeedUpdate
     {
         get;
     }
-    public virtual bool NeedLateUpdata
+    public virtual bool NeedLateUpdate
     {
         get;
     }
-    protected virtual void UpData()
+    protected virtual void Update()
     {
 
     }
-    protected virtual void LateUpData()
+    protected virtual void LateUpdate()
     {
 
     }
@@ -70,13 +70,13 @@ public class Singleton<T> where T : Singleton<T>
     } 
     protected virtual void Clear()
     { 
-        if (NeedUpdata)
+        if (NeedUpdate)
         {
-            SingletonType.instance.RemoveUpDataAction(_instance.UpData);
+            SingletonType.instance.RemoveUpdateAction(_instance.Update);
         }
-        if (NeedLateUpdata)
+        if (NeedLateUpdate)
         {
-            SingletonType.instance.RemoveLateUpDataAction(_instance.LateUpData);
+            SingletonType.instance.RemoveLateUpdateAction(_instance.LateUpdate);
         }
         _instance = null;
     } 
@@ -85,39 +85,39 @@ public delegate void SingletonClear();
 public class SingletonType : Singleton<SingletonType>
 {
     public HashSet<SingletonClear> TypeClears = new HashSet<SingletonClear>();
-    public List<Action> singleUpdatas = new List<Action>();
-    public List<Action> singleLateUpdatas = new List<Action>();
+    public List<Action> singleUpdates = new List<Action>();
+    public List<Action> singleLateUpdates = new List<Action>();
     public override void Init()
     {
         base.Init();
         Cleared = false;
     }
-    public void AddUpDataAction(Action action)
+    public void AddUpdateAction(Action action)
     {
-        if (!singleUpdatas.Contains(action))
+        if (!singleUpdates.Contains(action))
         {
-            singleUpdatas.Add(action);
+            singleUpdates.Add(action);
         }
     }
-    public void RemoveUpDataAction(Action action)
+    public void RemoveUpdateAction(Action action)
     {
-        if (singleUpdatas.Contains(action))
+        if (singleUpdates.Contains(action))
         {
-            singleUpdatas.Remove(action);
+            singleUpdates.Remove(action);
         }
     }
-    public void AddLateUpDataAction(Action action)
+    public void AddLateUpdateAction(Action action)
     {
-        if (!singleLateUpdatas.Contains(action))
+        if (!singleLateUpdates.Contains(action))
         {
-            singleLateUpdatas.Add(action);
+            singleLateUpdates.Add(action);
         }
     }
-    public void RemoveLateUpDataAction(Action action)
+    public void RemoveLateUpdateAction(Action action)
     {
-        if (singleLateUpdatas.Contains(action))
+        if (singleLateUpdates.Contains(action))
         {
-            singleLateUpdatas.Remove(action);
+            singleLateUpdates.Remove(action);
         }
     }
     public void AddType(SingletonClear typeClear)
@@ -128,7 +128,7 @@ public class SingletonType : Singleton<SingletonType>
     public void ClearAll()
     {
         Cleared = true;
-        singleUpdatas.Clear();
+        singleUpdates.Clear();
         foreach (var typeClear in TypeClears)
         {
             try
@@ -149,18 +149,18 @@ public class SingletonType : Singleton<SingletonType>
         Clear();
     }
 
-    public void UpData()
+    public new void Update()
     {
-        for(int i = 0; i < singleUpdatas.Count; i++)
+        for(int i = 0; i < singleUpdates.Count; i++)
         {
-            singleUpdatas[i].Invoke();
+            singleUpdates[i].Invoke();
         }
     }
-    public void LateUpData()
+    public new void LateUpdate()
     {
-        for (int i = 0; i < singleLateUpdatas.Count; i++)
+        for (int i = 0; i < singleLateUpdates.Count; i++)
         {
-            singleLateUpdatas[i].Invoke();
+            singleLateUpdates[i].Invoke();
         }
     }
 }

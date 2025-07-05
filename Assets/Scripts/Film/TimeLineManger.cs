@@ -11,7 +11,7 @@ using Object = UnityEngine.Object;
  
 public class TimeLineManger : Singleton<TimeLineManger>
 {
-    public override bool NeedUpdata => true;
+    public override bool NeedUpdate => true;
     struct RuntimePlayable
     { 
         public List<Animator> animators;
@@ -384,7 +384,7 @@ public class TimeLineManger : Singleton<TimeLineManger>
         base.Clear();
     }
 
-    protected override void UpData()
+    protected override void Update()
     {
         /*
         using (var e = runtimePlayables.GetEnumerator())

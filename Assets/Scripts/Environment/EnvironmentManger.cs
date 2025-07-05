@@ -37,7 +37,7 @@ public enum WeatherDisplayType
 }
 public class EnvironmentManger : Singleton<EnvironmentManger>
 {
-    public override bool NeedUpdata => true;
+    public override bool NeedUpdate => true;
     SkyEnviromentMono skyEnviromentMono;
     
     public SkyEnviromentMono SkyEnviromentMono =>skyEnviromentMono;
@@ -645,7 +645,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         float waitLightningTime = 0;
         float LightningCD = 0;
         internal float lightning;
-        internal void UpData()
+        internal void Update()
         { 
             if (lightning > 0)
             {
@@ -666,12 +666,12 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     }
 
    
-    protected override void UpData()
+    protected override void Update()
     { 
         if (lightning != null)
         {
-            lightning.UpData();
+            lightning.Update();
         }
-            base.UpData();
+            base.Update();
     }
 }

@@ -488,7 +488,7 @@ namespace UnityEngine.EventSystems
             if (!m_HasFocus)
                 TickModules();
         }
-        public void UpData()
+        public void FixUpdate()
         {
             Update();
         }

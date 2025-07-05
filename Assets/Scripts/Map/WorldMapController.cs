@@ -280,7 +280,7 @@ public class WorldMapController : MonoBehaviour
     {
         if (GameController.instance == null)
         {
-            SingletonType.instance.UpData();
+            SingletonType.instance.Update();
         }
     }
 #endif 

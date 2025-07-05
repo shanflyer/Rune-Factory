@@ -1,15 +1,19 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
+ 
 public class GameVolumeManager : Singleton<GameVolumeManager>
 {
-    public override bool NeedUpdata => true;
+    public override bool NeedUpdate => true;
     Material screenMat;
     MyDic<int, GameVolumeObject> volumeObjects = new MyDic<int, GameVolumeObject>();
+    Dictionary<string, ParticleSystem> singleParticleDic = new Dictionary<string, ParticleSystem>();
+
     public override async void Init()
     {
         base.Init(); 
@@ -22,6 +26,16 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
         screenMat.SetFloat("_CycleSize", width > heigh ? width : heigh);
         GameActionManager.instance.AddListener<LerpScreenCycleValue>(LerpScreenCycleValue);
         GameActionManager.instance.AddListener<SetPlayerShaderPos>(SetPlayerShaderPos);
+
+        singleParticleDic.Clear();
+        var particleParent= GameController.instance.transform.Find("SingleParticle");
+        for(int i = 0; i < particleParent.childCount; i++)
+        {
+            if(particleParent.GetChild(i).TryGetComponent(out ParticleSystem particleSystem))
+            {
+                singleParticleDic.Add(particleSystem.name, particleSystem);
+            }
+        }
     }
     private int _volumeLevel;
     public int volumeLevel
@@ -134,8 +148,8 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
     }
 
   
-    protected override void UpData()
+    protected override void Update()
     { 
-        base.UpData();
+        base.Update();
     }
 }

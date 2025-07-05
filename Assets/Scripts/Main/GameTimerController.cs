@@ -12,7 +12,7 @@ public class GameTimerController : Singleton<GameTimerController>
 
 
     Queue<Action> activeActions = new Queue<Action>();
-    public override bool NeedUpdata => true;
+    public override bool NeedUpdate => true;
 
     public override void Init()
     {
@@ -74,9 +74,9 @@ public class GameTimerController : Singleton<GameTimerController>
         
     }
 
-    protected override void UpData()
+    protected override void Update()
     {
-        base.UpData();
+        base.Update();
         while(activeActions.Count > 0)
         { 
             var Action = activeActions.Dequeue();

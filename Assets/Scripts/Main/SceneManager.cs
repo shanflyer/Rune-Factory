@@ -5,7 +5,7 @@ namespace MyGame
 {
     public class SceneManager : Singleton<SceneManager>
     {
-        public override bool NeedUpdata => true;
+        public override bool NeedUpdate => true;
         private string nowSceen;
 
         public string Now
@@ -75,9 +75,9 @@ namespace MyGame
         private AsyncOperation AsyncOperation;
         private Action loadSceneAction;
 
-        protected override void UpData()
+        protected override void Update()
         {
-            base.UpData();
+            base.Update();
             if (AsyncOperation == null)
             {
                 return;

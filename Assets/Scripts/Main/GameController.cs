@@ -382,14 +382,14 @@ if (result.Success)
     }
     private void LateUpdate()
     {
-        SingletonType.instance.LateUpData();
+        SingletonType.instance.LateUpdate();
     }
 
 
     private void Update()
     {
         //GraphicsSettings.useScriptableRenderPipelineBatching = false;
-        SingletonType.instance.UpData();
+        SingletonType.instance.Update();
 #if UNITY_EDITOR
         seasonValue += Time.deltaTime * testSeasonSpeed;
         if(seasonValue>4)

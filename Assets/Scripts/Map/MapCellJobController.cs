@@ -195,7 +195,7 @@ public class MapCellJobController : Singleton<MapCellJobController>
 {
     public NativeList<PathRequest> pathRequests;
     public List<MoveWithPath> MoveWithPath = new List<MoveWithPath>();
-    public override bool NeedUpdata => true;
+    public override bool NeedUpdate => true;
 
     public override void Init()
     {
@@ -209,9 +209,9 @@ public class MapCellJobController : Singleton<MapCellJobController>
         pathRequests.Dispose();
     }
 
-    protected override void UpData()
+    protected override void Update()
     {
-        base.UpData();
+        base.Update();
         int requestCount = pathRequests.Length;
         if (requestCount == 0) return;
 

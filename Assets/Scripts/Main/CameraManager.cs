@@ -25,8 +25,8 @@ public class CameraManager : Singleton<CameraManager>
     DepthOfField DepthOfField;
 
     //CinemachinePositionComposer[] cinemachineFramingTransposers;
-    public override bool NeedUpdata => true;
-    public override bool NeedLateUpdata => true;
+    public override bool NeedUpdate => true;
+    public override bool NeedLateUpdate => true;
     public bool fixedView { get; private set; }
     
     public void RefreshDepthOfField()
@@ -288,9 +288,9 @@ public class CameraManager : Singleton<CameraManager>
    // private bool fixedView = false;
     public Vector3 oldCameraPos { get; private set; }
 
-    protected override void UpData()
+    protected override void Update()
     {
-        base.UpData();
+        base.Update();
         if (oldCameraPos != mainCamera.transform.position)
         {
             oldCameraPos = mainCamera.transform.position;
@@ -312,9 +312,9 @@ public class CameraManager : Singleton<CameraManager>
     }
     MyDic<Renderer,int> TestRenderers = new MyDic<Renderer, int>();
     LayerMask hideLayer;
-    protected override void LateUpData()
+    protected override void LateUpdate()
     {
-        base.LateUpData();
+        base.LateUpdate();
         if (!fixedPlayerShaderPos)
         {
             if (CharacterManager.instance.ControllerRuntimeObj != null)

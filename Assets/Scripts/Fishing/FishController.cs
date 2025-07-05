@@ -5,7 +5,7 @@ using UnityEngine;
 public class FishController : Singleton<FishController>
 { 
     Dictionary<int, FisherRuntime> Fishers = new Dictionary<int, FisherRuntime>();
-    public override bool NeedUpdata => true;
+    public override bool NeedUpdate => true;
     private FishTool fishTool;
 
     public override async void Init()

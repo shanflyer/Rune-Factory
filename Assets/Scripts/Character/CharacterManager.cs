@@ -17,7 +17,7 @@ public struct TeamerEquipAndProperty : IReferenceData
 
 public class CharacterManager : Singleton<CharacterManager>
 {
-    public override bool NeedUpdata => true;
+    public override bool NeedUpdate => true;
 
     public const float moveSpeed = 15f;
     public const float updataMoveSpeed = 1f;

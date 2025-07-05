@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class GameActionManager : Singleton<GameActionManager>
 {
-    public override bool NeedUpdata { get => true; }
+    public override bool NeedUpdate { get => true; }
 
     public delegate void ActionDelegate<T>(T e) where T : GameAction;
 
@@ -111,7 +111,7 @@ public class GameActionManager : Singleton<GameActionManager>
         } 
     }
 
-    protected override void UpData()
+    protected override void Update()
     {
         while (ActionQueue.Count > 0)
         { 

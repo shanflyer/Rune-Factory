@@ -21,7 +21,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         GameActionManager.instance.AddListener<DeleteMapItem>(DeleteMapItem);
         GameActionManager.instance.AddListener<DestoryTempMapItem>(DestoryTempMapItem);
         GameActionManager.instance.AddListener<DisplayMap>(DisplayMap);
-        GameActionManager.instance.AddListener<UpdateGameTime>(UpDateGameTime);
+        GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
         GameActionManager.instance.AddListener<RefreshManufature>(RefreshManufature);
         GameActionManager.instance.AddListener<RefreshMapPackageItemRender>(RefreshMapPackageItemRender);
         GameActionManager.instance.AddListener<RefreshMapItemDisplay>(RefreshMapItemDisplay);
@@ -653,7 +653,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         }
     }
 
-    private void UpDateGameTime(UpdateGameTime updateGameTime)
+    private void UpdateGameTime(UpdateGameTime updateGameTime)
     {
         var keys = manufatureObjs.Keys.ToList();
         foreach (var m in keys)

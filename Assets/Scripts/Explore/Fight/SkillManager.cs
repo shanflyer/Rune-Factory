@@ -67,7 +67,7 @@ public class SkillRuntime
     {
         skillCd = skillData.cd;
     }
-    public void UpData(int timeValue=1)
+    public void Update(int timeValue=1)
     { 
         if (skillCd>0)
         {

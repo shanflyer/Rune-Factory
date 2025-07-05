@@ -260,7 +260,7 @@ public class FightCharacter : IReferenceData
                    
                     foreach (var skillRuntime in skillRuntimes)
                     {
-                        skillRuntime.Value.UpData(1);
+                        skillRuntime.Value.Update(1);
                     }
 
                     if (buffRuntimes != null)

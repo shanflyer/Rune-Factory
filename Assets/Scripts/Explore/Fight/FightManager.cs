@@ -15,7 +15,7 @@ public enum HurtResultType
 
 public class FightManager : Singleton<FightManager>
 { 
-    public override bool NeedUpdata => true;
+    public override bool NeedUpdate => true;
     private Dictionary<int, FightCharacter> fightCharacters = new Dictionary<int, FightCharacter>();
     private List<int> fightPlayers = new List<int>();
     private List<int> fightMonsters = new List<int>();
@@ -90,7 +90,7 @@ public class FightManager : Singleton<FightManager>
     {
         nowUsedItem = default(Item);
     }
-    async void CreatUseItemSkill()
+    async void CreateUseItemSkill()
     {
         int skillId = 1000;
         useItemSkillRuntime = await SkillManager.instance.CreateSkillRuntime(skillId);
@@ -392,7 +392,7 @@ public class FightManager : Singleton<FightManager>
 
             playerDic.Add(i, fightPlayer.instanceId);
         }
-        CreatUseItemSkill();
+        CreateUseItemSkill();
 
     }
     private void CreateFightPlayer(CreatFightPlayer creatFightPlayer)
@@ -418,7 +418,7 @@ public class FightManager : Singleton<FightManager>
 
             playerDic.Add(i, fightPlayer.instanceId);
         }
-        CreatUseItemSkill();
+        CreateUseItemSkill();
        
     }
 
@@ -1672,9 +1672,9 @@ public class FightManager : Singleton<FightManager>
     }
 
     float useItemCd = 0;
-    protected override void UpData()
+    protected override void Update()
     {
-        base.UpData();
+        base.Update();
         if (cdTimeMoving&&!pauseBehavior)
         {
             foreach (var fightCharacter in fightCharacters)
@@ -1689,7 +1689,7 @@ public class FightManager : Singleton<FightManager>
             if (useItemCd >= GameCommon.DefaultPerRoundCd)
             {
                 useItemCd = 0;
-                useItemSkillRuntime.UpData();
+                useItemSkillRuntime.Update();
             }
         }
     }

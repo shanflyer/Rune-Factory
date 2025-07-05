@@ -56,7 +56,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
 
     private async void ClickObj(object obj)
     {
-        EventSystem.current.UpData();
+        EventSystem.current.FixUpdate();
         if (EventSystem.current.currentSelectedGameObject != null)
         {
             return;

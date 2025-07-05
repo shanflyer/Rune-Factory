@@ -104,9 +104,9 @@ public class GameTimeEventManager : Singleton<GameTimeEventManager>
         }
     }
 
-    protected override void UpData()
+    protected override void Update()
     {
-        base.UpData();
+        base.Update();
     }
 
     private bool CheckGameTimeEventForSave(int id)
