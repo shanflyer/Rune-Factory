@@ -215,7 +215,7 @@ public class MapCellJobController : Singleton<MapCellJobController>
         int requestCount = pathRequests.Length;
         if (requestCount == 0) return;
 
-        const int capacityPerMap = 10240;
+        const int capacityPerMap = 2048;
         int totalCapacity = requestCount * capacityPerMap;
 
         NativeArray<int4> mapRanges = new NativeArray<int4>(requestCount, Allocator.TempJob);
