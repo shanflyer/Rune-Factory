@@ -924,6 +924,14 @@ public partial class Character
             if (bool2.x || bool2.y)
             {
                 _moveDirection = value;
+                if (_moveDirection.x == float.NaN)
+                {
+                    _moveDirection.x = 0;
+                }
+                if (_moveDirection.y == float.NaN)
+                {
+                    _moveDirection.y = 0;
+                }
                 if (_moveDirection.Equals(float2.zero))
                 {
                     return;
@@ -1044,6 +1052,10 @@ public partial class Character
     {
         MapCellController.instance.SetCharacterCoordinate(objCoordinate, coordinate, instanceId,this is TempCharacter);
         bool changeMap = mapInstance != coordinate.z;
+        if (coordinate.z == 0)
+        {
+            Debug.Log("set coordinate.z == 0");
+        }
         objCoordinate = coordinate;
         if (changeMap)
         {
@@ -1074,6 +1086,10 @@ public partial class Character
 
     public void SetObjCoordinate(int mapInstance, int2 coordinate)
     {
+        if (mapInstance == 0)
+        {
+            Debug.Log("set mapInstance == 0");
+        }
         int3 newCoordinate = new int3(coordinate, mapInstance);
         MapCellController.instance.SetCharacterCoordinate(objCoordinate, newCoordinate, instanceId, this is TempCharacter);
         objCoordinate = newCoordinate;
@@ -1640,15 +1656,17 @@ public partial class Character
         this.failedMoveAction = failedMoveAction;
         if (!CanMoveCrossMap)
         {
+          //  Debug.Log($"NoCanMoveCrossMap");
             return false;
         }
         moveTarget = new int3(targetCoordinate, targetMap);
 
+        
         bool result = false;
         Queue<int> resultList = MapCellController.instance.FindRoomList(objCoordinate.z, targetMap, ref result);
         if (result)
         {
-           // Debug.Log($"resultList{resultList.Count}");
+            //Debug.Log($"resultList{resultList.Count}");
             void FailedMoveAction()
             {
                 moveTarget = new int3(-1, -1, -1); 
@@ -1662,6 +1680,10 @@ public partial class Character
             }
 
             MoveCrossMap(resultList, targetCoordinate, moveEndAction, changeCoordinateAction, FailedMoveAction);
+        }
+        else
+        {
+           // Debug.Log($"result = false");
         }
         return result;
     }

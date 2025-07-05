@@ -5,6 +5,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
+using static UnityEngine.ParticleSystem;
 
  
 public class GameVolumeManager : Singleton<GameVolumeManager>
@@ -34,6 +35,10 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
             if(particleParent.GetChild(i).TryGetComponent(out ParticleSystem particleSystem))
             {
                 singleParticleDic.Add(particleSystem.name, particleSystem);
+                if (particleSystem.name == "脚印")
+                {
+                    footStep = particleSystem;
+                }
             }
         }
     }
@@ -76,6 +81,22 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
             PlayerPrefs.SetFloat("DepthField", depthFieldValue);
             CameraManager.instance.RefreshDepthOfField();
         }
+    }
+
+    private ParticleSystem footStep;
+    public void EmitFootParticle(float angle,Vector3 pos,Color footStepColor,bool isLeftFoot)
+    {
+        EmitParams ep = new EmitParams();
+        ep.startColor = footStepColor;
+        ep.position = pos;
+        ep.startSize = isLeftFoot ? footStep.main.startSize.constant : -footStep.main.startSize.constant;
+        ep.rotation = 180 - angle;
+        //Debug.Log($"ep.position{pos}");
+        footStep.Emit(ep, 1);
+    }
+    public void ClearFootStep()
+    {
+        footStep.Clear();
     }
     private void SetPlayerShaderPos(SetPlayerShaderPos SetPlayerShaderPos)
     {

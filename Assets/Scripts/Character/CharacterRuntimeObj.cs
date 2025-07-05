@@ -65,11 +65,6 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
     [SerializeField]
     private BehaviorTree behaviorTree;
 
-    [SerializeField]
-    private Transform DirOther;
-
-    [SerializeField]
-    private ParticleSystem footStep;
 
     [SerializeField]
     private AudioSource audioSource;
@@ -137,11 +132,7 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
         return gameObject.name;
     }
 
-    public void SetFootStepON(bool on)
-    {
-        var emission = footStep.emission;
-        emission.enabled = on;
-    }
+
 
     [SerializeField]
     private Vector2 moveDirection;
@@ -276,7 +267,7 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
             }
         }
     }
-
+     
     private void PlayFootStep(bool isLeft)
     {
         if (stepAudioClip == null)
@@ -303,22 +294,19 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
      
     private void LateUpdate()
     { 
-        if (isDisplayFootStep && footStep && speed > 0)
+        if (isDisplayFootStep && speed > 0)
         {
             if (waitFootTime <= 0)
             {
-                float angel = GameCommon.VectorAngle(Vector2.up, moveDirection);
+                float angle = GameCommon.VectorAngle(Vector2.up, moveDirection);
                 //
-                EmitParams ep = new EmitParams();
-                ep.startColor = footStepColor;
+              
                 Vector3 offSetPos = isLeftFoot ? leftFootPos : rightFootPos;
                 offSetPos.x *= moveDirection.y;
-                offSetPos.y *= -moveDirection.x;
+                offSetPos.y *= -moveDirection.x; 
+                var position = transform.position + offSetPos;
 
-                ep.position = transform.position + offSetPos;
-                ep.startSize = isLeftFoot ? footStep.main.startSize.constant : -footStep.main.startSize.constant;
-                ep.rotation = 180 - angel;
-                footStep.Emit(ep, 1);
+                GameVolumeManager.instance.EmitFootParticle(angle, position, footStepColor, isLeftFoot);
                 waitFootTime = FootTime;
                 PlayFootStep(isLeftFoot);
                 isLeftFoot = !isLeftFoot;
@@ -338,13 +326,7 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
         myShadow = shadow.GetComponent<MyShadowPolygon>();
         equipRenderer = transform.GetChild(1).GetChild(1).GetComponent<MySpriteMeshRender>();
         behaviorTree = transform.GetComponent<BehaviorTree>();
-        DirOther = transform.Find("Other/Dir");
-        if (DirOther)
-        {
-            var footStepTrans = DirOther.Find("脚印");
-            if (footStepTrans)
-                footStep = footStepTrans.GetComponent<ParticleSystem>();
-        }
+      
     }
 
 #endif

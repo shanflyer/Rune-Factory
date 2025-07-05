@@ -1115,14 +1115,14 @@ public class WorldMapManager : Singleton<WorldMapManager>
             displayMap = worldMapData.defaultMap;
         }
         var displayRoom = worldMapData.worldMapDic[displayMap];
-        await CreatRoomRuntime(displayRoom, true, displayMap);
+        await CreateRoomRuntime(displayRoom, true, displayMap);
 
          
         foreach (var room in worldMapData.worldMapDic.Values)
         { 
             if (room.id != displayMap)
             {
-                await CreatRoomRuntime(room, false, displayMap);
+                await CreateRoomRuntime(room, false, displayMap);
             }
         } 
         //生成地图链接
@@ -1149,7 +1149,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
         //WorldMapObjManager.instance.DefaultDisplayMap(displayMap);
     }
-    async Task CreatRoomRuntime(WorldMap room, bool display, int displayMap = 0)
+    async Task CreateRoomRuntime(WorldMap room, bool display, int displayMap = 0)
     {
         //获取房间数据
         var MapRoomData = room.mapRoomData;

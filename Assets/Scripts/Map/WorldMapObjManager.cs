@@ -392,6 +392,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         }
         RecycleMap();
 
+        GameVolumeManager.instance.ClearFootStep();
         ClearTempCharacter clearTempCharacter = new ClearTempCharacter();
         GameActionManager.instance.QueueAction(clearTempCharacter, true);
 

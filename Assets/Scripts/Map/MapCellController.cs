@@ -361,13 +361,14 @@ public class RuntimeMapRoom
         if (linkMapIndexes.TryGetValue(nowCoordinate, out int index))
         {
             int4 nextData = linkMaps[index];
-            if (GameCommon.CheckDirectionValue(direction, nextData.w))
+            if (direction==Direction.Default||GameCommon.CheckDirectionValue(direction, nextData.w))
             {
                 newMap = nextData.xyz;
                 changeAction = linkActions[index];
                 return true;
             }
         }
+       
         return false;
     }
 
@@ -1303,7 +1304,8 @@ public class MapCellController : Singleton<MapCellController>
         if (GetRuntimeMapRoom(nowMap, out RuntimeMapRoom runtimeMapRoom))
         {
             int3 changeAction = int3.zero;
-            if (direction == Direction.Default || runtimeMapRoom.ChangeMap(nowCoordinate, direction, out newMap, out changeAction))
+            bool isChangeMap = runtimeMapRoom.ChangeMap(nowCoordinate, direction, out newMap, out changeAction);
+            if (isChangeMap)
             {
                 if (changeAction.z != 0)
                 {
@@ -1572,11 +1574,13 @@ public class MapCellController : Singleton<MapCellController>
             var Neighbours = GetRoomNeighbors(checkId);
             if (Neighbours.IsEmpty)
             {
+               // Debug.Log($"Neighbours.IsEmpty:{checkId}");
                 result = false;
                 return new Queue<int>();
             }
             foreach (var neighbour in Neighbours)
             {
+               // Debug.Log($"checkId:{checkId}  - Neighbours:{neighbour.Key}");
                 if (!checkRoom.Contains(neighbour.Key))
                 {
                     links[neighbour.Key] = checkId;
@@ -1612,6 +1616,8 @@ public class MapCellController : Singleton<MapCellController>
                 }
             }
         }
+
+       // Debug.Log($"null--{sourceId}:{targetId}");
         return null;
     }
 
