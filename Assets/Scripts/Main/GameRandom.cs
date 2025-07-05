@@ -218,7 +218,7 @@ public class GameRandom : Singleton<GameRandom>
                 {
                     if (gameRandomDatas.TryGetValue(randomItem.itemValue, out var randomData))
                     {
-                        var result = GetRandomValue(randomData, innerGroupCount++, nowRandomResultCount, countValue);
+                        var result = GetRandomValue(randomData, innerGroupCount+1, nowRandomResultCount, countValue);
                         if (result != null)
                         {
                             randomResults.AddRange(result);

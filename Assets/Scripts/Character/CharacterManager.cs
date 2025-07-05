@@ -1723,7 +1723,7 @@ public class CharacterManager : Singleton<CharacterManager>
     private void ControllerMove(Vector2 _moveDirection)
     {
         controllerCharacter.moveDirection = _moveDirection;
-        //Debug.Log($" Set_moveDirection{_moveDirection}");
+      // Debug.Log($" Set_moveDirection{_moveDirection}");
         if (_moveDirection == Vector2.zero)
         {
             return;
