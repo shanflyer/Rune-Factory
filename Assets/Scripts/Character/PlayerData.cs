@@ -99,14 +99,14 @@ public class UserGameSaveData : IReferenceData
     public IntIntDictionary mapLineSaveData = new IntIntDictionary();
 
     public IntPlantSaveDataDictionary plantSaveDatas = new IntPlantSaveDataDictionary();
-    public IntFishSaveDataDataDictionary fishSaveDatas = new IntFishSaveDataDataDictionary(); 
+    public IntFishSaveDataDataDictionary fishSaveDatas = new IntFishSaveDataDataDictionary(); //OK
     public IntHomeEquipSaveDataDictionary mapHomeEquips = new IntHomeEquipSaveDataDictionary();
     public IntAnimalSaveDataDictionary animals = new IntAnimalSaveDataDictionary();
     public IntPastureSaveDataDictionary pastures = new IntPastureSaveDataDictionary();
     public IntManufatureSaveDataDictionary manufatures = new IntManufatureSaveDataDictionary();
     public IntStoreCounterSaveDataDictionary storeCounters = new IntStoreCounterSaveDataDictionary();
     public IntFieldSaveDataDictionary fields = new IntFieldSaveDataDictionary();
-    public IntShopSaveDataDictionary shops = new IntShopSaveDataDictionary();
+    public IntShopSaveDataDictionary shops = new IntShopSaveDataDictionary();//
     public StringShopListSaveDataDictionary shopLists = new StringShopListSaveDataDictionary();
 
     public List<int> openFormulas = new List<int>();
@@ -845,11 +845,13 @@ public class OtherSaveData
     public List<int> playerPackages;
     public bool isMarriedFood, isAnMo;
 
+    public int uid;
     public int newDayActionIndex, newWakeUpActionIndex;
     public List<int2> shortcutItems;
     public OtherSaveData() { }
     public OtherSaveData(OtherSaveData otherSaveData)
     {
+        uid = otherSaveData.uid;
         gold = otherSaveData.gold;
         playerPackages = new List<int>();
         playerPackages.AddRange(otherSaveData.playerPackages);

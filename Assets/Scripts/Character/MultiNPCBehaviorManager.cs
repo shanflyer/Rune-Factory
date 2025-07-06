@@ -236,7 +236,7 @@ public class MultiNPCBehaviorManager : Singleton<MultiNPCBehaviorManager>
         int multiDataId = creatMultiNPCBehaviorGroup.dataId;
         bool faceCenter = creatMultiNPCBehaviorGroup.faceCenter;
 
-        int groupInstance = MyInstance.instance.uid;
+        int groupInstance = MyInstance.instance.TempUid;
         var mulitiBehaviorData = await GameDataManager.instance.GetAsyncData<MulitiBehaviorData>(multiDataId);
 
         int maxX = int.MinValue;

@@ -130,7 +130,7 @@ public class PackageManager : Singleton<PackageManager>
             {
                 Item item = new Item
                 {
-                    instanceId =MyInstance.instance.uid,
+                    instanceId =MyInstance.instance.Uid,
                     dataId = itemDataId,
                     count = count
                 };
@@ -688,8 +688,7 @@ public class PackageManager : Singleton<PackageManager>
                     itemPackage = saveData.itemPackage,
 
                 };
-                gamePackage.InitSaveItemList(saveData.items);
-                MyInstance.instance.AddInstance(saveData.id);
+                gamePackage.InitSaveItemList(saveData.items); 
                 gamePackages.Add(saveData.id, gamePackage);
             }
           
@@ -839,7 +838,7 @@ public class PackageManager : Singleton<PackageManager>
             bool success = true;
             for(int i = 0; i < addPackageItem.items.Count; i++)
             {
-                int intanceId = MyInstance.instance.uid;
+                int intanceId = MyInstance.instance.Uid;
                 int count = await gamePackage.SetItemInPackage(new Item
                 {
                     instanceId = intanceId,
@@ -873,7 +872,7 @@ public class PackageManager : Singleton<PackageManager>
         if (gamePackages.TryGetValue(addPackageItem.packageId, out GamePackage gamePackage))
         {
 
-            int intanceId = MyInstance.instance.uid;
+            int intanceId = MyInstance.instance.Uid;
             int count = await gamePackage.SetItemInPackage(new Item
             {
                 instanceId = intanceId,
@@ -911,7 +910,7 @@ public class PackageManager : Singleton<PackageManager>
         int instanceId = creatRuntimePackage.instanceId;
         if (instanceId < 0)
         {
-            instanceId = MyInstance.instance.uid;
+            instanceId = MyInstance.instance.Uid;
         } 
         GamePackage gamePackage = new GamePackage
         {
@@ -930,7 +929,7 @@ public class PackageManager : Singleton<PackageManager>
 
     public async Task<int> CreatGamePackage(int dataId, int level, int instanceId = 0)
     {
-        int packageInstanceId = instanceId == 0 ? MyInstance.instance.uid : instanceId;
+        int packageInstanceId = instanceId == 0 ? MyInstance.instance.Uid : instanceId;
         if(gamePackages.ContainsKey(packageInstanceId))
         {
             return -1;
@@ -1363,7 +1362,7 @@ public class PackageManager : Singleton<PackageManager>
             }
             if (item.instanceId == 0)
             {
-                item.instanceId = MyInstance.instance.uid;
+                item.instanceId = MyInstance.instance.Uid;
             }
 
             ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
@@ -1406,7 +1405,7 @@ public class PackageManager : Singleton<PackageManager>
                         index = nullItems.Count != 0 ? nullItems.Dequeue() : items.Count;//空物体位置
                         Item newItem = new Item
                         {
-                            instanceId = MyInstance.instance.uid,
+                            instanceId = MyInstance.instance.Uid,
                             dataId = itemData.id,
                             packageId = instanceId,
                             isFresh = itemData.isFresh,
@@ -1468,7 +1467,7 @@ public class PackageManager : Singleton<PackageManager>
                         //index = itemData.groupCount - setItem.count;
                         Item item1 = new Item
                         {
-                            instanceId = MyInstance.instance.uid,
+                            instanceId = MyInstance.instance.Uid,
                             dataId = itemData.id,
                             packageId = instanceId,
                             isFresh = itemData.isFresh,
@@ -1501,7 +1500,7 @@ public class PackageManager : Singleton<PackageManager>
 
                         Item item1 = new Item
                         {
-                            instanceId = MyInstance.instance.uid,
+                            instanceId = MyInstance.instance.Uid,
                             dataId = itemData.id,
                             packageId = instanceId,
                             isFresh = itemData.isFresh,
@@ -1585,8 +1584,7 @@ public class PackageManager : Singleton<PackageManager>
                     }
                     else
                     {
-                        count -= nowItem.count;
-                        MyInstance.instance.RemoveInstance(nowItem.instanceId);
+                        count -= nowItem.count; 
                         nullItems.Enqueue(indexDatas[index]);
                         itemCount--;
                         indexDatas.RemoveAt(index);
@@ -1630,8 +1628,7 @@ public class PackageManager : Singleton<PackageManager>
                         }
                         else
                         {
-                            count -= nowItem.count;
-                            MyInstance.instance.RemoveInstance(nowItem.instanceId);
+                            count -= nowItem.count; 
                             nullItems.Enqueue(indexDatas[index]);
                             itemCount -= nowItem.count;
                             items[indexDatas[index]] = default(Item);

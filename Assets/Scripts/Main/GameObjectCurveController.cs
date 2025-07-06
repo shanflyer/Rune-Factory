@@ -16,6 +16,7 @@ public class CurveMoveData
 
 public class GameObjectCurveController : Singleton<GameObjectCurveController>
 {
+    private MyUid myUid;
     public delegate Vector2 GetCurvePos(float timeValue);
 
     public delegate void SetCurvePosCurveMoveData(float timeValue, CurveMoveData curveMoveData);
@@ -98,7 +99,8 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
 
     public override void Init()
     {
-        base.Init(); 
+        base.Init();
+        myUid = new MyUid();
     }
 
     private void SetCurvePosCurveMoveDataAction(float timeValue, CurveMoveData curveMoveData)
@@ -212,7 +214,7 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
 
     public int Line(float speed, Vector2 startPos, Vector2 targetPos, CurveAction curveAction, CurveEndAction curveEndAction)
     {
-        int instanceId = MyInstance.instance.uid;
+        int instanceId = myUid.Uid;
         IEnumerator enumerator = CurveAddTime(speed, curveAction, (float timeValue) =>
         {
             Vector2 pos = startPos + (targetPos - startPos) * timeValue;
@@ -225,7 +227,6 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
            
             runIEnumerator.Remove(instanceId);
             pauseEnumerator.Remove(instanceId);
-            MyInstance.instance.RemoveInstance(instanceId);
 
             if (curveEndAction != null)
             {

@@ -20,7 +20,7 @@ public class SkillManager : Singleton<SkillManager>
     public async Task<SkillRuntime> CreateSkillRuntime(int skillId)
     {
         SkillData skillData=await GameDataManager.instance.GetAsyncData<SkillData>(skillId);
-        SkillRuntime skillRuntime = new SkillRuntime(skillData, MyInstance.instance.uid); 
+        SkillRuntime skillRuntime = new SkillRuntime(skillData, ExploreManager.instance.NewUid); 
         return skillRuntime;
     }
 
@@ -31,7 +31,7 @@ public class SkillManager : Singleton<SkillManager>
         randomValue = FightManager.instance.GetAttributeTypeRandomValue(buffData.attributeType, fightCharacter.AttackAttributeType, randomValue);
         if (randomValue < buffData.probability)
         {
-            BuffRuntime buffRuntime = new BuffRuntime(buffData, MyInstance.instance.uid, fightCharacter.instanceId, overrideAddValue, overrideMulValue, overrideLifeTime);
+            BuffRuntime buffRuntime = new BuffRuntime(buffData, ExploreManager.instance.NewUid, fightCharacter.instanceId, overrideAddValue, overrideMulValue, overrideLifeTime);
             return buffRuntime;
         }
         return null;      

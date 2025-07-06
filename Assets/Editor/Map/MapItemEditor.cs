@@ -179,7 +179,7 @@ public class MapItemEditor : MyEditor
 
         MapItemData mapItemData = ScriptableObject.CreateInstance<MapItemData>();
 
-        mapItemData.id = MyInstance.instance.uid;
+        mapItemData.id = MyInstance.instance.CreateInstanceId();
         mapItemData.name = mapItemData.id.ToString();
         mapItemData.itemName = "NewMapObj";
         mapItemData.itemObj = selectItem;

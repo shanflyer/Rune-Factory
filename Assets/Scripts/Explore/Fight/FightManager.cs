@@ -164,11 +164,7 @@ public class FightManager : Singleton<FightManager>
     private void ClearCharacter()
     {
         fightCharacters.Clear();
-        fightPlayers.Clear();
-        for(int i = 0; i < fightMonsters.Count; i++)
-        {
-            MyInstance.instance.RemoveInstance(fightMonsters[i]);
-        }
+        fightPlayers.Clear(); 
         fightMonsters.Clear();
         playerDic.Clear();
         singleMonsterDic.Clear();
@@ -240,12 +236,8 @@ public class FightManager : Singleton<FightManager>
                       horizontalMonsterDic.Remove(monster.fightPos.y);
                       verticalMonsterDic.Remove(monster.fightPos.x);
 
-                      if (fightMonsters.Remove(characterDeath.characterId))
-                      {
-                          MyInstance.instance.RemoveInstance(characterDeath.characterId);
-                      }
-                      else
-                      {
+                      if (!fightMonsters.Remove(characterDeath.characterId))
+                      { 
                           fightCharacters.Remove(characterDeath.characterId);
                       } 
                   }
@@ -521,7 +513,7 @@ public class FightManager : Singleton<FightManager>
             int raw = i - col * 3 - 1;
 
             MonsterData monsterData = await GameDataManager.instance.GetAsyncData<MonsterData>(characterId);
-            FightMonster fightMonster = new FightMonster(monsterData, MyInstance.instance.uid, new int2(col, raw));   
+            FightMonster fightMonster = new FightMonster(monsterData, ExploreManager.instance.NewUid, new int2(col, raw));   
             fightCharacters.Add(fightMonster.instanceId, fightMonster);
             fightMonsters.Add(fightMonster.instanceId);
             Debug.Log($"singleMonsterDic.Count{singleMonsterDic.Count}--fightMonster.instanceId}}{fightMonster.instanceId}--fightMonster.fightPos{fightMonster.fightPos}");
@@ -1580,8 +1572,7 @@ public class FightManager : Singleton<FightManager>
             {
                 int characterId = fightMonsters[i];
                 fightCharacters.Remove(characterId);
-                FightController.instance.RemoveFightPlayerRuntime(characterId);
-                MyInstance.instance.RemoveInstance(characterId);
+                FightController.instance.RemoveFightPlayerRuntime(characterId); 
             } 
             fightMonsters.Clear(); 
 

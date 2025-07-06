@@ -31,7 +31,6 @@ public class WorldMapManager : Singleton<WorldMapManager>
     {
         base.Init();
         runtimeMapItems = new Dictionary<int, RuntimeMapItem>();
-        GameDataSaveManager.instance.InitMapInstanceData();
 
         GameActionManager.instance.AddListener<RemoveMapItemCollider>(RemoveMapItemCollider);
         GameActionManager.instance.AddListener<ReSetMapItemCollider>(ReSetMapItemCollider);
@@ -370,7 +369,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         int instanceId = creatRoom.instance;
         if (instanceId == 0)
         {
-            instanceId = MyInstance.instance.uid;
+            instanceId = MyInstance.instance.TempUid;
         }
 
         var MapRoomData = await GameDataManager.instance.GetAsyncData<MapRoomData>(creatRoom.roomId);
@@ -481,6 +480,13 @@ public class WorldMapManager : Singleton<WorldMapManager>
         return false;
     }
 
+    public void SaveMapItemInstance(int instance)
+    {
+        if(runtimeMapItems.TryGetValue(instance,out var runtimeMapItem))
+        {
+            GameDataSaveManager.instance.UserGameSaveData.SaveSpecialMapItem(runtimeMapItem.editorKey, instance);
+        }
+    }
     public bool GetMapItemPos(int id, out int3 objCoordinate)
     {
         objCoordinate = int3.zero;
@@ -567,7 +573,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
             if (instanceId == 0)
             {
                 isInSaveData = false;
-                instanceId = MyInstance.instance.uid;
+                instanceId = MyInstance.instance.Uid;
                 GameDataSaveManager.instance.SaveSpecialItem(itemkey, instanceId);
             }
         }else

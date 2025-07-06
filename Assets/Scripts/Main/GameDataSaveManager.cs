@@ -242,16 +242,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         }
         return 0;
     }
-    public void InitMapInstanceData()
-    {
-        if (loadGameSaveData!=null)
-        { 
-            for(int i=0;i<loadGameSaveData.specialMapItemList.Count;i++)
-            {
-                MyInstance.instance.AddInstance(loadGameSaveData.specialMapItemList[i].z);
-            } 
-        }
-    }
+   
     public int CheckMapLine(int id)
     {
         if (loadGameSaveData != null)
@@ -425,6 +416,8 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
 
     private void SaveUserGameSaveData()
     {
+        UserGameSaveData.otherSaveData.uid = MyInstance.instance.MaxUid;
+
         //包裹数据
         var packageSaveDatas = PackageManager.instance.GetPackageSaveData();
         UserGameSaveData.packageSaveDatas = packageSaveDatas;

@@ -226,7 +226,6 @@ public class FightCharacter : IReferenceData
                 if (buffRuntime.CheckCoverBuff(oldBuffRuntime.id))
                 {
                     buffRuntimes.RemoveAt(i);
-                    MyInstance.instance.RemoveInstance(oldBuffRuntime.instanceId);
                     RemoveBuffAction(oldBuffRuntime); 
                 }
             }
@@ -271,7 +270,6 @@ public class FightCharacter : IReferenceData
                             buffRuntime.BuffPerAction(instanceId);
                             if (buffRuntime.BuffActionEnd())
                             {
-                                MyInstance.instance.RemoveInstance(buffRuntime.instanceId);
                                 RemoveBuffAction(buffRuntime);
                                 buffRuntimes.RemoveAt(i); 
                             } 

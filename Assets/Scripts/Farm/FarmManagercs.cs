@@ -135,6 +135,7 @@ public class FarmManager : Singleton<FarmManager>
                 {
                     int2 editorKey = new int2(tryCreatField.roomId, tryCreatField.itemInstanceId);
                     int instanceId = WorldMapManager.instance.GetInstanceFromEditorId(editorKey);
+                    GameDataSaveManager.instance.UserGameSaveData.SaveSpecialMapItem(editorKey, instanceId);
                     if (!fields.ContainsKey(instanceId))
                     {
                         Field field = new Field

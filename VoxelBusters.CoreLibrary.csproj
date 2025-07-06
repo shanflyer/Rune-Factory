@@ -56,14 +56,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Analyzer Include="C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
-    <Analyzer Include="D:\MyGame\Rune Factory - Copy\Assets\OtherPackage\ExternalDependencyManager\Editor\1.2.183\Google.PackageManagerResolver.dll" />
-    <Analyzer Include="D:\MyGame\Rune Factory - Copy\Assets\OtherPackage\ExternalDependencyManager\Editor\1.2.183\Google.VersionHandlerImpl.dll" />
-    <Analyzer Include="D:\MyGame\Rune Factory - Copy\Assets\OtherPackage\codeandweb.com\Editor\TexturePackerImporter.dll" />
-    <Analyzer Include="D:\MyGame\Rune Factory - Copy\Assets\OtherPackage\ExternalDependencyManager\Editor\Google.VersionHandler.dll" />
-    <Analyzer Include="D:\MyGame\Rune Factory - Copy\Assets\OtherPackage\Behavior Designer\Runtime\BehaviorDesigner.Runtime.dll" />
-    <Analyzer Include="D:\MyGame\Rune Factory - Copy\Assets\OtherPackage\ExternalDependencyManager\Editor\1.2.183\Google.IOSResolver.dll" />
-    <Analyzer Include="D:\MyGame\Rune Factory - Copy\Assets\OtherPackage\ExternalDependencyManager\Editor\1.2.183\Google.JarResolver.dll" />
-    <Analyzer Include="D:\MyGame\Rune Factory - Copy\Assets\OtherPackage\Behavior Designer\Editor\BehaviorDesigner.Editor.dll" />
     <Analyzer Include="D:\Unity\6000.1.0f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="D:\Unity\6000.1.0f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
     <Analyzer Include="D:\Unity\6000.1.0f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
@@ -122,8 +114,8 @@
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\CoreLibrary\Utilities\UnityPackagePathResolver.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\CoreLibrary\Interfaces\ILocalisationServiceProvider.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\CoreLibrary\Utilities\EnumUtility.cs" />
-    <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\CoreLibrary\DesignPatterns\PrivateSingletonBehaviour.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\CoreLibrary\Utilities\ApplicationLifecycleObserver.cs" />
+    <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\CoreLibrary\DesignPatterns\PrivateSingletonBehaviour.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\CoreLibrary\Constants\ConsentStatus.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\CoreLibrary\AsyncOperations\AsyncOperationManager.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\CoreLibrary\Components\ISchedulerUpdateHandler.cs" />

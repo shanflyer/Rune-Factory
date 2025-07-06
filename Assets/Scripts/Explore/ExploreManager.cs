@@ -24,6 +24,7 @@ public class ExploreManager : Singleton<ExploreManager>
 
     public int NowChapter => nowChapter;
 
+    private MyUid myUid;
     private int nowChapter;
     private FightMapData nowFightMapData;
     private FightChapter fightChapter;
@@ -38,9 +39,11 @@ public class ExploreManager : Singleton<ExploreManager>
         return null;
     }
 
+    public int NewUid => myUid.Uid;
     public override async void Init()
     {
         base.Init();
+        myUid = new MyUid();
         fightChapters.Clear();
         var allChapterDatas = await GameDataManager.instance.GetAllAsyncData<FightMapData>();
         for (int i = 0; i < allChapterDatas.Count; i++)

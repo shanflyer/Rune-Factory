@@ -893,7 +893,7 @@ public class NPCManager : Singleton<NPCManager>
                     saveBirthDay.y = GameRandom.RandomInt(1, 31);
                     GameDataSaveManager.instance.UserGameSaveData.SetNpcBirthDay(NPCData.id, (Season)saveBirthDay.x, saveBirthDay.y);
                 }
-                int instanceId = MyInstance.instance.uid;
+                int instanceId = MyInstance.instance.Uid;
                 NPC npc = new NPC(instanceId, NPCData,(Season)saveBirthDay.x,saveBirthDay.y);
                 npcs.Add(npc.Key, npc);
                 instanceDatas[instanceId] = NPCData.id;

@@ -600,7 +600,7 @@ public class CharacterManager : Singleton<CharacterManager>
         var playerData = await GameDataManager.instance.GetAsyncData<CharacterData>(id);
         if (instanceId == 0)
         {
-            instanceId = MyInstance.instance.uid;
+            instanceId = MyInstance.instance.Uid;
         }
         ProfessionData professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(playerData.profession);
         player = new Player(playerData,  instanceId, playerName, professionData);
@@ -666,7 +666,7 @@ public class CharacterManager : Singleton<CharacterManager>
         MapCellController.instance.RemoveCharacterCoordinate(character.ObjCoordinate, character.instanceId, character is TempCharacter);
         CharacterBehaviorManager.instance.DestroyBehavior(character.instanceId);
         characters.Remove(character.instanceId);
-        MyInstance.instance.RemoveInstance(character.instanceId);
+        
         NPCTaskScheduleManager.instance.RemoveBehavior(character.instanceId);
     }
 
@@ -680,7 +680,7 @@ public class CharacterManager : Singleton<CharacterManager>
         var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(tempCharacterData.linkCharacterId);
         int level = TempCharacterManager.instance.level;
         var professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(characterData.profession);
-        TempCharacter character = new TempCharacter(characterData, professionData, MyInstance.instance.uid, tempCharacterData);
+        TempCharacter character = new TempCharacter(characterData, professionData, MyInstance.instance.TempUid, tempCharacterData);
 
         AddCharacter(character);
         character.SetObjCoordinate(creatTempCharacter.mapInstance,
@@ -710,7 +710,7 @@ public class CharacterManager : Singleton<CharacterManager>
             int instanceId = creatCharacter.instanceId;
             if (instanceId == 0)
             {
-                instanceId = MyInstance.instance.uid;
+                instanceId = MyInstance.instance.Uid;
             }
             var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(creatCharacter.characterId);
             var professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(characterData.profession);

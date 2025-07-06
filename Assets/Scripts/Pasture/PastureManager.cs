@@ -474,6 +474,8 @@ public class PastureManager : Singleton<PastureManager>
                     };
                     GameActionManager.instance.QueueAction(setItemAnimation);
                     SetValue(tryCreatPasture.itemInstanceId);
+
+                    WorldMapManager.instance.SaveMapItemInstance(tryCreatPasture.itemInstanceId);
                 }
                 else
                 {
@@ -509,7 +511,7 @@ public class PastureManager : Singleton<PastureManager>
                                 {
                                     Pasture pasture = new Pasture
                                     {
-                                        instanceId = MyInstance.instance.uid,
+                                        instanceId = MyInstance.instance.Uid,
                                         name = string.IsNullOrEmpty(tryCreatPasture.pastureName) ? pastureData.pastureName : tryCreatPasture.pastureName,
                                         pastureState = PastureState.平常,
                                         linkItem = instanceId,
@@ -656,7 +658,7 @@ public class PastureManager : Singleton<PastureManager>
     private async void SampleCreatAnimal(SampleCreatAnimal sampleCreatAnimal)
     {
         AnimalData animalData = await GameDataManager.instance.GetAsyncData<AnimalData>(sampleCreatAnimal.dataId);
-        Animal animal = new Animal(animalData,MyInstance.instance.uid);
+        Animal animal = new Animal(animalData,MyInstance.instance.Uid);
 
    
         animals.Add(animal.instanceId, animal);
@@ -695,7 +697,7 @@ public class PastureManager : Singleton<PastureManager>
     private async void TryCreatAnimal(TryCreatAnimal tryCreatAnimal)
     {
         AnimalData animalData = await GameDataManager.instance.GetAsyncData<AnimalData>(tryCreatAnimal.dataId);
-        Animal animal = new Animal(animalData, MyInstance.instance.uid);
+        Animal animal = new Animal(animalData, MyInstance.instance.Uid);
 
         if (pastures.TryGetValue(tryCreatAnimal.roomId, out var pasture))
         {

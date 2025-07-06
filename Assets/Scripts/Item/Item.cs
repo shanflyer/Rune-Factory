@@ -102,7 +102,7 @@ public class ItemManager:Singleton<ItemManager>
         {
             dataId = data.id,
             count = count,
-            instanceId = MyInstance.instance.uid
+            instanceId = MyInstance.instance.Uid
         };
         return item;
     }
@@ -113,7 +113,7 @@ public class ItemManager:Singleton<ItemManager>
         {
             dataId = dataId,
             count = count,
-            instanceId = MyInstance.instance.uid
+            instanceId = MyInstance.instance.Uid
         };
         return item;
     }
