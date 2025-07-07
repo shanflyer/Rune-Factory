@@ -13,6 +13,7 @@ public class MyInstance : Singleton<MyInstance>
         base.Init();
         tempUid = 100_000;
         uid = 100_000;
+        characterId = 10_000;
 
     }
     public int TempUid
@@ -24,7 +25,15 @@ public class MyInstance : Singleton<MyInstance>
         }
     }
     private int tempUid;
-
+    public int CharacterId
+    {
+        get
+        {
+            characterId++;
+            return characterId;
+        }
+    }
+    private int characterId;
     public int Uid
     {
         get

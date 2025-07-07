@@ -86,6 +86,11 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
     private ParticleSystem footStep;
     public void EmitFootParticle(float angle,Vector3 pos,Color footStepColor,bool isLeftFoot)
     {
+        if (pos.x == float.NaN || pos.y == float.NaN)
+        {
+            return;
+        }
+
         EmitParams ep = new EmitParams();
         ep.startColor = footStepColor;
         ep.position = pos;

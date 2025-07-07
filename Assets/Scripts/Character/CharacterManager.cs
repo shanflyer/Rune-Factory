@@ -600,7 +600,7 @@ public class CharacterManager : Singleton<CharacterManager>
         var playerData = await GameDataManager.instance.GetAsyncData<CharacterData>(id);
         if (instanceId == 0)
         {
-            instanceId = MyInstance.instance.Uid;
+            instanceId = MyInstance.instance.CharacterId;
         }
         ProfessionData professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(playerData.profession);
         player = new Player(playerData,  instanceId, playerName, professionData);
@@ -710,7 +710,7 @@ public class CharacterManager : Singleton<CharacterManager>
             int instanceId = creatCharacter.instanceId;
             if (instanceId == 0)
             {
-                instanceId = MyInstance.instance.Uid;
+                instanceId = MyInstance.instance.CharacterId; 
             }
             var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(creatCharacter.characterId);
             var professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(characterData.profession);
