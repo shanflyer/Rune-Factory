@@ -139,9 +139,9 @@ public class EmoteManager : Singleton<EmoteManager>
         }
     }
 
-    private async Task<RuntimeObj> GetEmote(int id, Transform parent)
+    private RuntimeObj GetEmote(int id, Transform parent)
     {
-        RuntimeObj runtimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj<Animator>(RuntimeObjType.EMOTE.ToString(),
+        RuntimeObj runtimeObj = GameRuntimeObjManager.instance.CreateRuntimeObj<Animator>(RuntimeObjType.EMOTE.ToString(),
             "emote", emoteAnimator, id, parent);
         return runtimeObj;
     }
@@ -163,7 +163,7 @@ public class EmoteManager : Singleton<EmoteManager>
                     {
                         emoteRuntime = new EmoteRuntime();
                         characterEmoteRuntimes[entityId] = emoteRuntime;
-                        emoteRuntime.runtimeObj = await GetEmote(emoteId, characterRuntimeObj.transform); 
+                        emoteRuntime.runtimeObj = GetEmote(emoteId, characterRuntimeObj.transform); 
                     }
                 }
                 break;
@@ -176,7 +176,7 @@ public class EmoteManager : Singleton<EmoteManager>
                     {
                         emoteRuntime = new EmoteRuntime();
                         itemEmoteRuntimes[entityId] = emoteRuntime;
-                        emoteRuntime.runtimeObj = await GetEmote(emoteId, itemRuntimeObj.transform); 
+                        emoteRuntime.runtimeObj = GetEmote(emoteId, itemRuntimeObj.transform); 
                     }
                 }
                 break;

@@ -5,20 +5,21 @@ using UnityEngine;
 public class SceneInfoManager : Singleton<SceneInfoManager>
 {
     private SceneInfo sceneInfoPre;
-    public async void DisplaySceneInfo(string str,Vector3 pos)
+    public void DisplaySceneInfo(string str,Vector3 pos)
     {
-        var runtimeSceneInfo =await GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.OTHER.ToString(),
-           "", sceneInfoPre, 0);
-        SceneInfo sceneInfo = runtimeSceneInfo.obj as SceneInfo;
-        sceneInfo.transform.position = pos;
-        sceneInfo.SetTextValue(str);
+          GameRuntimeObjManager.instance.CreateRuntimeObj(FightRuntimeObjType.OTHER.ToString(),
+           "", sceneInfoPre, 0,setComponent:(RuntimeObj runtimeSceneInfo) => 
+           {
+               SceneInfo sceneInfo = runtimeSceneInfo.obj as SceneInfo;
+               sceneInfo.transform.position = pos;
+               sceneInfo.SetTextValue(str);
 
-
-
-        GameTimerController.instance.DelayAction(500, () =>
-        {
-            GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeSceneInfo);
-        });
+               GameTimerController.instance.DelayAction(500, () =>
+               {
+                   GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeSceneInfo);
+               });
+           }); 
+       
     }
     protected override void Clear()
     {

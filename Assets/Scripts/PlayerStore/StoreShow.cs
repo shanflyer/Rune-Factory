@@ -15,16 +15,18 @@ public class StoreShow:Singleton<StoreShow>
         CoinPrefab =await GameSourceManager.instance.GetComponent<Animation>(DataPath.StoreCoinPrefab);
         GameActionManager.instance.AddListener<ShowCoin>(ShowCoin);
     }
-    public async void ShowCoin(ShowCoin ShowCoin)
+    public void ShowCoin(ShowCoin ShowCoin)
     {
-        var coinRuntimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj<Animation>(RuntimeObjType.STOREITEM.ToString(), "Coin", CoinPrefab, 0);
-        Animation animation = coinRuntimeObj.obj as Animation;
-        animation.transform.position = ShowCoin.pos;
-        animation.Play();
-        AudioController.instance.PlayAudio(SE.coinitem_acquired01);
-        GameTimerController.instance.DelayAction(GameCommon.storeCoinTime, () =>
+        GameRuntimeObjManager.instance.CreateRuntimeObj(RuntimeObjType.STOREITEM.ToString(), "Coin", CoinPrefab, 0,setComponent:(RuntimeObj coinRuntimeObj) =>
         {
-            GameRuntimeObjManager.instance.RecycleRuntimeObj(coinRuntimeObj);
-        });
+            Animation animation = coinRuntimeObj.obj as Animation;
+            animation.transform.position = ShowCoin.pos;
+            animation.Play();
+            AudioController.instance.PlayAudio(SE.coinitem_acquired01);
+            GameTimerController.instance.DelayAction(GameCommon.storeCoinTime, () =>
+            {
+                GameRuntimeObjManager.instance.RecycleRuntimeObj(coinRuntimeObj);
+            });
+        }); 
     }
 }

@@ -1385,10 +1385,13 @@ public class CharacterManager : Singleton<CharacterManager>
         var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(characterDataId);
         if (characterData != null)
         {
-            var runtimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.CHARACTER.ToString(), characterData.obj.name,
-               characterData.obj, instacneId); 
-
-            (runtimeObj.obj as CharacterRuntimeObj).SetPosition(pos);
+            var runtimeObj =GameRuntimeObjManager.instance.CreateRuntimeObj(RuntimeObjType.CHARACTER.ToString(), characterData.obj.name,
+               characterData.obj, instacneId, setComponent: (RuntimeObj obj) =>
+               {
+                   (obj.obj as CharacterRuntimeObj).SetPosition(pos);
+               }); 
+             
+          
             return runtimeObj;
         }
         return null;

@@ -114,16 +114,20 @@ public class BuffRuntime
         if (buffData.buffObj != null)
         {
             InitRuntimeObj();
-            async void InitRuntimeObj()
+            void InitRuntimeObj()
             {
-                runtimeObj = await GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.OTHER.ToString(), buffData.buffObj.name, buffData.buffObj, instanceId);
-                buffActionBehavior = runtimeObj.obj as BuffActionBehavior;
-                if (buffActionBehavior)
-                {
-                    buffActionBehavior.stopAction = ParticleSystemStopAction;
-                    buffActionBehavior.transform.position = pos;
-                    buffActionBehavior.PlayParticle();
-                }
+                runtimeObj = GameRuntimeObjManager.instance.CreateRuntimeObj(FightRuntimeObjType.OTHER.ToString(), buffData.buffObj.name, buffData.buffObj, instanceId,
+                  setComponent:(RuntimeObj runtime) =>
+                    {
+                        buffActionBehavior = runtime.obj as BuffActionBehavior;
+                        if (buffActionBehavior)
+                        {
+                            buffActionBehavior.stopAction = ParticleSystemStopAction;
+                            buffActionBehavior.transform.position = pos;
+                            buffActionBehavior.PlayParticle();
+                        }
+                    });
+               
             }
 
         }
@@ -161,16 +165,20 @@ public class BuffRuntime
         if (buffData.buffObj!= null)
         {
             InitRuntimeObj();
-            async void InitRuntimeObj()
+            void InitRuntimeObj()
             {
-                runtimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.OTHER.ToString(), buffData.buffObj.name, buffData.buffObj, instanceId);
-                buffActionBehavior = runtimeObj.obj as BuffActionBehavior;
-                if (buffActionBehavior)
-                {
-                    buffActionBehavior.stopAction = ParticleSystemStopAction;
-                    buffActionBehavior.transform.position = pos;
-                    buffActionBehavior.PlayParticle();
-                }
+                runtimeObj =GameRuntimeObjManager.instance.CreateRuntimeObj(FightRuntimeObjType.OTHER.ToString(), buffData.buffObj.name, buffData.buffObj, instanceId,
+                      setComponent: (RuntimeObj runtime) =>
+                      {
+                        
+                          buffActionBehavior = runtime.obj as BuffActionBehavior;
+                          if (buffActionBehavior)
+                          {
+                              buffActionBehavior.stopAction = ParticleSystemStopAction;
+                              buffActionBehavior.transform.position = pos;
+                              buffActionBehavior.PlayParticle();
+                          }
+                      }); 
             }
             
         } 

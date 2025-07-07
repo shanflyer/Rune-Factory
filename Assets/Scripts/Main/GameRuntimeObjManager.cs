@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
+public delegate void SetComponent(RuntimeObj RuntimeObj);
 public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>  
 {  
     Dictionary<string, Transform> objParents = new Dictionary<string, Transform>();
@@ -79,8 +80,8 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
         return false;
     }
  
-    public async Task<RuntimeObj> CreatRuntimeObj<T>(string runtimeObjType,string key,T objPre,int linkId,
-        Transform overrideParent=null,bool isActive=true)where T:Component
+    public RuntimeObj CreateRuntimeObj<T>(string runtimeObjType,string key,T objPre,int linkId,
+        Transform overrideParent=null,bool isActive=true, SetComponent setComponent=null) where T:Component
     {
         if(!objParents.TryGetValue(runtimeObjType,out Transform parent))
         {
@@ -95,24 +96,31 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
         {
             runtimeObj = new RuntimeObj();
             var asyncInstantiateOperation = GameObject.InstantiateAsync(objPre, parent);
-            await asyncInstantiateOperation;
-            runtimeObj.obj = asyncInstantiateOperation.Result[0];
+            //await asyncInstantiateOperation;
+            asyncInstantiateOperation.completed += op =>
+            {
+                runtimeObj.obj = asyncInstantiateOperation.Result[0];
+
+                var obj = runtimeObj.obj as Component;
+                obj.transform.SetParent(parent, false);
+                obj.gameObject.SetActive(isActive);
+                if (setComponent != null)
+                {
+                    setComponent.Invoke(runtimeObj);
+                }
+            };
+          
             runtimeObj.runtimeObjType = runtimeObjType;
             runtimeObj.key = key;
         }
-        runtimeObj.linkId = linkId;
-        try
-        { 
-            var obj = runtimeObj.obj as Component; 
-            obj.transform.SetParent(parent, false);
-            obj.gameObject.SetActive(isActive);
-        }
-        catch(Exception e)
+        else
         {
-            Debug.LogError(e);
+            if (setComponent != null)
+            {
+                setComponent.Invoke(runtimeObj);
+            }
         }
-         
-        
+        runtimeObj.linkId = linkId; 
         runtimeObj.use = true;
         return runtimeObj;
     }

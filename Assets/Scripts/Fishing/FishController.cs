@@ -97,7 +97,7 @@ public class FishController : Singleton<FishController>
             Fishers.Remove(recycleFisher.characterInstance);
         }
     }
-    async void CreatFisher(CreatFisher creatFisher)
+     void CreatFisher(CreatFisher creatFisher)
     {
         if (!Fishers.ContainsKey(creatFisher.characterInstance))
         {
@@ -106,18 +106,16 @@ public class FishController : Singleton<FishController>
             {
                 if (CharacterManager.instance.GetRuntimeCharacterObj(creatFisher.characterInstance, out var characterRuntimeObj))
                 {
-                    RuntimeObj runtimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj<FishTool>(RuntimeObjType.FISHTOOL.ToString(), "Fisher", fishTool, creatFisher.characterInstance);
-                  
-                    Vector3 pos = GameCommon.fishToolOffsets[character.direction];
-                    pos += characterRuntimeObj.transform.position;
-
-
-
-                    FisherRuntime fisher = new FisherRuntime(runtimeObj, creatFisher.characterInstance, character.mapInstance,creatFisher.pondData); 
-                    fisher.SetToolPos(pos);
-
-                    Fishers.Add(creatFisher.characterInstance, fisher);
-                    Fishers[creatFisher.characterInstance] = fisher;
+                      GameRuntimeObjManager.instance.CreateRuntimeObj<FishTool>(RuntimeObjType.FISHTOOL.ToString(), "Fisher", fishTool, creatFisher.characterInstance,
+                        setComponent:(RuntimeObj runtimeObj) =>
+                        {
+                            Vector3 pos = GameCommon.fishToolOffsets[character.direction];
+                            pos += characterRuntimeObj.transform.position;
+                            FisherRuntime fisher = new FisherRuntime(runtimeObj, creatFisher.characterInstance, character.mapInstance, creatFisher.pondData);
+                            fisher.SetToolPos(pos);
+                            Fishers.Add(creatFisher.characterInstance, fisher);
+                            Fishers[creatFisher.characterInstance] = fisher;
+                        }); 
                 }
              
             }

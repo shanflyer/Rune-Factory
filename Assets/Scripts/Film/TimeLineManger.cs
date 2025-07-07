@@ -324,34 +324,36 @@ public class TimeLineManger : Singleton<TimeLineManger>
 
     private PlayableDirector defaultPlayableDirector;
      
-    public async void PlaySkillTimeline(int source,SkillEstimateData skillEstimateData, MyTimeLineData myTimeLineData,
+    public  void PlaySkillTimeline(int source,SkillEstimateData skillEstimateData, MyTimeLineData myTimeLineData,
         Action endAction)
     {
-        var runtimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.PLAYABLEDIRECTOR.ToString(), "default", defaultPlayableDirector, 0);
-        var playableDirector = runtimeObj.obj as PlayableDirector;
-
-        if(!playableDirector.gameObject.TryGetComponent(out MyReciver myReciver))
-        {
-            myReciver = playableDirector.gameObject.AddComponent<MyReciver>();
-        }
-
-        if (runtimePlayables.TryGetValue(playableDirector, out RuntimePlayable RuntimePlayable))
-        {
-            RuntimePlayable.StopAction(playableDirector);
-            runtimePlayables.Remove(playableDirector);
-        } 
-        playableDirector.playableAsset = myTimeLineData.asset;
-        RuntimePlayable runtimePlayable = new RuntimePlayable(playableDirector, myTimeLineData, skillEstimateData, () =>
-        {
-            GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
-            if (endAction != null)
+           GameRuntimeObjManager.instance.CreateRuntimeObj(FightRuntimeObjType.PLAYABLEDIRECTOR.ToString(), "default", defaultPlayableDirector, 0,
+            setComponent:(RuntimeObj runtimeObj) =>
             {
-                endAction();
-            }
-            runtimePlayables.Remove(playableDirector);
-        },source);
-        runtimePlayables[playableDirector] = runtimePlayable;
-        playableDirector.Play();
+                var playableDirector = runtimeObj.obj as PlayableDirector;
+
+                if (!playableDirector.gameObject.TryGetComponent(out MyReciver myReciver))
+                {
+                    myReciver = playableDirector.gameObject.AddComponent<MyReciver>();
+                }
+                if (runtimePlayables.TryGetValue(playableDirector, out RuntimePlayable RuntimePlayable))
+                {
+                    RuntimePlayable.StopAction(playableDirector);
+                    runtimePlayables.Remove(playableDirector);
+                }
+                playableDirector.playableAsset = myTimeLineData.asset;
+                RuntimePlayable runtimePlayable = new RuntimePlayable(playableDirector, myTimeLineData, skillEstimateData, () =>
+                {
+                    GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
+                    if (endAction != null)
+                    {
+                        endAction();
+                    }
+                    runtimePlayables.Remove(playableDirector);
+                }, source);
+                runtimePlayables[playableDirector] = runtimePlayable;
+                playableDirector.Play();
+            }); 
     } 
     public void Stop(PlayableDirector playableDirector)
     {

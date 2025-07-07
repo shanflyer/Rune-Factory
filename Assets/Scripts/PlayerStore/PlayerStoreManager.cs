@@ -380,7 +380,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         }
     }
 
-    private async void DisplayStoreCounter(DisplayStoreCounter displayStoreCounter)
+    private  void DisplayStoreCounter(DisplayStoreCounter displayStoreCounter)
     { 
         if (runtimeStoreCounters.TryGetValue(displayStoreCounter.itemInstanceId, out var runtimeStoreCounter))
         {
@@ -394,28 +394,30 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 var storeCounterData = runtimeStoreCounter.storeCounterData;
                 if (!nowRuntimeStoreCounterObjs.TryGetValue(displayStoreCounter.itemInstanceId, out var runtimeObj))
                 {
-                    runtimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.STOREITEM.ToString(), "STOREITEM",
-                        sellItem, displayStoreCounter.itemInstanceId); 
-                    nowRuntimeStoreCounterObjs.Add(displayStoreCounter.itemInstanceId, runtimeObj);
-                }
-                SellItem nowSellItem = runtimeObj.obj as SellItem;
-                if (nowSellItem != null)
-                {
-                    int itemDataId = runtimeStoreCounter.itemData!=null? runtimeStoreCounter.itemData.id:0;
-                    
-                    nowSellItem.InitReferenceData(new Item
-                    {
-                        dataId = itemDataId,
-                        count = runtimeStoreCounter.count
-                    });
-                }
+                   GameRuntimeObjManager.instance.CreateRuntimeObj(RuntimeObjType.STOREITEM.ToString(), "STOREITEM",
+                        sellItem, displayStoreCounter.itemInstanceId, setComponent: (RuntimeObj runtimeObj) =>
+                        {
+                            nowRuntimeStoreCounterObjs.Add(displayStoreCounter.itemInstanceId, runtimeObj);
+                            SellItem nowSellItem = runtimeObj.obj as SellItem;
+                            if (nowSellItem != null)
+                            {
+                                int itemDataId = runtimeStoreCounter.itemData != null ? runtimeStoreCounter.itemData.id : 0;
 
-                nowSellItem.enabled = true;
-                Transform transform = nowSellItem.transform;
-                transform.gameObject.SetActive(true);
-                transform.SetParent(displayStoreCounter.transform, false);
-                transform.localPosition = storeCounterData.offset;
-                nowSellItem.SetDefaultOffset(storeCounterData.offset);
+                                nowSellItem.InitReferenceData(new Item
+                                {
+                                    dataId = itemDataId,
+                                    count = runtimeStoreCounter.count
+                                });
+                            }
+
+                            nowSellItem.enabled = true;
+                            Transform transform = nowSellItem.transform;
+                            transform.gameObject.SetActive(true);
+                            transform.SetParent(displayStoreCounter.transform, false);
+                            transform.localPosition = storeCounterData.offset;
+                            nowSellItem.SetDefaultOffset(storeCounterData.offset);
+                        });  
+                } 
             }
             else
             {
