@@ -8,17 +8,19 @@ using UnityEngine;
 public class GameDataManager : Singleton<GameDataManager>
 {
     public Dictionary<Type, Dictionary<string, IGameData>> allGameStaticDatas = new Dictionary<Type, Dictionary<string, IGameData>>();
-    
+
     public GameGlobalData GlobalData { get; private set; }
+
     protected override void Clear()
     {
         allGameStaticDatas.Clear();
         base.Clear();
     }
+
     public override async void Init()
     {
         base.Init();
-        GlobalData=GetData<GameGlobalData>();
+        GlobalData = GetData<GameGlobalData>();
         var gameDataSaveManager = GameDataSaveManager.instance;
         //初始加载
         await LoadAllAsyncData<GameActionData>();
@@ -63,7 +65,7 @@ public class GameDataManager : Singleton<GameDataManager>
             }
             catch (Exception e)
             {
-                Debug.LogWarning("errr:"+ DataPath.GetDataPath(type));
+                Debug.LogWarning("errr:" + DataPath.GetDataPath(type));
             }
         }
         if (dataAsset != null && dataAsset is TextAsset)
@@ -175,7 +177,7 @@ public class GameDataManager : Singleton<GameDataManager>
     public T GetData<T>(string key = "") where T : IGameData
     {
         Type type = typeof(T);
-        string dataPath =string.IsNullOrEmpty(key)? DataPath.GetDataPath(type):$"{DataPath.GetDataPath(type)}/{key}";
+        string dataPath = string.IsNullOrEmpty(key) ? DataPath.GetDataPath(type) : $"{DataPath.GetDataPath(type)}/{key}";
         if (allGameStaticDatas.TryGetValue(type, out var dataDic))
         {
             if (dataDic.TryGetValue(key, out var data))
@@ -209,7 +211,6 @@ public class GameDataManager : Singleton<GameDataManager>
             return _data;
         }
 
-         
         return default(T); ;
     }
 
@@ -258,7 +259,7 @@ public class GameDataManager : Singleton<GameDataManager>
         var dataAsset = await ExtensionsResources.LoadResourceAsync(DataPath.GetDataPath(type));
         if (dataAsset != null)
         {
-            if(dataAsset is IDataArray<T> dataArray)
+            if (dataAsset is IDataArray<T> dataArray)
             {
                 dataDic = new Dictionary<string, IGameData>();
                 for (int i = 0; i < dataArray.DataList.Length; i++)
@@ -273,14 +274,14 @@ public class GameDataManager : Singleton<GameDataManager>
                     return (T)data1;
                 }
             }
-            else if(dataAsset is T t)
+            else if (dataAsset is T t)
             {
                 t.Init();
                 dataDic = new Dictionary<string, IGameData>();
                 dataDic[key] = t;
                 allGameStaticDatas[type] = dataDic;
                 return t;
-            } 
+            }
         }
 
         var textAsset = dataAsset as TextAsset;
@@ -310,20 +311,27 @@ public class GameDataManager : Singleton<GameDataManager>
 public interface IGameData
 {
     public string GetKey();
+
     public void SetKey(string key) { }
+
     public string ToString()
     {
-       return GetKey();
+        return GetKey();
     }
+
     public void SetObjList(List<object> list) { }
+
     public string GetName() { return ToString(); }
+
     public bool isSingleGroup() { return false; }
 
 #if UNITY_EDITOR
+
     public StringStringDictionary GetDataDic()
     {
         return null;
     }
+
     public void SetReferenceData();
 
 #endif

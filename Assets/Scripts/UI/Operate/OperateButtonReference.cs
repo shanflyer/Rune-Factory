@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -57,9 +56,9 @@ public class OperateButtonReference : UIObjReference<OperateDataReferenceData>
 
     private int linkItemId = 0;
 
-    public override async Task InitData(OperateDataReferenceData t, SelectAction<OperateDataReferenceData> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override async void InitData(OperateDataReferenceData t, SelectAction<OperateDataReferenceData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-       await  base.InitData(t, SelectAction, toggleGroup);
+        base.InitData(t, SelectAction, toggleGroup);
         nameText.SetSWText(t.operateData.operateName);
         if (t.operateData.linkItem == 0)
         {

@@ -1,19 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Purchasing.MiniJSON;
 using UnityEngine.UI;
 
-public class FishUIReference:UIObjReference<FishReferenceData>
+public class FishUIReference : UIObjReference<FishReferenceData>
 {
-   [SerializeField]
-    TextMeshProUGUI FishName,record;
     [SerializeField]
-    Image Icon;
+    private TextMeshProUGUI FishName, record;
+
     [SerializeField]
-    Toggle toggle;
+    private Image Icon;
+
+    [SerializeField]
+    private Toggle toggle;
+
     private void Awake()
     {
         toggle.onValueChanged.AddListener((bool isOn) =>
@@ -24,6 +24,7 @@ public class FishUIReference:UIObjReference<FishReferenceData>
             }
         });
     }
+
     public override void SelectDefault()
     {
         base.SelectDefault();
@@ -33,6 +34,7 @@ public class FishUIReference:UIObjReference<FishReferenceData>
             SelectAction(data, true);
         }
     }
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -41,13 +43,14 @@ public class FishUIReference:UIObjReference<FishReferenceData>
         Icon = FindChildGameObject<Image>("Icon");
         record = FindChildGameObject<TextMeshProUGUI>("RecordValue");
     }
-    public override async Task InitData(FishReferenceData t, SelectAction<FishReferenceData> SelectAction = null, ToggleGroup toggleGroup = null)
+
+    public override async void InitData(FishReferenceData t, SelectAction<FishReferenceData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-      await  base.InitData(t, SelectAction, toggleGroup);
+        base.InitData(t, SelectAction, toggleGroup);
         toggle.group = toggleGroup;
         if (data.record == 0)
         {
-            ItemData itemData =await GameDataManager.instance.GetAsyncData<ItemData>(1);
+            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(1);
             FishName.text = "???";
             Icon.sprite = itemData.icon;
             record.text = "???";
@@ -59,11 +62,10 @@ public class FishUIReference:UIObjReference<FishReferenceData>
             Icon.sprite = fishData.iconSprite;
             record.text = $"{data.record}cm";
         }
-        
     }
-
 }
-public struct FishReferenceData:IReferenceData
+
+public struct FishReferenceData : IReferenceData
 {
     public int dataId;
     public int record;

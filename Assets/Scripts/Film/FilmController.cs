@@ -1,11 +1,8 @@
- 
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Playables;
-using UnityEngine.Timeline; 
+using UnityEngine.Timeline;
 
 public class FilmController : Singleton<FilmController>
 {
@@ -15,15 +12,14 @@ public class FilmController : Singleton<FilmController>
         public PlayableDirector playableDirector;
     }
 
-
     private Dictionary<string, Film> nowFilms = new Dictionary<string, Film>();
     private Transform filmParent;
 
-    async void PlayFilm(PlayFilm playFilm) 
-    { 
-        if(!nowFilms.TryGetValue(playFilm.filmName,out Film film))
+    private async void PlayFilm(PlayFilm playFilm)
+    {
+        if (!nowFilms.TryGetValue(playFilm.filmName, out Film film))
         {
-           await CreatAndPlayFilm(playFilm.filmName,playFilm.assetName);
+            await CreateAndPlayFilm(playFilm.filmName, playFilm.assetName);
         }
         else
         {
@@ -35,7 +31,6 @@ public class FilmController : Singleton<FilmController>
                 {
                     if (film.playableDirector.playableAsset != null)
                         assetData = filmData.GetTimeLineAsset(film.playableDirector.playableAsset.name);
-                 
                 }
                 UIManager.instance.SetFilmUI(assetData.needFilmUI);
                 if (assetData.hideCameraLimit)
@@ -47,16 +42,15 @@ public class FilmController : Singleton<FilmController>
                     GameActionManager.instance.QueueAction(setCameraConfiner2D);
                 }
 
-
-                if (film.playableDirector.playableAsset!=null&&!string.IsNullOrEmpty(playFilm.assetName)&&
+                if (film.playableDirector.playableAsset != null && !string.IsNullOrEmpty(playFilm.assetName) &&
                     playFilm.assetName != film.playableDirector.playableAsset.name)
                 {
-                    BindFilm(assetData, film.playableDirector); 
+                    BindFilm(assetData, film.playableDirector);
                 }
                 else
                 {
                     film.playableDirector.transform.localScale = Vector3.one;
-                    film.playableDirector.Play(); 
+                    film.playableDirector.Play();
                 }
             }
             else
@@ -67,7 +61,7 @@ public class FilmController : Singleton<FilmController>
         };
     }
 
-    void BindFilm(TimelineAssetData assetData, PlayableDirector playableDirector)
+    private void BindFilm(TimelineAssetData assetData, PlayableDirector playableDirector)
     {
         if (assetData.asset == null)
         {
@@ -90,12 +84,12 @@ public class FilmController : Singleton<FilmController>
                     continue;
                 }
 
-                Object sourceObject = playBindings.Current.sourceObject; 
-                
-                Transform child =playableDirector.transform.Find(assetData.pathes[i]);
+                Object sourceObject = playBindings.Current.sourceObject;
+
+                Transform child = playableDirector.transform.Find(assetData.pathes[i]);
                 if (child != null)
                 {
-                    if(child.gameObject.TryGetComponent(out Animator component))
+                    if (child.gameObject.TryGetComponent(out Animator component))
                     {
                         playableDirector.SetGenericBinding(sourceObject, component.gameObject);
                     }
@@ -103,7 +97,7 @@ public class FilmController : Singleton<FilmController>
                 else
                 {
                     var strs = assetData.pathes[i].Split('/');
-                    if (strs.Length>0&&strs[0] == "Camera")
+                    if (strs.Length > 0 && strs[0] == "Camera")
                     {
                         var path = assetData.pathes[i].Replace($"{strs[0]}/", "");
                         child = CameraManager.instance.mainCamera.transform.parent.Find(path);
@@ -112,16 +106,15 @@ public class FilmController : Singleton<FilmController>
                             if (child.gameObject.TryGetComponent(out Animator component))
                             {
                                 playableDirector.SetGenericBinding(sourceObject, component.gameObject);
-                            } 
+                            }
                         }
                     }
                     else
                     {
                         playableDirector.SetGenericBinding(sourceObject, playableDirector);
                     }
-                    
                 }
-                 
+
                 i++;
             }
         }
@@ -129,9 +122,9 @@ public class FilmController : Singleton<FilmController>
         //playableDirector.Stop();
         playableDirector.time = 0;
         playableDirector.Play();
-        
     }
-    void DisplayFilm(DisplayFilm DisplayFilm)
+
+    private void DisplayFilm(DisplayFilm DisplayFilm)
     {
         if (nowFilms.TryGetValue(DisplayFilm.filmName, out var film))
         {
@@ -146,17 +139,17 @@ public class FilmController : Singleton<FilmController>
                     Transform child = film.playableDirector.transform.Find(DisplayFilm.path);
                     child.localScale = Vector3.one;
                 }
-
             }
         }
     }
-    void HideFilm(HideFilm hideFilm)
+
+    private void HideFilm(HideFilm hideFilm)
     {
         if (nowFilms.TryGetValue(hideFilm.filmName, out var film))
         {
-           if(film.playableDirector != null)
+            if (film.playableDirector != null)
             {
-               // UIManager.instance.SetFilmUI(false);
+                // UIManager.instance.SetFilmUI(false);
 
                 if (string.IsNullOrEmpty(hideFilm.path))
                 {
@@ -167,16 +160,15 @@ public class FilmController : Singleton<FilmController>
                     Transform child = film.playableDirector.transform.Find(hideFilm.path);
                     child.localScale = Vector3.zero;
                 }
-                
             }
         }
     }
 
-    void JumpFilm(JumpFilm jumpFilm)
+    private void JumpFilm(JumpFilm jumpFilm)
     {
-        if(nowFilms.TryGetValue(jumpFilm.filmName,out var film))
+        if (nowFilms.TryGetValue(jumpFilm.filmName, out var film))
         {
-            var filmAsset =(TimelineAsset) film.playableDirector.playableAsset;
+            var filmAsset = (TimelineAsset)film.playableDirector.playableAsset;
 
             var Track = filmAsset.GetOutputTrack(0);
             Track.muted = true;
@@ -184,80 +176,83 @@ public class FilmController : Singleton<FilmController>
             Track.muted = false;
         }
     }
-    void StopFilm(StopFilm stopFilm) 
+
+    private void StopFilm(StopFilm stopFilm)
     {
         if (nowFilms.TryGetValue(stopFilm.filmName, out Film film))
         {
             film.playableDirector.Stop();
-            DestoryFilm(stopFilm.filmName);
+            DestroyFilm(stopFilm.filmName);
         }
-        
     }
-    void PauseFilm(PauseFilm pauseFilm) 
+
+    private void PauseFilm(PauseFilm pauseFilm)
     {
         if (nowFilms.TryGetValue(pauseFilm.filmName, out Film film))
         {
             film.playableDirector.Pause();
         }
     }
-    RefreshMapCamera refreshMapCamera;
-    async Task CreatAndPlayFilm(string filmName,string assetName)
+
+    private RefreshMapCamera refreshMapCamera;
+
+    private async Task CreateAndPlayFilm(string filmName, string assetName)
     {
-        FilmData filmData=await GameDataManager.instance.GetAsyncData<FilmData>(filmName);
+        FilmData filmData = await GameDataManager.instance.GetAsyncData<FilmData>(filmName);
         if (filmData != null)
         {
             if (filmData.FilmObj)
             {
-                var asyncInstantiateOperation= GameObject.InstantiateAsync(filmData.FilmObj, filmParent);
-                await asyncInstantiateOperation;
-                GameObject filmObj = asyncInstantiateOperation.Result[0];
-                PlayableDirector playableDirector = filmObj.GetComponent<PlayableDirector>();
-                playableDirector.stopped += (PlayableDirector) => 
+                var asyncInstantiateOperation = GameObject.InstantiateAsync(filmData.FilmObj, filmParent);
+                asyncInstantiateOperation.completed += ap =>
                 {
-                    if (!SingletonType.Cleared)
+                    GameObject filmObj = asyncInstantiateOperation.Result[0];
+                    PlayableDirector playableDirector = filmObj.GetComponent<PlayableDirector>();
+                    playableDirector.stopped += (PlayableDirector) =>
+                    {
+                        if (!SingletonType.Cleared)
+                        {
+                            TimeRun timeRun = new TimeRun
+                            {
+                                run = true,
+                            };
+                            GameActionManager.instance.QueueAction(timeRun);
+                            if (UIManager.instance != null)
+                                UIManager.instance.SetFilmUI(false);
+
+                            GameActionManager.instance.QueueAction(refreshMapCamera);
+                        }
+                    };
+                    var assetData = filmData.GetTimeLineAsset(assetName);
+
+                    if (assetData.hideCameraLimit)
+                    {
+                        SetCameraConfiner2D setCameraConfiner2D = new SetCameraConfiner2D
+                        {
+                            enable = false,
+                        };
+                        GameActionManager.instance.QueueAction(setCameraConfiner2D);
+                    }
+                    BindFilm(assetData, playableDirector);
+
+                    Film film = new Film
+                    {
+                        obj = filmObj,
+                        playableDirector = playableDirector
+                    };
+                    playableDirector.transform.localScale = Vector3.one;
+                    playableDirector.Play();
+                    nowFilms.Add(filmName, film);
+                    UIManager.instance.SetFilmUI(assetData.needFilmUI);
+                    if (filmData.stopTimeRun)
                     {
                         TimeRun timeRun = new TimeRun
                         {
-                            run = true,
+                            run = false,
                         };
                         GameActionManager.instance.QueueAction(timeRun);
-                        if (UIManager.instance != null)
-                            UIManager.instance.SetFilmUI(false);
-                         
-                        GameActionManager.instance.QueueAction(refreshMapCamera);
-                    } 
+                    }
                 };
-                var assetData = filmData.GetTimeLineAsset(assetName);
-               
-
-                if (assetData.hideCameraLimit)
-                {
-                    SetCameraConfiner2D setCameraConfiner2D = new SetCameraConfiner2D
-                    {
-                        enable = false,
-                    };
-                    GameActionManager.instance.QueueAction(setCameraConfiner2D);
-                }
-                BindFilm(assetData, playableDirector);
-                
-                Film film = new Film
-                {
-                    obj = filmObj,
-                    playableDirector = playableDirector
-                };
-                playableDirector.transform.localScale = Vector3.one;
-                playableDirector.Play();
-                nowFilms.Add(filmName, film);
-                UIManager.instance.SetFilmUI(assetData.needFilmUI);
-                if (filmData.stopTimeRun)
-                {
-                    TimeRun timeRun = new TimeRun
-                    {
-                        run = false,
-                    };
-                    GameActionManager.instance.QueueAction(timeRun);
-                }
-                
             }
         }
         else
@@ -267,32 +262,35 @@ public class FilmController : Singleton<FilmController>
             if (filmPrefab != null)
             {
                 var asyncInstantiateOperation = GameObject.InstantiateAsync(filmPrefab, filmParent);
-                await asyncInstantiateOperation;
-                var filmObj = asyncInstantiateOperation.Result[0];
-                PlayableDirector playableDirector = filmObj.GetComponent<PlayableDirector>();
-                playableDirector.stopped += (PlayableDirector) => 
+                asyncInstantiateOperation.completed += ao =>
                 {
-                    UIManager.instance.SetFilmUI(false);
-                    SetCharacterStopCreate setCharacterStopCreate = new SetCharacterStopCreate
+                    var filmObj = asyncInstantiateOperation.Result[0];
+                    PlayableDirector playableDirector = filmObj.GetComponent<PlayableDirector>();
+                    playableDirector.stopped += (PlayableDirector) =>
                     {
-                        hide = false
+                        UIManager.instance.SetFilmUI(false);
+                        SetCharacterStopCreate setCharacterStopCreate = new SetCharacterStopCreate
+                        {
+                            hide = false
+                        };
+                        GameActionManager.instance.QueueAction(setCharacterStopCreate);
+                        SetCameraConfiner2D setCameraConfiner2D = new SetCameraConfiner2D
+                        {
+                            enable = true,
+                        };
+                        GameActionManager.instance.QueueAction(setCameraConfiner2D);
                     };
-                    GameActionManager.instance.QueueAction(setCharacterStopCreate);
-                    SetCameraConfiner2D setCameraConfiner2D = new SetCameraConfiner2D
+
+                    Film film = new Film
                     {
-                        enable = true,
+                        obj = filmObj,
+                        playableDirector = playableDirector
                     };
-                    GameActionManager.instance.QueueAction(setCameraConfiner2D);
+                    playableDirector.transform.localScale = Vector3.one;
+                    playableDirector.Play();
+                    nowFilms.Add(filmName, film);
                 };
-                 
-                Film film = new Film
-                {
-                    obj = filmObj,
-                    playableDirector = playableDirector
-                };
-                playableDirector.transform.localScale = Vector3.one;
-                playableDirector.Play();
-                nowFilms.Add(filmName, film);
+
                 /*
                 if (filmData.stopTimeRun)
                 {
@@ -308,22 +306,23 @@ public class FilmController : Singleton<FilmController>
                     GameActionManager.instance.QueueAction(setCameraConfiner2D);
                 }*/
             }
-        } 
+        }
     }
-    void DestoryFilm(string filmName)
+
+    private void DestroyFilm(string filmName)
     {
-        if(nowFilms.TryGetValue(filmName,out Film film))
+        if (nowFilms.TryGetValue(filmName, out Film film))
         {
             GameObject.Destroy(film.obj);
             nowFilms.Remove(filmName);
         }
-        
     }
 
     public void SetParent(Transform filmParent)
     {
         this.filmParent = filmParent;
     }
+
     public override void Init()
     {
         base.Init();
@@ -334,6 +333,7 @@ public class FilmController : Singleton<FilmController>
         GameActionManager.instance.AddListener<HideFilm>(HideFilm);
         GameActionManager.instance.AddListener<DisplayFilm>(DisplayFilm);
     }
+
     protected override void Clear()
     {
         base.Clear();

@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,8 +24,9 @@ public class SaveReference : UIObjReference<UserGameSaveData>
 
     [SerializeField]
     private TextMeshProUGUI SaveTime;
+
     [SerializeField]
-    private Vector2 headSize=new Vector2(48,48);
+    private Vector2 headSize = new Vector2(48, 48);
 
     public override void SelectDefault()
     {
@@ -37,6 +37,7 @@ public class SaveReference : UIObjReference<UserGameSaveData>
             SelectAction(data, true);
         }
     }
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -50,15 +51,15 @@ public class SaveReference : UIObjReference<UserGameSaveData>
         SaveTime = FindChildGameObject<TextMeshProUGUI>("SaveTime");
     }
 
-    public override async Task InitData(UserGameSaveData t, SelectAction<UserGameSaveData> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override async void InitData(UserGameSaveData t, SelectAction<UserGameSaveData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-       await  base.InitData(t, SelectAction, toggleGroup);
+        base.InitData(t, SelectAction, toggleGroup);
         SelectToggle.group = toggleGroup;
         if (!string.IsNullOrEmpty(data.saveTime))
         {
             Icon.enabled = true;
             CharacterData characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(data.playerData.dataId);
-            characterData.head.SetImageSprite(Icon,headSize);
+            characterData.head.SetImageSprite(Icon, headSize);
             //Icon.sprite = characterData.icon.sprite;
             Level.text = GameCommon.AddString("Lv.", data.playerData.level.ToString());
             Name.text = data.playerData.name;
@@ -84,7 +85,6 @@ public class SaveReference : UIObjReference<UserGameSaveData>
                     SelectAction(data, value);
                 }
             }
-            
         });
     }
 

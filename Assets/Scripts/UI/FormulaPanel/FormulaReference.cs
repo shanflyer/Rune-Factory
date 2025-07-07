@@ -1,6 +1,4 @@
-﻿using BehaviorDesigner.Runtime.Tasks.Unity.UnityAnimator;
-using System.Threading.Tasks;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -45,9 +43,9 @@ public class FormulaReference : UIObjReference<FormulaReferenceData>
         Icon = FindChildGameObject<Image>("Icon");
     }
 
-    public override async Task InitData(FormulaReferenceData t, SelectAction<FormulaReferenceData> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override async void InitData(FormulaReferenceData t, SelectAction<FormulaReferenceData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        await base.InitData(t, SelectAction, toggleGroup);
+        base.InitData(t, SelectAction, toggleGroup);
         toggle.group = toggleGroup;
         ItemData productData = data.formulaData.ProductItem;
 
@@ -58,11 +56,10 @@ public class FormulaReference : UIObjReference<FormulaReferenceData>
         }
         else
         {
-            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(1); 
+            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(1);
             Icon.sprite = itemData.icon;
-            FormulaName.SetSWText("????"); 
+            FormulaName.SetSWText("????");
         }
-       
     }
 }
 

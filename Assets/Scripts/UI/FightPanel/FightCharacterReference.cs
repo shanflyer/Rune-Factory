@@ -144,9 +144,9 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
         effect = FindChildGameObject("Effect");
     }
 
-    public override async Task InitData(FightCharacter t, SelectAction<FightCharacter> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override void InitData(FightCharacter t, SelectAction<FightCharacter> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-      await  base.InitData(t, SelectAction, toggleGroup);
+      base.InitData(t, SelectAction, toggleGroup);
         fightPlayer = t as FightPlayer;
 
         GameActionManager.instance.AddListener<RefreshCharacter>(RefreshCharacter);

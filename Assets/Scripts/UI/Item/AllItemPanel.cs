@@ -1,31 +1,25 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
- 
 
 public class AllItemPanel : GamePanel<IReferenceData>
-{ 
-      
-
+{
     [SerializeField]
     private Transform ItemInformation;
-     
-     
 
     [SerializeField]
     private Image ItemIcon;
 
     [SerializeField]
     private TextMeshProUGUI ItemName;
-     
 
     [SerializeField]
     private TextMeshProUGUI Type, Property, Info;
 
     [SerializeField]
-    private Button ActionButton, ReturnButton; 
+    private Button ActionButton, ReturnButton;
+
     [SerializeField]
     private Transform InfoItemValueBg;
 
@@ -34,8 +28,10 @@ public class AllItemPanel : GamePanel<IReferenceData>
 
     [SerializeField]
     private ItemBoxReference itemBoxReference;
+
     [SerializeField]
-    private TMP_InputField countInput,keyInput;
+    private TMP_InputField countInput, keyInput;
+
     [SerializeField]
     private Button searchButton;
 
@@ -45,13 +41,13 @@ public class AllItemPanel : GamePanel<IReferenceData>
     [SerializeField]
     private ToggleGroup itemSelectGroup;
 
-    private DisplayList<ItemBoxReference, Item> itemBoxs; 
-      
-    private Item SelectItem; 
+    private DisplayList<ItemBoxReference, Item> itemBoxs;
+
+    private Item SelectItem;
 
     protected override void Awake()
     {
-        base.Awake(); 
+        base.Awake();
 
         ReturnButton.onClick.AddListener(Close);
         itemBoxs = new DisplayList<ItemBoxReference, Item>(itemBoxReference, itemParent);
@@ -77,30 +73,31 @@ public class AllItemPanel : GamePanel<IReferenceData>
         {
             getCount = int.Parse(value);
         });
-        
     }
-    int getCount = 1;
-    string keyStr = "";
+
+    private int getCount = 1;
+    private string keyStr = "";
+
     public override void OnEnable()
     {
-        base.OnEnable(); 
+        base.OnEnable();
     }
 
     public override void OnDisable()
     {
         base.OnDisable();
-       
     }
-    public override async Task InitData(string dataKey)
+
+    public override void InitData(string dataKey)
     {
-        await base.InitData(dataKey);
+        base.InitData(dataKey);
         RefreshPackage();
         getCount = 1;
         keyStr = "";
         countInput.SetTextWithoutNotify("1");
         keyInput.SetTextWithoutNotify("");
-
     }
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -110,26 +107,24 @@ public class AllItemPanel : GamePanel<IReferenceData>
         searchButton = FindChildGameObject<Button>("SearchButton");
 
         ItemIcon = FindChildGameObject<Image>("ItemIcon");
-        ItemName = FindChildGameObject<TextMeshProUGUI>("ItemName"); 
+        ItemName = FindChildGameObject<TextMeshProUGUI>("ItemName");
         Type = FindChildGameObject<TextMeshProUGUI>("Type");
         Property = FindChildGameObject<TextMeshProUGUI>("Property");
         Info = FindChildGameObject<TextMeshProUGUI>("Info");
-        ActionButton = FindChildGameObject<Button>("ActionButton"); 
+        ActionButton = FindChildGameObject<Button>("ActionButton");
         itemBoxReference = FindChildGameObject<ItemBoxReference>("ItemBoxReference");
         itemParent = FindChildGameObject("ItemParent");
         itemSelectGroup = FindChildGameObject<ToggleGroup>("ItemParent");
         ReturnButton = FindChildGameObject<Button>("ReturnButton");
-        ItemInformation = FindChildGameObject("InformationObj");  
+        ItemInformation = FindChildGameObject("InformationObj");
         InfoItemValueBg = FindChildGameObject("InfoItemValueBg");
-        InfoItemValue = FindChildGameObject<Image>("InfoItemValue"); 
+        InfoItemValue = FindChildGameObject<Image>("InfoItemValue");
     }
-     
-     
+
     public override void Close()
     {
-        base.Close(); 
+        base.Close();
     }
-  
 
     private async void SelectPackageItem(Item item, bool selected = true)
     {
@@ -138,7 +133,6 @@ public class AllItemPanel : GamePanel<IReferenceData>
             if (item.dataId == 0)
             {
                 ItemInformation.localScale = Vector3.zero;
-              
             }
             else
             {
@@ -148,14 +142,13 @@ public class AllItemPanel : GamePanel<IReferenceData>
                 ItemIcon.sprite = itemData.icon;
                 ItemIcon.enabled = true;
                 ItemIcon.SetNativeSize();
-                ItemName.SetADDText($"+ ",itemData.itemName," +");
+                ItemName.SetADDText($"+ ", itemData.itemName, " +");
                 Type.SetSWText(itemData.type.ToString());
                 Info.SetSWText(itemData.GetInfo());
                 Property.SetSWText(itemData.GetProperty());
-                
+
                 InfoItemValueBg.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
                 InfoItemValue.fillAmount = item.value;
- 
             }
         }
         else if (SelectItem.instanceId == item.instanceId)
@@ -164,13 +157,11 @@ public class AllItemPanel : GamePanel<IReferenceData>
         }
     }
 
- 
     private async void RefreshPackage()
     {
-        
         List<Item> items = new List<Item>();
-        var itemDatas=await GameDataManager.instance.GetAllAsyncData<ItemData>();
-        for(int i = 0; i < itemDatas.Count; i++)
+        var itemDatas = await GameDataManager.instance.GetAllAsyncData<ItemData>();
+        for (int i = 0; i < itemDatas.Count; i++)
         {
             if (string.IsNullOrEmpty(keyStr))
             {
@@ -178,7 +169,6 @@ public class AllItemPanel : GamePanel<IReferenceData>
                 {
                     dataId = itemDatas[i].id,
                     instanceId = i,
-
                 };
                 items.Add(item);
             }
@@ -188,15 +178,13 @@ public class AllItemPanel : GamePanel<IReferenceData>
                 {
                     dataId = itemDatas[i].id,
                     instanceId = i,
-
                 };
                 items.Add(item);
             }
-           
-        } 
-        await itemBoxs.InitListData(items, SelectPackageItem, toggleGroup: itemSelectGroup);
+        }
+        itemBoxs.InitListData(items, SelectPackageItem, toggleGroup: itemSelectGroup);
         // if(items.Count>0) { SelectPackageItem(items[0]); }
         itemBoxs.ClearSelect();
-        ItemInformation.localScale = Vector3.zero; 
+        ItemInformation.localScale = Vector3.zero;
     }
 }

@@ -182,9 +182,9 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             MapItemData mapItemData = tempMapItem.MapItemData;
             ProfabTransform = mapItemData.itemObj.transform;
         }
-        RuntimeObj itemObj=null;
-        itemObj =GameRuntimeObjManager.instance.CreateRuntimeObj<Transform>(RuntimeObjType.MAPITEM.ToString(),
-                tempMapItem.MapItemData.id.ToString(), ProfabTransform, -1, overrideParent,setComponent:(RuntimeObj runtimeObj)=> 
+        RuntimeObj itemObj = null;
+        itemObj = GameRuntimeObjManager.instance.CreateRuntimeObj<Transform>(RuntimeObjType.MAPITEM.ToString(),
+                tempMapItem.MapItemData.id.ToString(), ProfabTransform, -1, overrideParent, setComponent: (RuntimeObj runtimeObj) =>
                 {
                     MapItemRuntimeObj tempMapItemObj = new MapItemRuntimeObj(itemObj, tempMapItem.instanceId, tempMapItem.MapItemData.id, tempMapItem.coordinate);
                     tempMapItemObj.SetDefaultLayer();
@@ -192,7 +192,6 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                     tempRuntimeMapItemObjs.Add(tempMapItem.instanceId, tempMapItemObj);
                     tempMapItemObj.SetColor(tempMapItem.CanSet ? new Color(1, 1, 1, 0.5f) : new Color(1, 0, 0, 0.5f));
                 });
-       
     }
 
     public void RefreshTempMapItemColor(TempMapItem tempMapItem)
@@ -203,9 +202,9 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         }
     }
 
-    public int displayMap 
+    public int displayMap
     {
-        get=>_displayMap;
+        get => _displayMap;
         set
         {
             if (_displayMap != value)
@@ -222,12 +221,14 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                     isAuto = value != GameCommon.MyPlayerStore
                 };
                 GameActionManager.instance.QueueAction(switchAutoStore);
-            } 
+            }
         }
     }
-    int _displayMap;
+
+    private int _displayMap;
 
     public bool IsOutSideMap => DisplayMapRoomData?.weatherDisplayType != WeatherDisplayType.Inside;
+
     public MapRoomData DisplayMapRoomData
     {
         get => _displayMapRoomData;
@@ -235,25 +236,28 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         {
             _displayMapRoomData = value;
             EnvironmentManger.instance.ChangeWeatherDisplayType(DisplayMapRoomData.weatherDisplayType);
-           //RefreshMapAudio(true);
+            //RefreshMapAudio(true);
         }
     }
+
     private MapRoomData _displayMapRoomData;
 
-    float waterFall;
-    float weatherValue; string bgmTag;
-    void SetWeather(SetWeather setWeather)
+    private float waterFall;
+    private float weatherValue; private string bgmTag;
+
+    private void SetWeather(SetWeather setWeather)
     {
         waterFall = setWeather.weather.waterFall;
-        float windValue =math.abs(setWeather.weather.wind)*0.5f;
+        float windValue = math.abs(setWeather.weather.wind) * 0.5f;
         float waterFallValue = waterFall;
-        float cloudValue=math.abs(setWeather.weather.cloud);
+        float cloudValue = math.abs(setWeather.weather.cloud);
 
         weatherValue = windValue > waterFallValue ? windValue : waterFallValue;
         weatherValue = cloudValue > weatherValue ? cloudValue : weatherValue;
 
         RefreshMapAudio();
     }
+
     public void RefreshMapAudio(bool checkBgmTag = false)
     {
         if (DisplayMapRoomData == null)
@@ -268,7 +272,8 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         bgmTag = DisplayMapRoomData.bgmTag;
         DisplayMapRoomData.SetBGM(GameTimeManager.instance.SeasonValue, GameTimeManager.instance.timeValue, weatherValue);
     }
-    void RefreshMapCamera(RefreshMapCamera  refreshMapCamera)
+
+    private void RefreshMapCamera(RefreshMapCamera refreshMapCamera)
     {
         SetFixedCamera setFixedCamera = new SetFixedCamera
         {
@@ -278,35 +283,34 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         };
         GameActionManager.instance.QueueAction(setFixedCamera, true);
     }
-    
-   
-    private  RuntimeObj CreateMapRunTime(MapRoomData mapRoomData, int instanceId)
+
+    private RuntimeObj CreateMapRunTime(MapRoomData mapRoomData, int instanceId)
     {
         if (mapRoomData != null)
         {
             var mapRuntimeObj = GameRuntimeObjManager.instance.CreateRuntimeObj(RuntimeObjType.MAPGROUND.ToString(), mapRoomData.roomName, mapRoomData.mapObj.transform, instanceId,
-                setComponent:(RuntimeObj cp) =>
+                setComponent: (RuntimeObj cp) =>
                 {
                     RemoveMapDisplayCompeted(0);
 
                     Collider2D collider2D = cp.obj.GetComponent<Collider2D>();
                     CameraManager.instance.SetConfiner2DCollider(collider2D);
-                }); 
+                });
             return mapRuntimeObj;
         }
         return null;
     }
 
-    private RuntimeObj CreateMapItemRuntime(MapItemData mapItemData, int instanceId, int2 coordinate,SetComponent setComponent)
+    private RuntimeObj CreateMapItemRuntime(MapItemData mapItemData, int instanceId, int2 coordinate, SetComponent setComponent)
     {
         Vector3 pos = GameCommon.GetMapPos(coordinate);
         //pos.z = -100;
 
         if (mapItemData != null)
         {
-           // Debug.Log($"CreatRuntimeObj:{mapItemData.itemName}");
+            // Debug.Log($"CreatRuntimeObj:{mapItemData.itemName}");
             var mapItemRuntime = GameRuntimeObjManager.instance.CreateRuntimeObj(RuntimeObjType.MAPITEM.ToString(), mapItemData.id.ToString(), mapItemData.itemObj.transform, instanceId,
-                setComponent:(RuntimeObj runtimeObj) =>
+                setComponent: (RuntimeObj runtimeObj) =>
                 {
                     runtimeObj.obj.transform.localPosition = pos;
                     DisplayStoreCounter displayStoreCounter = new DisplayStoreCounter
@@ -318,7 +322,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                     GameActionManager.instance.QueueAction(displayStoreCounter);
                     setComponent(runtimeObj);
                 });
-           
+
             return mapItemRuntime;
         }
         return null;
@@ -335,7 +339,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         int2 mapEndCoordinate = mapRoomData.endCoordinate;
 
         var mapStartPos = GameCommon.GetMapPos(mapStartCoordinate);
-        var mapEndPos = GameCommon.GetMapPos(mapEndCoordinate); 
+        var mapEndPos = GameCommon.GetMapPos(mapEndCoordinate);
         DisplaySky displaySky = new DisplaySky
         {
             display = mapRoomData.displaySky,
@@ -357,7 +361,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         SetFixedSeason SetFixedSeason = new SetFixedSeason
         {
             season = mapRoomData.fixedSeason,
-            weatherDisplayType=mapRoomData.weatherDisplayType
+            weatherDisplayType = mapRoomData.weatherDisplayType
         };
         GameActionManager.instance.QueueAction(SetFixedSeason);
 
@@ -379,8 +383,8 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
     }
 
     private async void DisplayMap(DisplayMap displayMap)
-    { 
-        await DisplayMap(displayMap.displayMap,displayMap.fixedDisplay);
+    {
+        DisplayMap(displayMap.displayMap, displayMap.fixedDisplay);
         if (displayMap.actionId != 0)
         {
             GameActionData gameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(displayMap.actionId);
@@ -388,18 +392,20 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         }
     }
 
-    HashSet<int> mapDisplayCompleted = new HashSet<int>();
-    void RemoveMapDisplayCompeted(int id)
+    private HashSet<int> mapDisplayCompleted = new HashSet<int>();
+
+    private void RemoveMapDisplayCompeted(int id)
     {
         mapDisplayCompleted.Remove(id);
-        if (!GameController.instance.startPlay&& mapDisplayCompleted.Count <= 0&&DisplayMapRoomData.completedAction!=null)
+        if (!GameController.instance.startPlay && mapDisplayCompleted.Count <= 0 && DisplayMapRoomData.completedAction != null)
         {
             DisplayMapRoomData.completedAction.Action();
         }
     }
-    public async Task DisplayMap(int mapId,bool fixedDisplay=false)
+
+    public void DisplayMap(int mapId, bool fixedDisplay = false)
     {
-        if (!fixedDisplay &&displayMap == mapId)
+        if (!fixedDisplay && displayMap == mapId)
         {
             return;
         }
@@ -418,11 +424,11 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             {
                 creatDataId = DisplayMapRoomData.creatTempCharacterId,
                 clearAll = true,
-                prewarm=DisplayMapRoomData.tempNpcPrewarm,
+                prewarm = DisplayMapRoomData.tempNpcPrewarm,
             };
-            GameActionManager.instance.QueueAction(startCreatTempCharacter,true);
-            
-            for(int i = 0; i < DisplayMapRoomData.specialNpcBehaviorAreas.Count; i++)
+            GameActionManager.instance.QueueAction(startCreatTempCharacter, true);
+
+            for (int i = 0; i < DisplayMapRoomData.specialNpcBehaviorAreas.Count; i++)
             {
                 var area = DisplayMapRoomData.specialNpcBehaviorAreas[i];
                 StartCreatSpecialTempCharacter startCreatSpecialTempCharacter = new StartCreatSpecialTempCharacter
@@ -435,29 +441,27 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         }
         else
         {
-            
-        } 
+        }
         string dataId = DisplayMapRoomData.name;
         SetMapOverrideEnvirmentData(DisplayMapRoomData);
         if (!string.IsNullOrEmpty(dataId))
         {
             var coordinate = MapCellController.instance.GetRoomCoordinate(mapId);
             //Vector3 pos = GameCommon.GetMapPos(coordinate.x, coordinate.y) ;
-            mapDisplayCompleted.Add(0); 
+            mapDisplayCompleted.Add(0);
             // (nowMapRoomObj.obj as Transform).localPosition = new Vector3(GameCommon.cellSize, GameCommon.cellSize);
 
             List<int> mapItems = WorldMapManager.instance.GetMapItems(mapId);
-           
+
             for (int i = 0; i < mapItems.Count; i++)
             {
                 if (WorldMapManager.instance.GetRuntimeMapItem(mapItems[i], out RuntimeMapItem mapItem))
                 {
-                   mapDisplayCompleted.Add(mapItem.instanceId); 
-                   DisplayMapItem(mapItem);
+                    mapDisplayCompleted.Add(mapItem.instanceId);
+                    DisplayMapItem(mapItem);
                 }
             }
             nowMapRoomObj = CreateMapRunTime(DisplayMapRoomData, mapId);
-
 
             var tempItems = TempMapItemController.instance.GetTempMapItems(mapId);
             for (int i = 0; i < tempItems.Count; i++)
@@ -465,7 +469,6 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                 RefreshTempMapItem(tempItems[i]);
             }
 
-            
 #if UNITY_EDITOR
             // if (MapCellTestDisplay.Instance)
             // {
@@ -474,7 +477,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
 #endif
         }
 
-        await CharacterManager.instance.RefreshNpcRuntimeObj();
+        CharacterManager.instance.RefreshNpcRuntimeObj();
     }
 
     private async Task RuntimeMapItemPlay(RuntimeMapItem mapItem, RuntimeObj runtimeObj)
@@ -531,7 +534,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             };
 
             DeleteMapPackageItemRender(runTimeMapItemData.Key);
-            GameActionManager.instance.QueueAction(displayStoreCounter, true); 
+            GameActionManager.instance.QueueAction(displayStoreCounter, true);
             GameActionManager.instance.QueueAction(new TryRecycleItemEmote { id = runTimeMapItemData.Key }, true);
             runTimeMapItemData.Value.Recycle();
             manufatureObjs.Remove(runTimeMapItemData.Key);
@@ -588,7 +591,8 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
 
         return false;
     }
-    void RecycleMapItem(int mapItemInstanceId)
+
+    private void RecycleMapItem(int mapItemInstanceId)
     {
         if (tempRuntimeMapItemObjs.TryGetValue(mapItemInstanceId, out var tempObj))
         {
@@ -599,7 +603,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         {
             RuntimeObj.Recycle();
             nowRuntimeMapItemObjs.Remove(mapItemInstanceId);
-            GameActionManager.instance.QueueAction(new TryRecycleItemEmote { id = mapItemInstanceId },true); 
+            GameActionManager.instance.QueueAction(new TryRecycleItemEmote { id = mapItemInstanceId }, true);
             manufatureObjs.Remove(mapItemInstanceId);
 
             RemoveRuntimePackage removeRuntimePackage = new RemoveRuntimePackage
@@ -611,6 +615,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             MyAnimationController.instance.RemoveItemAnimation(mapItemInstanceId);
         }
     }
+
     public void DeleteMapItem(DeleteMapItem deleteMapItem)
     {
         RecycleMapItem(deleteMapItem.mapItemInstanceId);
@@ -631,7 +636,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         {
             if (refreshManufature.manufature.product.x == 0)
             {
-                GameActionManager.instance.QueueAction(new TryRecycleItemEmote { id = refreshManufature.manufature.instanceId }, true); 
+                GameActionManager.instance.QueueAction(new TryRecycleItemEmote { id = refreshManufature.manufature.instanceId }, true);
             }
             else if (refreshManufature.manufature.waitTime > GameTimeManager.instance.totalMinute)
             {
@@ -700,11 +705,11 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
 
     private Dictionary<int, Manufature> manufatureObjs = new Dictionary<int, Manufature>();
 
-    public  void DisplayMapItem(RuntimeMapItem runtimeMapItem)
+    public void DisplayMapItem(RuntimeMapItem runtimeMapItem)
     {
         if (!nowRuntimeMapItemObjs.ContainsKey(runtimeMapItem.instanceId))
         {
-            var X= CreateMapItemRuntime(runtimeMapItem.mapItemData, runtimeMapItem.instanceId, runtimeMapItem.coordinate, async (RuntimeObj runtimeObj) =>
+            var X = CreateMapItemRuntime(runtimeMapItem.mapItemData, runtimeMapItem.instanceId, runtimeMapItem.coordinate, async (RuntimeObj runtimeObj) =>
             {
                 MapItemRuntimeObj MapItemRuntimeObj = new MapItemRuntimeObj(runtimeObj, runtimeMapItem.instanceId, runtimeMapItem.mapItemData.id, runtimeMapItem.coordinate);
                 nowRuntimeMapItemObjs[runtimeMapItem.instanceId] = MapItemRuntimeObj;
@@ -741,8 +746,6 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
 
                 TryAddMapPackageItemRender(runtimeObj.obj as Transform, runtimeMapItem.instanceId);
             });
-
-            
         }
     }
 
@@ -755,26 +758,24 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                 tempObj.Recycle();
                 tempRuntimeMapItemObjs.Remove(mapItemId);
             }
-             
 
             runtimeObj.Recycle();
-             CreateMapItemRuntime(runtimeMapItem.mapItemData, runtimeMapItem.instanceId, runtimeMapItem.coordinate, async (RuntimeObj newObj) =>
-            {
-                MapItemRuntimeObj MapItemRuntimeObj = new MapItemRuntimeObj(newObj, runtimeMapItem.instanceId, runtimeMapItem.mapItemData.id, runtimeMapItem.coordinate);
-                nowRuntimeMapItemObjs[mapItemId] = MapItemRuntimeObj;
+            CreateMapItemRuntime(runtimeMapItem.mapItemData, runtimeMapItem.instanceId, runtimeMapItem.coordinate, async (RuntimeObj newObj) =>
+           {
+               MapItemRuntimeObj MapItemRuntimeObj = new MapItemRuntimeObj(newObj, runtimeMapItem.instanceId, runtimeMapItem.mapItemData.id, runtimeMapItem.coordinate);
+               nowRuntimeMapItemObjs[mapItemId] = MapItemRuntimeObj;
 
-                MyAnimationController.instance.RemoveItemAnimation(mapItemId);
+               MyAnimationController.instance.RemoveItemAnimation(mapItemId);
 
-                Animator animator = MapItemRuntimeObj.animator;
-                if (animator)
-                {
-                    MyAnimationController.instance.AddItemAnimation(mapItemId, animator, newId.ToString());
-                    await SetItemAimation(animationKey, newId, mapItemId);
-                }
+               Animator animator = MapItemRuntimeObj.animator;
+               if (animator)
+               {
+                   MyAnimationController.instance.AddItemAnimation(mapItemId, animator, newId.ToString());
+                   await SetItemAimation(animationKey, newId, mapItemId);
+               }
 
-                TryAddMapPackageItemRender(runtimeObj.animator.transform, runtimeMapItem.instanceId);
-            });
-            
+               TryAddMapPackageItemRender(runtimeObj.animator.transform, runtimeMapItem.instanceId);
+           });
         }
     }
 

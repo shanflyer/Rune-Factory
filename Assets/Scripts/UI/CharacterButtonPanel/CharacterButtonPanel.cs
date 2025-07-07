@@ -232,13 +232,13 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
         CharacterButtonReference = FindChildGameObject<CharacterButtonReference>("CharacterButton");
         characterButtonParent = FindChildGameObject("CharacterButtonList");
     }
-    public override Task InitData(string dataKey)
+    public override void InitData(string dataKey)
     {
         CharacterButtonReference.transform.localScale = Vector3.zero;
         MultiCharacterButton.transform.localScale = Vector3.zero;
         CharacterButtonReference.enabled = false;
         characterButtonParent.gameObject.SetActive(false);
-        return base.InitData(dataKey);
+        base.InitData(dataKey);
     }
     public override void InitReferenceData(MyListInt v)
     {

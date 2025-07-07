@@ -13,10 +13,10 @@ public class SleepMaskPanel : GamePanel<IReferenceData>
         mask = transform.GetComponent<Image>();
         base.InitReferenceData(v);
     }
-    public override Task InitData(string dataKey)
+    public override void InitData(string dataKey)
     {
         StartCoroutine(LerpMask());
-        return base.InitData(dataKey);
+        base.InitData(dataKey);
     }
     IEnumerator LerpMask()
     {

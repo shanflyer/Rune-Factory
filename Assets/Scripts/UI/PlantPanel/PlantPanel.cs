@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,11 +9,13 @@ public class PlantPanel : GamePanel<IReferenceData>
     private Button closeButton;
 
     [SerializeField]
-    private TextMeshProUGUI PlantName, desc,otherDesc;
+    private TextMeshProUGUI PlantName, desc, otherDesc;
+
     [SerializeField]
-    TextMeshProUGUI GoodSeason, BadSeason;
+    private TextMeshProUGUI GoodSeason, BadSeason;
+
     [SerializeField]
-    TextMeshProUGUI price,sellValue;
+    private TextMeshProUGUI price, sellValue;
 
     private DisplayList<PlantReference, PlantData> leftList, rightList;
 
@@ -109,9 +110,9 @@ public class PlantPanel : GamePanel<IReferenceData>
         }
     }
 
-    public override async Task InitData(string dataKey)
+    public override async void InitData(string dataKey)
     {
-        await base.InitData(dataKey);
+        base.InitData(dataKey);
 
         if (allPlantData == null || allPlantData.Count > 0)
             allPlantData = await GameDataManager.instance.GetAllAsyncData<PlantData>();
@@ -175,13 +176,12 @@ public class PlantPanel : GamePanel<IReferenceData>
         rightList.InitListData(rightPlantDatas, SelectPlantReference, toggleGroup);
         leftList.SelectDefault();
     }
-     
 
     private async void SelectPlantReference(PlantData plantData, bool selected)
     {
         if (selected)
         {
-            if(GameDataSaveManager.instance.GetPlantFruitCount(plantData.id,out var count))
+            if (GameDataSaveManager.instance.GetPlantFruitCount(plantData.id, out var count))
             {
                 PlantName.SetSWText(plantData.plantName);
                 ItemData seedData = await GameDataManager.instance.GetAsyncData<ItemData>(plantData.seed);
@@ -206,14 +206,14 @@ public class PlantPanel : GamePanel<IReferenceData>
             }
             else
             {
-                PlantName.text="????";
+                PlantName.text = "????";
                 desc.text = "??????????";
                 otherDesc.text = "???????????";
                 GoodSeason.text = "???????????";
                 BadSeason.text = "???????????";
                 sellValue.text = "?";
                 price.text = "??";
-            } 
+            }
         }
     }
 }

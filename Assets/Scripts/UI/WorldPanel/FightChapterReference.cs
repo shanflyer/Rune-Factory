@@ -52,9 +52,9 @@ public class FightChapterReference : UIObjReference<UIFightChapterData>
         selected = FindChildGameObject<Toggle>("Active");
     }
 
-    public override async Task InitData(UIFightChapterData t, SelectAction<UIFightChapterData> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override void InitData(UIFightChapterData t, SelectAction<UIFightChapterData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-       await base.InitData(t, SelectAction, toggleGroup);
+        base.InitData(t, SelectAction, toggleGroup);
         FightChapter fightChapter = ExploreManager.instance.GetFightChapter(data.fightChapterId);
         if (data.season)
         {

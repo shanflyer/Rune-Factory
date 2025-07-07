@@ -31,14 +31,14 @@ public class StoreProductReference : UIObjReference<AppStoreProductData>
         base.ClearSelect();
         particle.localScale = Vector3.zero;
     } 
-    public override Task InitData(AppStoreProductData t, SelectAction<AppStoreProductData> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override void InitData(AppStoreProductData t, SelectAction<AppStoreProductData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         text.text = LanguageManage.SwitchStr(t.showName);
         count.text = t.getDiamond.ToString();
         image.sprite = t.icon;
         image.SetNativeSize();
         particle.localScale = Vector3.one;
-        return base.InitData(t, SelectAction, toggleGroup);
+        base.InitData(t, SelectAction, toggleGroup);
     }
     public override void InitChildObjData()
     {

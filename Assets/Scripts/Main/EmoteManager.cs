@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
@@ -9,7 +8,7 @@ public class EmoteRuntime
 {
     public RuntimeObj runtimeObj
     {
-        get=>_runtimeObj;
+        get => _runtimeObj;
         set
         {
             if (!isRecycle)
@@ -18,16 +17,20 @@ public class EmoteRuntime
             }
         }
     }
+
     private RuntimeObj _runtimeObj;
     public Action waitAction;
     public EmoteData emote;
+
     public void InitData(EmoteData emoteData)
     {
         emote = emoteData;
         Show();
     }
-    PlayableGraph playableGraph;
-    void Show()
+
+    private PlayableGraph playableGraph;
+
+    private void Show()
     {
         if (runtimeObj == null || runtimeObj.obj == null)
         {
@@ -39,20 +42,23 @@ public class EmoteRuntime
         {
             playableGraph = PlayableGraph.Create();
         }
-     
+
         var playableOutput = AnimationPlayableOutput.Create(playableGraph, "emote", animator);
         var clipPlayable = AnimationClipPlayable.Create(playableGraph, emote.animationClip);
         playableOutput.SetSourcePlayable(clipPlayable);
-        playableGraph.Play(); 
+        playableGraph.Play();
     }
-    bool isRecycle = false;
+
+    private bool isRecycle = false;
+
     public void Recycle()
     {
-        if (runtimeObj!= null){
+        if (runtimeObj != null)
+        {
             GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
         }
         if (waitAction != null)
-            GameTimerController.instance.RemoveWaiter(waitAction); 
+            GameTimerController.instance.RemoveWaiter(waitAction);
         if (playableGraph.IsValid())
         {
             playableGraph.Stop();
@@ -61,16 +67,17 @@ public class EmoteRuntime
         runtimeObj = null;
         waitAction = null;
         isRecycle = true;
-
     }
+
     public void Dispose()
     {
         if (playableGraph.IsValid())
-        { 
+        {
             playableGraph.Destroy();
         }
     }
 }
+
 public class EmoteManager : Singleton<EmoteManager>
 {
     private Animator emoteAnimator;
@@ -82,15 +89,16 @@ public class EmoteManager : Singleton<EmoteManager>
     protected override void Clear()
     {
         base.Clear();
-        foreach(var e in characterEmoteRuntimes.Values)
+        foreach (var e in characterEmoteRuntimes.Values)
         {
             e.Dispose();
         }
-        foreach(var e in itemEmoteRuntimes.Values)
+        foreach (var e in itemEmoteRuntimes.Values)
         {
             e.Dispose();
         }
     }
+
     public override async void Init()
     {
         base.Init();
@@ -104,7 +112,7 @@ public class EmoteManager : Singleton<EmoteManager>
         GameActionManager.instance.AddListener<TryUpDataItemEmote>(TryUpDataItemEmote);
     }
 
-    void TryUpDataItemEmote(TryUpDataItemEmote TryUpDataItemEmote)
+    private void TryUpDataItemEmote(TryUpDataItemEmote TryUpDataItemEmote)
     {
         if (itemEmoteRuntimes.TryGetValue(TryUpDataItemEmote.id, out var runtimeObj))
         {
@@ -113,14 +121,16 @@ public class EmoteManager : Singleton<EmoteManager>
         }
         ShowEmote(TryUpDataItemEmote.emote, EntityType.地图道具, TryUpDataItemEmote.id, TryUpDataItemEmote.showTime);
     }
+
     private void TryRecycleItemEmote(TryRecycleItemEmote TryRecycleItemEmote)
     {
-        if(itemEmoteRuntimes.TryGetValue(TryRecycleItemEmote.id, out var runtimeObj))
+        if (itemEmoteRuntimes.TryGetValue(TryRecycleItemEmote.id, out var runtimeObj))
         {
             runtimeObj.Recycle();
             itemEmoteRuntimes.Remove(TryRecycleItemEmote.id);
-        } 
+        }
     }
+
     private void TryUpDataCharacterEmote(TryUpDataCharacterEmote tryUpDataCharacterEmote)
     {
         if (characterEmoteRuntimes.TryGetValue(tryUpDataCharacterEmote.id, out var runtimeObj))
@@ -130,6 +140,7 @@ public class EmoteManager : Singleton<EmoteManager>
         }
         ShowEmote(tryUpDataCharacterEmote.emote, EntityType.角色, tryUpDataCharacterEmote.id, tryUpDataCharacterEmote.showTime);
     }
+
     private void TryRecycleCharacterEmote(TryRecycleCharacterEmote TryRecycleCharacterEmote)
     {
         if (characterEmoteRuntimes.TryGetValue(TryRecycleCharacterEmote.id, out var runtimeObj))
@@ -145,13 +156,15 @@ public class EmoteManager : Singleton<EmoteManager>
             "emote", emoteAnimator, id, parent);
         return runtimeObj;
     }
-    void ShowRandomEmote(ShowRandomEmote showRandomEmote)
+
+    private void ShowRandomEmote(ShowRandomEmote showRandomEmote)
     {
         var result = GameRandom.instance.GetRandomValue(showRandomEmote.randomId);
         var emoteId = result[0].x;
         ShowEmote(emoteId, showRandomEmote.entityType, showRandomEmote.id, showRandomEmote.showTime);
     }
-    async void ShowEmote(int emoteId,EntityType entityType,int entityId,int showTime)
+
+    private async void ShowEmote(int emoteId, EntityType entityType, int entityId, int showTime)
     {
         EmoteRuntime emoteRuntime = null;
         switch (entityType)
@@ -163,7 +176,7 @@ public class EmoteManager : Singleton<EmoteManager>
                     {
                         emoteRuntime = new EmoteRuntime();
                         characterEmoteRuntimes[entityId] = emoteRuntime;
-                        emoteRuntime.runtimeObj = GetEmote(emoteId, characterRuntimeObj.transform); 
+                        emoteRuntime.runtimeObj = GetEmote(emoteId, characterRuntimeObj.transform);
                     }
                 }
                 break;
@@ -176,7 +189,7 @@ public class EmoteManager : Singleton<EmoteManager>
                     {
                         emoteRuntime = new EmoteRuntime();
                         itemEmoteRuntimes[entityId] = emoteRuntime;
-                        emoteRuntime.runtimeObj = GetEmote(emoteId, itemRuntimeObj.transform); 
+                        emoteRuntime.runtimeObj = GetEmote(emoteId, itemRuntimeObj.transform);
                     }
                 }
                 break;
@@ -189,7 +202,7 @@ public class EmoteManager : Singleton<EmoteManager>
                 {
                     runtimeObj.Recycle();
                     itemEmoteRuntimes.Remove(entityId);
-                } 
+                }
             }
             else
             {
@@ -198,7 +211,6 @@ public class EmoteManager : Singleton<EmoteManager>
                     runtimeObj.Recycle();
                     characterEmoteRuntimes.Remove(entityId);
                 }
-                    
             }
             emoteRuntime = null;
             return;
@@ -222,26 +234,24 @@ public class EmoteManager : Singleton<EmoteManager>
                 emoteRuntime.Recycle();
                 if (entityType == EntityType.地图道具)
                 {
-                    
                     if (itemEmoteRuntimes.TryGetValue(entityId, out var runtimeObj))
-                    { 
+                    {
                         itemEmoteRuntimes.Remove(entityId);
-                    } 
+                    }
                 }
                 else
                 {
-                    if(characterEmoteRuntimes.TryGetValue(entityId, out var runtimeObj))
-                    { 
+                    if (characterEmoteRuntimes.TryGetValue(entityId, out var runtimeObj))
+                    {
                         characterEmoteRuntimes.Remove(entityId);
                     }
-                   
-                } 
+                }
             }
         }
-
     }
+
     private void ShowEmote(ShowEmote showEmote)
     {
-        ShowEmote(showEmote.emoteId, showEmote.entityType, showEmote.id, showEmote.showTime); 
+        ShowEmote(showEmote.emoteId, showEmote.entityType, showEmote.id, showEmote.showTime);
     }
 }

@@ -1,13 +1,10 @@
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 public class CharacterInformationPanel : GamePanel<CharacterInformationData>
-{ 
+{
     [SerializeField]
     private Image characterHead;
 
@@ -28,19 +25,25 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
 
     [SerializeField]
     private TextMeshProUGUI AttackValue, DefenseValue;
+
     [SerializeField]
     private TextMeshProUGUI SpeedValue, LuckValue;
 
     [SerializeField]
     private TextMeshProUGUI LevelValue;
+
     [SerializeField]
-    private TextMeshProUGUI FriendshipValue,FriendshipLevel;
+    private TextMeshProUGUI FriendshipValue, FriendshipLevel;
+
     [SerializeField]
     private Button FriendshipInfo;
+
     [SerializeField]
     private Image FriendshipSlider;
+
     [SerializeField]
-    Transform Friendship;
+    private Transform Friendship;
+
     [SerializeField]
     private TextMeshProUGUI AttackUp, AttackDown, DefenseUp, DefenseDown;
 
@@ -48,18 +51,22 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
     private TextMeshProUGUI SpeedUp, SpeedDown, LuckUp, LuckDown;
 
     [SerializeField]
-    private EquipBoxReference WeaponBox, ClothesBox,ShoesBox, HeadgearBox;
-    [SerializeField]
-    Transform Visit;
-    [SerializeField]
-    private Button visitButton, closeButton;
-    [SerializeField]
-    Image BackGround;
+    private EquipBoxReference WeaponBox, ClothesBox, ShoesBox, HeadgearBox;
 
     [SerializeField]
-    Vector2 headSize = new Vector2(150, 150);
+    private Transform Visit;
+
     [SerializeField]
-    private float infoOffsetY =330f;
+    private Button visitButton, closeButton;
+
+    [SerializeField]
+    private Image BackGround;
+
+    [SerializeField]
+    private Vector2 headSize = new Vector2(150, 150);
+
+    [SerializeField]
+    private float infoOffsetY = 330f;
 
     private async void SelectEquipReference(Equipment equipment, bool selected = false)
     {
@@ -73,19 +80,17 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
                 {
                     itemType = equipment.ItemType,
                     instanceId = equipment.characterId,
-                    dataId = equipment.dataId, 
+                    dataId = equipment.dataId,
                 },
-                
+
                 ActionName = isController ? "卸下" : null,
                 action = SelectAction,
-                OffsetPos=infoOffsetY
+                OffsetPos = infoOffsetY
             };
-            itemInfo.item=await Item.SetValue(itemInfo.item,(int)equipment.itemValue * 100);
+            itemInfo.item = await Item.SetValue(itemInfo.item, (int)equipment.itemValue * 100);
             void SelectAction(Item item, bool selected = true)
             {
-                Character character = CharacterManager.instance.GetCharacter(equipment.characterId); 
-
-               
+                Character character = CharacterManager.instance.GetCharacter(equipment.characterId);
 
                 ClearEquip clearEquip = new ClearEquip
                 {
@@ -95,7 +100,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
                 };
                 GameActionManager.instance.QueueAction(clearEquip, true);
             }
-           await UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
+            await UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
         }
         else if (isController)
         {
@@ -104,19 +109,19 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
                 packageId = -1,
                 selectActionName = "装备",
                 targetObj = equipment.characterId,
-                itemMatchData=new ItemMatchData(),
+                itemMatchData = new ItemMatchData(),
                 selectAction = ChangeEquip,
-                isMiniShow=true
+                isMiniShow = true
                 //selectActionId = GameCommon.selectEquipBoxAction
             };
-            
+
             openPackage.itemMatchData.itemMatchType = ItemMatchType.ItemType;
             openPackage.itemMatchData.matchValues = new HashSet<int>
             {
                 (int)equipment.ItemType
             };
 
-            GameActionManager.instance.QueueAction(openPackage,true);
+            GameActionManager.instance.QueueAction(openPackage, true);
 
             async void ChangeEquip(Item item, bool select)
             {
@@ -125,16 +130,15 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
                 {
                     return;
                 }
-              
+
                 ChangeEquip changeEquip = new ChangeEquip
                 {
                     characterId = equipment.characterId,
                     itemId = item.instanceId,
                     outPackageId = item.packageId
                 };
-                GameActionManager.instance.QueueAction(changeEquip,true);
+                GameActionManager.instance.QueueAction(changeEquip, true);
             }
-
         }
     }
 
@@ -161,7 +165,6 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             GameActionManager.instance.RemoveListener<RefreshEquip>(RefreshEquip);
             GameActionManager.instance.RemoveListener<CharacterPropertyTrigger>(RefreshCharacterProperty);
         }
-           
     }
 
     private void RefreshEquip(RefreshEquip refreshEquip)
@@ -190,8 +193,8 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
 
         FriendshipInfo.onClick.AddListener(async () =>
         {
-            FunctionInfoData functionInfoData=await GameDataManager.instance.GetAsyncData<FunctionInfoData>(1);
-            UIManager.instance.ShowGamePanel<FunctionInfoPanel,FunctionInfoData>(functionInfoData);
+            FunctionInfoData functionInfoData = await GameDataManager.instance.GetAsyncData<FunctionInfoData>(1);
+            UIManager.instance.ShowGamePanel<FunctionInfoPanel, FunctionInfoData>(functionInfoData);
         });
     }
 
@@ -233,11 +236,11 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         visitButton = FindChildGameObject<Button>("VisitButton");
         closeButton = FindChildGameObject<Button>("Close");
 
-        FriendshipInfo= FindChildGameObject<Button>("FriendshipInfo");
+        FriendshipInfo = FindChildGameObject<Button>("FriendshipInfo");
         Friendship = FindChildGameObject("Friendship");
         FriendshipValue = FindChildGameObject<TextMeshProUGUI>("FriendshipValue");
         FriendshipLevel = FindChildGameObject<TextMeshProUGUI>("FriendshipLevel");
-        FriendshipSlider = FindChildGameObject<Image>("FriendshipSlider") ;
+        FriendshipSlider = FindChildGameObject<Image>("FriendshipSlider");
         SpeedValue = FindChildGameObject<TextMeshProUGUI>("SpeedValue");
         LuckValue = FindChildGameObject<TextMeshProUGUI>("LuckValue");
         SpeedDown = FindChildGameObject<TextMeshProUGUI>("SpeedDown");
@@ -265,8 +268,8 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         SpeedValue.text = characterProperty.Speed.ToString();
         LuckValue.text = characterProperty.Lucky.ToString();
 
-        AttackUp.enabled = AttackDown.enabled = DefenseDown.enabled = DefenseUp.enabled 
-            =SpeedDown.enabled=SpeedUp.enabled=LuckUp.enabled=LuckDown.enabled= false;
+        AttackUp.enabled = AttackDown.enabled = DefenseDown.enabled = DefenseUp.enabled
+            = SpeedDown.enabled = SpeedUp.enabled = LuckUp.enabled = LuckDown.enabled = false;
         if (data.characterProperty.AT > characterProperty.AT)
             AttackUp.enabled = true;
         if (data.characterProperty.DF > characterProperty.DF)
@@ -284,21 +287,20 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         if (data.characterProperty.Speed < characterProperty.Speed)
             SpeedDown.enabled = true;
     }
-     
+
     public void HideBackGround(bool hide)
     {
         BackGround.enabled = !hide;
     }
-    
+
     public override async void InitReferenceData(CharacterInformationData v)
     {
         base.InitReferenceData(v);
         data = v;
-        v.head.SetImageSprite(characterHead, headSize,Vector2.zero);
+        v.head.SetImageSprite(characterHead, headSize, Vector2.zero);
         HideBackGround(UIManager.instance.GamePanelIsShow<TeamPanel>());
         characterId = v.characterId;
-        
-        
+
         if (v.isNpc)
         {
             State.SetSWText(v.NPCState);
@@ -312,16 +314,16 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
 
         if (characterId == CharacterManager.instance.controllerCharacter.instanceId)
         {
-            CharacterName.text=GameDataSaveManager.instance.UserGameSaveData.playerData.name;
+            CharacterName.text = GameDataSaveManager.instance.UserGameSaveData.playerData.name;
             Friendship.localScale = Vector3.zero;
         }
         else
         {
             CharacterName.SetSWText(v.name);
             Friendship.localScale = Vector3.one;
-            if(FriendManager.instance.GetFriendShip(characterId,out var friendShip))
+            if (FriendManager.instance.GetFriendShip(characterId, out var friendShip))
             {
-                FriendshipLevel.text =$"Lv.{friendShip.friendLevel}";
+                FriendshipLevel.text = $"Lv.{friendShip.friendLevel}";
                 FriendshipValue.text = $"{friendShip.nowValue}/{friendShip.needValue}";
                 FriendshipSlider.fillAmount = friendShip.nowValue / friendShip.needValue;
             }
@@ -356,7 +358,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             = SpeedDown.enabled = SpeedUp.enabled = LuckUp.enabled = LuckDown.enabled = false;
 
         LevelValue.text = v.level.ToString();
-        var spriteRenference  = await GameSourceManager.instance.GetScriptableObject<SpriteResourceRenference>($"Reference/AttributeType{(int)v.attributeType}");
+        var spriteRenference = await GameSourceManager.instance.GetScriptableObject<SpriteResourceRenference>($"Reference/AttributeType{(int)v.attributeType}");
         if (spriteRenference == null)
         {
             Attribute.sprite = null;
@@ -365,53 +367,53 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         {
             Attribute.sprite = spriteRenference.sprite;
         }
-       
-      await  WeaponBox.InitData(new Equipment
+
+        WeaponBox.InitData(new Equipment
         {
             characterId = characterId,
             dataId = v.equip.weapon.x,
             itemValue = v.equip.weapon.y / 100.0f,
             ItemType = ItemType.武器,
-            hide= v.isAnimal
-      }, SelectEquipReference); ;
-      await  ClothesBox.InitData(new Equipment
+            hide = v.isAnimal
+        }, SelectEquipReference); ;
+        ClothesBox.InitData(new Equipment
         {
             characterId = characterId,
             dataId = v.equip.clothes.x,
             itemValue = v.equip.clothes.y / 100.0f,
             ItemType = ItemType.防具,
-             hide = v.isAnimal
-      }, SelectEquipReference);
+            hide = v.isAnimal
+        }, SelectEquipReference);
 
-      await  ShoesBox.InitData(new Equipment
+        ShoesBox.InitData(new Equipment
         {
             characterId = characterId,
             dataId = v.equip.headgear.x,
             itemValue = v.equip.headgear.y / 100.0f,
             ItemType = ItemType.帽子,
-          hide = v.isAnimal
-      }, SelectEquipReference); ;
+            hide = v.isAnimal
+        }, SelectEquipReference); ;
 
-      await  HeadgearBox.InitData(new Equipment
+        HeadgearBox.InitData(new Equipment
         {
             characterId = characterId,
             dataId = v.equip.shoes.x,
             itemValue = v.equip.shoes.y / 100.0f,
             ItemType = ItemType.鞋子,
-          hide = v.isAnimal
-      }, SelectEquipReference);
+            hide = v.isAnimal
+        }, SelectEquipReference);
 
-       
         if (v.isAnimal)
         {
             Visit.localScale = Vector3.zero;
             State.transform.localScale = Vector3.one;
             Friendship.localScale = Vector3.zero;
-        }else
+        }
+        else
         if (v.isNpc)
         {
             Visit.localScale = Vector3.one;
-            State.transform.localScale = Vector3.one; 
+            State.transform.localScale = Vector3.one;
             Friendship.localScale = Vector3.one;
         }
         else
@@ -421,7 +423,8 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             Friendship.localScale = Vector3.zero;
         }
     }
-    public override Task InitData(string dataKey)
+
+    public override void InitData(string dataKey)
     {
         int characerId = int.Parse(dataKey);
         Character character = CharacterManager.instance.GetCharacter(characerId);
@@ -434,7 +437,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         {
             Close();
         }
-        
-        return base.InitData(dataKey);
+
+        base.InitData(dataKey);
     }
 }

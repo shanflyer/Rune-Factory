@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
-using UnityEngine.TextCore.Text;
 
 public class FishingManager : Singleton<FishingManager>
 {
-    private Dictionary<int2, FishPondData> fishPondDatas = new Dictionary<int2, FishPondData>(); 
+    private Dictionary<int2, FishPondData> fishPondDatas = new Dictionary<int2, FishPondData>();
 
     public override async void Init()
     {
@@ -27,7 +26,7 @@ public class FishingManager : Singleton<FishingManager>
 
     protected override void Clear()
     {
-        base.Clear(); 
+        base.Clear();
         if (!SingletonType.Cleared)
         {
             GameActionManager.instance.RemoveListener<FishingIsSuccess>(FishingIsSuccess);
@@ -48,8 +47,8 @@ public class FishingManager : Singleton<FishingManager>
         bool isController = CharacterManager.instance.controllerCharacter.instanceId == fishingIsSuccess.characterId;
         if (isController)
         {
-           int itemInstance= WorldMapManager.instance.GetInstanceFromEditorId(fishingIsSuccess.pondData.linkMapItem);
-             
+            int itemInstance = WorldMapManager.instance.GetInstanceFromEditorId(fishingIsSuccess.pondData.linkMapItem);
+
             ShowMapObjTips ShowMapObjTips = new ShowMapObjTips
             {
                 id = itemInstance,
@@ -59,7 +58,7 @@ public class FishingManager : Singleton<FishingManager>
             UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
         }
 
-        if(waitFishers.TryGetValue(fishingIsSuccess.characterId,out var action))
+        if (waitFishers.TryGetValue(fishingIsSuccess.characterId, out var action))
         {
             GameTimerController.instance.RemoveWaiter(action);
             waitFishers.Remove(fishingIsSuccess.characterId);
@@ -88,7 +87,7 @@ public class FishingManager : Singleton<FishingManager>
                 Item item = new Item
                 {
                     dataId = fishData.itemId,
-                    count = 1, 
+                    count = 1,
                 };
                 item = await Item.SetValue(item, randomResult.y);
                 Character character = CharacterManager.instance.GetCharacter(fishingIsSuccess.characterId);
@@ -126,7 +125,7 @@ public class FishingManager : Singleton<FishingManager>
                             info1 = "背包空间不足，鱼已放生"
                         };
                         GameNotificationManager.instance.ShowItemResultInfo(itemResultInfo);
-                       // await  UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
+                        // await  UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
                     }
                     NPCFishingResult nPCFishingResult = new NPCFishingResult
                     {
@@ -171,6 +170,7 @@ public class FishingManager : Singleton<FishingManager>
             checkPlayFishingAction.setResult(playerIsFisher == checkPlayFishingAction.isFishing);
         }
     }
+
     private void DisplayMap(DisplayMap displayMap)
     {
         foreach (var fisher in fishers)
@@ -205,7 +205,7 @@ public class FishingManager : Singleton<FishingManager>
             };
             GameActionManager.instance.QueueAction(showMapObjTips);
         }
-       
+
         UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
         int characterId = stopFishing.characterId;
         if (waitFishers.TryGetValue(characterId, out var @delegate))
@@ -217,7 +217,7 @@ public class FishingManager : Singleton<FishingManager>
         {
             GameTimerController.instance.RemoveWaiter(@delegate);
             fishWaitActions.Remove(characterId);
-        } 
+        }
     }
 
     private void StartFishing(StartFishing startFishing)
@@ -234,9 +234,9 @@ public class FishingManager : Singleton<FishingManager>
             packageId = character.characterPackage
         };
         GameActionManager.instance.QueueAction(removePackageItem);
-         
+
         UIManager.instance.CloseGamePanel<ScreenControllerPanel>();
-        if(WorldMapManager.instance.GetRuntimeMapItem(startFishing.mapItemId,out var runtimeMapItem))
+        if (WorldMapManager.instance.GetRuntimeMapItem(startFishing.mapItemId, out var runtimeMapItem))
         {
             key = new int2(mapId, runtimeMapItem.editorInstanceId);
             /*
@@ -299,13 +299,12 @@ public class FishingManager : Singleton<FishingManager>
                 AddFishingGame(characterId, WaitFishingGame);
                 void WaitFishingGame()
                 {
-
                     if (characterId == CharacterManager.instance.controllerCharacter.instanceId)
-                    {  
+                    {
                         FishingIsSuccess fishingIsSuccess = new FishingIsSuccess
                         {
                             characterId = characterId,
-                            pondData=fishPondData,
+                            pondData = fishPondData,
                             isSuccess = false
                         };
                         GameActionManager.instance.QueueAction(fishingIsSuccess);
@@ -349,9 +348,7 @@ public class FishingManager : Singleton<FishingManager>
                 GameActionManager.instance.QueueAction(creatFisher);
             }
         }
-         
     }
-
 
     private void AddWaitFisher(int characterId, Action action)
     {

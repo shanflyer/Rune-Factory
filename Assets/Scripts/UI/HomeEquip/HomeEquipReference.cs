@@ -60,9 +60,9 @@ public class HomeEquipReference : UIObjReference<HomeEquip>
         toggle.isOn = true;
     }
 
-    public override async Task InitData(HomeEquip t, SelectAction<HomeEquip> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override void InitData(HomeEquip t, SelectAction<HomeEquip> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-       await base.InitData(t, SelectAction, toggleGroup);
+        base.InitData(t, SelectAction, toggleGroup);
 
         toggle.group = toggleGroup;
         HomeEquipmentData homeEquipmentData = data.homeEquipmentData; 

@@ -98,9 +98,9 @@ public class MyTalkPanel : GamePanel<IReferenceData>
         mask.gameObject.SetActive(false);
         base.InitReferenceData(v);
     }
-    public override Task InitData(string dataKey)
+    public override void InitData(string dataKey)
     {
         mask.gameObject.SetActive(false);
-        return base.InitData(dataKey);
+        base.InitData(dataKey);
     }
 }

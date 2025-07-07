@@ -1,38 +1,42 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using System;
 
-public class AdventureResultPanel: GamePanel<FightResult>
+public class AdventureResultPanel : GamePanel<FightResult>
 {
     [SerializeField]
-    AudioClip successAudioClip, failedAudioClip;
-    [SerializeField]
-    Transform SuccessTitle, FailureTitle;
-    [SerializeField]
-    Transform ItemsContent;
-    [SerializeField]
-    ItemReference itemReference;
-    [SerializeField]
-    AdventureTeamerRenference teamerRenference;
-    [SerializeField]
-    Transform Team;
-    [SerializeField]
-    Button OkButton;
+    private AudioClip successAudioClip, failedAudioClip;
 
-    DisplayList<ItemReference, Item> itemList;
-    DisplayList<AdventureTeamerRenference, FighterResult> teamerList;
+    [SerializeField]
+    private Transform SuccessTitle, FailureTitle;
+
+    [SerializeField]
+    private Transform ItemsContent;
+
+    [SerializeField]
+    private ItemReference itemReference;
+
+    [SerializeField]
+    private AdventureTeamerRenference teamerRenference;
+
+    [SerializeField]
+    private Transform Team;
+
+    [SerializeField]
+    private Button OkButton;
+
+    private DisplayList<ItemReference, Item> itemList;
+    private DisplayList<AdventureTeamerRenference, FighterResult> teamerList;
 
     protected override void Awake()
     {
         OkButton.onClick.AddListener(OKAction);
         itemList = new DisplayList<ItemReference, Item>(itemReference, ItemsContent);
-        teamerList=new DisplayList<AdventureTeamerRenference, FighterResult>(teamerRenference,Team);
+        teamerList = new DisplayList<AdventureTeamerRenference, FighterResult>(teamerRenference, Team);
         base.Awake();
     }
-    async void OKAction()
+
+    private async void OKAction()
     {
         /*WaitAction waitAction = new WaitAction();
         Parameter parameter = new Parameter
@@ -55,23 +59,21 @@ public class AdventureResultPanel: GamePanel<FightResult>
         };
         GameActionManager.instance.QueueAction(displayMap,true);*/
 
-
         GameRuntimeObjManager.instance.ClearRuntime<FightRuntimeObjType>();
 
         ExploreEnd exploreEnd = new ExploreEnd();
         GameActionManager.instance.QueueAction(exploreEnd, true);
 
-        await  UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
+        await UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
         await UIManager.instance.ShowGamePanel<PlayerTopPanel>();
         await UIManager.instance.ShowGamePanel<MainPanel>();
         await UIManager.instance.ShowGamePanel<ShortcutPanel>();
         await UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
 
-
         if (!data.victory)
         {
-           var teamers=  TeamManager.instance.playerTeam.Teamers;
-            for(int i = 0; i < characters.Count; i++)
+            var teamers = TeamManager.instance.playerTeam.Teamers;
+            for (int i = 0; i < characters.Count; i++)
             {
                 var characterId = characters[i];
                 if (NPCManager.instance.GetNPCFormInstance(characterId, out var npc))
@@ -92,17 +94,16 @@ public class AdventureResultPanel: GamePanel<FightResult>
                         }
                     };
                     GameActionManager.instance.QueueAction(leaveTeam, true);
-                    
                 }
-
-
             }
         }
-       // SceneManager.instance.UnloadNowScene();
+        // SceneManager.instance.UnloadNowScene();
         // UIManager.instance.
     }
-    List<int> characters = new List<int>();
-    public override async void InitReferenceData(FightResult fightResult)
+
+    private List<int> characters = new List<int>();
+
+    public override void InitReferenceData(FightResult fightResult)
     {
         base.InitReferenceData(fightResult);
         SuccessTitle.transform.localScale = fightResult.victory ? Vector3.one : Vector3.zero;
@@ -110,16 +111,16 @@ public class AdventureResultPanel: GamePanel<FightResult>
         AudioController.instance.PlayBGM(null, Group: BGMGroup.Battle.ToString(), audioClearType: AudioClearType.All);
         AudioController.instance.PlayAudioME(fightResult.victory ? successAudioClip : failedAudioClip, Group: MEGroup.Battle.ToString());
         Debug.Log("fightResult.getItems");
-        await itemList.InitListData(fightResult.getItems);
+        itemList.InitListData(fightResult.getItems);
         Debug.Log("fightResult.fighterResults");
-        for(int i = 0; i < fightResult.fighterResults.Count; i++)
+        for (int i = 0; i < fightResult.fighterResults.Count; i++)
         {
             characters.Add(fightResult.fighterResults[i].Character.instanceId);
         }
-        await teamerList.InitListData(fightResult.fighterResults);
+        teamerList.InitListData(fightResult.fighterResults);
         UIManager.instance.CloseGamePanel<FightPanel>();
     }
-    
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -129,7 +130,6 @@ public class AdventureResultPanel: GamePanel<FightResult>
         itemReference = FindChildGameObject<ItemReference>("ItemBoxReference");
         Team = FindChildGameObject("Team");
         teamerRenference = FindChildGameObject<AdventureTeamerRenference>("AdventureTeamer");
-        OkButton = FindChildGameObject<Button>("OkButton"); 
+        OkButton = FindChildGameObject<Button>("OkButton");
     }
-
 }

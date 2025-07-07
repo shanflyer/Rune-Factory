@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,23 +6,30 @@ using UnityEngine.UI;
 public class FishPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
-    Button closeButton;
-    [SerializeField]
-    TextMeshProUGUI fishName,record,desc;
-    [SerializeField]
-    TextMeshProUGUI season, place;
-    DisplayList<FishUIReference,FishReferenceData> leftFishList, rightFishList;
-    [SerializeField]
-    Button nextButton, frontButton;
-    [SerializeField]
-    Animator BookPaper;
-    [SerializeField]
-    ToggleGroup toggleGroup;
-    [SerializeField]
-    Transform leftParent,rightParent;
-    [SerializeField]
-    FishUIReference fishUIReference;
+    private Button closeButton;
 
+    [SerializeField]
+    private TextMeshProUGUI fishName, record, desc;
+
+    [SerializeField]
+    private TextMeshProUGUI season, place;
+
+    private DisplayList<FishUIReference, FishReferenceData> leftFishList, rightFishList;
+
+    [SerializeField]
+    private Button nextButton, frontButton;
+
+    [SerializeField]
+    private Animator BookPaper;
+
+    [SerializeField]
+    private ToggleGroup toggleGroup;
+
+    [SerializeField]
+    private Transform leftParent, rightParent;
+
+    [SerializeField]
+    private FishUIReference fishUIReference;
 
     protected override void Awake()
     {
@@ -34,7 +39,7 @@ public class FishPanel : GamePanel<IReferenceData>
             displayIndex += 2;
             if (displayIndex > maxIndex - 2)
             {
-                displayIndex = maxIndex - 2; 
+                displayIndex = maxIndex - 2;
             }
             InitButton();
             DelyDisplayFishes(true);
@@ -44,8 +49,8 @@ public class FishPanel : GamePanel<IReferenceData>
             displayIndex -= 2;
             if (displayIndex < 0)
             {
-                displayIndex = 0; 
-            } 
+                displayIndex = 0;
+            }
             InitButton();
             DelyDisplayFishes(false);
         });
@@ -53,10 +58,10 @@ public class FishPanel : GamePanel<IReferenceData>
 
         leftFishList = new DisplayList<FishUIReference, FishReferenceData>(fishUIReference, leftParent);
         rightFishList = new DisplayList<FishUIReference, FishReferenceData>(fishUIReference, rightParent);
-
-       
     }
-    List<FishData> allFishes;
+
+    private List<FishData> allFishes;
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -74,16 +79,16 @@ public class FishPanel : GamePanel<IReferenceData>
         nextButton = FindChildGameObject<Button>("Next");
         frontButton = FindChildGameObject<Button>("Front");
         BookPaper = FindChildGameObject<Animator>("Book2p");
-
     }
-    List<FishReferenceData> fishReferenceDatas = new List<FishReferenceData>();
-    int displayIndex = 0;
-    int maxIndex = 0;
 
-    void InitButton()
+    private List<FishReferenceData> fishReferenceDatas = new List<FishReferenceData>();
+    private int displayIndex = 0;
+    private int maxIndex = 0;
+
+    private void InitButton()
     {
         if (displayIndex >= maxIndex - 2)
-        { 
+        {
             nextButton.gameObject.SetActive(false);
         }
         else
@@ -91,7 +96,7 @@ public class FishPanel : GamePanel<IReferenceData>
             nextButton.gameObject.SetActive(true);
         }
         if (displayIndex <= 0)
-        { 
+        {
             frontButton.gameObject.SetActive(false);
         }
         else
@@ -99,18 +104,18 @@ public class FishPanel : GamePanel<IReferenceData>
             frontButton.gameObject.SetActive(true);
         }
     }
-    public override async Task InitData(string dataKey)
+
+    public override async void InitData(string dataKey)
     {
-      await  base.InitData(dataKey);
+        base.InitData(dataKey);
 
-        if (allFishes==null||allFishes.Count > 0)
+        if (allFishes == null || allFishes.Count > 0)
             allFishes = await GameDataManager.instance.GetAllAsyncData<FishData>();
-
 
         nextButton.transform.localScale = Vector3.one;
         frontButton.transform.localScale = Vector3.one;
         BookPaper.gameObject.SetActive(false);
-        
+
         fishReferenceDatas.Clear();
         displayIndex = 0;
         maxIndex = allFishes.Count / 8 + 1;
@@ -128,20 +133,21 @@ public class FishPanel : GamePanel<IReferenceData>
                     places = FishSaveData.places
                 };
                 fishReferenceDatas.Add(fishReferenceData);
-            }else
+            }
+            else
             {
                 FishReferenceData fishReferenceData = new FishReferenceData
                 {
                     dataId = fishData.id,
-                    seasons = fishData.seasons, 
+                    seasons = fishData.seasons,
                 };
                 fishReferenceDatas.Add(fishReferenceData);
             }
-           
         }
         DisplayFishes();
-    } 
-    void DelyDisplayFishes(bool next)
+    }
+
+    private void DelyDisplayFishes(bool next)
     {
         leftParent.localScale = Vector3.zero;
         rightParent.localScale = Vector3.zero;
@@ -159,7 +165,8 @@ public class FishPanel : GamePanel<IReferenceData>
         BookPaper.Play("Paper");
         GameTimerController.instance.DelayAction(820, DisplayFishes);
     }
-    void DisplayFishes()
+
+    private void DisplayFishes()
     {
         leftParent.localScale = Vector3.one;
         rightParent.localScale = Vector3.one;
@@ -167,20 +174,20 @@ public class FishPanel : GamePanel<IReferenceData>
         frontButton.transform.localScale = Vector3.one;
         BookPaper.gameObject.SetActive(false);
         List<FishReferenceData> leftFishReferenceDatas = new List<FishReferenceData>();
-        for(int i = 0; i < 8; i++)
+        for (int i = 0; i < 8; i++)
         {
             int index = i + displayIndex * 8;
             if (index < fishReferenceDatas.Count)
             {
                 leftFishReferenceDatas.Add(fishReferenceDatas[index]);
-            }            
+            }
         }
         leftFishList.InitListData(leftFishReferenceDatas, SelectFishReference, toggleGroup);
 
         List<FishReferenceData> rightFishReferenceDatas = new List<FishReferenceData>();
         for (int i = 0; i < 8; i++)
         {
-            int index = i + displayIndex * 8+8;
+            int index = i + displayIndex * 8 + 8;
             if (index < fishReferenceDatas.Count)
             {
                 rightFishReferenceDatas.Add(fishReferenceDatas[index]);
@@ -190,8 +197,9 @@ public class FishPanel : GamePanel<IReferenceData>
         leftFishList.SelectDefault();
     }
 
-    int selectFishDataId;
-    async void SelectFishReference(FishReferenceData fishReferenceData,bool selected)
+    private int selectFishDataId;
+
+    private async void SelectFishReference(FishReferenceData fishReferenceData, bool selected)
     {
         if (selected)
         {
@@ -202,9 +210,9 @@ public class FishPanel : GamePanel<IReferenceData>
                 desc.SetSWText(fishData.info);
                 record.text = $"{fishReferenceData.record}cm";
 
-                List<string>  seasonStr = new List<string>();
+                List<string> seasonStr = new List<string>();
                 seasonStr.Add("");
-                for(int i = 0; i < fishReferenceData.seasons.Count; i++)
+                for (int i = 0; i < fishReferenceData.seasons.Count; i++)
                 {
                     if (i > 0)
                     {
@@ -213,19 +221,19 @@ public class FishPanel : GamePanel<IReferenceData>
                     seasonStr.Add(((Season)(fishReferenceData.seasons[i])).ToString());
                 }
                 List<string> placeStr = new List<string>();
-                  placeStr.Add("");
-                for(int i = 0; i < fishData.places.Count; i++)
+                placeStr.Add("");
+                for (int i = 0; i < fishData.places.Count; i++)
                 {
                     int place = fishData.places[i];
-                    bool find = fishReferenceData.places.Contains(place); 
-                    var roomName = find?WorldMapManager.instance.GetWorldMap(place).mapRoomData.name :"???";
+                    bool find = fishReferenceData.places.Contains(place);
+                    var roomName = find ? WorldMapManager.instance.GetWorldMap(place).mapRoomData.name : "???";
                     if (i > 0)
                     {
-                        placeStr.Add("¡¢"); 
+                        placeStr.Add("¡¢");
                     }
-                    placeStr.Add(roomName); 
+                    placeStr.Add(roomName);
                 }
-                season.SetADDText("",seasonStr);
+                season.SetADDText("", seasonStr);
                 place.SetADDText("", placeStr);
             }
             else
@@ -236,11 +244,9 @@ public class FishPanel : GamePanel<IReferenceData>
                 season.text = "???";
                 place.text = "????";
             }
-            
-
-        }else if (selectFishDataId == fishReferenceData.dataId)
+        }
+        else if (selectFishDataId == fishReferenceData.dataId)
         {
-
         }
     }
 }

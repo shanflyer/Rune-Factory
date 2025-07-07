@@ -1,18 +1,16 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 using static UnityEngine.InputSystem.InputAction;
 
 public delegate void InputActionDelegate(object value);
-public class InputManager :Singleton<InputManager>
+
+public class InputManager : Singleton<InputManager>
 {
     private const string UIActionMap = "UI";
     private const string PlayerActionMap = "Player";
-     
+
     private PlayerInput playerInput;
     public InputActionMap playerAction;
     public InputActionMap uiAction;
@@ -20,9 +18,9 @@ public class InputManager :Singleton<InputManager>
 
     private Dictionary<string, InputActionDelegate> performDelegates = new Dictionary<string, InputActionDelegate>();
     private Dictionary<string, InputActionDelegate> cancelDelegates = new Dictionary<string, InputActionDelegate>();
+
     public InputManager()
     {
-       
         /*
        playerInput = UnityEngine.Object.FindObjectOfType<PlayerInput>();
 
@@ -38,17 +36,15 @@ public class InputManager :Singleton<InputManager>
         test.performed += TestAction;*/
     }
 
-   
     protected override void Clear()
     {
         base.Clear();
-        using(var e = performDelegates.GetEnumerator())
+        using (var e = performDelegates.GetEnumerator())
         {
             while (e.MoveNext())
             {
                 var inputActionDelegate = e.Current.Value;
                 inputActionDelegate = null;
-
             }
         }
         using (var e = cancelDelegates.GetEnumerator())
@@ -57,17 +53,16 @@ public class InputManager :Singleton<InputManager>
             {
                 var inputActionDelegate = e.Current.Value;
                 inputActionDelegate = null;
-
             }
         }
         performDelegates.Clear();
         cancelDelegates.Clear();
     }
 
-    Dictionary<string, InputAction> InputActions = new Dictionary<string, InputAction>();
-    ParticleSystem particleSystem;
+    private Dictionary<string, InputAction> InputActions = new Dictionary<string, InputAction>();
+    private ParticleSystem particleSystem;
 
-    void ShowPointerEffect(object obj)
+    private void ShowPointerEffect(object obj)
     {
         var mouseScreenPos = (Vector2)obj;
         Vector2 mousePos = CameraManager.instance.mainCamera.ScreenToWorldPoint(mouseScreenPos);
@@ -78,10 +73,10 @@ public class InputManager :Singleton<InputManager>
 
     public void SetControllerValue()
     {
-       
     }
 
-    EventSystem eventSystem;
+    private EventSystem eventSystem;
+
     public override async void Init()
     {
         base.Init();
@@ -89,7 +84,7 @@ public class InputManager :Singleton<InputManager>
         GameActionManager.instance.AddListener<SwitchInputMap>(SwitchInputMap);
         GameActionManager.instance.AddListener<OpenOrCloseInputMap>(OpenOrCloseInputMap);
 
-        var eventSystems =GameObject.FindObjectsByType<EventSystem>(FindObjectsSortMode.None);
+        var eventSystems = GameObject.FindObjectsByType<EventSystem>(FindObjectsSortMode.None);
         if (eventSystems.Length > 1)
         {
             GameObject.Destroy(eventSystems[1].gameObject);
@@ -101,20 +96,22 @@ public class InputManager :Singleton<InputManager>
 
         if (playerInput == null)
         {
-            GameObject inputController = new GameObject("InputController"); 
+            GameObject inputController = new GameObject("InputController");
             playerInput = inputController.AddComponent<PlayerInput>();
             playerInput.actions = await GameSourceManager.instance.GetScriptableObject<InputActionAsset>(DataPath.InputDataPath);
 
             var pointerPre = await GameSourceManager.instance.GetPrefab(DataPath.pointerEffectPath);
             var asyncInstantiateOperation = GameObject.InstantiateAsync(pointerPre, inputController.transform);
-            await asyncInstantiateOperation;
-            var pointerObj = asyncInstantiateOperation.Result[0]; 
-            particleSystem=pointerObj.GetComponent<ParticleSystem>();
+            asyncInstantiateOperation.completed += ao =>
+            {
+                var pointerObj = asyncInstantiateOperation.Result[0];
+                particleSystem = pointerObj.GetComponent<ParticleSystem>();
+            };
         }
-        var actionMaps= playerInput.actions.actionMaps;
-        foreach(var actionMap in actionMaps)
+        var actionMaps = playerInput.actions.actionMaps;
+        foreach (var actionMap in actionMaps)
         {
-            if(actionMap.name== PlayerActionMap)
+            if (actionMap.name == PlayerActionMap)
             {
                 playerAction = actionMap;
             }
@@ -127,7 +124,7 @@ public class InputManager :Singleton<InputManager>
             for (int i = 0; i < actions.Count; i++)
             {
                 var action = actions[i];
-               // Debug.Log($"actionName:{action.name}");
+                // Debug.Log($"actionName:{action.name}");
                 void PerformedDelegate(CallbackContext callbackContext)
                 {
                     if (!action.enabled)
@@ -140,7 +137,6 @@ public class InputManager :Singleton<InputManager>
                     }
                 };
                 action.performed += PerformedDelegate;
-                
 
                 void CanceledDelegate(CallbackContext callbackContext)
                 {
@@ -150,32 +146,30 @@ public class InputManager :Singleton<InputManager>
                     }
                     if (cancelDelegates.TryGetValue(action.name, out var del))
                     {
-                       // Debug.Log("Canceled");
+                        // Debug.Log("Canceled");
                         del.Invoke(null);
                     }
                 };
                 action.canceled += CanceledDelegate;
 
-                InputActions[action.name] = action; 
+                InputActions[action.name] = action;
             }
 
-           actionMap.Enable();
+            actionMap.Enable();
         }
 
-        
-        playerInput.defaultActionMap =PlayerActionMap;
+        playerInput.defaultActionMap = PlayerActionMap;
 
         //AddInputActionDelegate(MyInputNameData.Player_Pointer, ShowPointerEffect);
         //AddInputActionDelegate(MyInputNameData.Other_Pointer, ShowPointerEffect);
-
-        
     }
-    void OpenOrCloseInputMap(OpenOrCloseInputMap OpenOrCloseInputMap)
+
+    private void OpenOrCloseInputMap(OpenOrCloseInputMap OpenOrCloseInputMap)
     {
         if (uiAction != null)
         {
             if (OpenOrCloseInputMap.open)
-            { 
+            {
                 uiAction.Enable();
             }
             else
@@ -191,7 +185,7 @@ public class InputManager :Singleton<InputManager>
                 if (!OnlyUI)
                 {
                     playerAction.Enable();
-                } 
+                }
             }
             else
             {
@@ -199,12 +193,14 @@ public class InputManager :Singleton<InputManager>
             }
         }
     }
-    void SwitchInputMap(SwitchInputMap switchInputMap)
+
+    private void SwitchInputMap(SwitchInputMap switchInputMap)
     {
         SwitchInputMap(switchInputMap.UI);
     }
 
     private bool OnlyUI = false;
+
     public void SwitchInputMap(bool UI)
     {
         if (uiAction != null && playerAction != null)
@@ -220,18 +216,18 @@ public class InputManager :Singleton<InputManager>
                 //uiAction.Disable();
                 playerAction.Enable();
             }
-           
-          //  playerInput.currentActionMap = UI ? uiAction : playerAction;
+
+            //  playerInput.currentActionMap = UI ? uiAction : playerAction;
         }
-       // 
-       // playerInput.defaultActionMap = UI ? UIActionMap : PlayerActionMap;
+        //
+        // playerInput.defaultActionMap = UI ? UIActionMap : PlayerActionMap;
     }
 
-    public void AddInputActionDelegate(string actionName, InputActionDelegate inputActionDelegate,bool cancledAction=false)
+    public void AddInputActionDelegate(string actionName, InputActionDelegate inputActionDelegate, bool cancledAction = false)
     {
-        if(performDelegates.TryGetValue(actionName,out InputActionDelegate nowDelegate))
+        if (performDelegates.TryGetValue(actionName, out InputActionDelegate nowDelegate))
         {
-            nowDelegate += inputActionDelegate; 
+            nowDelegate += inputActionDelegate;
         }
         else
         {
@@ -240,8 +236,8 @@ public class InputManager :Singleton<InputManager>
         performDelegates[actionName] = nowDelegate;
 
         if (cancledAction)
-        { 
-            if(cancelDelegates.TryGetValue(actionName, out InputActionDelegate cancledDelegate))
+        {
+            if (cancelDelegates.TryGetValue(actionName, out InputActionDelegate cancledDelegate))
             {
                 cancledDelegate += inputActionDelegate;
             }
@@ -251,13 +247,13 @@ public class InputManager :Singleton<InputManager>
             }
             cancelDelegates[actionName] = cancledDelegate;
         }
-       
     }
+
     public void RemoveInputActionDelegate(string actionName, InputActionDelegate inputActionDelegate)
     {
         if (performDelegates.TryGetValue(actionName, out InputActionDelegate nowDelegate))
         {
-            nowDelegate -= inputActionDelegate; 
+            nowDelegate -= inputActionDelegate;
             if (nowDelegate == null)
             {
                 performDelegates.Remove(actionName);
@@ -267,7 +263,7 @@ public class InputManager :Singleton<InputManager>
                 performDelegates[actionName] = nowDelegate;
             }
         }
-        if ( cancelDelegates.TryGetValue(actionName, out InputActionDelegate cancledDelegate))
+        if (cancelDelegates.TryGetValue(actionName, out InputActionDelegate cancledDelegate))
         {
             cancledDelegate -= inputActionDelegate;
             if (cancledDelegate == null)
@@ -277,8 +273,7 @@ public class InputManager :Singleton<InputManager>
             else
             {
                 cancelDelegates[actionName] = cancledDelegate;
-            } 
+            }
         }
     }
- 
 }

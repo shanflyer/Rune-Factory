@@ -47,7 +47,7 @@ public class MapItemEditor : MyEditor
 
     private MapItemDataObj _selectMapItemDataObj;
     private Tilemap ground, collider, trigger;
-    private Transform singleItemParent; 
+    private Transform singleItemParent;
     private TileBase colliderTile, triggerTile, playerTriggerTile;
 
     private new void OnDestroy()
@@ -62,7 +62,7 @@ public class MapItemEditor : MyEditor
         foreach (Transform child in singleItemParent)
         {
             DestroyImmediate(child.gameObject);
-        } 
+        }
         _Instance = null;
     }
 
@@ -101,7 +101,7 @@ public class MapItemEditor : MyEditor
         }
 
         mapItemsPanel = CreateInstance<CommonEditor>();
-        mapItemsPanel.InitData(Instance, null); 
+        mapItemsPanel.InitData(Instance, null);
 
         var MapEditor = GameObject.Find("MapEditor");
         if (MapEditor == null)
@@ -227,7 +227,6 @@ public class MapItemEditor : MyEditor
             collider.SetTiles(poses.ToArray(), tileBases.ToArray());
         }
 
-
         var triggergridCount = selectMapItemDataObj.itemData.triggerGrids.Count / 4;
         for (int j = 0; j < triggergridCount; j++)
         {
@@ -268,7 +267,7 @@ public class MapItemEditor : MyEditor
                 }
             }
             ground.SetTiles(poses.ToArray(), tileBases.ToArray());
-        } 
+        }
 
         selectItem = Instantiate(selectMapItemDataObj.itemData.itemObj);
         selectItem.transform.SetParent(singleItemParent, false);
@@ -290,7 +289,7 @@ public class MapItemEditor : MyEditor
                 }
             }
         }
-        selectMapItemDataObj.itemData.colliderGrids =GameCommon.CellToGrid(colliderCells);
+        selectMapItemDataObj.itemData.colliderGrids = GameCommon.CellToGrid(colliderCells);
 
         var triggerBound = trigger.cellBounds;
         List<int2> triggerCells = new List<int2>();
@@ -305,7 +304,7 @@ public class MapItemEditor : MyEditor
                 }
             }
         }
-        selectMapItemDataObj.itemData.triggerGrids =GameCommon.CellToGrid(triggerCells);
+        selectMapItemDataObj.itemData.triggerGrids = GameCommon.CellToGrid(triggerCells);
 
         var playerTriggerBound = ground.cellBounds;
         List<int2> playerTriggerCells = new List<int2>();

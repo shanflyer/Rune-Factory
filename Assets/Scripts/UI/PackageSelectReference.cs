@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class PackageSelectReference : UIObjReference<PackageData>
@@ -32,11 +31,11 @@ public class PackageSelectReference : UIObjReference<PackageData>
         });
     }
 
-    private PackageData PackageData; 
+    private PackageData PackageData;
 
-    public override async Task InitData(PackageData t, SelectAction<PackageData> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override async void InitData(PackageData t, SelectAction<PackageData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        await base.InitData(t, SelectAction, toggleGroup);
+        base.InitData(t, SelectAction, toggleGroup);
         this.SelectAction = SelectAction;
         PackageData = t;
         PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(PackageData.dataId);

@@ -32,8 +32,8 @@ public class FunctionInfoPanel : GamePanel<FunctionInfoData>
         base.InitReferenceData(v);
     }
  
-    public override Task InitData(string dataKey)
+    public override void InitData(string dataKey)
     {
-        return base.InitData(dataKey);
+        base.InitData(dataKey);
     }
 }

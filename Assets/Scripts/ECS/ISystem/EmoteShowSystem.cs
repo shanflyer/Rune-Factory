@@ -2,7 +2,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 
-partial struct EmoteShowSystem : ISystem
+internal partial struct EmoteShowSystem : ISystem
 {
     [BurstCompile]
     public void OnCreate(ref SystemState state)
@@ -13,22 +13,22 @@ partial struct EmoteShowSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        
     }
 
     [BurstCompile]
     public void OnDestroy(ref SystemState state)
     {
-        
     }
 }
 
 public partial struct EmoteShowJob : IJobEntity
 {
     public float deltaTime;
+
     [ReadOnly]
     public NativeParallelHashSet<int>.ReadOnly removeEmotes;
-    public void Execute(EnabledRefRW<EmoteComponent> isEnable,ref EmoteComponent emoteComponent)
+
+    public void Execute(EnabledRefRW<EmoteComponent> isEnable, ref EmoteComponent emoteComponent)
     {
         if (!isEnable.ValueRO)
         {

@@ -1,15 +1,13 @@
-﻿using System;
+﻿using MyGame;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks; 
+using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
-using MyGame;
-using UnityEngine.TextCore.Text;
 
-public delegate void MoveEndAction(); 
- 
+public delegate void MoveEndAction();
+
 public struct TeamerEquipAndProperty : IReferenceData
 {
     public CharacterEquipAndPropertyData[] characterEquipAndPropertyDatas;
@@ -21,38 +19,39 @@ public class CharacterManager : Singleton<CharacterManager>
 
     public const float moveSpeed = 15f;
     public const float updataMoveSpeed = 1f;
-    public bool hideCharacter { get; private set; } 
+    public bool hideCharacter { get; private set; }
     private MyDic<int, Character> characters = new MyDic<int, Character>();
-    private Dictionary<int, int> characterDataToInstances = new Dictionary<int, int>(); 
+    private Dictionary<int, int> characterDataToInstances = new Dictionary<int, int>();
 
     public Player player;
     //private Vector2 playerMoveDirction;
 
-    void SetPlayerNeighbor()
+    private void SetPlayerNeighbor()
     {
-
     }
 
     public List<Character> GetAllCharacters()
     {
         return characters.GetValueList();
     }
- 
+
     protected override void Clear()
     {
         base.Clear();
         RecycleCharacter();
-        characterDataToInstances.Clear(); 
+        characterDataToInstances.Clear();
         characters.Clear();
     }
+
     //角色运行显示实体
     private Dictionary<Character, CharacterRuntimeObj> characterRuntionObjs = new Dictionary<Character, CharacterRuntimeObj>();
+
     private HashSet<Character> displayCharacters = new HashSet<Character>();
 
     private void RecycleCharacterObj(Character character)
     {
-       // Debug.Log($"RecycleCharacterObj:{character.name}");
-       
+        // Debug.Log($"RecycleCharacterObj:{character.name}");
+
         displayCharacters.Remove(character);
         GameActionManager.instance.QueueAction(new TryRecycleCharacterEmote { id = character.instanceId }, true);
         if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
@@ -72,7 +71,7 @@ public class CharacterManager : Singleton<CharacterManager>
         FishController.instance.RecycleFisherObj(character.instanceId);
     }
 
-    private async Task CreateCharacterObjAsync(Character character, bool controller = false)
+    private void CreateCharacterObj(Character character, bool controller = false)
     {
         if (hideCharacter)
             return;
@@ -82,47 +81,50 @@ public class CharacterManager : Singleton<CharacterManager>
             return;
         }
         displayCharacters.Add(character);
-        var runtimeObj = await CreateCharacterRuntimeObj(character.dataId, character.instanceId, character.coordinate);
-        CharacterRuntimeObj characterRuntimeObj = runtimeObj.obj as CharacterRuntimeObj;
-        characterRuntimeObj.runtimeObj = runtimeObj;
-        if (characterRuntionObjs.TryAdd(character, characterRuntimeObj))
-        {
-            characterRuntimeObj.SetAnimationDirection(character.moveDirection, character.direction);
-            characterRuntimeObj.enabled = true;
-            //Vector2 pos = GameCommon.GetMapPos(character.coordinate);
-            //transform.position = pos;
+        CreateCharacterRuntimeObj(character.dataId, character.instanceId, character.coordinate, SetComponent);
 
-            if (controller || character == controllerCharacter)
-            { 
-                CameraManager.instance.SetFollowTarget(characterRuntimeObj.transform);
-                ControllerRuntimeObj = characterRuntimeObj;
-                if (!ControllerRuntimeObj.TryGetComponent(out AudioListener audioListener))
+        void SetComponent(RuntimeObj runtimeObj)
+        {
+            CharacterRuntimeObj characterRuntimeObj = runtimeObj.obj as CharacterRuntimeObj;
+            characterRuntimeObj.runtimeObj = runtimeObj;
+
+            if (characterRuntionObjs.TryAdd(character, characterRuntimeObj))
+            {
+                characterRuntimeObj.SetAnimationDirection(character.moveDirection, character.direction);
+                characterRuntimeObj.enabled = true;
+                //Vector2 pos = GameCommon.GetMapPos(character.coordinate);
+                //transform.position = pos;
+
+                if (controller || character == controllerCharacter)
                 {
-                    audioListener = ControllerRuntimeObj.gameObject.AddComponent<AudioListener>();
+                    CameraManager.instance.SetFollowTarget(characterRuntimeObj.transform);
+                    ControllerRuntimeObj = characterRuntimeObj;
+                    if (!ControllerRuntimeObj.TryGetComponent(out AudioListener audioListener))
+                    {
+                        audioListener = ControllerRuntimeObj.gameObject.AddComponent<AudioListener>();
+                    }
+                    audioListener.enabled = true;
+                    CameraManager.instance.SetCameraListener(false);
+                    RefreshMapTempCharacter refreshMapTempCharacter = new RefreshMapTempCharacter
+                    {
+                        characterId = character.instanceId,
+                    };
+                    GameActionManager.instance.QueueAction(refreshMapTempCharacter, true);
                 }
-                audioListener.enabled = true;
-                CameraManager.instance.SetCameraListener(false);
-                RefreshMapTempCharacter refreshMapTempCharacter = new RefreshMapTempCharacter
-                {
-                    characterId = character.instanceId,
-                };
-                GameActionManager.instance.QueueAction(refreshMapTempCharacter, true);
-            }
 
-           // Debug.Log($"CreateCharacter:{character.name}");
+                // Debug.Log($"CreateCharacter:{character.name}");
+            }
+            else
+            {
+                displayCharacters.Remove(character);
+                characterRuntimeObj.Clear();
+            }
         }
-        else
-        {
-            displayCharacters.Remove(character);
-            characterRuntimeObj.Clear();
-        }
-         
-       
     }
 
     public override void Init()
     {
-        base.Init(); 
+        base.Init();
 
         GameActionManager.instance.AddListener<SetCharacterProperty>(SetCharacterValue);
         GameActionManager.instance.AddListener<ChangeCharacterProperty>(ChangeCharacterValue);
@@ -131,7 +133,7 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<CreatCharacter>(CreateCharacter);
         GameActionManager.instance.AddListener<CreatTempCharacter>(CreateTempCharacter);
         GameActionManager.instance.AddListener<DestoryCharacter>(DestroyCharacter);
-         
+
         GameActionManager.instance.AddListener<SetCharacterAnimator>(SetCharacterAnimator);
         GameActionManager.instance.AddListener<InitInputAction>(InitInputAction);
 
@@ -162,36 +164,38 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<SetTempCharacterTarget>(SetTempCharacterTarget);
         GameActionManager.instance.AddListener<SetCharacterStopCreate>(SetCharacterStopCreate);
     }
-    void SetTempCharacterTarget(SetTempCharacterTarget setTempCharacterTarget)
+
+    private void SetTempCharacterTarget(SetTempCharacterTarget setTempCharacterTarget)
     {
-        if(characters.TryGetValue(setTempCharacterTarget.characterId,out var character))
+        if (characters.TryGetValue(setTempCharacterTarget.characterId, out var character))
         {
-            if(character is TempCharacter tempCharacter)
+            if (character is TempCharacter tempCharacter)
             {
                 tempCharacter.SetTargetArea(setTempCharacterTarget.area, setTempCharacterTarget.targetCoordinate);
             }
         }
     }
-    void TempCharacterTalk(TempCharacterTalk tempCharacterTalk)
+
+    private void TempCharacterTalk(TempCharacterTalk tempCharacterTalk)
     {
         Character character = GetCharacter(tempCharacterTalk.characterId);
         if (character != null)
         {
-            if(character is TempCharacter tempCharacter)
+            if (character is TempCharacter tempCharacter)
             {
                 int talkId = tempCharacter.GetTalk();
-                 
+
                 SimpleTalk simpleTalk = new SimpleTalk
                 {
                     characterId = tempCharacter.instanceId,
                     talkId = talkId,
-                    endAction=tempCharacterTalk.endAction
+                    endAction = tempCharacterTalk.endAction
                 };
                 GameActionManager.instance.QueueAction(simpleTalk);
             }
-
         }
     }
+
     private async void ChangeCharacterNewMap(ChangeCharacterNewMap ChangeCharacterNewMap)
     {
         Character character = GetCharacter(ChangeCharacterNewMap.characterInstance);
@@ -206,7 +210,7 @@ public class CharacterManager : Singleton<CharacterManager>
             }
 
             character.RemoveMove();
-            character.SetCoordinate(newCoordiante,refreshMapTemp:false);
+            character.SetCoordinate(newCoordiante, refreshMapTemp: false);
             ReStartCharacterBehavior reStartCharacterBehavior = new ReStartCharacterBehavior
             {
                 characterId = character.instanceId
@@ -231,7 +235,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(displayCharacterItemRenderer.itemId);
                 if (itemData != null)
                 {
-                    characterRuntimeObj.SetEquipSprite(itemData.icon); 
+                    characterRuntimeObj.SetEquipSprite(itemData.icon);
                 }
                 else
                 {
@@ -287,7 +291,7 @@ public class CharacterManager : Singleton<CharacterManager>
             {
                 character.SetCoordinate(new int3(targetCoordinate, character.mapInstance));
 
-             // await  RefreshNpcRuntimeObj(character);
+                // await  RefreshNpcRuntimeObj(character);
             }
 
             if (SetCharacterRandomPos.setResult != null)
@@ -300,7 +304,8 @@ public class CharacterManager : Singleton<CharacterManager>
             SetCharacterRandomPos.setResult(false);
         }
     }
-    void RefreshCharacterPos(RefreshCharacterPos RefreshCharacterPos)
+
+    private void RefreshCharacterPos(RefreshCharacterPos RefreshCharacterPos)
     {
         if (characters.TryGetValue(RefreshCharacterPos.characterId, out var character))
         {
@@ -315,7 +320,7 @@ public class CharacterManager : Singleton<CharacterManager>
                         Debug.Log($"Waring:{character.name}--oldPos{characterRuntimeObj.transform.position}--newPos{pos}");
                     }
                 }
-                
+
                 characterRuntimeObj.transform.position = pos;
                 if (RefreshCharacterPos.setResult != null)
                 {
@@ -328,8 +333,8 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             RefreshCharacterPos.setResult(false);
         }
-
     }
+
     private void SetCharacterTempPos(SetCharacterTempPos setCharacterTempPos)
     {
         if (characters.TryGetValue(setCharacterTempPos.characterId, out var character))
@@ -361,8 +366,8 @@ public class CharacterManager : Singleton<CharacterManager>
 
     private void DisplayOrHideCharacter(DisplayOrHideCharacter displayOrHideCharacter)
     {
-        Character character=null;
-        if (displayOrHideCharacter.characterId == 0||displayOrHideCharacter.characterId==int.MinValue)
+        Character character = null;
+        if (displayOrHideCharacter.characterId == 0 || displayOrHideCharacter.characterId == int.MinValue)
         {
             character = controllerCharacter;
         }
@@ -374,8 +379,8 @@ public class CharacterManager : Singleton<CharacterManager>
                 characters.TryGetValue(displayOrHideCharacter.characterId, out character);
             }
         }
-        
-        if (character!=null&&characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
+
+        if (character != null && characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
         {
             characterRuntimeObj.gameObject.SetActive(displayOrHideCharacter.display);
             if (character == controllerCharacter)
@@ -385,7 +390,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    private async void ChangeCharacter(ChangeCharacter ChangeCharacter)
+    private void ChangeCharacter(ChangeCharacter ChangeCharacter)
     {
         if (characters.TryGetValue(ChangeCharacter.instanceId, out var character))
         {
@@ -398,7 +403,7 @@ public class CharacterManager : Singleton<CharacterManager>
                     characterRuntimeObj.Clear();
                     characterRuntionObjs.Remove(character);
                     displayCharacters.Remove(character);
-                   await CreateCharacterObjAsync(character);
+                    CreateCharacterObj(character);
                 }
             }
         }
@@ -422,6 +427,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 case ItemType.鞋子:
                     itemId = character.Equip.shoes.x;
                     break;
+
                 case ItemType.帽子:
                     itemId = character.Equip.headgear.x;
                     break;
@@ -429,7 +435,7 @@ public class CharacterManager : Singleton<CharacterManager>
             character.ClearEquip(clearEquip.itemType);
             if (itemId != 0 && clearEquip.outPackageId != 0)
             {
-               await PackageManager.instance.SetItemInPackage(new Item(itemId, 1), clearEquip.outPackageId);
+                await PackageManager.instance.SetItemInPackage(new Item(itemId, 1), clearEquip.outPackageId);
             }
         }
     }
@@ -539,13 +545,13 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
                 if (SceneManager.instance.Now == "World")
                 {
-                     UIManager.instance.ShowGamePanel<PlayerTopPanel>();
-                     //UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
+                    UIManager.instance.ShowGamePanel<PlayerTopPanel>();
+                    //UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
                     var shortcutPackage = ShortcutManager.instance.GetShortcutPackage(_controllerCharacter.instanceId);
                     UIManager.instance.ShowGamePanel<ShortcutPanel, ShortcutPackage>(shortcutPackage);
                 }
                 characterRuntionObjs.TryGetValue(controllerCharacter, out var _ControllerRuntimeObj);
-                ControllerRuntimeObj = _ControllerRuntimeObj; 
+                ControllerRuntimeObj = _ControllerRuntimeObj;
             }
         }
         get
@@ -595,7 +601,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    public async Task CreatePlayer(int id, string playerName,int bag, int instanceId = 0)
+    public async Task CreatePlayer(int id, string playerName, int bag, int instanceId = 0)
     {
         var playerData = await GameDataManager.instance.GetAsyncData<CharacterData>(id);
         if (instanceId == 0)
@@ -603,14 +609,14 @@ public class CharacterManager : Singleton<CharacterManager>
             instanceId = MyInstance.instance.CharacterId;
         }
         ProfessionData professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(playerData.profession);
-        player = new Player(playerData,  instanceId, playerName, professionData);
+        player = new Player(playerData, instanceId, playerName, professionData);
         controllerCharacter = player;
         AddCharacter(player);
         RefreshShortcut refreshShortcut = new RefreshShortcut
         {
             packageId = controllerCharacter.characterPackage
         };
-        GameActionManager.instance.QueueAction(refreshShortcut); 
+        GameActionManager.instance.QueueAction(refreshShortcut);
     }
 
     /// <summary>
@@ -624,7 +630,8 @@ public class CharacterManager : Singleton<CharacterManager>
             RemoveCharacter(character);
         }
     }
-    void DestroyCharacter(int destoryCharacter)
+
+    private void DestroyCharacter(int destoryCharacter)
     {
         if (characters.TryGetValue(destoryCharacter, out var character))
         {
@@ -634,19 +641,15 @@ public class CharacterManager : Singleton<CharacterManager>
 
     private void ClearTempCharacter(ClearTempCharacter clearTempCharacter)
     {
-        for(int i = 0; i < characters.length; i++)
+        for (int i = 0; i < characters.length; i++)
         {
             var character = characters[i];
-            if(character is TempCharacter)
+            if (character is TempCharacter)
             {
                 RemoveCharacter(character);
             }
-
         }
- 
     }
- 
-
 
     private void RemoveCharacter(Character character)
     {
@@ -656,8 +659,8 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             GameActionManager.instance.QueueAction(new TryRecycleCharacterEmote { id = character.instanceId }, true);
             characterRuntimeObj.Clear();
-           //Debug.Log($"RecycleTempCharacterObj:{character.name}");
-            //GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj); 
+            //Debug.Log($"RecycleTempCharacterObj:{character.name}");
+            //GameRuntimeObjManager.instance.RecycleRuntimeObj(characterRuntimeObj.runtimeObj);
             characterRuntionObjs.Remove(character);
             displayCharacters.Remove(character);
         }
@@ -666,7 +669,7 @@ public class CharacterManager : Singleton<CharacterManager>
         MapCellController.instance.RemoveCharacterCoordinate(character.ObjCoordinate, character.instanceId, character is TempCharacter);
         CharacterBehaviorManager.instance.DestroyBehavior(character.instanceId);
         characters.Remove(character.instanceId);
-        
+
         NPCTaskScheduleManager.instance.RemoveBehavior(character.instanceId);
     }
 
@@ -685,24 +688,25 @@ public class CharacterManager : Singleton<CharacterManager>
         AddCharacter(character);
         character.SetObjCoordinate(creatTempCharacter.mapInstance,
             new int2(creatTempCharacter.coordinateX, creatTempCharacter.coordinateY));
-        await RefreshNpcRuntimeObj(character,RefreshMapTemp:false);
+        RefreshNpcRuntimeObj(character, RefreshMapTemp: false);
 
-        character.templevel = level; 
+        character.templevel = level;
         if (creatTempCharacter.setValue != null)
         {
             creatTempCharacter.setValue(character.instanceId);
         }
     }
+
     public void AddAnimal()
     {
-
     }
+
     private async void CreateCharacter(CreatCharacter creatCharacter)
     {
         Character character;
         if (creatCharacter.isPlayer)
         {
-            await CreatePlayer(creatCharacter.characterId,creatCharacter.playerName, 0);
+            await CreatePlayer(creatCharacter.characterId, creatCharacter.playerName, 0);
             character = player;
         }
         else
@@ -710,12 +714,12 @@ public class CharacterManager : Singleton<CharacterManager>
             int instanceId = creatCharacter.instanceId;
             if (instanceId == 0)
             {
-                instanceId = MyInstance.instance.CharacterId; 
+                instanceId = MyInstance.instance.CharacterId;
             }
             var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(creatCharacter.characterId);
             var professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(characterData.profession);
-            character = new Character(characterData, professionData, instanceId,true);
-            AddCharacter(character,creatCharacter.hideData);
+            character = new Character(characterData, professionData, instanceId, true);
+            AddCharacter(character, creatCharacter.hideData);
         }
         if (creatCharacter.mapInstance != 0)
         {
@@ -723,7 +727,7 @@ public class CharacterManager : Singleton<CharacterManager>
             new int2(creatCharacter.coordinateX, creatCharacter.coordinateY));
             RefreshNpcRuntimeObj(character, creatCharacter.controller);
         }
-        
+
         if (creatCharacter.controller)
         {
             controllerCharacter = character;
@@ -739,17 +743,17 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    private void AddCharacter(Character character,bool hideData=false)
+    private void AddCharacter(Character character, bool hideData = false)
     {
         if (!hideData)
         {
             if (!(character is TempCharacter))
-            { 
+            {
                 characterDataToInstances.Add(character.dataId, character.instanceId);
             }
         }
-       
-        characters.TrySetValue(character.instanceId,character);
+
+        characters.TrySetValue(character.instanceId, character);
     }
 
     private void MapClickAction(object obj)
@@ -799,10 +803,10 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         if (characterDataToInstances.TryGetValue(dataId, out var instance))
         {
-            if(characters.TryGetValue(instance,out var character))
+            if (characters.TryGetValue(instance, out var character))
             {
                 return character;
-            } 
+            }
         }
         return null;
     }
@@ -810,7 +814,7 @@ public class CharacterManager : Singleton<CharacterManager>
     public Character GetCharacter(int characterId)
     {
         Character character = null;
-        if (characterId == 0||characterId==1||characterId==int.MinValue)
+        if (characterId == 0 || characterId == 1 || characterId == int.MinValue)
         {
             character = player;
         }
@@ -828,7 +832,7 @@ public class CharacterManager : Singleton<CharacterManager>
         return character;
     }
 
-    void SetCharacterStopCreate(SetCharacterStopCreate setCharacterStopCreate)
+    private void SetCharacterStopCreate(SetCharacterStopCreate setCharacterStopCreate)
     {
         hideCharacter = setCharacterStopCreate.hide;
     }
@@ -836,12 +840,12 @@ public class CharacterManager : Singleton<CharacterManager>
     private async void SetCharacterCoordinate(SetCharacterCoordinate setCharacterCoordinate)
     {
         Character character = GetCharacter(setCharacterCoordinate.characterId);
-       
+
         if (character != null)
         {
             character.RemoveMove();
-            character.SetCoordinate(setCharacterCoordinate.coordinate); 
-           //await RefreshNpcRuntimeObj(character);
+            character.SetCoordinate(setCharacterCoordinate.coordinate);
+            //await RefreshNpcRuntimeObj(character);
         }
     }
 
@@ -882,7 +886,7 @@ public class CharacterManager : Singleton<CharacterManager>
         return -1;
     }
 
-    public bool GetCharacterCoordiante(int id, out int3 coordinate)
+    public bool GetCharacterCoordinate(int id, out int3 coordinate)
     {
         if (characters.TryGetValue(id, out Character character))
         {
@@ -893,7 +897,7 @@ public class CharacterManager : Singleton<CharacterManager>
         return false;
     }
 
-    private async Task SetPlayerPos(Character character,bool refreshDirection = false)
+    private void SetPlayerPos(Character character, bool refreshDirection = false)
     {
         if (characterRuntionObjs.TryGetValue(character, out CharacterRuntimeObj characterRuntimeObj))
         {
@@ -915,20 +919,20 @@ public class CharacterManager : Singleton<CharacterManager>
                             Debug.Log($"Waring:{character.name}--oldPos{characterRuntimeObj.transform.position}--newPos{pos}");
                         }
                     }
-                   
+
                     characterRuntimeObj.SetPosition(pos);
-                    
+
                     if (refreshDirection)
                     {
-                        characterRuntimeObj.SetAnimationDirection(character.moveDirection,character.direction); 
+                        characterRuntimeObj.SetAnimationDirection(character.moveDirection, character.direction);
                     }
                     //transform.Translate(new Vector3(0, 0, -100));
                 }
             }
         }
-        else if (character.mapInstance == WorldMapObjManager.instance.displayMap&&!ExploreManager.instance.isExplore)
+        else if (character.mapInstance == WorldMapObjManager.instance.displayMap && !ExploreManager.instance.isExplore)
         {
-          await  CreateCharacterObjAsync(character);
+            CreateCharacterObj(character);
         }
     }
 
@@ -939,7 +943,7 @@ public class CharacterManager : Singleton<CharacterManager>
             //SetCharacterAnimationSpeed(0, characterRuntimeObj);
             var transform = characterRuntimeObj.transform;
             Vector3 targetPos = new Vector3(pos.x, pos.y, transform.position.z);
-           // transform.position = targetPos;
+            // transform.position = targetPos;
             SetCharacterAnimationSpeed(1, characterRuntimeObj);
             if (GameDataManager.instance.GlobalData.debug)
             {
@@ -950,11 +954,9 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
             }
             characterRuntimeObj.SetPosition(targetPos);
-           // transform.position = pos;
-           
+            // transform.position = pos;
         }
     }
-
 
     public void MoveCharacterObj(Character character, float2 moveValue, ref int2 coordinate)
     {
@@ -1045,7 +1047,7 @@ public class CharacterManager : Singleton<CharacterManager>
         character.moveEnumeratorId =
         GameObjectCurveController.instance.Line(character.nowSpeed, startPos, targetPos, (Vector2 pos) =>
         {
-            if (runtimeObj != null&&runtimeObj.gameObject.activeSelf)
+            if (runtimeObj != null && runtimeObj.gameObject.activeSelf)
             {
                 SetCharacterAnimationSpeed(1, runtimeObj);
                 var transform = runtimeObj.transform;
@@ -1079,10 +1081,10 @@ public class CharacterManager : Singleton<CharacterManager>
             var transform = runtimeObj.transform;
             startPos = transform.position;
         }
-       // Debug.Log($"next cell:{targetCoordinate}");
+        // Debug.Log($"next cell:{targetCoordinate}");
         bool slant = targetCoordinate.x != character.coordinate.x && targetCoordinate.y != character.coordinate.y;
         character.moveDirection = math.normalize(targetCoordinate - character.coordinate);
-         //Debug.Log($"targetCoordinate:{targetCoordinate}-character.coordinate{character.coordinate}-moveDirection: {character.moveDirection}");
+        //Debug.Log($"targetCoordinate:{targetCoordinate}-character.coordinate{character.coordinate}-moveDirection: {character.moveDirection}");
         // var direction = GameCommon.GetCharacterDirect(character.objCoordinate.coordinate, targetCoordinate, character.direction);
         if (!MapCellController.instance.CheckIsWalk(targetCoordinate, character.mapInstance))
         {
@@ -1093,22 +1095,21 @@ public class CharacterManager : Singleton<CharacterManager>
             }
             return;
         }
-        if (character==controllerCharacter&& character.linkItem != 0)
+        if (character == controllerCharacter && character.linkItem != 0)
         {
             TryRemoveLinkMapItemCharacter tryRemoveLinkMapItemCharacter = new TryRemoveLinkMapItemCharacter
             {
                 linkInstanceId = character.instanceId,
                 mapItemInstanceId = character.linkItem
             };
-            GameActionManager.instance.QueueAction(tryRemoveLinkMapItemCharacter);            
+            GameActionManager.instance.QueueAction(tryRemoveLinkMapItemCharacter);
         }
-       
 
         Vector2Int offsetCoordinate = Vector2Int.zero;
 
         var lineSpeed = slant ? moveSpeed * GameCommon.slantValue : moveSpeed;
         lineSpeed *= character.propertySpeed;
-        if(character.moveEnumeratorId!=0)
+        if (character.moveEnumeratorId != 0)
             Debug.Log($"Waring:{character.name}--noStop");
         character.moveEnumeratorId =
         GameObjectCurveController.instance.Line(lineSpeed, startPos, targetPos, (Vector2 pos) =>
@@ -1135,23 +1136,22 @@ public class CharacterManager : Singleton<CharacterManager>
                              //Debug.Log($"{character.name}--SetObjCoordinate0:{character.coordinate}--pos{pos}");
                          }
                      }
-                     catch(Exception e)
+                     catch (Exception e)
                      {
                          Debug.Log(e);
                      }
-                    
                  }
                  else
                  {
                      if (runtimeObj != null)
-                         runtimeObj.runtimeObj = null; 
+                         runtimeObj.runtimeObj = null;
                      runtimeObj = null;
                  }
              },
             () =>
             {
                 character.moveEnumeratorId = 0;
-               //Debug.Log($"pathNodes.count:{pathNodes.Count}");
+                //Debug.Log($"pathNodes.count:{pathNodes.Count}");
                 if (pathNodes.Count > 0)
                 {
                     character.SetCoordinate(new int3(targetCoordinate.xy, character.mapInstance), refreshMapTemp: false);
@@ -1160,7 +1160,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
                 else
                 {
-                  //  Debug.Log($"character:{character.name}--tryCorssMap");
+                    //  Debug.Log($"character:{character.name}--tryCorssMap");
                     if (runtimeObj != null)
                     {
                         SetCharacterAnimationSpeed(0, runtimeObj);
@@ -1168,11 +1168,11 @@ public class CharacterManager : Singleton<CharacterManager>
                     else
                     {
                         if (runtimeObj != null)
-                            runtimeObj.runtimeObj = null; 
+                            runtimeObj.runtimeObj = null;
                         runtimeObj = null;
                     }
-                        
-                    CrossMap(targetCoordinate, character, out int3 newMap, EndAction,true);
+
+                    CrossMap(targetCoordinate, character, out int3 newMap, EndAction, true);
                 }
                 if (changeCoordinateAction != null)
                 {
@@ -1187,11 +1187,11 @@ public class CharacterManager : Singleton<CharacterManager>
         ChangeMapAction(character, coordinate, 0);
     }
 
-    private async void ChangeMapAction(Character character, int3 newMap, int afterAction)
+    private void ChangeMapAction(Character character, int3 newMap, int afterAction)
     {
         int targetMap = newMap.z;
         var targetCoordinate = new int2(newMap.x, newMap.y);
-        
+
         if (character == controllerCharacter)
         {
             character.StopMove();
@@ -1204,19 +1204,18 @@ public class CharacterManager : Singleton<CharacterManager>
                 lerpTime = GameCommon.mapChangeLerpTime
             };
             GameActionManager.instance.QueueAction(lerpScreenCycleValue, true);
-            character.SetCoordinate(new int3(targetCoordinate, targetMap),false);
+            character.SetCoordinate(new int3(targetCoordinate, targetMap), false);
 
             GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), async () =>
-            { 
-                await SetPlayerPos(character,true);
-                await WorldMapObjManager.instance.DisplayMap(targetMap);
+            {
+                SetPlayerPos(character, true);
+                WorldMapObjManager.instance.DisplayMap(targetMap);
 
                 /*
                 GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 500), () =>
-                { 
-                    EnvironmentManger.instance.SkyEnviromentMono.PlayWeather(); 
+                {
+                    EnvironmentManger.instance.SkyEnviromentMono.PlayWeather();
                 });*/
-
 
                 GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), () =>
                 {
@@ -1231,7 +1230,6 @@ public class CharacterManager : Singleton<CharacterManager>
                     //EnvironmentManger.instance.SkyEnviromentMono.PlayWeather();
                     async void AfterLerpScreenCycle(bool value)
                     {
-                        
                         if (afterAction != 0)
                         {
                             var dataAction = await GameDataManager.instance.GetAsyncData<GameActionData>(afterAction);
@@ -1252,33 +1250,31 @@ public class CharacterManager : Singleton<CharacterManager>
                                     Debug.Log($"Waring1:{character.name}--oldPos{characterRuntimeObj.transform.position}--newPos{pos}");
                                 }
                             }
-                            characterRuntimeObj.SetPosition(pos); 
-                            characterRuntimeObj.SetAnimationDirection(character.moveDirection,character.direction); 
+                            characterRuntimeObj.SetPosition(pos);
+                            characterRuntimeObj.SetAnimationDirection(character.moveDirection, character.direction);
                         }
                         character.canMove = true;
                     }
                     GameActionManager.instance.QueueAction(lerpScreenCycleValue, true);
                 });
             });
-
-            
         }
         else if (!(character is TempCharacter))
         {
             character.moveEnumeratorId = 0;
-            character.SetCoordinate(new int3(targetCoordinate, targetMap),refreshMapTemp:false);
-            await SetPlayerPos(character);
+            character.SetCoordinate(new int3(targetCoordinate, targetMap), refreshMapTemp: false);
+            SetPlayerPos(character);
         }
     }
 
-    public bool CrossMap(int2 targetCoordinate, Character character, out int3 newMap, MoveEndAction EndAction = null,bool defaultDirection=false)
+    public bool CrossMap(int2 targetCoordinate, Character character, out int3 newMap, MoveEndAction EndAction = null, bool defaultDirection = false)
     {
         // int2 offsetCoordinate = targetCoordinate - character.coordinate;
-        character.SetCoordinate(new int3(targetCoordinate.xy, character.mapInstance), !character.isController,false);
+        character.SetCoordinate(new int3(targetCoordinate.xy, character.mapInstance), !character.isController, false);
 
         if (!(character is TempCharacter))
         {
-            MapCellController.instance.ChangeMapAction(targetCoordinate, defaultDirection?Direction.Default:character.direction, character.mapInstance, ChangeMapAction);
+            MapCellController.instance.ChangeMapAction(targetCoordinate, defaultDirection ? Direction.Default : character.direction, character.mapInstance, ChangeMapAction);
 
             void ChangeMapAction(int3 newMap, int afterAction)
             {
@@ -1344,24 +1340,22 @@ public class CharacterManager : Singleton<CharacterManager>
         return null;
     }
 
- 
-  
     public async Task CreateNpc(MapNpcData mapNpcData)
     {
         if (NPCManager.instance.GetNPC(mapNpcData.dataId, out var npc))
         {
             npc.isActive = mapNpcData.beginMap > 0;
-              
+
             if (!characters.TryGetValue(npc.characterInstance, out var character))
-            { 
+            {
                 var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(mapNpcData.dataId);
                 var professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(characterData.profession);
                 character = new Character(characterData, professionData, npc.characterInstance, true);
-                characters.Add(npc.characterInstance, character); 
+                characters.Add(npc.characterInstance, character);
                 characterDataToInstances[character.dataId] = character.instanceId;
             }
             character.SetCoordinate(new int3(mapNpcData.beginCoordinate, mapNpcData.beginMap));
-           // await RefreshNpcRuntimeObj(character);  
+            // await RefreshNpcRuntimeObj(character);
         }
 
         /*
@@ -1377,7 +1371,7 @@ public class CharacterManager : Singleton<CharacterManager>
         //  behaviorTree.startTask.AddChildTask(logTask);
     }
 
-    private async Task<RuntimeObj> CreateCharacterRuntimeObj(int characterDataId, int instacneId, int2 coordiante)
+    private async void CreateCharacterRuntimeObj(int characterDataId, int instacneId, int2 coordiante, SetComponent setComponent)
     {
         Vector3 pos = GameCommon.GetMapPos(coordiante);
         //pos.z = -100;
@@ -1385,19 +1379,19 @@ public class CharacterManager : Singleton<CharacterManager>
         var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(characterDataId);
         if (characterData != null)
         {
-            var runtimeObj =GameRuntimeObjManager.instance.CreateRuntimeObj(RuntimeObjType.CHARACTER.ToString(), characterData.obj.name,
+            var runtimeObj = GameRuntimeObjManager.instance.CreateRuntimeObj(RuntimeObjType.CHARACTER.ToString(), characterData.obj.name,
                characterData.obj, instacneId, setComponent: (RuntimeObj obj) =>
                {
                    (obj.obj as CharacterRuntimeObj).SetPosition(pos);
-               }); 
-             
-          
-            return runtimeObj;
+                   if (setComponent != null)
+                   {
+                       setComponent(obj);
+                   }
+               });
         }
-        return null;
     }
 
-    public async Task RefreshNpcRuntimeObj(Character character, bool controller = false,bool RefreshMapTemp=true)
+    public void RefreshNpcRuntimeObj(Character character, bool controller = false, bool RefreshMapTemp = true)
     {
         CharacterRuntimeObj characterRuntimeObj;
 
@@ -1407,7 +1401,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             if (character.mapInstance != WorldMapObjManager.instance.displayMap
                 || ExploreManager.instance.isExplore)
-            { 
+            {
                 RecycleCharacterObj(character);
                 if (character == controllerCharacter)
                 {
@@ -1415,7 +1409,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
                 //Debug.Log($"{character.name}--SetObjCoordinate:RecycleCharacterOb");
             }
-            else 
+            else
             {
                 Vector3 pos = GameCommon.GetMapPos(character.coordinate);
                 var transform = characterRuntimeObj.transform;
@@ -1431,7 +1425,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
                 characterRuntimeObj.SetPosition(pos);
                 if (controller)
-                { 
+                {
                     CameraManager.instance.SetFollowTarget(transform);
                 }
                 if (RefreshMapTemp)
@@ -1442,24 +1436,21 @@ public class CharacterManager : Singleton<CharacterManager>
                     };
                     GameActionManager.instance.QueueAction(refreshMapTempCharacter);
                 }
-               
 
-               //Debug.Log($"{character.name}--SetObjCoordinate:{character.coordinate}--pos{pos}");
+                //Debug.Log($"{character.name}--SetObjCoordinate:{character.coordinate}--pos{pos}");
             }
         }
         else
         {
-             
             if (character.mapInstance == WorldMapObjManager.instance.displayMap && !ExploreManager.instance.isExplore)
             {
-                if(character is TempCharacter)
+                if (character is TempCharacter)
                 {
                     AddCharacter(character);
                 }
-
-                await CreateCharacterObjAsync(character); 
+                CreateCharacterObj(character);
             }
-        } 
+        }
     }
 
     public void RecycleCharacter()
@@ -1468,7 +1459,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             foreach (var characterRuntime in characterRuntionObjs)
             {
-                characterRuntime.Value.Clear(); 
+                characterRuntime.Value.Clear();
                 FishController.instance.RecycleFisherObj(characterRuntime.Key.instanceId);
             }
         }
@@ -1477,35 +1468,34 @@ public class CharacterManager : Singleton<CharacterManager>
             foreach (var characterRuntime in characterRuntionObjs)
             {
                 characterRuntime.Value.Dispose();
-              
             }
         }
-       
+
         characterRuntionObjs.Clear();
         displayCharacters.Clear();
     }
 
-    public async Task RefreshNpcRuntimeObj()
+    public void RefreshNpcRuntimeObj()
     {
-        for(int i = characters.length-1; i >=0; i--)
+        for (int i = characters.length - 1; i >= 0; i--)
         {
             var character = characters[i];
-            if (character.mapInstance != WorldMapObjManager.instance.displayMap||ExploreManager.instance.isExplore)
+            if (character.mapInstance != WorldMapObjManager.instance.displayMap || ExploreManager.instance.isExplore)
             {
-                if(characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
+                if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
                 {
                     RecycleCharacterObj(character);
                 }
-                if(character is TempCharacter tempCharacter)
+                if (character is TempCharacter tempCharacter)
                 {
                     DestroyCharacter(character.instanceId);
                 }
             }
-            else if(!displayCharacters.Contains(character))
+            else if (!displayCharacters.Contains(character))
             {
                 if (!characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
                 {
-                    await CreateCharacterObjAsync(character);
+                    CreateCharacterObj(character);
                 }
                 else
                 {
@@ -1521,7 +1511,7 @@ public class CharacterManager : Singleton<CharacterManager>
                     Transform transform = characterRuntimeObj.transform;
                     transform.localPosition = pos;
                 }
-            } 
+            }
         }
 
         //CharacterManager.SetShaderPlayerPos(ControllerRuntimeObj.transform.position);
@@ -1555,7 +1545,7 @@ public class CharacterManager : Singleton<CharacterManager>
             controllerCharacter.mapInstance, (Stack<int2> pathNodes) =>
             {
                 controllerCharacter.PlayerMove(pathNodes);
-            }); 
+            });
     }
 
     /// <summary>
@@ -1726,7 +1716,7 @@ public class CharacterManager : Singleton<CharacterManager>
     private void ControllerMove(Vector2 _moveDirection)
     {
         controllerCharacter.moveDirection = _moveDirection;
-      // Debug.Log($" Set_moveDirection{_moveDirection}");
+        // Debug.Log($" Set_moveDirection{_moveDirection}");
         if (_moveDirection == Vector2.zero)
         {
             return;
@@ -1748,7 +1738,7 @@ public class CharacterManager : Singleton<CharacterManager>
                         length = length
                     };
                     GameActionManager.instance.QueueAction(tryTeamLeaderMove, true);
-                    ControllerRuntimeObj.SetPosition(new Vector3(targetPos.x, targetPos.y, controllerTransform.position.z)); 
+                    ControllerRuntimeObj.SetPosition(new Vector3(targetPos.x, targetPos.y, controllerTransform.position.z));
                     //Debug.Log("SetShaderPlayerPos7");
 
                     if (controllerCharacter.coordinate.x != targetCoordinate.x ||
@@ -1845,7 +1835,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             characters.TryGetValue(SetCharacterDirection.characterId, out character);
         }
-        if (character!=null)
+        if (character != null)
         {
             if (SetCharacterDirection.directionEnum != Direction.Default)
             {
@@ -1855,7 +1845,6 @@ public class CharacterManager : Singleton<CharacterManager>
             {
                 character.moveDirection = SetCharacterDirection.direction;
             }
-           
         }
     }
 }

@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -57,7 +55,7 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
         Start.onClick.AddListener(StartAction);
         Return.onClick.AddListener(async () =>
         {
-           await UIManager.instance.ShowGamePanel<ZeroPanel>();
+            await UIManager.instance.ShowGamePanel<ZeroPanel>();
             Close();
         });
 
@@ -78,18 +76,18 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
 
     private UserGameSaveData selectGameSaveData;
 
-    public override async void InitReferenceData(UserGameSaveDataList v)
+    public override void InitReferenceData(UserGameSaveDataList v)
     {
         base.InitReferenceData(v);
         selectGameSaveData = v.nowSaveData;
-        await SaveReference.InitData(v.nowSaveData, SelectAction, toggleGroup);
-        await saveList.InitListData(v.userGameSaveDatas, SelectAction, toggleGroup);
+        SaveReference.InitData(v.nowSaveData, SelectAction, toggleGroup);
+        saveList.InitListData(v.userGameSaveDatas, SelectAction, toggleGroup);
         SaveReference.SelectDefault();
     }
 
     private void StartAction()
     {
-        if (selectGameSaveData!=null)
+        if (selectGameSaveData != null)
         {
             GameDataSaveManager.instance.loadingIndex = selectGameSaveData.index;
 
@@ -103,13 +101,13 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
         }
     }
 
-    private async void CopyDataAsync()
+    private void CopyDataAsync()
     {
         if (!string.IsNullOrEmpty(selectGameSaveData.saveTime))
         {
             GameDataSaveManager.instance.CopySaveData(selectGameSaveData);
-            await SaveReference.InitData(data.nowSaveData, SelectAction, toggleGroup);
-            await saveList.InitListData(data.userGameSaveDatas, SelectAction, toggleGroup);
+            SaveReference.InitData(data.nowSaveData, SelectAction, toggleGroup);
+            saveList.InitListData(data.userGameSaveDatas, SelectAction, toggleGroup);
             SaveReference.SelectDefault();
         }
         else
@@ -117,11 +115,11 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
         }
     }
 
-    private async void DeleteData()
+    private void DeleteData()
     {
         GameDataSaveManager.instance.DeleteSaveData(selectGameSaveData);
-        await SaveReference.InitData(data.nowSaveData, SelectAction, toggleGroup);
-        await saveList.InitListData(data.userGameSaveDatas, SelectAction, toggleGroup);
+        SaveReference.InitData(data.nowSaveData, SelectAction, toggleGroup);
+        saveList.InitListData(data.userGameSaveDatas, SelectAction, toggleGroup);
         SaveReference.SelectDefault();
     }
 }

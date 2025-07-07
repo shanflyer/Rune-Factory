@@ -112,11 +112,11 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
         InitData();
     }
 
-    public override Task InitData(string dataKay)
+    public override void InitData(string dataKay)
     {
         AudioController.instance.StopBgm();
         Shader.SetGlobalVector("_PlayerPos", Vector3.zero);
-        return base.InitData(dataKay);
+        base.InitData(dataKay);
     }
 
     private void SelectDate(int index)

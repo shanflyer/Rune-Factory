@@ -1,21 +1,19 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 public class MyInstance : Singleton<MyInstance>
 {
-    HashSet<int> instanceIds = new HashSet<int>();
-    Random random = new Random();
+    private HashSet<int> instanceIds = new HashSet<int>();
+    private Random random = new Random();
 
-   
     public override void Init()
     {
         base.Init();
         tempUid = 100_000;
         uid = 100_000;
         characterId = 10_000;
-
     }
+
     public int TempUid
     {
         get
@@ -24,7 +22,9 @@ public class MyInstance : Singleton<MyInstance>
             return tempUid;
         }
     }
+
     private int tempUid;
+
     public int CharacterId
     {
         get
@@ -33,7 +33,9 @@ public class MyInstance : Singleton<MyInstance>
             return characterId;
         }
     }
+
     private int characterId;
+
     public int Uid
     {
         get
@@ -42,8 +44,10 @@ public class MyInstance : Singleton<MyInstance>
             return uid;
         }
     }
+
     private int uid;
     public int MaxUid => uid;
+
     public int CreateInstanceId()
     {
         while (true)
@@ -59,7 +63,6 @@ public class MyInstance : Singleton<MyInstance>
         }
     }
 
- 
     protected override void Clear()
     {
         instanceIds.Clear();

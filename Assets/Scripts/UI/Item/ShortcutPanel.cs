@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,10 +23,11 @@ public struct ShortcutItem : IReferenceData
 
         return false;
     }
+
     public bool Equals(Object @object)
     {
         ShortcutItem other = (ShortcutItem)@object;
-        if (other!=null)
+        if (other != null)
         {
             if (index == other.index)
             {
@@ -83,25 +83,25 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
 
     [SerializeField]
     private ShortcutItemReference ShortcutItemReference;
+
     [SerializeField]
     private Button useButton, unEquipButton;
 
     public override void OnEnable()
     {
-        base.OnEnable(); 
+        base.OnEnable();
     }
 
     public override void OnDisable()
     {
         base.OnDisable();
-         
     }
 
     protected override void Awake()
     {
         base.Awake();
         itemList = new DisplayList<ShortcutItemReference, ShortcutItem>(ShortcutItemReference, itemParent);
-        bagButton.onClick.AddListener( () =>
+        bagButton.onClick.AddListener(() =>
         {
             if (UIManager.instance.GamePanelIsShow<WarehousePanel>())
             {
@@ -132,7 +132,8 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
         useButton.onClick.AddListener(UseItemAction);
         unEquipButton.onClick.AddListener(UnEquipAction);
     }
-    void UseItemAction()
+
+    private void UseItemAction()
     {
         ItemUseAction itemUseAction = new ItemUseAction
         {
@@ -142,7 +143,8 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
         };
         GameActionManager.instance.QueueAction(itemUseAction, true);
     }
-    void UnEquipAction()
+
+    private void UnEquipAction()
     {
         RemoveShortcutItem removeShortcutItem = new RemoveShortcutItem
         {
@@ -155,8 +157,7 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
 
     private Item selectPackageItem;
 
-  
-    private void TryUsedItem(Item item,bool select)
+    private void TryUsedItem(Item item, bool select)
     {
         ItemUseAction itemUseAction = new ItemUseAction
         {
@@ -180,22 +181,22 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
 
     private ShortcutPackage shortcutPackage;
 
-    public override Task InitData(string dataKey)
+    public override void InitData(string dataKey)
     {
         useButton.interactable = unEquipButton.interactable = false;
         var shortcutPackage = ShortcutManager.instance.GetShortcutPackage(CharacterManager.instance.controllerCharacter.instanceId);
         InitReferenceData(shortcutPackage);
-        return base.InitData(dataKey);
+        base.InitData(dataKey);
     }
 
-    public override async void InitReferenceData(ShortcutPackage v)
+    public override void InitReferenceData(ShortcutPackage v)
     {
         useButton.interactable = unEquipButton.interactable = false;
         base.InitReferenceData(v);
         shortcutPackage = v;
         var items = v.GetShortcutItems();
 
-        await itemList.InitListData(items, SelectShortcutItem,toggleGroup,Async:false);
+        itemList.InitListData(items, SelectShortcutItem, toggleGroup, Async: false);
         if (shortcutItem.Item.instanceId == 0)
         {
         }
@@ -234,13 +235,12 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
             SetPackageSelectItem setPackageSelectItem = new SetPackageSelectItem
             {
                 packageId = shortcutPackage.packagerId,
-                selectItem = selectPackageItem.instanceId!=0? selectPackageItem.instanceId: selectPackageItem.dataId
+                selectItem = selectPackageItem.instanceId != 0 ? selectPackageItem.instanceId : selectPackageItem.dataId
             };
             GameActionManager.instance.QueueAction(setPackageSelectItem);
         }
         else
         {
-            
             if (selectShortIndex == item.index)
             {
                 selectShortIndex = 0;

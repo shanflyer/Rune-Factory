@@ -1,28 +1,31 @@
-﻿
-using System.Threading.Tasks;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-public  class CommitterPanel:GamePanel<IReferenceData>
+
+public class CommitterPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
-    Button CloseBtn;
+    private Button CloseBtn;
+
     [SerializeField]
-    TextMeshProUGUI info;
+    private TextMeshProUGUI info;
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
         CloseBtn = FindChildGameObject<Button>("Close");
         info = FindChildGameObject<TextMeshProUGUI>("Info");
     }
-    public override async Task InitData(string dataKey)
+
+    public override async void InitData(string dataKey)
     {
         string text = await CloudRemoteConfig.instance.GetConfig("Committer");
-        info.text = text; 
+        info.text = text;
     }
+
     protected override void Awake()
     {
-        base.Awake(); 
+        base.Awake();
         CloseBtn.onClick.AddListener(Close);
     }
 }

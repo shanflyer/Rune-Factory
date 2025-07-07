@@ -35,9 +35,9 @@ public class FormulaTypeReference : UIObjReference<FormulaTypeData>
         typeName = FindChildGameObject<TextMeshProUGUI>("TypeName");
     }
 
-    public override async Task InitData(FormulaTypeData t, SelectAction<FormulaTypeData> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override void InitData(FormulaTypeData t, SelectAction<FormulaTypeData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-       await base.InitData(t, SelectAction, toggleGroup);
+        base.InitData(t, SelectAction, toggleGroup);
         typeName.SetSWText(data.formulaType);
     }
 

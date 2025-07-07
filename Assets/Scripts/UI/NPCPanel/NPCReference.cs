@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -62,15 +61,15 @@ public class NPCReference : UIObjReference<NPC>
         toggle = GetComponent<Toggle>();
     }
 
-    public override async Task InitData(NPC t, SelectAction<NPC> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override async void InitData(NPC t, SelectAction<NPC> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-         await base.InitData(t, SelectAction, toggleGroup);
+        base.InitData(t, SelectAction, toggleGroup);
         toggle.group = toggleGroup;
 
         CharacterData characterData = await data.GetCharacterData();
-        characterData.head.SetImageSprite(Icon,new Vector2(512,512));
-         
-        NPCName.SetADDText("+ ", characterData.characterName," +");
+        characterData.head.SetImageSprite(Icon, new Vector2(512, 512));
+
+        NPCName.SetADDText("+ ", characterData.characterName, " +");
 
         FriendValue.SetSWText(FriendManager.instance.GetFriendShipLevel(data.characterInstance));
         StateValue.SetSWText(data.npcState.ToString());

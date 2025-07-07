@@ -67,7 +67,7 @@ public class MainPanel : GamePanel<IReferenceData>
             UIManager.instance.ShowGamePanel<MyTalkPanel>();
         });
     }
-    public override Task InitData(string dataKey)
+    public override void InitData(string dataKey)
     {
         var playerTeam = TeamManager.instance.playerTeam;
         if (playerTeam != null && playerTeam.Teamers.Count > 1)
@@ -79,7 +79,7 @@ public class MainPanel : GamePanel<IReferenceData>
             TeamButton.gameObject.SetActive(false);
         }
         
-        return base.InitData(dataKey);
+        base.InitData(dataKey);
        
     }
 }

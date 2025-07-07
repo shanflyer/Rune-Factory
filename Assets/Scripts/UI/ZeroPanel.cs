@@ -107,11 +107,11 @@ public class ZeroPanel : GamePanel<IReferenceData>
         await UIManager.instance.ShowGamePanel<SelectCharacterPanel>();
     }
 
-    public override Task InitData(string dataKay)
+    public override void InitData(string dataKay)
     {
         selectPanel.localScale = Vector3.zero;
         start.transform.localScale = Vector3.one;
         PlayZeroBGM();
-        return base.InitData(dataKay);
+        base.InitData(dataKay);
     }
 }

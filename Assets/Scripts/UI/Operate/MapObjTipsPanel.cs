@@ -15,10 +15,10 @@ public class MapObjTipsPanel : GamePanel<IReferenceData>
         base.SetPanelUISerializeObj();
         infoText = FindChildGameObject<TextMeshProUGUI>("Info");
     }
-    public override Task InitData(string dataKey)
+    public override void InitData(string dataKey)
     {
         infoText.SetSWText(dataKey);
-        return base.InitData(dataKey);
+        base.InitData(dataKey);
     }  
 
 }

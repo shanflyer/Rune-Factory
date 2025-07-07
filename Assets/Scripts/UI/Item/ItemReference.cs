@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,12 +21,11 @@ public class ItemReference : UIObjReference<Item>
     private Item item;
     private ItemData itemData;
 
-
     private void Awake()
     {
     }
 
-    public override async Task InitData(Item t, SelectAction<Item> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override async void InitData(Item t, SelectAction<Item> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         this.item = t;
         this.SelectAction = SelectAction;
@@ -35,6 +33,6 @@ public class ItemReference : UIObjReference<Item>
 
         icon.sprite = itemData.icon;
         text.text = item.count.ToString();
-       await base.InitData(t, SelectAction);
+        base.InitData(t, SelectAction);
     }
 }

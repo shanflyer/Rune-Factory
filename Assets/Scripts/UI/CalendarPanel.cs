@@ -1,30 +1,36 @@
-﻿using System.Collections;
-using System.Collections.Generic; 
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class CalendarPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
     private Button nextMonthButton, forwardMonthButton;
+
     [SerializeField]
     private ToggleGroup DatesParent;
+
     [SerializeField]
     private DateReference dateReference;
+
     [SerializeField]
     private TextMeshProUGUI DataTimeText;
+
     [SerializeField]
     private TextMeshProUGUI festivaltext;
+
     [SerializeField]
     private Button returnButton;
+
     [SerializeField]
-    Animator BookPaper;
+    private Animator BookPaper;
+
     private int date;
     private int year;
     private Season season;
     private DisplayList<DateReference, GameDate> dateReferences;
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -37,20 +43,22 @@ public class CalendarPanel : GamePanel<IReferenceData>
         festivaltext = FindChildGameObject<TextMeshProUGUI>("festival");
         BookPaper = FindChildGameObject<Animator>("Book2p");
     }
+
     protected override void Awake()
     {
         base.Awake();
 
         dateReferences = new DisplayList<DateReference, GameDate>(dateReference, DatesParent.transform);
         returnButton.onClick.AddListener(() =>
-        { 
+        {
             Close();
         });
 
         nextMonthButton.onClick.AddListener(NextMonth);
         forwardMonthButton.onClick.AddListener(ForwardMonth);
     }
-    public override Task InitData(string dataKay)
+
+    public override void InitData(string dataKay)
     {
         BookPaper.gameObject.SetActive(false);
         year = GameTimeManager.instance.Year;
@@ -64,17 +72,16 @@ public class CalendarPanel : GamePanel<IReferenceData>
         else
         {
             forwardMonthButton.gameObject.SetActive(true);
-        } 
-        
-        return base.InitData(dataKay);
+        }
+
+        base.InitData(dataKay);
     }
-    
-    void AfterDisplay()
+
+    private void AfterDisplay()
     {
         date = GameTimeManager.instance.Day;
         DataTimeText.text = LanguageManage.instance.GameTimeToString(year, season);
-        
-         
+
         /* DatesParent.transform.GetChild(date - 1).GetComponentInChildren<Toggle>().isOn =
            true;*/
         dateReferences.SelectIndex(date - 1);
@@ -86,16 +93,17 @@ public class CalendarPanel : GamePanel<IReferenceData>
         {
             forwardMonthButton.gameObject.SetActive(true);
         }
-        if (year == GameTimeManager.instance.Year&&season==GameTimeManager.instance.Season)
+        if (year == GameTimeManager.instance.Year && season == GameTimeManager.instance.Season)
         {
             dateReferences.GetReference(date - 1).DisplayToday();
         }
     }
-    void ForwardMonth()
+
+    private void ForwardMonth()
     {
-       // BookPaper.gameObject.SetActive(true);
-       //BookPaper.Play("Paper1");
-       // GameTimerController.instance.DelayAction(820, () => BookPaper.gameObject.SetActive(false));
+        // BookPaper.gameObject.SetActive(true);
+        //BookPaper.Play("Paper1");
+        // GameTimerController.instance.DelayAction(820, () => BookPaper.gameObject.SetActive(false));
         int seasonId = (int)season;
         if (seasonId > 1)
         {
@@ -108,48 +116,49 @@ public class CalendarPanel : GamePanel<IReferenceData>
         }
         season = (Season)seasonId;
         CreatSeason(season);
-        AfterDisplay(); 
+        AfterDisplay();
     }
-    void NextMonth()
+
+    private void NextMonth()
     {
         //BookPaper.gameObject.SetActive(true);
         //BookPaper.Play("Paper");
-        GameTimerController.instance.DelayAction(820, ()=>BookPaper.gameObject.SetActive(false));
+        GameTimerController.instance.DelayAction(820, () => BookPaper.gameObject.SetActive(false));
         int seasonId = (int)season;
         if (seasonId < 4)
         {
             seasonId++;
         }
-        else if(seasonId==4)
+        else if (seasonId == 4)
         {
             seasonId = 1;
             year++;
         }
-        season = (Season) seasonId;
+        season = (Season)seasonId;
         CreatSeason(season);
         AfterDisplay();
-    } 
-    async void CreatSeason(Season season)
+    }
+
+    private void CreatSeason(Season season)
     {
-        List<GameDate> gameDates = GameTimeManager.instance.GetGameDataForSeason(season);  
+        List<GameDate> gameDates = GameTimeManager.instance.GetGameDataForSeason(season);
         if (DatesParent.transform.childCount > gameDates.Count)
         {
-            for(int i = gameDates.Count; i < DatesParent.transform.childCount; i++)
+            for (int i = gameDates.Count; i < DatesParent.transform.childCount; i++)
             {
                 Destroy(DatesParent.transform.GetChild(i).gameObject);
             }
         }
-        await  dateReferences.InitListData(gameDates,DisplayClickDate,DatesParent,Async:false);
+        dateReferences.InitListData(gameDates, DisplayClickDate, DatesParent, Async: false);
         AfterDisplay();
     }
 
-
-    void DisplayClickDate(GameDate _gameDate,bool value)
+    private void DisplayClickDate(GameDate _gameDate, bool value)
     {
         if (value)
         {
             date = _gameDate.date;
-            DataTimeText.text=_gameDate.ToString(year);  
+            DataTimeText.text = _gameDate.ToString(year);
 
             List<string> festivalStr = new List<string>();
             if (_gameDate.FestivaList != null)
@@ -161,7 +170,7 @@ public class CalendarPanel : GamePanel<IReferenceData>
                     festivalStr.Add("\n");
                 }
             }
-            
+
             if (year == GameTimeManager.instance.Year)
             {
                 if (_gameDate.CustomFestival != null)
@@ -172,7 +181,7 @@ public class CalendarPanel : GamePanel<IReferenceData>
                         festivalStr.Add(festivalData.name);
                         festivalStr.Add("\n");
                     }
-                } 
+                }
             }
             if (festivalStr.Count > 0)
             {
@@ -180,10 +189,8 @@ public class CalendarPanel : GamePanel<IReferenceData>
             }
             else
             {
-                festivaltext.text="";
+                festivaltext.text = "";
             }
-            
-        } 
+        }
     }
-	
 }

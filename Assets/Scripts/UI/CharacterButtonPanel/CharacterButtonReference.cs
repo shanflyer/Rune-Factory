@@ -28,7 +28,7 @@ public class CharacterButtonReference : UIObjReference<MyInt>
         } );
         
     }
-    public override Task InitData(MyInt t, SelectAction<MyInt> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override void InitData(MyInt t, SelectAction<MyInt> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         
         Character character = CharacterManager.instance.GetCharacter(t.value);
@@ -44,6 +44,6 @@ public class CharacterButtonReference : UIObjReference<MyInt>
             }
            
         }
-        return base.InitData(t, SelectAction, toggleGroup);
+        base.InitData(t, SelectAction, toggleGroup);
     }
 }

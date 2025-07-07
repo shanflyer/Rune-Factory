@@ -38,9 +38,9 @@ public class ShopSelectReference : UIObjReference<Shop>
         shopName1 = FindChildGameObject<TextMeshProUGUI>("ShopName1");
     }
 
-    public override async Task InitData(Shop t, SelectAction<Shop> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override void InitData(Shop t, SelectAction<Shop> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        await base.InitData(t, SelectAction, toggleGroup);
+         base.InitData(t, SelectAction, toggleGroup);
         toggle.group = toggleGroup;
         this.SelectAction = SelectAction;
         shopName0.SetSWText(data.shopName);

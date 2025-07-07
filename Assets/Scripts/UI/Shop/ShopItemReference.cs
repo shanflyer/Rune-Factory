@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -36,12 +35,12 @@ public class ShopItemReference : UIObjReference<ShopItemData>
         moneyIcon = FindChildGameObject<Image>("MoneyIcon");
         moneyValue = FindChildGameObject<TextMeshProUGUI>("MoneyValue");
     }
-     
+
     private ShopItemData ShopItemData;
 
-    public override async Task InitData(ShopItemData t, SelectAction<ShopItemData> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override async void InitData(ShopItemData t, SelectAction<ShopItemData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        await base.InitData(t, SelectAction, toggleGroup);
+        base.InitData(t, SelectAction, toggleGroup);
         ShopItemData = t;
         toggle.group = toggleGroup;
         this.SelectAction = SelectAction;

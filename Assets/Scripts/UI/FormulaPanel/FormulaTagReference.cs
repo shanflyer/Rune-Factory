@@ -37,9 +37,9 @@ public class FormulaTagReference : UIObjReference<FormulaType>
         tagName = FindChildGameObject<TextMeshProUGUI>("Name");
     }
 
-    public override Task InitData(FormulaType t, SelectAction<FormulaType> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override void InitData(FormulaType t, SelectAction<FormulaType> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         tagName.SetSWText(t.ToString());
-        return base.InitData(t, SelectAction, toggleGroup);
+        base.InitData(t, SelectAction, toggleGroup);
     }
 }

@@ -13,14 +13,14 @@ public class FunctionInfoReference:UIObjReference<InfoData>
         text = GetComponentInChildren<TextMeshProUGUI>();
     }
  
-    public override Task InitData(string dataKey)
+    public override void InitData(string dataKey)
     {
         text.SetSWText(dataKey);
-        return base.InitData(dataKey);
+        base.InitData(dataKey);
     }
-    public override Task InitData(InfoData t, SelectAction<InfoData> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override void InitData(InfoData t, SelectAction<InfoData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         text.SetSWText(t.text);
-        return base.InitData(t, SelectAction, toggleGroup);
+        base.InitData(t, SelectAction, toggleGroup);
     }
 }

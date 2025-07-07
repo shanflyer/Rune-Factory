@@ -1,28 +1,29 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 public delegate void SetComponent(RuntimeObj RuntimeObj);
-public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>  
-{  
-    Dictionary<string, Transform> objParents = new Dictionary<string, Transform>();
-    Dictionary<string, Dictionary<string, Stack<RuntimeObj>>> unusedRuntimeObjs = 
+
+public class GameRuntimeObjManager : Singleton<GameRuntimeObjManager>
+{
+    private Dictionary<string, Transform> objParents = new Dictionary<string, Transform>();
+
+    private Dictionary<string, Dictionary<string, Stack<RuntimeObj>>> unusedRuntimeObjs =
         new Dictionary<string, Dictionary<string, Stack<RuntimeObj>>>();
+
     public override void Init()
     {
         base.Init();
     }
+
     protected override void Clear()
     {
         base.Clear();
-        foreach(var dc in unusedRuntimeObjs.Values)
+        foreach (var dc in unusedRuntimeObjs.Values)
         {
-            foreach(var d in dc.Values)
+            foreach (var d in dc.Values)
             {
-                foreach(var r in d)
+                foreach (var r in d)
                 {
                     if (r.dispose != null)
                     {
@@ -32,24 +33,25 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
             }
         }
     }
+
     public void ClearRuntime<T>() where T : Enum
-    { 
+    {
         foreach (var type in typeof(T).GetEnumValues())
         {
-            string runtimeObjType = type.ToString(); 
+            string runtimeObjType = type.ToString();
             unusedRuntimeObjs.Remove(runtimeObjType);
 
             objParents.Remove(runtimeObjType);
-        } 
+        }
     }
-    public void CreatParent<T>(Transform parent )where T:Enum
-    {
 
+    public void CreatParent<T>(Transform parent) where T : Enum
+    {
         var runtimeObjParent = new GameObject("RuntimeObjParent").transform;
         runtimeObjParent.SetParent(parent);
         foreach (var type in typeof(T).GetEnumValues())
         {
-           string runtimeObjType = type.ToString();
+            string runtimeObjType = type.ToString();
             if (objParents.ContainsKey(runtimeObjType))
             {
                 continue;
@@ -59,31 +61,30 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
             objParents.Add(runtimeObjType, obj.transform);
         }
     }
-    
-    bool GetRuntimeObj(string runtimeObjType,string key,out RuntimeObj runtimeObj)
+
+    private bool GetRuntimeObj(string runtimeObjType, string key, out RuntimeObj runtimeObj)
     {
-        if(unusedRuntimeObjs.TryGetValue(runtimeObjType,out Dictionary<string, Stack<RuntimeObj>> selectRuntimeObjs))
+        if (unusedRuntimeObjs.TryGetValue(runtimeObjType, out Dictionary<string, Stack<RuntimeObj>> selectRuntimeObjs))
         {
             Stack<RuntimeObj> runtimeObjs;
-            if (selectRuntimeObjs.TryGetValue(key,out runtimeObjs))
+            if (selectRuntimeObjs.TryGetValue(key, out runtimeObjs))
             {
-               // unusedRuntimeObjs[runtimeObjType].Remove(key);
+                // unusedRuntimeObjs[runtimeObjType].Remove(key);
                 if (runtimeObjs.Count > 0)
                 {
-                    runtimeObj= runtimeObjs.Pop();
+                    runtimeObj = runtimeObjs.Pop();
                     return true;
                 }
-
-            } 
+            }
         }
         runtimeObj = null;
         return false;
     }
- 
-    public RuntimeObj CreateRuntimeObj<T>(string runtimeObjType,string key,T objPre,int linkId,
-        Transform overrideParent=null,bool isActive=true, SetComponent setComponent=null) where T:Component
+
+    public RuntimeObj CreateRuntimeObj<T>(string runtimeObjType, string key, T objPre, int linkId,
+        Transform overrideParent = null, bool isActive = true, SetComponent setComponent = null) where T : Component
     {
-        if(!objParents.TryGetValue(runtimeObjType,out Transform parent))
+        if (!objParents.TryGetValue(runtimeObjType, out Transform parent))
         {
             parent = new GameObject(runtimeObjType).transform;
             objParents[runtimeObjType] = parent;
@@ -109,7 +110,7 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
                     setComponent.Invoke(runtimeObj);
                 }
             };
-          
+
             runtimeObj.runtimeObjType = runtimeObjType;
             runtimeObj.key = key;
         }
@@ -120,14 +121,15 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
                 setComponent.Invoke(runtimeObj);
             }
         }
-        runtimeObj.linkId = linkId; 
+        runtimeObj.linkId = linkId;
         runtimeObj.use = true;
         return runtimeObj;
     }
-    public void RecycleRuntimeObj(RuntimeObj runtimeObj,bool setActive=true)
+
+    public void RecycleRuntimeObj(RuntimeObj runtimeObj, bool setActive = true)
     {
-        if(runtimeObj.obj != null)
-        {  
+        if (runtimeObj.obj != null)
+        {
             runtimeObj.use = false;
             var component = runtimeObj.obj as Component;
 
@@ -139,7 +141,7 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
             {
                 component.gameObject.SetActive(false);
             }
-           
+
             Dictionary<string, Stack<RuntimeObj>> objs;
             if (!unusedRuntimeObjs.TryGetValue(runtimeObj.runtimeObjType, out objs))
             {
@@ -152,28 +154,27 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
                 runtimeObjs = new Stack<RuntimeObj>();
                 objs[runtimeObj.key] = runtimeObjs;
             }
-            if(runtimeObjs.Count <10||!setActive)
+            if (runtimeObjs.Count < 10 || !setActive)
             {
                 runtimeObjs.Push(runtimeObj);
             }
             else
             {
-                GameObject.Destroy(component.gameObject); 
+                GameObject.Destroy(component.gameObject);
             }
-           
         }
         //runtimeObj = null;
     }
 
     public void SetObjParent(string runtimeObjType, bool hide)
     {
-        if(objParents.TryGetValue(runtimeObjType,out var parent))
+        if (objParents.TryGetValue(runtimeObjType, out var parent))
         {
             parent.localPosition = hide ? new Vector3(0, 0, -10000) : Vector3.zero;
         }
     }
-
 }
+
 public class RuntimeObj
 {
     public Component obj;

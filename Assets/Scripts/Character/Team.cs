@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -16,7 +15,7 @@ public class TeamManager : Singleton<TeamManager>
                 {
                     return team;
                 }
-                CreatTeam(CharacterManager.instance.controllerCharacter);
+                CreateTeam(CharacterManager.instance.controllerCharacter);
                 return teams[CharacterManager.instance.controllerCharacter.instanceId];
             }
             catch
@@ -113,11 +112,11 @@ public class TeamManager : Singleton<TeamManager>
         }
     }
 
-    public async Task<bool> LeaveTeam(int characterId)
+    public bool LeaveTeam(int characterId)
     {
         if (teams.TryGetValue(characterId, out var team))
         {
-           await team.RemoveCharacter(characterId);
+            team.RemoveCharacter(characterId);
             return true;
         }
 
@@ -131,9 +130,7 @@ public class TeamManager : Singleton<TeamManager>
         }
         if (team != null)
         {
-            if (await team.RemoveCharacter(characterId))
-            {
-            }
+            team.RemoveCharacter(characterId);
             return true;
         }
         return false;
@@ -151,7 +148,7 @@ public class TeamManager : Singleton<TeamManager>
         return false;
     }
 
-    public void CreatTeam(Character character)
+    public void CreateTeam(Character character)
     {
         if (!teams.ContainsKey(character.instanceId))
         {
@@ -173,6 +170,7 @@ public class TeamManager : Singleton<TeamManager>
         GameActionManager.instance.AddListener<CheckIsNotInTeam>(CheckInTeam);
         GameActionManager.instance.AddListener<DestroyTeam>(DestroyTeam);
     }
+
     private void CheckInTeam(CheckIsNotInTeam checkInTeam)
     {
         if (IsInTeam(checkInTeam.characterId))
@@ -182,9 +180,10 @@ public class TeamManager : Singleton<TeamManager>
         }
         checkInTeam.setResult(true);
     }
-    private async void LeaveTeam(LeaveTeam leaveTeam)
+
+    private void LeaveTeam(LeaveTeam leaveTeam)
     {
-        bool result = await LeaveTeam(leaveTeam.teamCharacterId);
+        bool result = LeaveTeam(leaveTeam.teamCharacterId);
         RefreshAnimalPos refreshAnimalPos = new RefreshAnimalPos
         {
             animalId = leaveTeam.teamCharacterId
@@ -220,7 +219,8 @@ public class TeamManager : Singleton<TeamManager>
             team.TeamLeaderMove(tryTeamLeaderMove.length);
         }
     }
-    private async void DestroyTeam(DestroyTeam destroyTeam)
+
+    private void DestroyTeam(DestroyTeam destroyTeam)
     {
         int id = destroyTeam.teamCharacterId;
         if (id == 0)
@@ -229,10 +229,11 @@ public class TeamManager : Singleton<TeamManager>
         }
         if (teams.TryGetValue(id, out var team))
         {
-            await team.Clear();
+            team.Clear();
             teams.Remove(id);
         }
     }
+
     private void CreateTeam(CreatTeamPlayer createTeamPlayer)
     {
         for (int i = 0; i < createTeamPlayer.players.Count; i++)
@@ -246,7 +247,7 @@ public class TeamManager : Singleton<TeamManager>
             {
                 characterId = id,
                 teamCharacterId = CharacterManager.instance.controllerCharacter.instanceId,
-                holdDisplay=createTeamPlayer.holdDisplay
+                holdDisplay = createTeamPlayer.holdDisplay
             };
             GameActionManager.instance.QueueAction(joinTeam, true);
         }
@@ -254,7 +255,7 @@ public class TeamManager : Singleton<TeamManager>
 
     private void JoinTeam(JoinTeam joinTeam)
     {
-        if(joinTeam.teamCharacterId==0|| joinTeam.teamCharacterId == int.MinValue)
+        if (joinTeam.teamCharacterId == 0 || joinTeam.teamCharacterId == int.MinValue)
         {
             joinTeam.teamCharacterId = CharacterManager.instance.controllerCharacter.instanceId;
         }
@@ -299,7 +300,7 @@ public class TeamManager : Singleton<TeamManager>
             Team team1 = new Team(character);
             teams.Add(character.instanceId, team1);
 
-            bool result = team1.AddCharacter(joinTeam.characterId,joinTeam.holdDisplay);
+            bool result = team1.AddCharacter(joinTeam.characterId, joinTeam.holdDisplay);
             if (result)
             {
                 RefreshOperateCharacter refreshOperateCharacter = new RefreshOperateCharacter
@@ -317,21 +318,21 @@ public class TeamManager : Singleton<TeamManager>
             joinTeam.setResult(false);
     }
 
-    private async void RemoveCharacter(DestoryCharacter destoryCharacter)
+    private void RemoveCharacter(DestoryCharacter destoryCharacter)
     {
-      await  LeaveTeam(destoryCharacter.characterId);
+        LeaveTeam(destoryCharacter.characterId);
     }
 
     protected override void Clear()
-    { 
+    {
         base.Clear();
-        teams.Clear(); 
+        teams.Clear();
     }
 }
 
 public class Team
 {
-    public float speed => leader.CharacterProperty.Speed *0.01f;
+    public float speed => leader.CharacterProperty.Speed * 0.01f;
     public Character leader => Teamers[0].character;
     public List<Teamer> Teamers = new List<Teamer>();
     private HashSet<int> characterInstances = new HashSet<int>();
@@ -403,7 +404,7 @@ public class Team
         return characterInstances.Contains(characterId);
     }
 
-    public bool AddCharacter(int characterId,bool holdDisplay)
+    public bool AddCharacter(int characterId, bool holdDisplay)
     {
         if (characterInstances.Add(characterId))
         {
@@ -417,11 +418,11 @@ public class Team
                 List<float4> coordinates;
                 float4 targetCoordinate = SetLastCoordianteAndDircet(forwardCharacter, out coordinates);
                 Vector2 endPos = GameCommon.GetMapPos(forwardCharacter.coordinate);
-                if(CharacterManager.instance.GetRuntimeCharacterObj(forwardCharacter.instanceId,out var characterRuntimeObj))
+                if (CharacterManager.instance.GetRuntimeCharacterObj(forwardCharacter.instanceId, out var characterRuntimeObj))
                 {
                     endPos = characterRuntimeObj.transform.position;
                 }
-                teamer.SetNowCoordinate(targetCoordinate.xy, targetCoordinate.zw,holdDisplay, endPos);
+                teamer.SetNowCoordinate(targetCoordinate.xy, targetCoordinate.zw, holdDisplay, endPos);
                 // teamer.character.SetDirection(direction);
                 // teamer.character.SetCellOffset(forwardCharacter.GetCellOffset());
 
@@ -565,15 +566,16 @@ public class Team
         //  CharacterManager.instance.RefreshNpcRuntimeObj(nowCharacter);
     }
 
-    public async Task Clear()
+    public void Clear()
     {
         var characterIds = characterInstances.ToList();
-        for(int i = 0; i < characterIds.Count; i++)
+        for (int i = 0; i < characterIds.Count; i++)
         {
-           await RemoveCharacter(characterIds[i]);
+            RemoveCharacter(characterIds[i]);
         }
     }
-    public async Task<bool> RemoveCharacter(int characterid)
+
+    public bool RemoveCharacter(int characterid)
     {
         bool isLeader = leader.instanceId == characterid;
         int oldCharacterId = leader.instanceId;
@@ -600,12 +602,12 @@ public class Team
                         var forwardCharacter = Teamers[i - 1];
                         nextCharacter.queueCoordinate = forwardCharacter.queueCoordinate;
                         nextCharacter.queuePos = forwardCharacter.queuePos;
-                        nextCharacter.SetNowCoordinate(forwardCharacter.character.coordinate, forwardCharacter.character.moveDirection,false, forwardCharacter.endPos);
-                       await CharacterManager.instance.RefreshNpcRuntimeObj(nextCharacter.character,RefreshMapTemp:false);
+                        nextCharacter.SetNowCoordinate(forwardCharacter.character.coordinate, forwardCharacter.character.moveDirection, false, forwardCharacter.endPos);
+                        CharacterManager.instance.RefreshNpcRuntimeObj(nextCharacter.character, RefreshMapTemp: false);
                     }
                 }
                 Teamers[index].character.LeaveTeam();
-                Teamers.RemoveAt(index); 
+                Teamers.RemoveAt(index);
             }
             ReStartCharacterBehavior(characterid);
         }
@@ -654,10 +656,10 @@ public class Team
             {
                 var character = Teamers[1];
                 var forwardCharacter = Teamers[0];
-                character.AddQueueCoordinate(forwardCharacter.character.coordinate, forwardCharacter.character.moveDirection); 
-                if (CharacterManager.instance.GetRuntimeCharacterObj(forwardCharacter.character.instanceId,out var characterObj))
+                character.AddQueueCoordinate(forwardCharacter.character.coordinate, forwardCharacter.character.moveDirection);
+                if (CharacterManager.instance.GetRuntimeCharacterObj(forwardCharacter.character.instanceId, out var characterObj))
                 {
-                    character.AddQueuePos(new float2(characterObj.transform.position.x,characterObj.transform.position.y),forwardCharacter.character.moveDirection);
+                    character.AddQueuePos(new float2(characterObj.transform.position.x, characterObj.transform.position.y), forwardCharacter.character.moveDirection);
                 }
                 else
                 {
@@ -674,27 +676,27 @@ public class Teamer
     public int2 nowCoordinate;
     private float2 direction;
     public Queue<float4> queueCoordinate = new Queue<float4>();
-    public Queue<float4> queuePos = new Queue<float4>(); 
+    public Queue<float4> queuePos = new Queue<float4>();
     public Character character;
     public Teamer nextTeamer;
 
-    public async void SetNowCoordinate(float2 nowCoordinate, float2 directionValue,bool holdDisplay,Vector2 endPos)
+    public void SetNowCoordinate(float2 nowCoordinate, float2 directionValue, bool holdDisplay, Vector2 endPos)
     {
         this.nowCoordinate = (int2)nowCoordinate;
         character.SetCoordinate(this.nowCoordinate);
         if (!holdDisplay)
         {
-            await CharacterManager.instance.RefreshNpcRuntimeObj(character,RefreshMapTemp:false);
+            CharacterManager.instance.RefreshNpcRuntimeObj(character, RefreshMapTemp: false);
         }
         startPos = GameCommon.GetMapPos(nowCoordinate);
-       this.endPos = endPos;
+        this.endPos = endPos;
         character.moveDirection = directionValue;
         direction = directionValue;
     }
 
     public Teamer(Character character)
     {
-        this.character = character; 
+        this.character = character;
         nowCoordinate = character.coordinate;
     }
 
@@ -706,6 +708,7 @@ public class Teamer
             SetTeamCoordinate();
         }
     }
+
     public void AddQueuePos(float2 pos, float2 direction)
     {
         queuePos.Enqueue(new float4(pos.xy, direction.xy));
@@ -714,11 +717,12 @@ public class Teamer
             SetTeamCoordinate();
         }*/
     }
+
     private bool canMove = false;
 
-    public void SetTeamCoordinate(bool refreshPos=true)
+    public void SetTeamCoordinate(bool refreshPos = true)
     {
-        character.SetCoordinate(nowCoordinate,refreshPos);
+        character.SetCoordinate(nowCoordinate, refreshPos);
         CharacterManager.instance.GetRuntimeCharacterObj(character.instanceId, out var characterRuntimeObj);
         if (queueCoordinate.Count > 3)
         {
@@ -728,15 +732,15 @@ public class Teamer
             if (characterRuntimeObj == null)
                 startPos = GameCommon.GetMapPos(nowCoordinate);
             nowCoordinate = (int2)targetCoordinate.xy;
-           //endPos = GameCommon.GetMapPos(nowCoordinate);
+            //endPos = GameCommon.GetMapPos(nowCoordinate);
             timeValue = 0;
 
-           /* SetDirection setDirection = new SetDirection
-            {
-                characterId = character.instanceId,
-                direction = targetCoordinate.zw
-            };
-            GameActionManager.instance.QueueAction(setDirection, true);*/
+            /* SetDirection setDirection = new SetDirection
+             {
+                 characterId = character.instanceId,
+                 direction = targetCoordinate.zw
+             };
+             GameActionManager.instance.QueueAction(setDirection, true);*/
             canMove = true;
         }
         else
@@ -746,13 +750,13 @@ public class Teamer
 
         if (queuePos.Count > 3)
         {
-            float4 pos= queuePos.Dequeue();
+            float4 pos = queuePos.Dequeue();
             endPos = pos.xy;
             if (characterRuntimeObj != null)
             {
                 startPos = characterRuntimeObj.transform.position;
             }
-                character.moveDirection= math.normalizesafe(endPos - startPos, character.moveDirection);
+            character.moveDirection = math.normalizesafe(endPos - startPos, character.moveDirection);
         }
     }
 
@@ -770,7 +774,7 @@ public class Teamer
             queuePos.Enqueue(targetPos);
         }
         character.SetCoordinate(coordinate, refreshMapTemp: false);
-       //await CharacterManager.instance.RefreshNpcRuntimeObj(character);
+        //await CharacterManager.instance.RefreshNpcRuntimeObj(character);
         canMove = true;
     }
 
@@ -799,7 +803,7 @@ public class Teamer
                     nextTeamer.AddQueueCoordinate(character.coordinate, character.moveDirection);
                     nextTeamer.AddQueuePos(pos, character.moveDirection);
                 }
-               // Debug.Log("TeamMove");
+                // Debug.Log("TeamMove");
                 SetTeamCoordinate(false);
             }
             //if (character.name == "玛德琳")

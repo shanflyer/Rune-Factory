@@ -1,35 +1,43 @@
-using System.Threading.Tasks;
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
 public class FormulaPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
-    Button closeBtn;
-    [SerializeField]
-    Transform tagParent; 
-    [SerializeField]
-    FormulaReference formulaReference; 
-    [SerializeField]
-    FormulaTagReference formulaTagReference;
-    [SerializeField]
-    Button nextButton, frontButton;
-    [SerializeField]
-    Animator BookPaper;
-    [SerializeField]
-    ToggleGroup toggleGroup;
-    [SerializeField]
-    Transform leftParent, rightParent;
-    [SerializeField]
-    TextMeshProUGUI formulaNameText, formulaInfoText, formulaTypeText,formulaMaterialText;
+    private Button closeBtn;
 
-    DisplayList<FormulaReference, FormulaReferenceData> leftFormulaList, rightFormulaList;
-    DisplayList<FormulaTagReference, FormulaType> formulaTagList;
+    [SerializeField]
+    private Transform tagParent;
 
-    Dictionary<FormulaType, List<FormulaData>> formulaDataDic;
-    List<FormulaType> formulaTypes;
+    [SerializeField]
+    private FormulaReference formulaReference;
+
+    [SerializeField]
+    private FormulaTagReference formulaTagReference;
+
+    [SerializeField]
+    private Button nextButton, frontButton;
+
+    [SerializeField]
+    private Animator BookPaper;
+
+    [SerializeField]
+    private ToggleGroup toggleGroup;
+
+    [SerializeField]
+    private Transform leftParent, rightParent;
+
+    [SerializeField]
+    private TextMeshProUGUI formulaNameText, formulaInfoText, formulaTypeText, formulaMaterialText;
+
+    private DisplayList<FormulaReference, FormulaReferenceData> leftFormulaList, rightFormulaList;
+    private DisplayList<FormulaTagReference, FormulaType> formulaTagList;
+
+    private Dictionary<FormulaType, List<FormulaData>> formulaDataDic;
+    private List<FormulaType> formulaTypes;
+
     protected override void Awake()
     {
         base.Awake();
@@ -59,10 +67,9 @@ public class FormulaPanel : GamePanel<IReferenceData>
             InitButton();
             DelayDisplayFormulas(false);
         });
-
-        
     }
-    void DelayDisplayFormulas(bool next)
+
+    private void DelayDisplayFormulas(bool next)
     {
         leftParent.localScale = Vector3.zero;
         rightParent.localScale = Vector3.zero;
@@ -80,7 +87,8 @@ public class FormulaPanel : GamePanel<IReferenceData>
         BookPaper.Play("Paper");
         GameTimerController.instance.DelayAction(820, DisplayFormulas);
     }
-    void DisplayFormulas()
+
+    private void DisplayFormulas()
     {
         leftParent.localScale = Vector3.one;
         rightParent.localScale = Vector3.one;
@@ -88,8 +96,7 @@ public class FormulaPanel : GamePanel<IReferenceData>
         frontButton.transform.localScale = Vector3.one;
         BookPaper.gameObject.SetActive(false);
 
-       
-        InitButton(); 
+        InitButton();
         List<FormulaReferenceData> leftFormulaReferenceDatas = new List<FormulaReferenceData>();
         for (int i = 0; i < 8; i++)
         {
@@ -136,11 +143,13 @@ public class FormulaPanel : GamePanel<IReferenceData>
         frontButton = FindChildGameObject<Button>("Front");
         BookPaper = FindChildGameObject<Animator>("Book2p");
     }
+
     public override void InitReferenceData(IReferenceData v)
     {
         base.InitReferenceData(v);
     }
-    void SelectFormulaData(FormulaReferenceData formulaReferenceData,bool selected)
+
+    private void SelectFormulaData(FormulaReferenceData formulaReferenceData, bool selected)
     {
         if (selected)
         {
@@ -149,16 +158,16 @@ public class FormulaPanel : GamePanel<IReferenceData>
                 formulaNameText.SetSWText(formulaReferenceData.formulaData.formulaName);
                 formulaTypeText.SetSWText(formulaReferenceData.formulaData.formulaType.ToString());
                 List<string> formulaMats = new List<string>();
-                for(int i = 0; i < formulaReferenceData.formulaData.StuffItems.Count; i++)
+                for (int i = 0; i < formulaReferenceData.formulaData.StuffItems.Count; i++)
                 {
-                    ItemData itemData = formulaReferenceData.formulaData.StuffItems[i]; 
+                    ItemData itemData = formulaReferenceData.formulaData.StuffItems[i];
                     formulaMats.Add(itemData.itemName);
-                    if(i< formulaReferenceData.formulaData.StuffItems.Count - 1)
+                    if (i < formulaReferenceData.formulaData.StuffItems.Count - 1)
                     {
                         formulaMats.Add(",");
                     }
                 }
-                formulaMaterialText.SetADDText("需要材料:", formulaMats); 
+                formulaMaterialText.SetADDText("需要材料:", formulaMats);
                 formulaInfoText.SetSWText(formulaReferenceData.formulaData.ProductItem.GetInfo());
             }
             else
@@ -171,11 +180,12 @@ public class FormulaPanel : GamePanel<IReferenceData>
         }
     }
 
-    int displayIndex = 0;
-    int maxIndex = 0;
-    FormulaType formulaType;
-    List<FormulaReferenceData> formulaReferenceDatas;
-    void InitButton()
+    private int displayIndex = 0;
+    private int maxIndex = 0;
+    private FormulaType formulaType;
+    private List<FormulaReferenceData> formulaReferenceDatas;
+
+    private void InitButton()
     {
         if (displayIndex >= maxIndex - 2)
         {
@@ -194,7 +204,8 @@ public class FormulaPanel : GamePanel<IReferenceData>
             frontButton.gameObject.SetActive(true);
         }
     }
-    async void SelectFormulaType(FormulaType formulaType,bool select)
+
+    private async void SelectFormulaType(FormulaType formulaType, bool select)
     {
         if (select)
         {
@@ -211,14 +222,14 @@ public class FormulaPanel : GamePanel<IReferenceData>
                 formulaReferenceDatas.Add(formulaReferenceData);
             }
 
-
             displayIndex = 0;
             maxIndex = formulaDatas.Count / 8 + 1;
             DisplayFormulas();
             leftFormulaList.SelectDefault();
         }
     }
-    public override async Task InitData(string dataKey)
+
+    public override async void InitData(string dataKey)
     {
         if (formulaDataDic == null)
         {
@@ -231,13 +242,12 @@ public class FormulaPanel : GamePanel<IReferenceData>
                 {
                     formulaDatas = new List<FormulaData>();
                     formulaTypes.Add(allFormula[i].formulaType);
-                    formulaDataDic.Add(allFormula[i].formulaType,formulaDatas);
+                    formulaDataDic.Add(allFormula[i].formulaType, formulaDatas);
                 }
                 formulaDatas.Add(allFormula[i]);
             }
         }
-       await formulaTagList.InitListData(formulaTypes, SelectFormulaType);
+        formulaTagList.InitListData(formulaTypes, SelectFormulaType);
         formulaTagList.SelectDefault();
-       
     }
 }

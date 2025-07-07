@@ -1,27 +1,26 @@
-﻿ 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EquipBoxReference:UIObjReference<Equipment>
+public class EquipBoxReference : UIObjReference<Equipment>
 {
     [SerializeField]
-    TextMeshProUGUI typeText,NameText;
+    private TextMeshProUGUI typeText, NameText;
+
     [SerializeField]
-    Image equipMentIcon;
+    private Image equipMentIcon;
+
     [SerializeField]
-    Button clickButton;
+    private Button clickButton;
+
     [SerializeField]
-    Transform itemValueBg;
+    private Transform itemValueBg;
+
     [SerializeField]
-    Image itemValue;
+    private Image itemValue;
+
     [SerializeField]
-    Image hideMask;
+    private Image hideMask;
 
     private void Awake()
     {
@@ -33,6 +32,7 @@ public class EquipBoxReference:UIObjReference<Equipment>
             }
         });
     }
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -44,12 +44,13 @@ public class EquipBoxReference:UIObjReference<Equipment>
         itemValue = FindChildGameObject<Image>("ItemValue");
         hideMask = FindChildGameObject<Image>("Hide");
     }
-    public override async Task InitData(Equipment t, SelectAction<Equipment> SelectAction = null, ToggleGroup toggleGroup = null)
+
+    public override async void InitData(Equipment t, SelectAction<Equipment> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-       await base.InitData(t, SelectAction, toggleGroup);
+        base.InitData(t, SelectAction, toggleGroup);
         typeText.SetSWText(data.ItemType.ToString());
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(data.dataId);
-        if(itemData!=null)
+        if (itemData != null)
         {
             NameText.SetSWText(itemData.itemName);
             equipMentIcon.sprite = itemData.icon;
@@ -57,7 +58,6 @@ public class EquipBoxReference:UIObjReference<Equipment>
             NameText.enabled = true;
             equipMentIcon.enabled = true;
             itemValueBg.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
-           
         }
         else
         {

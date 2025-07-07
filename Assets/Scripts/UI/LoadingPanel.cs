@@ -20,12 +20,12 @@ public class LoadingPanel : GamePanel<IReferenceData>
         playableDirector.gameObject.SetActive(false);
         base.Close();
     }
-    public override Task InitData(string dataKey)
+    public override void InitData(string dataKey)
     {
         playableDirector.gameObject.SetActive(true);
         playableDirector.Play();
         boy.SetActive(GameDataSaveManager.instance.UserGameSaveData.playerData.gender == Gender.male);
         girl.SetActive(GameDataSaveManager.instance.UserGameSaveData.playerData.gender == Gender.female);
-        return base.InitData(dataKey);
+        base.InitData(dataKey);
     }
 }

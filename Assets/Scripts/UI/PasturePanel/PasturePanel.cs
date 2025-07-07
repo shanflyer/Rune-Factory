@@ -140,9 +140,9 @@ public class PasturePanel : GamePanel<MyListInt>
        
 
     }
-    public override Task InitData(string dataKey)
+    public override void InitData(string dataKey)
     {
-        return base.InitData(dataKey);
+        base.InitData(dataKey);
     }
     Vector2 animalIconSize = new Vector2(48, 48);
     void SelectAnimal(MyInt myInt,bool select)

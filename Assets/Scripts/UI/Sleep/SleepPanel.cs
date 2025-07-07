@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,11 +29,11 @@ public class SleepPanel : GamePanel<MyInt>
         returnButton = FindChildGameObject<Button>("ReturnButton");
     }
 
-    public override async Task InitData(string dataKey)
+    public override async void InitData(string dataKey)
     {
         mapItemInstance = int.Parse(dataKey);
         var SleepSetDataList = await GameDataManager.instance.GetAsyncData<SleepSetDataList>("SleepSetDataList");
-        var SleepList = SleepSetDataList.GetNowSleepSetData(GameTimeManager.instance.Hour,GameTimeManager.instance.GameDay);
+        var SleepList = SleepSetDataList.GetNowSleepSetData(GameTimeManager.instance.Hour, GameTimeManager.instance.GameDay);
         sleepSetList.InitListData(SleepList, SelectAction);
     }
 

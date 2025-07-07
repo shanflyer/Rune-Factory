@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DisplayList<T, V> where T : UIObjReference<V> 
+public class DisplayList<T, V> where T : UIObjReference<V>
 {
     private Transform parent;
     private T listPrefab;
@@ -12,12 +11,14 @@ public class DisplayList<T, V> where T : UIObjReference<V>
 
     public int dataCount => _dataCount;
     private int _dataCount;
+
     public DisplayList(T listPrefab, Transform parent)
     {
         this.parent = parent;
         this.listPrefab = listPrefab;
         list = new List<T>();
     }
+
     public void SelectIndex(int index)
     {
         if (index < dataCount)
@@ -25,6 +26,7 @@ public class DisplayList<T, V> where T : UIObjReference<V>
             list[index].Selected();
         }
     }
+
     public virtual void ClearSelect()
     {
         for (int i = 0; i < list.Count; i++)
@@ -62,6 +64,7 @@ public class DisplayList<T, V> where T : UIObjReference<V>
             list[0].SelectDefault();
         }
     }
+
     public T GetReference(V v)
     {
         for (int i = 0; i < list.Count; i++)
@@ -73,29 +76,30 @@ public class DisplayList<T, V> where T : UIObjReference<V>
         }
         return null;
     }
+
     public T GetReference(int index)
     {
         if (index < dataCount)
         {
-           return list[index];
+            return list[index];
         }
         return null;
     }
-    public async void SetSelectData(V v, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null)
+
+    public void SetSelectData(V v, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         for (int i = 0; i < list.Count; i++)
         {
             if (list[i].t.Equals(v))
             {
-              await  list[i].InitData(v, SelectAction, toggleGroup);
+                list[i].InitData(v, SelectAction, toggleGroup);
             }
         }
     }
 
-    public async Task InitListData(List<V> componentData, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null,bool Async=true)
+    public void InitListData(List<V> componentData, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null, bool Async = true)
     {
-       
-        if (componentData == null||componentData.Count==0)
+        if (componentData == null || componentData.Count == 0)
         {
             for (int i = 0; i < list.Count; i++)
             {
@@ -110,7 +114,7 @@ public class DisplayList<T, V> where T : UIObjReference<V>
         for (int i = list.Count - 1; i > componentData.Count - 1; i--)
         {
             list[i].ClearData();
-            list[i].enabled = false; 
+            list[i].enabled = false;
             list[i].transform.localScale = Vector3.zero;
         }
 
@@ -120,7 +124,7 @@ public class DisplayList<T, V> where T : UIObjReference<V>
             {
                 list[i].enabled = true;
                 list[i].transform.localScale = Vector3.one;
-               await list[i].InitData(componentData[i], SelectAction, toggleGroup);
+                list[i].InitData(componentData[i], SelectAction, toggleGroup);
             }
             else
             {
@@ -138,18 +142,16 @@ public class DisplayList<T, V> where T : UIObjReference<V>
                 }
                 try
                 {
-                   
                     t.enabled = true;
                     t.transform.SetParent(parent);
                     t.transform.localScale = Vector3.one;
-                    await t.InitData(componentData[i], SelectAction, toggleGroup);
+                    t.InitData(componentData[i], SelectAction, toggleGroup);
                     list.Add(t);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Debug.LogError($"i:{i}-count:{componentData.Count}--{e}");
                 }
-               
             }
         }
     }

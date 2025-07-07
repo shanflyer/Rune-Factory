@@ -1,19 +1,22 @@
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class WeatherPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
-    Animation animation;
-    [SerializeField]   
-    Transform nowWeatherParent, nextWeatherParent;
-    DisplayList<WeatherReference, WeatherReferenceData> nowWeathers;
-    DisplayList<WeatherReference, WeatherReferenceData> nextWeathers;
+    private Animation animation;
+
     [SerializeField]
-    WeatherReference weatherReference;
+    private Transform nowWeatherParent, nextWeatherParent;
+
+    private DisplayList<WeatherReference, WeatherReferenceData> nowWeathers;
+    private DisplayList<WeatherReference, WeatherReferenceData> nextWeathers;
+
     [SerializeField]
-    Button closeBtn;
+    private WeatherReference weatherReference;
+
+    [SerializeField]
+    private Button closeBtn;
 
     public override void SetPanelUISerializeObj()
     {
@@ -23,34 +26,35 @@ public class WeatherPanel : GamePanel<IReferenceData>
         weatherReference = FindChildGameObject<WeatherReference>("WeatherReference");
         closeBtn = FindChildGameObject<Button>("Close");
         base.SetPanelUISerializeObj();
-
     }
+
     protected override void Awake()
     {
         base.Awake();
         nowWeathers = new DisplayList<WeatherReference, WeatherReferenceData>(weatherReference, nowWeatherParent);
-        nextWeathers=new DisplayList<WeatherReference, WeatherReferenceData>(weatherReference,nextWeatherParent);
+        nextWeathers = new DisplayList<WeatherReference, WeatherReferenceData>(weatherReference, nextWeatherParent);
         closeBtn.onClick.AddListener(Close);
     }
+
     public override void Close()
     {
         base.Close();
         CameraManager.instance.SetUICameraPostProcessing(false);
     }
-    public override async Task InitData(string dataKey)
+
+    public override void InitData(string dataKey)
     {
         CameraManager.instance.SetUICameraPostProcessing(true);
         animation.Play();
         var nowWeatherReferences = WeatherManager.instance.GetNowWeatherReferenceDatas();
-        await nowWeathers.InitListData(nowWeatherReferences);
+        nowWeathers.InitListData(nowWeatherReferences);
         var nextWeatherReferences = WeatherManager.instance.GetNextWeatherReferenceDatas();
-        await  nextWeathers.InitListData(nextWeatherReferences);
-        await base.InitData(dataKey);
+        nextWeathers.InitListData(nextWeatherReferences);
+        base.InitData(dataKey);
     }
+
     public override void InitReferenceData(IReferenceData v)
     {
         base.InitReferenceData(v);
-        
     }
-
 }

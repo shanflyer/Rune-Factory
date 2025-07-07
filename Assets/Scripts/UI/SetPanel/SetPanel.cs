@@ -117,9 +117,9 @@ public class SetPanel : GamePanel<IReferenceData>
         
         UIManager.instance.SetJoyStickColor(color);
     }
-    public override async Task InitData(string dataKey)
+    public override void InitData(string dataKey)
     {
-       await base.InitData(dataKey);
+        base.InitData(dataKey);
         float3 volume = AudioController.instance.GetAudioVolume();
         masterSlider.SetValueWithoutNotify(volume.x);
         bgmSlider.SetValueWithoutNotify(volume.y);

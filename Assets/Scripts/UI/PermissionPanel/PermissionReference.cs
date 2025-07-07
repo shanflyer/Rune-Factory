@@ -26,9 +26,9 @@ public class PermissionReference : UIObjReference<Permission>
         GetTips = FindChildGameObject("GetTips");
     }
 
-    public override async Task InitData(Permission t, SelectAction<Permission> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override void InitData(Permission t, SelectAction<Permission> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-       await  base.InitData(t, SelectAction, toggleGroup);
+       base.InitData(t, SelectAction, toggleGroup);
         Name.SetSWText(data.permissionData.permissionName);
         ConditionValue.SetSWText(data.permissionData.conditionStr);
         RewardValue.SetSWText(data.permissionData.reward);

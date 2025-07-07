@@ -1,52 +1,55 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PastureInfo : UIObjReference<Pasture>
 {
     [SerializeField]
-    Image P0, P1, P2;
+    private Image P0, P1, P2;
+
     [SerializeField]
-    Toggle toggle;
+    private Toggle toggle;
+
     private void Awake()
     {
         toggle.onValueChanged.AddListener((bool value) =>
         {
             if (SelectAction != null)
             {
-                SelectAction(data,value);
+                SelectAction(data, value);
             }
         });
     }
+
     public override void OnEnable()
     {
         base.OnEnable();
         GameActionManager.instance.AddListener<RefreshPasture>(RefreshPasture);
     }
+
     public override void OnDisable()
     {
         base.OnDisable();
         if (!SingletonType.Cleared)
             GameActionManager.instance.RemoveListener<RefreshPasture>(RefreshPasture);
     }
-     void RefreshPasture(RefreshPasture refreshPasture)
+
+    private void RefreshPasture(RefreshPasture refreshPasture)
     {
-        if (data!=null&&data.instanceId == refreshPasture.instanceId)
+        if (data != null && data.instanceId == refreshPasture.instanceId)
         {
-           if(PastureManager.instance.GetPasture(data.instanceId,out data))
+            if (PastureManager.instance.GetPasture(data.instanceId, out data))
             {
-                P0.enabled = P1.enabled = P2.enabled = false; 
+                P0.enabled = P1.enabled = P2.enabled = false;
                 switch (data.level)
                 {
                     case 0:
                         P0.enabled = true;
                         break;
+
                     case 1:
                         P1.enabled = true;
                         break;
+
                     case 2:
                         P2.enabled = true;
                         break;
@@ -54,6 +57,7 @@ public class PastureInfo : UIObjReference<Pasture>
             }
         }
     }
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -62,12 +66,14 @@ public class PastureInfo : UIObjReference<Pasture>
         P1 = FindChildGameObject<Image>("P1");
         P2 = FindChildGameObject<Image>("P2");
     }
+
     public override void SelectDefault()
     {
         base.SelectDefault();
         toggle.isOn = true;
     }
-    public override Task InitData(Pasture t, SelectAction<Pasture> SelectAction = null, ToggleGroup toggleGroup = null)
+
+    public override void InitData(Pasture t, SelectAction<Pasture> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         data = t;
         P0.enabled = P1.enabled = P2.enabled = false;
@@ -83,16 +89,17 @@ public class PastureInfo : UIObjReference<Pasture>
                 case 0:
                     P0.enabled = true;
                     break;
+
                 case 1:
                     P1.enabled = true;
                     break;
+
                 case 2:
                     P2.enabled = true;
                     break;
             }
         }
-       
-        return base.InitData(t, SelectAction, toggleGroup);
-    }
 
+        base.InitData(t, SelectAction, toggleGroup);
+    }
 }

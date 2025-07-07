@@ -4,8 +4,6 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Playables;
-using UnityEngine.TextCore.Text;
-using static UnityEngine.ParticleSystem;
 
 #if UNITY_EDITOR
 #endif
@@ -19,9 +17,9 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
         get
         {
             return base.transform;
-        } 
+        }
     }
-   
+
     public RuntimeObj runtimeObj
     {
         get
@@ -64,7 +62,6 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
 
     [SerializeField]
     private BehaviorTree behaviorTree;
-
 
     [SerializeField]
     private AudioSource audioSource;
@@ -132,8 +129,6 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
         return gameObject.name;
     }
 
-
-
     [SerializeField]
     private Vector2 moveDirection;
 
@@ -168,7 +163,7 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
             {
                 animator.speed = animationSpeed;
                 //animator.SetBool(CharacterAnimatorParameter.Set, false);
-               // animator.SetBool(CharacterAnimatorParameter.Fish,false);
+                // animator.SetBool(CharacterAnimatorParameter.Fish,false);
             }
         }
         this.speed = animationSpeed;
@@ -188,18 +183,20 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
         equip.localPosition = offset;
         offset = shadow.localPosition;
         offset.z = 0;
-        shadow.localPosition = offset; 
+        shadow.localPosition = offset;
 
         /*if(runtimeObj!=null)
             EnvironmentManger.instance.AddCharacterGetFootStep(runtimeObj.linkId, characterGetFootStep);*/
     }
+
     public void Dispose()
     {
         if (singlePlayableGraph.IsValid())
         {
             singlePlayableGraph.Destroy();
-        } 
+        }
     }
+
     private void OnDisable()
     {
         /*iif (runtimeObj != null&&!SingletonType.Cleared)
@@ -234,7 +231,6 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
 
     public void SetPosition(Vector3 pos)
     {
-         
         transform.position = pos;
     }
 
@@ -267,7 +263,7 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
             }
         }
     }
-     
+
     private void PlayFootStep(bool isLeft)
     {
         if (stepAudioClip == null)
@@ -291,19 +287,19 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
             }
         }
     }
-     
+
     private void LateUpdate()
-    { 
+    {
         if (isDisplayFootStep && speed > 0)
         {
             if (waitFootTime <= 0)
             {
                 float angle = GameCommon.VectorAngle(Vector2.up, moveDirection);
                 //
-              
+
                 Vector3 offSetPos = isLeftFoot ? leftFootPos : rightFootPos;
                 offSetPos.x *= moveDirection.y;
-                offSetPos.y *= -moveDirection.x; 
+                offSetPos.y *= -moveDirection.x;
                 var position = transform.position + offSetPos;
 
                 GameVolumeManager.instance.EmitFootParticle(angle, position, footStepColor, isLeftFoot);
@@ -326,7 +322,6 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
         myShadow = shadow.GetComponent<MyShadowPolygon>();
         equipRenderer = transform.GetChild(1).GetChild(1).GetComponent<MySpriteMeshRender>();
         behaviorTree = transform.GetComponent<BehaviorTree>();
-      
     }
 
 #endif

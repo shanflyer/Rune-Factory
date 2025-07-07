@@ -1,5 +1,4 @@
-﻿using BehaviorDesigner.Runtime.Tasks.Unity.UnityPlayerPrefs;
-using NativeCollections;
+﻿using NativeCollections;
 using System;
 using System.Collections.Generic;
 using Unity.Burst;
@@ -40,13 +39,15 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
     [NativeDisableParallelForRestriction] public NativeArray<uint> openCosts;
     public NativeArray<int> openCounts;
     public int capacityPerMap;
+
     [NativeDisableParallelForRestriction]
-    public NativeHashMap<uint, ulong>  cellMap; 
+    public NativeHashMap<uint, ulong> cellMap;
+
     public NativeStream.Writer pathWriter;
 
     public void Execute(int index)
     {
-       // Debug.Log($"execute index:{index}");
+        // Debug.Log($"execute index:{index}");
         var req = requests[index];
         var mapRange = mapRanges[index];
         int2 start = req.start;
@@ -59,7 +60,7 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
         uint endFlat = GetCoordinateIndex(end.x, end.y, mapRange.xy, mapRange.zw);
         uint keyStart = (uint)index * 1_000_000 + startFlat;
         cellMap.TryAdd(keyStart, PathUtil64.Pack(0, startFlat, 1));
-       // Debug.Log($"新增keyStart{keyStart}--{index}");
+        // Debug.Log($"新增keyStart{keyStart}--{index}");
         openCells[baseOffset + count] = startFlat;
         openCosts[baseOffset + count] = 0;
         count++;
@@ -83,7 +84,7 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
             if (minIndex == -1) break;
 
             currentFlat = openCells[baseOffset + minIndex];
-            uint currentKey= (uint)index * 1_000_000 + currentFlat;
+            uint currentKey = (uint)index * 1_000_000 + currentFlat;
             // Debug.Log($"index={index}, count={count}, currentKey={currentKey}");
             count--;
             openCounts[index] = count;
@@ -91,15 +92,14 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
             openCosts[baseOffset + minIndex] = openCosts[baseOffset + count];
 
             int2 current = end;
-            ulong currentPacked=0;
-      
+            ulong currentPacked = 0;
+
             var result = cellMap.TryGetValue(currentKey, out currentPacked);
             if (!result)
             {
 #if UNITY_EDITOR
                 Debug.LogError($"获取错误");
 #endif
-
             }
             //Debug.Log($"访问:{currentKey}");
             current = GetCoordinate(currentFlat, mapRange.xy, mapRange.zw);
@@ -111,21 +111,19 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
 #endif
 
                 break;
-            } 
+            }
 
             PathUtil64.Unpack(currentPacked, out ulong gCost, out _, out _);
             cellMap[currentKey] = PathUtil64.SetState(currentPacked, 2);
-            
 
             bool foundEnd = false;
-         
+
             for (int dx = -1; dx <= 1; dx++)
             {
                 for (int dy = -1; dy <= 1; dy++)
-                { 
+                {
                     if (dx == 0 && dy == 0) continue;
                     int2 neighbor = current + new int2(dx, dy);
-
 
                     if (!InBounds(neighbor, mapRange.xy, mapRange.zw)) continue;
 
@@ -133,14 +131,13 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
                     uint baseKey = (uint)index * 1_000_000 + flat;
                     uint mapCellIndex = (uint)req.roomId * 1_000_000 + flat;
 
-                   // Debug.Log($"index={index}, current={current}, neighbor={neighbor}, flat={flat}, baseKey={baseKey}");
+                    // Debug.Log($"index={index}, current={current}, neighbor={neighbor}, flat={flat}, baseKey={baseKey}");
 
                     if (barrierMap.ContainsKey(mapCellIndex))
                     {
-                      //  Debug.Log($"index={index}, blocked by barrier: {mapCellIndex}");
+                        //  Debug.Log($"index={index}, blocked by barrier: {mapCellIndex}");
                         continue;
                     }
-                        
 
                     uint moveCost = (dx == 0 || dy == 0) ? 2u : 3u;
                     ulong newG = gCost + moveCost;
@@ -168,7 +165,7 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
                     }
                     else
                     {
-                         //Debug.Log($"新增{baseKey}--{index}");
+                        //Debug.Log($"新增{baseKey}--{index}");
                         triedAddCount++;
 
                         if (!cellMap.TryAdd(baseKey, PathUtil64.Pack(fCost, currentFlat, 1)))
@@ -176,7 +173,6 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
 #if UNITY_EDITOR
                             Debug.Log($"保存:{baseKey} 失败--{Enum.GetName(typeof(TryGetResult), result) ?? result.ToString()}");
 #endif
-
                         }
 
                         openCells[baseOffset + count] = flat;
@@ -198,7 +194,6 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
                 }
                 if (foundEnd) break;
             }
-           
 
             if (foundEnd) break;
         }
@@ -209,12 +204,11 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
 #if UNITY_EDITOR
             Debug.Log($"未发现路径");
 #endif
-
         }
         else
         {
             pathWriter.BeginForEachIndex(index);
-            
+
             for (int iter = 0; iter < 512; iter++)
             {
                 uint key = (uint)index * 1_000_000 + currentFlat;
@@ -238,7 +232,6 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
             }
             pathWriter.EndForEachIndex();
         }
-       
     }
 
     public int2 GetCoordinate(uint index, int2 start, int2 end)
@@ -314,11 +307,11 @@ public class MapCellJobController : Singleton<MapCellJobController>
             openCosts = openCosts,
             openCounts = openCounts,
             capacityPerMap = capacityPerMap,
-            cellMap = cellMap, 
+            cellMap = cellMap,
             barrierMap = MapCellController.instance.MapObjBarriers,
             pathWriter = pathStream.AsWriter()
         };
-       // job.Run(requestCount);
+        // job.Run(requestCount);
         job.Schedule(requestCount, 2).Complete();
 
         var reader = pathStream.AsReader();

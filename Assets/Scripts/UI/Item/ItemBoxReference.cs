@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -79,19 +78,20 @@ public class ItemBoxReference : UIObjReference<Item>
         base.SelectDefault();
         //toggle.isOn = true;
         toggle.SetIsOnWithoutNotify(true);
-        if(SelectAction != null)
+        if (SelectAction != null)
         {
             SelectAction.Invoke(item);
         }
     }
+
     public void SetCountColor(Color color)
     {
         count.color = color;
     }
 
-    public override async Task InitData(Item t, SelectAction<Item> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override async void InitData(Item t, SelectAction<Item> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        await base.InitData(t, SelectAction, toggleGroup);
+        base.InitData(t, SelectAction, toggleGroup);
         item = t;
 
         toggle.group = toggleGroup;
@@ -100,7 +100,7 @@ public class ItemBoxReference : UIObjReference<Item>
         if (item.dataId != 0)
         {
             itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
-        } 
+        }
         toggle.enabled = true;
 
         if (t.locked && LockMask)
@@ -129,13 +129,13 @@ public class ItemBoxReference : UIObjReference<Item>
                 }
                 else
                 {
-                    LockMask.transform.localScale = item.instanceId == -1 ? Vector3.one : Vector3.zero; 
-                } 
+                    LockMask.transform.localScale = item.instanceId == -1 ? Vector3.one : Vector3.zero;
+                }
             }
             else
             {
                 icon.color = (item.instanceId != -1) ? Color.white : new Color(1, 1, 1, 0.6f);
-            } 
+            }
             icon.enabled = true;
             icon.rectTransform.sizeDelta = GameCommon.SetImageSize(icon.sprite, new Vector2(32, 32));
             count.text = item.count.ToString();
@@ -145,7 +145,7 @@ public class ItemBoxReference : UIObjReference<Item>
             if (ItemValueBg)
                 ItemValueBg.transform.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
             if (ItemValue)
-                ItemValue.fillAmount =await item.GetValue();
+                ItemValue.fillAmount = await item.GetValue();
         }
         else
         {

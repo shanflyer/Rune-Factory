@@ -1,22 +1,21 @@
-﻿using BehaviorDesigner.Runtime.Tasks.Unity.UnityAnimator;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
-using UnityEngine.Purchasing.MiniJSON;
 using UnityEngine.UI;
 
 public class PlantReference : UIObjReference<PlantData>
 {
     [SerializeField]
-    TextMeshProUGUI PlantName;
+    private TextMeshProUGUI PlantName;
+
     [SerializeField]
-    Image Icon;
+    private Image Icon;
+
     [SerializeField]
-    Toggle toggle;
+    private Toggle toggle;
+
     [SerializeField]
-    TextMeshProUGUI fruitCount;
+    private TextMeshProUGUI fruitCount;
+
     private void Awake()
     {
         toggle.onValueChanged.AddListener((bool isOn) =>
@@ -27,6 +26,7 @@ public class PlantReference : UIObjReference<PlantData>
             }
         });
     }
+
     public override void SelectDefault()
     {
         base.SelectDefault();
@@ -36,6 +36,7 @@ public class PlantReference : UIObjReference<PlantData>
             SelectAction(data, true);
         }
     }
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -44,12 +45,13 @@ public class PlantReference : UIObjReference<PlantData>
         Icon = FindChildGameObject<Image>("Icon");
         fruitCount = FindChildGameObject<TextMeshProUGUI>("FruitCount");
     }
-    public override async Task InitData(PlantData t, SelectAction<PlantData> SelectAction = null, ToggleGroup toggleGroup = null)
-    {
-        await base.InitData(t, SelectAction, toggleGroup);
-        toggle.group = toggleGroup; 
 
-        if(GameDataSaveManager.instance.GetPlantFruitCount(t.id,out var count))
+    public override async void InitData(PlantData t, SelectAction<PlantData> SelectAction = null, ToggleGroup toggleGroup = null)
+    {
+        base.InitData(t, SelectAction, toggleGroup);
+        toggle.group = toggleGroup;
+
+        if (GameDataSaveManager.instance.GetPlantFruitCount(t.id, out var count))
         {
             PlantName.SetSWText(t.plantName);
             Icon.sprite = t.icon;
@@ -74,6 +76,5 @@ public class PlantReference : UIObjReference<PlantData>
             Icon.SetNativeSize();
             fruitCount.SetADDText("收获数量:", 0);
         }
-       
     }
 }

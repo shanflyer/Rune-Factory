@@ -1,7 +1,6 @@
 ﻿// 支持并行写入 + 并行读取 + TryRemove，模仿 Unity UnsafeParallelHashMap，实现桶式哈希 + 链式冲突处理结构
 
 using System;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Unity.Burst;
@@ -17,6 +16,7 @@ namespace NativeCollections
         Found,           // 找到并且写入已完成
         PendingWrite     // 有 key 但写入尚未完成
     }
+
     [NativeContainer]
     [StructLayout(LayoutKind.Sequential)]
     [BurstCompile(FloatMode = FloatMode.Fast)]
@@ -120,7 +120,7 @@ namespace NativeCollections
             int idx = Interlocked.Increment(ref *m_Count) - 1;
             if (idx >= m_Capacity) return false;
 
-            // 写入 key 
+            // 写入 key
             m_Keys[idx] = key;
 
             // 标记为“写入中”
@@ -177,11 +177,9 @@ namespace NativeCollections
                 }
             }
 
-
             value = default;
-            return TryGetResult.NotFound; 
+            return TryGetResult.NotFound;
         }
-
 
         public bool TryRemove(TKey key)
         {
@@ -229,7 +227,6 @@ namespace NativeCollections
             m_Capacity = m_Capacity,
             m_BucketCapacityMask = m_BucketCapacityMask
         };
-       
 
         public struct ParallelReader
         {
@@ -239,7 +236,8 @@ namespace NativeCollections
             [NativeDisableUnsafePtrRestriction] internal TValue* m_Values;
             [NativeDisableUnsafePtrRestriction] internal int* m_States;
             internal int m_BucketCapacityMask;
-            internal int m_Capacity;  
+            internal int m_Capacity;
+
             public TryGetResult TryGetValue(TKey key, out TValue value)
             {
                 int hash = key.GetHashCode();
@@ -247,24 +245,24 @@ namespace NativeCollections
 
                 int steps = 0;
                 int start = Volatile.Read(ref m_Buckets[bucket]);
-              //  UnityEngine.Debug.Log($"[TryGetValue] Key={key}, Hash={hash}, Bucket={bucket}, Start={start}");
+                //  UnityEngine.Debug.Log($"[TryGetValue] Key={key}, Hash={hash}, Bucket={bucket}, Start={start}");
 
                 for (int i = start; i != -1 && steps++ < 128; i = m_NextPtrs[i])
                 {
                     int state = Volatile.Read(ref m_States[i]);
-                  //  UnityEngine.Debug.Log($"  -> Step {steps}, i={i}, state={state}, key={m_Keys[i]}");
+                    //  UnityEngine.Debug.Log($"  -> Step {steps}, i={i}, state={state}, key={m_Keys[i]}");
 
                     if (state == 2 && m_Keys[i].Equals(key))
                     {
                         value = m_Values[i];
-                       // UnityEngine.Debug.Log($"  [Found] key={key}, i={i}, value={value}");
+                        // UnityEngine.Debug.Log($"  [Found] key={key}, i={i}, value={value}");
                         return TryGetResult.Found;
                     }
 
                     if (state == 1 && m_Keys[i].Equals(key))
                     {
                         value = default;
-                      //  UnityEngine.Debug.Log($"  [Pending] key={key}, i={i}");
+                        //  UnityEngine.Debug.Log($"  [Pending] key={key}, i={i}");
                         return TryGetResult.PendingWrite;
                     }
                 }
@@ -275,17 +273,16 @@ namespace NativeCollections
                     int state = Volatile.Read(ref m_States[i]);
                     if (state != 0 && m_Keys[i].Equals(key))
                     {
-                      //  UnityEngine.Debug.Log($"  [ScanFallback] key={key}, state={state}, i={i}");
+                        //  UnityEngine.Debug.Log($"  [ScanFallback] key={key}, state={state}, i={i}");
                         value = default;
-                        return TryGetResult.PendingWrite; 
+                        return TryGetResult.PendingWrite;
                     }
                 }
 
-               // UnityEngine.Debug.Log($"  [NotFound] key={key}");
+                // UnityEngine.Debug.Log($"  [NotFound] key={key}");
                 value = default;
                 return TryGetResult.NotFound;
             }
-
         }
 
         public struct ParallelWriter
@@ -316,7 +313,7 @@ namespace NativeCollections
                 int idx = Interlocked.Increment(ref *m_Count) - 1;
                 if (idx >= m_Capacity) return false;
 
-                // 写入 key 
+                // 写入 key
                 m_Keys[idx] = key;
 
                 // 标记为“写入中”
@@ -358,7 +355,6 @@ namespace NativeCollections
 
                 return false;
             }
-
 
             public bool TryRemove(TKey key)
             {

@@ -10,7 +10,7 @@ public class SavePanel : GamePanel<UserGameSaveDataList>
     private SaveReference SaveReference;
 
     [SerializeField]
-    private Button Copy,  Save, Return;
+    private Button Copy, Save, Return;
 
     [SerializeField]
     private Transform SaveDataParent;
@@ -34,7 +34,7 @@ public class SavePanel : GamePanel<UserGameSaveDataList>
         Copy.onClick.AddListener(CopyData);
         Save.onClick.AddListener(SaveAction);
         Return.onClick.AddListener(() =>
-        { 
+        {
             Close();
         });
 
@@ -65,18 +65,18 @@ public class SavePanel : GamePanel<UserGameSaveDataList>
     {
         if (selected)
         {
-            selectGameSaveData = userGameSaveData; 
+            selectGameSaveData = userGameSaveData;
             bool dataIsNull = string.IsNullOrEmpty(userGameSaveData.saveTime);
             Copy.interactable = !dataIsNull;
         }
     }
 
-    public override async void InitReferenceData(UserGameSaveDataList v)
+    public override void InitReferenceData(UserGameSaveDataList v)
     {
         base.InitReferenceData(v);
         //selectGameSaveData = null;
-       await saveList.InitListData(v.userGameSaveDatas, SelectAction, toggleGroup);
-       saveList.SelectDefault();
+        saveList.InitListData(v.userGameSaveDatas, SelectAction, toggleGroup);
+        saveList.SelectDefault();
     }
 
     private void SaveAction()
@@ -103,5 +103,4 @@ public class SavePanel : GamePanel<UserGameSaveDataList>
         {
         }
     }
-
 }

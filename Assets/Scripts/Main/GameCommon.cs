@@ -5,7 +5,6 @@ using System.Text;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
-using static UnityEngine.Rendering.GPUSort;
 
 public delegate void Int3Action(int3 value, int action = 0);
 
@@ -125,6 +124,7 @@ public static class AttackType
     /// </summary>
     public static int whipAttack = 6;
 }
+
 public static class SpanStringReplacer
 {
     /// <summary>
@@ -249,6 +249,7 @@ internal ref struct ValueStringBuilder
 
     public override string ToString() => _buffer.Slice(0, _length).ToString();
 }
+
 public static class GameCommon
 {
     public static List<MyString> GetMyStrings(this List<string> strs)
@@ -260,6 +261,7 @@ public static class GameCommon
         }
         return myStrings;
     }
+
     public static Dictionary<Direction, Vector2> fishToolOffsets = new Dictionary<Direction, Vector2>
     {
         {Direction.LEFT,new Vector2(-0.556f,0.034f)},
@@ -267,7 +269,7 @@ public static class GameCommon
         {Direction.UP,new Vector2(0,0.6531f)},
         {Direction.DOWN,new Vector2(0,-0.39f)},
     };
-  
+
     public const int AddATBuff = 11;
     public const int AddDFBuff = 12;
     public const int AddSpeedBuff = 13;
@@ -284,7 +286,7 @@ public static class GameCommon
     public const int RedObjLayer = 15;
 
     public const int ManufatureWorkingEmote = 72;
-    public const int ManufatureWorkendEnote = 14;      
+    public const int ManufatureWorkendEnote = 14;
 
     public const int PixelCameraDefaultValue = 400;
     public const int setTeamerFunctionId = 4;
@@ -317,21 +319,26 @@ public static class GameCommon
     public static List<int> zeroNPC = new List<int>
     {
         1001,2001
-    }; 
+    };
+
     //组队
     public const int TeamFull = 5002;//人太多
+
     public const int TeamHurt = 5003;//受伤
     public const int TeamLeave = 5004;//离开
 
     public const string backHomeBehaviorPath = "Behavior/NPC/New/家里闲逛";
+
     //钓鱼
     public const int GetFish = 41;//收竿
+
     public const int StartFish = 40;//钓鱼
     public const int GetFishEmote = 0;
-    public const int NotGetFishEmote =24;
+    public const int NotGetFishEmote = 24;
 
     //土地
     public const int SmoothField = 10;//锄地
+
     public const int Seeding = 20;//播种
     public const int Watering = 21;//浇水
     public const int Harvesting = 22;//收获
@@ -342,7 +349,6 @@ public static class GameCommon
     public const int plantDeath = 40;
 
     public const int animalNeedFood = 32;
-
 
     public static int defaultOperateId = 0;
     public static int defaultPlayerTalkTime = 2000;
@@ -472,8 +478,9 @@ public static class GameCommon
         }
         return cells;
     }
+
     public static List<int> CellToGrid(List<int2> cells)
-    { 
+    {
         List<int> result = new List<int>();
 
         HashSet<int2> allCellPoints = new HashSet<int2>();
@@ -483,7 +490,6 @@ public static class GameCommon
             var cell = cells[i];
             allCellPoints.Add(cell);
         }
-
 
         while (allCellPoints.Count > 0)
         {
@@ -579,7 +585,6 @@ public static class GameCommon
         return result;
     }
 
-
     public static void RemoveValue<TKey, TValue>(
     ref NativeParallelMultiHashMap<TKey, TValue> map,
     TKey key,
@@ -632,8 +637,6 @@ public static class GameCommon
         return value;
     }
 
-
-    
     /// <summary>
     /// 转换方向为值
     /// </summary>
@@ -705,13 +708,14 @@ public static class GameCommon
 
         return vector3;
     }
+
     public static List<int> StringToListInt(string str)
     {
         List<int> result = new List<int>();
         try
         {
             var strs = str.Split(',');
-            for(int i = 0; i < strs.Length; i++)
+            for (int i = 0; i < strs.Length; i++)
             {
                 result.Add(int.Parse(strs[i]));
             }
@@ -719,12 +723,13 @@ public static class GameCommon
         catch { }
         return result;
     }
+
     public static int3 StringToInt3(string str)
     {
         int3 int3 = new int3();
         try
         {
-            if (str[0] =='i')
+            if (str[0] == 'i')
             {
                 str = str.Substring(5, str.Length - 6);
                 var strs = str.Split(',');
@@ -785,21 +790,23 @@ public static class GameCommon
     {
         s1 = s1.Replace("_", "/");
         var span = s1.AsSpan();
-      
+
         var builder = new StringBuilder(s0);
         builder.Append(span);
         return builder.ToString();
     }
+
     public static string BlendString(string s0, params string[] args)
-    {  
+    {
         var builder = new StringBuilder(s0);
         for (int i = 0; i < args.Length; i++)
         {
             var span = args[i].ToString().AsSpan();
             builder.Append(span);
-        } 
+        }
         return builder.ToString();
     }
+
     public static void SetEnable(GameObject gameObject, bool enable, bool compontEnable)
     {
         gameObject.transform.localScale = enable ? Vector3.one : Vector3.zero;
@@ -904,6 +911,7 @@ public static class GameCommon
             }
         }
     }
+
     public static float VectorAngle(Vector2 from, Vector2 to)
     {
         float angle;

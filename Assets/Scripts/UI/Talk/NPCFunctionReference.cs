@@ -27,9 +27,9 @@ public class NPCFunctionReference : UIObjReference<NPCFunctionData>
         button.onClick.AddListener(ClickAction);
     }
 
-    public override async Task InitData(NPCFunctionData t, SelectAction<NPCFunctionData> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override void InitData(NPCFunctionData t, SelectAction<NPCFunctionData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-       await  base.InitData(t, SelectAction, toggleGroup);
+       base.InitData(t, SelectAction, toggleGroup);
         icon.sprite = data.icon;
         Name.SetSWText(data.npcFunctionName);
     }

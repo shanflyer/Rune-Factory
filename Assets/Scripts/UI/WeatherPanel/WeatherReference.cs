@@ -21,9 +21,9 @@ public class WeatherReference : UIObjReference<WeatherReferenceData>
         timeText = FindChildGameObject<TextMeshProUGUI>("Time");
         weatherIcon = FindChildGameObject<Image>("icon");
     }
-    public override async Task InitData(WeatherReferenceData t, SelectAction<WeatherReferenceData> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override void InitData(WeatherReferenceData t, SelectAction<WeatherReferenceData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        await base.InitData(t, SelectAction, toggleGroup);
+         base.InitData(t, SelectAction, toggleGroup);
         timeText.SetSWText( data.time);
         
         weatherIcon.sprite = WeatherManager.instance.GetWeatherIcon(data.weather,true,data.night); 

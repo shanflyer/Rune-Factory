@@ -1,24 +1,29 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI; 
+using UnityEngine.UI;
 
 public class TeamPanel : GamePanel<CharacterInformationDataList>
 {
     [SerializeField]
-    Transform teamerparent;
-    [SerializeField]
-    TeamerReference TeamerReference;
-    [SerializeField]
-    ToggleGroup toggleGroup;
+    private Transform teamerparent;
 
     [SerializeField]
-    Button leaveButton;
+    private TeamerReference TeamerReference;
+
     [SerializeField]
-    Button talkButton;
+    private ToggleGroup toggleGroup;
+
     [SerializeField]
-    Transform operatePanel;
-    DisplayList<TeamerReference, CharacterInformationData> teamerList;
+    private Button leaveButton;
+
+    [SerializeField]
+    private Button talkButton;
+
+    [SerializeField]
+    private Transform operatePanel;
+
+    private DisplayList<TeamerReference, CharacterInformationData> teamerList;
+
     protected override void Awake()
     {
         base.Awake();
@@ -26,6 +31,7 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
         talkButton.onClick.AddListener(TalkAction);
         leaveButton.onClick.AddListener(LeaveAction);
     }
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -36,24 +42,27 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
         leaveButton = FindChildGameObject<Button>("Leave");
         operatePanel = FindChildGameObject("Operate");
     }
+
     public override void OnEnable()
     {
         base.OnEnable();
         GameActionManager.instance.AddListener<RefreshTeam>(RefreshTeam);
     }
+
     public override void OnDisable()
     {
         base.OnDisable();
         if (!SingletonType.Cleared)
             GameActionManager.instance.RemoveListener<RefreshTeam>(RefreshTeam);
     }
-    async void TalkAction()
+
+    private async void TalkAction()
     {
         Character character = CharacterManager.instance.GetCharacter(SelectCharacterId);
         if (character != null)
         {
             if (!PastureManager.instance.TalkAnimal(character.instanceId))
-            { 
+            {
                 EventReferenceData eventReferenceData = new EventReferenceData
                 {
                     name = "CharacterId",
@@ -87,14 +96,13 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
             {
                     eventReferenceData,targetReferenceData,NextTalkReferenceData
             });
-
             }
-            
         }
     }
-    void LeaveAction()
+
+    private void LeaveAction()
     {
-        if(PastureManager.instance.GetAnimal(SelectCharacterId,out var animal))
+        if (PastureManager.instance.GetAnimal(SelectCharacterId, out var animal))
         {
             if (animal.pasture == 0)
             {
@@ -115,7 +123,7 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
                 };
                 GameActionManager.instance.QueueAction(leaveTeam);
                 InformationController.instance.AddInformation(LanguageManage.SwitchStr("动物已经回到牧场"), true, true);
-            } 
+            }
         }
         else
         {
@@ -124,17 +132,17 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
                 teamCharacterId = SelectCharacterId,
             };
             GameActionManager.instance.QueueAction(leaveTeam);
-
-        } 
-        
+        }
     }
+
     public override void Close()
     {
         base.Close();
         SelectCharacterId = 0;
-        UIManager.instance.CloseGamePanel<CharacterInformationPanel>(); 
+        UIManager.instance.CloseGamePanel<CharacterInformationPanel>();
     }
-    void RefreshTeam(RefreshTeam refreshTeam)
+
+    private void RefreshTeam(RefreshTeam refreshTeam)
     {
         var myTeamInfo = TeamManager.instance.GetMyTeamCharacterInfo();
         if (myTeamInfo.characterInformationDatas.Count <= 1)
@@ -147,8 +155,9 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
         }
     }
 
-    int SelectCharacterId = 0;
-    async void SelectAction(CharacterInformationData characterInformationData,bool select)
+    private int SelectCharacterId = 0;
+
+    private async void SelectAction(CharacterInformationData characterInformationData, bool select)
     {
         if (select)
         {
@@ -165,20 +174,21 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
             else
             {
                 operatePanel.gameObject.SetActive(true);
-            } 
+            }
             panel.HideBackGround(true);
         }
-        else if(SelectCharacterId != characterInformationData.characterId)
+        else if (SelectCharacterId != characterInformationData.characterId)
         {
             SelectCharacterId = 0;
             operatePanel.gameObject.SetActive(false);
-          //  UIManager.instance.CloseGamePanel<CharacterInformationPanel>();
+            //  UIManager.instance.CloseGamePanel<CharacterInformationPanel>();
         }
     }
-    public override async void InitReferenceData(CharacterInformationDataList v)
+
+    public override void InitReferenceData(CharacterInformationDataList v)
     {
         base.InitReferenceData(v);
-        await teamerList.InitListData(v.characterInformationDatas, SelectAction, toggleGroup);
-        teamerList.Select(v.characterInformationDatas[0]); 
+        teamerList.InitListData(v.characterInformationDatas, SelectAction, toggleGroup);
+        teamerList.Select(v.characterInformationDatas[0]);
     }
 }

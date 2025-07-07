@@ -129,7 +129,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         }
     }
 
-    public override Task InitData(string dataKay)
+    public override void InitData(string dataKay)
     {
         goldValue.text = PayManager.instance.NowGold.ToString();
         crystalValue.text = PayManager.instance.NowDiamond.ToString();
@@ -146,7 +146,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
 
         RefreshPlayerGold(default(RefreshPlayerGold));
         NewDay(default(NewDay)); 
-        return base.InitData(dataKay);
+        base.InitData(dataKay);
     }
 
     public override void Show(int layer = -1)

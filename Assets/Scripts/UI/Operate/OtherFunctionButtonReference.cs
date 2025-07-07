@@ -28,9 +28,9 @@ public class OtherFunctionButtonReference : UIObjReference<FunctionButton>
     [SerializeField]
     private TextMeshProUGUI Name;
 
-    public override async Task InitData(FunctionButton t, SelectAction<FunctionButton> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override void InitData(FunctionButton t, SelectAction<FunctionButton> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-       await base.InitData(t, SelectAction, toggleGroup);
+        base.InitData(t, SelectAction, toggleGroup);
         Name.SetSWText(data.name);
         Icon.sprite = data.sprite;
         Icon.rectTransform.sizeDelta = GameCommon.SetImageSize(data.sprite, new Vector2(32, 32));

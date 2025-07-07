@@ -42,9 +42,9 @@ public class TeamerReference : UIObjReference<CharacterInformationData>
         NPCName = FindChildGameObject<TextMeshProUGUI>("NPCName");
     }
 
-    public override async Task InitData(CharacterInformationData t, SelectAction<CharacterInformationData> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override void InitData(CharacterInformationData t, SelectAction<CharacterInformationData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        await base.InitData(t, SelectAction, toggleGroup);
+         base.InitData(t, SelectAction, toggleGroup);
         data.head.SetImageSprite(NPCImage,new Vector2(48,48),Vector2.zero);
        // NPCImage.sprite = data.icon;
         // data.head.SetImageSprite(NPCImage);

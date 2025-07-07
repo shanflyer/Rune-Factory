@@ -52,10 +52,10 @@ public class DateReference : UIObjReference<GameDate>
     {
         today.localScale = Vector3.one;
     }
-    public override async Task InitData(GameDate t, SelectAction<GameDate> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override void InitData(GameDate t, SelectAction<GameDate> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         today.localScale = Vector3.zero;
-       await base.InitData(t, SelectAction, toggleGroup);
+        base.InitData(t, SelectAction, toggleGroup);
         selectToggle.group = toggleGroup;
         ValueText.text = data.date.ToString();
         festivalTips.enabled = data.FestivaList!=null&& data.FestivaList.Count > 0;

@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -38,11 +37,10 @@ public class CreaterReference : UIObjReference<MoneyCreatData>
         value = FindChildGameObject<TextMeshProUGUI>("Value");
         cost = FindChildGameObject<TextMeshProUGUI>("CostValue");
     }
-     
 
-    public override async Task InitData(MoneyCreatData t, SelectAction<MoneyCreatData> SelectAction = null, ToggleGroup toggleGroup = null)
+    public override void InitData(MoneyCreatData t, SelectAction<MoneyCreatData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        await  base.InitData(t, SelectAction);
+        base.InitData(t, SelectAction);
         this.SelectAction = SelectAction;
         moneyCreatData = t;
         toggle.group = toggleGroup;

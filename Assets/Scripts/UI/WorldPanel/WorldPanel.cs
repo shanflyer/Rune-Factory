@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -22,8 +20,10 @@ public class WorldPanel : GamePanel<MyInt>
 
     [SerializeField]
     private TextMeshProUGUI exploreValue;
+
     [SerializeField]
     private TextMeshProUGUI infoText;
+
     [SerializeField]
     private Button exploreButton;
 
@@ -72,6 +72,7 @@ public class WorldPanel : GamePanel<MyInt>
 
     private int selectFightChapterId;
     private FightChapter chapterData;
+
     private void ExploreMap()
     {
         if (chapterData.fightMapData.checkBeforeChapter != 0)
@@ -88,7 +89,7 @@ public class WorldPanel : GamePanel<MyInt>
         {
             InformationController.instance.AddInformation(LanguageManage.SwitchStr("体力不足，无法进行探索！"), true, true);
             return;
-        } 
+        }
 
         EnterChapter enterChapter = new EnterChapter
         {
@@ -98,7 +99,7 @@ public class WorldPanel : GamePanel<MyInt>
         Close();
     }
 
-    private async void SelectFightChapter(UIFightChapterData uIFightChapterData, bool selected)
+    private void SelectFightChapter(UIFightChapterData uIFightChapterData, bool selected)
     {
         if (selected)
         {
@@ -119,11 +120,11 @@ public class WorldPanel : GamePanel<MyInt>
                 };
                 list.Add(mapItemReferenceData);
             }
-            await fightMapItems.InitListData(list);
+            fightMapItems.InitListData(list);
             exploreButton.interactable =
 #if UNITY_EDITOR
                 GameController.instance.test ? true :
-#endif 
+#endif
                 chapterData.open;
         }
         else
@@ -133,7 +134,7 @@ public class WorldPanel : GamePanel<MyInt>
                 selectFightChapterId = -1;
             }
             fightMapItems.ClearAll();
-            exploreValue.SetSWText("探索度:{0}%","--");
+            exploreValue.SetSWText("探索度:{0}%", "--");
             exploreButton.interactable = false;
         }
     }
@@ -154,7 +155,7 @@ public class WorldPanel : GamePanel<MyInt>
             }
             seasonIndex.Enqueue(i);
         }
-         
+
         for (int i = 0; i < fightMapDatas.Count; i++)
         {
             var fightMapData = fightMapDatas[i];
@@ -173,26 +174,25 @@ public class WorldPanel : GamePanel<MyInt>
                         season =
 #if UNITY_EDITOR
                        GameController.instance.test ? true :
-#endif  
+#endif
                         fightMapData.season == selectSeason
                     };
-                    await seasonFightChapterList[index].InitData(data, SelectFightChapter);
+                    seasonFightChapterList[index].InitData(data, SelectFightChapter);
 #if UNITY_EDITOR
                     if (GameController.instance.test)
                     {
-                       // SelectFightChapter(data, true);
-
+                        // SelectFightChapter(data, true);
                     }
                     else
 #endif
                     if (fightMapData.season == selectSeason && fightMapData.isOpen)
                     {
-                       // SelectFightChapter(data, true);
+                        // SelectFightChapter(data, true);
                     }
                 }
             }
         }
-        for(int i = 0; i < seasonFightChapterList.Count; i++)
+        for (int i = 0; i < seasonFightChapterList.Count; i++)
         {
             if (seasonFightChapterList[i].TrySelect())
             {
@@ -213,15 +213,14 @@ public class WorldPanel : GamePanel<MyInt>
         RefreshUI((Season)v.value);
     }
 
-    public override Task InitData(string dataKey)
+    public override void InitData(string dataKey)
     {
         try
         {
             int index = int.Parse(dataKey);
             RefreshUI((Season)index);
-
         }
         catch { }
-        return base.InitData(dataKey);
+        base.InitData(dataKey);
     }
 }

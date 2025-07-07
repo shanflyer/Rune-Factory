@@ -33,9 +33,9 @@ public class LanguagePanel : GamePanel<IReferenceData>
         }); 
           
     }
-    public override async Task InitData(string dataKey)
+    public override void InitData(string dataKey)
     {
-       await base.InitData(dataKey); 
+        base.InitData(dataKey); 
        
         RefreshLanguage();
     }

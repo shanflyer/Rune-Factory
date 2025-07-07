@@ -52,7 +52,7 @@ public class GetEntityCoordinate : Action
                 break;
 
             case EntityType.角色:
-                getSuccess = CharacterManager.instance.GetCharacterCoordiante(entityId.Value, out coordinate);
+                getSuccess = CharacterManager.instance.GetCharacterCoordinate(entityId.Value, out coordinate);
                 break;
         }
         targetCoordinate.Value = coordinate;

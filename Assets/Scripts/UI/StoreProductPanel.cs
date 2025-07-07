@@ -45,12 +45,12 @@ public class StoreProductPanel : GamePanel<IReferenceData>
     {
         mask.gameObject.SetActive(false);
     }
-    public override Task InitData(string dataKey)
+    public override void InitData(string dataKey)
     {
         mask.gameObject.SetActive(false);
         GameActionManager.instance.AddListener<PayEndAction>(PayEndAction);
         storeProductList.InitListData(AppStoreManager.instance.GetAppStoreProductDatas(), SelectProduct);
-        return base.InitData(dataKey);
+        base.InitData(dataKey);
     }
 
     private void SelectProduct(AppStoreProductData productData, bool selected)

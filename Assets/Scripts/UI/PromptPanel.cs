@@ -11,9 +11,9 @@ public class PromptPanel : GamePanel<IReferenceData>
     {
         base.SetPanelUISerializeObj();
     }
-    public override Task InitData(string dataKey)
+    public override void InitData(string dataKey)
     {
         info.SetSWText(dataKey);
-        return base.InitData(dataKey); 
+        base.InitData(dataKey); 
     }
 }

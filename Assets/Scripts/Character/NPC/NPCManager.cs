@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Unity.Mathematics;
-using UnityEngine; 
+using UnityEngine;
 
 public enum NPCState
 {
     修养中 = 0, 正常 = 1
 }
-
 
 public struct CharacterInformationDataList : IReferenceData
 {
@@ -34,13 +33,14 @@ public struct CharacterInformationData : IReferenceData
     public Equip equip;
     public int friendValue;
     public AttributeType attributeType;
+
     public bool Equals(IReferenceData other)
     {
-        if(other is CharacterInformationData informationData)
+        if (other is CharacterInformationData informationData)
         {
             return informationData.characterId == characterId;
         }
-            return false;
+        return false;
     }
 }
 
@@ -78,10 +78,10 @@ public class TempCharacter : Character
         nowArea = targetArea;
     }
 
-    public TempCharacter(CharacterData characterData, ProfessionData professionData, int instanceId, TempCharacterData tempCharacterData) : 
-        base(characterData, professionData, instanceId,false)
+    public TempCharacter(CharacterData characterData, ProfessionData professionData, int instanceId, TempCharacterData tempCharacterData) :
+        base(characterData, professionData, instanceId, false)
     {
-        this.tempCharacterData = tempCharacterData; 
+        this.tempCharacterData = tempCharacterData;
         //templevel = 1;
     }
 
@@ -139,7 +139,7 @@ public class TempCharacter : Character
         }
         if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var characterRuntimeObj))
         {
-            characterRuntimeObj.SetEnableBehavior(instanceId, externalBehaviorTree); 
+            characterRuntimeObj.SetEnableBehavior(instanceId, externalBehaviorTree);
         }
         else
         {
@@ -158,8 +158,8 @@ public class TempCharacter : Character
 
 public class Player : Character
 {
-    public Player(CharacterData characterData, int instanceId, string playerName, ProfessionData professionData, int overridePackage = 0) : 
-        base(characterData, professionData, instanceId,true, overridePackage)
+    public Player(CharacterData characterData, int instanceId, string playerName, ProfessionData professionData, int overridePackage = 0) :
+        base(characterData, professionData, instanceId, true, overridePackage)
     {
         name = playerName;
     }
@@ -217,32 +217,35 @@ public struct NPCList : IReferenceData
 
 public class NPC : IReferenceData
 {
-    Season birthSeason;
-    int birthDay;
+    private Season birthSeason;
+    private int birthDay;
+
     //NPCBehavior nPCBehavior;
     public NPC(int instanceId, NPCData nPCData, Season birthSeason, int birthDay)
     {
         characterInstance = instanceId;
         npcData = nPCData;
         npcState = NPCState.正常;
-        
-        this.birthSeason = birthSeason; 
+
+        this.birthSeason = birthSeason;
         this.birthDay = birthDay;
         NPCTaskScheduleManager.instance.AddNPCBehavior(instanceId);
-       // nPCBehavior = new NPCBehavior(instanceId);
+        // nPCBehavior = new NPCBehavior(instanceId);
     }
+
     public FestivalData GetNpcBirthDay()
     {
         FestivalData festivalData = new FestivalData
         {
             date = birthDay,
-            season=birthSeason,
+            season = birthSeason,
             festivalType = FestivalType.纪念,
             id = npcData.id,
             name = npcData.npcName + LanguageManage.SwitchStr(" 的生日"),
         };
         return festivalData;
     }
+
     public Character Character
     {
         get
@@ -268,19 +271,20 @@ public class NPC : IReferenceData
 
     public CharacterInformationData GetInformation()
     {
-        var CharacterInformationData= Character.GetInformation();
+        var CharacterInformationData = Character.GetInformation();
         CharacterInformationData.isNpc = true;
         return CharacterInformationData;
     }
-    public int friendLevel=>FriendManager.instance.GetFriendShipLevel(npcData.id);
-    
+
+    public int friendLevel => FriendManager.instance.GetFriendShipLevel(npcData.id);
+
     public List<int> functions
     {
         get
         {
             List<int> _functions = new List<int>();
             int nowLevel = friendLevel;
-            for(int i = 0; i < npcData.functionIds.Count; i++)
+            for (int i = 0; i < npcData.functionIds.Count; i++)
             {
                 int level = npcData.friendLevels[i];
                 if (nowLevel >= level)
@@ -292,6 +296,7 @@ public class NPC : IReferenceData
             return _functions;
         }
     }
+
     public List<int> likeItems => likeItemSet.ToList();
     private HashSet<int> likeItemSet = new HashSet<int>();
     private HashSet<int> unLikeItemSet = new HashSet<int>();
@@ -304,22 +309,25 @@ public class NPC : IReferenceData
     public int playerOperateEventId => npcData.playerOperateEventId;
     public int nextTalkEventId => npcData.nextTalkEventId;
 
-    public NPCState npcState { get; set; } 
+    public NPCState npcState { get; set; }
     public NPCData npcData { get; private set; }
     public bool isActive;
 
     private int resetDay = 0;
 
     public bool isSleep { get; private set; }
+
     public void SetSleep(bool isSleep)
     {
         this.isSleep = isSleep;
     }
+
     public void Rest()
     {
         npcState = NPCState.修养中;
         resetDay = 2;
     }
+
     public void NewDay()
     {
         if (resetDay > 0)
@@ -330,19 +338,20 @@ public class NPC : IReferenceData
                 npcState = NPCState.正常;
             }
         }
-       
     }
+
     public bool CheckTeamFriend()
     {
         return friendLevel >= npcData.teamFriendShip;
     }
+
     public bool CheckNpcShop()
     {
         if (character.linkItem == 0)
         {
             return false;
         }
-        else 
+        else
         {
             if (NPCTaskScheduleManager.instance.NowTaskName(characterInstance) == "看守柜台")
             {
@@ -361,6 +370,7 @@ public class NPC : IReferenceData
         }
         return 0;
     }
+
     public int GetWorkArea()
     {
         if (NPCBehaviorData.workMapAreas.Count > 0)
@@ -370,6 +380,7 @@ public class NPC : IReferenceData
         }
         return 0;
     }
+
     /// <summary>
     ///
     /// </summary>
@@ -386,9 +397,11 @@ public class NPC : IReferenceData
     public int GetTalkId()
     {
         int friendShipLevel = FriendManager.instance.GetFriendShipLevel(dataId);
-        return npcData.GetTalk(friendShipLevel,character.mapInstance);
+        return npcData.GetTalk(friendShipLevel, character.mapInstance);
     }
+
     private NPCBehaviorData NPCBehaviorData;
+
     public async void InitBehaviorData()
     {
         NPCBehaviorData = await GameDataManager.instance.GetAsyncData<NPCBehaviorData>(npcData.id);
@@ -397,7 +410,6 @@ public class NPC : IReferenceData
         likeItemSet = ItemManager.instance.GetItemsForTag(NPCBehaviorData.likeItem);
         unLikeItemSet = ItemManager.instance.GetItemsForTag(NPCBehaviorData.unLikeItem);
 
-      
         visitMaps.Clear();
         InitNowVisitMap();
         visitFriends.Clear();
@@ -416,10 +428,10 @@ public class NPC : IReferenceData
         {
             Debug.LogError($"{npcData.npcName}--error");
         }
-        if (NPCBehaviorData!=null)
+        if (NPCBehaviorData != null)
         {
-            NPCTaskScheduleManager.instance.SetNPCTaskScheduleTimeList(characterInstance,NPCBehaviorData.dailyTasks, NPCBehaviorData.externalBehavior);
-        } 
+            NPCTaskScheduleManager.instance.SetNPCTaskScheduleTimeList(characterInstance, NPCBehaviorData.dailyTasks, NPCBehaviorData.externalBehavior);
+        }
     }
 
     public bool IsInHome()
@@ -590,23 +602,19 @@ public class NPC : IReferenceData
         return 0;
     }
 
-    
-
     public async Task<CharacterData> GetCharacterData()
     {
         CharacterData characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(npcData.linkCharacterId);
         return characterData;
     }
 
-
     public void BackHome()
     {
         if (NPCBehaviorData != null && NPCBehaviorData.externalBehavior != null)
         {
             NPCTaskScheduleManager.instance.AddNpcBehavior(characterInstance, CharacterBehaviorManager.instance.backHomeExternalBehavior);
-        }  
+        }
     }
-
 
     public bool SetTimeBehaviorTree(UpdateGameTime UpdateGameTime)
     {
@@ -616,8 +624,6 @@ public class NPC : IReferenceData
         }
         return NPCTaskScheduleManager.instance.SetNowBehaviorTree(characterInstance, UpdateGameTime);
     }
-
-
 
     public void Dispose()
     {
@@ -679,7 +685,7 @@ public class NPC : IReferenceData
                     displayFunction = false,
                     endAction = () =>
                     {
-                        CharacterManager.instance.controllerCharacter.SetNeighborhood(characterInstance); 
+                        CharacterManager.instance.controllerCharacter.SetNeighborhood(characterInstance);
                     }
                 };
                 GameActionManager.instance.QueueAction(talk);
@@ -688,7 +694,7 @@ public class NPC : IReferenceData
                 {
                     characterId = characterInstance,
                     friendAddType = FriendAddType.礼物,
-                    value = friendValue*mulValue
+                    value = friendValue * mulValue
                 };
                 GameActionManager.instance.QueueAction(addFriendShipValue);
             }
@@ -703,8 +709,6 @@ public class NPC : IReferenceData
     }
 }
 
-
-
 public class NPCManager : Singleton<NPCManager>
 {
     private MyDic<int, NPC> npcs = new MyDic<int, NPC>();
@@ -713,8 +717,8 @@ public class NPCManager : Singleton<NPCManager>
     public override void Init()
     {
         base.Init();
-        npcs.Clear(); 
-        GameActionManager.instance.AddListener<GiveGift>(GiveGift); 
+        npcs.Clear();
+        GameActionManager.instance.AddListener<GiveGift>(GiveGift);
 
         GameActionManager.instance.AddListener<CheckNpcShopLink>(CheckNpcShopLink);
         GameActionManager.instance.AddListener<TryNPCJoinTeam>(TryNPCJoinTeam);
@@ -726,37 +730,41 @@ public class NPCManager : Singleton<NPCManager>
         base.Clear();
         npcs.Clear();
     }
-    void NewDay(NewDay newDay)
+
+    private void NewDay(NewDay newDay)
     {
-       for(int i = 0; i < npcs.length; i++)
+        for (int i = 0; i < npcs.length; i++)
         {
             npcs[i].NewDay();
         }
     }
+
     public List<FestivalData> GetNpcBirthFestivalDatas()
     {
         List<FestivalData> festivalDatas = new List<FestivalData>();
-        for(int i = 0; i < npcs.length; i++)
+        for (int i = 0; i < npcs.length; i++)
         {
             festivalDatas.Add(npcs[i].GetNpcBirthDay());
         }
         return festivalDatas;
     }
+
     public void InitNPCBehavior()
     {
-        for(int i = 0; i < npcs.length; i++)
+        for (int i = 0; i < npcs.length; i++)
         {
             if (npcs[i].Character == null || npcs[i].Character.mapInstance < 0)
             {
-               // Debug.Log($"npc:{npcs[i].npcName}--不适合");
+                // Debug.Log($"npc:{npcs[i].npcName}--不适合");
                 continue;
             }
             npcs[i].InitBehaviorData();
         }
     }
-    void TryNPCJoinTeam(TryNPCJoinTeam tryNPCJoinTeam)
+
+    private void TryNPCJoinTeam(TryNPCJoinTeam tryNPCJoinTeam)
     {
-        if(GetNPCFormInstance(tryNPCJoinTeam.characterId,out var npc))
+        if (GetNPCFormInstance(tryNPCJoinTeam.characterId, out var npc))
         {
             if (npc.npcState == NPCState.修养中)
             {
@@ -816,9 +824,10 @@ public class NPCManager : Singleton<NPCManager>
             GameActionManager.instance.QueueAction(joinTeam);
         }
     }
+
     public void CheckNpcShopLink(CheckNpcShopLink checkNpcShopLink)
     {
-        if(GetNPCFormInstance(checkNpcShopLink.characterId,out var npc))
+        if (GetNPCFormInstance(checkNpcShopLink.characterId, out var npc))
         {
             if (npc.CheckNpcShop())
             {
@@ -827,7 +836,8 @@ public class NPCManager : Singleton<NPCManager>
             }
         }
         checkNpcShopLink.setResult(false);
-    }  
+    }
+
     private void GiveGift(GiveGift giveGift)
     {
         if (GetNPCFormInstance(giveGift.receiveCharacter, out var npc))
@@ -835,15 +845,17 @@ public class NPCManager : Singleton<NPCManager>
             npc.GetGift(giveGift.giveCharacter, giveGift.giftId);
         }
     }
-    public bool GetNPCIdFromInstance(int instanceId,out int npcId)
+
+    public bool GetNPCIdFromInstance(int instanceId, out int npcId)
     {
         if (instanceDatas.TryGetValue(instanceId, out npcId))
         {
             return true;
         }
         npcId = 0;
-        return false ;
+        return false;
     }
+
     public bool GetNPCFormInstance(int instanceId, out NPC npc)
     {
         npc = null;
@@ -872,7 +884,7 @@ public class NPCManager : Singleton<NPCManager>
     {
         NPCList nPCList = new NPCList
         {
-            npcs = npcs.GetValueList().FindAll(n=>!n.hide),
+            npcs = npcs.GetValueList().FindAll(n => !n.hide),
         };
 
         return nPCList;
@@ -886,7 +898,7 @@ public class NPCManager : Singleton<NPCManager>
             var NPCData = NPCDatas[i];
             if (NPCData.zeroCreate)
             {
-                var saveBirthDay=GameDataSaveManager.instance.UserGameSaveData.GetNpcBirthDay(NPCData.id);
+                var saveBirthDay = GameDataSaveManager.instance.UserGameSaveData.GetNpcBirthDay(NPCData.id);
                 if (saveBirthDay.x == -1)
                 {
                     saveBirthDay.x = GameRandom.RandomInt(1, 5);
@@ -894,15 +906,15 @@ public class NPCManager : Singleton<NPCManager>
                     GameDataSaveManager.instance.UserGameSaveData.SetNpcBirthDay(NPCData.id, (Season)saveBirthDay.x, saveBirthDay.y);
                 }
                 int instanceId = MyInstance.instance.CharacterId;
-                NPC npc = new NPC(instanceId, NPCData,(Season)saveBirthDay.x,saveBirthDay.y);
+                NPC npc = new NPC(instanceId, NPCData, (Season)saveBirthDay.x, saveBirthDay.y);
                 npcs.Add(npc.Key, npc);
                 instanceDatas[instanceId] = NPCData.id;
                 FriendManager.instance.ZeroFriendShip(NPCData.id, NPCData.zeroFriendShipLevel);
 
-                FestivalManager.instance.AddNPCBrothDay(npc.npcName, (Season)saveBirthDay.x, saveBirthDay.y,NPCData.id);
+                FestivalManager.instance.AddNPCBrothDay(npc.npcName, (Season)saveBirthDay.x, saveBirthDay.y, NPCData.id);
 
                 Character character = CharacterManager.instance.GetCharacter(instanceId);
-                if (character==null)
+                if (character == null)
                 {
                     CreatCharacter creatCharacter = new CreatCharacter
                     {
@@ -913,7 +925,6 @@ public class NPCManager : Singleton<NPCManager>
                 }
             }
         }
-        var shopManager = ShopManager.instance; 
-         
+        var shopManager = ShopManager.instance;
     }
 }
