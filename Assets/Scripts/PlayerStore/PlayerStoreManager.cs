@@ -256,7 +256,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
     }
 
     //设置背包界面物体Action
-    private async void StoreCounterSetSelectItemAction(StoreCounterSetSelectItemAction storeCounterSetSelectItemAction)
+    private void StoreCounterSetSelectItemAction(StoreCounterSetSelectItemAction storeCounterSetSelectItemAction)
     {
         if (runtimeStoreCounters.TryGetValue(storeCounterSetSelectItemAction.targetObj, out var runtimeStoreCounter))
         {
@@ -280,12 +280,15 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 itemMatchData = itemMatchData
             };
 
-            WarehousePanel warehousePanel = await UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
-            warehousePanel.SetSelectItemAction((Item item, bool select) =>
+            UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList,SetPanel: warehousePanel =>
             {
-                UIManager.instance.CloseGamePanel<WarehousePanel>();
-                OpenSetItemPanel(storeCounterSetSelectItemAction.targetObj, item);
-            }, "选择");
+                warehousePanel.SetSelectItemAction((Item item, bool select) =>
+                {
+                    UIManager.instance.CloseGamePanel<WarehousePanel>();
+                    OpenSetItemPanel(storeCounterSetSelectItemAction.targetObj, item);
+                }, "选择");
+            });
+           
         }
     }
 
@@ -300,7 +303,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 itemId = itemDataId,
                 count = runtimeStoreCounter.count
             };
-            await UIManager.instance.ShowGamePanel<StoreCounterSetPanel, SetStoreCounterItem>(setStoreCounterItem);
+            UIManager.instance.ShowGamePanel<StoreCounterSetPanel, SetStoreCounterItem>(setStoreCounterItem);
         }
     }
 
@@ -315,7 +318,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         {
             setStoreCounterItem.count = runtimeStoreCounter.count;
         }
-        await UIManager.instance.ShowGamePanel<StoreCounterSetPanel, SetStoreCounterItem>(setStoreCounterItem);
+        UIManager.instance.ShowGamePanel<StoreCounterSetPanel, SetStoreCounterItem>(setStoreCounterItem);
     }
 
     private async void SetStoreCounterItem(SetStoreCounterItem setStoreCounterItem)

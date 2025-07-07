@@ -8,11 +8,13 @@ public class GameNotificationManager : Singleton<GameNotificationManager>
         base.Init();
     }
 
-    public async void DisplayTips(string title, string notice)
+    public void DisplayTips(string title, string notice)
     {
-        await UIManager.instance.ShowGamePanel<TipsPanel>(layer: 100);
-        TipsPanel tipsPanel = await UIManager.instance.GetGamePanel<TipsPanel>();
-        tipsPanel.InitTipsData(title, notice);
+        UIManager.instance.ShowGamePanel<TipsPanel>(layer: 100);
+        UIManager.instance.GetGamePanel<TipsPanel>(SetPanel: tipsPanel =>{
+            tipsPanel.InitTipsData(title, notice);
+        });
+       
     }
 
     bool showItemResultInfo = false;

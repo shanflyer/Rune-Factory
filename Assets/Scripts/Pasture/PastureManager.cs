@@ -142,7 +142,7 @@ public class PastureManager : Singleton<PastureManager>
                     items = items,
                     afterAction = UpPastureLevel,
                 };
-                await UIManager.instance.ShowGamePanel<ItemCostSelectPanel, ItemCostEventData>(itemCostEventData);
+                UIManager.instance.ShowGamePanel<ItemCostSelectPanel, ItemCostEventData>(itemCostEventData);
 
                 void UpPastureLevel(bool result)
                 {
@@ -458,7 +458,7 @@ public class PastureManager : Singleton<PastureManager>
                 items = items,
                 afterAction = CreatPasture,
             };
-            await UIManager.instance.ShowGamePanel<ItemCostSelectPanel, ItemCostEventData>(itemCostEventData);
+            UIManager.instance.ShowGamePanel<ItemCostSelectPanel, ItemCostEventData>(itemCostEventData);
 
             void CreatPasture(bool result)
             {

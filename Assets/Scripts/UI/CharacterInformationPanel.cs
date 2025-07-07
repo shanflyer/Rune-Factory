@@ -100,7 +100,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
                 };
                 GameActionManager.instance.QueueAction(clearEquip, true);
             }
-            await UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
+            UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
         }
         else if (isController)
         {

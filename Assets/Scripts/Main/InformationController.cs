@@ -21,24 +21,10 @@ public class InformationController : Singleton<InformationController>
     }
 
     InformationShowPanel InformationShowPanel;
-    PromptPanel PromptPanel
-    {
-        get
-        {
-            if (_PromptPanel == null)
-            {
-                GetPromptPanel();
-                async void GetPromptPanel()
-                {
-                    _PromptPanel = await UIManager.instance.GetGamePanel<PromptPanel>();
-                }
-            }
-            return _PromptPanel;
-        }
-    }
+
     PromptPanel _PromptPanel;
     bool nowShow = false;
-   async void ShowInformation()
+    void ShowInformation()
     { 
         if(informationsQueue.Count>0)
         {
@@ -48,10 +34,14 @@ public class InformationController : Singleton<InformationController>
 
             if (InformationShowPanel == null)
             {
-                InformationShowPanel =await UIManager.instance.GetGamePanel<InformationShowPanel>(true);
+                 UIManager.instance.GetGamePanel<InformationShowPanel>(SetPanel: InformationShowPanel =>
+                {
+                    this.InformationShowPanel = InformationShowPanel;
+                    InformationShowPanel.SetInfo(information);
+                    InformationShowPanel.Show();
+                });
             }
-            InformationShowPanel.SetInfo(information);
-            InformationShowPanel.Show();
+            
         }
         else
         {
@@ -80,18 +70,27 @@ public class InformationController : Singleton<InformationController>
                 ShowInformation();
             }
         }
-        if (PromptShow&& PromptPanel!=null)
+        if (PromptShow&& _PromptPanel!=null)
         {
-            PromptPanel.Show();
-            PromptPanel.InitData(information);
+            _PromptPanel.Show();
+            _PromptPanel.InitData(information);
             GameTimerController.instance.DelayAction((int)(GameCommon.PromptTime*1000), ClosePromptPanel);
+        }
+        else
+        {
+            UIManager.instance.GetGamePanel<PromptPanel>(SetPanel:panel=>{
+                _PromptPanel = panel;
+                _PromptPanel.Show();
+                _PromptPanel.InitData(information);
+                GameTimerController.instance.DelayAction((int)(GameCommon.PromptTime * 1000), ClosePromptPanel);
+            });
         }
     }
     void ClosePromptPanel()
     {
-        if (PromptPanel != null)
+        if (_PromptPanel != null)
         {
-            PromptPanel.Close();
+            _PromptPanel.Close();
         }
     }
 }

@@ -157,25 +157,28 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
 
     private int SelectCharacterId = 0;
 
-    private async void SelectAction(CharacterInformationData characterInformationData, bool select)
+    private void SelectAction(CharacterInformationData characterInformationData, bool select)
     {
         if (select)
         {
-            var panel = await UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformationData);
-            if (panel == null)
+            UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformationData,SetPanel: panel =>
             {
-                return;
-            }
-            SelectCharacterId = characterInformationData.characterId;
-            if (characterInformationData.characterId == CharacterManager.instance.controllerCharacter.instanceId)
-            {
-                operatePanel.gameObject.SetActive(false);
-            }
-            else
-            {
-                operatePanel.gameObject.SetActive(true);
-            }
-            panel.HideBackGround(true);
+                if (panel == null)
+                {
+                    return;
+                }
+                SelectCharacterId = characterInformationData.characterId;
+                if (characterInformationData.characterId == CharacterManager.instance.controllerCharacter.instanceId)
+                {
+                    operatePanel.gameObject.SetActive(false);
+                }
+                else
+                {
+                    operatePanel.gameObject.SetActive(true);
+                }
+                panel.HideBackGround(true);
+            });
+            
         }
         else if (SelectCharacterId != characterInformationData.characterId)
         {

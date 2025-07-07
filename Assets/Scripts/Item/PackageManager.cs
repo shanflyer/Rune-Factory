@@ -15,7 +15,7 @@ public class PackageManager : Singleton<PackageManager>
         }
     }
 
-    public async void ShowPlayerBagUse(bool close, ItemMatchData itemMatchData)
+    public void ShowPlayerBagUse(bool close, ItemMatchData itemMatchData)
     {
         Character character = CharacterManager.instance.controllerCharacter;
         PackageList packageList = new PackageList
@@ -27,18 +27,20 @@ public class PackageManager : Singleton<PackageManager>
         {
             packageList.packageDatas.Add(gamePackage.OutGamePackageData());
         }
-        var warehousePanel = await UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
-        warehousePanel.SetSelectItemAction((Item item, bool select) =>
-        {
-            UsingAction(item);
-            if (close)
+        UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList,SetPanel: warehousePanel =>{
+            warehousePanel.SetSelectItemAction((Item item, bool select) =>
             {
-                UIManager.instance.CloseGamePanel<WarehousePanel>();
-            }
-        }, "使用");
+                UsingAction(item);
+                if (close)
+                {
+                    UIManager.instance.CloseGamePanel<WarehousePanel>();
+                }
+            }, "使用");
+        });
+        
     }
 
-    public async void ShowFightPlayerBagUse(bool close, ItemMatchData itemMatchData)
+    public void ShowFightPlayerBagUse(bool close, ItemMatchData itemMatchData)
     {
         Character character = CharacterManager.instance.controllerCharacter;
         PackageList packageList = new PackageList
@@ -50,16 +52,18 @@ public class PackageManager : Singleton<PackageManager>
         {
             packageList.packageDatas.Add(gamePackage.OutGamePackageData());
         }
-        var warehousePanel = await UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
-        warehousePanel.SetSelectItemAction((Item item, bool select) =>
-        {
-            FightManager.instance.TryUseItem(item);
-            // UsingAction(item);
-            if (close)
-            {
-                UIManager.instance.CloseGamePanel<WarehousePanel>();
-            }
-        }, "使用");
+         UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList, SetPanel: warehousePanel => {
+             warehousePanel.SetSelectItemAction((Item item, bool select) =>
+             {
+                 FightManager.instance.TryUseItem(item);
+                 // UsingAction(item);
+                 if (close)
+                 {
+                     UIManager.instance.CloseGamePanel<WarehousePanel>();
+                 }
+             }, "使用");
+         });
+       
     }
 
     private void UsingAction(Item item)
@@ -73,7 +77,7 @@ public class PackageManager : Singleton<PackageManager>
         GameActionManager.instance.QueueAction(itemUseAction, true);
     }
 
-    public async void ShowAllPlayerPackage(SelectAction<Item> selectItemAction, string actionName)
+    public void ShowAllPlayerPackage(SelectAction<Item> selectItemAction, string actionName)
     {
         PackageList packageList = new PackageList
         {
@@ -86,8 +90,11 @@ public class PackageManager : Singleton<PackageManager>
                 packageList.packageDatas.Add(gamePackage.OutGamePackageData());
             }
         }
-        var warehousePanel = await UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
-        warehousePanel.SetSelectItemAction(selectItemAction, actionName);
+        UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList,SetPanel: warehousePanel =>
+        {
+            warehousePanel.SetSelectItemAction(selectItemAction, actionName);
+        });
+       
     }
 
     public int GetPlayerItemCount(int itemDataId)
@@ -365,7 +372,7 @@ public class PackageManager : Singleton<PackageManager>
                 packageData0,packageData1
             }
         };
-        await UIManager.instance.ShowGamePanel<MultiPackagePanel, PackageList>(packageList);
+        UIManager.instance.ShowGamePanel<MultiPackagePanel, PackageList>(packageList);
     }
 
     private async void CreatPackage(CreatPackage creatPackage)
@@ -582,40 +589,44 @@ public class PackageManager : Singleton<PackageManager>
 
             if (openPackage.isMiniShow)
             {
-                var miniPackagePanel = await UIManager.instance.ShowGamePanel<MiniPackagePanel, PackageList>(packageList);
+                 UIManager.instance.ShowGamePanel<MiniPackagePanel, PackageList>(packageList,SetPanel: miniPackagePanel =>
+                {
+                    if (gameActionData != null)
+                    {
+                        miniPackagePanel.SetSelectItemAction(openPackage.selectAction, openPackage.selectActionName);
+                    }
+                    else
+                    {
+                    }
+                    if (openPackage.selectActionId == 0 &&
+                    openPackage.selectAction != null)
+                    {
+                        miniPackagePanel.SetSelectItemAction(openPackage.selectAction, openPackage.selectActionName);
+                    }
 
-                if (gameActionData != null)
-                {
-                    miniPackagePanel.SetSelectItemAction(openPackage.selectAction, openPackage.selectActionName);
-                }
-                else
-                {
-                }
-                if (openPackage.selectActionId == 0 &&
-                openPackage.selectAction != null)
-                {
-                    miniPackagePanel.SetSelectItemAction(openPackage.selectAction, openPackage.selectActionName);
-                }
+                    if (openPackage.setPanel != null)
+                    {
+                        openPackage.setPanel(miniPackagePanel);
+                    }
+                });
 
-                if (openPackage.setPanel != null)
-                {
-                    openPackage.setPanel(miniPackagePanel);
-                }
+               
             }
             else
             {
-                var WarehousePanel = await UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
-
-                if (openPackage.selectActionId == 0 &&
-                    openPackage.selectAction != null)
+                 UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList,SetPanel: WarehousePanel =>
                 {
-                    WarehousePanel.SetSelectItemAction(openPackage.selectAction, openPackage.selectActionName);
-                }
+                    if (openPackage.selectActionId == 0 &&
+                   openPackage.selectAction != null)
+                    {
+                        WarehousePanel.SetSelectItemAction(openPackage.selectAction, openPackage.selectActionName);
+                    }
 
-                if (openPackage.setPanel != null)
-                {
-                    openPackage.setPanel(WarehousePanel);
-                }
+                    if (openPackage.setPanel != null)
+                    {
+                        openPackage.setPanel(WarehousePanel);
+                    }
+                }); 
             }
         }
     }

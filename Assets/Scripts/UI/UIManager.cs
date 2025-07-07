@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
+public delegate void SetPanel<T>(T t) where T : BaseReference;
 public class UIManager : Singleton<UIManager>
 {
     private Dictionary<Type, BaseReference> gamePanels = new Dictionary<Type, BaseReference>();
@@ -131,23 +132,27 @@ public class UIManager : Singleton<UIManager>
         {
             var colorS = JoyStickColorStr.Split(',');
             joyStickColor = new Color(float.Parse(colorS[0]), float.Parse(colorS[1]), float.Parse(colorS[2]), float.Parse(colorS[3]));
-            var ScreenControllerPanel = await GetGamePanel<ScreenControllerPanel>();
-            if (ScreenControllerPanel)
+            GetGamePanel<ScreenControllerPanel>(SetPanel: ScreenControllerPanel =>
             {
-                ScreenControllerPanel.RefreshJoyStickColor();
-            }
+                if (ScreenControllerPanel)
+                {
+                    ScreenControllerPanel.RefreshJoyStickColor();
+                }
+            }); 
         }
     }
 
-    public async void SetJoyStickColor(Color color)
+    public  void SetJoyStickColor(Color color)
     {
         joyStickColor = color;
         PlayerPrefs.SetString("JoyStickColor", $"{color.r},{color.g},{color.b},{color.a}");
-        var ScreenControllerPanel = await GetGamePanel<ScreenControllerPanel>();
-        if (ScreenControllerPanel)
-        {
-            ScreenControllerPanel.RefreshJoyStickColor();
-        }
+         GetGamePanel<ScreenControllerPanel>(SetPanel: ScreenControllerPanel =>
+         {
+             if (ScreenControllerPanel)
+             {
+                 ScreenControllerPanel.RefreshJoyStickColor();
+             }
+         }); 
     }
 
     private Dictionary<string, AudioClip> tagUIAudioDic = new Dictionary<string, AudioClip>();
@@ -210,31 +215,18 @@ public class UIManager : Singleton<UIManager>
         return false;
     }
 
-    public async Task<T> GetGamePanel<T>(bool force = false) where T : BaseReference
+    public void GetGamePanel<T>(SetPanel<T> SetPanel, bool force = false) where T : BaseReference
     {
         if (gamePanels.TryGetValue(typeof(T), out var gamePanel) && gamePanel != null)
         {
-            return (T)gamePanel;
+            SetPanel((T)gamePanel); 
         }
         else if (force)
         {
-            return await ShowGamePanel<T>();
-        }
-        return null;
+           ShowGamePanel<T>(SetPanel: SetPanel);
+        } 
     }
-
-    public async Task<T> GetGamePanel<T, V>(V data, bool force = false, int layer = -1, Transform parent = null) where T : GamePanel<V> where V : IReferenceData
-    {
-        if (gamePanels.TryGetValue(typeof(T), out var gamePanel) && gamePanel != null)
-        {
-            return (T)gamePanel;
-        }
-        else if (force)
-        {
-            return await ShowGamePanel<T, V>(data, layer, parent);
-        }
-        return null;
-    }
+ 
 
     private BaseReference GetGamePanel(Type t)
     {
@@ -246,22 +238,32 @@ public class UIManager : Singleton<UIManager>
         return null;
     }
 
-    public async Task<T> ShowGamePanel<T>(string dataKey = null, int layer = -1, Transform parent = null) where T : BaseReference
+    public void ShowGamePanel<T>(string dataKey = null, int layer = -1, Transform parent = null, SetPanel<T> SetPanel=null) where T : BaseReference
     {
         var type = typeof(T);
-        var gamePanel = await ShowGamePanel(type, dataKey, layer, parent);
+        ShowGamePanel(type, dataKey, layer, parent, SetPanel: BaseReference =>
+        {
+            if (SetPanel != null)
+            {
+                SetPanel((T)BaseReference);
+            }
+        });
         if (GameDataManager.instance.GlobalData.debug)
-            Debug.Log($"ShowPanel:{type}");
-        return gamePanel as T;
+            Debug.Log($"ShowPanel:{type}"); 
     }
 
-    public async Task<T> ShowGamePanel<T, V>(V data, int layer = -1, Transform parent = null) where T : GamePanel<V> where V : IReferenceData
+    public void ShowGamePanel<T, V>(V data, int layer = -1, Transform parent = null, SetPanel<T> SetPanel = null) where T : GamePanel<V> where V : IReferenceData
     {
         var type = typeof(T);
-        var gamePanel = await ShowGamePanel(type, data, layer, parent);
+         ShowGamePanel(type, data, layer, parent, SetPanel: BaseReference =>
+         {
+             if (SetPanel != null)
+             {
+                 SetPanel((T)BaseReference);
+             }
+         });
         if (GameDataManager.instance.GlobalData.debug)
-            Debug.Log($"ShowPanel:{type}");
-        return (T)gamePanel;
+            Debug.Log($"ShowPanel:{type}"); 
     }
 
     public T ShowGamePanelImmediately<T, V>(V data, int layer = -1, Transform parent = null) where T : GamePanel<V> where V : IReferenceData
@@ -328,48 +330,53 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-    private async Task<GamePanel<V>> ShowGamePanel<V>(Type type, V data, int layer = -1, Transform parent = null) where V : IReferenceData
+    private async void ShowGamePanel<V>(Type type, V data, int layer = -1, Transform parent = null,SetPanel<BaseReference> SetPanel=null) where V : IReferenceData
     {
         if (!gamePanels.TryGetValue(type, out BaseReference panel) || panel == null)
         {
             string path = $"{DataPath.UIPath}{type}";
             var gamePanelObj = await GameSourceManager.instance.GetPrefab(path);
             var async = GameObject.InstantiateAsync(gamePanelObj, parent == null ? canvasParent : parent);
-            await async;
-            if (!Application.isPlaying || SingletonType.Cleared)
+            async.completed += ao =>
             {
-                GameObject.Destroy(gamePanelObj);
-                return null;
-            }
-            var _Panel = async.Result[0];
-            var gamePanelComponent = _Panel.GetComponent(type);
-            _Panel.transform.localPosition = Vector3.zero;
-            GamePanel<V> gamePanel;
-            if (gamePanelComponent == null)
-            {
-                gamePanel = (GamePanel<V>)_Panel.AddComponent(type);
-            }
-            else
-            {
-                gamePanel = (GamePanel<V>)gamePanelComponent;
-            }
-
-            if (!IsPluralUI(type))
-            {
-                if (gamePanels.TryGetValue(type, out var _panel))
+                if (!Application.isPlaying || SingletonType.Cleared)
                 {
-                    if (_panel != gamePanel)
-                    {
-                        _panel.Close();
-                    }
+                    GameObject.Destroy(gamePanelObj); 
                 }
-                gamePanels[type] = gamePanel;
-            }
+                var _Panel = async.Result[0];
+                var gamePanelComponent = _Panel.GetComponent(type);
+                _Panel.transform.localPosition = Vector3.zero;
+                GamePanel<V> gamePanel;
+                if (gamePanelComponent == null)
+                {
+                    gamePanel = (GamePanel<V>)_Panel.AddComponent(type);
+                }
+                else
+                {
+                    gamePanel = (GamePanel<V>)gamePanelComponent;
+                }
 
-            gamePanel.gameObject.SetActive(true);
-            gamePanel.Show(layer);
-            gamePanel.InitReferenceData(data);
-            return gamePanel;
+                if (!IsPluralUI(type))
+                {
+                    if (gamePanels.TryGetValue(type, out var _panel))
+                    {
+                        if (_panel != gamePanel)
+                        {
+                            _panel.Close();
+                        }
+                    }
+                    gamePanels[type] = gamePanel;
+                }
+
+                gamePanel.gameObject.SetActive(true);
+                gamePanel.Show(layer);
+                gamePanel.InitReferenceData(data);
+
+                if (SetPanel != null)
+                {
+                    SetPanel(gamePanel);
+                }
+            }; 
         }
         else
         {
@@ -383,7 +390,10 @@ public class UIManager : Singleton<UIManager>
             gamePanel.Show(layer);
             gamePanel.InitReferenceData(data);
 
-            return gamePanel;
+            if (SetPanel != null)
+            {
+                SetPanel(gamePanel);
+            }
         }
     }
 
@@ -417,15 +427,15 @@ public class UIManager : Singleton<UIManager>
             gamePanel.raycaster.enabled = !hidePanel.hide;
     }
 
-    private async void OpenPanel(OpenPanelAction openPanelEvent)
+    private void OpenPanel(OpenPanelAction openPanelEvent)
     {
         //Debug.Log($"OpenPanelAction :{openPanelEvent.type}");
-        await ShowGamePanel(openPanelEvent.type, openPanelEvent.dataId);
+       ShowGamePanel(openPanelEvent.type, openPanelEvent.dataId);
     }
 
     private HashSet<Type> openedPanels = new HashSet<Type>();
 
-    private async Task<BaseReference> ShowGamePanel(Type type, string dataKey = null, int layer = -1, Transform parent = null)
+    private async void ShowGamePanel(Type type, string dataKey = null, int layer = -1, Transform parent = null, SetPanel<BaseReference> SetPanel=null)
     {
         /*if (!IsPluralUI(type))
         {
@@ -443,47 +453,65 @@ public class UIManager : Singleton<UIManager>
             string path = $"{DataPath.UIPath}{type}";
             var gamePanelObj = await GameSourceManager.instance.GetPrefab(path);
             var async = GameObject.InstantiateAsync(gamePanelObj, parent == null ? canvasParent : parent);
-            await async;
+            async.completed += ao =>
+            {
 
-            if (!Application.isPlaying || SingletonType.Cleared)
-            {
-                GameObject.Destroy(gamePanelObj);
-                return null;
-            }
-
-            var _Panel = async.Result[0];
-            _Panel.transform.localPosition = Vector3.zero;
-            var gamePanelComponent = _Panel.GetComponent(type);
-
-            if (gamePanelComponent == null)
-            {
-                gamePanel = (BaseReference)_Panel.AddComponent(type);
-            }
-            else
-            {
-                gamePanel = (BaseReference)gamePanelComponent;
-            }
-            if (!IsPluralUI(type))
-            {
-                if (gamePanels.TryGetValue(type, out var _panel))
+                if (!Application.isPlaying || SingletonType.Cleared)
                 {
-                    if (_panel != gamePanel)
-                    {
-                        _panel.Close();
-                    }
+                    GameObject.Destroy(gamePanelObj); 
                 }
-                gamePanels[type] = gamePanel;
-            }
-        }
-        if (parent != null)
-        {
-            gamePanel.transform.SetParent(parent);
-            gamePanel.transform.localPosition = Vector3.zero;
-        }
-        gamePanel.Show(layer);
-        gamePanel.InitData(dataKey);
 
-        return gamePanel;
+                var _Panel = async.Result[0];
+                _Panel.transform.localPosition = Vector3.zero;
+                var gamePanelComponent = _Panel.GetComponent(type);
+
+                if (gamePanelComponent == null)
+                {
+                    gamePanel = (BaseReference)_Panel.AddComponent(type);
+                }
+                else
+                {
+                    gamePanel = (BaseReference)gamePanelComponent;
+                }
+                if (!IsPluralUI(type))
+                {
+                    if (gamePanels.TryGetValue(type, out var _panel))
+                    {
+                        if (_panel != gamePanel)
+                        {
+                            _panel.Close();
+                        }
+                    }
+                    gamePanels[type] = gamePanel;
+                }
+
+                if (parent != null)
+                {
+                    gamePanel.transform.SetParent(parent);
+                    gamePanel.transform.localPosition = Vector3.zero;
+                }
+                gamePanel.Show(layer);
+                gamePanel.InitData(dataKey);
+                if (SetPanel != null)
+                {
+                    SetPanel(gamePanel);
+                }
+            };
+        }
+        else
+        {
+            if (parent != null)
+            {
+                gamePanel.transform.SetParent(parent);
+                gamePanel.transform.localPosition = Vector3.zero;
+            }
+            gamePanel.Show(layer);
+            gamePanel.InitData(dataKey);
+            if (SetPanel != null)
+            {
+                SetPanel(gamePanel);
+            }
+        } 
     }
 
     public void CloseGamePanel<T>()

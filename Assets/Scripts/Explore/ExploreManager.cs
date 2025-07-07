@@ -184,9 +184,9 @@ public class ExploreManager : Singleton<ExploreManager>
             GameActionManager.instance.QueueAction(setMapOverrideEnvironment, true);
             FightManager.instance.CreateFightPlayer();
 
-            GameTimerController.instance.DelayAction(100, async () =>
+            GameTimerController.instance.DelayAction(100,  () =>
             {
-                await UIManager.instance.ShowGamePanel<FightPanel>(ExploreManager.instance.NowChapter.ToString(), layer: 2);
+                UIManager.instance.ShowGamePanel<FightPanel>(ExploreManager.instance.NowChapter.ToString(), layer: 2);
                 UIManager.instance.CloseGamePanel<PlayerTopPanel>();
                 UIManager.instance.CloseGamePanel<MainPanel>();
                 UIManager.instance.CloseGamePanel<ShortcutPanel>();
@@ -345,7 +345,7 @@ public class ExploreManager : Singleton<ExploreManager>
         var gameEventData = await GameDataManager.instance.GetAsyncData<GameEventData>(fightChapter.failureEventId);
         var FightResult = FightManager.instance.FightResult;
         FightResult.victory = false;
-        await UIManager.instance.ShowGamePanel<AdventureResultPanel, FightResult>(FightResult, layer: 2);
+        UIManager.instance.ShowGamePanel<AdventureResultPanel, FightResult>(FightResult, layer: 2);
         Debug.Log("章节探索失败");
         if (gameEventData != null)
         {
@@ -361,7 +361,7 @@ public class ExploreManager : Singleton<ExploreManager>
         var gameEventData = await GameDataManager.instance.GetAsyncData<GameEventData>(fightChapter.successEventId);
         var FightResult = FightManager.instance.FightResult;
         FightResult.victory = true;
-        await UIManager.instance.ShowGamePanel<AdventureResultPanel, FightResult>(FightResult, layer: 2);
+        UIManager.instance.ShowGamePanel<AdventureResultPanel, FightResult>(FightResult, layer: 2);
         Debug.Log("章节探索成功");
         if (gameEventData != null)
         {

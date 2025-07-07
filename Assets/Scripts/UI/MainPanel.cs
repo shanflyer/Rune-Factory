@@ -49,18 +49,18 @@ public class MainPanel : GamePanel<IReferenceData>
     protected override void Awake()
     {
         base.Awake();
-        InfoButton.onClick.AddListener(async () =>
+        InfoButton.onClick.AddListener(() =>
         {
-           await UIManager.instance.ShowGamePanel<BookPanel>();
+           UIManager.instance.ShowGamePanel<BookPanel>();
         });
-        TeamButton.onClick.AddListener(async () =>
+        TeamButton.onClick.AddListener(() =>
         {
-           await UIManager.instance.ShowGamePanel<TeamPanel, CharacterInformationDataList>(TeamManager.instance.GetMyTeamCharacterInfo());
+           UIManager.instance.ShowGamePanel<TeamPanel, CharacterInformationDataList>(TeamManager.instance.GetMyTeamCharacterInfo());
         });
-        HomeEquipmentButton.onClick.AddListener(async () =>
+        HomeEquipmentButton.onClick.AddListener(() =>
         {
             var homeEquipList= HomeEquipManager.instance.GetHomeEquipList(CharacterManager.instance.controllerCharacter.instanceId);
-          await  UIManager.instance.ShowGamePanel<PlayerHomeEquipPanel,HomeEquipList>(homeEquipList);
+            UIManager.instance.ShowGamePanel<PlayerHomeEquipPanel,HomeEquipList>(homeEquipList);
         });
         MyTalk.onClick.AddListener(() =>
         {

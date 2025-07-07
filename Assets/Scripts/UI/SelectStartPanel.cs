@@ -21,7 +21,7 @@ public class SelectStartPanel : GamePanel<IReferenceData>
         {
             Close();
             UIManager.instance.CloseGamePanel<ZeroPanel>();
-           await UIManager.instance.ShowGamePanel<SelectCharacterPanel>();
+           UIManager.instance.ShowGamePanel<SelectCharacterPanel>();
         });
         LoadButton.onClick.AddListener(() =>
         {

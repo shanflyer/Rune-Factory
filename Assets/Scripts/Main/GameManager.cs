@@ -24,7 +24,7 @@ public class GameManager : Singleton<GameManager>
         GameNotificationManager.instance.ShowItemResultInfo(itemResultInfo);
         //UIManager.instance.ShowGamePanel<ItemResultPanel,ItemResultInfo>(itemResultInfo);
     }
-    public async void ShowTwoSelectAction(string title, string notice, Action yesAction, Action noAction)
+    public void ShowTwoSelectAction(string title, string notice, Action yesAction, Action noAction)
     {
         TwoSelectData twoSelectData = new TwoSelectData
         {
@@ -33,26 +33,29 @@ public class GameManager : Singleton<GameManager>
             yesAction = yesAction,
             noAction = noAction
         };
-       await UIManager.instance.ShowGamePanel<TwoSelectPanel, TwoSelectData>(twoSelectData);
+       UIManager.instance.ShowGamePanel<TwoSelectPanel, TwoSelectData>(twoSelectData);
     }
 
-    private async void CloseMapObjTips(CloseMapObjTips closeMapObjTips)
+    private  void CloseMapObjTips(CloseMapObjTips closeMapObjTips)
     {
-        var mapObjTipsPanel = await UIManager.instance.GetGamePanel<MapObjTipsPanel>();
-        if (mapObjTipsPanel)
+        UIManager.instance.GetGamePanel<MapObjTipsPanel>(SetPanel: mapObjTipsPanel =>
         {
-            if (WorldMapObjManager.instance.GetRuntimeMapItemObj(closeMapObjTips.id, out var runtimeObj))
+            if (mapObjTipsPanel)
             {
-                if (runtimeObj.transform != null)
+                if (WorldMapObjManager.instance.GetRuntimeMapItemObj(closeMapObjTips.id, out var runtimeObj))
                 {
-                    Transform parent = runtimeObj.transform;
-                    if (mapObjTipsPanel.transform.parent == parent)
+                    if (runtimeObj.transform != null)
                     {
-                        mapObjTipsPanel.Close();
+                        Transform parent = runtimeObj.transform;
+                        if (mapObjTipsPanel.transform.parent == parent)
+                        {
+                            mapObjTipsPanel.Close();
+                        }
                     }
                 }
             }
-        }
+        });
+        
     }
 
     private async void ShowMapObjTips(ShowMapObjTips showMapObjTips)
@@ -72,9 +75,9 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    public async void ShowObjTips(string info, Transform parent)
+    public void ShowObjTips(string info, Transform parent)
     {
-       await UIManager.instance.ShowGamePanel<MapObjTipsPanel>(info, parent: parent);
+       UIManager.instance.ShowGamePanel<MapObjTipsPanel>(info, parent: parent);
     }
 
     public int GetPlayerBoxId()

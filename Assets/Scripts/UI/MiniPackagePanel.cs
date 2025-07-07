@@ -140,7 +140,7 @@ public class MiniPackagePanel : GamePanel<PackageList>
                     ActionName = actionName, 
                     OffsetPos=infoOffsetY
                 };
-                await UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
+                UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
 
                 if (otherSelectItemAction != null)
                 {

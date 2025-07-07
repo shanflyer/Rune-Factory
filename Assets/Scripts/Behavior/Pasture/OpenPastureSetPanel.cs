@@ -34,7 +34,7 @@ public class OpenPastureSetPanel : Action
             }
         }
         myListInt.intList = ints;
-       await UIManager.instance.ShowGamePanel<PasturePanel, MyListInt>(myListInt);
+       UIManager.instance.ShowGamePanel<PasturePanel, MyListInt>(myListInt);
         
         taskStatus = TaskStatus.Success;
     }

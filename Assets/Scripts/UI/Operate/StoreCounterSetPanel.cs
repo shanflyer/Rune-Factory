@@ -74,8 +74,11 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
                 packageData
             }
         };
-        var WarehousePanel = await UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
-        WarehousePanel.SetSelectItemAction(SelectPackageItem, "更换");
+        UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList,SetPanel: WarehousePanel =>
+        {
+            WarehousePanel.SetSelectItemAction(SelectPackageItem, "更换");
+        });
+        
     }
 
     private int changeCount = 0;
@@ -88,7 +91,7 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
             storeCounterId = storeCunterSetData.storeCounterId,
             count = 0
         };
-        await UIManager.instance.ShowGamePanel<StoreCounterSetPanel, SetStoreCounterItem>(setStoreCounterItem);
+        UIManager.instance.ShowGamePanel<StoreCounterSetPanel, SetStoreCounterItem>(setStoreCounterItem);
         UIManager.instance.CloseGamePanel<WarehousePanel>();
     }
 

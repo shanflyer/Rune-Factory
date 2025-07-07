@@ -64,11 +64,11 @@ public class AdventureResultPanel : GamePanel<FightResult>
         ExploreEnd exploreEnd = new ExploreEnd();
         GameActionManager.instance.QueueAction(exploreEnd, true);
 
-        await UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
-        await UIManager.instance.ShowGamePanel<PlayerTopPanel>();
-        await UIManager.instance.ShowGamePanel<MainPanel>();
-        await UIManager.instance.ShowGamePanel<ShortcutPanel>();
-        await UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
+        UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
+        UIManager.instance.ShowGamePanel<PlayerTopPanel>();
+        UIManager.instance.ShowGamePanel<MainPanel>();
+        UIManager.instance.ShowGamePanel<ShortcutPanel>();
+        UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
 
         if (!data.victory)
         {

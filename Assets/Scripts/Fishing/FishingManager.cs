@@ -147,7 +147,7 @@ public class FishingManager : Singleton<FishingManager>
                     info1 = "本次垂钓一无所获"
                 };
                 GameNotificationManager.instance.ShowItemResultInfo(itemResultInfo);
-                //await UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
+                //UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
             }
             NPCFishingResult nPCFishingResult = new NPCFishingResult
             {

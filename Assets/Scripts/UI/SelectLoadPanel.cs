@@ -55,7 +55,7 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
         Start.onClick.AddListener(StartAction);
         Return.onClick.AddListener(async () =>
         {
-            await UIManager.instance.ShowGamePanel<ZeroPanel>();
+            UIManager.instance.ShowGamePanel<ZeroPanel>();
             Close();
         });
 

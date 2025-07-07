@@ -149,25 +149,27 @@ public class FriendManager : Singleton<FriendManager>
             } 
             packageList.packageDatas.Add(packageData);
 
-            var warehousePanel = await UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
-            warehousePanel.SetSelectItemAction(SelectAction, isAnimal?"投喂": "赠送");
-
-            void SelectAction(Item item,bool select)
+            UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList,SetPanel: warehousePanel =>
             {
-                warehousePanel.Close();
-                int count = PackageManager.instance.GetPackageItemCount(item.packageId, item.dataId);
-                if (count >= 1)
+                warehousePanel.SetSelectItemAction(SelectAction, isAnimal ? "投喂" : "赠送");
+
+                void SelectAction(Item item, bool select)
                 {
-                    UIManager.instance.CloseGamePanel<WarehousePanel>();
-                    GiveGift giveGift = new GiveGift
+                    warehousePanel.Close();
+                    int count = PackageManager.instance.GetPackageItemCount(item.packageId, item.dataId);
+                    if (count >= 1)
                     {
-                        giftId = item.dataId,
-                        giveCharacter = tryGiveGiftOpenPackage.fromCharacterId,
-                        receiveCharacter = tryGiveGiftOpenPackage.toCharacterId
-                    };
-                    GameActionManager.instance.QueueAction(giveGift, true);
+                        UIManager.instance.CloseGamePanel<WarehousePanel>();
+                        GiveGift giveGift = new GiveGift
+                        {
+                            giftId = item.dataId,
+                            giveCharacter = tryGiveGiftOpenPackage.fromCharacterId,
+                            receiveCharacter = tryGiveGiftOpenPackage.toCharacterId
+                        };
+                        GameActionManager.instance.QueueAction(giveGift, true);
+                    }
                 }
-            }
+            }); 
         }
     }
 

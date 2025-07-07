@@ -39,7 +39,7 @@ public class ItemCostBehavior : Action
             items = items,
             afterAction=SetResult
         };
-       await UIManager.instance.ShowGamePanel<ItemCostSelectPanel, ItemCostEventData>(itemCostEventData);
+       UIManager.instance.ShowGamePanel<ItemCostSelectPanel, ItemCostEventData>(itemCostEventData);
     }
     void SetResult(bool result)
     {

@@ -254,9 +254,9 @@ public class WorldMapController : MonoBehaviour
             };
             GameActionManager.instance.QueueAction(setCharacterCoordinate);
            
-            await UIManager.instance.ShowGamePanel<MainPanel>(); 
+            UIManager.instance.ShowGamePanel<MainPanel>(); 
            
-           await UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
+           UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
         }
        
         if (GameController.instance.startPlay)

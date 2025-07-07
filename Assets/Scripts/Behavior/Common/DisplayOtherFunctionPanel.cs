@@ -39,7 +39,7 @@ public class DisplayOtherFunctionPanel : Action
             };
             FunctionButtonList.buttons.Add(functionButton);
         }
-       await UIManager.instance.ShowGamePanel<OtherFuntionPanel, FunctionButtonList>(FunctionButtonList);
+       UIManager.instance.ShowGamePanel<OtherFuntionPanel, FunctionButtonList>(FunctionButtonList);
     }
 
     void CloseOtherFunctionPanel(bool success)

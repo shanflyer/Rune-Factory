@@ -179,7 +179,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 showClose = true,
                 OffsetPos = infoOffsetY, 
             };
-           await UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
+           UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
         });
 
         TitleButton.onClick.AddListener(() =>

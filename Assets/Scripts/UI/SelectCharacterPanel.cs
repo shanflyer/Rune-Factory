@@ -105,8 +105,8 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
         Return.onClick.AddListener(async () =>
         { 
             Close();
-           var zeroPanel= await UIManager.instance.ShowGamePanel<ZeroPanel>(); 
-            zeroPanel.PlayZeroBGM();
+           UIManager.instance.ShowGamePanel<ZeroPanel>(); 
+          
         });
 
         InitData();
@@ -177,7 +177,7 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
     { 
         
         //DataSaveAndLoadTest.IniteZerodata();
-       await UIManager.instance.ShowGamePanel<CharacterSelectInformationPanel,SelectCharacterData>(new SelectCharacterData
+       UIManager.instance.ShowGamePanel<CharacterSelectInformationPanel,SelectCharacterData>(new SelectCharacterData
        {
            name=playerName,
            brithDay=brothDate,

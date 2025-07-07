@@ -18,9 +18,9 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         GameActionManager.instance.AddListener<TryLayInHomeEquip>(TryLayInHomeEquip);
         GameActionManager.instance.AddListener<SetHomeEquipCoordinate>(SetHomeEquipCoordinate);
         GameActionManager.instance.AddListener<RefreshHomeEquip>(RefreshHomeEquip);
-        GameActionManager.instance.AddListener<DisplayHomeEquipPanel>(async (DisplayHomeEquipPanel DisplayHomeEquipPanel) =>
+        GameActionManager.instance.AddListener<DisplayHomeEquipPanel>((DisplayHomeEquipPanel DisplayHomeEquipPanel) =>
         {
-          await  UIManager.instance.ShowGamePanel<PlayerHomeEquipPanel, HomeEquipList>(GetHomeEquipList(DisplayHomeEquipPanel.characterId));
+          UIManager.instance.ShowGamePanel<PlayerHomeEquipPanel, HomeEquipList>(GetHomeEquipList(DisplayHomeEquipPanel.characterId));
         });
         GameActionManager.instance.AddListener<UnSetHomeEquip>(UnSetHomeEquip);
     }

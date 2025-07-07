@@ -40,7 +40,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                         talkValue = mapItemData.playerOperateInfo,
                         displayTime = GameCommon.defaultPlayerTalkTime
                     };
-                   await UIManager.instance.ShowGamePanel<CharacterResponsePanel, CharacterResponseData>(responseData,
+                   UIManager.instance.ShowGamePanel<CharacterResponsePanel, CharacterResponseData>(responseData,
                         parent: characterRuntimeObj.runtimeObj.obj as Transform);
                 }
             }

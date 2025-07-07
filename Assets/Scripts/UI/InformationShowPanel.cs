@@ -23,7 +23,7 @@ public class InformationShowPanel : GamePanel<IReferenceData>
         display.onClick.AddListener(async () =>
         {
             //AudioController.instance.PlayAudio(SE.click);
-           await UIManager.instance.ShowGamePanel<InformationPanel>(layer:20);
+           UIManager.instance.ShowGamePanel<InformationPanel>(layer:20);
         });
     }
     public void SetInfo(string str)

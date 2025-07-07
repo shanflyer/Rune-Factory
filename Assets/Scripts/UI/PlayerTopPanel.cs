@@ -84,12 +84,12 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         playerButton.onClick.AddListener(async () =>
         {
             var characterInformation = CharacterManager.instance.controllerCharacter.GetInformation();
-           await UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformation);
+           UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformation);
         });
 
         calendar.onClick.AddListener(async () =>
         {
-           await UIManager.instance.ShowGamePanel<CalendarPanel>();
+           UIManager.instance.ShowGamePanel<CalendarPanel>();
         });
         goldAdd.onClick.AddListener(PayManager.instance.TryCreatGold);
         crystalAdd.onClick.AddListener(PayManager.instance.TryCreatMoney);
@@ -98,7 +98,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         {
             
             // AudioController.instance.PlayAudio(SE.click);
-           await UIManager.instance.ShowGamePanel<SetPanel>();
+           UIManager.instance.ShowGamePanel<SetPanel>();
         });
 
         GameActionManager.instance.AddListener<NewDay>(NewDay);

@@ -24,7 +24,7 @@ public class TalkManager : Singleton<TalkManager>
                 talkValue = talkData.text,
                 endAction = simpleTalk.endAction
             };
-          await  UIManager.instance.ShowGamePanel<CharacterResponsePanel, CharacterResponseData>(characterResponseData, parent: characterRuntimeObj.transform);
+          UIManager.instance.ShowGamePanel<CharacterResponsePanel, CharacterResponseData>(characterResponseData, parent: characterRuntimeObj.transform);
         }
     }
 
@@ -120,12 +120,12 @@ public class TalkManager : Singleton<TalkManager>
                     return;
                 }
             }
-            await UIManager.instance.ShowGamePanel<TalkPanel, NPCTalkOperateData>(NPCTalkOperateData);
+            UIManager.instance.ShowGamePanel<TalkPanel, NPCTalkOperateData>(NPCTalkOperateData);
         }
 
         if (functionCheckResult == null)
         {
-            await UIManager.instance.ShowGamePanel<TalkPanel, NPCTalkOperateData>(NPCTalkOperateData);
+            UIManager.instance.ShowGamePanel<TalkPanel, NPCTalkOperateData>(NPCTalkOperateData);
         }
         
        

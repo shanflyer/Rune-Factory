@@ -92,7 +92,7 @@ public class ZeroPanel : GamePanel<IReferenceData>
     private async void LoadDataPanel()
     {
         Close();
-        await UIManager.instance.ShowGamePanel<SelectLoadPanel, UserGameSaveDataList>(GameDataSaveManager.instance.UserGameSaveDataList);
+        UIManager.instance.ShowGamePanel<SelectLoadPanel, UserGameSaveDataList>(GameDataSaveManager.instance.UserGameSaveDataList);
     }
 
     private async void StartGame()
@@ -104,7 +104,7 @@ public class ZeroPanel : GamePanel<IReferenceData>
             assetName = "Default"
         };
         GameActionManager.instance.QueueAction(playFilm, true);
-        await UIManager.instance.ShowGamePanel<SelectCharacterPanel>();
+        UIManager.instance.ShowGamePanel<SelectCharacterPanel>();
     }
 
     public override void InitData(string dataKay)

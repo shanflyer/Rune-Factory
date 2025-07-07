@@ -86,24 +86,30 @@ public class ShortcutManager : Singleton<ShortcutManager>
                 }
             }
             shortcutPackages[shortcutPackage.Key]=(shortcutPackage);
-            var shortcutPanel = await UIManager.instance.GetGamePanel<ShortcutPanel>();
-            if (shortcutPanel != null)
+             UIManager.instance.GetGamePanel<ShortcutPanel>(SetPanel: shortcutPanel =>
             {
-                shortcutPanel.InitReferenceData(shortcutPackage);
-            }
+                if (shortcutPanel != null)
+                {
+                    shortcutPanel.InitReferenceData(shortcutPackage);
+                }
+            });
+            
             // UIManager.instance.ShowGamePanel<ShortcutPanel, ShortcutPackage>(shortcutPackage);
 
         }
     }
-    async Task RefreshDisplayShortcutPackageAsync(ShortcutPackage shortcutPackage)
+    void RefreshDisplayShortcutPackageAsync(ShortcutPackage shortcutPackage)
     {
         if (CharacterManager.instance.controllerCharacter.instanceId == shortcutPackage.characterId)
         {
-            var shortcutPanel =await UIManager.instance.GetGamePanel<ShortcutPanel>();
-            if (shortcutPanel != null)
+            UIManager.instance.GetGamePanel<ShortcutPanel>(SetPanel: shortcutPanel =>
             {
-               shortcutPanel.InitReferenceData(shortcutPackage);
-            }    
+                if (shortcutPanel != null)
+                {
+                    shortcutPanel.InitReferenceData(shortcutPackage);
+                }
+            });
+            
         }
     }
     void RefreshItemValue(RefreshItemValue refreshItemValue)
@@ -112,15 +118,15 @@ public class ShortcutManager : Singleton<ShortcutManager>
         shortcutPackage.SetItemValue(refreshItemValue.itemId, refreshItemValue.itemValue);
 
     }
-    async void RemoveShortcutItem(RemoveShortcutItem removeShortcutItem)
+    void RemoveShortcutItem(RemoveShortcutItem removeShortcutItem)
     {
         var shortcutPackage = GetShortcutPackage(removeShortcutItem.characterId);
 
         shortcutPackage.RemoveItemIndex(removeShortcutItem.index);
         //shortcutPackages.SetData(shortcutPackage);
-        await RefreshDisplayShortcutPackageAsync(shortcutPackage);
+        RefreshDisplayShortcutPackageAsync(shortcutPackage);
     }
-    async void SetShortcutItem(SetShortcutItem setShortcutItem)
+   void SetShortcutItem(SetShortcutItem setShortcutItem)
     {
         var shortcutPackage = GetShortcutPackage(setShortcutItem.characterId);
         if (shortcutPackage.SetItem(setShortcutItem.Item))
@@ -134,7 +140,7 @@ public class ShortcutManager : Singleton<ShortcutManager>
 
 
             //shortcutPackages.SetData(shortcutPackage);
-            await RefreshDisplayShortcutPackageAsync(shortcutPackage);
+            RefreshDisplayShortcutPackageAsync(shortcutPackage);
         }
     }
    

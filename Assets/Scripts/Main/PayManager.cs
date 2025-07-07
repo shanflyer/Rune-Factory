@@ -64,7 +64,7 @@ public class PayManager : Singleton<PayManager>
             payType = payType,
             afterAction = afterAction
         };
-       await UIManager.instance.ShowGamePanel<CostSelectPanel, CostEventData>(CostEventData);
+       UIManager.instance.ShowGamePanel<CostSelectPanel, CostEventData>(CostEventData);
     }
 
     public bool TryCost(PayType payType, int count)
@@ -103,7 +103,7 @@ public class PayManager : Singleton<PayManager>
 
     public async void TryCreatGold()
     {
-       await UIManager.instance.ShowGamePanel<GoldCreatPanel, IReferenceData>(null);
+       UIManager.instance.ShowGamePanel<GoldCreatPanel, IReferenceData>(null);
     }
 
     public void AddDiamond(int value)

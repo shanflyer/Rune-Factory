@@ -52,7 +52,7 @@ namespace MyGame
             }
 
             this.AsyncOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-            //loadingPanel=await UIManager.instance.ShowGamePanel<LoadingPanel>();
+            //loadingPanel=UIManager.instance.ShowGamePanel<LoadingPanel>();
             nowSceen = sceneName;
         }
 

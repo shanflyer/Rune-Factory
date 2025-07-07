@@ -101,7 +101,7 @@ public class ShopManager : Singleton<ShopManager>
                 {
                     if(_shopListDic.TryGetValue(runtimeMapItem.editorKey,out var shopList1))
                     {
-                        await UIManager.instance.ShowGamePanel<ShopPanel, ShopList>(shopList1);
+                        UIManager.instance.ShowGamePanel<ShopPanel, ShopList>(shopList1);
                     }
                 }
                 
@@ -121,7 +121,7 @@ public class ShopManager : Singleton<ShopManager>
         } 
         if(shopListDic.TryGetValue(shopName, out var shopList))
         {
-          await UIManager.instance.ShowGamePanel<ShopPanel, ShopList>(shopList);
+          UIManager.instance.ShowGamePanel<ShopPanel, ShopList>(shopList);
         } 
     }
 }

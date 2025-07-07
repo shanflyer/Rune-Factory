@@ -96,7 +96,7 @@ public class SetPanel : GamePanel<IReferenceData>
         });
         changeColorButton.onClick.AddListener(async () =>
         {
-            ColorPickerPanel ColorPickerPanel=await UIManager.instance.ShowGamePanel<ColorPickerPanel,MyColor>(
+            UIManager.instance.ShowGamePanel<ColorPickerPanel,MyColor>(
                 new MyColor { color =UIManager.instance.JoyStickColor,colorEvent= JoyStickColorChange });
         });
         colorASlider.onValueChanged.AddListener((float value) =>
@@ -148,6 +148,6 @@ public class SetPanel : GamePanel<IReferenceData>
     private async void SaveSet()
     {
         Close();
-       await UIManager.instance.ShowGamePanel<SavePanel, UserGameSaveDataList>(GameDataSaveManager.instance.UserGameSaveDataList);
+       UIManager.instance.ShowGamePanel<SavePanel, UserGameSaveDataList>(GameDataSaveManager.instance.UserGameSaveDataList);
     }
 }
