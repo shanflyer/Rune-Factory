@@ -1,114 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-5166404115447350157
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e715ea371f114f4a8d2584ad476634d, type: 3}
-  m_Name: "\u540E\u81C2\u4E0A_Data"
-  m_EditorClassIdentifier: 
-  m_PivotPoint: {x: 74.5, y: 140.5}
-  m_Vertices:
-  - {x: 70, y: 147}
-  - {x: 79, y: 147}
-  - {x: 70, y: 134}
-  - {x: 79, y: 134}
-  m_BoneWeights:
-  - weight0: 1
-    weight1: 0
-    weight2: 0
-    weight3: 0
-    boneIndex0: 1
-    boneIndex1: 0
-    boneIndex2: 0
-    boneIndex3: 0
-  - weight0: 1
-    weight1: 0
-    weight2: 0
-    weight3: 0
-    boneIndex0: 1
-    boneIndex1: 0
-    boneIndex2: 0
-    boneIndex3: 0
-  - weight0: 1
-    weight1: -0
-    weight2: 0
-    weight3: 0
-    boneIndex0: 1
-    boneIndex1: 0
-    boneIndex2: 0
-    boneIndex3: 0
-  - weight0: 1
-    weight1: 0
-    weight2: 0
-    weight3: 0
-    boneIndex0: 1
-    boneIndex1: 0
-    boneIndex2: 0
-    boneIndex3: 0
-  m_Edges:
-  - index1: 0
-    index2: 1
-  - index1: 1
-    index2: 3
-  - index1: 0
-    index2: 2
-  - index1: 2
-    index2: 3
-  m_Holes: []
-  m_Indices: 000000000100000002000000020000000100000003000000
-  m_BindPoses:
-  - bindPose:
-      e00: 1
-      e01: 0
-      e02: 0
-      e03: -0.026827216
-      e10: 0
-      e11: 1
-      e12: 0
-      e13: 0.35277402
-      e20: 0
-      e21: 0
-      e22: 1
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 1
-    boneLength: 0
-    path: 
-    name: Left_Root
-    color: {r: 1, g: 0, b: 0, a: 1}
-    zOrder: 0
-  - bindPose:
-      e00: 0.07111936
-      e01: -0.99746823
-      e02: 0
-      e03: 0.02726453
-      e10: 0.99746823
-      e11: 0.07111936
-      e12: 0
-      e13: -0.0025413968
-      e20: 0
-      e21: 0
-      e22: 1
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 1
-    boneLength: 0.10245619
-    path: Left_Body/Left_BackArm_Up
-    name: Left_BackArm_Up
-    color: {r: 1, g: 0.75, b: 0, a: 1}
-    zOrder: 0
-  m_Blendshapes: []
---- !u!43 &-1820808264284158883
+--- !u!43 &-290240286716612103
 Mesh:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -241,7 +133,7 @@ Mesh:
       format: 10
       dimension: 4
     m_DataSize: 320
-    _typelessdata: ec5138bdb81e853d000000000000000000000000000080bf0000803f0000000000000000000080bfec51383db81e853d000000000000000000000000000080bf0000803f0000000000000000000080bfec5138bdb81e85bd000000000000000000000000000080bf0000803f0000000000000000000080bfec51383db81e85bd000000000000000000000000000080bf0000803f0000000000000000000080bf00000c3f0000133f00001e3f0000133f00000c3f0000063f00001e3f0000063f0000803f000000000000000000000000010000000000000000000000000000000000803f000000000000000000000000010000000000000000000000000000000000803f000000800000000000000000010000000000000000000000000000000000803f00000000000000000000000001000000000000000000000000000000
+    _typelessdata: ec5138bdb81e853d000000000000000000000000000080bf0000803f0000000000000000000080bfec51383db81e853d000000000000000000000000000080bf0000803f0000000000000000000080bfec5138bdb81e85bd000000000000000000000000000080bf0000803f0000000000000000000080bfec51383db81e85bd000000000000000000000000000080bf0000803f0000000000000000000080bf0000523f0000363f00005b3f0000363f0000523f00001c3f00005b3f00001c3f0000803f000000000000000000000000010000000000000000000000000000000000803f000000000000000000000000010000000000000000000000000000000000803f000000800000000000000000010000000000000000000000000000000000803f00000000000000000000000001000000000000000000000000000000
   m_CompressedMesh:
     m_Vertices:
       m_NumItems: 0
@@ -322,6 +214,114 @@ MonoBehaviour:
   m_Name: "\u540E\u81C2\u4E0A"
   m_EditorClassIdentifier: 
   m_ApiVersion: 4
-  m_Sprite: {fileID: 1654937360, guid: e9d17c1a640d71d4295e82c05f784cbb, type: 3}
-  m_SharedMesh: {fileID: -1820808264284158883}
+  m_Sprite: {fileID: 1374825352, guid: e9d17c1a640d71d4295e82c05f784cbb, type: 3}
+  m_SharedMesh: {fileID: -290240286716612103}
   m_SharedMaterials: []
+--- !u!114 &4071737758872868126
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e715ea371f114f4a8d2584ad476634d, type: 3}
+  m_Name: "\u540E\u81C2\u4E0A_Data"
+  m_EditorClassIdentifier: 
+  m_PivotPoint: {x: 214.5, y: 84.5}
+  m_Vertices:
+  - {x: 210, y: 91}
+  - {x: 219, y: 91}
+  - {x: 210, y: 78}
+  - {x: 219, y: 78}
+  m_BoneWeights:
+  - weight0: 1
+    weight1: 0
+    weight2: 0
+    weight3: 0
+    boneIndex0: 1
+    boneIndex1: 0
+    boneIndex2: 0
+    boneIndex3: 0
+  - weight0: 1
+    weight1: 0
+    weight2: 0
+    weight3: 0
+    boneIndex0: 1
+    boneIndex1: 0
+    boneIndex2: 0
+    boneIndex3: 0
+  - weight0: 1
+    weight1: -0
+    weight2: 0
+    weight3: 0
+    boneIndex0: 1
+    boneIndex1: 0
+    boneIndex2: 0
+    boneIndex3: 0
+  - weight0: 1
+    weight1: 0
+    weight2: 0
+    weight3: 0
+    boneIndex0: 1
+    boneIndex1: 0
+    boneIndex2: 0
+    boneIndex3: 0
+  m_Edges:
+  - index1: 0
+    index2: 1
+  - index1: 1
+    index2: 3
+  - index1: 0
+    index2: 2
+  - index1: 2
+    index2: 3
+  m_Holes: []
+  m_Indices: 000000000100000002000000020000000100000003000000
+  m_BindPoses:
+  - bindPose:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: -0.026827216
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0.35277402
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    boneLength: 0
+    path: 
+    name: Left_Root
+    color: {r: 1, g: 0, b: 0, a: 1}
+    zOrder: 0
+  - bindPose:
+      e00: 0.07111936
+      e01: -0.99746823
+      e02: 0
+      e03: 0.02726453
+      e10: 0.99746823
+      e11: 0.07111936
+      e12: 0
+      e13: -0.0025413968
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    boneLength: 0.10245617
+    path: Left_Body/Left_BackArm_Up
+    name: Left_BackArm_Up
+    color: {r: 1, g: 0.75, b: 0, a: 1}
+    zOrder: 0
+  m_Blendshapes: []

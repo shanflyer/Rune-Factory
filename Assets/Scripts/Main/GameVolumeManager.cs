@@ -86,7 +86,12 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
     private ParticleSystem footStep;
     public void EmitFootParticle(float angle,Vector3 pos,Color footStepColor,bool isLeftFoot)
     {
-        if (pos.x == float.NaN || pos.y == float.NaN)
+        pos.z = 0;
+        if (pos.x == float.NaN || pos.y == float.NaN||angle==float.NaN)
+        {
+            return;
+        }
+        if(float.IsFinite(pos.x)|| float.IsFinite(pos.y)|| float.IsFinite(angle))
         {
             return;
         }

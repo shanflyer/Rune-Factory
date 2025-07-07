@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-4735838329042321670
+--- !u!114 &-7361018771516252202
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -12,45 +12,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e715ea371f114f4a8d2584ad476634d, type: 3}
   m_Name: "\u88D9\u5B50\u4E2D_Data"
   m_EditorClassIdentifier: 
-  m_PivotPoint: {x: 74, y: 74.5}
+  m_PivotPoint: {x: 165, y: 85.5}
   m_Vertices:
-  - {x: 70, y: 82}
-  - {x: 78, y: 82}
-  - {x: 70, y: 67}
-  - {x: 78, y: 67}
+  - {x: 161, y: 93}
+  - {x: 169, y: 93}
+  - {x: 161, y: 78}
+  - {x: 169, y: 78}
   m_BoneWeights:
   - weight0: 1
     weight1: 0
     weight2: 0
     weight3: 0
     boneIndex0: 1
-    boneIndex1: -1
-    boneIndex2: -1
-    boneIndex3: -1
+    boneIndex1: 0
+    boneIndex2: 0
+    boneIndex3: 0
   - weight0: 1
     weight1: 0
     weight2: 0
     weight3: 0
     boneIndex0: 1
-    boneIndex1: -1
-    boneIndex2: -1
-    boneIndex3: -1
+    boneIndex1: 0
+    boneIndex2: 0
+    boneIndex3: 0
   - weight0: 1
     weight1: 0
     weight2: 0
     weight3: 0
     boneIndex0: 1
-    boneIndex1: -1
-    boneIndex2: -1
-    boneIndex3: -1
+    boneIndex1: 0
+    boneIndex2: 0
+    boneIndex3: 0
   - weight0: 1
-    weight1: 0
+    weight1: -0
     weight2: 0
     weight3: 0
     boneIndex0: 1
-    boneIndex1: -1
-    boneIndex2: -1
-    boneIndex3: -1
+    boneIndex1: 0
+    boneIndex2: 0
+    boneIndex3: 0
   m_Edges:
   - index1: 0
     index2: 1
@@ -108,23 +108,7 @@ MonoBehaviour:
     color: {r: 1, g: 0.75, b: 0, a: 1}
     zOrder: 0
   m_Blendshapes: []
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c10c0be6d28fe4d539c4a39822fe301c, type: 3}
-  m_Name: "\u88D9\u5B50\u4E2D"
-  m_EditorClassIdentifier: 
-  m_ApiVersion: 4
-  m_Sprite: {fileID: -2079502752, guid: e9d17c1a640d71d4295e82c05f784cbb, type: 3}
-  m_SharedMesh: {fileID: 2026982320045567690}
-  m_SharedMaterials: []
---- !u!43 &2026982320045567690
+--- !u!43 &-7176822460343850355
 Mesh:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -257,7 +241,7 @@ Mesh:
       format: 10
       dimension: 4
     m_DataSize: 320
-    _typelessdata: 0ad723bd9a99993d000000000000000000000000000080bf0000803f0000000000000000000080bf0ad7233d9a99993d000000000000000000000000000080bf0000803f0000000000000000000080bf0ad723bd9a9999bd000000000000000000000000000080bf0000803f0000000000000000000080bf0ad7233d9a9999bd000000000000000000000000000080bf0000803f0000000000000000000080bf00000c3f0000a43e00001c3f0000a43e00000c3f0000863e00001c3f0000863e0000803f000000000000000000000000010000000000000000000000000000000000803f000000000000000000000000010000000000000000000000000000000000803f000000000000000000000000010000000000000000000000000000000000803f00000000000000000000000001000000000000000000000000000000
+    _typelessdata: 0ad723bd9a99993d000000000000000000000000000080bf0000803f0000000000000000000080bf0ad7233d9a99993d000000000000000000000000000080bf0000803f0000000000000000000080bf0ad723bd9a9999bd000000000000000000000000000080bf0000803f0000000000000000000080bf0ad7233d9a9999bd000000000000000000000000000080bf0000803f0000000000000000000080bf0000213f00003a3f0000293f00003a3f0000213f00001c3f0000293f00001c3f0000803f000000000000000000000000010000000000000000000000000000000000803f000000000000000000000000010000000000000000000000000000000000803f000000000000000000000000010000000000000000000000000000000000803f00000080000000000000000001000000000000000000000000000000
   m_CompressedMesh:
     m_Vertices:
       m_NumItems: 0
@@ -325,3 +309,19 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c10c0be6d28fe4d539c4a39822fe301c, type: 3}
+  m_Name: "\u88D9\u5B50\u4E2D"
+  m_EditorClassIdentifier: 
+  m_ApiVersion: 4
+  m_Sprite: {fileID: 242606063, guid: e9d17c1a640d71d4295e82c05f784cbb, type: 3}
+  m_SharedMesh: {fileID: -7176822460343850355}
+  m_SharedMaterials: []

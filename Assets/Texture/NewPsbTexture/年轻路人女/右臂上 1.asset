@@ -1,6 +1,130 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!43 &-8528129131645426953
+--- !u!114 &-5105164158973381320
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e715ea371f114f4a8d2584ad476634d, type: 3}
+  m_Name: "\u53F3\u81C2\u4E0A 1_Data"
+  m_EditorClassIdentifier: 
+  m_PivotPoint: {x: 94, y: 84.5}
+  m_Vertices:
+  - {x: 89, y: 91}
+  - {x: 99, y: 91}
+  - {x: 89, y: 78}
+  - {x: 99, y: 78}
+  m_BoneWeights:
+  - weight0: 1
+    weight1: -0
+    weight2: 0
+    weight3: 0
+    boneIndex0: 1
+    boneIndex1: 0
+    boneIndex2: 0
+    boneIndex3: 0
+  - weight0: 1
+    weight1: 0
+    weight2: 0
+    weight3: 0
+    boneIndex0: 1
+    boneIndex1: 0
+    boneIndex2: 0
+    boneIndex3: 0
+  - weight0: 1
+    weight1: 0
+    weight2: 0
+    weight3: 0
+    boneIndex0: 1
+    boneIndex1: 0
+    boneIndex2: 0
+    boneIndex3: 0
+  - weight0: 1
+    weight1: -0
+    weight2: 0
+    weight3: 0
+    boneIndex0: 1
+    boneIndex1: 0
+    boneIndex2: 0
+    boneIndex3: 0
+  m_Edges:
+  - index1: 0
+    index2: 1
+  - index1: 1
+    index2: 3
+  - index1: 0
+    index2: 2
+  - index1: 2
+    index2: 3
+  m_Holes: []
+  m_Indices: 000000000100000002000000020000000100000003000000
+  m_BindPoses:
+  - bindPose:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0.11399999
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0.3674624
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    boneLength: 0
+    path: 
+    name: Back_Root
+    color: {r: 1, g: 0, b: 0, a: 1}
+    zOrder: 0
+  - bindPose:
+      e00: 0.42450064
+      e01: -0.90542763
+      e02: 0
+      e03: 0.058622304
+      e10: 0.90542763
+      e11: 0.42450064
+      e12: 0
+      e13: 0.023987133
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    boneLength: 0.11996504
+    path: Back_Body/Back_RightArm_Up
+    name: Back_RightArm_Up
+    color: {r: 1, g: 0.75, b: 0, a: 1}
+    zOrder: 0
+  m_Blendshapes: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c10c0be6d28fe4d539c4a39822fe301c, type: 3}
+  m_Name: "\u53F3\u81C2\u4E0A 1"
+  m_EditorClassIdentifier: 
+  m_ApiVersion: 4
+  m_Sprite: {fileID: 1006972505, guid: e9d17c1a640d71d4295e82c05f784cbb, type: 3}
+  m_SharedMesh: {fileID: 1092253556939610245}
+  m_SharedMaterials: []
+--- !u!43 &1092253556939610245
 Mesh:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,14 +165,14 @@ Mesh:
     e31: 0
     e32: 0
     e33: 1
-  - e00: 0.42450094
+  - e00: 0.42450064
     e01: -0.90542763
     e02: 0
-    e03: 0.05862231
+    e03: 0.058622304
     e10: 0.90542763
-    e11: 0.42450094
+    e11: 0.42450064
     e12: 0
-    e13: 0.023987126
+    e13: 0.023987133
     e20: 0
     e21: 0
     e22: 1
@@ -62,8 +186,8 @@ Mesh:
   m_BonesAABB:
   - m_Min: {x: Infinity, y: Infinity, z: Infinity}
     m_Max: {x: -Infinity, y: -Infinity, z: -Infinity}
-  - m_Min: {x: -0.02145553, y: -0.04887682, z: 0}
-    m_Max: {x: 0.13870016, y: 0.096851066, z: 0}
+  - m_Min: {x: -0.021455523, y: -0.04887679, z: 0}
+    m_Max: {x: 0.13870013, y: 0.09685105, z: 0}
   m_VariableBoneCountWeights:
     m_Data: 
   m_MeshCompression: 0
@@ -133,7 +257,7 @@ Mesh:
       format: 10
       dimension: 4
     m_DataSize: 320
-    _typelessdata: cdcc4cbdb81e853d000000000000000000000000000080bf0000803f0000000000000000000080bfcdcc4c3db81e853d000000000000000000000000000080bf0000803f0000000000000000000080bfcdcc4cbdb81e85bd000000000000000000000000000080bf0000803f0000000000000000000080bfcdcc4c3db81e85bd000000000000000000000000000080bf0000803f0000000000000000000080bf0000cc3e0000773f0000f43e0000773f0000cc3e00006a3f0000f43e00006a3f0000803f000000800000000000000000010000000000000000000000000000000000803f000000000000000000000000010000000000000000000000000000000000803f000000000000000000000000010000000000000000000000000000000000803f00000000000000000000000001000000000000000000000000000000
+    _typelessdata: cdcc4cbdb81e853d000000000000000000000000000080bf0000803f0000000000000000000080bfcdcc4c3db81e853d000000000000000000000000000080bf0000803f0000000000000000000080bfcdcc4cbdb81e85bd000000000000000000000000000080bf0000803f0000000000000000000080bfcdcc4c3db81e85bd000000000000000000000000000080bf0000803f0000000000000000000080bf0000b23e0000363f0000c63e0000363f0000b23e00001c3f0000c63e00001c3f0000803f000000800000000000000000010000000000000000000000000000000000803f000000000000000000000000010000000000000000000000000000000000803f000000000000000000000000010000000000000000000000000000000000803f00000080000000000000000001000000000000000000000000000000
   m_CompressedMesh:
     m_Vertices:
       m_NumItems: 0
@@ -201,127 +325,3 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!114 &-6521021443192405303
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e715ea371f114f4a8d2584ad476634d, type: 3}
-  m_Name: "\u53F3\u81C2\u4E0A 1_Data"
-  m_EditorClassIdentifier: 
-  m_PivotPoint: {x: 56, y: 240.5}
-  m_Vertices:
-  - {x: 51, y: 247}
-  - {x: 61, y: 247}
-  - {x: 51, y: 234}
-  - {x: 61, y: 234}
-  m_BoneWeights:
-  - weight0: 1
-    weight1: -0
-    weight2: 0
-    weight3: 0
-    boneIndex0: 1
-    boneIndex1: 0
-    boneIndex2: 0
-    boneIndex3: 0
-  - weight0: 1
-    weight1: 0
-    weight2: 0
-    weight3: 0
-    boneIndex0: 1
-    boneIndex1: 0
-    boneIndex2: 0
-    boneIndex3: 0
-  - weight0: 1
-    weight1: 0
-    weight2: 0
-    weight3: 0
-    boneIndex0: 1
-    boneIndex1: 0
-    boneIndex2: 0
-    boneIndex3: 0
-  - weight0: 1
-    weight1: 0
-    weight2: 0
-    weight3: 0
-    boneIndex0: 1
-    boneIndex1: 0
-    boneIndex2: 0
-    boneIndex3: 0
-  m_Edges:
-  - index1: 0
-    index2: 1
-  - index1: 1
-    index2: 3
-  - index1: 0
-    index2: 2
-  - index1: 2
-    index2: 3
-  m_Holes: []
-  m_Indices: 000000000100000002000000020000000100000003000000
-  m_BindPoses:
-  - bindPose:
-      e00: 1
-      e01: 0
-      e02: 0
-      e03: 0.11399999
-      e10: 0
-      e11: 1
-      e12: 0
-      e13: 0.3674624
-      e20: 0
-      e21: 0
-      e22: 1
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 1
-    boneLength: 0
-    path: 
-    name: Back_Root
-    color: {r: 1, g: 0, b: 0, a: 1}
-    zOrder: 0
-  - bindPose:
-      e00: 0.42450094
-      e01: -0.90542763
-      e02: 0
-      e03: 0.05862231
-      e10: 0.90542763
-      e11: 0.42450094
-      e12: 0
-      e13: 0.023987126
-      e20: 0
-      e21: 0
-      e22: 1
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 1
-    boneLength: 0.11996499
-    path: Back_Body/Back_RightArm_Up
-    name: Back_RightArm_Up
-    color: {r: 1, g: 0.75, b: 0, a: 1}
-    zOrder: 0
-  m_Blendshapes: []
---- !u!114 &11400000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c10c0be6d28fe4d539c4a39822fe301c, type: 3}
-  m_Name: "\u53F3\u81C2\u4E0A 1"
-  m_EditorClassIdentifier: 
-  m_ApiVersion: 4
-  m_Sprite: {fileID: 1062275661, guid: e9d17c1a640d71d4295e82c05f784cbb, type: 3}
-  m_SharedMesh: {fileID: -8528129131645426953}
-  m_SharedMaterials: []

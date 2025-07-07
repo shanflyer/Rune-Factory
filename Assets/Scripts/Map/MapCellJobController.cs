@@ -46,7 +46,7 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
 
     public void Execute(int index)
     {
-        Debug.Log($"execute index:{index}");
+       // Debug.Log($"execute index:{index}");
         var req = requests[index];
         var mapRange = mapRanges[index];
         int2 start = req.start;
@@ -96,14 +96,20 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
             var result = cellMap.TryGetValue(currentKey, out currentPacked);
             if (!result)
             {
+#if UNITY_EDITOR
                 Debug.LogError($"获取错误");
+#endif
+
             }
             //Debug.Log($"访问:{currentKey}");
             current = GetCoordinate(currentFlat, mapRange.xy, mapRange.zw);
 
             if (current.Equals(end))
             {
-                Debug.Log($"发现路径{end}---{index}"); 
+#if UNITY_EDITOR
+                Debug.Log($"发现路径{end}---{index}");
+#endif
+
                 break;
             } 
 
@@ -167,7 +173,10 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
 
                         if (!cellMap.TryAdd(baseKey, PathUtil64.Pack(fCost, currentFlat, 1)))
                         {
+#if UNITY_EDITOR
                             Debug.Log($"保存:{baseKey} 失败--{Enum.GetName(typeof(TryGetResult), result) ?? result.ToString()}");
+#endif
+
                         }
 
                         openCells[baseOffset + count] = flat;
@@ -178,7 +187,10 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
                         if (neighbor.Equals(end))
                         {
                             currentFlat = flat;
-                            Debug.Log($"发现路径{end}---{index}");
+#if UNITY_EDITOR
+                            //Debug.Log($"发现路径{end}---{index}");
+#endif
+
                             foundEnd = true;
                             break;
                         }
@@ -194,7 +206,10 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
 
         if (currentFlat != endFlat)
         {
+#if UNITY_EDITOR
             Debug.Log($"未发现路径");
+#endif
+
         }
         else
         {
@@ -206,7 +221,10 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
                 var result = cellMap.TryGetValue(key, out ulong packed);
                 if (!result)
                 {
+#if UNITY_EDITOR
                     Debug.Log($"index:{index}---获取失败key:{key}");
+#endif
+
                     break;
                 }
                 // uint flat = currentFlat - (uint)index * 1_000_000;
