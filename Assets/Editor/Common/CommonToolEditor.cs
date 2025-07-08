@@ -640,27 +640,13 @@ public class CommonToolEditor : MyEditor
             string ObjPath = "Assets/Resources/Prefabs/MapItem";
             DirectoryInfo directoryInfo = new DirectoryInfo(MapPath);
             var files = directoryInfo.GetFiles("*.Prefab");
-            foreach (var file in files)
-            {
-                GameObject obj = AssetDatabase.LoadAssetAtPath<GameObject>($"{MapPath}/{file.Name}");
-                if (!obj.TryGetComponent(out TestRenderGroup testRenderGroup))
-                {
-                    testRenderGroup = obj.AddComponent<TestRenderGroup>();
-                }
-                testRenderGroup.GetRenders();
-                EditorUtility.SetDirty(obj);
-            }
-
+           
             DirectoryInfo directoryInfo1 = new DirectoryInfo(ObjPath);
             var files1 = directoryInfo1.GetFiles("*.Prefab");
             foreach (var file in files1)
             {
                 GameObject obj = AssetDatabase.LoadAssetAtPath<GameObject>($"{ObjPath}/{file.Name}");
-                if (!obj.TryGetComponent(out TestRenderGroup testRenderGroup))
-                {
-                    testRenderGroup = obj.AddComponent<TestRenderGroup>();
-                }
-                testRenderGroup.GetRenders();
+                
                 EditorUtility.SetDirty(obj);
             }
             AssetDatabase.Refresh();

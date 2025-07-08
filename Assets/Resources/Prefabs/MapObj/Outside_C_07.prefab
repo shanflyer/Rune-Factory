@@ -4904,6 +4904,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 486d7738ca24a884184bbe3daf67135c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioSource: {fileID: 0}
+  audioCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   effects:
   - particleSystem: {fileID: 6614662634766290285}
     windSpeed:
@@ -4912,6 +4919,7 @@ MonoBehaviour:
     valueCurve: 0
   animators: []
   windBlendValue: 1
+  AnimatorWindType: 0
   snowWind: 0
   seasonRemap:
     x: 0.1
@@ -9823,6 +9831,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 486d7738ca24a884184bbe3daf67135c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioSource: {fileID: 0}
+  audioCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   effects:
   - particleSystem: {fileID: 1555079399244089640}
     windSpeed:
@@ -9831,6 +9846,7 @@ MonoBehaviour:
     valueCurve: 0
   animators: []
   windBlendValue: 1
+  AnimatorWindType: 0
   snowWind: 0
   seasonRemap:
     x: 0.1

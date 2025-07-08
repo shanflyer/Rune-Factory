@@ -609,7 +609,6 @@ GameObject:
   - component: {fileID: 8281978276054277709}
   - component: {fileID: 1656170683728332802}
   - component: {fileID: 4762428651408142425}
-  - component: {fileID: 9149932510374821586}
   m_Layer: 0
   m_Name: "\u5C71\u5730\u6E56"
   m_TagString: Untagged
@@ -814,28 +813,6 @@ MonoBehaviour:
   volumeMap:
     x: 0.5
     y: 0
---- !u!114 &9149932510374821586
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1886289339035944231}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55087fb195f968a4994e34fdf4316498, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  renderers:
-  - {fileID: 6302743924403361219}
-  - {fileID: 5294086893325322781}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 2207443932304670163}
-  - {fileID: 6956928787238366688}
-  - {fileID: 6417054217879052451}
 --- !u!1 &4419536878559737351
 GameObject:
   m_ObjectHideFlags: 0
@@ -1650,27 +1627,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c154279bf48ed14085ee55940d99ad7, type: 3}
---- !u!199 &2207443932304670163 stripped
-ParticleSystemRenderer:
-  m_CorrespondingSourceObject: {fileID: 4028014455587988359, guid: 2c154279bf48ed14085ee55940d99ad7,
-    type: 3}
-  m_PrefabInstance: {fileID: 2973514031025462868}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6183942298978810262 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8977307382070470594, guid: 2c154279bf48ed14085ee55940d99ad7,
-    type: 3}
-  m_PrefabInstance: {fileID: 2973514031025462868}
-  m_PrefabAsset: {fileID: 0}
---- !u!199 &6417054217879052451 stripped
-ParticleSystemRenderer:
-  m_CorrespondingSourceObject: {fileID: 8091279191585324791, guid: 2c154279bf48ed14085ee55940d99ad7,
-    type: 3}
-  m_PrefabInstance: {fileID: 2973514031025462868}
-  m_PrefabAsset: {fileID: 0}
---- !u!199 &6956928787238366688 stripped
-ParticleSystemRenderer:
-  m_CorrespondingSourceObject: {fileID: 5318736448099300276, guid: 2c154279bf48ed14085ee55940d99ad7,
     type: 3}
   m_PrefabInstance: {fileID: 2973514031025462868}
   m_PrefabAsset: {fileID: 0}

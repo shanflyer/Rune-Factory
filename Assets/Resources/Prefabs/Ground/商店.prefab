@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6325850580298076807}
   - component: {fileID: 1720978201703519837}
   - component: {fileID: 3461418135773072916}
-  - component: {fileID: -1392766478906971649}
   - component: {fileID: 2278554155403726036}
   m_Layer: 0
   m_Name: "\u5546\u5E97"
@@ -186,27 +185,6 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 7
     m_NumAlphaKeys: 2
---- !u!114 &-1392766478906971649
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 106488528452212010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55087fb195f968a4994e34fdf4316498, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  renderers:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 4985346649892740214}
-  - {fileID: 7774480867060084366}
-  - {fileID: 5407801454641969573}
-  - {fileID: 9202065680495145340}
-  - {fileID: 3781984940290526331}
-  - {fileID: 6945995388838486293}
 --- !u!61 &2278554155403726036
 BoxCollider2D:
   m_ObjectHideFlags: 0

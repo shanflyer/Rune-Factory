@@ -4976,6 +4976,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 486d7738ca24a884184bbe3daf67135c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioSource: {fileID: 0}
+  audioCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   effects:
   - particleSystem: {fileID: 7153864819799075136}
     windSpeed:
@@ -4984,6 +4991,7 @@ MonoBehaviour:
     valueCurve: 0
   animators: []
   windBlendValue: 1
+  AnimatorWindType: 0
   snowWind: 1
   seasonRemap:
     x: 0
@@ -6590,7 +6598,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1028266716800625195}
-  - component: {fileID: -3257724872522500827}
   m_Layer: 0
   m_Name: "\u88C5\u5907\u5E97"
   m_TagString: Untagged
@@ -6616,63 +6623,6 @@ Transform:
   - {fileID: 4022228615366429917}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-3257724872522500827
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7890537168671884024}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55087fb195f968a4994e34fdf4316498, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  renderers:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 864061529391422850}
-  - {fileID: 924300843850008444}
-  - {fileID: 7764711881796370073}
-  - {fileID: 8768527447176603625}
-  - {fileID: 1997930369063765591}
-  - {fileID: 505310242409325211}
-  - {fileID: 1973671964800061993}
-  - {fileID: 1192542688057329377}
-  - {fileID: 656585919193388536}
-  - {fileID: 2891145247955605408}
-  - {fileID: 3643005235642431392}
-  - {fileID: 1630954548752715922}
-  - {fileID: 7549807435491084968}
-  - {fileID: 874132632970611304}
-  - {fileID: 6496667058074660642}
-  - {fileID: 1427494890020934090}
-  - {fileID: 8928543626382823401}
-  - {fileID: 3607163750828208385}
-  - {fileID: 2325059172261460226}
-  - {fileID: 7612195737502205930}
-  - {fileID: 7804309545569340115}
-  - {fileID: 2713926064651793467}
-  - {fileID: 925219497441020985}
-  - {fileID: 3089530115690786752}
-  - {fileID: 7878187665471101847}
-  - {fileID: 857499428808849011}
-  - {fileID: 3403822894122049918}
-  - {fileID: 651882427305591431}
-  - {fileID: 896394662696825601}
-  - {fileID: 3046578822649188600}
-  - {fileID: 7364973376602563464}
-  - {fileID: 4612417458676482161}
-  - {fileID: 3197937342233055909}
-  - {fileID: 744895418279670108}
-  - {fileID: 7617982687561737823}
-  - {fileID: 5733011519039554982}
-  - {fileID: 7867825962137319337}
-  - {fileID: 5406324480545412176}
-  - {fileID: 624413410742206488}
-  - {fileID: 3358948435098444769}
-  - {fileID: 6455420909869526708}
 --- !u!1 &7972530316120437435
 GameObject:
   m_ObjectHideFlags: 0

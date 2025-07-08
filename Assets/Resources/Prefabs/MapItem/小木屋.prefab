@@ -1321,7 +1321,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1168994283287210381}
-  - component: {fileID: -1265787545144844864}
   m_Layer: 0
   m_Name: "\u5C0F\u6728\u5C4B"
   m_TagString: Untagged
@@ -1348,41 +1347,6 @@ Transform:
   - {fileID: 1573315865428001908}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-1265787545144844864
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3238508593939376163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55087fb195f968a4994e34fdf4316498, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  renderers:
-  - {fileID: 0}
-  - {fileID: 2878334405666387259}
-  - {fileID: 4440539213836453517}
-  - {fileID: 6800400804381252898}
-  - {fileID: 4309668704200171396}
-  - {fileID: 308866362103897200}
-  - {fileID: 447325888410080028}
-  - {fileID: 8373903728337435}
-  - {fileID: 3442123213996574697}
-  - {fileID: 7823807089402863827}
-  - {fileID: 8838990650269858368}
-  - {fileID: 688439770212298490}
-  - {fileID: 8032795521556673103}
-  - {fileID: 7797956714289893189}
-  - {fileID: 5106872052425264145}
-  - {fileID: 8085522080203554070}
-  - {fileID: 4969046203490436029}
-  - {fileID: 719524131471952611}
-  - {fileID: 0}
-  - {fileID: 1482081773585752180}
-  - {fileID: 8563161469003693111}
-  - {fileID: 868458816497065496}
 --- !u!1 &3366495311168180944
 GameObject:
   m_ObjectHideFlags: 0
@@ -6820,6 +6784,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 486d7738ca24a884184bbe3daf67135c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioSource: {fileID: 0}
+  audioCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   effects:
   - particleSystem: {fileID: 6433250527686258871}
     windSpeed:
@@ -6828,6 +6799,7 @@ MonoBehaviour:
     valueCurve: 0
   animators: []
   windBlendValue: 1
+  AnimatorWindType: 0
   snowWind: 1
   seasonRemap:
     x: 0
@@ -7582,27 +7554,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 57cb07d0247b47b4193abcbeebb4d8e4, type: 3}
---- !u!212 &868458816497065496 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 549182924871345883, guid: 57cb07d0247b47b4193abcbeebb4d8e4,
-    type: 3}
-  m_PrefabInstance: {fileID: 833856720097228995}
-  m_PrefabAsset: {fileID: 0}
---- !u!199 &1482081773585752180 stripped
-ParticleSystemRenderer:
-  m_CorrespondingSourceObject: {fileID: 2234662557293959351, guid: 57cb07d0247b47b4193abcbeebb4d8e4,
-    type: 3}
-  m_PrefabInstance: {fileID: 833856720097228995}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1573315865428001908 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2181992049222696119, guid: 57cb07d0247b47b4193abcbeebb4d8e4,
-    type: 3}
-  m_PrefabInstance: {fileID: 833856720097228995}
-  m_PrefabAsset: {fileID: 0}
---- !u!199 &8563161469003693111 stripped
-ParticleSystemRenderer:
-  m_CorrespondingSourceObject: {fileID: 9026341444296721652, guid: 57cb07d0247b47b4193abcbeebb4d8e4,
     type: 3}
   m_PrefabInstance: {fileID: 833856720097228995}
   m_PrefabAsset: {fileID: 0}

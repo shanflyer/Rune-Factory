@@ -193,7 +193,8 @@ public class MapItemEditor : MyEditor
         {
             return;
         }
-        DestroyImmediate(singleItemParent.gameObject);
+        if (singleItemParent)
+            DestroyImmediate(singleItemParent.gameObject);
         GameObject newItemParent = new GameObject("ItemParent");
         singleItemParent = newItemParent.transform;
         //newItemParent.transform.localPosition = new Vector3(GameCommon.cellSize, GameCommon.cellSize, 0);
