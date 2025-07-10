@@ -33,7 +33,7 @@ public class GetEntityPos : Action
                 getSuccess = WorldMapManager.instance.GetMapItemPos(entityId.Value, out coordinate);
                 break;
             case EntityType.角色:
-                getSuccess = CharacterManager.instance.GetCharacterCoordiante(entityId.Value, out coordinate);
+                getSuccess = CharacterManager.instance.GetCharacterCoordinate(entityId.Value, out coordinate);
                 break;
         }
         targetPos.Value =GameCommon.GetMapPos(coordinate.x,coordinate.y);
