@@ -192,7 +192,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
         }
     }
-    private async void ChangeCharacterNewMap(ChangeCharacterNewMap ChangeCharacterNewMap)
+    private void ChangeCharacterNewMap(ChangeCharacterNewMap ChangeCharacterNewMap)
     {
         Character character = GetCharacter(ChangeCharacterNewMap.characterInstance);
         if (character != null)
@@ -251,7 +251,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    private async void SetCharacterRandomCoordinate(SetCharacterRandomCoordinate setCharacterRandomCoordinate)
+    private void SetCharacterRandomCoordinate(SetCharacterRandomCoordinate setCharacterRandomCoordinate)
     {
         Character character = GetCharacter(setCharacterRandomCoordinate.characterId);
         if (character != null)
@@ -274,7 +274,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    private async void SetCharacterRandomPos(SetCharacterRandomPos SetCharacterRandomPos)
+    private  void SetCharacterRandomPos(SetCharacterRandomPos SetCharacterRandomPos)
     {
         Character character = GetCharacter(SetCharacterRandomPos.characterId);
         if (character != null && characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
@@ -882,7 +882,7 @@ public class CharacterManager : Singleton<CharacterManager>
         return -1;
     }
 
-    public bool GetCharacterCoordiante(int id, out int3 coordinate)
+    public bool GetCharacterCoordinate(int id, out int3 coordinate)
     {
         if (characters.TryGetValue(id, out Character character))
         {
