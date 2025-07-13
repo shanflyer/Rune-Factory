@@ -17,9 +17,7 @@ public class GetEntityCoordinate : Action
     private SharedInt2 coordinate;
 
     [Header("个体id")]
-    public SharedInt entityId;
-
- 
+    public SharedInt entityId; 
 
     public SharedInt2 itemEditorKey;
 

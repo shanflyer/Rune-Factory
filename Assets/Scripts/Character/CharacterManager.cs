@@ -108,6 +108,13 @@ public class CharacterManager : Singleton<CharacterManager>
                 };
                 GameActionManager.instance.QueueAction(refreshMapTempCharacter, true);
             }
+            else if(NPCManager.instance.GetNPC(character.instanceId,out NPC npc))
+            {
+                if (npc.isSleep)
+                {
+                    CharacterManager.instance.RefreshSleep(character);
+                }
+            }
 
            // Debug.Log($"CreateCharacter:{character.name}");
         }
@@ -1393,7 +1400,38 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         return null;
     }
+    public void RefreshSleep(Character character)
+    {
+        if (WorldMapManager.instance.GetRuntimeMapItem(character.linkItem, out var mapItem))
+        {
+            character.SetCoordinate(new  int3(mapItem.coordinate.xy, mapItem.mapInstanceId)); 
 
+            SetCharacterAnimator setCharacterAnimator = new SetCharacterAnimator
+            {
+                characterId = character.instanceId,
+                parameter = "State",
+                parameterType = ParameterType.INT,
+                intValue = 1
+            };
+            GameActionManager.instance.QueueAction(setCharacterAnimator);
+
+            var sleepPos = mapItem.mapItemData.offsetLinkPos;
+            SetCharacterTempPos SetCharacterTempPos = new SetCharacterTempPos
+            {
+                characterId = character.instanceId,
+                pos = sleepPos
+            };
+            GameActionManager.instance.QueueAction(SetCharacterTempPos);
+
+            SetDirection setDirection = new SetDirection
+            {
+                directionEnum = Direction.DOWN,
+                characterId = character.instanceId,
+            };
+            GameActionManager.instance.QueueAction(setDirection);
+        }
+
+    }
     public async Task RefreshNpcRuntimeObj(Character character, bool controller = false,bool RefreshMapTemp=true)
     {
         CharacterRuntimeObj characterRuntimeObj;
@@ -1506,17 +1544,28 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
                 else
                 {
-                    Vector3 pos = GameCommon.GetMapPos(character.coordinate);
-                    if (GameDataManager.instance.GlobalData.debug)
+                    if (NPCManager.instance.GetNPC(character.instanceId, out NPC npc))
                     {
-                        float dX = math.abs(characterRuntimeObj.transform.position.x - pos.x);
-                        if (dX >= 1.5)
+                        if (npc.isSleep)
                         {
-                            Debug.Log($"Waring:{character.name}--oldPos{characterRuntimeObj.transform.position}--newPos{pos}");
+                            RefreshSleep(character);
                         }
                     }
-                    Transform transform = characterRuntimeObj.transform;
-                    transform.localPosition = pos;
+                    else
+                    {
+                        Vector3 pos = GameCommon.GetMapPos(character.coordinate);
+                        if (GameDataManager.instance.GlobalData.debug)
+                        {
+                            float dX = math.abs(characterRuntimeObj.transform.position.x - pos.x);
+                            if (dX >= 1.5)
+                            {
+                                Debug.Log($"Waring:{character.name}--oldPos{characterRuntimeObj.transform.position}--newPos{pos}");
+                            }
+                        }
+                        Transform transform = characterRuntimeObj.transform;
+                        transform.localPosition = pos;
+                    }
+                   
                 }
             } 
         }

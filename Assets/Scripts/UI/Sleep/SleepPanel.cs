@@ -42,6 +42,8 @@ public class SleepPanel : GamePanel<MyInt>
 
     private void SelectAction(SleepSetData data, bool value)
     {
+        CharacterManager.instance.controllerCharacter.linkItem = mapItemInstance;
+
         CloseMapObjTips closeMapObjTips = new CloseMapObjTips
         {
             id = mapItemInstance,
@@ -78,6 +80,7 @@ public class SleepPanel : GamePanel<MyInt>
             };
             GameActionManager.instance.QueueAction(playerSleep);
         }
+        /*
         if (WorldMapManager.instance.GetRuntimeMapItem(mapItemInstance, out var mapItem))
         {
             var coordinate = mapItem.coordinate;
@@ -96,7 +99,22 @@ public class SleepPanel : GamePanel<MyInt>
                 intValue = 1
             };
             GameActionManager.instance.QueueAction(setCharacterAnimator);
-        }
+
+            var sleepPos= mapItem.mapItemData.offsetLinkPos;
+            SetCharacterTempPos SetCharacterTempPos = new SetCharacterTempPos
+            {
+                characterId = CharacterManager.instance.controllerCharacter.instanceId,
+                pos = sleepPos
+            };
+            GameActionManager.instance.QueueAction(SetCharacterTempPos);
+
+            SetDirection setDirection = new SetDirection
+            {
+                directionEnum = Direction.DOWN,
+                characterId = CharacterManager.instance.controllerCharacter.instanceId,
+            };
+            GameActionManager.instance.QueueAction(setDirection);
+        }*/
 
         Close();
     }

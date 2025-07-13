@@ -422,6 +422,7 @@ public class NPC : IReferenceData
         } 
     }
 
+   
     public bool IsInHome()
     {
         if (Character != null)

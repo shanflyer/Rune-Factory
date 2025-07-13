@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
+using UnityEditor.Purchasing;
 using UnityEngine;
 
 [System.Serializable]
@@ -816,7 +817,8 @@ public class GameTimeManager : Singleton<GameTimeManager>
         }
         void WakeUp()
         {
-           // Debug.Log($"characterId:{characterId}");
+            CharacterManager.instance.controllerCharacter.linkItem = 0;
+            // Debug.Log($"characterId:{characterId}");
             Character character = CharacterManager.instance.GetCharacter(characterId);
             PlayerWakeUp playerWakeUp = new PlayerWakeUp
             {
@@ -885,6 +887,11 @@ public class GameTimeManager : Singleton<GameTimeManager>
                     }
                 });
         }
+
+
+        var character = CharacterManager.instance.GetCharacter(characterId);
+        CharacterManager.instance.RefreshSleep(character); 
+
         if (isController)
         {
             UIManager.instance.CloseGamePanel<OperateButtonPanel>();
