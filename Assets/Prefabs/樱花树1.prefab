@@ -329,7 +329,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 0.00999997
+  m_Length: 0.009999991
   m_ChildTransform: {fileID: 6488062696993098113}
   m_AttachedIK: {fileID: 0}
 --- !u!1 &3386929708027444605
@@ -817,10 +817,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5381852048069721629}
   - component: {fileID: 8432129472396956024}
-  - component: {fileID: 2685849706701822768}
   - component: {fileID: 78254921844097371}
   - component: {fileID: 4752089438012694011}
   - component: {fileID: 9192420456903150267}
+  - component: {fileID: 1225798709141259384}
   m_Layer: 0
   m_Name: 21
   m_TagString: Untagged
@@ -871,7 +871,78 @@ MonoBehaviour:
   - {fileID: 800396686808183785}
   - {fileID: 2139619209817765081}
   - {fileID: 8456229630906942835}
---- !u!137 &2685849706701822768
+--- !u!114 &78254921844097371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6731125686755806079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 533669fe702b5414cbcdd5a5efeb8e36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Poses:
+  - {fileID: 11400000, guid: fa63ecae7e06121449ffff3ead16a0d4, type: 2}
+  - {fileID: 11400000, guid: 0f8a6d10d51a0a84293d8e67f1ac08f3, type: 2}
+  - {fileID: 11400000, guid: 14eb187eae7be1346ad538e49c2eef81, type: 2}
+  - {fileID: 11400000, guid: 1b68b502926810942baebf7461194d5f, type: 2}
+  - {fileID: 11400000, guid: 0e9649b73c3ff6e48b4e20246bbef960, type: 2}
+--- !u!95 &4752089438012694011
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6731125686755806079}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 22100000, guid: 0cc95200c0896964aa4c7810e9341e3b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &9192420456903150267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6731125686755806079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 486d7738ca24a884184bbe3daf67135c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 0}
+  audioCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  effects: []
+  animators:
+  - {fileID: 4752089438012694011}
+  windBlendValue: 0.6
+  AnimatorWindType: 0
+  snowWind: 0
+  seasonRemap:
+    x: 0
+    y: 0
+    z: 0
+    w: 0
+  seasomBlend: 0
+--- !u!137 &1225798709141259384
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -932,73 +1003,9 @@ SkinnedMeshRenderer:
   m_BlendShapeWeights: []
   m_RootBone: {fileID: 5031205353671075853}
   m_AABB:
-    m_Center: {x: -0.05480188, y: 0.08366823, z: 0}
-    m_Extent: {x: 1.354574, y: 2.360454, z: 0}
+    m_Center: {x: -0.121077776, y: 1.1828461, z: 0}
+    m_Extent: {x: 1.0624756, y: 1.3087244, z: 0}
   m_DirtyAABB: 0
---- !u!114 &78254921844097371
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6731125686755806079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 533669fe702b5414cbcdd5a5efeb8e36, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Poses:
-  - {fileID: 11400000, guid: fa63ecae7e06121449ffff3ead16a0d4, type: 2}
-  - {fileID: 11400000, guid: 0f8a6d10d51a0a84293d8e67f1ac08f3, type: 2}
-  - {fileID: 11400000, guid: 14eb187eae7be1346ad538e49c2eef81, type: 2}
-  - {fileID: 11400000, guid: 1b68b502926810942baebf7461194d5f, type: 2}
-  - {fileID: 11400000, guid: 0e9649b73c3ff6e48b4e20246bbef960, type: 2}
---- !u!95 &4752089438012694011
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6731125686755806079}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 22100000, guid: 0cc95200c0896964aa4c7810e9341e3b, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
---- !u!114 &9192420456903150267
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6731125686755806079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 486d7738ca24a884184bbe3daf67135c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  effects: []
-  animators:
-  - {fileID: 4752089438012694011}
-  windBlendValue: 0.6
-  AnimatorWindType: 0
-  snowWind: 0
-  seasonRemap:
-    x: 0
-    y: 0
-    z: 0
-    w: 0
-  seasomBlend: 0
 --- !u!1 &7224892091268187541
 GameObject:
   m_ObjectHideFlags: 0
@@ -1132,7 +1139,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 0.08000016
+  m_Length: 0.07999996
   m_ChildTransform: {fileID: 805599177316761491}
   m_AttachedIK: {fileID: 0}
 --- !u!1 &7843571000654264583
@@ -1181,7 +1188,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 0.51000047
+  m_Length: 0.51000035
   m_ChildTransform: {fileID: 2139619209817765081}
   m_AttachedIK: {fileID: 0}
 --- !u!1 &8757616778839754186
@@ -1279,7 +1286,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 0.4000008
+  m_Length: 0.40000057
   m_ChildTransform: {fileID: 8456229630906942835}
   m_AttachedIK: {fileID: 0}
 --- !u!1001 &7294599565628469265
@@ -1517,6 +1524,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 486d7738ca24a884184bbe3daf67135c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioSource: {fileID: 0}
+  audioCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   effects:
   - particleSystem: {fileID: 4264194851720782305}
     windSpeed:
