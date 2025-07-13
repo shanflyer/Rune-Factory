@@ -241,12 +241,20 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
         {
             return;
         }
-        sprite.GetSecondaryTextures(secondarySpriteTextures);
-
-        for (int i = 0; i < secondarySpriteTextures.Length; i++)
+        try
         {
-            material.SetTexture(secondarySpriteTextures[i].name, secondarySpriteTextures[i].texture);
+            sprite.GetSecondaryTextures(secondarySpriteTextures);
+
+            for (int i = 0; i < secondarySpriteTextures.Length; i++)
+            {
+                material.SetTexture(secondarySpriteTextures[i].name, secondarySpriteTextures[i].texture);
+            }
         }
+        catch
+        {
+
+        }
+       
     }
 
     #endregion Material Management

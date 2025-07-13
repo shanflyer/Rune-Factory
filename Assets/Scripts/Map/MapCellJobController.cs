@@ -7,6 +7,7 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public static class PathUtil64
 {
@@ -58,8 +59,9 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
         uint startFlat = GetCoordinateIndex(start.x, start.y, mapRange.xy, mapRange.zw);
         uint endFlat = GetCoordinateIndex(end.x, end.y, mapRange.xy, mapRange.zw);
         uint keyStart = (uint)index * 1_000_000 + startFlat;
-        cellMap.TryAdd(keyStart, PathUtil64.Pack(0, startFlat, 1));
-       // Debug.Log($"新增keyStart{keyStart}--{index}");
+        var startPacked = PathUtil64.Pack(0, startFlat, 1);
+        var addResult= cellMap.TryAdd(keyStart, startPacked);
+        //Debug.Log($"startFlat:{startFlat}--endFlat:{endFlat}-新增keyStart{keyStart}--{index}--addResult:{addResult}");
         openCells[baseOffset + count] = startFlat;
         openCosts[baseOffset + count] = 0;
         count++;
@@ -71,43 +73,71 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
         {
             uint minCost = uint.MaxValue;
             int minIndex = -1;
-            for (int i = 0; i < count; i++)
+            int i = 0;
+            for (; i <= count - 4; i += 4)
             {
-                uint c = openCosts[baseOffset + i];
-                if (c < minCost)
+                uint4 costs = new uint4(openCosts[baseOffset + i], openCosts[baseOffset + i + 1], openCosts[baseOffset + i + 2], openCosts[baseOffset + 3]);
+                bool4 mask = costs < minCost;
+                if (math.any(mask))
                 {
-                    minCost = c;
+                    for (int j = 0; j < 4; j++)
+                    {
+                        if (costs[j] < minCost)
+                        {
+                            minCost = costs[j];
+                            minIndex = i + j;
+                        }
+                    }
+                }
+            }
+
+            for (; i < count; i++)
+            {
+                if (openCosts[baseOffset + i] < minCost)
+                {
+                    minCost = openCosts[baseOffset + i];
                     minIndex = i;
                 }
             }
             if (minIndex == -1) break;
 
-            currentFlat = openCells[baseOffset + minIndex];
+            currentFlat = openCells[baseOffset + minIndex]; 
             uint currentKey= (uint)index * 1_000_000 + currentFlat;
             // Debug.Log($"index={index}, count={count}, currentKey={currentKey}");
+           
+
+            int2 current = end;
+            ulong currentPacked=0;
+            if (currentKey == keyStart)
+            {
+                currentPacked = startPacked;
+            }
+            else
+            {
+              
+                var result = cellMap.TryGetValue(currentKey, out currentPacked);
+                if (!result)
+                {
+#if UNITY_EDITOR
+                  //  Debug.LogError($"startFlat:{startFlat}--endFlat:{endFlat}--获取错误--{currentKey}");
+#endif
+
+                }
+            }
+
             count--;
             openCounts[index] = count;
             openCells[baseOffset + minIndex] = openCells[baseOffset + count];
             openCosts[baseOffset + minIndex] = openCosts[baseOffset + count];
 
-            int2 current = end;
-            ulong currentPacked=0;
-      
-            var result = cellMap.TryGetValue(currentKey, out currentPacked);
-            if (!result)
-            {
-#if UNITY_EDITOR
-                Debug.LogError($"获取错误");
-#endif
 
-            }
             //Debug.Log($"访问:{currentKey}");
             current = GetCoordinate(currentFlat, mapRange.xy, mapRange.zw);
 
             if (current.Equals(end))
             {
 #if UNITY_EDITOR
-                Debug.Log($"发现路径{end}---{index}");
+               // Debug.Log($"发现路径{end}---{index}");
 #endif
 
                 break;
@@ -150,7 +180,7 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
                     ulong h = (ulong)(math.min(dxCost, dyCost) * 3 + math.abs(dxCost - dyCost) * 2) * 3;
                     ulong fCost = newG + h;
 
-                    result = cellMap.TryGetValue(baseKey, out ulong old);
+                   var result = cellMap.TryGetValue(baseKey, out ulong old);
 
                     if (result)
                     {
@@ -168,13 +198,13 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
                     }
                     else
                     {
-                         //Debug.Log($"新增{baseKey}--{index}");
+                       //  Debug.Log($"startFlat:{startFlat}--endFlat:{endFlat}--新增{baseKey}--{index}");
                         triedAddCount++;
 
                         if (!cellMap.TryAdd(baseKey, PathUtil64.Pack(fCost, currentFlat, 1)))
                         {
 #if UNITY_EDITOR
-                            Debug.Log($"保存:{baseKey} 失败--{Enum.GetName(typeof(TryGetResult), result) ?? result.ToString()}");
+                          //  Debug.Log($"保存:{baseKey} 失败--{Enum.GetName(typeof(TryGetResult), result) ?? result.ToString()}");
 #endif
 
                         }
@@ -207,7 +237,7 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
         if (currentFlat != endFlat)
         {
 #if UNITY_EDITOR
-            Debug.Log($"未发现路径");
+         //   Debug.Log($"未发现路径");
 #endif
 
         }
@@ -222,7 +252,7 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
                 if (!result)
                 {
 #if UNITY_EDITOR
-                    Debug.Log($"index:{index}---获取失败key:{key}");
+                //    Debug.Log($"index:{index}---获取失败key:{key}");
 #endif
 
                     break;
