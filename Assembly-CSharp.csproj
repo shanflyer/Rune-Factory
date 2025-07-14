@@ -148,6 +148,7 @@
     <Compile Include="Assets\Scripts\Data\GameRandomGrowDataList.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Vector2\GetUpVector.cs" />
     <Compile Include="Assets\Scripts\UI\PasturePanel\PastureInfo.cs" />
+    <Compile Include="Assets\Scripts\ECS\ISystem\CharacterSystem\CharacterEquipSystem.cs" />
     <Compile Include="Assets\Scripts\Explore\ExploreManager.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Examples\Scripts\SpringCollider.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\GameObject\CompareTag.cs" />
@@ -424,6 +425,7 @@
     <Compile Include="Assets\Scripts\UI\TouchArea.cs" />
     <Compile Include="Assets\Scripts\Film\MyGameMarker.cs" />
     <Compile Include="Assets\Scripts\UI\SelectLoadPanel.cs" />
+    <Compile Include="Assets\Scripts\ECS\Components\CharacterComponent\CharacterEquipment.cs" />
     <Compile Include="Assets\Scripts\UI\DisplayList.cs" />
     <Compile Include="Assets\Scripts\Main\GameObjectCurveController.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetSpeed.cs" />
@@ -638,6 +640,7 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Animator\GetIntegerParameter.cs" />
     <Compile Include="Assets\Scripts\UI\NPCPanel\NPCPanel.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetStepOffset.cs" />
+    <Compile Include="Assets\Scripts\ECS\Components\CharacterComponent\GameProperty.cs" />
     <Compile Include="Assets\Scripts\Data\DefaultConfigData.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\SetMass.cs" />
     <Compile Include="Assets\Scripts\Main\AudioController.cs" />
@@ -653,6 +656,7 @@
     <Compile Include="Assets\Scripts\Behavior\PlayerStore\StartCreatTempCharacterBehavior.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Input\GetAxisRaw.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\AddTorque.cs" />
+    <Compile Include="Assets\Scripts\ECS\Components\CharacterComponent\CharacterTransform.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\SetString.cs" />
     <Compile Include="Assets\Scripts\Main\GameNotificationManager.cs" />
     <Compile Include="Assets\Scripts\Behavior\Common\PlaySEBehavior.cs" />
@@ -955,6 +959,7 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\CapsuleCollider\SetHeight.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Quaternion\AngleAxis.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\SetAngularDrag.cs" />
+    <Compile Include="Assets\Scripts\ECS\Runtime\CharacterEquipSpawnBridge.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Variables\SharedInt.cs" />
     <Compile Include="Assets\Scripts\UI\ItemCostSelectPanel\ItemCostSelectPanel.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Variables\SharedHumanBodyBones.cs" />
@@ -1013,6 +1018,7 @@
     <Compile Include="Assets\Scripts\Main\SceneInfoManager.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetPanLevel.cs" />
     <Compile Include="Assets\Scripts\UI\ItemCostSelectPanel\CostItem.cs" />
+    <Compile Include="Assets\Scripts\ECS\Components\CharacterComponent\CharacterProfession.cs" />
     <Compile Include="Assets\Scripts\Action\MapAction.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Transform\GetEulerAngles.cs" />
     <Compile Include="Assets\Scripts\UI\PromptPanel.cs" />
@@ -1099,6 +1105,7 @@
     <Compile Include="Assets\Scripts\Behavior\Character\CheckNPCBehaviorState.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Transform\GetParent.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Light\SetSpotAngle.cs" />
+    <Compile Include="Assets\Scripts\ECS\NativeFixedQueue.cs" />
     <Compile Include="Assets\Scripts\Behavior\Variables\SharedInt3.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Math\SetBool.cs" />
     <Compile Include="Assets\OtherPackage\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />

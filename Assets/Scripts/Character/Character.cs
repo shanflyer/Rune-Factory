@@ -12,539 +12,10 @@ public struct CharacterEquipAndPropertyData
     public Sprite icon;
     public AttributeType attributeType;
     public Equip equip;
-    public CharacterProperty characterProperty;
+    public GameProperty characterProperty;
 }
 
-[System.Serializable]
-public struct CharacterProperty
-{
-    public int HP, MP, Power, MaxHP, MaxMP, MaxPower, AT, DF, Lucky,Speed;
-    public int Other;
 
-    public string GetItemProperty()
-    {
-        string result = "";
-       
-        if (HP != 0)
-        {
-            string operatorStr = HP > 0 ? "+" : "-";
-            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.生命)}{operatorStr}{HP} ";
-        }
-       
-        if (MP != 0)
-        {
-            string operatorStr = MP > 0 ? "+" : "-";
-            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.法力)}{operatorStr}{MP}  ";
-        } 
-        if (Power != 0)
-        {
-            string operatorStr = Power > 0 ? "+" : "-";
-            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.体力)}{operatorStr}{Power}  ";
-        }
-        if (Other != 0)
-        {
-            bool nullValue = AT == 0 && DF == 0 && Lucky == 0 && Speed == 0;
-
-            if (!nullValue)
-            {
-                if (string.IsNullOrEmpty(result))
-                {
-                    result = $"{LanguageManage.SwitchStr("战斗时")} ";
-                }
-                else
-                {
-                    result = $"{result}\n{LanguageManage.SwitchStr("战斗时")} ";
-                }
-
-                if (AT != 0)
-                {
-                    string operatorStr = AT > 0 ? "+" : "";
-                    result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.攻击)}{operatorStr}{AT} ";
-                }
-                if (DF != 0)
-                {
-                    string operatorStr = DF > 0 ? "+" : "";
-                    result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.防御)}{operatorStr}{DF} ";
-                }
-                if (Lucky != 0)
-                {
-                    string operatorStr = Lucky > 0 ? "+" : "";
-                    result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.幸运)}{operatorStr}{Lucky} ";
-                }
-                if (Speed != 0)
-                {
-                    string operatorStr = Speed > 0 ? "+" : "";
-                    result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.敏捷)}{operatorStr}{Speed} ";
-                }
-                result = $"{result}{Other}{LanguageManage.SwitchStr("回合")}";
-            } 
-        } 
-        return result;
-    }
-    public override string ToString()
-    {
-        string result = "";
-        if (MaxHP != 0)
-        {
-            string operatorStr = MaxHP > 0 ? "+" : "";
-            result = $"{LanguageManage.SwitchStr(CharacterPropertyType.最大生命)}{operatorStr}{MaxHP}  ";
-        }
-        if (HP != 0)
-        {
-            string operatorStr = HP > 0 ? "+" : "";
-            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.生命)}{operatorStr}{HP} ";
-        }
-        if (MaxMP != 0)
-        {
-            string operatorStr = MaxMP > 0 ? "+" : "";
-            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.最大法力)}{operatorStr}{MaxMP} ";
-        }
-        if (MP != 0)
-        {
-            string operatorStr = MP > 0 ? "+" : "";
-            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.法力)}{operatorStr}{MP}  ";
-        }
-        if (MaxPower != 0)
-        {
-            string operatorStr = MaxPower > 0 ? "+" : "";
-            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.最大体力)}{operatorStr}{MaxPower}";
-        }
-        if (Power != 0)
-        {
-            string operatorStr = Power > 0 ? "+" : "";
-            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.体力)}{operatorStr}{Power}  ";
-        }
-        if (AT != 0)
-        {
-            string operatorStr = AT > 0 ? "+" : "";
-            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.攻击)}{operatorStr}{AT}  ";
-        }
-        if (DF != 0)
-        {
-            string operatorStr = DF > 0 ? "+" : "";
-            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.防御)}{operatorStr}{DF}  ";
-        }
-        if (Lucky != 0)
-        {
-            string operatorStr = Lucky > 0 ? "+" : "";
-            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.幸运)}{operatorStr}{Lucky}  ";
-        }
-        if (Speed != 0)
-        {
-            string operatorStr = Speed > 0 ? "+" : "";
-            result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.敏捷)}{operatorStr}{Speed}  ";
-        }
-        return result;
-    }
-
-    public static CharacterProperty One
-    {
-        get
-        {
-            CharacterProperty characterProperty = new CharacterProperty
-            {
-                HP = 1,
-                MP = 1,
-                Power = 1,
-                MaxHP = 1,
-                MaxMP = 1,
-                MaxPower = 1,
-                AT = 1,
-                DF = 1,
-                Lucky = 1,
-                Other = 1,
-                Speed=1
-            };
-            return characterProperty;
-        }
-    }
-    public static CharacterProperty FullPercent
-    {
-        get
-        {
-            CharacterProperty characterProperty = new CharacterProperty
-            {
-                HP = 100,
-                MP = 100,
-                Power = 100,
-                MaxHP = 100,
-                MaxMP = 100,
-                MaxPower = 100,
-                AT = 100,
-                DF = 100,
-                Lucky = 100,
-                Other = 100,
-                Speed = 100
-            };
-            return characterProperty;
-        }
-    }
-    public static CharacterProperty operator -(CharacterProperty property0, CharacterProperty property1)
-    {
-        CharacterProperty CharacterProperty = new CharacterProperty
-        {
-            HP = property0.HP - property1.HP,
-            MP = property0.MP - property1.MP,
-            AT = property0.AT - property1.AT,
-            DF = property0.DF - property1.DF,
-            Power = property0.Power - property1.Power,
-            MaxHP = property0.MaxHP - property1.MaxHP,
-            MaxMP = property0.MaxMP - property1.MaxMP,
-            MaxPower = property0.MaxPower - property1.MaxPower,
-            Lucky = property0.Lucky - property1.Lucky,
-            Other = property0.Other - property1.Other,
-            Speed=property0.Speed-property1.Speed
-        };
-        return CharacterProperty;
-    }
-
-    public static CharacterProperty operator +(CharacterProperty property0, CharacterProperty property1)
-    {
-        CharacterProperty CharacterProperty = new CharacterProperty
-        {
-            HP = property0.HP + property1.HP,
-            MP = property0.MP + property1.MP,
-            AT = property0.AT + property1.AT,
-            DF = property0.DF + property1.DF,
-            Power = property0.Power + property1.Power,
-            MaxHP = property0.MaxHP + property1.MaxHP,
-            MaxMP = property0.MaxMP + property1.MaxMP,
-            MaxPower = property0.MaxPower + property1.MaxPower,
-            Lucky = property0.Lucky + property1.Lucky,
-            Other = property0.Other + property1.Other,
-            Speed=property0.Speed+property1.Speed
-        };
-        return CharacterProperty;
-    }
-    public static CharacterProperty operator *(CharacterProperty property0, CharacterProperty property1)
-    {
-        CharacterProperty CharacterProperty = new CharacterProperty
-        {
-            HP = property0.HP * property1.HP,
-            MP = property0.MP * property1.MP,
-            AT = property0.AT * property1.AT,
-            DF = property0.DF * property1.DF,
-            Power = property0.Power * property1.Power,
-            MaxHP = property0.MaxHP * property1.MaxHP,
-            MaxMP = property0.MaxMP * property1.MaxMP,
-            MaxPower = property0.MaxPower * property1.MaxPower,
-            Lucky = property0.Lucky * property1.Lucky,
-            Other = property0.Other * property1.Other,
-            Speed=property0.Speed*property1.Speed
-        };
-        return CharacterProperty;
-    }
-    public static CharacterProperty operator *(CharacterProperty property0, float value)
-    {
-        CharacterProperty CharacterProperty = new CharacterProperty
-        {
-            HP = (int)(property0.HP * value),
-            MP = (int)(property0.MP * value),
-            AT = (int)(property0.AT * value),
-            DF = (int)(property0.DF * value),
-            Power = (int)(property0.Power * value),
-            MaxHP = (int)(property0.MaxHP * value),
-            MaxMP = (int)(property0.MaxMP * value),
-            MaxPower = (int)(property0.MaxPower * value),
-            Lucky = (int)(property0.Lucky * value),
-            Other = (int)(property0.Other * value),
-            Speed= (int)(property0.Speed * value),
-        };
-        return CharacterProperty;
-    }
-
-    public int GetValue(CharacterPropertyType CharacterPropertyType)
-    {
-        switch (CharacterPropertyType)
-        {
-            case CharacterPropertyType.体力:
-                return Power;
-
-            case CharacterPropertyType.生命:
-                return HP;
-
-            case CharacterPropertyType.法力:
-                return MP;
-
-            case CharacterPropertyType.攻击:
-                return AT;
-
-            case CharacterPropertyType.防御:
-                return DF;
-
-            case CharacterPropertyType.幸运:
-                return Lucky;
-
-            case CharacterPropertyType.最大体力:
-                return MaxPower;
-
-            case CharacterPropertyType.最大生命:
-                return MaxHP;
-
-            case CharacterPropertyType.最大法力:
-                return MaxMP;
-            case CharacterPropertyType.敏捷:
-                return Speed;
-            default:
-                return Other;
-        }
-    }
-
-    public static CharacterProperty Lerp(CharacterProperty start, CharacterProperty end, float LerpValue)
-    {
-        return start + (end - start) * LerpValue;
-    }
-    public void AddProperty(CharacterPropertyType propertyType, int value)
-    {
-        switch (propertyType)
-        {
-            case CharacterPropertyType.体力:
-                Power += value;
-                break;
-
-            case CharacterPropertyType.生命:
-                HP += value;
-                break;
-
-            case CharacterPropertyType.法力:
-                MP += value;
-                break;
-
-            case CharacterPropertyType.最大体力:
-                MaxPower += value;
-                break;
-
-            case CharacterPropertyType.最大法力:
-                MaxMP += value;
-                break;
-
-            case CharacterPropertyType.最大生命:
-                MaxHP += value;
-                break;
-
-            case CharacterPropertyType.攻击:
-                AT += value;
-                break;
-
-            case CharacterPropertyType.防御:
-                DF += value;
-                break;
-
-            case CharacterPropertyType.幸运:
-                Lucky += value;
-                break;
-            case CharacterPropertyType.敏捷:
-                Speed += value;
-                break;
-            case CharacterPropertyType.自定义值:
-                Other += value;
-                break;
-        }
-    }
-    public void AddOverrideProperty(CharacterPropertyType propertyType,int value)
-    {
-        switch (propertyType)
-        {
-            case CharacterPropertyType.体力:
-                if (value < 0)
-                {
-                    Power += value;
-                }
-                else
-                {
-                    Power = Power > value ? Power : value;
-                }
-               
-                break;
-
-            case CharacterPropertyType.生命:
-                if (value < 0)
-                {
-                    HP += value;
-                }
-                else
-                    HP =HP> value?HP:value;
-                break;
-
-            case CharacterPropertyType.法力:
-                if (value < 0)
-                {
-                    MP += value;
-                }
-                else
-                    MP =MP> value?MP:value;
-                break;
-
-            case CharacterPropertyType.最大体力:
-                if (value < 0)
-                {
-                    MaxPower += value;
-                }
-                else
-                    MaxPower =MaxPower> value?MaxPower:value;
-                break;
-
-            case CharacterPropertyType.最大法力:
-                if (value < 0)
-                {
-                    MaxMP += value;
-                }
-                else
-                    MaxMP =MaxMP> value?MaxMP:value;
-                break;
-
-            case CharacterPropertyType.最大生命:
-                if (value < 0)
-                {
-                    MaxHP += value;
-                }
-                else
-                    MaxHP = MaxHP > value ? MaxHP : value;
-                break;
-
-            case CharacterPropertyType.攻击:
-                if (value < 0)
-                {
-                    AT += value;
-                }
-                else
-                    AT = AT > value ? AT : value;
-                break;
-
-            case CharacterPropertyType.防御:
-                if (value < 0)
-                {
-                    DF += value;
-                }
-                else
-                    DF = DF > value ? DF : value;
-                break;
-
-            case CharacterPropertyType.幸运:
-                if (value < 0)
-                {
-                    Lucky += value;
-                }
-                else
-                    Lucky = Lucky > value ? Lucky : value;
-                break;
-            case CharacterPropertyType.敏捷:
-                if (value < 0)
-                {
-                    Speed += value;
-                }
-                else
-                    Speed = Speed > value ? Speed : value;
-                break;
-            case CharacterPropertyType.自定义值:
-                if (value < 0)
-                {
-                    Other += value;
-                }
-                else
-                    Other = Other > value ? Other : value;
-                break;
-        }
-    }
-    public void SetProperty(SetCharacterProperty setCharacterProperty)
-    {
-        switch (setCharacterProperty.propertyType)
-        {
-            case CharacterPropertyType.体力:
-                Power = setCharacterProperty.Value;
-                break;
-
-            case CharacterPropertyType.生命:
-                HP = setCharacterProperty.Value;
-                break;
-
-            case CharacterPropertyType.法力:
-                MP = setCharacterProperty.Value;
-                break;
-
-            case CharacterPropertyType.最大体力:
-                MaxPower = setCharacterProperty.Value;
-                break;
-
-            case CharacterPropertyType.最大法力:
-                MaxMP = setCharacterProperty.Value;
-                break;
-
-            case CharacterPropertyType.最大生命:
-                MaxHP = setCharacterProperty.Value;
-                break;
-
-            case CharacterPropertyType.攻击:
-                AT = setCharacterProperty.Value;
-                break;
-
-            case CharacterPropertyType.防御:
-                DF = setCharacterProperty.Value;
-                break;
-
-            case CharacterPropertyType.幸运:
-                Lucky = setCharacterProperty.Value;
-                break;
-            case CharacterPropertyType.敏捷:
-                Speed = setCharacterProperty.Value;
-                break;
-            case CharacterPropertyType.自定义值:
-                Other = setCharacterProperty.Value;
-                break;
-        }
-    }
-
-    public void ChangeProperty(ChangeCharacterProperty changeCharacterProperty)
-    {
-        switch (changeCharacterProperty.propertyType)
-        {
-            case CharacterPropertyType.体力:
-                Power += changeCharacterProperty.changeValue;
-                Power = math.clamp(Power, 0, MaxPower);
-                break;
-
-            case CharacterPropertyType.生命:
-                HP += changeCharacterProperty.changeValue;
-                HP = math.clamp(HP, 0, MaxHP);
-                break;
-
-            case CharacterPropertyType.法力:
-                MP += changeCharacterProperty.changeValue;
-                MP = math.clamp(MP, 0, MaxMP);
-                break;
-
-            case CharacterPropertyType.最大体力:
-                MaxPower += changeCharacterProperty.changeValue;
-                break;
-
-            case CharacterPropertyType.最大法力:
-                MaxMP += changeCharacterProperty.changeValue;
-                break;
-
-            case CharacterPropertyType.最大生命:
-                MaxHP += changeCharacterProperty.changeValue;
-                break;
-
-            case CharacterPropertyType.攻击:
-                AT += changeCharacterProperty.changeValue;
-                break;
-
-            case CharacterPropertyType.防御:
-                DF += changeCharacterProperty.changeValue;
-                break;
-
-            case CharacterPropertyType.幸运:
-                Lucky += changeCharacterProperty.changeValue;
-                break;
-            case CharacterPropertyType.敏捷:
-                Speed += changeCharacterProperty.changeValue;
-                break;
-            case CharacterPropertyType.自定义值:
-                Other += changeCharacterProperty.changeValue;
-                break;
-        }
-    }
-}
 
 public struct Exp
 {
@@ -642,23 +113,6 @@ public partial class Character
          
     }
 
-    public void SetCellOffset(Vector2 offset)
-    {
-        if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var characterRuntimeObj))
-        {
-            characterRuntimeObj.transform.Translate(offset);
-        }
-    }
-
-    public Vector2 GetCellOffset()
-    {
-        if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var characterRuntimeObj))
-        {
-            Vector3 pos = GameCommon.GetMapPos(coordinate);
-            return characterRuntimeObj.transform.position - pos;
-        }
-        return Vector2.zero;
-    }
 
     protected virtual async Task CreatCharacterPackage(int overridePackage = 0,int instanceId=0)
     {
@@ -810,7 +264,7 @@ public partial class Character
         }
     }
 
-    public CharacterProperty CharacterProperty
+    public GameProperty CharacterProperty
     {
         get => (ProfessionProperty+EquipmentProperty+OtherAddProperty)*OtherMulProperty;
         
@@ -826,7 +280,7 @@ public partial class Character
         GameActionManager.instance.QueueAction(CharacterPropertyTrigger,true);
     }
 
-    private CharacterProperty ProfessionProperty
+    private GameProperty ProfessionProperty
     {
         get
         {
@@ -838,7 +292,7 @@ public partial class Character
             CharacterPropertyTrigger();
         }
     }
-    private CharacterProperty EquipmentProperty
+    private GameProperty EquipmentProperty
     {
         get
         {
@@ -850,7 +304,7 @@ public partial class Character
             CharacterPropertyTrigger();
         }
     }
-    private CharacterProperty OtherAddProperty
+    private GameProperty OtherAddProperty
     {
         get
         {
@@ -862,7 +316,7 @@ public partial class Character
             CharacterPropertyTrigger();
         }
     }
-    private CharacterProperty OtherMulProperty
+    private GameProperty OtherMulProperty
     {
         get
         {
@@ -875,10 +329,10 @@ public partial class Character
         }
     }
 
-    private CharacterProperty professionProperty;
-    private CharacterProperty equipmentProperty;
-    private CharacterProperty otherAddProperty;
-    private CharacterProperty otherMulProperty = CharacterProperty.One;
+    private GameProperty professionProperty;
+    private GameProperty equipmentProperty;
+    private GameProperty otherAddProperty;
+    private GameProperty otherMulProperty = GameProperty.One;
 
     public int groupId = -1;
     public ProfessionData professionData;

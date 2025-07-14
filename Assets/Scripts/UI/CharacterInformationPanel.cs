@@ -248,7 +248,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
 
     private int characterId;
 
-    private void DisplayProperty(CharacterProperty characterProperty)
+    private void DisplayProperty(GameProperty characterProperty)
     {
         int maxHP = characterProperty.MaxHP;
         int maxRP = characterProperty.MaxPower;

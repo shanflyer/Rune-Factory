@@ -191,7 +191,7 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
             Null.gameObject.SetActive(false);
 
             CharacterInformationData characterInformationData = character.GetInformation();
-            CharacterProperty characterProperty = fightPlayer.characterProperty;
+            GameProperty characterProperty = fightPlayer.characterProperty;
             if (character == CharacterManager.instance.controllerCharacter)
             {
                 NameText.text=GameDataSaveManager.instance.UserGameSaveData.playerData.name;

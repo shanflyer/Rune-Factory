@@ -69,8 +69,8 @@ public class ItemData : ScriptableObject, IGameData
     public int HP, MP, Power, MaxHP, MaxMP, MaxPower, AT, DF, Lucky, Speed, Other;
 #endif
     [SerializeField]
-    private CharacterProperty property;
-    public CharacterProperty Property => property;
+    private GameProperty property;
+    public GameProperty Property => property;
     public string GetInfo()
     {
         switch (type)

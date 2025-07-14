@@ -18,11 +18,11 @@ public class BuffProperty
 {
     public int dataId;
     public List<BuffRuntime> buffs=new List<BuffRuntime>();
-    private CharacterProperty addProperty;
-    private CharacterProperty mulProperty;
+    private GameProperty addProperty;
+    private GameProperty mulProperty;
 
-    public CharacterProperty AddProperty=>addProperty;
-    public CharacterProperty MulProperty=>mulProperty;
+    public GameProperty AddProperty=>addProperty;
+    public GameProperty MulProperty=>mulProperty;
 
     public BuffProperty(BuffRuntime buffRuntime)
     {
@@ -37,8 +37,8 @@ public class BuffProperty
     }
     void RefreshProperty()
     {
-        addProperty = default(CharacterProperty);
-        mulProperty = default(CharacterProperty);
+        addProperty = default(GameProperty);
+        mulProperty = default(GameProperty);
         for (int i = 0; i < buffs.Count; i++)
         {
             var buff = buffs[i];
@@ -63,7 +63,7 @@ public class FightCharacter : IReferenceData
     public FightCharacterStaues fightCharacterStaues = FightCharacterStaues.正常;
     public virtual AttributeType AttackAttributeType { get; }
     public virtual AttributeType DefenceAttributeType { get; }
-    public virtual CharacterProperty characterProperty { get; }
+    public virtual GameProperty characterProperty { get; }
     public virtual Sprite icon { get; set; }
 
     public virtual string Name { get; }
@@ -74,11 +74,11 @@ public class FightCharacter : IReferenceData
 
     public FightCharacter()
     {
-        buffMulProperty = CharacterProperty.FullPercent;
+        buffMulProperty = GameProperty.FullPercent;
         buffRuntimes = new List<BuffRuntime>();
     }
-    public CharacterProperty buffAddProperty;
-    public CharacterProperty buffMulProperty;
+    public GameProperty buffAddProperty;
+    public GameProperty buffMulProperty;
     public List<BuffRuntime> buffRuntimes { get; set; } 
     Dictionary<int, BuffProperty> BuffPropertys=new Dictionary<int, BuffProperty>();
     public virtual bool IsEquipSkill(int skillId)
@@ -158,8 +158,8 @@ public class FightCharacter : IReferenceData
                     buffProperty = new BuffProperty(buffRuntime);
                 }
                 buffProperty.Add(buffRuntime);
-                buffAddProperty = default(CharacterProperty);
-                buffMulProperty = CharacterProperty.FullPercent;
+                buffAddProperty = default(GameProperty);
+                buffMulProperty = GameProperty.FullPercent;
                 for(int i = 0; i < buffPropertyDic.length; i++)
                 {
                     buffAddProperty += buffPropertyDic[i].AddProperty;
@@ -312,7 +312,7 @@ public class FightCharacter : IReferenceData
 
 public class FightPlayer : FightCharacter
 {
-    public override CharacterProperty characterProperty
+    public override GameProperty characterProperty
     {
         get
         {
@@ -524,7 +524,7 @@ public class FightMonster : FightCharacter
         }
     }
 
-    public override CharacterProperty characterProperty
+    public override GameProperty characterProperty
     {
         get
         {
@@ -532,7 +532,7 @@ public class FightMonster : FightCharacter
         }
     }
 
-    private CharacterProperty _characterProperty;
+    private GameProperty _characterProperty;
     public override AttributeType AttackAttributeType => attributeType;
     public override AttributeType DefenceAttributeType => attributeType;
     private AttributeType attributeType;

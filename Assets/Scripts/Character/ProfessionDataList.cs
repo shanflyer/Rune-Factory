@@ -2,6 +2,8 @@
 using Unity.Mathematics;
 using UnityEngine;
 using System;
+using Unity.Collections;
+using System.Linq;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -27,7 +29,7 @@ public class ProfessionDataList : ScriptableObject, IGameData, IDataArray<Profes
                   
                 professionData.skills = new List<int>();
                 professionData.exp = new List<int>();
-                professionData.propertys = new List<CharacterProperty>();
+                professionData.propertys = new List<GameProperty>();
                 professionData.id = data.id;
                 professionData.professionName = data.professionName;
                 professionData.attributeType = data.attributeType;
@@ -36,7 +38,7 @@ public class ProfessionDataList : ScriptableObject, IGameData, IDataArray<Profes
 
             if (professionData.id == data.id)
             {
-                CharacterProperty characterProperty = new CharacterProperty
+                GameProperty characterProperty = new GameProperty
                 {
                     HP = data.HP,
                     MaxHP = data.HP,
@@ -80,7 +82,7 @@ public class ProfessionData:IGameData
     public int behaviorId;
     public List<int> exp;
     public List<int> skills;
-    public List<CharacterProperty> propertys;
+    public List<GameProperty> propertys;
     public AttributeType attributeType;
     public string GetKey()
     {
@@ -100,7 +102,7 @@ public class ProfessionData:IGameData
         level = math.clamp(level, 1, exp.Count);
         return exp[level - 1];
     }
-    public CharacterProperty GetLevelProperty(int level)
+    public GameProperty GetLevelProperty(int level)
     {
         level = math.clamp(level, 1, propertys.Count);
         return propertys[level - 1];
@@ -111,6 +113,55 @@ public class ProfessionData:IGameData
     public override string ToString()
     {
         return id.ToString();
+    }
+    public void Init()
+    {
+        GameDataManager.instance.CreateProfessionEcsData();
+        if (GameDataManager.instance.eCSProfessionLevelDatas.Length == 0)
+        {
+            GameDataManager.instance.professionRange.Add(id, exp.Count);
+        }
+        else
+        {
+            GameDataManager.instance.professionRange.Add(id, 
+                GameDataManager.instance.eCSProfessionLevelDatas.Length+exp.Count);
+        }
+        for (int i = 0; i < exp.Count; i++)
+        {
+            GameDataManager.instance.eCSProfessionLevelDatas.Add(new int2(exp[i], skills[i]));
+        }
+    }
+}
+ 
+
+public partial class GameDataManager
+{ 
+
+    public NativeHashMap<int, int> professionRange;
+    public NativeList<int2> eCSProfessionLevelDatas;
+
+    public void CreateProfessionEcsData()
+    {
+        if (professionRange.IsCreated)
+        {
+            professionRange = new NativeHashMap<int, int>(16, Allocator.Persistent);
+            clearAction += ClearProfessionData;
+        }
+        if (eCSProfessionLevelDatas.IsCreated)
+        {
+            eCSProfessionLevelDatas = new NativeList<int2>(32, Allocator.Persistent);
+        }
+    }
+    public void ClearProfessionData() 
+    {
+        if (!professionRange.IsCreated)
+        {
+            professionRange.Dispose();
+        }
+        if (!eCSProfessionLevelDatas.IsCreated)
+        {
+            eCSProfessionLevelDatas.Dispose();
+        }
     }
 }
 

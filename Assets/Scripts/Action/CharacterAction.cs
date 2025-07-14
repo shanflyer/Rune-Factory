@@ -1132,7 +1132,7 @@ public struct CharacterPropertyTrigger : GameAction
 
             try
             {
-                characterProperty = new CharacterProperty
+                characterProperty = new GameProperty
                 {
                     HP = int.Parse(parameter.parameters[0].value),
                     MP = int.Parse(parameter.parameters[1].value),
@@ -1153,7 +1153,7 @@ public struct CharacterPropertyTrigger : GameAction
     }
 
     public int characterId;
-    public CharacterProperty characterProperty;
+    public GameProperty characterProperty;
 }
 
 public struct DisplayOrHideCharacter : GameAction

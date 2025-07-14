@@ -5,20 +5,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class GameDataManager : Singleton<GameDataManager>
+public partial class GameDataManager : Singleton<GameDataManager>
 {
     public Dictionary<Type, Dictionary<string, IGameData>> allGameStaticDatas = new Dictionary<Type, Dictionary<string, IGameData>>();
-    
+    private Action clearAction;
     public GameGlobalData GlobalData { get; private set; }
     protected override void Clear()
     {
+        clearAction.Invoke();
         allGameStaticDatas.Clear();
         base.Clear();
+    }
+    void ClearData()
+    {
+        allGameStaticDatas.Clear();
     }
     public override async void Init()
     {
         base.Init();
-        GlobalData=GetData<GameGlobalData>();
+        clearAction = ClearData;
+        GlobalData =GetData<GameGlobalData>();
         var gameDataSaveManager = GameDataSaveManager.instance;
         //初始加载
         await LoadAllAsyncData<GameActionData>();

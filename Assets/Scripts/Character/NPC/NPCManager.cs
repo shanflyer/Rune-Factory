@@ -28,7 +28,7 @@ public struct CharacterInformationData : IReferenceData
     public NPCState NPCState;
     public bool isAnimal;
     public AnimalState animalState;
-    public CharacterProperty characterProperty;
+    public GameProperty characterProperty;
     public int level;
     public Exp exp;
     public Equip equip;
