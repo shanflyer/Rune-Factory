@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a78b5481c4bee6e44b18491b79a75c41
+guid: a22b02593d948714ba78f4de86bbcea7
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -48,7 +48,7 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 1
   spriteExtrude: 1
-  spriteMeshType: 0
+  spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
@@ -109,6 +109,19 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -116,9 +129,9 @@ TextureImporter:
       name: "\u8239\u575E\u4E8C\u5C42_0"
       rect:
         serializedVersion: 2
-        x: 31
+        x: 0
         y: 287
-        width: 386
+        width: 481
         height: 545
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -145,8 +158,12 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures:
-    - texture: {fileID: 2800000, guid: f11bdad5813ee5b4692b38e9ab255324, type: 3}
+    - texture: {fileID: 2800000, guid: d8f264ee8bf0d374b8db1e7745e9d25d, type: 3}
       name: _NormalMap
+    - texture: {fileID: 2800000, guid: 9f168587cd9c39a4fb8e0bef5990e8e2, type: 3}
+      name: _MoveMask
+    - texture: {fileID: 2800000, guid: 675309dfe4c9b0048bbcb53659600857, type: 3}
+      name: _SnowTex
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
