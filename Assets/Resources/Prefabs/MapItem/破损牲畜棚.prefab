@@ -246,7 +246,7 @@ Transform:
   m_GameObject: {fileID: 933122716859290136}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.155, y: 0.384, z: 0}
+  m_LocalPosition: {x: 0.163, y: 0.231, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -319,7 +319,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshRenderer: {fileID: 7387335738779409767}
   meshFilter: {fileID: 3294983737574039572}
-  m_Sprite: {fileID: 21300000, guid: 6b09fad6971a33843b9f1c676f438fc8, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b6230f6c908fc864296d9ca95246a9cc, type: 3}
   flip: 0
   spriteDrawMode: 0
   size: 1
@@ -446,7 +446,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6603272587374634581}
   - component: {fileID: 4725580228128583400}
-  - component: {fileID: 4007912218857676446}
   m_Layer: 0
   m_Name: "\u6805\u680F_6 (1)"
   m_TagString: Untagged
@@ -524,19 +523,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4007912218857676446
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2678279740770578596}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 421e7d29e339100448b28790e3d53915, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 0}
 --- !u!1 &3083558281698161976
 GameObject:
   m_ObjectHideFlags: 0
@@ -971,7 +957,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5965616539846030957}
   - component: {fileID: 8767870275433465619}
-  - component: {fileID: 5838556928810239126}
   m_Layer: 0
   m_Name: "\u6805\u680F_4"
   m_TagString: Untagged
@@ -988,7 +973,7 @@ Transform:
   m_GameObject: {fileID: 6038550441081741062}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.7454, y: 0.47982892, z: 0}
+  m_LocalPosition: {x: 0.9405, y: 0.47982892, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1043,25 +1028,12 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
-  m_Size: {x: 0.756314, y: 0.32}
+  m_Size: {x: 0.3660179, y: 0.32}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
---- !u!114 &5838556928810239126
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6038550441081741062}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 421e7d29e339100448b28790e3d53915, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 0}
 --- !u!1 &7506593707135563063
 GameObject:
   m_ObjectHideFlags: 0
@@ -1072,7 +1044,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6275568727919466552}
   - component: {fileID: 4155675172461633602}
-  - component: {fileID: 8886534413339468287}
   m_Layer: 0
   m_Name: "\u6805\u680F_6 (2)"
   m_TagString: Untagged
@@ -1150,19 +1121,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8886534413339468287
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7506593707135563063}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 421e7d29e339100448b28790e3d53915, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 0}
 --- !u!1 &7831870576395852064
 GameObject:
   m_ObjectHideFlags: 0
@@ -1628,12 +1586,12 @@ PrefabInstance:
     - target: {fileID: 274311622171012830, guid: 03decd2e7b2ad3546bf1ce241cb52350,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.324
+      value: 0.393
       objectReference: {fileID: 0}
     - target: {fileID: 274311622171012830, guid: 03decd2e7b2ad3546bf1ce241cb52350,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.58815694
+      value: 0.213
       objectReference: {fileID: 0}
     - target: {fileID: 274311622171012830, guid: 03decd2e7b2ad3546bf1ce241cb52350,
         type: 3}
