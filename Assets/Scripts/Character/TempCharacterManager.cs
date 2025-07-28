@@ -278,6 +278,10 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
         {
             tempCharacters.SetList(tempList);
         }
+        if (tempCharacters.length == 0)
+        {
+            return;
+        }
         int randomIndex = GameRandom.RandomInt(0, tempCharacters.length);
         characterId = tempCharacters[randomIndex];
         tempCharacters.RemoveAt(randomIndex);

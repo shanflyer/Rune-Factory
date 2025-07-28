@@ -463,7 +463,8 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             Shader.SetGlobalColor("_SunColor", sunColor);
             Shader.SetGlobalInt("_Sun", natureLightData.sunValue);
 
-            float screenScale = Screen.width / (float)Screen.height;
+            var ScreenResolution = GameCommon.GetScreenResolution();
+            float screenScale = ScreenResolution.x / ScreenResolution.y ;
             float screenScaleX = 1f + screenScale;
             float screenScaleY = 1f + screenScale * 0.5f;
             Vector2 sunPos= natureLightData.sunPos * new Vector2(screenScaleX, screenScaleY);
@@ -526,7 +527,8 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
                 Shader.SetGlobalInt("_Sun", overrideLightData.sunValue);
 
 
-                float screenScale = Screen.width / (float)Screen.height;
+                var ScreenResolution = GameCommon.GetScreenResolution();
+                float screenScale = ScreenResolution.x / ScreenResolution.y ;
                 float screenScaleX = 1f + screenScale;
                 float screenScaleY = 1f + screenScale * 0.5f;
                 Vector2 sunPos = overrideLightData.sunPos * new Vector2(screenScaleX, screenScaleY);
@@ -574,7 +576,8 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         Shader.SetGlobalColor("_SkyBottomColor", natureLightData.skyBottomColor);
         Shader.SetGlobalFloat("_SkyHalfValue", natureLightData.skyHalfValue);
         Shader.SetGlobalColor("_SunColor", natureLightData.sunColor);
-        float screenScale = Screen.width / (float)Screen.height;
+        var ScreenResolution = GameCommon.GetScreenResolution();
+        float screenScale = ScreenResolution.x / ScreenResolution.y ;
         float screenScaleX = 1f + screenScale;
         float screenScaleY = 1f + screenScale * 0.5f;
         Vector2 sunPos = natureLightData.sunPos * new Vector2(screenScaleX, screenScaleY);
