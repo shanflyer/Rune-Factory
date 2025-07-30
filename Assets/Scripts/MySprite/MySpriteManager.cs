@@ -236,6 +236,10 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
     private void ApplySpriteTextures(Material material, Sprite sprite)
     {
         material.SetTexture("_MainTex", sprite.texture);
+        if (sprite == null)
+        {
+            return;
+        }
         SecondarySpriteTexture[] secondarySpriteTextures = new SecondarySpriteTexture[sprite.GetSecondaryTextureCount()];
         if (secondarySpriteTextures.Length == 0)
         {

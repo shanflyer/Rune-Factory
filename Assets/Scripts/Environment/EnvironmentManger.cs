@@ -465,7 +465,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
 
             var ScreenResolution = GameCommon.GetScreenResolution();
             float screenScale = ScreenResolution.x / ScreenResolution.y ;
-            float screenScaleX = 1f + screenScale;
+            float screenScaleX = 1f;// + screenScale;
             float screenScaleY = 1f + screenScale * 0.5f;
             Vector2 sunPos= natureLightData.sunPos * new Vector2(screenScaleX, screenScaleY);
             if (sunTransform)

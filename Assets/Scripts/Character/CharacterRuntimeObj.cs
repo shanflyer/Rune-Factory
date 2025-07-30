@@ -94,8 +94,10 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
             this.enabled = false;
             Vector3 offset = new Vector3(0, 0, -99999);
             body.localScale = Vector3.zero;
-            equip.Translate(offset);
-            shadow.Translate(offset);
+            if (equip)
+                equip.Translate(offset);
+            if (shadow)
+                shadow.Translate(offset);
 
             GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj, true);
         }
@@ -183,12 +185,19 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
         isLeftFoot = false;
 
         body.localScale = Vector3.one;
-        Vector3 offset = equip.localPosition;
-        offset.z = 0;
-        equip.localPosition = offset;
-        offset = shadow.localPosition;
-        offset.z = 0;
-        shadow.localPosition = offset; 
+        if (equip)
+        {
+            Vector3 offset = equip.localPosition;
+            offset.z = 0;
+            equip.localPosition = offset;
+        }
+        if (shadow)
+        {
+            Vector3 offset = shadow.localPosition;
+            offset.z = 0;
+            shadow.localPosition = offset;
+        }
+       
 
         /*if(runtimeObj!=null)
             EnvironmentManger.instance.AddCharacterGetFootStep(runtimeObj.linkId, characterGetFootStep);*/

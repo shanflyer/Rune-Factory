@@ -419,6 +419,7 @@ public static class GameCommon
 
     public static Vector2 GetScreenResolution()
     {
+      //  return new Vector2(Screen.width, Screen.height);
         Vector2 gameViewSize;
         //使用宏编译主要是为了打包的时候不会报错
 #if UNITY_EDITOR
