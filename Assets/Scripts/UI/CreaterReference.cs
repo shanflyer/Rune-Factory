@@ -25,7 +25,7 @@ public class CreaterReference : UIObjReference<MoneyCreatData>
         {
             if (value && SelectAction != null)
             {
-                SelectAction(moneyCreatData);
+                SelectAction(moneyCreatData,index);
             }
         });
     }

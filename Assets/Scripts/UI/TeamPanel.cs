@@ -148,7 +148,7 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
     }
 
     int SelectCharacterId = 0;
-    async void SelectAction(CharacterInformationData characterInformationData,bool select)
+    async void SelectAction(CharacterInformationData characterInformationData, int index, bool select)
     {
         if (select)
         {

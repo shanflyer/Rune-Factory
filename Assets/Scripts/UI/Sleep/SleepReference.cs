@@ -24,7 +24,7 @@ public class SleepReference : UIObjReference<SleepSetData>
 
     private void Awake()
     {
-        sleepButton.onClick.AddListener(() => { SelectAction(data, true); });
+        sleepButton.onClick.AddListener(() => { SelectAction(data,index, true); });
         sleepText.SetSWText(data.text);
     }
 

@@ -64,7 +64,7 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
         saveList = new DisplayList<SaveReference, UserGameSaveData>(SaveReference, SaveDataParent);
     }
 
-    private void SelectAction(UserGameSaveData userGameSaveData, bool selected)
+    private void SelectAction(UserGameSaveData userGameSaveData,int index, bool selected)
     {
         if (selected)
         {

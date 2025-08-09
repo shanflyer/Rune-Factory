@@ -209,7 +209,7 @@ public class ShopPanel : GamePanel<ShopList>
         }
     }
 
-    private async void SeletShopItem(ShopItemData shopItemData, bool selected = true)
+    private async void SeletShopItem(ShopItemData shopItemData, int index, bool selected = true)
     {
         selectShopItemData = shopItemData;
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(shopItemData.item);
@@ -229,7 +229,7 @@ public class ShopPanel : GamePanel<ShopList>
         SelectInformation.transform.localScale = Vector3.one;
     }
 
-    private void SelecShopData(Shop shop, bool selected)
+    private void SelecShopData(Shop shop, int index, bool selected)
     {
         if (selected)
         {
@@ -248,7 +248,7 @@ public class ShopPanel : GamePanel<ShopList>
         ItemGroup.enabled = true;
         shops.InitListData(v.shops.GetValueList(), SelecShopData, ShopGroup);
         shops.SelectDefault();
-        SelecShopData(v.shops[0], true);
+        SelecShopData(v.shops[0],0, true);
         buyCount = 1;
         RefreshBuyCount();
     }

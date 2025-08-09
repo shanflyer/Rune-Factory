@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using Unity.Collections;
 using Unity.Mathematics;
-using UnityEngine;
-using static UnityEngine.Rendering.GPUSort;
+using UnityEngine; 
 
 public delegate void Int3Action(int3 value, int action = 0);
 
-public delegate Vector2 GetMoveVector();
+public delegate Vector2 GetVector2();
 
 public delegate void SetMoveTarge(int2 targetCoordinate, Vector2 targetPos);
 
@@ -251,6 +250,14 @@ internal ref struct ValueStringBuilder
 }
 public static class GameCommon
 {
+    static HashSet<int> DisplayMaps = new HashSet<int>
+    {
+        {302},{512},{695},{889},{874},{2355},{2497}
+    };
+    public static bool CheckDisplay(int mapId)
+    {
+        return DisplayMaps.Contains(mapId);
+    }
     public static List<MyString> GetMyStrings(this List<string> strs)
     {
         List<MyString> myStrings = new List<MyString>();

@@ -276,7 +276,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
             };
              
             WarehousePanel warehousePanel = await UIManager.instance.ShowGamePanel<WarehousePanel,PackageList>(packageList);
-            warehousePanel.SetSelectItemAction((Item item, bool select) =>
+            warehousePanel.SetSelectItemAction((Item item, int index, bool select) =>
             {
                 UIManager.instance.CloseGamePanel<WarehousePanel>();
                 OpenSetItemPanel(storeCounterSetSelectItemAction.targetObj, item);

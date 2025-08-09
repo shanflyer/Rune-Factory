@@ -17,7 +17,7 @@ public class FormulaTagReference : UIObjReference<FormulaType>
         {
             if (SelectAction != null)
             {
-                SelectAction(data, value);
+                SelectAction(data,index, value);
             }
         });
     }
@@ -27,7 +27,7 @@ public class FormulaTagReference : UIObjReference<FormulaType>
         toggle.SetIsOnWithoutNotify(true);
         if (SelectAction != null)
         {
-            SelectAction(data, true);
+            SelectAction(data,index, true);
         }
     }
     public override void SetPanelUISerializeObj()

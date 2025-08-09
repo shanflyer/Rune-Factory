@@ -26,7 +26,7 @@ public class NPCReference : UIObjReference<NPC>
         {
             if (SelectAction != null)
             {
-                SelectAction(data, value);
+                SelectAction(data,index, value);
             }
         });
     }

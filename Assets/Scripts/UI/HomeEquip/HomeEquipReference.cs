@@ -35,7 +35,7 @@ public class HomeEquipReference : UIObjReference<HomeEquip>
             }
             if (SelectAction != null)
             {
-                SelectAction.Invoke(data, value);
+                SelectAction.Invoke(data,index, value);
             }
         });
     }

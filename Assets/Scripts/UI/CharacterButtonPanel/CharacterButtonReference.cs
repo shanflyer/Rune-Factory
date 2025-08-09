@@ -22,7 +22,7 @@ public class CharacterButtonReference : UIObjReference<MyInt>
         {
             if (SelectAction != null)
             {
-                SelectAction(data, true);
+                SelectAction(data,index, true);
             }
 
         } );

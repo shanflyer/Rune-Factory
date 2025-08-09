@@ -24,7 +24,7 @@ public class LanguageReference : UIObjReference<LanguageData>
             {
                 if (SelectAction != null)
                 {
-                    SelectAction(data);
+                    SelectAction(data,index);
                 }
             }
         });

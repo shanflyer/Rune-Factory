@@ -26,7 +26,7 @@ public class DateReference : UIObjReference<GameDate>
         {
             if (SelectAction != null)
             {
-                SelectAction(data, value);
+                SelectAction(data,index, value);
             }
         });
     }
@@ -36,7 +36,7 @@ public class DateReference : UIObjReference<GameDate>
         selectToggle.SetIsOnWithoutNotify(true);
         if (SelectAction != null)
         {
-            SelectAction(data, true);
+            SelectAction(data,index, true);
         }
     }
     public override void SetPanelUISerializeObj()

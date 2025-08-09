@@ -32,7 +32,7 @@ public class AnimalReference : UIObjReference<MyInt>
         {
             if (SelectAction != null)
             {
-                SelectAction(data);
+                SelectAction(data,index);
             }
         });
     }

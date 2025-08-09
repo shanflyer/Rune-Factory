@@ -102,6 +102,10 @@ public class RuntimeMapRoom
     private List<NpcBehaviorArea> NpcBehaviorAreas = new List<NpcBehaviorArea>();
     private Dictionary<BehaviorAreaType, List<int>> NpcBehaviorAreaTypeDic = new Dictionary<BehaviorAreaType, List<int>>();
     
+    public int2 GetStartIndex(int2 coordinate)
+    {
+        return coordinate - startCoordinate;
+    }
     public int3 GetRandomBehaviorCell(int areaId)
     {
         var npcBehaviorArea = NpcBehaviorAreas.Find(n => n.Name == areaId);
@@ -526,7 +530,14 @@ public class MapCellController : Singleton<MapCellController>
     }
 
 
-
+    public int2 GetStartIndex(int mapInstance,int2 coordinate)
+    {
+        if (runtimeMapRooms.TryGetValue(mapInstance, out var runtimeMapRoom))
+        {
+            return runtimeMapRoom.GetStartIndex(coordinate);
+        }
+        return int2.zero;
+    }
     public int3 GetRandomBehaviorCell(int mapInstance, int areaId)
     {
         if (runtimeMapRooms.TryGetValue(mapInstance, out var runtimeMapRoom))

@@ -156,7 +156,7 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
     private Item selectPackageItem;
 
   
-    private void TryUsedItem(Item item,bool select)
+    private void TryUsedItem(Item item, int index, bool select)
     {
         ItemUseAction itemUseAction = new ItemUseAction
         {
@@ -222,7 +222,7 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
     private int selectShortIndex;
     private ShortcutItem shortcutItem;
 
-    private void SelectShortcutItem(ShortcutItem item, bool select)
+    private void SelectShortcutItem(ShortcutItem item, int index, bool select)
     {
         if (select)
         {

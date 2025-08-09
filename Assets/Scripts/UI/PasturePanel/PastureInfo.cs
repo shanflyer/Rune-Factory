@@ -17,7 +17,7 @@ public class PastureInfo : UIObjReference<Pasture>
         {
             if (SelectAction != null)
             {
-                SelectAction(data,value);
+                SelectAction(data,index,value);
             }
         });
     }

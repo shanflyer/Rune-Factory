@@ -24,7 +24,7 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
         {
             if(SelectAction != null)
             {
-                SelectAction(data, value);
+                SelectAction(data,index, value);
             }
         });
     }
@@ -48,7 +48,7 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
         base.SelectDefault();
         if (SelectAction != null)
         {
-            SelectAction(data, true);
+            SelectAction(data,index, true);
         }
     }
     public override void OnEnable()

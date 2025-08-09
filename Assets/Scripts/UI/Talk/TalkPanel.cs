@@ -91,7 +91,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
         nextButton.interactable = true;
     }
 
-    private async void SelectNPCFunctionData(NPCFunctionData NPCFunctionData, bool selected = true)
+    private async void SelectNPCFunctionData(NPCFunctionData NPCFunctionData, int index, bool selected = true)
     {
         /* HidePanel hidePanel = new HidePanel
          {
@@ -136,7 +136,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
         }
         else
         {
-            NPCFunctionList.InitListData(null);
+            NPCFunctionList.InitListData(new List<NPCFunctionData>());
         }
 
         InitData();

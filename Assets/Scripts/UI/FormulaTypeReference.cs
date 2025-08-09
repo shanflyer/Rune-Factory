@@ -22,7 +22,7 @@ public class FormulaTypeReference : UIObjReference<FormulaTypeData>
         {
             if (SelectAction != null)
             {
-                SelectAction(data, value);
+                SelectAction(data,index, value);
             }
         });
         toggle.isOn = true;

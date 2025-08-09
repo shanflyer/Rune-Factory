@@ -27,7 +27,7 @@ public class PackageSelectReference : UIObjReference<PackageData>
         {
             if (SelectAction != null)
             {
-                SelectAction(PackageData);
+                SelectAction(PackageData, index);
             }
         });
     }

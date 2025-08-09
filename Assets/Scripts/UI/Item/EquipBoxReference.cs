@@ -29,7 +29,7 @@ public class EquipBoxReference:UIObjReference<Equipment>
         {
             if (SelectAction != null)
             {
-                SelectAction(data);
+                SelectAction(data,index);
             }
         });
     }

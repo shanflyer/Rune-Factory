@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -53,10 +54,36 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
             catch (Exception e)
             {
                 Debug.Log($"{gameObject.name}:{e}");
-            } 
+            }
         }
-       
-       
+        Type type = this.GetType();
+
+        var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+        for (int i = 0; i < fields.Length; i++)
+        {
+            var field = fields[i];
+            string keyName = field.Name;
+            if (field.Name.Contains("_"))
+            {
+                keyName = field.Name.Split('_')[0];
+            }
+            if (string.IsNullOrEmpty(keyName))
+            {
+                var component = transform.GetComponent(field.FieldType);
+                field.SetValue(this, component);
+            }
+            else
+            if (objectDatas.TryGetValue(keyName, out var transform))
+            {
+                try
+                {
+                    var component = transform.GetComponent(field.FieldType);
+                    field.SetValue(this, component);
+                }
+                finally { }
+            }
+        }
+
     }
     public override void SetPanelUISerializeObj()
     {

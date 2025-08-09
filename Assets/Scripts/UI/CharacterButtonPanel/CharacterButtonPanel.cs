@@ -43,7 +43,7 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
     }
     List<MyInt> nowCharacters = new List<MyInt>();
     HashSet<int> characters = new HashSet<int>();
-    async void SelectAction(MyInt seletCharacter, bool selected = true)
+    async void SelectAction(MyInt seletCharacter, int index, bool selected = true)
     {
 
         Character character = CharacterManager.instance.GetCharacter(seletCharacter.value);

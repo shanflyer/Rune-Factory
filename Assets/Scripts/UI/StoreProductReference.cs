@@ -22,7 +22,7 @@ public class StoreProductReference : UIObjReference<AppStoreProductData>
         {
             if (SelectAction != null)
             {
-                SelectAction(data, true);
+                SelectAction(data,index, true);
             }
         });
     }

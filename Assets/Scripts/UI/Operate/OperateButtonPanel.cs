@@ -71,7 +71,7 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
             OperateList1.InitListData(operateDatas, SelectAction);
         }
     }
-    void SelectAction(OperateDataReferenceData operateData,bool select)
+    void SelectAction(OperateDataReferenceData operateData,int index,bool select)
     {
         PlayerOperateManager.instance.OperateAction(operateData, operateDataList.eventReferenceDatas);
     }

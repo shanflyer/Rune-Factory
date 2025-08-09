@@ -98,7 +98,7 @@ public class WorldPanel : GamePanel<MyInt>
         Close();
     }
 
-    private async void SelectFightChapter(UIFightChapterData uIFightChapterData, bool selected)
+    private async void SelectFightChapter(UIFightChapterData uIFightChapterData, int index, bool selected)
     {
         if (selected)
         {

@@ -954,7 +954,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         }
         else
         {
-            this.formulaTypes.InitListData(null, SelectFormulaTypeData);
+            this.formulaTypes.InitListData(new List<FormulaTypeData>(), SelectFormulaTypeData);
         }
 
         RefreshFormulaSelect();
@@ -984,7 +984,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         GameActionManager.instance.QueueAction(setFixedCamera);
     }
 
-    private void SelectFormulaTypeData(FormulaTypeData formulaTypeData, bool seleted)
+    private void SelectFormulaTypeData(FormulaTypeData formulaTypeData, int index, bool seleted)
     {
         if (!seleted)
         {
@@ -1050,7 +1050,7 @@ public class ManufacturePanel : GamePanel<Manufature>
     }
 
 
-    async void SetFormulaItem(Item item, bool select)
+    async void SetFormulaItem(Item item, int index, bool select)
     {
         item.count = 0;
         await SelectItemBoxRefrence.InitData(item, null, FormulaItemBoxGroup);

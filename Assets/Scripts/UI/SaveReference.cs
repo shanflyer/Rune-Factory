@@ -34,7 +34,7 @@ public class SaveReference : UIObjReference<UserGameSaveData>
         SelectToggle.SetIsOnWithoutNotify(true);
         if (SelectAction != null)
         {
-            SelectAction(data, true);
+            SelectAction(data, index, true);
         }
     }
     public override void SetPanelUISerializeObj()
@@ -81,7 +81,7 @@ public class SaveReference : UIObjReference<UserGameSaveData>
             {
                 if (SelectAction != null)
                 {
-                    SelectAction(data, value);
+                    SelectAction(data,index, value);
                 }
             }
             

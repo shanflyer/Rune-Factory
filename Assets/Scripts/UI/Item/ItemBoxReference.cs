@@ -57,7 +57,7 @@ public class ItemBoxReference : UIObjReference<Item>
             }
             if (SelectAction != null)
             {
-                SelectAction.Invoke(item, value);
+                SelectAction.Invoke(item, index, value);
             }
             else if (SelectUIAction != null)
             {
@@ -81,7 +81,7 @@ public class ItemBoxReference : UIObjReference<Item>
         toggle.SetIsOnWithoutNotify(true);
         if(SelectAction != null)
         {
-            SelectAction.Invoke(item);
+            SelectAction.Invoke(item, index);
         }
     }
     public void SetCountColor(Color color)

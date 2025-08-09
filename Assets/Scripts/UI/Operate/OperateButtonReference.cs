@@ -26,7 +26,7 @@ public class OperateButtonReference : UIObjReference<OperateDataReferenceData>
         {
             if (SelectAction != null)
             {
-                SelectAction(data);
+                SelectAction(data, index);
             }
         });
     }

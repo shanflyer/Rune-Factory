@@ -61,7 +61,7 @@ public class SavePanel : GamePanel<UserGameSaveDataList>
 
     private UserGameSaveData selectGameSaveData;
 
-    private void SelectAction(UserGameSaveData userGameSaveData, bool selected)
+    private void SelectAction(UserGameSaveData userGameSaveData, int index, bool selected)
     {
         if (selected)
         {

@@ -544,7 +544,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
             
         }
     }
-    private  void SelectEquip(HomeEquip HomeEquip, bool selected = true)
+    private  void SelectEquip(HomeEquip HomeEquip, int index, bool selected = true)
     {
         if (selected)
         {

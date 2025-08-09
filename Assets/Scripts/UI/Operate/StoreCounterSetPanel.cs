@@ -73,7 +73,7 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
     }
     int changeCount = 0;
 
-    async void SelectPackageItem(Item item,bool select)
+    async void SelectPackageItem(Item item, int index, bool select)
     {
         SetStoreCounterItem setStoreCounterItem = new SetStoreCounterItem
         {

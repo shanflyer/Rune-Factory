@@ -1094,10 +1094,26 @@ namespace UnityEngine.UI
 
             var color32 = color;
             vh.Clear();
+            if (colorGradient)
+            {
+                color32 = colorBL;
+            }
             vh.AddVert(new Vector3(v.x, v.y), color32, new Vector2(uv.x, uv.y));
+            if (colorGradient)
+            {
+                color32 = colorTL;
+            }
             vh.AddVert(new Vector3(v.x, v.w), color32, new Vector2(uv.x, uv.w));
+            if (colorGradient)
+            {
+                color32 = colorTR;
+            }
             vh.AddVert(new Vector3(v.z, v.w), color32, new Vector2(uv.z, uv.w));
-            vh.AddVert(new Vector3(v.z, v.y), color32, new Vector2(uv.z, uv.y));
+            if (colorGradient)
+            {
+                color32 = colorBR;
+            }
+            vh.AddVert(new Vector3(v.z, v.y), color32, new Vector2(uv.z, uv.y)); 
 
             vh.AddTriangle(0, 1, 2);
             vh.AddTriangle(2, 3, 0);
@@ -1123,14 +1139,27 @@ namespace UnityEngine.UI
             // Calculate the drawing offset based on the difference between the two pivots.
             var drawOffset = (rectPivot - spritePivot) * drawingSize;
 
-            var color32 = color;
+            Color32 color32 = color;
             vh.Clear();
+            if (colorGradient)
+            {
+                color32 = colorBL;
+            }
 
             Vector2[] vertices = activeSprite.vertices;
             Vector2[] uvs = activeSprite.uv;
             for (int i = 0; i < vertices.Length; ++i)
             {
-                vh.AddVert(new Vector3((vertices[i].x / spriteBoundSize.x) * drawingSize.x - drawOffset.x, (vertices[i].y / spriteBoundSize.y) * drawingSize.y - drawOffset.y), color32, new Vector2(uvs[i].x, uvs[i].y));
+                var position = new Vector3((vertices[i].x / spriteBoundSize.x) * drawingSize.x - drawOffset.x, (vertices[i].y / spriteBoundSize.y) * drawingSize.y - drawOffset.y);
+                var ColorUv = position;
+                ColorUv.x = ColorUv.x / spriteBoundSize.x;
+                ColorUv.y = ColorUv.y / spriteBoundSize.y;
+                var color0 = Color.Lerp(colorBL, colorBR, ColorUv.x);
+                var color1 = Color.Lerp(colorTL, colorTR, ColorUv.x);
+                color = Color.Lerp(color0, color1, ColorUv.y);
+                color32 = color;
+
+                vh.AddVert(position, color32, new Vector2(uvs[i].x, uvs[i].y));
             }
 
             UInt16[] triangles = activeSprite.triangles;

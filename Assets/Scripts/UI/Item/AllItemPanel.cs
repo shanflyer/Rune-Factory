@@ -131,7 +131,7 @@ public class AllItemPanel : GamePanel<IReferenceData>
     }
   
 
-    private async void SelectPackageItem(Item item, bool selected = true)
+    private async void SelectPackageItem(Item item, int index, bool selected = true)
     {
         if (selected)
         {

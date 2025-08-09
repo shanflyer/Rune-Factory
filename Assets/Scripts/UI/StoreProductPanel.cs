@@ -53,7 +53,7 @@ public class StoreProductPanel : GamePanel<IReferenceData>
         return base.InitData(dataKey);
     }
 
-    private void SelectProduct(AppStoreProductData productData, bool selected)
+    private void SelectProduct(AppStoreProductData productData,int index, bool selected)
     {
         AppStoreManager.instance.BuyProduct(productData);
         mask.gameObject.SetActive(true);

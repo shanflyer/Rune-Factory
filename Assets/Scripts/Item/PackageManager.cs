@@ -29,7 +29,7 @@ public class PackageManager : Singleton<PackageManager>
             packageList.packageDatas.Add(gamePackage.OutGamePackageData());
         }
         var warehousePanel = await UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
-        warehousePanel.SetSelectItemAction((Item item,bool select) =>
+        warehousePanel.SetSelectItemAction((Item item,int index,bool select) =>
         {
             UsingAction(item);
             if (close)
@@ -51,7 +51,7 @@ public class PackageManager : Singleton<PackageManager>
             packageList.packageDatas.Add(gamePackage.OutGamePackageData());
         }
         var warehousePanel = await UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
-        warehousePanel.SetSelectItemAction((Item item, bool select) =>
+        warehousePanel.SetSelectItemAction((Item item, int index, bool select) =>
         {
 
             FightManager.instance.TryUseItem(item);

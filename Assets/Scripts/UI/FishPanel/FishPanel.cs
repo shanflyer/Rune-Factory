@@ -191,7 +191,7 @@ public class FishPanel : GamePanel<IReferenceData>
     }
 
     int selectFishDataId;
-    async void SelectFishReference(FishReferenceData fishReferenceData,bool selected)
+    async void SelectFishReference(FishReferenceData fishReferenceData, int index, bool selected)
     {
         if (selected)
         {

@@ -593,6 +593,10 @@ public partial class Character
     public int characterPackage;
     public List<int> skills = new List<int>();
 
+    public int2 GetMapStartIndex()
+    {
+        return MapCellController.instance.GetStartIndex(mapInstance, coordinate);
+    }
     public void SetController(bool controller)
     {
         isController = controller;

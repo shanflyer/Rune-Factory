@@ -21,7 +21,7 @@ public class FormulaReference : UIObjReference<FormulaReferenceData>
         {
             if (SelectAction != null)
             {
-                SelectAction(data, isOn);
+                SelectAction(data,index, isOn);
             }
         });
     }
@@ -33,7 +33,7 @@ public class FormulaReference : UIObjReference<FormulaReferenceData>
 
         if (SelectAction != null)
         {
-            SelectAction(data, true);
+            SelectAction(data,index, true);
         }
     }
 

@@ -1,0 +1,48 @@
+using System.Threading.Tasks;
+using Unity.Mathematics;
+using UnityEngine;
+using UnityEngine.UI;
+
+ public struct NPCReferenceData
+{
+    public NPC npc;
+    public Vector2 parentPos;
+    public GetVectorForMap getVectorForMap;
+}
+public delegate bool GetVectorForMap(int mapInstance, out Vector2 pos);
+public class NPCHeadReference : UIObjReference<NPCReferenceData>
+{
+    [SerializeField]
+    Image NPCHead;
+    [SerializeField]
+    RectTransform _rectTransform;
+    public override Task InitData(NPCReferenceData t, SelectAction<NPCReferenceData> SelectAction = null, ToggleGroup toggleGroup = null)
+    {
+        oldMapInstance = 0;
+        NPCHead.sprite = t.npc.Character.characterData.head.sprite;
+        return base.InitData(t, SelectAction, toggleGroup);
+    }
+    int oldMapInstance;
+    public override void OnDisable()
+    {
+        base.OnDisable();
+        oldMapInstance = 0;
+    }
+    private void Update()
+    {
+        if (oldMapInstance != data.npc.Character.mapInstance)
+        {
+            oldMapInstance = data.npc.Character.mapInstance;
+            data.getVectorForMap(oldMapInstance, out data.parentPos);
+            SelectAction(data, index);
+        }
+
+        if(GameCommon.CheckDisplay(data.npc.Character.mapInstance))
+        {
+            //_rectTransform.localScale = Vector2.one;
+            int2 coordinateIndex = data.npc.Character.GetMapStartIndex();
+            _rectTransform.pivot =data.parentPos+ new Vector2(coordinateIndex.x, coordinateIndex.y)*2;
+        }
+       
+    }
+}

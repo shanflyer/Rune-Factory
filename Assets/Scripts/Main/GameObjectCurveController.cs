@@ -249,7 +249,7 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
             enumerator = null;
         }
     }
-    public void ObjectMove(Character character, GetMoveVector GetObjectPos, SetMoveTarge SetMoveTarge, int instanceId)
+    public void ObjectMove(Character character, GetVector2 GetObjectPos, SetMoveTarge SetMoveTarge, int instanceId)
     {
         if (!objectMoveIEnumerator.TryGetValue(instanceId, out IEnumerator enumerator))
         {
@@ -258,7 +258,7 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
             objectMoveIEnumerator.Add(instanceId, enumerator);
         }
     }
-    public void ObjectMove(GetMoveVector GetObjectPos, GetMoveVector GetMoveDirction, SetMoveTarge SetMoveTarge,
+    public void ObjectMove(GetVector2 GetObjectPos, GetVector2 GetMoveDirction, SetMoveTarge SetMoveTarge,
         int mapId, int instanceId, bool checkWalk,float speed=1)
     {
         if (!objectMoveIEnumerator.TryGetValue(instanceId, out IEnumerator enumerator))
@@ -269,7 +269,7 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
         }
     }
     
-    private IEnumerator ObjectMoving(Character character, GetMoveVector GetObjectPos, SetMoveTarge SetMoveTarge, int instanceId)
+    private IEnumerator ObjectMoving(Character character, GetVector2 GetObjectPos, SetMoveTarge SetMoveTarge, int instanceId)
     { 
        // bool _continue = true;
         while (!character.moveDirection.Equals(float2.zero))
@@ -307,7 +307,7 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
     }
      
 
-    private IEnumerator ObjectFreedomMoving(GetMoveVector GetObjectPos, GetMoveVector GetMoveDirction, SetMoveTarge SetMoveTarge,
+    private IEnumerator ObjectFreedomMoving(GetVector2 GetObjectPos, GetVector2 GetMoveDirction, SetMoveTarge SetMoveTarge,
         int mapId, int instanceId, bool checkWalk,float speed= 1)
     {
         bool _continue = true;
