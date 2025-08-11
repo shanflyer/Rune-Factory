@@ -1176,7 +1176,7 @@ public class MapCellController : Singleton<MapCellController>
         {
             do
             {
-                if (CheckIsWalk(new int3(mapLinkCell.coordinate, linkMap)))
+                if (CheckIsWalk(new int3(mapLinkCell.coordinate, nowMap)))
                 {
                     LinkCells.Add(mapLinkCell);
                 }
