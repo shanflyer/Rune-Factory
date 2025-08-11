@@ -35,7 +35,7 @@ public class CharacterMoveNoWait : Action
         if (character != null)
         {
             character.StopMove();
-            if (!character.MoveCrossMap(targetCoordinate.z, targetCoordinate.xy, null))
+            if (!character.TryMove(targetCoordinate.z, targetCoordinate.xy, null))
             {
               
             }

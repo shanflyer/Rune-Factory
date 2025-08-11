@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Unity.Mathematics;
@@ -1647,12 +1648,13 @@ public partial class Character
     public MoveEndAction moveEndAction { get; private set; }
     public MoveEndAction changeCoordinateAction { get; private set; }
     public Int3Action failedMoveAction { get; private set; }
-    public bool MoveCrossMap(int2 targetCoordinate, MoveEndAction moveEndAction = null, MoveEndAction changeCoordinateAction = null,
+  
+    public bool TryMove(int2 targetCoordinate, MoveEndAction moveEndAction = null, MoveEndAction changeCoordinateAction = null,
        Int3Action failedMoveAction = null)
     {
-        return MoveCrossMap(mapInstance, targetCoordinate, moveEndAction, changeCoordinateAction, failedMoveAction);
+        return TryMove(mapInstance, targetCoordinate, moveEndAction, changeCoordinateAction, failedMoveAction);
     }
-    public bool MoveCrossMap(int targetMap, int2 targetCoordinate, MoveEndAction moveEndAction = null, MoveEndAction changeCoordinateAction = null,
+    public bool TryMove(int targetMap, int2 targetCoordinate, MoveEndAction moveEndAction = null, MoveEndAction changeCoordinateAction = null,
         Int3Action failedMoveAction = null)
     {
         this.moveEndAction = moveEndAction;
@@ -1660,105 +1662,156 @@ public partial class Character
         this.failedMoveAction = failedMoveAction;
         if (!CanMoveCrossMap)
         {
-          //  Debug.Log($"NoCanMoveCrossMap");
+            Debug.Log($"NoCanMoveCrossMap");
             return false;
         }
-        moveTarget = new int3(targetCoordinate, targetMap);
-
-        
-        bool result = false;
-        Queue<int> resultList = MapCellController.instance.FindRoomList(objCoordinate.z, targetMap, ref result);
-        if (result)
+        void FailedMoveAction()
         {
-            //Debug.Log($"resultList{resultList.Count}");
-            void FailedMoveAction()
+            moveTarget = new int3(-1, -1, -1);
+            if (failedMoveAction != null)
             {
-                moveTarget = new int3(-1, -1, -1); 
-                if (failedMoveAction != null)
-                {
-                    failedMoveAction(new int3(targetCoordinate.xy,targetMap));
-                }
-                moveEndAction = null;
-                changeCoordinateAction = null;
-                failedMoveAction = null;
+                failedMoveAction(new int3(targetCoordinate.xy, targetMap));
             }
-
-            MoveCrossMap(resultList, targetCoordinate, moveEndAction, changeCoordinateAction, FailedMoveAction);
+            moveEndAction = null;
+            changeCoordinateAction = null;
+            failedMoveAction = null;
         }
-        else
+        if (targetMap== objCoordinate.z)
         {
-           // Debug.Log($"result = false");
-        }
-        return result;
-    }
-
-    private void MoveCrossMap(Queue<int> moveRoomList, int2 targetCoordinate, MoveEndAction moveEndAction = null,
-        MoveEndAction changeCoordinateAction = null, MoveEndAction failedMoveAction = null)
-    {
-        int nowMap = objCoordinate.z;
-        if (moveRoomList.Count > 0)
-        {
-            int target = moveRoomList.Dequeue();
-
-            int2 inCoordinate = int2.zero;
-            if (MapCellController.instance.GetLinkMapInCoordinate(nowMap, target, ref inCoordinate))
+            MapCellJobController.instance.AddPathRequest(objCoordinate.xy, targetCoordinate, targetMap, (Stack<int2> path,int map) =>
             {
-                MapCellJobController.instance.AddPathRequest(objCoordinate.xy, inCoordinate, nowMap, (Stack<int2> path) =>
-                {
-                    PlayerMove(path, () =>
-                    {
-                        if (this == CharacterManager.instance.controllerCharacter)
-                        {
-                            canMove = false;
-                            GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), () =>
-                            {
-                                MoveCrossMap(moveRoomList, targetCoordinate, moveEndAction);
-                            });
-                        }
-                        else
-                        {
-                            MoveCrossMap(moveRoomList, targetCoordinate, moveEndAction);
-                        }
-                    }, changeCoordinateAction, failedMoveAction);
-                }); 
-
-                /*
-                Stack<int2> pathNodes = MapCellController.instance.FindPathNode(objCoordinate.xy, inCoordinate, nowMap); 
-                PlayerMove(pathNodes, () =>
+                PlayerMove(path, () =>
                 {
                     if (this == CharacterManager.instance.controllerCharacter)
                     {
                         canMove = false;
                         GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), () =>
                         {
-                            MoveCrossMap(moveRoomList, targetCoordinate, moveEndAction);
+                            if (this.moveEndAction != null)
+                            {
+                                this.moveEndAction.Invoke();
+                                moveEndAction = null;
+                                changeCoordinateAction = null;
+                                failedMoveAction = null;
+                            }
                         });
                     }
                     else
                     {
-                        MoveCrossMap(moveRoomList, targetCoordinate, moveEndAction);
+                        if (this.moveEndAction != null)
+                        {
+                            this.moveEndAction.Invoke();
+                            moveEndAction = null;
+                            changeCoordinateAction = null;
+                            failedMoveAction = null;
+                        }
                     }
-                }, changeCoordinateAction, failedMoveAction);
-                */
-            }
+                }, changeCoordinateAction, FailedMoveAction);
+            });
+
+            return true;
         }
         else
         {
-            MapCellJobController.instance.AddPathRequest(objCoordinate.xy, targetCoordinate, objCoordinate.z, (Stack<int2> path) =>
+            Dictionary<int,Stack<int2>> roadCells = new Dictionary<int,Stack<int2>>();
+            Queue<int> roomQueue = new Queue<int>();
+            if(MapCellController.instance.FindRoomList(objCoordinate.z, targetMap, out var roomList))
             {
-                PlayerMove(path, moveEndAction, changeCoordinateAction, failedMoveAction);
-            });
+                int nowMap = objCoordinate.z;
+                int2 startCoordinate = objCoordinate.xy;
+                int roomCount = roomList.Count+1;
+                int nextMap= nowMap;
+                int2 targetMapCell = int2.zero;
+                for (int i = 0; i <= roomList.Count; i++)
+                {
+                    roomQueue.Enqueue(nowMap);
+                    if (i < roomList.Count)
+                    { 
+                        nextMap = roomList[i];
+                        if (MapCellController.instance.GetLinkMapInCoordinate(nowMap, nextMap, out var tempTarget,out targetMapCell))
+                        {
+                            MapCellJobController.instance.AddPathRequest(startCoordinate, tempTarget, nowMap, (Stack<int2> path,int map) =>
+                            {
+                                roadCells.Add(map, path);
+                                roomCount--;
+                                if (roomCount == 0)
+                                {
+                                    Move();
+                                }
+                            });
+                        }
+                    }
+                    else
+                    { 
+                        MapCellJobController.instance.AddPathRequest(startCoordinate, targetCoordinate, nowMap, (Stack<int2> path, int map) =>
+                        {
+                            roadCells.Add(map, path);
+                            roomCount--;
+                            if (roomCount == 0)
+                            {
+                                Move();
+                            }
+                        });
+                    } 
+                      
+                    nowMap = nextMap;
+                    startCoordinate = targetMapCell;
+                }
 
-            /* 
-            Stack<int2> pathNodes = MapCellController.instance.FindPathNode(objCoordinate.xy, targetCoordinate, objCoordinate.z);
-            PlayerMove(pathNodes, moveEndAction, changeCoordinateAction, failedMoveAction);
-            if (CellDebugDisplay.Instance)
+                return true;
+
+            }
+            else
             {
-                CellDebugDisplay.Instance.DisplayPath(pathNodes.ToArray());
-             }*/
+                return false;
+            }
+            
+            void Move()
+            {
+                if (roomQueue.Count > 0)
+                {
+                    int map = roomQueue.Dequeue();
+                    if(roadCells.TryGetValue(map,out var path))
+                    {
+                        PlayerMove(path, () =>
+                        {
+                            if (this == CharacterManager.instance.controllerCharacter)
+                            {
+                                canMove = false;
+                                GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), () =>
+                                {
+                                    if (this.moveEndAction != null)
+                                    {
+                                        this.moveEndAction.Invoke();
+                                        moveEndAction = null;
+                                        changeCoordinateAction = null;
+                                        failedMoveAction = null;
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                Move();
+                            }
+                        }, changeCoordinateAction, FailedMoveAction);
+                    }
 
+                }
+                else
+                {
+                    if (this.moveEndAction != null)
+                    {
+                        this.moveEndAction.Invoke();
+                        moveEndAction = null;
+                        changeCoordinateAction = null;
+                        failedMoveAction = null;
+                    }
+                }
+            } 
         }
+         
     }
+     
 
     public void PlayerMove(Stack<int2> pathNodes, MoveEndAction endAction = null, MoveEndAction changeCoordinateAction = null,
         MoveEndAction failedMoveAction = null)

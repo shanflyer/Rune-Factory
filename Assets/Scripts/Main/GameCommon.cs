@@ -57,6 +57,39 @@ public enum CharacterPropertyType
     自定义值 = -1, 体力 = 0, 生命 = 1, 法力 = 2, 攻击 = 3, 防御 = 4, 幸运 = 5, 饱食 = 6,
     最大体力 = 7, 最大生命 = 8, 最大法力 = 9, 敏捷 = 10
 }
+public static class DirectionMask
+{
+    public static int Add(int mask, Direction dir)
+    {
+        return mask | (1 << (int)dir);
+    }
+
+    public static int Remove(int mask, Direction dir)
+    {
+        return mask & ~(1 << (int)dir);
+    }
+
+    public static bool Has(int mask, Direction dir)
+    {
+        return (mask & (1 << (int)dir)) != 0;
+    }
+
+    public static int Clear()
+    {
+        return 0;
+    }
+
+    public static string ToDebugString(int mask)
+    {
+        var names = new List<string>();
+        foreach (Direction d in Enum.GetValues(typeof(Direction)))
+        {
+            if (Has(mask, d))
+                names.Add(d.ToString());
+        }
+        return string.Join(",", names);
+    }
+}
 
 public enum Direction
 {

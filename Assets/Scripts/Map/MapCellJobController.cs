@@ -29,7 +29,7 @@ public static class PathUtil64
     }
 }
 
-public delegate void MoveWithPath(Stack<int2> path);
+public delegate void MoveWithPath(Stack<int2> path,int map);
 
 [BurstCompile]
 public struct SparsePathfindingSIMDJob : IJobParallelFor
@@ -359,7 +359,7 @@ public class MapCellJobController : Singleton<MapCellJobController>
             while (reader.RemainingItemCount > 0)
                 path.Push(reader.Read<int2>());
             reader.EndForEachIndex();
-            MoveWithPath[i].Invoke(path);
+            MoveWithPath[i].Invoke(path, pathRequests[i].roomId);
         }
 
         openCells.Dispose();

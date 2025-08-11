@@ -33,7 +33,7 @@ public class GroupCharacterMoveToEachOther : Action
             }
             else
             {
-                if (!character.MoveCrossMap(target))
+                if (!character.TryMove(target))
                 {
 
                 }
@@ -135,7 +135,7 @@ public class GroupCharacterMoveToEachOther : Action
                 else
                 {
                     character.RemoveMove();
-                    character.MoveCrossMap(nowCenter);
+                    character.TryMove(nowCenter);
                 } 
             }
             oldCenter = nowCenter;

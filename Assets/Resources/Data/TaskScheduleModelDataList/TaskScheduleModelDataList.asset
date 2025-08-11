@@ -16,13 +16,16 @@ MonoBehaviour:
   - modelName: "\u65E9\u4E0A"
     id: 0
     gameTimeKey:
-      minHour: 6
-      minMinute: 0
-      maxHour: 7
-      maxMinute: 0
+      minTime:
+        x: 6
+        y: 0
+      maxTime:
+        x: 7
+        y: 0
     dailyTaskDataItems:
     - itemValue: 2002
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -49,6 +52,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2001
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -75,6 +79,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2008
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -102,13 +107,16 @@ MonoBehaviour:
   - modelName: "\u767D\u5929"
     id: 1
     gameTimeKey:
-      minHour: 7
-      minMinute: 0
-      maxHour: 20
-      maxMinute: 0
+      minTime:
+        x: 7
+        y: 0
+      maxTime:
+        x: 20
+        y: 0
     dailyTaskDataItems:
     - itemValue: 2002
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -135,6 +143,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2008
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -161,6 +170,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2001
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -187,6 +197,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2003
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -213,6 +224,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2004
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -239,6 +251,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2005
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -265,6 +278,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2006
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -291,6 +305,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2007
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -318,13 +333,16 @@ MonoBehaviour:
   - modelName: "\u665A\u4E0A"
     id: 2
     gameTimeKey:
-      minHour: 20
-      minMinute: 0
-      maxHour: 24
-      maxMinute: 0
+      minTime:
+        x: 20
+        y: 0
+      maxTime:
+        x: 24
+        y: 0
     dailyTaskDataItems:
     - itemValue: 2002
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -351,6 +369,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2008
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -377,6 +396,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2001
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -403,6 +423,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2000
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -430,13 +451,16 @@ MonoBehaviour:
   - modelName: "\u51CC\u6668"
     id: 3
     gameTimeKey:
-      minHour: 0
-      minMinute: 0
-      maxHour: 6
-      maxMinute: 0
+      minTime:
+        x: 0
+        y: 0
+      maxTime:
+        x: 6
+        y: 0
     dailyTaskDataItems:
     - itemValue: 2000
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -464,13 +488,16 @@ MonoBehaviour:
   - modelName: "\u65E9\u4E0A\u65E0\u67DC\u53F0"
     id: 10
     gameTimeKey:
-      minHour: 6
-      minMinute: 0
-      maxHour: 7
-      maxMinute: 0
+      minTime:
+        x: 6
+        y: 0
+      maxTime:
+        x: 7
+        y: 0
     dailyTaskDataItems:
     - itemValue: 2002
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -497,6 +524,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2008
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -524,13 +552,16 @@ MonoBehaviour:
   - modelName: "\u767D\u5929\u65E0\u67DC\u53F0"
     id: 11
     gameTimeKey:
-      minHour: 7
-      minMinute: 0
-      maxHour: 20
-      maxMinute: 0
+      minTime:
+        x: 7
+        y: 0
+      maxTime:
+        x: 20
+        y: 0
     dailyTaskDataItems:
     - itemValue: 2002
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -557,6 +588,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2008
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -583,6 +615,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2003
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -609,6 +642,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2004
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -635,6 +669,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2005
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -661,6 +696,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2006
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -687,6 +723,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2007
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -714,13 +751,16 @@ MonoBehaviour:
   - modelName: "\u665A\u4E0A\u65E0\u67DC\u53F0"
     id: 12
     gameTimeKey:
-      minHour: 20
-      minMinute: 0
-      maxHour: 24
-      maxMinute: 0
+      minTime:
+        x: 20
+        y: 0
+      maxTime:
+        x: 24
+        y: 0
     dailyTaskDataItems:
     - itemValue: 2002
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -747,6 +787,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2000
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -773,6 +814,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2008
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -800,13 +842,16 @@ MonoBehaviour:
   - modelName: "\u52A8\u7269\u767D\u5929"
     id: 20
     gameTimeKey:
-      minHour: 6
-      minMinute: 0
-      maxHour: 20
-      maxMinute: 0
+      minTime:
+        x: 6
+        y: 0
+      maxTime:
+        x: 20
+        y: 0
     dailyTaskDataItems:
     - itemValue: 2009
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -833,6 +878,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2010
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -859,6 +905,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2011
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -886,13 +933,16 @@ MonoBehaviour:
   - modelName: "\u52A8\u7269\u665A\u4E0A"
     id: 21
     gameTimeKey:
-      minHour: 20
-      minMinute: 0
-      maxHour: 24
-      maxMinute: 0
+      minTime:
+        x: 20
+        y: 0
+      maxTime:
+        x: 24
+        y: 0
     dailyTaskDataItems:
     - itemValue: 2009
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -919,6 +969,7 @@ MonoBehaviour:
         m_RotationOrder: 4
     - itemValue: 2012
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:
@@ -946,13 +997,16 @@ MonoBehaviour:
   - modelName: "\u52A8\u7269\u6DF1\u591C"
     id: 22
     gameTimeKey:
-      minHour: 0
-      minMinute: 0
-      maxHour: 6
-      maxMinute: 0
+      minTime:
+        x: 0
+        y: 0
+      maxTime:
+        x: 6
+        y: 0
     dailyTaskDataItems:
     - itemValue: 2012
       weight: 1000
+      GameActionData: {fileID: 0}
       growCurve:
         serializedVersion: 2
         m_Curve:

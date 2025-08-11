@@ -254,7 +254,7 @@ public class CharacterManager : Singleton<CharacterManager>
         Character targetCharacter = GetCharacter(visitNPC.targetId);
         if (sourceCharacter != null && targetCharacter != null)
         {
-            sourceCharacter.MoveCrossMap(targetCharacter.mapInstance, targetCharacter.coordinate);
+            sourceCharacter.TryMove(targetCharacter.mapInstance, targetCharacter.coordinate);
         }
     }
 
@@ -1086,10 +1086,10 @@ public class CharacterManager : Singleton<CharacterManager>
             var transform = runtimeObj.transform;
             startPos = transform.position;
         }
-       // Debug.Log($"next cell:{targetCoordinate}");
+       Debug.Log($"next cell:{targetCoordinate}");
         bool slant = targetCoordinate.x != character.coordinate.x && targetCoordinate.y != character.coordinate.y;
         character.moveDirection = math.normalize(targetCoordinate - character.coordinate);
-         //Debug.Log($"targetCoordinate:{targetCoordinate}-character.coordinate{character.coordinate}-moveDirection: {character.moveDirection}");
+         Debug.Log($"targetCoordinate:{targetCoordinate}-character.coordinate{character.coordinate}-moveDirection: {character.moveDirection}");
         // var direction = GameCommon.GetCharacterDirect(character.objCoordinate.coordinate, targetCoordinate, character.direction);
         if (!MapCellController.instance.CheckIsWalk(targetCoordinate, character.mapInstance))
         {
@@ -1139,7 +1139,7 @@ public class CharacterManager : Singleton<CharacterManager>
                              runtimeObj.SetPosition(pos);
                              //transform.Translate(Vector3.zero);
 
-                             //Debug.Log($"{character.name}--SetObjCoordinate0:{character.coordinate}--pos{pos}");
+                             Debug.Log($"{character.name}--SetObjCoordinate0:{character.coordinate}--pos{pos}");
                          }
                      }
                      catch(Exception e)
@@ -1158,7 +1158,7 @@ public class CharacterManager : Singleton<CharacterManager>
             () =>
             {
                 character.moveEnumeratorId = 0;
-               //Debug.Log($"pathNodes.count:{pathNodes.Count}");
+                Debug.Log($"pathNodes.count:{pathNodes.Count}");
                 if (pathNodes.Count > 0)
                 {
                     character.SetCoordinate(new int3(targetCoordinate.xy, character.mapInstance), refreshMapTemp: false);
@@ -1167,7 +1167,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
                 else
                 {
-                  //  Debug.Log($"character:{character.name}--tryCorssMap");
+                   Debug.Log($"character:{character.name}--tryCorssMap");
                     if (runtimeObj != null)
                     {
                         SetCharacterAnimationSpeed(0, runtimeObj);
@@ -1598,7 +1598,7 @@ public class CharacterManager : Singleton<CharacterManager>
         int2 targetCoordinate = GameCommon.GetMapCoordinateInt(mousePos);
         int2 startCoordinate = controllerCharacter.coordinate;
         MapCellController.instance.FindPathNodeNearest(startCoordinate, targetCoordinate,
-            controllerCharacter.mapInstance, (Stack<int2> pathNodes) =>
+            controllerCharacter.mapInstance, (Stack<int2> pathNodes,int map) =>
             {
                 controllerCharacter.PlayerMove(pathNodes);
             }); 

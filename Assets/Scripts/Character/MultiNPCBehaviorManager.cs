@@ -61,7 +61,7 @@ public class MultiNPCGroup
                 GameActionManager.instance.QueueAction(startCharacterBehavior, true);
                 if (tempData.targetCell.x > 0)
                 {
-                    character.MoveCrossMap(tempData.targetCell.z, tempData.targetCell.xy,
+                    character.TryMove(tempData.targetCell.z, tempData.targetCell.xy,
                     tempData.moveEndAction,
                     tempData.changeCoordinateAction,
                     tempData.failedMoveAction);
@@ -159,7 +159,7 @@ public class MultiNPCGroup
                 GameActionManager.instance.QueueAction(startCharacterBehavior, true);
                 if (tempData.targetCell.x > 0)
                 {
-                    character.MoveCrossMap(tempData.targetCell.z, tempData.targetCell.xy,
+                    character.TryMove(tempData.targetCell.z, tempData.targetCell.xy,
                     tempData.moveEndAction,
                     tempData.changeCoordinateAction,
                     tempData.failedMoveAction);

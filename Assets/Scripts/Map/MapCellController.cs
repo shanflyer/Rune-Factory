@@ -174,10 +174,7 @@ public class RuntimeMapRoom
         NpcBehaviorAreas = null;
         NpcBehaviorAreaTypeDic.Clear();
 
-        linkMapIndexes.Dispose();
-        linkMaps.Dispose();
-        linkActions.Dispose();
-        neighborMaps.Dispose();
+        linkMapIndexes.Dispose(); 
 
         commonTriggerDatas.Dispose();
         commonTriggerCellIndexes.Dispose();
@@ -199,15 +196,8 @@ public class RuntimeMapRoom
     public int3 coordinate; 
     // public RoomCellData roomCellData;
     public NativeHashMap<uint, int> mapGroundIndexDatas;
-    public NativeHashMap<int2, int> linkMapIndexes;
-    public NativeList<int4> linkMaps;
-
-    /// <summary>
-    /// 玩家转换地图前后的事件
-    /// </summary>
-    public NativeList<int3> linkActions;
-
-    public NativeHashMap<int, int> neighborMaps;
+    public NativeHashMap<int2, int> linkMapIndexes; 
+     
 
     /// <summary>
     /// 地图触发区域
@@ -267,136 +257,26 @@ public class RuntimeMapRoom
         playerForwardTriggerIndexes = new NativeHashMap<int, int>(1024, Allocator.Persistent);
         playerForwardTriggerAreaDatas = new NativeList<TriggerAreaData>(512, Allocator.Persistent);
     }
-
-    public bool GetLinkMapInCoordinate(int linkMap, ref int2 inCoordinate)
-    {
-        NativeList<int2> coordinates = new NativeList<int2>(4, Allocator.Temp);
-
-        using (var e = linkMapIndexes.GetEnumerator())
-        {
-            while (e.MoveNext())
-            {
-                if (linkMaps[e.Current.Value].z == linkMap && MapCellController.instance.CheckIsWalk(new int3(e.Current.Key, linkMap)))
-                {
-                    coordinates.Add(e.Current.Key);
-                }
-            }
-        }
-
-        if (coordinates.Length > 0)
-        {
-            inCoordinate = coordinates[GameRandom.RandomInt(0, coordinates.Length)];
-            return true;
-        }
-        return false;
-    }
-
-    public RuntimeMapRoom DeleteLinkMap(LinkMapCell linkMapCell)
-    {
-        int directionValue = 0;
-        for (int i = 0; i < linkMapCell.directions.Count; i++)
-        {
-            directionValue += GameCommon.GetDirectionValue(linkMapCell.directions[i]);
-        }
-
-        int4 target = new int4(linkMapCell.targetCell.xyz, directionValue);
-        for (int i = linkMaps.Length - 1; i >= 0; i--)
-        {
-            if (linkMaps[i].Equals(target))
-            {
-                linkMaps.RemoveAt(i);
-                linkActions.RemoveAt(i);
-                break;
-            }
-        }
-        var cells = GameCommon.GridToCells(linkMapCell.girds);
-
-        for (int i = 0; i < cells.Count; i++)
-        {
-            linkMapIndexes.Remove(cells[i]);
-        }
-        if (neighborMaps.TryGetValue(linkMapCell.targetCell.z, out var num))
-        {
-            num--;
-            if (num == 0)
-            {
-                neighborMaps.Remove(linkMapCell.targetCell.z);
-            }
-        }
-        return this;
-    }
-
-    public RuntimeMapRoom AddLinkMap(LinkMapCell linkMapCell)
-    {
-        int directionValue = 0;
-        for (int i = 0; i < linkMapCell.directions.Count; i++)
-        {
-            directionValue += GameCommon.GetDirectionValue(linkMapCell.directions[i]);
-        }
-
-        int4 target = new int4(linkMapCell.targetCell.xyz, directionValue);
-        linkMaps.Add(target);
-
-        int3 linkAction = new int3(linkMapCell.beforeAction, linkMapCell.afterAction, linkMapCell.checkAction);
-        linkActions.Add(linkAction);
-
-        var cells = GameCommon.GridToCells(linkMapCell.girds);
-        for (int i = 0; i < cells.Count; i++)
-        {
-            try
-            {
-                linkMapIndexes[cells[i]] = linkMaps.Length - 1;
-            }
-            catch
-            {
-                Debug.LogError($"linkMapCell{linkMapCell.targetCell}--{cells[i]}--old{linkMapIndexes[cells[i]]}");
-            }
-        }
-        neighborMaps.TryGetValue(linkMapCell.targetCell.z, out var num);
-        num++;
-        neighborMaps[linkMapCell.targetCell.z] = num;
-        return this;
-    }
-
-    public bool ChangeMap(int2 nowCoordinate, Direction direction, out int3 newMap, out int3 changeAction)
-    {
-        newMap = int3.zero;
-        changeAction = int3.zero;
-        if (linkMapIndexes.TryGetValue(nowCoordinate, out int index))
-        {
-            int4 nextData = linkMaps[index];
-            if (direction==Direction.Default||GameCommon.CheckDirectionValue(direction, nextData.w))
-            {
-                newMap = nextData.xyz;
-                changeAction = linkActions[index];
-                return true;
-            }
-        }
-       
-        return false;
-    }
-
-    public bool ChangeMap(int2 nowCoordinate, Direction direction, out int3 newMap)
-    {
-        newMap = int3.zero;
-        if (linkMapIndexes.TryGetValue(nowCoordinate, out int index))
-        {
-            int4 nextData = linkMaps[index];
-            if (GameCommon.CheckDirectionValue(direction, nextData.w))
-            {
-                newMap = nextData.xyz;
-                return true;
-            }
-        }
-        return false;
-    }
+      
 }
- 
+
+public struct MapLinkCell
+{
+    public int2 coordinate;
+    public int directionValue;
+    public int afterAction;
+    public int3 targetCell;
+}
 public class MapCellController : Singleton<MapCellController>
 {
     private Dictionary<int, RuntimeMapRoom> runtimeMapRooms = new Dictionary<int, RuntimeMapRoom>(); 
     private NativeParallelHashMap<uint, ushort> mapObjBarriers;
     public NativeParallelHashMap<uint, ushort>.ReadOnly MapObjBarriers => mapObjBarriers.AsReadOnly();
+
+    
+    NativeParallelMultiHashMap<int2, MapLinkCell> mapLinkCellSet;
+    NativeHashMap<int3, MapLinkCell> mapLinkSet;
+    Dictionary<int, HashSet<int>> mapNeighbors=new Dictionary<int, HashSet<int>>();
 
 
     public delegate void TriggerEvent(int eventId, int reference, bool enter, bool controller);
@@ -1245,10 +1125,7 @@ public class MapCellController : Singleton<MapCellController>
             coordinate = coordinate, 
             id = roomId,
             mapGroundIndexDatas = new NativeHashMap<uint, int>(16, Allocator.Persistent),
-            linkMapIndexes = new NativeHashMap<int2, int>(16, Allocator.Persistent),
-            linkMaps = new NativeList<int4>(16, Allocator.Persistent),
-            linkActions = new NativeList<int3>(16, Allocator.Persistent),
-            neighborMaps = new NativeHashMap<int, int>(8, Allocator.Persistent),
+            linkMapIndexes = new NativeHashMap<int2, int>(16, Allocator.Persistent), 
         };
 
         var groundGridCount = mapRoomData.groundGrids.Count / 4;
@@ -1290,141 +1167,206 @@ public class MapCellController : Singleton<MapCellController>
         return Direction.LEFT;
     }
 
-    public bool GetLinkMapInCoordinate(int nowMap, int linkMap, ref int2 inCoordinate)
+    public bool GetLinkMapInCoordinate(int nowMap, int linkMap, out int2 inCoordinate,out int2 targetCoordinate)
     {
-        if (GetRuntimeMapRoom(nowMap, out RuntimeMapRoom nowRuntimeMap))
+        int2 key = new int2(nowMap, linkMap);
+        inCoordinate=targetCoordinate = key;
+        List<MapLinkCell> LinkCells = new List<MapLinkCell>();
+        if (mapLinkCellSet.TryGetFirstValue(key,out var mapLinkCell,out var it))
         {
-            return nowRuntimeMap.GetLinkMapInCoordinate(linkMap, ref inCoordinate);
-        }
-        return false;
-    }
-
-    public bool ChangeMap(int2 nowCoordinate, Direction direction, int nowMap, out int3 newMap)
-    {
-        if (GetRuntimeMapRoom(nowMap, out RuntimeMapRoom runtimeMapRoom))
-        {
-            return runtimeMapRoom.ChangeMap(nowCoordinate, direction, out newMap);
-        }
-        newMap = int3.zero;
-        return false;
-    }
-
-    public void ChangeMapAction(int2 nowCoordinate, Direction direction, int nowMap, Int3Action action)
-    {
-        int3 newMap = int3.zero;
-        if (GetRuntimeMapRoom(nowMap, out RuntimeMapRoom runtimeMapRoom))
-        {
-            int3 changeAction = int3.zero;
-            bool isChangeMap = runtimeMapRoom.ChangeMap(nowCoordinate, direction, out newMap, out changeAction);
-            if (isChangeMap)
+            do
             {
-                if (changeAction.z != 0)
+                if (CheckIsWalk(new int3(mapLinkCell.coordinate, linkMap)))
                 {
-                    GameActionDataManager.instance.Action(changeAction.z, (bool value) =>
-                    {
-                        if (value)
-                        {
-                            ChangeMap();
-                        }
-                    }, true);
+                    LinkCells.Add(mapLinkCell);
                 }
-                else
-                {
-                    ChangeMap();
-                }
+               
+            } while (mapLinkCellSet.TryGetNextValue(out mapLinkCell, ref it));
+        }
+        if (LinkCells.Count > 0)
+        {
+            inCoordinate = LinkCells[GameRandom.RandomInt(0, LinkCells.Count)].coordinate;
+            targetCoordinate = LinkCells[GameRandom.RandomInt(0, LinkCells.Count)].targetCell.xy;
+            return true;
+        }
+         
+        return false;
+    }
+ 
 
+    public bool ChangeMapAction(int2 nowCoordinate, Direction direction, int nowMap, Int3Action action)
+    {
+        int3 key = new int3(nowCoordinate.xy, nowMap);
+        if (mapLinkSet.TryGetValue(key, out var mapLinkCell))
+        {
+            if (direction == Direction.Default|| DirectionMask.Has(mapLinkCell.directionValue, direction))
+            {
+                ChangeMap();
                 async void ChangeMap()
                 {
-                    if (changeAction.x != 0)
+                    if (mapLinkCell.afterAction != 0)
                     {
-                        var actionData = await GameDataManager.instance.GetAsyncData<GameActionData>(changeAction.x);
+                        var actionData = await GameDataManager.instance.GetAsyncData<GameActionData>(mapLinkCell.afterAction);
                         actionData.Action(setResult: (bool value) =>
                         {
-                            action.Invoke(newMap, changeAction.y);
+                            action.Invoke(mapLinkCell.targetCell, mapLinkCell.afterAction);
                         });
                     }
                     else
                     {
-                        action.Invoke(newMap, changeAction.y);
+                        action.Invoke(mapLinkCell.targetCell, mapLinkCell.afterAction);
                     }
                 }
+                return true;
             }
-            else
-            {
-                // Debug.Log($"ChangeMapAction Fail：{direction}");
-            }
-        }
+        } 
+        return false;
     }
 
     public void InitLinkMap(List<MapLine> mapLines)
     {
         foreach (var mapLine in mapLines)
         {
-            bool isInit = true;
-            int saveValue = GameDataSaveManager.instance.CheckMapLine(mapLine.instanceId);
-            switch (saveValue)
+            bool isInit = mapLine.zeroInit;
+            if (!GameController.instance.startPlay)
             {
-                case -1:
-                    if (GameController.instance.startPlay)
-                    {
+                int saveValue = GameDataSaveManager.instance.CheckMapLine(mapLine.instanceId);
+                switch (saveValue)
+                {
+                    case -1:
+                        //if (GameController.instance.startPlay)
+                        {
+                            //  isInit = true;
+                        }
+                        // else
+                        {
+                            isInit = mapLine.zeroInit;
+                        }
+
+                        break;
+
+                    case 0:
+                        isInit = false;
+                        break;
+
+                    case 1:
                         isInit = true;
-                    }
-                    else
-                    {
-                        isInit = mapLine.zeroInit;
-                    }
-
-                    break;
-
-                case 0:
-                    isInit = false;
-                    break;
-
-                case 1:
-                    isInit = true;
-                    break;
+                        break;
+                }
             }
-            if (!isInit && !GameController.instance.startPlay)
+                
+            if (!isInit)
             {
                 continue;
             }
+            Debug.Log($"mapLine:{mapLine.map0}--{mapLine.map1}");
             InitLinkMap(mapLine);
         }
     }
 
     public void DeleteMapLink(MapLine mapLine)
     {
-        if (runtimeMapRooms.TryGetValue(mapLine.map0, out RuntimeMapRoom runtimeMapRoom))
+        int2 key0 = new int2(mapLine.map0, mapLine.map1);
+        int2 key1 = new int2(mapLine.map1, mapLine.map0);
+        HashSet<int> removeIt = new HashSet<int>();
+        if(mapLinkCellSet.TryGetFirstValue(key0,out var item,out var it))
         {
-            runtimeMapRoom = runtimeMapRoom.DeleteLinkMap(mapLine.cells0);
-            // runtimeMapRooms.SetData(runtimeMapRoom);
+            do
+            {
+                int3 key = new int3(item.coordinate.xy, mapLine.map0); 
+                mapLinkSet.Remove(key);
+
+            } while (mapLinkCellSet.TryGetNextValue(out item, ref it));
+        }
+        if (mapLinkCellSet.TryGetFirstValue(key1, out  item, out  it))
+        {
+            do
+            {
+                int3 key = new int3(item.coordinate.xy, mapLine.map1);
+                mapLinkSet.Remove(key);
+
+            } while (mapLinkCellSet.TryGetNextValue(out item, ref it));
+        }
+        mapLinkCellSet.Remove(key0);
+        mapLinkCellSet.Remove(key1); 
+
+        if(mapNeighbors.TryGetValue(mapLine.map0,out var ints))
+        {
+            ints.Remove(mapLine.map1);
+            mapNeighbors.Remove(mapLine.map0);
         }
 
-        if (runtimeMapRooms.TryGetValue(mapLine.map1, out RuntimeMapRoom _runtimeMapRoom))
+        if (mapNeighbors.TryGetValue(mapLine.map1, out ints))
         {
-            _runtimeMapRoom = _runtimeMapRoom.DeleteLinkMap(mapLine.cells1);
-            // runtimeMapRooms.SetData(_runtimeMapRoom);
+            ints.Remove(mapLine.map0);
+            mapNeighbors.Remove(mapLine.map1);
         }
     }
 
     public void InitLinkMap(MapLine mapLine)
     {
-        if (runtimeMapRooms.TryGetValue(mapLine.map0, out RuntimeMapRoom runtimeMapRoom))
-        {
-            runtimeMapRoom.AddLinkMap(mapLine.cells0);
-            // runtimeMapRooms.SetData(runtimeMapRoom);
-        }
+        int2 key0 = new int2(mapLine.map0, mapLine.map1);
+        int2 key1 = new int2(mapLine.map1, mapLine.map0);
 
-        if (runtimeMapRooms.TryGetValue(mapLine.map1, out RuntimeMapRoom _runtimeMapRoom))
+        int dir0=0;
+        int dir1 = 0;
+        for(int i = 0; i < mapLine.cells0.directions.Count; i++)
         {
-            _runtimeMapRoom.AddLinkMap(mapLine.cells1);
-            // runtimeMapRooms.SetData(_runtimeMapRoom);
+            dir0= DirectionMask.Add(dir0,mapLine.cells0.directions[i]);
         }
+        var cells0 = GameCommon.GridToCells(mapLine.cells0.girds);
+        for (int i = 0; i < cells0.Count; i++)
+        {
+            MapLinkCell mapLinkCell = new MapLinkCell
+            {
+                coordinate = cells0[i],
+                directionValue = dir0,
+                afterAction = mapLine.afterActionId,
+                targetCell = mapLine.cells0.targetCell,
+            };
+            
+            mapLinkCellSet.Add(key0, mapLinkCell);
+            mapLinkSet.Add(new int3(cells0[i].xy, mapLine.map0), mapLinkCell); 
+           
+        }
+        if(!mapNeighbors.TryGetValue(mapLine.map0,out var ints))
+        {
+            ints = new HashSet<int>();
+            mapNeighbors.Add(mapLine.map0,ints);
+        }
+        ints.Add(mapLine.map1);
+
+        if (!mapNeighbors.TryGetValue(mapLine.map1, out var ints1))
+        {
+            ints1 = new HashSet<int>();
+            mapNeighbors.Add(mapLine.map1, ints1); 
+        }
+        ints1.Add(mapLine.map0);
+
+        var cells1 = GameCommon.GridToCells(mapLine.cells1.girds);
+        for (int i = 0; i < mapLine.cells1.directions.Count; i++)
+        {
+            dir1 = DirectionMask.Add(dir1, mapLine.cells1.directions[i]);
+        }
+        for (int i = 0; i < cells1.Count; i++)
+        {
+            MapLinkCell mapLinkCell = new MapLinkCell
+            {
+                coordinate = cells1[i],
+                directionValue = dir1,
+                afterAction = mapLine.afterActionId,
+                targetCell = mapLine.cells1.targetCell,
+            };
+
+            mapLinkCellSet.Add(key1, mapLinkCell);
+            mapLinkSet.Add(new int3(cells1[i].xy, mapLine.map1), mapLinkCell);
+        }
+         
     }
 
     public void FindPathNodeNearest(int2 startPos, int2 targetPos, int mapId,MoveWithPath moveWithPath)
     {
-        MapCellJobController.instance.AddPathRequest(startPos, targetPos, mapId, (Stack<int2> outData) =>
+        MapCellJobController.instance.AddPathRequest(startPos, targetPos, mapId, (Stack<int2> outData,int map) =>
         {
             if (outData.Count == 0)
             {
@@ -1440,18 +1382,18 @@ public class MapCellController : Singleton<MapCellController>
                     {
                         offsetCoordinate = _offsetCoordinate;
                         _targetPos = targetPos + offsetCoordinate;
-                        MapCellJobController.instance.AddPathRequest(startPos, _targetPos, mapId, (Stack<int2> outData1) =>
+                        MapCellJobController.instance.AddPathRequest(startPos, _targetPos, mapId, (Stack<int2> outData1, int map) =>
                         {
                             if (outData1.Count != 0)
                             {
-                                moveWithPath.Invoke(outData1);
+                                moveWithPath.Invoke(outData1,map);
                             }
                         }); 
                     }
                     index++;
                 }
             }
-            moveWithPath.Invoke(outData);
+            moveWithPath.Invoke(outData, map);
         }); 
     }
 
@@ -1555,16 +1497,81 @@ public class MapCellController : Singleton<MapCellController>
     }
      
 
-    private NativeHashMap<int, int> GetRoomNeighbors(int roomId)
+    private HashSet<int> GetRoomNeighbors(int roomId)
     {
-        if (runtimeMapRooms.TryGetValue(roomId, out RuntimeMapRoom sourceRoom))
+        if(mapNeighbors.TryGetValue(roomId,out var ints))
         {
-            return sourceRoom.neighborMaps;
+            return ints;
         }
-        return default(NativeHashMap<int, int>);
+        return null; 
     }
+    public bool FindRoomList(int sourceId, int targetId, out List<int> roomList)
+    {
+         roomList = new List<int>();
+        if (sourceId == targetId)
+        {
+            return true;
+        }
+         
+        Dictionary<int, int> links = new Dictionary<int, int>();
+        List<int> nowList = new List<int>();
+        HashSet<int> checkRoom = new HashSet<int>();
+        checkRoom.Add(targetId);
+        nowList.Add(targetId);
 
-    public Queue<int> FindRoomList(int sourceId, int targetId, ref bool result)
+        bool result = false;
+        for (int i = 0; i < nowList.Count; i++)
+        {
+            int checkId = nowList[i];
+            var Neighbours = GetRoomNeighbors(checkId);
+            if (Neighbours == null)
+            {
+                // Debug.Log($"Neighbours.IsEmpty:{checkId}");
+                return false; 
+            }
+
+            foreach (var neighbour in Neighbours)
+            {
+                // Debug.Log($"checkId:{checkId}  - Neighbours:{neighbour.Key}");
+                if (!checkRoom.Contains(neighbour))
+                {
+                    links[neighbour] = checkId;
+                    checkRoom.Add(neighbour);
+                    nowList.Add(neighbour);
+                    if (sourceId == neighbour)
+                    {
+                        result = true;
+                        break;
+                    }
+                }
+            }
+
+            if (result)
+            {
+                break;
+            }
+        }
+
+        if (result)
+        {
+            int _roomId = sourceId;
+            //roomList.Enqueue(_roomId);
+            while (true)
+            {
+                if (links.TryGetValue(_roomId, out _roomId))
+                {
+                    roomList.Add(_roomId);
+                }
+                if (_roomId == targetId)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+    public Queue<int> FindRoomQueue(int sourceId, int targetId, ref bool result)
     {
         if (sourceId == targetId)
         {
@@ -1583,21 +1590,22 @@ public class MapCellController : Singleton<MapCellController>
         {
             int checkId = nowList[i];
             var Neighbours = GetRoomNeighbors(checkId);
-            if (Neighbours.IsEmpty)
+            if (Neighbours==null)
             {
                // Debug.Log($"Neighbours.IsEmpty:{checkId}");
                 result = false;
                 return new Queue<int>();
-            }
+            } 
+
             foreach (var neighbour in Neighbours)
             {
                // Debug.Log($"checkId:{checkId}  - Neighbours:{neighbour.Key}");
-                if (!checkRoom.Contains(neighbour.Key))
+                if (!checkRoom.Contains(neighbour))
                 {
-                    links[neighbour.Key] = checkId;
-                    checkRoom.Add(neighbour.Key);
-                    nowList.Add(neighbour.Key);
-                    if (sourceId == neighbour.Key)
+                    links[neighbour] = checkId;
+                    checkRoom.Add(neighbour);
+                    nowList.Add(neighbour);
+                    if (sourceId == neighbour)
                     {
                         result = true;
                         break;
@@ -1637,6 +1645,9 @@ public class MapCellController : Singleton<MapCellController>
         base.Init();
         GameActionManager.instance.AddListener<RemoveCellCharacter>(RemoveCellCharacter);
         mapObjBarriers=new NativeParallelHashMap<uint, ushort>(204800,Allocator.Persistent);
+         
+        mapLinkCellSet = new NativeParallelMultiHashMap<int2, MapLinkCell>(2048, Allocator.Persistent);
+        mapLinkSet = new NativeHashMap<int3, MapLinkCell>(2048, Allocator.Persistent);
     }
 
     private void RemoveCellCharacter(RemoveCellCharacter removeCellCharacter)
@@ -1813,6 +1824,8 @@ public class MapCellController : Singleton<MapCellController>
         }
         runtimeMapRooms.Clear();
         mapObjBarriers.Dispose();
+        mapLinkCellSet.Dispose(); 
+        mapLinkSet.Dispose();
     }
 
     private const int MOVE_STRAIGHT_COST = 10;
