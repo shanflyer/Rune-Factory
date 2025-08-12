@@ -1730,13 +1730,14 @@ public partial class Character
                         nextMap = roomList[i];
                         if (MapCellController.instance.GetLinkMapInCoordinate(nowMap, nextMap, out var tempTarget,out targetMapCell))
                         {
+                            Debug.Log($"PlayerMove：nowMap:{nowMap}tempTarget{tempTarget}startCoordinate{startCoordinate}-nextMap{nextMap}--targetMapCell{targetMapCell}");
                             MapCellJobController.instance.AddPathRequest(startCoordinate, tempTarget, nowMap, (Stack<int2> path,int map) =>
                             {
                                 roadCells.Add(map, path);
                                 roomCount--;
                                 if (roomCount == 0)
                                 {
-                                    Move();
+                                    Move(true);
                                 }
                             });
                         }
@@ -1745,11 +1746,12 @@ public partial class Character
                     { 
                         MapCellJobController.instance.AddPathRequest(startCoordinate, targetCoordinate, nowMap, (Stack<int2> path, int map) =>
                         {
+                            Debug.Log($"PlayerMove：startCoordinate:{nowMap}startCoordinate{startCoordinate}targetCoordinate{targetCoordinate}-nowMap{nowMap}");
                             roadCells.Add(map, path);
                             roomCount--;
                             if (roomCount == 0)
                             {
-                                Move();
+                                Move(true);
                             }
                         });
                     } 
@@ -1766,13 +1768,26 @@ public partial class Character
                 return false;
             }
             
-            void Move()
+            void Move(bool zero)
             {
                 if (roomQueue.Count > 0)
                 {
                     int map = roomQueue.Dequeue();
                     if(roadCells.TryGetValue(map,out var path))
                     {
+                        string pathStr = "path";
+                        var pList= path.ToList();
+                        for(int i = 0; i < pList.Count; i++)
+                        {
+                            pathStr = GameCommon.BlendString(pathStr, ",", pList[i].ToString());
+                        }
+
+                       // Debug.Log($"PlayerMove:map{map}-path.count{path.Count} pathStr{pathStr}");
+                        if (!zero)
+                        {
+                            var coordinate = path.Pop();
+                            SetCoordinate(new int3(coordinate.xy, map));
+                        }
                         PlayerMove(path, () =>
                         {
                             if (this == CharacterManager.instance.controllerCharacter)
@@ -1791,7 +1806,7 @@ public partial class Character
                             }
                             else
                             {
-                                Move();
+                                Move(false);
                             }
                         }, changeCoordinateAction, FailedMoveAction);
                     }

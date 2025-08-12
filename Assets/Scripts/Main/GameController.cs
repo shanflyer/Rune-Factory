@@ -11,6 +11,8 @@ using VoxelBusters.EssentialKit;
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
+using System.Linq;
+using Unity.Entities.UniversalDelegates;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -21,6 +23,10 @@ public class GameController : MonoBehaviour
     private AudioClip startBGM;
     public bool startPlay = true;
 #if UNITY_EDITOR
+
+    public int testMap;
+    public int4 testCoordinate;
+
     public Selectable selectable;
     public Weather weather;
     public bool autoWeather;
@@ -458,13 +464,22 @@ if (result.Success)
         int instanceId = selectable.GetInstanceID();
         Debug.LogWarning($"instanceId:{instanceId}");
     }
-    public void Test()
+
+    public void TestLookup()
     {
-        Vector2 pos = Camera.main.WorldToScreenPoint(testObj.position);
-        Vector2 screenSize = GameCommon.GetScreenResolution();
-        Vector2 screenValue = new Vector2(pos.x / screenSize.x, pos.y / screenSize.y);
-        Debug.Log($"pos:{pos}--ScreenSize:{screenSize}--ScreenValue:{screenValue}");
+        MapCellJobController.instance.AddPathRequest(testCoordinate.xy, testCoordinate.zw, testMap,
+            (Stack<int2> path, int map) => 
+            {
+                string pathStr = "path";
+                var pList = path.ToList();
+                for (int j = 0; j < pList.Count; j++)
+                {
+                    pathStr = GameCommon.BlendString(pathStr, ",", pList[j].ToString());
+                }
+                Debug.Log($"PlayerMove Job  pathStr{pathStr}");
+            });
     }
+ 
     public void SetCloudGlobal()
     {
         Shader.SetGlobalFloat("_CloudValue", _CloudValue);
@@ -515,7 +530,7 @@ public class GameControllerEditor : Editor
         
         if (GUILayout.Button("test"))
         {
-            gameController.Test();
+            gameController.TestLookup();
         }
 
        

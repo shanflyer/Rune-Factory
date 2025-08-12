@@ -1089,7 +1089,7 @@ public class CharacterManager : Singleton<CharacterManager>
        Debug.Log($"next cell:{targetCoordinate}");
         bool slant = targetCoordinate.x != character.coordinate.x && targetCoordinate.y != character.coordinate.y;
         character.moveDirection = math.normalize(targetCoordinate - character.coordinate);
-         Debug.Log($"targetCoordinate:{targetCoordinate}-character.coordinate{character.coordinate}-moveDirection: {character.moveDirection}");
+       //  Debug.Log($"targetCoordinate:{targetCoordinate}-character.coordinate{character.coordinate}-moveDirection: {character.moveDirection}");
         // var direction = GameCommon.GetCharacterDirect(character.objCoordinate.coordinate, targetCoordinate, character.direction);
         if (!MapCellController.instance.CheckIsWalk(targetCoordinate, character.mapInstance))
         {
@@ -1139,7 +1139,7 @@ public class CharacterManager : Singleton<CharacterManager>
                              runtimeObj.SetPosition(pos);
                              //transform.Translate(Vector3.zero);
 
-                             Debug.Log($"{character.name}--SetObjCoordinate0:{character.coordinate}--pos{pos}");
+                             //Debug.Log($"{character.name}--SetObjCoordinate0:{character.coordinate}--pos{pos}");
                          }
                      }
                      catch(Exception e)
@@ -1203,7 +1203,12 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             character.StopMove();
             character.canMove = false;
-            LerpScreenCycleValue lerpScreenCycleValue = new LerpScreenCycleValue
+            character.SetCoordinate(new int3(targetCoordinate, targetMap), false);
+            await SetPlayerPos(character, true);
+            await WorldMapObjManager.instance.DisplayMap(targetMap);
+            character.canMove = true;
+            /*
+             LerpScreenCycleValue lerpScreenCycleValue = new LerpScreenCycleValue
             {
                 cyclePos = GameCommon.GetMapPos(character.coordinate),
                 minCycleValue = 0,
@@ -1217,13 +1222,7 @@ public class CharacterManager : Singleton<CharacterManager>
             { 
                 await SetPlayerPos(character,true);
                 await WorldMapObjManager.instance.DisplayMap(targetMap);
-
-                /*
-                GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 500), () =>
-                { 
-                    EnvironmentManger.instance.SkyEnviromentMono.PlayWeather(); 
-                });*/
-
+                 
 
                 GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), () =>
                 {
@@ -1267,8 +1266,10 @@ public class CharacterManager : Singleton<CharacterManager>
                     GameActionManager.instance.QueueAction(lerpScreenCycleValue, true);
                 });
             });
+             */
 
-            
+
+
         }
         else if (!(character is TempCharacter))
         {
