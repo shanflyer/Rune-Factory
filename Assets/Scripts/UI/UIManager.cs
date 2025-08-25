@@ -508,3 +508,93 @@ public class UIManager : Singleton<UIManager>
         }
     }
 }
+public static class RectTransformPresets
+{
+    public enum Preset
+    {
+        // 9宫
+        TopLeft, TopCenter, TopRight,
+        MiddleLeft, MiddleCenter, MiddleRight,
+        BottomLeft, BottomCenter, BottomRight,
+
+        // 常用拉伸（和面板里那几种一致）
+        StretchTop, StretchMiddle, StretchBottom,      // 横向拉伸
+        StretchLeft, StretchCenter, StretchRight,      // 纵向拉伸
+        StretchAll                                     // 全拉伸
+    }
+
+    /// <summary>
+    /// 模拟 Anchor Presets 的点击/Alt/Shift/Alt+Shift。
+    /// keepPosition = Shift；alsoSetPivot = Alt。
+    /// </summary>
+    public static void Apply(RectTransform rt, Preset preset, bool keepPosition = false, bool alsoSetPivot = false)
+    {
+        if (rt == null || rt.parent == null) return;
+        var parentRT = rt.parent as RectTransform;
+        if (parentRT == null) return;
+
+        // 记录旧锚/偏移，为 Shift 计算做准备
+        Vector2 oldAnchorMin = rt.anchorMin;
+        Vector2 oldAnchorMax = rt.anchorMax;
+        Vector2 oldOffsetMin = rt.offsetMin;
+        Vector2 oldOffsetMax = rt.offsetMax;
+
+        // 预设 -> 目标锚与目标 pivot
+        (Vector2 aMin, Vector2 aMax, Vector2 pivot) = GetPresetAnchorsAndPivot(preset);
+
+        // 设置 anchors
+        rt.anchorMin = aMin;
+        rt.anchorMax = aMax;
+
+        // Shift：保持位置/尺寸不动（等价编辑器里按住 Shift）
+        if (keepPosition)
+        {
+            // 关键：offset 要加上锚变化 * 父尺寸
+            Vector2 parentSize = parentRT.rect.size;
+            Vector2 deltaMin = (aMin - oldAnchorMin) * parentSize;
+            Vector2 deltaMax = (aMax - oldAnchorMax) * parentSize;
+            rt.offsetMin = oldOffsetMin + deltaMin;
+            rt.offsetMax = oldOffsetMax + deltaMax;
+        }
+
+        // Alt：同步 pivot
+        if (alsoSetPivot)
+        {
+            rt.pivot = pivot;
+        }
+    }
+
+    private static (Vector2 aMin, Vector2 aMax, Vector2 pivot) GetPresetAnchorsAndPivot(Preset p)
+    {
+        switch (p)
+        {
+            // ===== 9宫 =====
+            case Preset.TopLeft: return (new Vector2(0, 1), new Vector2(0, 1), new Vector2(0, 1));
+            case Preset.TopCenter: return (new Vector2(0.5f, 1), new Vector2(0.5f, 1), new Vector2(0.5f, 1));
+            case Preset.TopRight: return (new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1));
+
+            case Preset.MiddleLeft: return (new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0, 0.5f));
+            case Preset.MiddleCenter: return (new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
+            case Preset.MiddleRight: return (new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(1, 0.5f));
+
+            case Preset.BottomLeft: return (new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0));
+            case Preset.BottomCenter: return (new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0.5f, 0));
+            case Preset.BottomRight: return (new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0));
+
+            // ===== 横向拉伸（Y 锚固定，上中下）=====
+            case Preset.StretchTop: return (new Vector2(0, 1), new Vector2(1, 1), new Vector2(0.5f, 1));
+            case Preset.StretchMiddle: return (new Vector2(0, 0.5f), new Vector2(1, 0.5f), new Vector2(0.5f, 0.5f));
+            case Preset.StretchBottom: return (new Vector2(0, 0), new Vector2(1, 0), new Vector2(0.5f, 0));
+
+            // ===== 纵向拉伸（X 锚固定，左中右）=====
+            case Preset.StretchLeft: return (new Vector2(0, 0), new Vector2(0, 1), new Vector2(0, 0.5f));
+            case Preset.StretchCenter: return (new Vector2(0.5f, 0), new Vector2(0.5f, 1), new Vector2(0.5f, 0.5f));
+            case Preset.StretchRight: return (new Vector2(1, 0), new Vector2(1, 1), new Vector2(1, 0.5f));
+
+            // ===== 全拉伸 =====
+            case Preset.StretchAll: return (new Vector2(0, 0), new Vector2(1, 1), new Vector2(0.5f, 0.5f));
+        }
+        // 兜底
+        return (new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
+    }
+}

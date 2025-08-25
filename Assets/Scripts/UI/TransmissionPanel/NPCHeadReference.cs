@@ -16,6 +16,13 @@ public class NPCHeadReference : UIObjReference<NPCReferenceData>
     Image NPCHead;
     [SerializeField]
     RectTransform _rectTransform;
+
+#if UNITY_EDITOR
+    [SerializeField]
+    int2 _coordinateIndex;
+    [SerializeField]
+    int _mapInstance;
+#endif
     public override Task InitData(NPCReferenceData t, SelectAction<NPCReferenceData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         oldMapInstance = 0;
@@ -38,10 +45,15 @@ public class NPCHeadReference : UIObjReference<NPCReferenceData>
         }
 
         if(GameCommon.CheckDisplay(data.npc.Character.mapInstance))
-        {
-            //_rectTransform.localScale = Vector2.one;
+        {  //_rectTransform.localScale = Vector2.one;
             int2 coordinateIndex = data.npc.Character.GetMapStartIndex();
-            _rectTransform.pivot =data.parentPos+ new Vector2(coordinateIndex.x, coordinateIndex.y)*2;
+            RectTransformPresets.Apply(_rectTransform, RectTransformPresets.Preset.BottomRight);
+            _rectTransform.anchoredPosition = data.parentPos + new Vector2(coordinateIndex.x, coordinateIndex.y) * 2;
+#if UNITY_EDITOR
+            _coordinateIndex=coordinateIndex;
+            _mapInstance= data.npc.Character.mapInstance;
+#endif
+          
         }
        
     }
