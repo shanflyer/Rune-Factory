@@ -3774,7 +3774,6 @@ GameObject:
   - component: {fileID: 3343280047578245095}
   - component: {fileID: 3032451021432878724}
   - component: {fileID: 2926058612652939877}
-  - component: {fileID: 2757202240026291278}
   m_Layer: 0
   m_Name: "\u8001\u5E74\u8DEF\u4EBA\u5973"
   m_TagString: Untagged
@@ -3994,8 +3993,6 @@ MonoBehaviour:
   myShadow: {fileID: 5092675950528718910}
   equipRenderer: {fileID: 7972206903697901911}
   behaviorTree: {fileID: 3032451021432878724}
-  DirOther: {fileID: 6359478122005703838}
-  footStep: {fileID: 2157261775048910533}
   audioSource: {fileID: 3343280047578245095}
   isDisplayFootStep: 1
   leftFootPos: {x: -0.05, y: -0.025, z: 0}
@@ -4006,18 +4003,6 @@ MonoBehaviour:
     y: 0
   moveDirection: {x: 0, y: 0}
   speed: 0
---- !u!210 &2757202240026291278
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3116753982474887759}
-  m_Enabled: 1
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_SortAtRoot: 0
 --- !u!1 &3176188399311386898
 GameObject:
   m_ObjectHideFlags: 0
@@ -6503,6 +6488,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6965635430388786947}
+  - component: {fileID: 6211176547799508584}
   m_Layer: 0
   m_Name: "\u524D"
   m_TagString: Untagged
@@ -6532,6 +6518,18 @@ Transform:
   - {fileID: 2580576466419934417}
   m_Father: {fileID: 714768648817573665}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &6211176547799508584
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5283748034830006826}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &5339753805250168465
 GameObject:
   m_ObjectHideFlags: 0
@@ -6590,6 +6588,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3025376792223034567}
+  - component: {fileID: 6994933620870387615}
   m_Layer: 0
   m_Name: "\u5DE6"
   m_TagString: Untagged
@@ -6619,6 +6618,18 @@ Transform:
   - {fileID: 8021394135096671008}
   m_Father: {fileID: 714768648817573665}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &6994933620870387615
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5355000354678529115}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &5379613309230638711
 GameObject:
   m_ObjectHideFlags: 0
@@ -7756,6 +7767,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 809845830821443497}
+  - component: {fileID: 97720315225713342}
   m_Layer: 0
   m_Name: "\u540E"
   m_TagString: Untagged
@@ -7784,6 +7796,18 @@ Transform:
   - {fileID: 29014217777148434}
   m_Father: {fileID: 714768648817573665}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &97720315225713342
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5962734792124980335}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &6023429993016092206
 GameObject:
   m_ObjectHideFlags: 0
@@ -11199,15 +11223,3 @@ MonoBehaviour:
   m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_Material: {fileID: 2100000, guid: ed79272e38e077c4683d077845b3c6d8, type: 2}
   SpriteResourceRenference: {fileID: 0}
---- !u!198 &2157261775048910533 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 4710815693255775376, guid: 0a42bbbd99fa01b409384257f6389535,
-    type: 3}
-  m_PrefabInstance: {fileID: 6669848427243319893}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &6359478122005703838 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 347173433857908427, guid: 0a42bbbd99fa01b409384257f6389535,
-    type: 3}
-  m_PrefabInstance: {fileID: 6669848427243319893}
-  m_PrefabAsset: {fileID: 0}

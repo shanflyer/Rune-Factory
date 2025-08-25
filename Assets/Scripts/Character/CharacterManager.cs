@@ -1086,7 +1086,7 @@ public class CharacterManager : Singleton<CharacterManager>
             var transform = runtimeObj.transform;
             startPos = transform.position;
         }
-       Debug.Log($"next cell:{targetCoordinate}");
+       //Debug.Log($"next cell:{targetCoordinate}");
         bool slant = targetCoordinate.x != character.coordinate.x && targetCoordinate.y != character.coordinate.y;
         character.moveDirection = math.normalize(targetCoordinate - character.coordinate);
        //  Debug.Log($"targetCoordinate:{targetCoordinate}-character.coordinate{character.coordinate}-moveDirection: {character.moveDirection}");
@@ -1158,7 +1158,7 @@ public class CharacterManager : Singleton<CharacterManager>
             () =>
             {
                 character.moveEnumeratorId = 0;
-                Debug.Log($"pathNodes.count:{pathNodes.Count}");
+               // Debug.Log($"pathNodes.count:{pathNodes.Count}");
                 if (pathNodes.Count > 0)
                 {
                     character.SetCoordinate(new int3(targetCoordinate.xy, character.mapInstance), refreshMapTemp: false);

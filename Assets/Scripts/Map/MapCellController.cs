@@ -1259,7 +1259,7 @@ public class MapCellController : Singleton<MapCellController>
             {
                 continue;
             }
-            Debug.Log($"mapLine:{mapLine.map0}--{mapLine.map1}");
+           // Debug.Log($"mapLine:{mapLine.map0}--{mapLine.map1}");
             InitLinkMap(mapLine);
         }
     }

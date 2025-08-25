@@ -650,7 +650,6 @@ GameObject:
   - component: {fileID: 3910431720159498977}
   - component: {fileID: 4852984669169552005}
   - component: {fileID: 4121982193822987498}
-  - component: {fileID: 6378005925396845487}
   - component: {fileID: 5690010106262109595}
   m_Layer: 0
   m_Name: "\u963F\u666E\u6566"
@@ -871,8 +870,6 @@ MonoBehaviour:
   myShadow: {fileID: 5740843267208343678}
   equipRenderer: {fileID: 6042179033217258683}
   behaviorTree: {fileID: 4852984669169552005}
-  DirOther: {fileID: 2071896029919091283}
-  footStep: {fileID: 6445108437105479688}
   audioSource: {fileID: 3910431720159498977}
   isDisplayFootStep: 1
   leftFootPos: {x: -0.05, y: -0.025, z: 0}
@@ -883,18 +880,6 @@ MonoBehaviour:
     y: 0
   moveDirection: {x: 0, y: 0}
   speed: 0
---- !u!210 &6378005925396845487
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 302825952614756851}
-  m_Enabled: 1
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_SortAtRoot: 0
 --- !u!114 &5690010106262109595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4271,6 +4256,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8237495309873894371}
+  - component: {fileID: 3350834357800139381}
   m_Layer: 0
   m_Name: "\u524D"
   m_TagString: Untagged
@@ -4300,6 +4286,18 @@ Transform:
   - {fileID: 1700009831561139307}
   m_Father: {fileID: 2384508894580453917}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &3350834357800139381
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3581521677983343503}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &3657019274804199012
 GameObject:
   m_ObjectHideFlags: 0
@@ -6876,6 +6874,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5195866114605752985}
+  - component: {fileID: 3718487539008114394}
   m_Layer: 0
   m_Name: "\u5DE6"
   m_TagString: Untagged
@@ -6905,6 +6904,18 @@ Transform:
   - {fileID: 554849599231002769}
   m_Father: {fileID: 2384508894580453917}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &3718487539008114394
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5456212339351334178}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &5495583911037638384
 GameObject:
   m_ObjectHideFlags: 0
@@ -9672,6 +9683,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2498951941895583800}
+  - component: {fileID: 761447560120987120}
   m_Layer: 0
   m_Name: "\u540E"
   m_TagString: Untagged
@@ -9700,6 +9712,18 @@ Transform:
   - {fileID: 8457358730297677166}
   m_Father: {fileID: 2384508894580453917}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &761447560120987120
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7835250468520373923}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &7837110498149870843
 GameObject:
   m_ObjectHideFlags: 0
@@ -11030,12 +11054,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 7904184281513120677}
   m_SourcePrefab: {fileID: 100100000, guid: 0a42bbbd99fa01b409384257f6389535, type: 3}
---- !u!4 &2071896029919091283 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 347173433857908427, guid: 0a42bbbd99fa01b409384257f6389535,
-    type: 3}
-  m_PrefabInstance: {fileID: 1734363114013656216}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4629104895992783489 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6353541617688307225, guid: 0a42bbbd99fa01b409384257f6389535,
@@ -11123,9 +11141,3 @@ MonoBehaviour:
   m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_Material: {fileID: 2100000, guid: ed79272e38e077c4683d077845b3c6d8, type: 2}
   SpriteResourceRenference: {fileID: 0}
---- !u!198 &6445108437105479688 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 4710815693255775376, guid: 0a42bbbd99fa01b409384257f6389535,
-    type: 3}
-  m_PrefabInstance: {fileID: 1734363114013656216}
-  m_PrefabAsset: {fileID: 0}

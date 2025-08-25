@@ -1780,6 +1780,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3341105455427922315}
+  - component: {fileID: 7155316416157665396}
   m_Layer: 0
   m_Name: "\u540E"
   m_TagString: Untagged
@@ -1809,6 +1810,18 @@ Transform:
   - {fileID: 4135029123520514254}
   m_Father: {fileID: 8086036194633654807}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &7155316416157665396
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1260952525560899399}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &1316201581448669259
 GameObject:
   m_ObjectHideFlags: 0
@@ -5772,7 +5785,6 @@ GameObject:
   - component: {fileID: 6681385222298185360}
   - component: {fileID: 298855579568648857}
   - component: {fileID: 7465651114025989231}
-  - component: {fileID: 429063869364665485}
   - component: {fileID: 7086465694664415464}
   - component: {fileID: 3858635745532343100}
   m_Layer: 0
@@ -5825,8 +5837,6 @@ MonoBehaviour:
   myShadow: {fileID: 6444523456721318627}
   equipRenderer: {fileID: 5112516197985745259}
   behaviorTree: {fileID: 7086465694664415464}
-  DirOther: {fileID: 2942194593832065512}
-  footStep: {fileID: 7882851767706866611}
   audioSource: {fileID: 7465651114025989231}
   isDisplayFootStep: 0
   leftFootPos: {x: -0.05, y: -0.025, z: 0}
@@ -5966,18 +5976,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!210 &429063869364665485
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4334102402339549888}
-  m_Enabled: 1
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_SortAtRoot: 0
 --- !u!114 &7086465694664415464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7688,6 +7686,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5418912486300579876}
+  - component: {fileID: 4538640464333019331}
   m_Layer: 0
   m_Name: "\u524D"
   m_TagString: Untagged
@@ -7718,6 +7717,18 @@ Transform:
   - {fileID: 4127258475585338121}
   m_Father: {fileID: 8086036194633654807}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &4538640464333019331
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5485204032273308187}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &5492844649102094314
 GameObject:
   m_ObjectHideFlags: 0
@@ -11254,6 +11265,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1746517391041677064}
+  - component: {fileID: 5238876365671237431}
   m_Layer: 0
   m_Name: "\u5DE6"
   m_TagString: Untagged
@@ -11284,6 +11296,18 @@ Transform:
   - {fileID: 2572155469450563989}
   m_Father: {fileID: 8086036194633654807}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &5238876365671237431
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8635072427544881062}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &8727830492947054004
 GameObject:
   m_ObjectHideFlags: 0
@@ -12241,18 +12265,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1677270804245307564}
   m_SourcePrefab: {fileID: 100100000, guid: 0a42bbbd99fa01b409384257f6389535, type: 3}
---- !u!4 &2942194593832065512 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 347173433857908427, guid: 0a42bbbd99fa01b409384257f6389535,
-    type: 3}
-  m_PrefabInstance: {fileID: 3172132840894809891}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &7882851767706866611 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 4710815693255775376, guid: 0a42bbbd99fa01b409384257f6389535,
-    type: 3}
-  m_PrefabInstance: {fileID: 3172132840894809891}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8370501153562698042 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6353541617688307225, guid: 0a42bbbd99fa01b409384257f6389535,

@@ -9244,6 +9244,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3797606715283655943}
+  - component: {fileID: 4909823078581001189}
   m_Layer: 0
   m_Name: "\u5DE6"
   m_TagString: Untagged
@@ -9273,6 +9274,18 @@ Transform:
   - {fileID: 3540522801466034198}
   m_Father: {fileID: 2416604661333366098}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &4909823078581001189
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3782390640205563472}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &3803684855545250719
 GameObject:
   m_ObjectHideFlags: 0
@@ -9894,6 +9907,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7450374379165856121}
+  - component: {fileID: 77891432166444478}
   m_Layer: 0
   m_Name: "\u524D"
   m_TagString: Untagged
@@ -9923,6 +9937,18 @@ Transform:
   - {fileID: 8788912279579479149}
   m_Father: {fileID: 2416604661333366098}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &77891432166444478
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4196828172998255103}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &4254986883550033843
 GameObject:
   m_ObjectHideFlags: 0
@@ -10351,6 +10377,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3452953794996594688}
+  - component: {fileID: 4047447293224451928}
   m_Layer: 0
   m_Name: "\u540E"
   m_TagString: Untagged
@@ -10379,6 +10406,18 @@ Transform:
   - {fileID: 1388461446913198121}
   m_Father: {fileID: 2416604661333366098}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &4047447293224451928
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4550874342351800084}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &4592266783782339605
 GameObject:
   m_ObjectHideFlags: 0
@@ -14243,7 +14282,6 @@ GameObject:
   - component: {fileID: 3622007131850185172}
   - component: {fileID: 7377392826609768423}
   - component: {fileID: 7195436994636178500}
-  - component: {fileID: 4353363633262313837}
   - component: {fileID: 8343162585233971283}
   m_Layer: 0
   m_Name: "\u5E74\u8F7B\u8DEF\u4EBA\u7537"
@@ -14464,8 +14502,6 @@ MonoBehaviour:
   myShadow: {fileID: 604168616917814191}
   equipRenderer: {fileID: 3992368822887239950}
   behaviorTree: {fileID: 7377392826609768423}
-  DirOther: {fileID: 6097404561023442124}
-  footStep: {fileID: 1511352687978435412}
   audioSource: {fileID: 3622007131850185172}
   isDisplayFootStep: 1
   leftFootPos: {x: -0.05, y: -0.025, z: 0}
@@ -14476,18 +14512,6 @@ MonoBehaviour:
     y: 0
   moveDirection: {x: 0, y: 0}
   speed: 0
---- !u!210 &4353363633262313837
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7574447710426931108}
-  m_Enabled: 1
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_SortAtRoot: 0
 --- !u!114 &8343162585233971283
 MonoBehaviour:
   m_ObjectHideFlags: 0

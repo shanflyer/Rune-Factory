@@ -1106,6 +1106,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9149379729605008933}
+  - component: {fileID: 7700898268368991308}
   m_Layer: 0
   m_Name: "\u524D"
   m_TagString: Untagged
@@ -1138,6 +1139,18 @@ Transform:
   - {fileID: 896551033077447497}
   m_Father: {fileID: 3189375804395288972}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &7700898268368991308
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 951369554102546972}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &964093266979959500
 GameObject:
   m_ObjectHideFlags: 0
@@ -2499,7 +2512,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 0.09956303
+  m_Length: 0.099563286
   m_ChildTransform: {fileID: 6870863028459051418}
   m_AttachedIK: {fileID: 0}
 --- !u!1 &1965594382184496577
@@ -6117,7 +6130,6 @@ GameObject:
   - component: {fileID: 4843695581912316426}
   - component: {fileID: 3036822710079627806}
   - component: {fileID: 4683755575438916513}
-  - component: {fileID: 6184149499854059970}
   - component: {fileID: 4729830981513052177}
   m_Layer: 0
   m_Name: "\u739B\u5FB7\u7433"
@@ -6338,8 +6350,6 @@ MonoBehaviour:
   myShadow: {fileID: 8155635947622685943}
   equipRenderer: {fileID: 4283658895989477077}
   behaviorTree: {fileID: 3036822710079627806}
-  DirOther: {fileID: 7320473759624559542}
-  footStep: {fileID: 2316760707156701677}
   audioSource: {fileID: 4843695581912316426}
   isDisplayFootStep: 1
   leftFootPos: {x: -0.05, y: -0.025, z: 0}
@@ -6350,18 +6360,6 @@ MonoBehaviour:
     y: 0
   moveDirection: {x: 0, y: 0}
   speed: 0
---- !u!210 &6184149499854059970
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4600562094813381599}
-  m_Enabled: 1
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_SortAtRoot: 0
 --- !u!114 &4729830981513052177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6386,6 +6384,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1594294959032947976}
+  - component: {fileID: 7588181183260197988}
   m_Layer: 0
   m_Name: "\u540E"
   m_TagString: Untagged
@@ -6416,6 +6415,18 @@ Transform:
   - {fileID: 8209791330045238930}
   m_Father: {fileID: 3189375804395288972}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &7588181183260197988
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4635073521363634075}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &4645285361230034952
 GameObject:
   m_ObjectHideFlags: 0
@@ -8255,7 +8266,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Length: 0.08589189
+  m_Length: 0.08589198
   m_ChildTransform: {fileID: 7746661505363635075}
   m_AttachedIK: {fileID: 0}
 --- !u!1 &5898864965014081109
@@ -11063,6 +11074,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 672505161360959316}
+  - component: {fileID: 7848075084994622905}
   m_Layer: 0
   m_Name: "\u5DE6"
   m_TagString: Untagged
@@ -11095,6 +11107,18 @@ Transform:
   - {fileID: 6569708967570035858}
   m_Father: {fileID: 3189375804395288972}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &7848075084994622905
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7395859188850364655}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &7399985961585816925
 GameObject:
   m_ObjectHideFlags: 0
@@ -13483,12 +13507,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 7596135472384747008}
   m_SourcePrefab: {fileID: 100100000, guid: 0a42bbbd99fa01b409384257f6389535, type: 3}
---- !u!198 &2316760707156701677 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 4710815693255775376, guid: 0a42bbbd99fa01b409384257f6389535,
-    type: 3}
-  m_PrefabInstance: {fileID: 7009541105728415101}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3619984928475932173 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6015156964468949872, guid: 0a42bbbd99fa01b409384257f6389535,
@@ -13573,12 +13591,6 @@ MonoBehaviour:
 --- !u!4 &4137317184454525796 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6353541617688307225, guid: 0a42bbbd99fa01b409384257f6389535,
-    type: 3}
-  m_PrefabInstance: {fileID: 7009541105728415101}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &7320473759624559542 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 347173433857908427, guid: 0a42bbbd99fa01b409384257f6389535,
     type: 3}
   m_PrefabInstance: {fileID: 7009541105728415101}
   m_PrefabAsset: {fileID: 0}

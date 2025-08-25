@@ -267,6 +267,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1969980981053708454}
+  - component: {fileID: 996520764975412517}
   m_Layer: 0
   m_Name: "\u540E"
   m_TagString: Untagged
@@ -295,6 +296,18 @@ Transform:
   - {fileID: 6496218806008664554}
   m_Father: {fileID: 6399775096814338236}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &996520764975412517
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 210913556559353829}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &323588447584908467
 GameObject:
   m_ObjectHideFlags: 0
@@ -2913,6 +2926,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7280193369594947815}
+  - component: {fileID: 3980263187129495700}
   m_Layer: 0
   m_Name: "\u524D"
   m_TagString: Untagged
@@ -2942,6 +2956,18 @@ Transform:
   - {fileID: 4371049909433022057}
   m_Father: {fileID: 6399775096814338236}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &3980263187129495700
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2275501495172549122}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &2282541827792250105
 GameObject:
   m_ObjectHideFlags: 0
@@ -9182,6 +9208,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7808578364578973386}
+  - component: {fileID: 9036821559890152291}
   m_Layer: 0
   m_Name: "\u5DE6"
   m_TagString: Untagged
@@ -9211,6 +9238,18 @@ Transform:
   - {fileID: 7785397337725127047}
   m_Father: {fileID: 6399775096814338236}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &9036821559890152291
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7536311304614781719}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &7684212143759326519
 GameObject:
   m_ObjectHideFlags: 0
@@ -10358,7 +10397,6 @@ GameObject:
   - component: {fileID: 1805276561613090834}
   - component: {fileID: 885519561893513484}
   - component: {fileID: 7250940986572054798}
-  - component: {fileID: 4360111840477105899}
   - component: {fileID: 6376972089662877316}
   - component: {fileID: 4455973762118134531}
   m_Layer: 0
@@ -10411,8 +10449,6 @@ MonoBehaviour:
   myShadow: {fileID: 2246912381073767882}
   equipRenderer: {fileID: 7581985421224619162}
   behaviorTree: {fileID: 6376972089662877316}
-  DirOther: {fileID: 1447584765825980}
-  footStep: {fileID: 5022746265799809511}
   audioSource: {fileID: 7250940986572054798}
   isDisplayFootStep: 0
   leftFootPos: {x: -0.05, y: -0.025, z: 0}
@@ -10552,18 +10588,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!210 &4360111840477105899
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8731659947624994699}
-  m_Enabled: 1
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_SortAtRoot: 0
 --- !u!114 &6376972089662877316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11128,18 +11152,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 4838146986417417509}
   m_SourcePrefab: {fileID: 100100000, guid: 0a42bbbd99fa01b409384257f6389535, type: 3}
---- !u!4 &1447584765825980 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 347173433857908427, guid: 0a42bbbd99fa01b409384257f6389535,
-    type: 3}
-  m_PrefabInstance: {fileID: 347987682190839159}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &5022746265799809511 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 4710815693255775376, guid: 0a42bbbd99fa01b409384257f6389535,
-    type: 3}
-  m_PrefabInstance: {fileID: 347987682190839159}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6318107825513025031 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6015156964468949872, guid: 0a42bbbd99fa01b409384257f6389535,

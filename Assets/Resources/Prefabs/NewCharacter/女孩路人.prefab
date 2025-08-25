@@ -1620,6 +1620,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1201103226936356699}
+  - component: {fileID: 5302719293148688328}
   m_Layer: 0
   m_Name: "\u524D"
   m_TagString: Untagged
@@ -1650,6 +1651,18 @@ Transform:
   - {fileID: 5489157913417660364}
   m_Father: {fileID: 1789235423945206463}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &5302719293148688328
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1761527629760208730}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &1824965092945175108
 GameObject:
   m_ObjectHideFlags: 0
@@ -7422,6 +7435,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3143757709834595875}
+  - component: {fileID: 4754079299087451539}
   m_Layer: 0
   m_Name: "\u5DE6"
   m_TagString: Untagged
@@ -7452,6 +7466,18 @@ Transform:
   - {fileID: 2402954916668625895}
   m_Father: {fileID: 1789235423945206463}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &4754079299087451539
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6973995989819491473}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &6979637950593820314
 GameObject:
   m_ObjectHideFlags: 0
@@ -8375,7 +8401,6 @@ GameObject:
   - component: {fileID: 5104906120233981479}
   - component: {fileID: 5549885534550217282}
   - component: {fileID: 3604543541796123529}
-  - component: {fileID: 1041843884494090032}
   - component: {fileID: 3169495428766368321}
   m_Layer: 0
   m_Name: "\u5973\u5B69\u8DEF\u4EBA"
@@ -8596,8 +8621,6 @@ MonoBehaviour:
   myShadow: {fileID: 8309751516577263801}
   equipRenderer: {fileID: 2885716159827137321}
   behaviorTree: {fileID: 5549885534550217282}
-  DirOther: {fileID: 5900218412846054250}
-  footStep: {fileID: 1463824829181161777}
   audioSource: {fileID: 5104906120233981479}
   isDisplayFootStep: 1
   leftFootPos: {x: -0.05, y: -0.025, z: 0}
@@ -8608,18 +8631,6 @@ MonoBehaviour:
     y: 0
   moveDirection: {x: 0, y: 0}
   speed: 0
---- !u!210 &1041843884494090032
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7816716907629717559}
-  m_Enabled: 1
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_SortAtRoot: 0
 --- !u!114 &3169495428766368321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8967,6 +8978,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 103621557706176941}
+  - component: {fileID: 4691439463801102866}
   m_Layer: 0
   m_Name: "\u540E"
   m_TagString: Untagged
@@ -8996,6 +9008,18 @@ Transform:
   - {fileID: 41424815716967784}
   m_Father: {fileID: 1789235423945206463}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &4691439463801102866
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8101203547943744183}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &8120997482798105396
 GameObject:
   m_ObjectHideFlags: 0
@@ -10071,18 +10095,6 @@ MonoBehaviour:
 --- !u!4 &944895504534012856 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6353541617688307225, guid: 0a42bbbd99fa01b409384257f6389535,
-    type: 3}
-  m_PrefabInstance: {fileID: 6138583334187820449}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &1463824829181161777 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 4710815693255775376, guid: 0a42bbbd99fa01b409384257f6389535,
-    type: 3}
-  m_PrefabInstance: {fileID: 6138583334187820449}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &5900218412846054250 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 347173433857908427, guid: 0a42bbbd99fa01b409384257f6389535,
     type: 3}
   m_PrefabInstance: {fileID: 6138583334187820449}
   m_PrefabAsset: {fileID: 0}

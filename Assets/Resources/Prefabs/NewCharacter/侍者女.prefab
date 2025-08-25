@@ -3167,6 +3167,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8934450205301610789}
+  - component: {fileID: 3384134168041834995}
   m_Layer: 0
   m_Name: "\u5DE6"
   m_TagString: Untagged
@@ -3197,6 +3198,18 @@ Transform:
   - {fileID: 3232362445656864551}
   m_Father: {fileID: 3496170760783831330}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &3384134168041834995
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2491780990685613858}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &2556787639181243942
 GameObject:
   m_ObjectHideFlags: 0
@@ -5350,6 +5363,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6449224349410698892}
+  - component: {fileID: 7639111594571083463}
   m_Layer: 0
   m_Name: "\u524D"
   m_TagString: Untagged
@@ -5380,6 +5394,18 @@ Transform:
   - {fileID: 5279403741403739629}
   m_Father: {fileID: 3496170760783831330}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &7639111594571083463
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4302479751235282782}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &4345649004021440537
 GameObject:
   m_ObjectHideFlags: 0
@@ -6708,7 +6734,6 @@ GameObject:
   - component: {fileID: 3005759674874210077}
   - component: {fileID: 5955792612123556628}
   - component: {fileID: 4971190281916635764}
-  - component: {fileID: 8863383230652140025}
   - component: {fileID: 2793748382732733836}
   - component: {fileID: 6622940352752324780}
   m_Layer: 0
@@ -6761,8 +6786,6 @@ MonoBehaviour:
   myShadow: {fileID: 1695357358133769932}
   equipRenderer: {fileID: 3492573943689293076}
   behaviorTree: {fileID: 2793748382732733836}
-  DirOther: {fileID: 1903028536738811848}
-  footStep: {fileID: 6906744815596766611}
   audioSource: {fileID: 4971190281916635764}
   isDisplayFootStep: 0
   leftFootPos: {x: -0.05, y: -0.025, z: 0}
@@ -6902,18 +6925,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!210 &8863383230652140025
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5435153785071190068}
-  m_Enabled: 1
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_SortAtRoot: 0
 --- !u!114 &2793748382732733836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11268,6 +11279,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 101566305285726823}
+  - component: {fileID: 8686454127851534785}
   m_Layer: 0
   m_Name: "\u540E"
   m_TagString: Untagged
@@ -11297,6 +11309,18 @@ Transform:
   - {fileID: 3173340301237412872}
   m_Father: {fileID: 3496170760783831330}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &8686454127851534785
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8725138929974489092}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &8725640836707166339
 GameObject:
   m_ObjectHideFlags: 0
@@ -12241,12 +12265,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2467214717886391281}
   m_SourcePrefab: {fileID: 100100000, guid: 0a42bbbd99fa01b409384257f6389535, type: 3}
---- !u!4 &1903028536738811848 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 347173433857908427, guid: 0a42bbbd99fa01b409384257f6389535,
-    type: 3}
-  m_PrefabInstance: {fileID: 2213943873308332291}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5086202566682539802 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6353541617688307225, guid: 0a42bbbd99fa01b409384257f6389535,
@@ -12334,9 +12352,3 @@ MonoBehaviour:
   m_Color: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_Material: {fileID: 2100000, guid: ed79272e38e077c4683d077845b3c6d8, type: 2}
   SpriteResourceRenference: {fileID: 0}
---- !u!198 &6906744815596766611 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 4710815693255775376, guid: 0a42bbbd99fa01b409384257f6389535,
-    type: 3}
-  m_PrefabInstance: {fileID: 2213943873308332291}
-  m_PrefabAsset: {fileID: 0}
