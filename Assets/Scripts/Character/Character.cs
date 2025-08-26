@@ -1658,6 +1658,14 @@ public partial class Character
     public bool TryMove(int targetMap, int2 targetCoordinate, MoveEndAction moveEndAction = null, MoveEndAction changeCoordinateAction = null,
         Int3Action failedMoveAction = null)
     {
+        if (targetMap == mapInstance && targetCoordinate.x == coordinate.x && targetCoordinate.y == coordinate.y)
+        {
+            if (moveEndAction != null)
+            {
+                moveEndAction.Invoke();
+            }
+            return true;
+        }
         this.moveEndAction = moveEndAction;
         this.changeCoordinateAction = changeCoordinateAction;
         this.failedMoveAction = failedMoveAction;

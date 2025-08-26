@@ -281,6 +281,23 @@ public struct SetMapItemLinkCharacter : GameAction
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
+public struct ChangeMap : GameAction
+{
+    public int3 mapValue;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+    public void Clear() { this = default; }
+
+    public void Init(List<Parameter> parameters, int source = int.MinValue, int target = int.MinValue, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 2)
+        {
+            mapValue =new int3(int.Parse(parameters[0].value), int.Parse(parameters[1].value), int.Parse(parameters[2].value));
+        }
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct ChangeMapRoom : GameAction
 {
     public int oldRoom,newRoom;

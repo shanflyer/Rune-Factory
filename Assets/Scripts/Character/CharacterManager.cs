@@ -168,6 +168,12 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<TempCharacterTalk>(TempCharacterTalk);
         GameActionManager.instance.AddListener<SetTempCharacterTarget>(SetTempCharacterTarget);
         GameActionManager.instance.AddListener<SetCharacterStopCreate>(SetCharacterStopCreate);
+        GameActionManager.instance.AddListener<ChangeMap>(ChangeMap);
+    }
+    void ChangeMap(ChangeMap  changeMap)
+    {
+        var character = controllerCharacter;
+        ChangeMapAction(character, changeMap.mapValue,0);
     }
     void SetTempCharacterTarget(SetTempCharacterTarget setTempCharacterTarget)
     {
@@ -1405,7 +1411,7 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         if (WorldMapManager.instance.GetRuntimeMapItem(character.linkItem, out var mapItem))
         {
-            character.SetCoordinate(new  int3(mapItem.coordinate.xy, mapItem.mapInstanceId)); 
+            //character.SetCoordinate(new  int3(mapItem.coordinate.xy, mapItem.mapInstanceId)); 
 
             SetCharacterAnimator setCharacterAnimator = new SetCharacterAnimator
             {
@@ -1416,7 +1422,7 @@ public class CharacterManager : Singleton<CharacterManager>
             };
             GameActionManager.instance.QueueAction(setCharacterAnimator);
 
-            var sleepPos = mapItem.mapItemData.offsetLinkPos;
+            var sleepPos = mapItem.mapItemData.offsetLinkPos+ (Vector3)mapItem.pos; 
             SetCharacterTempPos SetCharacterTempPos = new SetCharacterTempPos
             {
                 characterId = character.instanceId,
