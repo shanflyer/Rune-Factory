@@ -47,7 +47,7 @@ public class NPCHeadReference : UIObjReference<NPCReferenceData>
         if(GameCommon.CheckDisplay(data.npc.Character.mapInstance))
         {  //_rectTransform.localScale = Vector2.one;
             int2 coordinateIndex = data.npc.Character.GetMapStartIndex();
-            RectTransformPresets.Apply(_rectTransform, RectTransformPresets.Preset.BottomRight);
+            RectTransformPresets.Apply(_rectTransform, RectTransformPresets.Preset.BottomLeft);
             _rectTransform.anchoredPosition = data.parentPos + new Vector2(coordinateIndex.x, coordinateIndex.y) * 2;
 #if UNITY_EDITOR
             _coordinateIndex=coordinateIndex;

@@ -45,7 +45,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
     [SerializeField]
     private TextMeshProUGUI FPSText;
     [SerializeField]
-    private Button playerButton;
+    private Button playerButton,MapButton;
     [SerializeField]
     private Vector2 headSize = new Vector2(448, 512);
 
@@ -99,6 +99,10 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
             
             // AudioController.instance.PlayAudio(SE.click);
            await UIManager.instance.ShowGamePanel<SetPanel>();
+        });
+        MapButton.onClick.AddListener(() =>
+        {
+            UIManager.instance.ShowGamePanel<TransmissionPanel>();
         });
 
         GameActionManager.instance.AddListener<NewDay>(NewDay);

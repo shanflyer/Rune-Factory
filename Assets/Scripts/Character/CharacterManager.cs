@@ -1167,7 +1167,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
                 else
                 {
-                   Debug.Log($"character:{character.name}--tryCorssMap");
+                 //  Debug.Log($"character:{character.name}--tryCorssMap");
                     if (runtimeObj != null)
                     {
                         SetCharacterAnimationSpeed(0, runtimeObj);

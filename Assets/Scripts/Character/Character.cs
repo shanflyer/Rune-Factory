@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Unity.Mathematics;
+using Unity.Mathematics.Geometry;
 using UnityEngine; 
 
 public struct CharacterEquipAndPropertyData
@@ -1730,7 +1731,7 @@ public partial class Character
                         nextMap = roomList[i];
                         if (MapCellController.instance.GetLinkMapInCoordinate(nowMap, nextMap, out var tempTarget,out targetMapCell))
                         {
-                            Debug.Log($"PlayerMove：nowMap:{nowMap}tempTarget{tempTarget}startCoordinate{startCoordinate}-nextMap{nextMap}--targetMapCell{targetMapCell}");
+                            //Debug.Log($"PlayerMove：nowMap:{nowMap}tempTarget{tempTarget}startCoordinate{startCoordinate}-nextMap{nextMap}--targetMapCell{targetMapCell}");
                             MapCellJobController.instance.AddPathRequest(startCoordinate, tempTarget, nowMap, (Stack<int2> path,int map) =>
                             {
                                 roadCells.Add(map, path);
@@ -1746,7 +1747,7 @@ public partial class Character
                     { 
                         MapCellJobController.instance.AddPathRequest(startCoordinate, targetCoordinate, nowMap, (Stack<int2> path, int map) =>
                         {
-                            Debug.Log($"PlayerMove：startCoordinate:{nowMap}startCoordinate{startCoordinate}targetCoordinate{targetCoordinate}-nowMap{nowMap}");
+                          //  Debug.Log($"PlayerMove：startCoordinate:{nowMap}startCoordinate{startCoordinate}targetCoordinate{targetCoordinate}-nowMap{nowMap}");
                             roadCells.Add(map, path);
                             roomCount--;
                             if (roomCount == 0)
@@ -1775,12 +1776,19 @@ public partial class Character
                     int map = roomQueue.Dequeue();
                     if(roadCells.TryGetValue(map,out var path))
                     {
+                        if (path.Count == 0)
+                        {
+                            Debug.Log($"寻路失败:path.Count == 0");
+                            FailedMoveAction();
+                            return;
+                        }
+                        /*
                         string pathStr = "path";
                         var pList= path.ToList();
                         for(int i = 0; i < pList.Count; i++)
                         {
                             pathStr = GameCommon.BlendString(pathStr, ",", pList[i].ToString());
-                        }
+                        }*/
 
                        // Debug.Log($"PlayerMove:map{map}-path.count{path.Count} pathStr{pathStr}");
                         if (!zero)

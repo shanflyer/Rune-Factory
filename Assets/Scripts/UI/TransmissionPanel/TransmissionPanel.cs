@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UI; 
 
 public class TransmissionPanel : GamePanel<IReferenceData>
 {
@@ -12,13 +12,23 @@ public class TransmissionPanel : GamePanel<IReferenceData>
     Transform NPCParent,Map, ChildMap;
     [SerializeField]
     NPCHeadReference NPC;
+    [SerializeField]
+    ScrollRect Scroll;
+    [SerializeField]
+    Slider ViewSlider;
+    [SerializeField]
+    Transform MapImage;
+    [SerializeField]
+    Transform FightMap;
     DisplayList<NPCHeadReference, NPCReferenceData> npcList;
-
+    
     Dictionary<int, Vector2> mapParentPosDic;
     Dictionary<int, Transform> childMapDic;
     protected override void Awake()
     {
         base.Awake();
+        ViewSlider.onValueChanged.AddListener(SetScale);
+
         closeBtn.onClick.AddListener(Close);
         npcList = new DisplayList<NPCHeadReference, NPCReferenceData>(NPC, NPCParent);
         mapParentPosDic = new Dictionary<int, Vector2>();
@@ -44,6 +54,11 @@ public class TransmissionPanel : GamePanel<IReferenceData>
         }
         return false;
     }
+    void SetScale(float  Value)
+    {
+        float scaleValue = Value + 1;
+        MapImage.localScale = new Vector3(scaleValue, scaleValue, scaleValue);
+    }
   
     public override void SetPanelUISerializeObj()
     {
@@ -53,6 +68,19 @@ public class TransmissionPanel : GamePanel<IReferenceData>
     public override async Task InitData(string dataKey)
     {
         base.InitData(dataKey);
+        FightMap.transform.localScale = Vector3.zero;
+        try
+        {
+            int dValue = int.Parse(dataKey);
+            if (dValue > 0)
+            {
+                FightMap.transform.localScale = Vector3.one;
+            }
+        }
+        catch
+        {
+
+        }
 
         for(int i = 0; i < ChildMap.childCount; i++)
         {
@@ -81,7 +109,8 @@ public class TransmissionPanel : GamePanel<IReferenceData>
     }
     void SetChildMap(NPCReferenceData data,int index,bool selected)
     {
-        if(childMapDic.TryGetValue(data.npc.Character.mapInstance,out var parent))
+        Scroll.enabled = false;
+        if (childMapDic.TryGetValue(data.npc.Character.mapInstance,out var parent))
         {
             var item = npcList.GetReference(index);
             item.transform.SetParent(parent, false);
@@ -95,6 +124,7 @@ public class TransmissionPanel : GamePanel<IReferenceData>
             }
 
         }
+        Scroll.enabled = true;
     }
 }
      
