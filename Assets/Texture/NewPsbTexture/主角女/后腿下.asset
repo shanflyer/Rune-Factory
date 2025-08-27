@@ -24,33 +24,33 @@ MonoBehaviour:
     weight2: 0
     weight3: 0
     boneIndex0: 1
-    boneIndex1: 0
-    boneIndex2: 0
-    boneIndex3: 0
-  - weight0: 0.9859265
-    weight1: 0.014073466
-    weight2: 0
-    weight3: 0
-    boneIndex0: 1
-    boneIndex1: 0
-    boneIndex2: 0
-    boneIndex3: 0
-  - weight0: 0.9936927
-    weight1: 0.0063073095
-    weight2: 0
-    weight3: 0
-    boneIndex0: 1
-    boneIndex1: 0
-    boneIndex2: 0
-    boneIndex3: 0
+    boneIndex1: -1
+    boneIndex2: -1
+    boneIndex3: -1
   - weight0: 1
     weight1: 0
     weight2: 0
     weight3: 0
-    boneIndex0: 0
+    boneIndex0: 1
+    boneIndex1: -1
+    boneIndex2: -1
+    boneIndex3: -1
+  - weight0: 1
+    weight1: 0
+    weight2: 0
+    weight3: 0
+    boneIndex0: 1
+    boneIndex1: -1
+    boneIndex2: -1
+    boneIndex3: -1
+  - weight0: 0
+    weight1: 1
+    weight2: 0
+    weight3: 0
+    boneIndex0: -1
     boneIndex1: 1
-    boneIndex2: 0
-    boneIndex3: 0
+    boneIndex2: -1
+    boneIndex3: -1
   m_Edges:
   - index1: 0
     index2: 1
@@ -67,11 +67,11 @@ MonoBehaviour:
       e00: 1
       e01: 0
       e02: 0
-      e03: -0.0260752
+      e03: -0.0018271804
       e10: 0
       e11: 1
       e12: 0
-      e13: 0.070483886
+      e13: 0.07277417
       e20: 0
       e21: 0
       e22: 1
@@ -82,18 +82,18 @@ MonoBehaviour:
       e33: 1
     boneLength: 0
     path: 
-    name: Front_Root
+    name: Left_Root
     color: {r: 1, g: 0, b: 0, a: 1}
     zOrder: 0
   - bindPose:
-      e00: -0.07572768
-      e01: -0.997129
+      e00: 0.021113154
+      e01: -0.9997775
       e02: 0
-      e03: 0.03042638
-      e10: 0.997129
-      e11: -0.07572768
+      e03: 0.043543324
+      e10: 0.9997775
+      e11: 0.021113154
       e12: 0
-      e13: 0.019869259
+      e13: 0.012860902
       e20: 0
       e21: 0
       e22: 1
@@ -102,9 +102,9 @@ MonoBehaviour:
       e31: 0
       e32: 0
       e33: 1
-    boneLength: 0.08419497
-    path: Front_LeftLeg_Up/Front_LeftLeg_Down
-    name: Front_LeftLeg_Down
+    boneLength: 0.09727252
+    path: Left_BackLeg_Up/Left_BackLeg_Down
+    name: Left_BackLeg_Down
     color: {r: 1, g: 0.75, b: 0, a: 1}
     zOrder: 0
   m_Blendshapes: []
@@ -152,11 +152,11 @@ Mesh:
   - e00: 1
     e01: 0
     e02: 0
-    e03: -0.0260752
+    e03: -0.0018271804
     e10: 0
     e11: 1
     e12: 0
-    e13: 0.070483886
+    e13: 0.07277417
     e20: 0
     e21: 0
     e22: 1
@@ -165,14 +165,14 @@ Mesh:
     e31: 0
     e32: 0
     e33: 1
-  - e00: -0.07572768
-    e01: -0.997129
+  - e00: 0.021113154
+    e01: -0.9997775
     e02: 0
-    e03: 0.03042638
-    e10: 0.997129
-    e11: -0.07572768
+    e03: 0.043543324
+    e10: 0.9997775
+    e11: 0.021113154
     e12: 0
-    e13: 0.019869259
+    e13: 0.012860902
     e20: 0
     e21: 0
     e22: 1
@@ -184,10 +184,10 @@ Mesh:
   m_BoneNameHashes: 
   m_RootBoneNameHash: 0
   m_BonesAABB:
-  - m_Min: {x: -0.076075196, y: -0.014516115, z: 0}
-    m_Max: {x: 0.023924801, y: 0.15548389, z: 0}
-  - m_Min: {x: -0.05811597, y: -0.03642404, z: 0}
-    m_Max: {x: 0.118968725, y: 0.06328886, z: 0}
+  - m_Min: {x: Infinity, y: Infinity, z: Infinity}
+    m_Max: {x: -Infinity, y: -Infinity, z: -Infinity}
+  - m_Min: {x: -0.042493425, y: -0.038922593, z: 0}
+    m_Max: {x: 0.12958008, y: 0.0646444, z: 0}
   m_VariableBoneCountWeights:
     m_Data: 
   m_MeshCompression: 0
@@ -257,7 +257,7 @@ Mesh:
       format: 10
       dimension: 4
     m_DataSize: 320
-    _typelessdata: cdcc4cbd7b14ae3d000000000000000000000000000080bf0000803f0000000000000000000080bfcdcc4c3d7b14ae3d000000000000000000000000000080bf0000803f0000000000000000000080bfcdcc4cbd7b14aebd000000000000000000000000000080bf0000803f0000000000000000000080bfcdcc4c3d7b14aebd000000000000000000000000000080bf0000803f0000000000000000000080bf0000d43e0000d83e0000e83e0000d83e0000d43e0000b63e0000e83e0000b63e0000803f00000000000000000000000001000000000000000000000000000000ae657c3f6594663c000000000000000001000000000000000000000000000000a5627e3f8cadce3b0000000000000000010000000000000000000000000000000000803f00000000000000000000000000000000010000000000000000000000
+    _typelessdata: cdcc4cbd7b14ae3d000000000000000000000000000080bf0000803f0000000000000000000080bfcdcc4c3d7b14ae3d000000000000000000000000000080bf0000803f0000000000000000000080bfcdcc4cbd7b14aebd000000000000000000000000000080bf0000803f0000000000000000000080bfcdcc4c3d7b14aebd000000000000000000000000000080bf0000803f0000000000000000000080bf0000d43e0000d83e0000e83e0000d83e0000d43e0000b63e0000e83e0000b63e0000803f000000000000000000000000010000000000000000000000000000000000803f000000000000000000000000010000000000000000000000000000000000803f000000000000000000000000010000000000000000000000000000000000803f00000000000000000000000001000000000000000000000000000000
   m_CompressedMesh:
     m_Vertices:
       m_NumItems: 0
