@@ -430,10 +430,14 @@ public class UIManager : Singleton<UIManager>
 
             if (!Application.isPlaying||SingletonType.Cleared)
             {
+                GameObject.DestroyImmediate(gamePanelObj);
+                return null;
+            }else
+            if ( SingletonType.Cleared)
+            {
                 GameObject.Destroy(gamePanelObj);
                 return null;
             }
-
             var _Panel = async.Result[0]; 
             _Panel.transform.localPosition = Vector3.zero;
             var gamePanelComponent = _Panel.GetComponent(type);

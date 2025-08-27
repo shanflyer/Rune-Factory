@@ -1,4 +1,5 @@
 ﻿
+using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using System;
 using Unity.Mathematics;
 using UnityEngine;
@@ -114,7 +115,7 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
     { 
         GameActionManager.instance.AddListener<DisplaySky>(DisplaySky);
         GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
-
+       
         farVelocity = farCloud.velocityOverLifetime;
         nearVelocity = nearCloud.velocityOverLifetime;
         farEmission = farCloud.emission;
@@ -122,7 +123,7 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
         farMain = farCloud.main;
         nearMain = nearCloud.main;
         starEmission = star.emission;
-
+        starEmission.rateOverTime = 0;
         float screenHeight = Screen.height;
         float dt = screenHeight - environmentLerpOffset.x;
         dt *= environmentLerpOffset.y;

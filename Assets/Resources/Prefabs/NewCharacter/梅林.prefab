@@ -3262,7 +3262,7 @@ Transform:
   m_GameObject: {fileID: 2089672094253224653}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.73, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11173,7 +11173,7 @@ Transform:
   m_GameObject: {fileID: 6867597696742935613}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.73, y: -0.01, z: 0}
+  m_LocalPosition: {x: 0, y: -0.01, z: 0}
   m_LocalScale: {x: 0.75, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13977,12 +13977,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e13c5c54c81ecd244b3ad1fcb3a1e7ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  body: {fileID: 6122625410349081645}
-  equip: {fileID: 0}
-  shadow: {fileID: 0}
+  equip: {fileID: 46845841546354787}
+  shadow: {fileID: 2965912818772216917}
   animator: {fileID: 1542796312502876743}
-  myShadow: {fileID: 0}
-  equipRenderer: {fileID: 0}
+  myShadow: {fileID: 5462899253622488621}
+  equipRenderer: {fileID: 3225279240460449585}
   behaviorTree: {fileID: 5368232716120646535}
   audioSource: {fileID: 5132340718813910652}
   isDisplayFootStep: 1
@@ -14892,7 +14891,7 @@ PrefabInstance:
     - target: {fileID: 6353541617688307225, guid: 0a42bbbd99fa01b409384257f6389535,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.73
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6353541617688307225, guid: 0a42bbbd99fa01b409384257f6389535,
         type: 3}

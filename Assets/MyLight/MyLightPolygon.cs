@@ -60,17 +60,25 @@ public class MyLightPolygon : MyLightBase
     public override void RefreshColor()
     {
         base.RefreshColor();
-        if (meshFilter.sharedMesh == null)
+        try
         {
-            CreateMesh();
+            if (meshFilter.sharedMesh == null)
+            {
+                CreateMesh();
+            }
+            var mesh = meshFilter.sharedMesh;
+            Color[] colors = mesh.colors;
+            for (int i = 0; i < colors.Length; i++)
+            {
+                colors[i] = lightColor;
+            }
+            mesh.colors = colors;
         }
-        var mesh = meshFilter.sharedMesh;
-        Color[] colors = mesh.colors;
-        for (int i = 0; i < colors.Length; i++)
+        catch (Exception e)
         {
-            colors[i] = lightColor;
+            Debug.LogError($"{e}--{transform.name}-");
         }
-        mesh.colors = colors;
+      
     } 
     public void CreateMesh()
     {

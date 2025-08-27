@@ -49,7 +49,7 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
     private RuntimeObj _runtimeObj;
 
     [SerializeField]
-    private Transform body, equip, shadow;
+    private Transform  equip, shadow;
 
     public Animator Animator => animator;
 
@@ -93,7 +93,6 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
 
             this.enabled = false;
             Vector3 offset = new Vector3(0, 0, -99999);
-            body.localScale = Vector3.zero;
             if (equip)
                 equip.Translate(offset);
             if (shadow)
@@ -184,7 +183,6 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
         waitFootTime = 0;
         isLeftFoot = false;
 
-        body.localScale = Vector3.one;
         if (equip)
         {
             Vector3 offset = equip.localPosition;
@@ -329,11 +327,10 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
     public void SetReferenceData()
     {
         animator = gameObject.GetComponentInChildren<Animator>();
-        body = transform.Find("Body");
         equip = transform.Find("Equip");
         shadow = transform.Find("Shadow");
         myShadow = shadow.GetComponent<MyShadowPolygon>();
-        equipRenderer = transform.GetChild(1).GetChild(1).GetComponent<MySpriteMeshRender>();
+        equipRenderer = equip.GetChild(1).GetComponent<MySpriteMeshRender>();
         behaviorTree = transform.GetComponent<BehaviorTree>();
       
     }
