@@ -211,6 +211,7 @@ public class FilmController : Singleton<FilmController>
                 var asyncInstantiateOperation= GameObject.InstantiateAsync(filmData.FilmObj, filmParent);
                 await asyncInstantiateOperation;
                 GameObject filmObj = asyncInstantiateOperation.Result[0];
+                filmObj.transform.localPosition = Vector3.zero;
                 PlayableDirector playableDirector = filmObj.GetComponent<PlayableDirector>();
                 playableDirector.stopped += (PlayableDirector) => 
                 {
