@@ -16,6 +16,8 @@ public struct ResetGameEvent : GameAction
         {
             eventId = source;
         }
+        this.setValue = setValue;
+        this.setResult = setResult;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -36,6 +38,8 @@ public struct RemoveGameEvent : GameAction
         {
             eventId = source;
         }
+        this.setValue = setValue;
+        this.setResult = setResult;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -56,6 +60,8 @@ public struct SampleGameEvent : GameAction
         {
             eventId = source;
         }
+        this.setValue = setValue;
+        this.setResult = setResult;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

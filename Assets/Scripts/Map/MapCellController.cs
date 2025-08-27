@@ -1234,14 +1234,7 @@ public class MapCellController : Singleton<MapCellController>
                 switch (saveValue)
                 {
                     case -1:
-                        //if (GameController.instance.startPlay)
-                        {
-                            //  isInit = true;
-                        }
-                        // else
-                        {
-                            isInit = mapLine.zeroInit;
-                        }
+                        isInit = mapLine.zeroInit;
 
                         break;
 
@@ -1254,7 +1247,14 @@ public class MapCellController : Singleton<MapCellController>
                         break;
                 }
             }
-                
+            else
+            {
+                if ( mapLine.testInit)
+                {
+                    isInit = true;
+                }
+            }
+           
             if (!isInit)
             {
                 continue;
@@ -1321,7 +1321,7 @@ public class MapCellController : Singleton<MapCellController>
             {
                 coordinate = cells0[i],
                 directionValue = dir0,
-                afterAction = mapLine.afterActionId,
+                afterAction = mapLine.cells0.afterAction,
                 targetCell = mapLine.cells0.targetCell,
             };
             
@@ -1354,7 +1354,7 @@ public class MapCellController : Singleton<MapCellController>
             {
                 coordinate = cells1[i],
                 directionValue = dir1,
-                afterAction = mapLine.afterActionId,
+                afterAction = mapLine.cells1.afterAction,
                 targetCell = mapLine.cells1.targetCell,
             };
 

@@ -52,7 +52,7 @@ public class MapLine
     public int map0, map1;
     public LinkMapCell cells0=new LinkMapCell(), cells1=new LinkMapCell();
     public int afterActionId;
-
+    public bool testInit;
     public MapLine()
     {
 
