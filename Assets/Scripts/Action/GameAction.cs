@@ -65,6 +65,8 @@ public struct PlayCharacterTimeLine : GameAction
         {
             characterId = source;
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -83,7 +85,8 @@ public struct SetFixedPlayerShaderPos : GameAction
         {
             fixedPos = source != 0;
         }
-
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -99,7 +102,8 @@ public struct SetCameraPixelValue : GameAction
         {
             pixelValue = int.Parse(parameters[0].value);
         }
-        
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -115,7 +119,8 @@ public struct SetCameraConfiner2D : GameAction
         {
             enable = bool.Parse(parameters[0].value);
         }
-         
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -124,10 +129,7 @@ public struct RefreshMapCamera : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    { 
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 public struct SetFixedCamera : GameAction
 {
@@ -154,6 +156,8 @@ public struct SetFixedCamera : GameAction
         {
             fixedPos.x = float.MinValue;
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -163,10 +167,7 @@ public struct RefreshGameSaveData : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 
 public struct NewHour : GameAction
@@ -174,20 +175,14 @@ public struct NewHour : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 public struct NewDay : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 public struct RefreshShopLevel : GameAction
 {
@@ -198,7 +193,8 @@ public struct RefreshShopLevel : GameAction
     {
         if (parameters.Count > 0)
             shopName = parameters[0].value; 
-         
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -223,7 +219,8 @@ public struct OpenShopItem : GameAction
         {
             itemId = target;
         }
-
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -250,6 +247,8 @@ public struct TryVisitShop : GameAction
         {
             ShopObjId = target;
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -272,7 +271,8 @@ public struct TryGiveGiftOpenPackage : GameAction
             fromCharacterId = source;
         if (target != 0)
             toCharacterId = target;
-
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -299,7 +299,8 @@ public struct GiveGift : GameAction
             receiveCharacter = target;
         if (value != 0)
             giftId = value;
-
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -318,6 +319,8 @@ public struct SwitchAutoStore : GameAction
         {
             isAuto = source == 1;
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -337,6 +340,8 @@ public struct SetPlayerStoreOpen : GameAction
         {
             open = source == 1;
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -347,10 +352,7 @@ public struct TryBuyPlayerGood : GameAction
     public int characterId;
     public int storeCounterId;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 
 public struct BuyPlayerGood : GameAction
@@ -370,6 +372,8 @@ public struct BuyPlayerGood : GameAction
         {
             storeCounterId = target;
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -387,6 +391,8 @@ public struct ShowCoin : GameAction
             pos.x = float.Parse(parameters[0].value);
             pos.y = float.Parse(parameters[1].value);
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -399,10 +405,7 @@ public struct UpdateGameTime : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 
 public struct SetStoreCounterItem : GameAction, IReferenceData
@@ -430,6 +433,8 @@ public struct SetStoreCounterItem : GameAction, IReferenceData
             itemId = target;
             count = -1;
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -443,6 +448,8 @@ public struct StoreCounterSetSelectItemAction : GameAction
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         targetObj = target;
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -460,6 +467,8 @@ public struct SetStoreCounter : GameAction
         nullAction = int.Parse(parameters[0].value);
         playerId = source;
         storeCounterId = target;
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -479,6 +488,8 @@ public struct DisplayStoreCounter : GameAction
             display = bool.Parse(parameters[0].value);
             itemInstanceId = int.Parse(parameters[1].value);
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -496,6 +507,8 @@ public struct CreatStoreCounter : GameAction
             itemInstanceId = int.Parse(parameters[0].value);
             storeDataId = int.Parse(parameters[1].value);
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 } 
@@ -519,6 +532,8 @@ public struct PlayerTalkItem : GameAction
 
         characterId = source;
         ItemId = target;
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -528,10 +543,7 @@ public struct SwitchOperateList : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 
 public struct ShopBuySuccess : GameAction
@@ -546,6 +558,8 @@ public struct ShopBuySuccess : GameAction
         {
             buyCount = int.Parse(parameters[0].value);
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -562,6 +576,8 @@ public struct RefreshPackage : GameAction
         {
             packageId = int.Parse(parameters[0].value);
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -577,6 +593,8 @@ public struct AddPlayerGold : GameAction
         {
             this.value = int.Parse(parameters[0].value);
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -585,10 +603,7 @@ public struct RefreshPlayerGold : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 
 public struct InitInputAction : GameAction
@@ -596,10 +611,7 @@ public struct InitInputAction : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 
 public struct EndPlayerRound : GameAction
@@ -607,10 +619,7 @@ public struct EndPlayerRound : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 
 public struct StopAutoFight : GameAction
@@ -618,10 +627,7 @@ public struct StopAutoFight : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 
 public struct PlayerFight : GameAction
@@ -629,10 +635,7 @@ public struct PlayerFight : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 
 public struct FightCharacterMove : GameAction
@@ -652,6 +655,8 @@ public struct FightCharacterMove : GameAction
         {
             newIndex = int.Parse(parameters[1].value);
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -661,10 +666,7 @@ public struct StartRoundFight : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 
 public struct WaitAction : GameAction
@@ -726,6 +728,8 @@ public struct DisplayHurt : GameAction
             hurtValue = parameters[1].value;
             hurtResultType = (HurtResultType)int.Parse(parameters[2].value);
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -748,6 +752,8 @@ public struct NextActionSkillEstimate : GameAction
             sourceId = int.Parse(parameters[1].value); 
             displayHurt = bool.Parse(parameters[2].value);
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -772,6 +778,8 @@ public struct ActionSkillEstimate : GameAction
             index = int.Parse(parameters[3].value);
             displayHurt = bool.Parse(parameters[4].value);
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -781,10 +789,7 @@ public struct HideFightScene : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 
 public struct DisplayFightScene : GameAction
@@ -792,10 +797,7 @@ public struct DisplayFightScene : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 
 public struct JumpFilm : GameAction
@@ -812,6 +814,8 @@ public struct JumpFilm : GameAction
             filmName = parameters[0].value;
             jumpTime = float.Parse(parameters[1].value);
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, true);
     }
 }
@@ -839,7 +843,8 @@ public struct SimpleTalk : GameAction
         {
             characterId = source;
         }
-
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -852,10 +857,7 @@ public struct DynamicTalk : GameAction
     public Sprite icon;
     public string name;
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 
 public struct Talk : GameAction
@@ -908,7 +910,8 @@ public struct Talk : GameAction
         {
             talkId = target;
         }
-
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -916,10 +919,7 @@ public struct LoadMapCompleted : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 
 public struct StartWorldInit : GameAction
@@ -927,7 +927,9 @@ public struct StartWorldInit : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {  
+    {        
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -946,7 +948,8 @@ public struct SwitchScene : GameAction
             beforeLoadActionId = int.Parse(parameters[1].value);
         if (parameters.Count >= 3)
             afterLoadActionId = int.Parse(parameters[2].value);
-
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -957,10 +960,7 @@ public struct ChapterStepAction : GameAction
 
     public SetValue setValue { get; set; }
     public void Clear() { this = default; }
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 
 public struct OpenChapter : GameAction
@@ -979,7 +979,8 @@ public struct OpenChapter : GameAction
         {
             id = source;
         }
-
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -996,7 +997,8 @@ public struct EnterChapter : GameAction
         {
             id = int.Parse(parameters[0].value);
         }
-
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -1018,6 +1020,8 @@ public struct DisplayFilm : GameAction
         {
             path = parameters[1].value;
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, true);
     }
 }
@@ -1039,6 +1043,8 @@ public struct HideFilm : GameAction
         {
             path = parameters[1].value;
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, true);
     }
 }
@@ -1055,6 +1061,8 @@ public struct StopFilm : GameAction
         {
             filmName = parameters[0].value;
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, true);
     }
 }
@@ -1076,6 +1084,8 @@ public struct PlayFilm : GameAction
         {
             assetName = parameters[1].value;
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, true);
     }
 }
@@ -1092,7 +1102,8 @@ public struct PauseFilm : GameAction
         {
             filmName = parameters[0].value;
         }
-
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, true);
     }
 }
@@ -1102,20 +1113,14 @@ public struct EndNowRoundFight : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { set; get; }
     public void Clear() { this = default; }
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 public struct TryStartAutoExplore : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { set; get; }
     public void Clear() { this = default; }
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 
 public struct TryStartAutoBehavior : GameAction
@@ -1123,10 +1128,7 @@ public struct TryStartAutoBehavior : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { set; get; }
     public void Clear() { this = default; }
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 
 public struct SwitchAutoExplore : GameAction
@@ -1135,10 +1137,7 @@ public struct SwitchAutoExplore : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { set; get; }
     public void Clear() { this = default; }
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 
 public struct SetAutoExplore : GameAction
@@ -1153,7 +1152,8 @@ public struct SetAutoExplore : GameAction
         {
             auto = bool.Parse(parameters[0].value);
         }
-
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -1175,6 +1175,8 @@ public struct SwitchFunctionButton : GameAction
         {
             auto = bool.Parse(parameters[1].value);
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

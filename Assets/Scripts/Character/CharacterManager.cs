@@ -1292,7 +1292,8 @@ public class CharacterManager : Singleton<CharacterManager>
 
         if (!(character is TempCharacter))
         {
-            MapCellController.instance.ChangeMapAction(targetCoordinate, defaultDirection?Direction.Default:character.direction, character.mapInstance, ChangeMapAction);
+            MapCellController.instance.ChangeMapAction(targetCoordinate, defaultDirection?Direction.Default:character.direction,
+                character.mapInstance, ChangeMapAction,isPlayer:character==controllerCharacter);
 
             void ChangeMapAction(int3 newMap, int afterAction)
             {

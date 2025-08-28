@@ -15,7 +15,8 @@ public struct PlayerWakeUp : GameAction
         {
             characterId = source;
         }
-
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 
@@ -48,7 +49,9 @@ public struct PlayerSleep : GameAction
         if (value != int.MinValue)
         {
             targetMinute = value;
-        } 
+        }        
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 
@@ -80,6 +83,8 @@ public struct LerpGameTime : GameAction
             targetMinute = int.Parse(parameters[1].value);
         if (parameters.Count > 2)
             totalTime = float.Parse(parameters[2].value);
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 
@@ -92,10 +97,7 @@ public struct ClearOverrideEnvironment : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 public struct WeatherAction : GameAction
 {
@@ -103,20 +105,14 @@ public struct WeatherAction : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 public struct SetSeasonWeather : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    {
-        GameActionManager.instance.QueueAction(this, immediately);
-    }
+    
 }
 public struct SetFixedTime : GameAction
 {
@@ -151,6 +147,8 @@ public struct SetMapOverrideEnvironment : GameAction
             dawnEnvironmentDataName = parameters[2].value;
         if (parameters.Count > 3)
             nightEnvironmentDataName = parameters[3].value;
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

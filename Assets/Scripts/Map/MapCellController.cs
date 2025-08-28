@@ -1194,7 +1194,7 @@ public class MapCellController : Singleton<MapCellController>
     }
  
 
-    public bool ChangeMapAction(int2 nowCoordinate, Direction direction, int nowMap, Int3Action action)
+    public bool ChangeMapAction(int2 nowCoordinate, Direction direction, int nowMap, Int3Action action,bool isPlayer)
     {
         int3 key = new int3(nowCoordinate.xy, nowMap);
         if (mapLinkSet.TryGetValue(key, out var mapLinkCell))
@@ -1204,7 +1204,7 @@ public class MapCellController : Singleton<MapCellController>
                 ChangeMap();
                 async void ChangeMap()
                 {
-                    if (mapLinkCell.afterAction != 0)
+                    if (mapLinkCell.afterAction != 0&& isPlayer)
                     {
                         var actionData = await GameDataManager.instance.GetAsyncData<GameActionData>(mapLinkCell.afterAction);
                         actionData.Action(setResult: (bool value) =>

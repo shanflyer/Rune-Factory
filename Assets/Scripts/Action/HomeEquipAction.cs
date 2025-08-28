@@ -96,7 +96,8 @@ public struct CreatManufature : GameAction
         {
             instanceId = source;
         }
-
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -111,7 +112,8 @@ public struct ClearManufature : GameAction
         {
             manufatureId = int.Parse(parameters[0].value); 
         }
-
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -128,6 +130,8 @@ public struct OpenFormula : GameAction
         }
         if (source > 0)
             formulaId = source;
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

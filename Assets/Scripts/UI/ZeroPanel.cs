@@ -70,7 +70,7 @@ public class ZeroPanel : GamePanel<IReferenceData>
         if (GameController.instance.startPlay)
         {
             Close();
-            GameDataSaveManager.instance.InitPlayerData("Test", Gender.male, Season.´º, 1);
+            GameDataSaveManager.instance.InitPlayerData("Test", Gender.male, Season.æ˜¥, 1);
             StartWorldInit startWorldInit = new StartWorldInit();
             GameActionManager.instance.QueueAction(startWorldInit);
             //SceneManager.instance.SwitchScene("World");
@@ -100,7 +100,7 @@ public class ZeroPanel : GamePanel<IReferenceData>
         Close();
         PlayFilm playFilm = new PlayFilm
         {
-            filmName = "½ÇÉ«Ñ¡Ôñ",
+            filmName = "è§’è‰²é€‰æ‹©",
             assetName = "Default"
         };
         GameActionManager.instance.QueueAction(playFilm, true);

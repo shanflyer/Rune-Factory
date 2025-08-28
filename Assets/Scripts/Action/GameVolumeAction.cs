@@ -27,6 +27,8 @@ public struct DisplaySky : GameAction
         {
             skyId = int.Parse(parameters[2].value);
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -54,6 +56,8 @@ public struct LerpScreenCycleValue : GameAction
             lerpTime = float.Parse(parameters[2].value);
             cyclePos = GameCommon.StringToVector3(parameters[3].value);
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 

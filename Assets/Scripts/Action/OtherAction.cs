@@ -16,6 +16,8 @@ public struct SaveGuideFilmIndexAction : GameAction
         {
             id = source;
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -56,6 +58,8 @@ public struct GameGuideAction : GameAction
         {
             guidKey = source;
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -83,8 +87,7 @@ public struct CheckGameGuideAction : GameAction
             isEnd = target != 0;
         }
         this.setResult = setResult;
-        this.setValue = setValue;
-        
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

@@ -8654,7 +8654,7 @@ PlayableDirector:
   m_GameObject: {fileID: 3291875467427073563}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 11400000, guid: 2628a8b5b65eb574fa0598883e4e8572, type: 2}
+  m_PlayableAsset: {fileID: 11400000, guid: 9d1712fa33ac9c54bb7acaa4ce2987e8, type: 2}
   m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
@@ -8729,6 +8729,22 @@ PlayableDirector:
   - key: {fileID: 7053643737039815576, guid: 2628a8b5b65eb574fa0598883e4e8572, type: 2}
     value: {fileID: 0}
   - key: {fileID: -1313136471143734799, guid: 2628a8b5b65eb574fa0598883e4e8572, type: 2}
+    value: {fileID: 7949554994597011135}
+  - key: {fileID: -8670154811621076676, guid: 9d1712fa33ac9c54bb7acaa4ce2987e8, type: 2}
+    value: {fileID: 114558674675760245}
+  - key: {fileID: -1985006854238758010, guid: 9d1712fa33ac9c54bb7acaa4ce2987e8, type: 2}
+    value: {fileID: 6903162116226931588}
+  - key: {fileID: -3674229019675448863, guid: 9d1712fa33ac9c54bb7acaa4ce2987e8, type: 2}
+    value: {fileID: 5996132679553699504}
+  - key: {fileID: -2821632716749694034, guid: 9d1712fa33ac9c54bb7acaa4ce2987e8, type: 2}
+    value: {fileID: 7949554994597011135}
+  - key: {fileID: -1754845907457488357, guid: 9d1712fa33ac9c54bb7acaa4ce2987e8, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: 8614691584986275302, guid: 9d1712fa33ac9c54bb7acaa4ce2987e8, type: 2}
+    value: {fileID: 6903162116226931588}
+  - key: {fileID: -5596985055359978681, guid: 9d1712fa33ac9c54bb7acaa4ce2987e8, type: 2}
+    value: {fileID: 5996132679553699504}
+  - key: {fileID: 1334410603804361454, guid: 9d1712fa33ac9c54bb7acaa4ce2987e8, type: 2}
     value: {fileID: 7949554994597011135}
   m_ExposedReferences:
     m_References: []
@@ -25965,6 +25981,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: "\u4E3B\u89D2\u5973"
       objectReference: {fileID: 0}
+    - target: {fileID: 3223803242032710617, guid: 51bab4d6ee8a13e499d1033e30bd8349,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6414705054865376410, guid: 51bab4d6ee8a13e499d1033e30bd8349,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -26025,6 +26046,12 @@ PrefabInstance:
 --- !u!4 &2778203453033499123 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6414705054865376410, guid: 51bab4d6ee8a13e499d1033e30bd8349,
+    type: 3}
+  m_PrefabInstance: {fileID: 9190638548895927657}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &5996132679553699504 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 3223803242032710617, guid: 51bab4d6ee8a13e499d1033e30bd8349,
     type: 3}
   m_PrefabInstance: {fileID: 9190638548895927657}
   m_PrefabAsset: {fileID: 0}
