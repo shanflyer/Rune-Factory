@@ -5,6 +5,11 @@ using System.Reflection;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using Unity.Transforms;
+using UnityEngine.InputSystem.HID;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class GamePanel<V> : BaseReference where V:IReferenceData
 {
@@ -84,20 +89,27 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
             }
         }
 
+
     }
     public override void SetPanelUISerializeObj()
     {
+#if UNITY_EDITOR
         base.SetPanelUISerializeObj();
         InitChildObjData();
+     
         var uiObjReferences = gameObject.GetComponentsInChildren<BaseReference>(true);
-        foreach(var uiObj in uiObjReferences)
+        foreach (var uiObj in uiObjReferences)
         {
+            Undo.RecordObject(uiObj, "SetPanelUISerializeObj");
             if (uiObj == this)
             {
                 continue;
             }
             uiObj.SetPanelUISerializeObj();
         }
+        EditorUtility.SetDirty(gameObject);
+#endif
+
 
     }
     

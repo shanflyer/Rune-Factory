@@ -143,34 +143,38 @@ public struct CheckFieldState : GameAction
     }
 }
 
-public struct TryCreatField : GameAction
+public struct TryCreateField : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }  public void Clear(){this = default; }
+    public SetResult setResult { get; set; }
+    public void Clear() { this = default; }
     public int roomId;
     public int itemInstanceId;
-    public int2 coordinate;
-    public bool noSaveRefresh;
+    public int editorInstanceId; 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
+       
         if (parameters.Count > 0)
         {
-            roomId = int.Parse(parameters[0].value);
+            itemInstanceId = int.Parse(parameters[0].value);
         }
         if (parameters.Count > 1)
         {
-            itemInstanceId = int.Parse(parameters[1].value);
+            editorInstanceId = int.Parse(parameters[1].value);
+        }
+        if (parameters.Count > 2)
+        {
+            roomId = int.Parse(parameters[2].value);
         }
         if (source != 0)
         {
-            roomId = source;
+            itemInstanceId  = source;
+            editorInstanceId = target;
+            roomId = value;
         }
-        if (target != 0)
-        {
-            itemInstanceId = target;
-        }
+        
         this.setResult = setResult;
-        this.setValue=setValue;
+        this.setValue = setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

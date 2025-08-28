@@ -8,7 +8,6 @@ public class FarmManager : Singleton<FarmManager>
     private Dictionary<int, Field> fields = new Dictionary<int, Field>();
     //private Dictionary<int, Plant> plants = new Dictionary<int, Plant>();
 
-    private Dictionary<int, List<FieldArea>> FieldAreas = new Dictionary<int, List<FieldArea>>();
 
     protected override void Clear()
     {
@@ -23,18 +22,7 @@ public class FarmManager : Singleton<FarmManager>
         fields.Clear();
         // plants.Clear();
 
-        var allFieldAreas = await GameDataManager.instance.GetAllAsyncData<FieldArea>();
-        for (int i = 0; i < allFieldAreas.Count; i++)
-        {
-            var fieldArea = allFieldAreas[i];
-            if (!FieldAreas.TryGetValue(fieldArea.mapId, out var fieldAreas))
-            {
-                fieldAreas = new List<FieldArea>();
-                FieldAreas[fieldArea.mapId] = fieldAreas;
-            }
-            fieldAreas.Add(fieldArea);
-        }
-        GameActionManager.instance.AddListener<TryCreatField>(TryCreatField);
+        GameActionManager.instance.AddListener<TryCreateField>(TryCreateField);
         GameActionManager.instance.AddListener<CheckFieldState>(CheckFieldState);
         GameActionManager.instance.AddListener<TrySmoothField>(TrySmoothField);
         GameActionManager.instance.AddListener<TryCreatPlant>(TryCreatPlant);
@@ -97,9 +85,11 @@ public class FarmManager : Singleton<FarmManager>
                 waterHour = fieldSaveData.waterHour
                
             };
-            var PlantData = await GameDataManager.instance.GetAsyncData<PlantData>(fieldSaveData.PlantDataId);
+            fields.Add(instanceId, field);
+          
             if (fieldSaveData.PlantinstaceId != 0)
             {
+                var PlantData = await GameDataManager.instance.GetAsyncData<PlantData>(fieldSaveData.PlantDataId);
                 field.plant = new Plant(fieldSaveData.PlantinstaceId, PlantData, field.instanceId, field.isSetWater,fieldSaveData.plantState,fieldSaveData.nowCycle); 
                 
                 AddMapItem addMapItem = new AddMapItem
@@ -111,7 +101,7 @@ public class FarmManager : Singleton<FarmManager>
                 };
                 GameActionManager.instance.QueueAction(addMapItem);
             } 
-            fields.Add(instanceId, field);
+          
             field.RefreshField();
             //GameDataSaveManager.instance.UserGameSaveData.SetFieldData(field);
         }
@@ -125,54 +115,25 @@ public class FarmManager : Singleton<FarmManager>
             field.SetData(fieldSaveData.fieldState, fieldSaveData.isSetWater, fieldSaveData.waterHour);
         }
     }
-    private void TryCreatField(TryCreatField tryCreatField)
+    void TryCreateField(TryCreateField tryCreateField)
     {
-        if (FieldAreas.TryGetValue(tryCreatField.roomId, out var fieldAreas))
+        int2 editorKey = new int2(tryCreateField.roomId, tryCreateField.editorInstanceId);
+        int instanceId = tryCreateField.itemInstanceId;
+        GameDataSaveManager.instance.UserGameSaveData.SaveSpecialMapItem(editorKey, instanceId);
+        if (!fields.ContainsKey(instanceId))
         {
-            for (int i = 0; i < fieldAreas.Count; i++)
+            if(WorldMapManager.instance.GetRuntimeMapItem(instanceId,out var runtimeMapItem))
             {
-                if (fieldAreas[i].fields.Contains(tryCreatField.itemInstanceId))
+                Field field = new Field
                 {
-                    int2 editorKey = new int2(tryCreatField.roomId, tryCreatField.itemInstanceId);
-                    int instanceId = WorldMapManager.instance.GetInstanceFromEditorId(editorKey);
-                    GameDataSaveManager.instance.UserGameSaveData.SaveSpecialMapItem(editorKey, instanceId);
-                    if (!fields.ContainsKey(instanceId))
-                    {
-                        Field field = new Field
-                        {
-                            instanceId = instanceId,
-                            mapInstance = tryCreatField.roomId,
-                            coordinate = tryCreatField.coordinate,
-                            editorInstanceId=tryCreatField.itemInstanceId,
-                            fieldState = FieldState.待平整
-                        };
-                        fields.Add(instanceId, field);
-                        if (!tryCreatField.noSaveRefresh)
-                        {
-                            field.RefreshField();
-                        }
-                       
-                    }
-                }
-            }
-            /*
-            if(fieldArea.open)
-            {
-                for (int i = 0; i < fieldArea.fields.Count; i++)
-                {
-                    int2 editorKey = new int2(tryCreatField.roomId,fieldArea.fields[i]);
-                    int instanceId = WorldMapManager.instance.GetInstanceFromEditorId(editorKey);
-                    if (!fields.Contains(instanceId))
-                    {
-                        Field field = new Field
-                        {
-                            instanceId = instanceId,
-                            fieldState = FieldState.待平整
-                        };
-                        fields.SetData(field);
-                    }
-                }
-            }*/
+                    instanceId = instanceId,
+                    mapInstance = tryCreateField.roomId,
+                    coordinate = runtimeMapItem.coordinate,
+                    editorInstanceId = tryCreateField.itemInstanceId,
+                    fieldState = FieldState.待平整
+                };
+                fields.Add(instanceId, field);
+            } 
         }
     }
 

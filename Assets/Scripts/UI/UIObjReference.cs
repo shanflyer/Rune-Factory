@@ -106,29 +106,38 @@ public class UIObjReference<T> : BaseReference
         {
             for (int i = 0; i < fields.Length; i++)
             {
-                var field = fields[i];
-                string keyName = field.Name;
-                if (field.Name.Contains("_"))
+                try
                 {
-                    keyName = field.Name.Split('_')[0];
-                }
-                if (string.IsNullOrEmpty(keyName))
-                {
-                    var component = gameObject.GetComponent(field.FieldType);
-                    field.SetValue(this, component);
-                }
-                else
-                if (objectDatas.TryGetValue(keyName, out var transform))
-                {
-                    try
+                    var field = fields[i];
+                    string keyName = field.Name;
+                    if (field.Name.Contains("_"))
                     {
-                        var component = transform.GetComponent(field.FieldType);
+                        keyName = field.Name.Split('_')[0];
+                    }
+                    if (string.IsNullOrEmpty(keyName))
+                    {
+                        var component = gameObject.GetComponent(field.FieldType);
                         field.SetValue(this, component);
                     }
-                    finally { }
+                    else
+                    if (objectDatas.TryGetValue(keyName, out var transform))
+                    {
+                        try
+                        {
+                            var component = transform.GetComponent(field.FieldType);
+                            field.SetValue(this, component);
+                        }
+                        finally { }
+                    }
                 }
+                catch
+                {
+
+                }
+                
             }
         }
+        
     }
 
     public override void SetPanelUISerializeObj()

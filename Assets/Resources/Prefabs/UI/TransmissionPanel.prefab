@@ -2184,7 +2184,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1763306340070103789}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 981cf65d2883f134aaea5324309a1180, type: 3}
   m_Name: 
@@ -2199,9 +2199,9 @@ MonoBehaviour:
   ChildMap: {fileID: 4104179140092858292}
   NPC: {fileID: 254324345191746398}
   Scroll: {fileID: 1536356091395912401}
-  ViewSlider: {fileID: 0}
-  MapImage: {fileID: 0}
-  FightMap: {fileID: 0}
+  ViewSlider: {fileID: 8255245896140689741}
+  MapImage: {fileID: 5154538167231803594}
+  FightMap: {fileID: 437296770604362397}
 --- !u!1 &1817765817882598634
 GameObject:
   m_ObjectHideFlags: 0
@@ -5870,7 +5870,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -460, y: 0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 0.000061035156}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1680906111731474746
@@ -6766,7 +6766,7 @@ MonoBehaviour:
   HideSelected: 0
   m_HandleRect: {fileID: 6921573902400464021}
   m_Direction: 0
-  m_Value: 1
+  m_Value: 0
   m_Size: 0.58181816
   m_NumberOfSteps: 0
   m_OnValueChanged:
