@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
 public struct PlayerWakeUp : GameAction
 {
@@ -97,6 +96,13 @@ public struct ClearOverrideEnvironment : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
     
 }
 public struct WeatherAction : GameAction
@@ -105,14 +111,26 @@ public struct WeatherAction : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
-    
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
 }
 public struct SetSeasonWeather : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
-    
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
 }
 public struct SetFixedTime : GameAction
 {
@@ -120,6 +138,14 @@ public struct SetFixedTime : GameAction
     public int hour;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
 }
 public struct SetFixedSeason : GameAction
 {
@@ -127,6 +153,14 @@ public struct SetFixedSeason : GameAction
     public WeatherDisplayType weatherDisplayType;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
 }
 public struct SetMapOverrideEnvironment : GameAction
 {
@@ -158,6 +192,14 @@ public struct CreatWeather : GameAction
     public List<int> nowWeathers, nextWeather;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
 }
 public struct SetWeather : GameAction
 {
@@ -165,12 +207,28 @@ public struct SetWeather : GameAction
     public bool noLerp;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
 }
 public struct SetEnvironmentLight : GameAction
 {
     public EnvironmentLightData environmentLightData;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
 }
 
 public struct OverrideEnvironmentLight : GameAction
@@ -179,10 +237,26 @@ public struct OverrideEnvironmentLight : GameAction
     public EnvironmentLightData environmentLightData;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
 }
 
 public struct ClearOverrideEnvironmentLight : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
 }

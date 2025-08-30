@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Unity.Mathematics;
 
 public struct RefreshField : GameAction
 {
@@ -85,6 +84,13 @@ public struct SetWaterField : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
     
 }
 
@@ -95,6 +101,13 @@ public struct TryCreatPlant : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
     
 }
 
@@ -104,6 +117,13 @@ public struct TrySmoothField : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
     
 }
 public struct CheckPlant : GameAction

@@ -1,6 +1,4 @@
-﻿
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Unity.Mathematics;
 
 public struct SetChapterFight : GameAction
@@ -9,13 +7,26 @@ public struct SetChapterFight : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
-    
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
 }
 public struct ManualSkillAction : GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }  public void Clear(){this = default; } 
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
     
 }
 public struct SkillAutoLock : GameAction
@@ -62,12 +73,26 @@ public struct AddBuffAction : GameAction
     public int2 overrideAddValue;
     public int2 overrideMulValue;
 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
 }
 public struct NoSelectSkillAction: GameAction
 {
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }  public void Clear(){this = default; } 
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
 }
 public struct SelectSkillAction : GameAction
 {

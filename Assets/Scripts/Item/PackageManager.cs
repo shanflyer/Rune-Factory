@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 public class PackageManager : Singleton<PackageManager>
 {
@@ -934,9 +933,13 @@ public class PackageManager : Singleton<PackageManager>
         {
             return -1;
         }
-
-
-        PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(dataId); 
+ 
+        PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(dataId);
+        if (packageSetData == null)
+        {
+            Debug.LogError($"null packageSetData:{dataId}");
+            return -1;
+        }
         int nowCount = packageSetData.count + packageSetData.levelUpAddCount * level;
         GamePackage gamePackage = new GamePackage(nowCount, packageSetData.name, packageInstanceId, packageSetData,level);
         gamePackages.Add(packageInstanceId, gamePackage);

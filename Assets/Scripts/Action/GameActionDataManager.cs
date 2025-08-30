@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
@@ -24,6 +25,17 @@ public class GameActionDataManager : Singleton<GameActionDataManager>
                 Type type = Type.GetType(typeName);
                 var data = Activator.CreateInstance(type);
                 MethodInfo meth = type.GetMethod("Init");
+                if (meth == null)
+                {
+                    var interfaces = type.GetInterfaces().Except(type.BaseType?.GetInterfaces() ?? Type.EmptyTypes)
+                        .ToArray();
+
+                    foreach (var face in interfaces)
+                    {
+                        meth = face.GetMethod("Init");
+                        if (meth != null) break;
+                    }
+                }
                 var _Delegate = (ActionInit)meth.CreateDelegate(typeof(ActionInit), data);
 
                 _Delegate.Invoke(parameters, source, target, value, setResult, setValue);
