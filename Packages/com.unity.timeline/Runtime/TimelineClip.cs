@@ -643,6 +643,7 @@ namespace UnityEngine.Timeline
         {
             get
             {
+                if (overideClip != null) return overideClip;
                 if (m_Asset == null)
                     return null;
 
@@ -651,6 +652,24 @@ namespace UnityEngine.Timeline
             }
         }
 
+        public AnimationClip assetClip
+        {
+            get
+            {
+                if (m_Asset == null)
+                    return null;
+
+                var playableAsset = m_Asset as AnimationPlayableAsset;
+                return playableAsset != null ? playableAsset.clip : null;
+            }
+        }
+
+        public void ClearOverride()
+        {
+            overideClip = null;
+        }
+
+        public AnimationClip overideClip;
         static double SanitizeTimeValue(double value, double defaultValue)
         {
             if (double.IsInfinity(value) || double.IsNaN(value))

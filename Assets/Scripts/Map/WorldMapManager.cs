@@ -1,8 +1,6 @@
-﻿using ProFlares;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -460,7 +458,18 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
         return -1;
     }
-     
+
+    public bool GetRuntimeMapItem(int2 editorKey, out RuntimeMapItem runtimeMapItem)
+    {
+        if (editorItemRemapInstanceIds.TryGetValue(editorKey, out var instanceid))
+        {
+            runtimeMapItem = runtimeMapItems[instanceid];
+            return true;
+        }
+
+        runtimeMapItem = null;
+        return false;
+    }
     public bool GetRuntimeMapItem(int instanceId, out RuntimeMapItem runtimeMapItem)
     {
         return runtimeMapItems.TryGetValue(instanceId, out runtimeMapItem);

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Unity.Mathematics;
-using Unity.Mathematics.Geometry;
-using UnityEngine; 
+using UnityEngine;
 
 public struct CharacterEquipAndPropertyData
 {
@@ -17,7 +15,7 @@ public struct CharacterEquipAndPropertyData
     public CharacterProperty characterProperty;
 }
 
-[System.Serializable]
+[Serializable]
 public struct CharacterProperty
 {
     public int HP, MP, Power, MaxHP, MaxMP, MaxPower, AT, DF, Lucky,Speed;
@@ -1511,6 +1509,34 @@ public partial class Character
        await  GameEventManager.instance.AddGameEvent(eventid, eventReferenceDatas);
     }
 
+    public void SetTriggerMapItem(int reference, int eventId)
+    {
+        oldOperateItem = reference;
+        var showMapObjTips = new ShowMapObjTips
+        {
+            id = reference
+        };
+        GameActionManager.instance.QueueAction(showMapObjTips, true);
+
+        var triggerEnter = new TriggerEnter
+        {
+            eventId = reference
+        };
+        GameActionManager.instance.QueueAction(triggerEnter, true);
+        var eventReferenceDatas = new List<EventReferenceData>(2);
+        eventReferenceDatas.Add(new EventReferenceData
+        {
+            name = GameCommon.characterTriggerRenferenceName,
+            value = instanceId
+        });
+        eventReferenceDatas.Add(new EventReferenceData
+        {
+            name = GameCommon.triggerRenferenceName,
+            value = reference
+        });
+
+        GameEventManager.instance.AddGameEvent(eventId, eventReferenceDatas);
+    }
     /// <summary>
     /// 设置坐标
     /// </summary>

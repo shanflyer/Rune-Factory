@@ -1281,6 +1281,34 @@ public struct DisplayOrHideCharacter : GameAction
     }
 }
 
+public struct SetCharacterTriggerItem : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Clear()
+    {
+        this = default;
+    }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count >= 3)
+        {
+            characterId = int.Parse(parameters[0].value);
+            mapItemEditId.x = int.Parse(parameters[1].value);
+            mapItemEditId.y = int.Parse(parameters[2].value);
+        }
+
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+
+    public int characterId;
+    public int2 mapItemEditId;
+}
 public struct SetCharacterCoordinate : GameAction
 {
     public SetValue setValue { get; set; }

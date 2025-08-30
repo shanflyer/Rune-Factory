@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks; 
+using System.Threading.Tasks;
+using MyGame;
 using Unity.Mathematics;
 using UnityEngine;
-using MyGame;
-using UnityEngine.TextCore.Text;
 
 public delegate void MoveEndAction(); 
  
@@ -112,7 +110,7 @@ public class CharacterManager : Singleton<CharacterManager>
             {
                 if (npc.isSleep)
                 {
-                    CharacterManager.instance.RefreshSleep(character);
+                    instance.RefreshSleep(character);
                 }
             }
 
@@ -169,6 +167,8 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<SetTempCharacterTarget>(SetTempCharacterTarget);
         GameActionManager.instance.AddListener<SetCharacterStopCreate>(SetCharacterStopCreate);
         GameActionManager.instance.AddListener<ChangeMap>(ChangeMap);
+
+        GameActionManager.instance.AddListener<SetCharacterTriggerItem>(SetCharacterTriggerItem);
     }
     void ChangeMap(ChangeMap  changeMap)
     {
@@ -1195,6 +1195,21 @@ public class CharacterManager : Singleton<CharacterManager>
              );
     }
 
+    private void SetCharacterTriggerItem(SetCharacterTriggerItem SetCharacterTriggerItem)
+    {
+        Character character = null;
+        if (SetCharacterTriggerItem.characterId == 0)
+        {
+            character = controllerCharacter;
+        }
+        else if (characters.TryGetValue(SetCharacterTriggerItem.characterId, out character))
+        {
+        }
+
+        if (character != null)
+            if (WorldMapManager.instance.GetRuntimeMapItem(SetCharacterTriggerItem.mapItemEditId, out var runtimeObj))
+                character.SetTriggerMapItem(runtimeObj.instanceId, runtimeObj.mapItemData.playerTriggerEvent);
+    }
     public void FixedTransMap(Character character, int3 coordinate)
     {
         ChangeMapAction(character, coordinate, 0);
