@@ -924,8 +924,8 @@ public partial class Character
         }
         set
         {
-            var bool2 = _moveDirection != value;
-            if (bool2.x || bool2.y)
+            // var bool2 = _moveDirection != value;
+            // if (bool2.x || bool2.y)
             {
                 _moveDirection = value;
                 if (_moveDirection.x == float.NaN)

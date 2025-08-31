@@ -21,7 +21,7 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
         [ReadOnly] public NativeArray<float2> SourceVertices;
         [ReadOnly] public NativeArray<float2> SourceUVs;
         [ReadOnly] public NativeArray<ushort> SourceTriangles;
-        [ReadOnly] public float2 PivotOffset; // ÊàÖáÆ«ÒÆÁ¿£¨ÏñËØµ¥Î»£©
+        [ReadOnly] public float2 PivotOffset; // æ¢è½´åç§»é‡ï¼ˆåƒç´ å•ä½ï¼‰
 
         [WriteOnly] public NativeArray<float3> OutputVertices;
         [WriteOnly] public NativeArray<float2> OutputUVs;
@@ -29,19 +29,19 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
 
         public void Execute(int index)
         {
-            // ´¦Àí¶¥µã×ø±ê£¨×ª»»µ½ÒÔÊàÖáÎªÖĞĞÄ£©
+            // å¤„ç†é¡¶ç‚¹åæ ‡ï¼ˆè½¬æ¢åˆ°ä»¥æ¢è½´ä¸ºä¸­å¿ƒï¼‰
             if (index < SourceVertices.Length)
             {
                 float2 vertex = SourceVertices[index];
                 OutputVertices[index] = new float3(
-                    (vertex.x - PivotOffset.x), // ÒÑ×ª»»ÎªÒÔÊàÖáÎªÔ­µã
+                    (vertex.x - PivotOffset.x), // å·²è½¬æ¢ä¸ºä»¥æ¢è½´ä¸ºåŸç‚¹
                     (vertex.y - PivotOffset.y),
                     0
                 );
                 OutputUVs[index] = SourceUVs[index];
             }
 
-            // ´¦ÀíÈı½ÇĞÎË÷Òı
+            // å¤„ç†ä¸‰è§’å½¢ç´¢å¼•
             if (index < SourceTriangles.Length)
             {
                 OutputTriangles[index] = SourceTriangles[index];
@@ -93,23 +93,23 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
 
     private Mesh GenerateSpriteMesh(Sprite sprite)
     {
-        // »ñÈ¡Ô­Ê¼Êı¾İ£¨¶¥µãÒÑ°üº¬ÕıÈ·µÄpivotÆ«ÒÆ£©
+        // è·å–åŸå§‹æ•°æ®ï¼ˆé¡¶ç‚¹å·²åŒ…å«æ­£ç¡®çš„pivotåç§»ï¼‰
         Vector2[] spriteVertices = sprite.vertices;
         Vector2[] spriteUV = sprite.uv;
         ushort[] spriteTriangles = sprite.triangles;
 
-        // ¼ÆËãÊàÖáÆ«ÒÆÁ¿£¨×ª»»ÎªÏñËØ×ø±ê£©
+        // è®¡ç®—æ¢è½´åç§»é‡ï¼ˆè½¬æ¢ä¸ºåƒç´ åæ ‡ï¼‰
         float2 pivotOffset = new float2(
             sprite.pivot.x/ sprite.pixelsPerUnit,
             sprite.pivot.y/ sprite.pixelsPerUnit
         );
 
 
-        // ×¼±¸NativeÊı¾İ
+        // å‡†å¤‡Nativeæ•°æ®
         NativeArray<float2> inputVertices = new NativeArray<float2>(spriteVertices.Length, Allocator.TempJob);
         for (int i = 0; i < spriteVertices.Length; i++)
         {
-            // ×ª»»¶¥µãµ½ÏñËØ×ø±ê
+            // è½¬æ¢é¡¶ç‚¹åˆ°åƒç´ åæ ‡
             inputVertices[i] = new float2(
                 spriteVertices[i].x ,
                 spriteVertices[i].y
@@ -127,7 +127,7 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
         NativeArray<float2> outputUVs = new NativeArray<float2>(spriteUV.Length, Allocator.TempJob);
         NativeArray<int> outputTriangles = new NativeArray<int>(spriteTriangles.Length, Allocator.TempJob);
 
-        // ÉèÖÃJob²ÎÊı
+        // è®¾ç½®Jobå‚æ•°
         var job = new MeshGenerationJob
         {
             SourceVertices = inputVertices,
@@ -138,12 +138,12 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
             OutputTriangles = outputTriangles
         };
 
-        // µ÷¶ÈJob
+        // è°ƒåº¦Job
         int totalElements = Mathf.Max(spriteVertices.Length, spriteTriangles.Length);
         JobHandle handle = job.Schedule(totalElements, 64);
         handle.Complete();
 
-        // ×ª»»»ØUnityÀàĞÍ
+        // è½¬æ¢å›Unityç±»å‹
         Vector3[] finalVertices = new Vector3[outputVertices.Length];
         for (int i = 0; i < outputVertices.Length; i++)
             finalVertices[i] = outputVertices[i];
@@ -152,7 +152,7 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
         for (int i = 0; i < outputUVs.Length; i++)
             finalUVs[i] = outputUVs[i];
 
-        // ´´½¨Mesh
+        // åˆ›å»ºMesh
         Mesh mesh = new Mesh();
         mesh.name = $"SpriteMesh_{sprite.GetInstanceID()}";
         mesh.SetVertices(finalVertices);
@@ -164,10 +164,10 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
             mesh.RecalculateNormals();
         }
 
-        // 2. Éú³ÉÇĞÏß
+        // 2. ç”Ÿæˆåˆ‡çº¿
         mesh.RecalculateTangents();
 
-        // ÇåÀíNativeÄÚ´æ
+        // æ¸…ç†Nativeå†…å­˜
         inputVertices.Dispose();
         inputUVs.Dispose();
         inputTriangles.Dispose();
@@ -182,7 +182,7 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
     {
         if (vertices.Length == 0) return new Bounds();
 
-        // ¼ÆËã¸÷Öá×î´óÆ«ÒÆÁ¿
+        // è®¡ç®—å„è½´æœ€å¤§åç§»é‡
         float maxX = 0, maxY = 0;
         foreach (Vector3 vertex in vertices)
         {
@@ -190,11 +190,11 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
             maxY = Mathf.Max(maxY, Mathf.Abs(vertex.y));
         }
 
-        // ´´½¨ÒÔÊàÖáÎªÖĞĞÄµÄ°üÎ§ºĞ
+        // åˆ›å»ºä»¥æ¢è½´ä¸ºä¸­å¿ƒçš„åŒ…å›´ç›’
         return new Bounds(
-            Vector3.zero, // ÖĞĞÄµãÊ¼ÖÕÎªÔ­µã
+            Vector3.zero, // ä¸­å¿ƒç‚¹å§‹ç»ˆä¸ºåŸç‚¹
             new Vector3(
-                maxX * 2, // ×ª»»ÎªUnityµ¥Î»
+                maxX * 2, // è½¬æ¢ä¸ºUnityå•ä½
                 maxY * 2,
                 0.1f
             )
