@@ -1072,7 +1072,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 character.nowSpeed = 0;
                 if (runtimeObj != null)
                     SetCharacterAnimationSpeed(0, runtimeObj);
-                CrossMap(targetCoordinate, character, out int3 newMap, EndAction);
+                CrossMap(targetCoordinate, character, EndAction);
                 if (changeCoordinateAction != null)
                 {
                     changeCoordinateAction.Invoke();
@@ -1184,8 +1184,8 @@ public class CharacterManager : Singleton<CharacterManager>
                             runtimeObj.runtimeObj = null; 
                         runtimeObj = null;
                     }
-                        
-                    CrossMap(targetCoordinate, character, out int3 newMap, EndAction,true);
+
+                    CrossMap(targetCoordinate, character, EndAction, true);
                 }
                 if (changeCoordinateAction != null)
                 {
@@ -1224,11 +1224,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             character.StopMove();
             character.canMove = false;
-            character.SetCoordinate(new int3(targetCoordinate, targetMap), false);
-            await SetPlayerPos(character, true);
-            await WorldMapObjManager.instance.DisplayMap(targetMap);
-            character.canMove = true;
-            /*
+            
              LerpScreenCycleValue lerpScreenCycleValue = new LerpScreenCycleValue
             {
                 cyclePos = GameCommon.GetMapPos(character.coordinate),
@@ -1237,10 +1233,10 @@ public class CharacterManager : Singleton<CharacterManager>
                 lerpTime = GameCommon.mapChangeLerpTime
             };
             GameActionManager.instance.QueueAction(lerpScreenCycleValue, true);
-            character.SetCoordinate(new int3(targetCoordinate, targetMap),false);
-
+           
             GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), async () =>
-            { 
+            {
+                character.SetCoordinate(new int3(targetCoordinate, targetMap), false);
                 await SetPlayerPos(character,true);
                 await WorldMapObjManager.instance.DisplayMap(targetMap);
                  
@@ -1268,29 +1264,14 @@ public class CharacterManager : Singleton<CharacterManager>
                             }
                         }
 
-                        if (characterRuntionObjs.TryGetValue(character, out CharacterRuntimeObj characterRuntimeObj))
-                        {
-                            Vector2 pos = characterRuntimeObj.transform.position;
-                            if (GameDataManager.instance.GlobalData.debug)
-                            {
-                                float dX = math.abs(characterRuntimeObj.transform.position.x - pos.x);
-                                if (dX >= 1.5)
-                                {
-                                    Debug.Log($"Waring1:{character.name}--oldPos{characterRuntimeObj.transform.position}--newPos{pos}");
-                                }
-                            }
-                            characterRuntimeObj.SetPosition(pos); 
-                            characterRuntimeObj.SetAnimationDirection(character.moveDirection,character.direction); 
-                        }
+                        await SetPlayerPos(character, true);
+                         
                         character.canMove = true;
                     }
                     GameActionManager.instance.QueueAction(lerpScreenCycleValue, true);
                 });
             });
-             */
-
-
-
+            
         }
         else if (!(character is TempCharacter))
         {
@@ -1300,14 +1281,16 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    public bool CrossMap(int2 targetCoordinate, Character character, out int3 newMap, MoveEndAction EndAction = null,bool defaultDirection=false)
+    public bool CrossMap(int2 targetCoordinate, Character character, MoveEndAction EndAction = null,
+        bool defaultDirection = false)
     {
         // int2 offsetCoordinate = targetCoordinate - character.coordinate;
         character.SetCoordinate(new int3(targetCoordinate.xy, character.mapInstance), !character.isController,false);
-
+        var crossed = false;
         if (!(character is TempCharacter))
         {
-            MapCellController.instance.ChangeMapAction(targetCoordinate, defaultDirection?Direction.Default:character.direction,
+            crossed = MapCellController.instance.ChangeMapAction(targetCoordinate,
+                defaultDirection ? Direction.Default : character.direction,
                 character.mapInstance, ChangeMapAction,isPlayer:character==controllerCharacter);
 
             void ChangeMapAction(int3 newMap, int afterAction)
@@ -1315,53 +1298,8 @@ public class CharacterManager : Singleton<CharacterManager>
                 this.ChangeMapAction(character, newMap, afterAction);
             }
         }
-        /*
-        if (character.CanMoveCrossMap &&
-            MapCellController.instance.ChangeMap(targetCoordinate, character.direction, character.mapInstance, out newMap))
-        {
-            int targetMap = newMap.z;
-            targetCoordinate = new int2(newMap.x, newMap.y);
-
-            if (character == controllerCharacter)
-            {
-                character.StopMove();
-                LerpScreenCycleValue lerpScreenCycleValue = new LerpScreenCycleValue
-                {
-                    cyclePos = GameCommon.GetMapPos(character.coordinate),
-                    minCycleValue = 0,
-                    maxCycleValue = 1,
-                    lerpTime = GameCommon.mapChangeLerpTime
-                };
-                GameActionManager.instance.QueueAction(lerpScreenCycleValue,true);
-                character.SetCoordinate(new int3(targetCoordinate, targetMap));
-
-                GameTimerController.instance.DeleyActionMain((int)(GameCommon.mapChangeLerpTime * 1000), async () =>
-                {
-                    WorldMapObjManager.instance.RecycleMap();
-                    await   WorldMapObjManager.instance.DisplayMap(targetMap);
-                    SetPlayerPos(character);
-
-                    GameTimerController.instance.DeleyActionMain((int)(GameCommon.mapChangeLerpTime * 1000), () =>
-                    {
-                        LerpScreenCycleValue lerpScreenCycleValue = new LerpScreenCycleValue
-                        {
-                            cyclePos = GameCommon.GetMapPos(character.coordinate),
-                            minCycleValue = 1,
-                            maxCycleValue = 0,
-                            lerpTime = GameCommon.mapChangeLerpTime
-                        };
-                        GameActionManager.instance.QueueAction(lerpScreenCycleValue, true);
-                    });
-                });
-            }
-            else
-            {
-                SetPlayerPos(character);
-            }
-        }*/
         EndAction?.Invoke();
-        newMap = int3.zero;
-        return false;
+        return crossed;
     }
 
     public CharacterData GetCharacterDataFromInstance(int Id)
@@ -1823,7 +1761,7 @@ public class CharacterManager : Singleton<CharacterManager>
                     if (controllerCharacter.coordinate.x != targetCoordinate.x ||
                     controllerCharacter.coordinate.y != targetCoordinate.y)
                     {
-                        CrossMap(targetCoordinate, controllerCharacter, out int3 newMap);
+                        CrossMap(targetCoordinate, controllerCharacter);
                         //  Debug.Log($"targetCoordinate:{targetCoordinate}-controllerCharacter:{controllerCharacter.coordinate}");
                         TryTeamLeaderSetCoordinate tryTeamLeaderSetCoordinate = new TryTeamLeaderSetCoordinate
                         {

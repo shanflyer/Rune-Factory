@@ -370,12 +370,17 @@ public struct CreatPackage : GameAction
             {
                 instanceId = int.Parse(parameters[2].value);
             }
-            if (source != 0 && source != int.MinValue)
-                instanceId = source;
-            if (target != 0 && target != int.MinValue)
-                packageDataId = target;
-            if (value != 0 && value != int.MinValue)
-                level = value;
+
+            if (target < 20)
+            {
+                if (source != 0 && source != int.MinValue)
+                    instanceId = source;
+                if (target != 0 && target != int.MinValue)
+                    packageDataId = target;
+                if (value != 0 && value != int.MinValue)
+                    level = value;
+            }
+            
         }
         else
         {

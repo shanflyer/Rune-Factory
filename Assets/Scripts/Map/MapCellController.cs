@@ -1153,6 +1153,8 @@ public class MapCellController : Singleton<MapCellController>
                 ChangeMap();
                 async void ChangeMap()
                 {
+                    action.Invoke(mapLinkCell.targetCell, mapLinkCell.afterAction);
+                    /*
                     if (mapLinkCell.afterAction != 0&& isPlayer)
                     {
                         var actionData = await GameDataManager.instance.GetAsyncData<GameActionData>(mapLinkCell.afterAction);
@@ -1164,7 +1166,7 @@ public class MapCellController : Singleton<MapCellController>
                     else
                     {
                         action.Invoke(mapLinkCell.targetCell, mapLinkCell.afterAction);
-                    }
+                    }*/
                 }
                 return true;
             }

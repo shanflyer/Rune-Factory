@@ -928,12 +928,13 @@ public class PackageManager : Singleton<PackageManager>
 
     public async Task<int> CreatGamePackage(int dataId, int level, int instanceId = 0)
     {
+        if (dataId == 0) return -1;
         int packageInstanceId = instanceId == 0 ? MyInstance.instance.Uid : instanceId;
         if(gamePackages.ContainsKey(packageInstanceId))
         {
             return -1;
         }
- 
+        
         PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(dataId);
         if (packageSetData == null)
         {

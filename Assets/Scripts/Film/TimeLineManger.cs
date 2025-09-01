@@ -49,10 +49,10 @@ public class TimeLineManger : Singleton<TimeLineManger>
                     }
 
                 int i = 0;
-                while (playBindings.MoveNext() && i < bindDatas.Count)
+                while (playBindings.MoveNext())
                 {
-                    var sourceObject = playBindings.Current.sourceObject; 
-                    var bindData = bindDatas[i];
+                    var sourceObject = playBindings.Current.sourceObject;
+                    var bindData = i < bindDatas.Count ? bindDatas[i] : default;
                     string streamName = playBindings.Current.streamName;
                     Animator animator=null; 
                     if (streamName == bindData.outName)
