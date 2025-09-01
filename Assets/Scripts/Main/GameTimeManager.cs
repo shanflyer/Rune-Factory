@@ -1,13 +1,11 @@
-﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
-using UnityEditor.Purchasing;
 using UnityEngine;
 
-[System.Serializable]
+[Serializable]
 public enum Week
 {
     SunDay = 0,
@@ -18,13 +16,13 @@ public enum Week
     FriDay = 5
 }
 
-[System.Serializable]
+[Serializable]
 public enum Season
 {
     Default = 0, 春 = 1, 夏 = 2, 秋 = 3, 冬 = 4
 }
 
-[System.Serializable]
+[Serializable]
 public class GameDate : IReferenceData, INativeData
 {
     public Season season;
@@ -74,7 +72,7 @@ public class GameDate : IReferenceData, INativeData
 
 public class GameTimeManager : Singleton<GameTimeManager>
 {
-    [System.Serializable]
+    [Serializable]
     internal class GameTime
     {
         public int year = 1;
@@ -503,7 +501,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
 
         public void TimeRun()
         {
-            if (!GameTimeManager.instance.runTime)
+            if (!instance.runTime)
             {
                 return;
             }
@@ -1061,11 +1059,11 @@ public class GameTimeManager : Singleton<GameTimeManager>
             targetHour += 24;
         }
         int endValue = (targetHour * 60 + targetMinue) * 20;
-        int addValue = (int)math.round((endValue - startValue) / totalTime * UnityEngine.Time.fixedDeltaTime);
+        int addValue = (int)math.round((endValue - startValue) / totalTime * Time.fixedDeltaTime);
         float timeValue = 0;
         while (timeValue < totalTime)
         {
-            timeValue += UnityEngine.Time.deltaTime;
+            timeValue += Time.deltaTime;
             nowGameTime.mySecond += addValue;
             nowGameTime.TimeInit();
             //Debug.Log($"Time:{timeValue}-hour:{nowGameTime.hour}-minute:{nowGameTime.minute}--second:{nowGameTime.mySecond}");

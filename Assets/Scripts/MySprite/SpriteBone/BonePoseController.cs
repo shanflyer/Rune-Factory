@@ -1,7 +1,7 @@
-using UnityEngine;
-using System.Collections.Generic;  
+using System.Collections.Generic;
 using System.Linq;
 using Anima2D;
+using UnityEngine;
 #if UNITY_EDITOR
 using System;
 using UnityEditor;
@@ -14,8 +14,9 @@ public class BonePoseController : MonoBehaviour
     public AnimationClip animationClip;
     HashSet<string> SpecialParts = new HashSet<string>
     {
-          {"«∞"},{"◊Û"},{"∫Û"},{"”„œﬂ"},{"”„∏Õ"},{"Shadow"},{"Other"},{"Equip"}
+        "Ââç", "Â∑¶", "Âêé", "È±ºÁ∫ø", "È±ºÁ´ø", "Shadow", "Other", "Equip"
     };
+#if UNITY_EDITOR
     public void TransformToPoseData()
     {
         if (spriteBone == null)
@@ -240,7 +241,7 @@ public class BonePoseController : MonoBehaviour
         catch { }
       
 #if UNITY_EDITOR
-        // Ω· ¯¬º÷∆
+        // ÁªìÊùüÂΩïÂà∂
        // AnimationMode.StopAnimationMode();
 #endif 
         /*
@@ -259,7 +260,7 @@ public class BonePoseController : MonoBehaviour
         }
         return path;
     }
-#if UNITY_EDITOR
+
 
     void GetClipBindings(AnimationClip animationClip)
     {
@@ -281,21 +282,21 @@ public class BonePoseController : MonoBehaviour
     private void RecordTransform(Vector3 pos,Vector3 angle,Vector3 scale, AnimationClip clip, float time, string path)
     {
        Type type= typeof(Transform);
-        // Œª÷√
+       // ‰ΩçÁΩÆ
         RecordVector3(clip, type,"m_LocalPosition", time, pos, path);
-        // –˝◊™
+        // ÊóãËΩ¨
         RecordVector3(clip, type,"m_LocalEulerAngles", time, angle, path);
-        // Àı∑≈
+        // Áº©Êîæ
         RecordVector3(clip, type, "m_LocalScale", time, scale, path);
     }
    
     private void RecordVector3(AnimationClip clip, Type type, string propertyPath, float time, Vector3 value, string path)
-    { 
-        // X÷·
+    {
+        // XËΩ¥
         SetKeyframe(clip, type, $"{propertyPath}.x", time, value.x,path);
-        // Y÷·
+        // YËΩ¥
         SetKeyframe(clip, type, $"{propertyPath}.y", time, value.y,path);
-        // Z÷·
+        // ZËΩ¥
         SetKeyframe(clip, type, $"{propertyPath}.z", time, value.z, path);
     }
     private void SetKeyframe(AnimationClip clip,Type type,string propertyPath, float time, float value,string path)
@@ -355,7 +356,7 @@ public class BonePoseController : MonoBehaviour
         }
         curve.keys = keys.ToArray();
 
-        // ±£¥Ê«˙œﬂ
+        // ‰øùÂ≠òÊõ≤Á∫ø
         AnimationUtility.SetEditorCurve(clip, binding, curve);
     }
 # endif
@@ -370,15 +371,17 @@ public class BonePoseControllerEditor : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        if (GUILayout.Button("±£¥Ê ˝æ›"))
+        if (GUILayout.Button("‰øùÂ≠òÊï∞ÊçÆ"))
         {
             SpriteBonePoseController.TransformToPoseData();
         }
-        if (GUILayout.Button("∂¡»° ˝æ›"))
+
+        if (GUILayout.Button("ËØªÂèñÊï∞ÊçÆ"))
         {
             SpriteBonePoseController.PoseDataToTransform();
         }
-        if (GUILayout.Button("±£¥Ê∂Øª≠"))
+
+        if (GUILayout.Button("‰øùÂ≠òÂä®Áîª"))
         {
             SpriteBonePoseController.RecordAnimation();
         }
