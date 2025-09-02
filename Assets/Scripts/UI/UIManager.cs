@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks; 
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -516,20 +516,24 @@ public static class RectTransformPresets
 {
     public enum Preset
     {
-        // 9��
+        // 9宫
         TopLeft, TopCenter, TopRight,
         MiddleLeft, MiddleCenter, MiddleRight,
         BottomLeft, BottomCenter, BottomRight,
 
-        // �������죨��������Ǽ���һ�£�
-        StretchTop, StretchMiddle, StretchBottom,      // ��������
-        StretchLeft, StretchCenter, StretchRight,      // ��������
-        StretchAll                                     // ȫ����
+        // 常用拉伸（和面板里那几种一致）
+        StretchTop,
+        StretchMiddle,
+        StretchBottom, // 横向拉伸
+        StretchLeft,
+        StretchCenter,
+        StretchRight, // 纵向拉伸
+        StretchAll // 全拉伸
     }
 
     /// <summary>
-    /// ģ�� Anchor Presets �ĵ��/Alt/Shift/Alt+Shift��
-    /// keepPosition = Shift��alsoSetPivot = Alt��
+    /// 模拟 Anchor Presets 的点击/Alt/Shift/Alt+Shift。
+    /// keepPosition = Shift；alsoSetPivot = Alt。
     /// </summary>
     public static void Apply(RectTransform rt, Preset preset, bool keepPosition = false, bool alsoSetPivot = false)
     {
@@ -537,23 +541,23 @@ public static class RectTransformPresets
         var parentRT = rt.parent as RectTransform;
         if (parentRT == null) return;
 
-        // ��¼��ê/ƫ�ƣ�Ϊ Shift ������׼��
+        // 记录旧锚/偏移，为 Shift 计算做准备
         Vector2 oldAnchorMin = rt.anchorMin;
         Vector2 oldAnchorMax = rt.anchorMax;
         Vector2 oldOffsetMin = rt.offsetMin;
         Vector2 oldOffsetMax = rt.offsetMax;
 
-        // Ԥ�� -> Ŀ��ê��Ŀ�� pivot
+        // 预设 -> 目标锚与目标 pivot
         (Vector2 aMin, Vector2 aMax, Vector2 pivot) = GetPresetAnchorsAndPivot(preset);
 
-        // ���� anchors
+        // 设置 anchors
         rt.anchorMin = aMin;
         rt.anchorMax = aMax;
 
-        // Shift������λ��/�ߴ粻�����ȼ۱༭���ﰴס Shift��
+        // Shift：保持位置/尺寸不动（等价编辑器里按住 Shift）
         if (keepPosition)
         {
-            // �ؼ���offset Ҫ����ê�仯 * ���ߴ�
+            // 关键：offset 要加上锚变化 * 父尺寸
             Vector2 parentSize = parentRT.rect.size;
             Vector2 deltaMin = (aMin - oldAnchorMin) * parentSize;
             Vector2 deltaMax = (aMax - oldAnchorMax) * parentSize;
@@ -561,7 +565,7 @@ public static class RectTransformPresets
             rt.offsetMax = oldOffsetMax + deltaMax;
         }
 
-        // Alt��ͬ�� pivot
+        // Alt：同步 pivot
         if (alsoSetPivot)
         {
             rt.pivot = pivot;
@@ -572,7 +576,7 @@ public static class RectTransformPresets
     {
         switch (p)
         {
-            // ===== 9�� =====
+            // ===== 9宫 =====
             case Preset.TopLeft: return (new Vector2(0, 1), new Vector2(0, 1), new Vector2(0, 1));
             case Preset.TopCenter: return (new Vector2(0.5f, 1), new Vector2(0.5f, 1), new Vector2(0.5f, 1));
             case Preset.TopRight: return (new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1));
@@ -585,20 +589,175 @@ public static class RectTransformPresets
             case Preset.BottomCenter: return (new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0.5f, 0));
             case Preset.BottomRight: return (new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0));
 
-            // ===== �������죨Y ê�̶��������£�=====
+            // ===== 横向拉伸（Y 锚固定，上中下）=====
             case Preset.StretchTop: return (new Vector2(0, 1), new Vector2(1, 1), new Vector2(0.5f, 1));
             case Preset.StretchMiddle: return (new Vector2(0, 0.5f), new Vector2(1, 0.5f), new Vector2(0.5f, 0.5f));
             case Preset.StretchBottom: return (new Vector2(0, 0), new Vector2(1, 0), new Vector2(0.5f, 0));
 
-            // ===== �������죨X ê�̶��������ң�=====
+            // ===== 纵向拉伸（X 锚固定，左中右）=====
             case Preset.StretchLeft: return (new Vector2(0, 0), new Vector2(0, 1), new Vector2(0, 0.5f));
             case Preset.StretchCenter: return (new Vector2(0.5f, 0), new Vector2(0.5f, 1), new Vector2(0.5f, 0.5f));
             case Preset.StretchRight: return (new Vector2(1, 0), new Vector2(1, 1), new Vector2(1, 0.5f));
 
-            // ===== ȫ���� =====
+            // ===== 全拉伸 =====
             case Preset.StretchAll: return (new Vector2(0, 0), new Vector2(1, 1), new Vector2(0.5f, 0.5f));
         }
-        // ����
+
+        // 兜底
         return (new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
     }
 }
+
+public static class GridSimLayout
+{
+    /// 把 items（真实在 actualParent 下）摆成“好像在 grid 下”的布局。
+    /// 视觉等效 GridLayoutGroup（包含 padding/spacing/startCorner/startAxis/constraint/childAlignment）
+    /// 建议：items 的 anchorMin=anchorMax=(0,1)，pivot=(0,1)（左上），最稳。
+    public static void Apply(
+        GridLayoutGroup grid,
+        List<RectTransform> items,
+        RectTransform actualParent,
+        bool forceChildSizeToCell = true)
+    {
+        if (grid == null || actualParent == null || items == null) return;
+        var gridRT = (RectTransform)grid.transform;
+        var n = items.Count;
+        if (n == 0) return;
+
+        // 可选：禁用 grid，避免它自己去重建布局（不影响取参）
+        grid.enabled = false;
+
+        for (var i = 0; i < n; i++)
+        {
+            var rt = items[i];
+            if (!rt) continue;
+
+            // —— 推荐统一成左上锚点/枢轴，避免额外换算 —— //
+            rt.anchorMin = rt.anchorMax = new Vector2(0, 1);
+            rt.pivot = new Vector2(0, 1);
+
+            if (forceChildSizeToCell)
+                rt.sizeDelta = grid.cellSize;
+
+            // 1) 在“grid 左上参考系”下计算第 i 个应当位置
+            var posInGridTopLeft = GetGridAnchoredPosition(grid, i, n);
+
+            // 2) grid 左上参考系 -> grid 本地坐标（原点 = grid pivot）
+            var gridTopLeftLocal = new Vector2(
+                -gridRT.pivot.x * gridRT.rect.width,
+                (1f - gridRT.pivot.y) * gridRT.rect.height);
+            var localInGrid = new Vector3(
+                gridTopLeftLocal.x + posInGridTopLeft.x,
+                gridTopLeftLocal.y + posInGridTopLeft.y, 0f);
+
+            // 3) 本地->世界->actualParent本地
+            var world = gridRT.TransformPoint(localInGrid);
+            var localInParent = actualParent.InverseTransformPoint(world);
+
+            // 4) actualParent 本地坐标 -> 左上参考系 anchoredPosition
+            var parentTopLeftLocal = new Vector2(
+                -actualParent.pivot.x * actualParent.rect.width,
+                (1f - actualParent.pivot.y) * actualParent.rect.height);
+
+            rt.anchoredPosition = (Vector2)localInParent - parentTopLeftLocal;
+        }
+    }
+
+    // === 与官方 GridLayoutGroup 等效的“第 index 个在网格内的左上锚点坐标” ===
+    private static Vector2 GetGridAnchoredPosition(GridLayoutGroup g, int index, int childCount)
+    {
+        var content = (RectTransform)g.transform;
+        var cell = g.cellSize;
+        var spacing = g.spacing;
+        var pad = g.padding;
+        var corner = g.startCorner;
+        var axis = g.startAxis;
+
+        var W = content.rect.width;
+        var H = content.rect.height;
+
+        // 列/行数
+        int cols, rows;
+        switch (g.constraint)
+        {
+            case GridLayoutGroup.Constraint.FixedColumnCount:
+                cols = Mathf.Max(1, g.constraintCount);
+                rows = Mathf.CeilToInt((float)childCount / cols);
+                break;
+            case GridLayoutGroup.Constraint.FixedRowCount:
+                rows = Mathf.Max(1, g.constraintCount);
+                cols = Mathf.CeilToInt((float)childCount / rows);
+                break;
+            default: // Flexible
+            {
+                const float EPS = 0.001f; // 边界余量，贴近官方行为
+                var usableW = W - pad.left - pad.right + spacing.x + EPS;
+                cols = Mathf.Max(1, Mathf.FloorToInt(usableW / (cell.x + spacing.x)));
+                rows = Mathf.CeilToInt((float)childCount / cols);
+                break;
+            }
+        }
+
+        cols = Mathf.Max(1, cols);
+        rows = Mathf.Max(1, rows);
+
+        // 行列索引（受 startAxis 影响）
+        int r, c;
+        if (axis == GridLayoutGroup.Axis.Horizontal)
+        {
+            r = index / cols;
+            c = index % cols;
+        }
+        else
+        {
+            r = index % rows;
+            c = index / rows;
+        }
+
+        // 网格整体尺寸（不含 padding）
+        var reqX = cols * cell.x + (cols - 1) * spacing.x;
+        var reqY = rows * cell.y + (rows - 1) * spacing.y;
+
+        // childAlignment（等价 GetStartOffset）
+        var (ax, ay) = Alignment01(g.childAlignment);
+        var surplusX = Mathf.Max(0, W - pad.left - pad.right - reqX);
+        var surplusY = Mathf.Max(0, H - pad.top - pad.bottom - reqY);
+
+        var originX = pad.left + surplusX * ax; // 左上参考系 X 向右为正
+        var originYUp = pad.top + surplusY * ay; // 顶边（正值；最终 y 取负）
+
+        var rightSide = corner == GridLayoutGroup.Corner.UpperRight || corner == GridLayoutGroup.Corner.LowerRight;
+        var lowerSide = corner == GridLayoutGroup.Corner.LowerLeft || corner == GridLayoutGroup.Corner.LowerRight;
+
+        var colOffX = rightSide
+            ? reqX - cell.x - c * (cell.x + spacing.x) // 从右往左
+            : c * (cell.x + spacing.x); // 从左往右
+
+        var rowOffY = lowerSide
+            ? reqY - cell.y - r * (cell.y + spacing.y) // 从下往上（最终取负）
+            : r * (cell.y + spacing.y); // 从上往下
+
+        var x = originX + colOffX;
+        var y = -(originYUp + rowOffY); // 左上参考系：向下为负
+        return new Vector2(x, y);
+    }
+
+    private static (float ax, float ay) Alignment01(TextAnchor a)
+    {
+        switch (a)
+        {
+            case TextAnchor.UpperLeft: return (0f, 0f);
+            case TextAnchor.UpperCenter: return (0.5f, 0f);
+            case TextAnchor.UpperRight: return (1f, 0f);
+            case TextAnchor.MiddleLeft: return (0f, 0.5f);
+            case TextAnchor.MiddleCenter: return (0.5f, 0.5f);
+            case TextAnchor.MiddleRight: return (1f, 0.5f);
+            case TextAnchor.LowerLeft: return (0f, 1f);
+            case TextAnchor.LowerCenter: return (0.5f, 1f);
+            case TextAnchor.LowerRight: return (1f, 1f);
+        }
+
+        return (0f, 0f);
+    }
+}
+
