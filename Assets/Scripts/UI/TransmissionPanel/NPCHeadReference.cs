@@ -28,29 +28,39 @@ public class NPCHeadReference : UIObjReference<NPCReferenceData>
 #endif
     public override Task InitData(NPCReferenceData t, SelectAction<NPCReferenceData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        oldMapInstance = 0;
+        oldMapInstance = -1;
         NPCHead.sprite = t.npc.Character.characterData.head.sprite;
+        // t.changeUINPCReferenceMap(0, data.npc.Character.mapInstance, transform as RectTransform);
         return base.InitData(t, SelectAction, toggleGroup);
     }
     int oldMapInstance;
     public override void OnDisable()
     {
         base.OnDisable();
-        oldMapInstance = 0;
+        oldMapInstance = -1;
     }
     private void Update()
     {
-        if (oldMapInstance != data.npc.Character.mapInstance)
+        if (oldMapInstance < 0 || oldMapInstance != data.npc.Character.mapInstance)
         {
             data.changeUINPCReferenceMap(oldMapInstance, data.npc.Character.mapInstance, transform as RectTransform);
             oldMapInstance = data.npc.Character.mapInstance;
-            data.getVectorForMap(oldMapInstance, out data.parentPos); 
+
+            /*if (GameCommon.CheckDisplay(data.npc.Character.mapInstance))
+                RectTransformPresets.Apply(_rectTransform, RectTransformPresets.Preset.BottomLeft);
+            else
+                RectTransformPresets.Apply(_rectTransform, RectTransformPresets.Preset.TopLeft);*/
+            data.getVectorForMap(oldMapInstance, out data.parentPos);
+
+#if UNITY_EDITOR
+            _mapInstance = data.npc.Character.mapInstance;
+#endif
         }
 
         if(GameCommon.CheckDisplay(data.npc.Character.mapInstance))
         {  //_rectTransform.localScale = Vector2.one;
             int2 coordinateIndex = data.npc.Character.GetMapStartIndex();
-            //RectTransformPresets.Apply(_rectTransform, RectTransformPresets.Preset.BottomLeft);
+          
             _rectTransform.anchoredPosition = data.parentPos + new Vector2(coordinateIndex.x, coordinateIndex.y) * 2;
 #if UNITY_EDITOR
             _coordinateIndex=coordinateIndex;

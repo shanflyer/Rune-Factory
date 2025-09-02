@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public struct GridSimData
+public class GridSimData
 {
     public GridLayoutGroup layoutGroup;
     public List<RectTransform> items;
@@ -13,13 +13,21 @@ public struct GridSimData
     {
         for (var i = items.Count - 1; i >= 0; i--)
         {
-            items[i] = items[items.Count - 1];
-            items.RemoveAt(items.Count - 1);
+            if (items[i] == item)
+            {
+                items[i] = items[items.Count - 1];
+                items.RemoveAt(items.Count - 1);
+                break;
+            }
+          
         }
+
+        needRefresh = true;
     }
 }
 public class TransmissionPanel : GamePanel<IReferenceData>
 {
+    [SerializeField] private Transform ChildItem;
     [SerializeField]
     Button closeBtn;
     [SerializeField]
@@ -89,15 +97,15 @@ public class TransmissionPanel : GamePanel<IReferenceData>
     private void ChangeUIMapNPCReference(int oldMap, int newMap, RectTransform rectTransform)
     {
         if (childMapRectDic.TryGetValue(oldMap, out var oldRect))
-        {
-            oldRect.needRefresh = true;
+        { 
             oldRect.RemoveItem(rectTransform);
+            oldRect.needRefresh = true;
         }
 
         if (childMapRectDic.TryGetValue(newMap, out var newRect))
-        {
-            oldRect.needRefresh = true;
+        { 
             newRect.items.Add(rectTransform);
+            newRect.needRefresh = true;
         }
     }
     
@@ -129,7 +137,7 @@ public class TransmissionPanel : GamePanel<IReferenceData>
                 npc = npcs.npcs[i],
                 getVectorForMap = GetParentPos,
                 changeUINPCReferenceMap = ChangeUIMapNPCReference
-            };
+            }; 
             GetParentPos(npcs.npcs[i].Character.mapInstance, out nPCReferenceData.parentPos);
             nPCReferenceDatas.Add(nPCReferenceData);
         }
@@ -137,14 +145,40 @@ public class TransmissionPanel : GamePanel<IReferenceData>
         npcList.InitListData(nPCReferenceDatas);
     }
 
-    private void Update()
+    private void RefreshChild(Transform parent, int childCount)
+    {
+        for (var i = 0; i < parent.childCount; i++)
+            if (i < childCount)
+                parent.GetChild(i).gameObject.SetActive(true);
+            else
+                parent.GetChild(i).gameObject.SetActive(false);
+
+        var addCount = childCount - parent.childCount;
+        for (var i = 0; i < addCount; i++)
+        {
+            var item = Instantiate(ChildItem, parent);
+            item.gameObject.SetActive(true);
+        }
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(parent as RectTransform);
+    }
+
+    private void LateUpdate()
     {
         foreach (var childMapRect in childMapRectDic.Values)
         {
             if (childMapRect.needRefresh)
-                GridSimLayout.Apply(childMapRect.layoutGroup, childMapRect.items, NPCParent as RectTransform);
-        }
-        
+            {
+                RefreshChild(childMapRect.layoutGroup.transform, childMapRect.items.Count);
+                childMapRect.needRefresh = false;
+                for (var i = 0; i < childMapRect.items.Count; i++)
+                {
+                    var itemTransform = childMapRect.items[i];
+                    itemTransform.position = childMapRect.layoutGroup.transform.GetChild(i).position;
+                }
+            }
+        } 
     }
+ 
 }
      
