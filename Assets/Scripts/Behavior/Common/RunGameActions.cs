@@ -1,15 +1,17 @@
-﻿using BehaviorDesigner.Runtime;
-using BehaviorDesigner.Runtime.Tasks;
+﻿using System;
 using System.Collections.Generic;
+using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
+using Action = BehaviorDesigner.Runtime.Tasks.Action;
 
-[System.Serializable]
+[Serializable]
 public class DynamicData
 {
     public SharedInt source, target, value;
 }
 
-[System.Serializable]
+[Serializable]
 public struct DynamicParameterData
 {
     public List<SharedVariable> Parameters;
@@ -80,6 +82,10 @@ public class RunGameActions : Action
                 }
                 gameActionData._parameters = _parameters;
             }
+
+            if (GameDataManager.instance.GlobalData.debug)
+                Debug.Log(
+                    $"behaviorAction:{gameActionDatas[i].typeName}--BehaviorName:{Owner.BehaviorName}--{FriendlyName}");
 
             if (otherDatas != null && i < otherDatas.Count)
             {

@@ -351,19 +351,19 @@ public class GlobalShaderSetMonoEditor : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        if (GUILayout.Button("²âÊÔGUID"))
+        if (GUILayout.Button("æµ‹è¯•GUID"))
         {
             globalShaderSetMono.TestGUID();
         }
-        if (GUILayout.Button("ÉèÖÃ"))
+        if (GUILayout.Button("è®¾ç½®"))
         {
             globalShaderSetMono.SetGlobalShaderValue();
         }
-        if (GUILayout.Button("ÉèÖÃlightValue"))
+        if (GUILayout.Button("è®¾ç½®lightValue"))
         {
             globalShaderSetMono.TestLightValue();
         }
-        if (GUILayout.Button("²âÊÔÏà»ú"))
+        if (GUILayout.Button("æµ‹è¯•ç›¸æœº"))
         {
             globalShaderSetMono.TestCameraRect();
         }

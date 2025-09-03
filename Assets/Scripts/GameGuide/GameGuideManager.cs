@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -109,11 +104,12 @@ public class GameGuideManager:Singleton<GameGuideManager>
            
         }
     }
-    async void SetIntAction(int id,Selectable selectable)
+
+    private void SetIntAction(int id, Selectable selectable)
     {
         guidSelectableDic[id] = selectable;
-         
-       // if (id== nowGuideSelectableId)
+        if (waitGuide != 0 && waitGuide == id) InitShowGuide();
+        // if (id== nowGuideSelectableId)
         {
            // Debug.Log("等待 guid");
            //InitShowGuide();
@@ -132,6 +128,7 @@ public class GameGuideManager:Singleton<GameGuideManager>
     }
     void ShowGuide()
     {
+        waitGuide = 0;
         if (nowGameGuideData == null)
         {
             return;
@@ -183,10 +180,13 @@ public class GameGuideManager:Singleton<GameGuideManager>
             InitShowGuide();
         }
     }
+
+    private int waitGuide;
     void InitShowGuide()
     {
         if (guidSelectableDic.TryGetValue(nowGuideSelectableId, out var selectable))
         {
+           
             selectable.HideSelected = true;
             //Debug.Log($"指引点击01!!-");
             if (selectable is Button button)
@@ -202,7 +202,8 @@ public class GameGuideManager:Singleton<GameGuideManager>
         }
         else
         {
-            Debug.Log("指引未命中！");
+            waitGuide = nowGuideSelectableId;
+            Debug.Log("指引等待！");
         }
     }
     public bool GetSelectableSize(int guid,out Vector3 pos,out Vector2 size)

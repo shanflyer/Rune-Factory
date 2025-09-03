@@ -332,6 +332,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: Infinity
     m_PreExtrapolationTime: 0
     m_DisplayName: Back
+    overideClip: {fileID: 0}
   - m_Version: 1
     m_Start: 0.016666666666666666
     m_ClipIn: 0
@@ -365,6 +366,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0.016666666666666666
     m_DisplayName: Left
+    overideClip: {fileID: 0}
   m_Markers:
     m_Objects: []
   m_InfiniteClipPreExtrapolation: 0
@@ -457,6 +459,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
     m_DisplayName: Idle_Right
+    overideClip: {fileID: 0}
   - m_Version: 1
     m_Start: 0.016666666666666666
     m_ClipIn: 0
@@ -508,6 +511,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: 0.03333333333333355
     m_PreExtrapolationTime: 0
     m_DisplayName: Walk_Left
+    overideClip: {fileID: 0}
   - m_Version: 1
     m_Start: 1.0333333333333334
     m_ClipIn: 0
@@ -577,6 +581,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
     m_DisplayName: Walk_Back
+    overideClip: {fileID: 0}
   - m_Version: 1
     m_Start: 3.9833333333333334
     m_ClipIn: 0
@@ -646,6 +651,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
     m_DisplayName: Walk_Left
+    overideClip: {fileID: 0}
   - m_Version: 1
     m_Start: 6.016666666666667
     m_ClipIn: 0
@@ -697,6 +703,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
     m_DisplayName: Walk_Front
+    overideClip: {fileID: 0}
   - m_Version: 1
     m_Start: 8.333333333333334
     m_ClipIn: 0
@@ -710,25 +717,7 @@ MonoBehaviour:
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -766,6 +755,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: Infinity
     m_PreExtrapolationTime: 0
     m_DisplayName: Walk_Left
+    overideClip: {fileID: 0}
   m_Markers:
     m_Objects: []
   m_InfiniteClipPreExtrapolation: 0
@@ -893,6 +883,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
     m_DisplayName: Idle_Left
+    overideClip: {fileID: 0}
   - m_Version: 1
     m_Start: 1
     m_ClipIn: 0
@@ -962,6 +953,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: Infinity
     m_PreExtrapolationTime: 0
     m_DisplayName: Idle_Back
+    overideClip: {fileID: 0}
   m_Markers:
     m_Objects: []
   m_InfiniteClipPreExtrapolation: 0
@@ -1121,11 +1113,12 @@ MonoBehaviour:
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
     m_DisplayName: Idle_Right
+    overideClip: {fileID: 0}
   - m_Version: 1
     m_Start: 0.016666666666666666
     m_ClipIn: 0.01666666666666656
     m_Asset: {fileID: 1823243556188187890}
-    m_Duration: 0.9666666666666666
+    m_Duration: 0.9833333333333332
     m_TimeScale: 1
     m_ParentTrack: {fileID: -1985006854238758010}
     m_EaseInDuration: 0
@@ -1187,9 +1180,10 @@ MonoBehaviour:
     m_Recordable: 0
     m_PostExtrapolationMode: 1
     m_PreExtrapolationMode: 1
-    m_PostExtrapolationTime: 0.050000000000000155
+    m_PostExtrapolationTime: 0.03333333333333355
     m_PreExtrapolationTime: 0
     m_DisplayName: Walk_Left
+    overideClip: {fileID: 0}
   - m_Version: 1
     m_Start: 1.0333333333333334
     m_ClipIn: 0
@@ -1259,6 +1253,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
     m_DisplayName: Walk_Back
+    overideClip: {fileID: 0}
   - m_Version: 1
     m_Start: 3.9833333333333334
     m_ClipIn: 0
@@ -1328,6 +1323,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
     m_DisplayName: Walk_Left
+    overideClip: {fileID: 0}
   - m_Version: 1
     m_Start: 6.016666666666667
     m_ClipIn: 0
@@ -1379,6 +1375,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
     m_DisplayName: Walk_Front
+    overideClip: {fileID: 0}
   - m_Version: 1
     m_Start: 8.333333333333334
     m_ClipIn: 0
@@ -1392,25 +1389,7 @@ MonoBehaviour:
     m_BlendOutDuration: -1
     m_MixInCurve:
       serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
+      m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -1448,6 +1427,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: Infinity
     m_PreExtrapolationTime: 0
     m_DisplayName: Walk_Left
+    overideClip: {fileID: 0}
   m_Markers:
     m_Objects: []
   m_InfiniteClipPreExtrapolation: 0
@@ -1572,7 +1552,7 @@ MonoBehaviour:
   m_Retroactive: 0
   m_EmitOnce: 0
   gameActionDatas:
-  - {fileID: 11400000, guid: e533369649dc2254bbeca33f8cce1eb6, type: 2}
+  - {fileID: 11400000, guid: 446a80f3774d8ea4b8c4ed5f3af425f2, type: 2}
 --- !u!74 &-66664896739946385
 AnimationClip:
   m_ObjectHideFlags: 0
@@ -2261,6 +2241,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
     m_DisplayName: Right
+    overideClip: {fileID: 0}
   - m_Version: 1
     m_Start: 1.0333333333333334
     m_ClipIn: 0
@@ -2330,6 +2311,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
     m_DisplayName: Back
+    overideClip: {fileID: 0}
   - m_Version: 1
     m_Start: 3.9833333333333334
     m_ClipIn: 0
@@ -2381,6 +2363,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
     m_DisplayName: Right
+    overideClip: {fileID: 0}
   - m_Version: 1
     m_Start: 6
     m_ClipIn: 0
@@ -2414,6 +2397,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: 0.01666666666666572
     m_PreExtrapolationTime: 0
     m_DisplayName: Front
+    overideClip: {fileID: 0}
   - m_Version: 1
     m_Start: 8.366666666666667
     m_ClipIn: 0
@@ -2483,6 +2467,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: Infinity
     m_PreExtrapolationTime: 0
     m_DisplayName: Left
+    overideClip: {fileID: 0}
   m_Markers:
     m_Objects: []
   m_InfiniteClipPreExtrapolation: 0
@@ -2681,6 +2666,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
     m_DisplayName: Right
+    overideClip: {fileID: 0}
   - m_Version: 1
     m_Start: 1.0333333333333334
     m_ClipIn: 0
@@ -2750,6 +2736,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
     m_DisplayName: Back
+    overideClip: {fileID: 0}
   - m_Version: 1
     m_Start: 3.9833333333333334
     m_ClipIn: 0
@@ -2801,6 +2788,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: 0
     m_PreExtrapolationTime: 0
     m_DisplayName: Right
+    overideClip: {fileID: 0}
   - m_Version: 1
     m_Start: 6
     m_ClipIn: 0
@@ -2834,6 +2822,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: 0.01666666666666572
     m_PreExtrapolationTime: 0
     m_DisplayName: Front
+    overideClip: {fileID: 0}
   - m_Version: 1
     m_Start: 8.366666666666667
     m_ClipIn: 0
@@ -2903,6 +2892,7 @@ MonoBehaviour:
     m_PostExtrapolationTime: Infinity
     m_PreExtrapolationTime: 0
     m_DisplayName: Left
+    overideClip: {fileID: 0}
   m_Markers:
     m_Objects: []
   m_InfiniteClipPreExtrapolation: 0
