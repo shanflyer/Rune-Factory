@@ -254,10 +254,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 486d7738ca24a884184bbe3daf67135c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioSource: {fileID: 0}
+  audioCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   effects: []
   animators:
   - {fileID: 640955004594869272}
   windBlendValue: 0.8
+  AnimatorWindType: 0
   snowWind: 1
   seasonRemap:
     x: 0

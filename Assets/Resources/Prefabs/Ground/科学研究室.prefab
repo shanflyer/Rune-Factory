@@ -1220,7 +1220,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5268776929961771790}
   - component: {fileID: 3340293313270032850}
-  - component: {fileID: 1624104045724442793}
   m_Layer: 0
   m_Name: Desert-Interior_C_46
   m_TagString: Untagged
@@ -1298,19 +1297,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
---- !u!114 &1624104045724442793
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1219398475939508164}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 421e7d29e339100448b28790e3d53915, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 0}
 --- !u!1 &1303207272185936161
 GameObject:
   m_ObjectHideFlags: 0
@@ -2178,7 +2164,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1089510066714969305}
   - component: {fileID: 7830448201050595022}
-  - component: {fileID: 3655380089064776994}
   m_Layer: 0
   m_Name: "\u5730\u6BEF"
   m_TagString: Untagged
@@ -2256,19 +2241,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3655380089064776994
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3870866468939021174}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 421e7d29e339100448b28790e3d53915, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 0}
 --- !u!1 &4524396151317335672
 GameObject:
   m_ObjectHideFlags: 0
@@ -2497,7 +2469,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8838262956637905184}
   - component: {fileID: 5211540274763657054}
-  - component: {fileID: 3944426606251261455}
   m_Layer: 0
   m_Name: "\u5730\u6BEF"
   m_TagString: Untagged
@@ -2575,19 +2546,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3944426606251261455
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5003091532618907013}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 421e7d29e339100448b28790e3d53915, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 0}
 --- !u!1 &5330159944726900901
 GameObject:
   m_ObjectHideFlags: 0
@@ -5389,7 +5347,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: "\u5BB6\u5177_05"
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2155832475937825044, guid: 3074275ebbb0f9d4da731b640e5b77ed, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

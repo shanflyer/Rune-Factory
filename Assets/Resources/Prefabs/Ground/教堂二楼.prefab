@@ -337,7 +337,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5556080239413089095}
   - component: {fileID: 2311962136749844685}
-  - component: {fileID: 7567784132983494112}
   m_Layer: 0
   m_Name: "\u5730\u6BEF3 (1)"
   m_TagString: Untagged
@@ -415,19 +414,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7567784132983494112
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1139231358819341164}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 421e7d29e339100448b28790e3d53915, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 0}
 --- !u!1 &1247861017253229008
 GameObject:
   m_ObjectHideFlags: 0
@@ -4131,7 +4117,6 @@ GameObject:
   m_Component:
   - component: {fileID: 346867192666076065}
   - component: {fileID: 7730490697861485879}
-  - component: {fileID: 6399605041968872040}
   m_Layer: 0
   m_Name: "\u6559\u5802\u5EFA\u7B51_23"
   m_TagString: Untagged
@@ -4209,19 +4194,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6399605041968872040
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4192083292684184790}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 421e7d29e339100448b28790e3d53915, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 0}
 --- !u!1 &4785189750974956845
 GameObject:
   m_ObjectHideFlags: 0
@@ -4232,7 +4204,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8868224618882141138}
   - component: {fileID: 1582034849089827182}
-  - component: {fileID: 1462882086579450966}
   m_Layer: 0
   m_Name: "\u5730\u6BEF3"
   m_TagString: Untagged
@@ -4310,19 +4281,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1462882086579450966
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4785189750974956845}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 421e7d29e339100448b28790e3d53915, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 0}
 --- !u!1 &5099076021004914064
 GameObject:
   m_ObjectHideFlags: 0
@@ -5205,7 +5163,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7877063425922451668}
   - component: {fileID: 6921670606911245768}
-  - component: {fileID: 5403591335930564541}
   m_Layer: 0
   m_Name: "\u5730\u6BEF3 (2)"
   m_TagString: Untagged
@@ -5283,19 +5240,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5403591335930564541
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8350670806751259914}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 421e7d29e339100448b28790e3d53915, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 0}
 --- !u!1 &8395601674480614387
 GameObject:
   m_ObjectHideFlags: 0
@@ -8570,7 +8514,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Desert-Interior_C_49
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8928779873296443193, guid: d67960603f221ba4f9fae776efe5ae85, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -8938,7 +8883,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3921938908892241534, guid: a6e37cfd7d90bec4a8e8064c76606726, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
