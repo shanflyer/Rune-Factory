@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 public struct EnvironmentLightData
 {
@@ -343,9 +342,10 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             {
                 Shader.SetGlobalFloat("_DampValue", nowWeather.waterFall > 0 && !nowWeather.IsSnow() ? 1 : 0);
             }
-            skyEnviromentMono.ChangeWeatherDisplayType(weatherDisplayType);
+           
         }
-       
+
+        skyEnviromentMono.ChangeWeatherDisplayType(weatherDisplayType);
     }
    
     IEnumerator LerpWeather(Weather newWeather)

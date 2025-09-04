@@ -110,12 +110,17 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
         GameActionManager.instance.AddListener<CharacterPropertyTrigger>(RefreshCharacterProperty);
         GameActionManager.instance.AddListener<SetWeather>(SetWeather);
-
+        GameActionManager.instance.AddListener<NewHour>(NewHour);
         UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
     }
     private void LateUpdate()
     {
         FPSText.text = $"FPS{1.0f / Time.smoothDeltaTime}"; 
+    }
+
+    private void NewHour(NewHour newHour)
+    {
+        weather.sprite = WeatherManager.instance.GetWeatherIcon();
     }
     void SetWeather(SetWeather setWeather)
     {
@@ -147,7 +152,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         RPSlider.fillAmount = characterProperty.Power / (float)characterProperty.MaxPower;
         HPValue.text = $"{characterProperty.HP}/{characterProperty.MaxHP}";
         RPValue.text = $"{characterProperty.Power}/{characterProperty.MaxPower}";
-
+        weather.sprite = WeatherManager.instance.GetWeatherIcon();
         RefreshPlayerGold(default(RefreshPlayerGold));
         NewDay(default(NewDay)); 
         return base.InitData(dataKay);

@@ -26,11 +26,6 @@ public class CharacterManager : Singleton<CharacterManager>
     public Player player;
     //private Vector2 playerMoveDirction;
 
-    void SetPlayerNeighbor()
-    {
-
-    }
-
     public List<Character> GetAllCharacters()
     {
         return characters.GetValueList();
@@ -106,7 +101,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 };
                 GameActionManager.instance.QueueAction(refreshMapTempCharacter, true);
             }
-            else if(NPCManager.instance.GetNPC(character.instanceId,out NPC npc))
+            else if (NPCManager.instance.GetNPCFormInstance(character.instanceId, out var npc))
             {
                 if (npc.isSleep)
                 {
@@ -1505,7 +1500,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
                 else
                 {
-                    if (NPCManager.instance.GetNPC(character.instanceId, out NPC npc))
+                    if (NPCManager.instance.GetNPCFormInstance(character.instanceId, out var npc))
                     {
                         if (npc.isSleep)
                         {

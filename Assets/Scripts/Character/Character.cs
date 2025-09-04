@@ -1158,7 +1158,7 @@ public partial class Character
             {
                 if (absX <= range && absY <= range)
                 {
-                    if(NPCManager.instance.GetNPC(character.instanceId,out var npc)&&npc.isSleep)
+                    if (NPCManager.instance.GetNPCFormInstance(character.instanceId, out var npc) && npc.isSleep)
                     {
                         RefreshOperateCharacter refreshOperateCharacter = new RefreshOperateCharacter
                         {
@@ -1194,7 +1194,7 @@ public partial class Character
         HashSet<int> sleepCharacters = new HashSet<int>();
         foreach(var id in NeighborhoodCharacters1)
         {
-            if(NPCManager.instance.GetNPC(id,out var npc))
+            if (NPCManager.instance.GetNPCFormInstance(id, out var npc))
             {
                 if (npc.isSleep)
                 {

@@ -187,19 +187,25 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
             sun.enabled = false;
             bg.enabled = false;
             sea.enabled = false;
-            farCloud.Stop();
-            nearCloud.Stop();
-            star.Stop();
+           
             sun.gameObject.SetActive(false);
             sunClollider.enabled = false;
             if (displaySky.displaySunlight)
             {
+                farEmission.rateOverTime = (int)math.lerp(farCloudCount.x, farCloudCount.y, cloud);
+                nearEmission.rateOverTime = (int)math.lerp(nearCloudCount.x, nearCloudCount.y, cloud);
+                farCloud.Play();
+                nearCloud.Play();
+                star.Play();
                 ProFlareBatch.gameObject.SetActive(true);
                 ProFlareBatch.SetTrigger2DGameObject(true);
                 ProFlareBatch.ForceRefresh();
             }
             else
             {
+                farCloud.Stop();
+                nearCloud.Stop();
+                star.Stop();
                 ProFlareBatch.gameObject.SetActive(false);
             }
         }

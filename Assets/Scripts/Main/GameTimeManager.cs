@@ -246,6 +246,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
 
             if (nowMinute >= dawnStart && nowMinute <= dawnEnd)
             {
+                night = true;
                 float lightValue = (float)(nowMinute - dawnStart + mySecond * 0.05f) / (60);
                 var environmentLightData = new EnvironmentLightData();
                 environmentLightData.cloudColor = DawnEnvironmentData.CloudColor.Evaluate(lightValue);
@@ -313,6 +314,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             }
             else if (nowMinute > dayEnd && nowMinute < duskEnd)
             {
+                night = false;
                 float lightValue = (float)(nowMinute - duskStart + mySecond * 0.05f) / (60);
 
                 Color sunColor = DuskEnvironmentData.sunColor.Evaluate(lightValue);
@@ -808,7 +810,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
         }
         else
         {
-           if( NPCManager.instance.GetNPC(characterId,out var npc))
+            if (NPCManager.instance.GetNPCFormInstance(characterId, out var npc))
             {
                 npc.SetSleep(true);
             }
@@ -857,7 +859,22 @@ public class GameTimeManager : Singleton<GameTimeManager>
             };
             GameActionManager.instance.QueueAction(changeCharacterProperty, true);
 
-            if (NPCManager.instance.GetNPC(characterId, out var npc))
+            var changeCharacterProperty1 = new ChangeCharacterProperty
+            {
+                characterId = playerSleep.characterId,
+                propertyType = CharacterPropertyType.生命,
+                changeValue = (int)(character.CharacterProperty.MaxHP * 0.1667f * sleepHour) //六小时睡满体力
+            };
+            GameActionManager.instance.QueueAction(changeCharacterProperty1, true);
+            var changeCharacterProperty2 = new ChangeCharacterProperty
+            {
+                characterId = playerSleep.characterId,
+                propertyType = CharacterPropertyType.法力,
+                changeValue = (int)(character.CharacterProperty.MaxMP * 0.1667f * sleepHour) //六小时睡满体力
+            };
+            GameActionManager.instance.QueueAction(changeCharacterProperty2, true);
+
+            if (NPCManager.instance.GetNPCFormInstance(characterId, out var npc))
             {
                 npc.SetSleep(false);
             }

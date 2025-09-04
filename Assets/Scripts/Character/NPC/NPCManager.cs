@@ -1,9 +1,9 @@
-﻿using BehaviorDesigner.Runtime;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BehaviorDesigner.Runtime;
 using Unity.Mathematics;
-using UnityEngine; 
+using UnityEngine;
 
 public enum NPCState
 {
@@ -195,7 +195,7 @@ public partial class Character
         //characterInformationData.icon = characterData.icon.sprite;
         //characterInformationData.attributeType = attributeType;
 
-        if (NPCManager.instance.GetNPC(instanceId, out var npc))
+        if (NPCManager.instance.GetNPCFormInstance(instanceId, out var npc))
         {
             characterInformationData.isNpc = true;
             characterInformationData.NPCState = npc.npcState;
