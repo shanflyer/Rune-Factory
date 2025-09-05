@@ -11,7 +11,12 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
 
     private SellItem sellItem;
     AnimationCurve timeCurve,weatherCurve;
-    public bool playerStoreOpen { get; private set; }
+
+    public bool playerStoreOpen
+    {
+        get => GameDataSaveManager.instance.UserGameSaveData.otherSaveData.playerStoreOpen;
+        private set => GameDataSaveManager.instance.UserGameSaveData.otherSaveData.playerStoreOpen = value;
+    }
     protected override void Clear()
     {
         base.Clear();

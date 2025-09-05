@@ -1,9 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Mathematics; 
- 
+using Unity.Mathematics;
+
 public class UserGameSaveDataList : IReferenceData
 {
     public CommonSaveData commonSaveData;  
@@ -844,7 +843,8 @@ public class OtherSaveData
     public int gold;
     public List<int> playerPackages;
     public bool isMarriedFood, isAnMo;
-
+    public bool playerStoreOpen;
+    
     public int uid;
     public int newDayActionIndex, newWakeUpActionIndex;
     public List<int2> shortcutItems;
@@ -853,6 +853,8 @@ public class OtherSaveData
     {
         uid = otherSaveData.uid;
         gold = otherSaveData.gold;
+        playerStoreOpen = otherSaveData.playerStoreOpen;
+        
         playerPackages = new List<int>();
         playerPackages.AddRange(otherSaveData.playerPackages);
         isMarriedFood = otherSaveData.isMarriedFood;

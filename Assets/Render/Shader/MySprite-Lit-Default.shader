@@ -27,8 +27,9 @@ Shader "MySprite-Lit-Default"
         _NormalMap("Normal Map", 2D) = "bump" {}
         _WaterMaskTex("WaterMaskTex", 2D) ="black"{} 
         _DepthTex("DepthTex", 2D) ="gray"{} 
-        _WetValue("WetValue",Range(0,1))=0 
-        _LightBlend("LightBlend",float)=1 
+        _WetValue("WetValue",Range(0,1))=0
+        _LightBlend("LightBlend",float)=1
+        _MirrorBlend("MirrorBlend",Color)=(1,1,1,1)
         
         [Toggle]_BlendVertexColor("BlendVertexColor",int)=0
 
@@ -175,6 +176,7 @@ Shader "MySprite-Lit-Default"
             int _Damp;
             int _HideNormal;
             float4 _FixedColor;
+            float4 _MirrorBlend;
  
             int NativePos;
             float4 _FlowerRemap;
@@ -320,8 +322,9 @@ Shader "MySprite-Lit-Default"
 
                 mirrorUV.x+=water_valueX;
                 mirrorUV.y+=water_valueY;
- 
-                float3 MirrorTexColor= SAMPLE_TEXTURE2D(_MirrorTex, sampler_MirrorTex, mirrorUV).xyz;  
+
+                float3 MirrorTexColor = SAMPLE_TEXTURE2D(_MirrorTex, sampler_MirrorTex, mirrorUV).xyz;
+                MirrorTexColor.xyz *= _MirrorBlend.xyz;
                 float MirrorValue=(MirrorTexColor.x+MirrorTexColor.y+MirrorTexColor.z)/3;
                  //return MirrorTexColor;
 

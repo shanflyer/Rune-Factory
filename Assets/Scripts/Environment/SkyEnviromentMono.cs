@@ -161,7 +161,7 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
     }
     async void DisplaySky(DisplaySky displaySky)
     {
-        displayCloud = displaySky.display;
+        displayCloud = !(!displaySky.display && !displaySky.displaySunlight);
         bgOffset =float4.zero;
         if (displaySky.display)
         {
@@ -205,6 +205,9 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
             {
                 farCloud.Stop();
                 nearCloud.Stop();
+                farCloud.Clear();
+                nearCloud.Clear();
+                
                 star.Stop();
                 ProFlareBatch.gameObject.SetActive(false);
             }
