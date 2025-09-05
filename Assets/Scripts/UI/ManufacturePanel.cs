@@ -1002,7 +1002,8 @@ public class ManufacturePanel : GamePanel<Manufature>
 
     private async void GetOutProduct()
     {
-        bool allSet = await PackageManager.instance.CheckPackageTryItemIn(CharacterManager.instance.controllerCharacter.characterPackage, manufature.product.x, manufature.product.y);
+        var allSet = PackageManager.instance.CheckPackageTryItemIn(
+            CharacterManager.instance.controllerCharacter.characterPackage, manufature.product.x, manufature.product.y);
         if (!allSet)
         {
             InformationController.instance.AddInformation(LanguageManage.SwitchStr("背包空间不足!"));

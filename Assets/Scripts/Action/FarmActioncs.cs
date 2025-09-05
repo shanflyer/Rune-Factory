@@ -62,6 +62,7 @@ public struct TrySicklePlant : GameAction
 }
 public struct TryGetPlantFruit : GameAction
 {
+    public int characterId;
     public int fieldId;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
@@ -72,6 +73,8 @@ public struct TryGetPlantFruit : GameAction
         {
             fieldId = source;
         }
+
+        if (target != 0 && target != int.MinValue) characterId = target;
         this.setResult = setResult;
         this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
@@ -149,7 +152,7 @@ public struct CheckFieldState : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int instanceid;
-
+    public bool plantDeath;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         

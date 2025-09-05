@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-[System.Serializable]
+[Serializable]
 public struct Item : IReferenceData
 {
     public int instanceId;
@@ -122,7 +122,8 @@ public class ItemManager:Singleton<ItemManager>
 
     public async Task BuyActionAsync(ShopItemData selectShopItemData, int buyCount)
     {
-        if (!await PackageManager.instance.CheckPackageTryItemIn(CharacterManager.instance.controllerCharacter.characterPackage, selectShopItemData.item, buyCount))
+        if (!PackageManager.instance.CheckPackageTryItemIn(
+                CharacterManager.instance.controllerCharacter.characterPackage, selectShopItemData.item, buyCount))
         {
             GameNotificationManager.instance.DisplayTips($"空间不足", "背包无法放下这么多东西");
             return;

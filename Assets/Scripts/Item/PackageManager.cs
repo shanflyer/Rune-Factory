@@ -719,11 +719,11 @@ public class PackageManager : Singleton<PackageManager>
         return packageSaveDatas;
     }
 
-    public async Task<bool> CheckPackageTryItemIn(int packageId, int itemDataId, int count)
+    public bool CheckPackageTryItemIn(int packageId, int itemDataId, int count)
     {
         if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
         {
-            return await gamePackage.CheckPackageTryItemIn(itemDataId, count);
+            return gamePackage.CheckPackageTryItemIn(itemDataId, count);
         }
         return false;
     }
@@ -1672,14 +1672,14 @@ public class PackageManager : Singleton<PackageManager>
             return packageItemCounts.ContainsKey(itemDataId);
         }
 
-        public async Task<bool> CheckPackageTryItemIn(int itemDataId, int count)
+        public bool CheckPackageTryItemIn(int itemDataId, int count)
         {
             if (caseCount < itemCount)
             {
                 return false;
             }
 
-            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(itemDataId.ToString());
+            var itemData = GameDataManager.instance.GetData<ItemData>(itemDataId.ToString());
             if (!string.IsNullOrEmpty(itemData.name))
             {
                 if (itemData.groupCount > 1)

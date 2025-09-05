@@ -2,6 +2,35 @@
 using Unity.Mathematics;
 using UnityEngine;
 
+public struct ShowItemAction : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Clear()
+    {
+        this = default;
+    }
+
+    public int itemId;
+    public int mapInstanceId;
+    public Vector3 position;
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 2)
+        {
+            itemId = int.Parse(parameters[0].value);
+            mapInstanceId = int.Parse(parameters[1].value);
+            position = GameCommon.StringToVector3(parameters[2].value);
+        }
+
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct AddItemValue : GameAction
 {
     public SetValue setValue { get; set; }

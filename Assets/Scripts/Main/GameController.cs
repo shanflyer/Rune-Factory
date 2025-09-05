@@ -1,18 +1,12 @@
- 
+using System.Collections.Generic;
+using System.Linq;
+using MyGame;
+using Unity.Mathematics;
 using UnityEngine;
- 
-using Unity.Mathematics;   
-using UnityEngine.InputSystem; 
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using MyGame; 
-using Unity.Transforms;
 using VoxelBusters.CoreLibrary;
 using VoxelBusters.EssentialKit;
-using System;
-using System.Collections.Generic;
-using Unity.Collections;
-using System.Linq;
-using Unity.Entities.UniversalDelegates;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -354,6 +348,7 @@ if (result.Success)
         var gameTimeEventManager = GameTimeEventManager.instance;
         var teamManager = TeamManager.instance;
         var gameGuideManager = GameGuideManager.instance;
+        var showItemManager = ShowItemManager.instance;
         GameTimeManager.instance.ZeroGameTime();
 
         GameTimerController.instance.DelayAction(100, () => { GameTimeManager.instance.SetTime(12, 0); });

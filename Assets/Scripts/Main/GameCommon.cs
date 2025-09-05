@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using Unity.Collections;
 using Unity.Mathematics;
-using UnityEngine; 
+using UnityEditor;
+using UnityEngine;
 
 public delegate void Int3Action(int3 value, int action = 0);
 
@@ -12,7 +15,7 @@ public delegate Vector2 GetVector2();
 
 public delegate void SetMoveTarge(int2 targetCoordinate, Vector2 targetPos);
 
-[System.Serializable]
+[Serializable]
 public enum AttributeType
 {
     无 = 0,
@@ -23,7 +26,7 @@ public enum AttributeType
     土 = 5
 }
 
-[System.Serializable]
+[Serializable]
 public enum Gender
 {
     animal = 0,
@@ -31,7 +34,7 @@ public enum Gender
     female = 2
 }
 
-[System.Serializable]
+[Serializable]
 public enum ValueType
 {
     AT = 1,
@@ -45,13 +48,13 @@ public enum ValueType
     Dodge = 9,
 }
 
-[System.Serializable]
+[Serializable]
 public enum CompareType
 {
     等于, 不等于, 大于, 不大于, 小于, 不小于
 }
 
-[System.Serializable]
+[Serializable]
 public enum CharacterPropertyType
 {
     自定义值 = -1, 体力 = 0, 生命 = 1, 法力 = 2, 攻击 = 3, 防御 = 4, 幸运 = 5, 饱食 = 6,
@@ -98,7 +101,13 @@ public enum Direction
 
 public enum RuntimeObjType
 {
-    MAPGROUND, MAPITEM, CHARACTER, STOREITEM, EMOTE, FISHTOOL
+    MAPGROUND,
+    MAPITEM,
+    CHARACTER,
+    STOREITEM,
+    EMOTE,
+    FISHTOOL,
+    OTHER
 }
 
 public enum FightRuntimeObjType
@@ -476,14 +485,14 @@ public static class GameCommon
 
     private static Vector2 GameViewSize()
     {
-        var mouseOverWindow = UnityEditor.EditorWindow.mouseOverWindow;
-        System.Reflection.Assembly assembly = typeof(UnityEditor.EditorWindow).Assembly;
-        System.Type type = assembly.GetType("UnityEditor.PlayModeView");
+        var mouseOverWindow = EditorWindow.mouseOverWindow;
+        Assembly assembly = typeof(EditorWindow).Assembly;
+        Type type = assembly.GetType("UnityEditor.PlayModeView");
 
         Vector2 size = (Vector2)type.GetMethod(
             "GetMainPlayModeViewTargetSize",
-            System.Reflection.BindingFlags.NonPublic |
-            System.Reflection.BindingFlags.Static
+            BindingFlags.NonPublic |
+            BindingFlags.Static
         ).Invoke(mouseOverWindow, null);
 
         return size;
@@ -851,7 +860,7 @@ public static class GameCommon
         // Create a byte array to hold the random value.
         byte[] randomNumber = new byte[length];
         // Create a new instance of the RNGCryptoServiceProvider.
-        System.Security.Cryptography.RNGCryptoServiceProvider rng = new System.Security.Cryptography.RNGCryptoServiceProvider();
+        RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
         // Fill the array with a random value.
         rng.GetBytes(randomNumber);
         // Convert the byte to an uint value to make the modulus operation easier.
