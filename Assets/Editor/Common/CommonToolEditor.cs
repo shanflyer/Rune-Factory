@@ -1,11 +1,9 @@
-﻿using Mono.Cecil.Cil;
-using Newtonsoft.Json;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 using TMPro;
-using Unity.Entities;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEditor.Animations;
@@ -20,7 +18,7 @@ public class CommonToolEditor : MyEditor
     [MenuItem("工具/通用工具")]
     public static void WindowShow()
     {
-        Instance = EditorWindow.CreateWindow<CommonToolEditor>("通用工具");
+        Instance = CreateWindow<CommonToolEditor>("通用工具");
         Instance.minSize = new Vector2(240, 360);
         Instance.maxSize = new Vector2(240, 360);
         Instance.ShowAuxWindow();
@@ -168,7 +166,8 @@ public class CommonToolEditor : MyEditor
         {
             RemoveMissComp();
         }
-         
+
+        if (GUILayout.Button("更新prefab")) RefreshPrefab();
         originalPsbPath= EditorGUILayout.TextField("源Psd", originalPsbPath);
         targePsbPath = EditorGUILayout.TextField("目标路径", targePsbPath);
         if (GUILayout.Button("复制"))
@@ -420,6 +419,165 @@ public class CommonToolEditor : MyEditor
 
     }
 
+    public void RefreshPrefab()
+    {
+        // 目录规范化 & 校验
+        var src = NormalizeFolder(sourcePath);
+        var dst = NormalizeFolder(objPath);
+        if (!IsValidFolder(src) || !IsValidFolder(dst))
+        {
+            Debug.LogError($"目录无效：\nsourceDir={sourcePath}\ntargetDir={objPath}");
+            return;
+        }
+
+        // 1) 收集“来源目录”内所有 Prefab 的 GUID（用来做成员判定）
+        var sourceGuids = new HashSet<string>(AssetDatabase.FindAssets("t:prefab", new[] { TrimSlash(src) }));
+
+        // 2) 遍历“目标目录”内的 Prefab
+        var targetGuids = AssetDatabase.FindAssets("t:prefab", new[] { TrimSlash(dst) });
+
+        AssetDatabase.StartAssetEditing();
+        try
+        {
+            foreach (var guid in targetGuids)
+            {
+                var prefabPath = AssetDatabase.GUIDToAssetPath(guid);
+                if (string.IsNullOrEmpty(prefabPath)) continue;
+
+                GameObject root = null;
+                var changed = false;
+
+                try
+                {
+                    root = PrefabUtility.LoadPrefabContents(prefabPath);
+                    if (root == null)
+                    {
+                        Debug.LogWarning($"LoadPrefabContents 失败: {prefabPath}");
+                        continue;
+                    }
+
+                    // 先“快照”所有 Transform，再筛选出需要替换的目标（避免迭代中删除）
+                    var all = root.GetComponentsInChildren<Transform>(true);
+
+                    // 收集候选：是“嵌套 Prefab 实例”的结点，且对应的资产在 sourceDir 中
+                    var candidates = new List<Transform>(64);
+                    foreach (var tr in all)
+                    {
+                        if (tr == null) continue; // 容错
+
+                        // 只处理“Prefab 实例的一部分”，普通节点跳过
+                        var originalObj = PrefabUtility.GetCorrespondingObjectFromOriginalSource(tr.gameObject);
+                        if (originalObj == null) continue;
+
+                        var originalPath = AssetDatabase.GetAssetPath(originalObj);
+                        if (string.IsNullOrEmpty(originalPath)) continue;
+
+                        var originalGuid = AssetDatabase.AssetPathToGUID(originalPath);
+                        if (sourceGuids.Contains(originalGuid)) candidates.Add(tr);
+                    }
+
+                    if (candidates.Count == 0)
+                        // 没有需要替换的子项
+                        continue;
+
+                    // 按“层级深度”从深到浅替换（避免先删父导致子失效）
+                    candidates.Sort((a, b) => GetDepth(b).CompareTo(GetDepth(a)));
+
+                    foreach (var tr in candidates)
+                    {
+                        if (tr == null) continue; // 父被删等情况的容错
+
+                        var go = tr.gameObject;
+                        var originalObj = PrefabUtility.GetCorrespondingObjectFromOriginalSource(go);
+                        if (originalObj == null) continue;
+
+                        var originalPath = AssetDatabase.GetAssetPath(originalObj);
+                        if (string.IsNullOrEmpty(originalPath)) continue;
+
+                        var replacementPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(originalPath);
+                        if (replacementPrefab == null)
+                        {
+                            Debug.LogWarning($"替换源 Prefab 读取失败：{originalPath}");
+                            continue;
+                        }
+
+                        // 记录父/序/局部变换/名字
+                        var parent = tr.parent;
+                        var sibling = tr.GetSiblingIndex();
+                        var lp = tr.localPosition;
+                        var lr = tr.localRotation;
+                        var ls = tr.localScale;
+                        var keepName = go.name;
+
+                        // 在同一父节点下实例化为“嵌套 Prefab 实例”
+                        var newObj = (GameObject)PrefabUtility.InstantiatePrefab(replacementPrefab, parent);
+                        var nt = newObj.transform;
+                        nt.SetSiblingIndex(sibling);
+                        nt.localPosition = lp;
+                        nt.localRotation = lr;
+                        nt.localScale = ls;
+                        newObj.name = keepName;
+
+                        // 删除旧实例
+                        DestroyImmediate(go);
+                        changed = true;
+                    }
+
+                    if (changed)
+                    {
+                        // ！！！必须带路径的重载，否则会报错或不生效
+                        PrefabUtility.SaveAsPrefabAsset(root, prefabPath);
+                        Debug.Log($"已更新嵌套子 Prefab：{prefabPath}");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"处理 Prefab 失败：{prefabPath}\n{ex}");
+                }
+                finally
+                {
+                    if (root != null)
+                        PrefabUtility.UnloadPrefabContents(root);
+                }
+            }
+        }
+        finally
+        {
+            AssetDatabase.StopAssetEditing();
+            AssetDatabase.Refresh();
+        }
+    }
+
+    // —— 工具函数 —— //
+    private int GetDepth(Transform t)
+    {
+        var d = 0;
+        for (var p = t; p != null; p = p.parent) d++;
+        return d;
+    }
+
+    private string NormalizeFolder(string path)
+    {
+        if (string.IsNullOrEmpty(path)) return path;
+        path = path.Replace('\\', '/');
+        if (!path.StartsWith("Assets/", StringComparison.Ordinal) && path != "Assets")
+            return path; // 允许传错，但不强行改，后面校验会报错
+        if (!path.EndsWith("/")) path += "/";
+        return path;
+    }
+
+    private string TrimSlash(string path)
+    {
+        if (string.IsNullOrEmpty(path)) return path;
+        if (path.EndsWith("/")) path = path.Substring(0, path.Length - 1);
+        return path;
+    }
+
+    private bool IsValidFolder(string folderWithSlash)
+    {
+        var f = TrimSlash(folderWithSlash);
+        return AssetDatabase.IsValidFolder(f);
+    }
     public void RemoveMissComp()
     {
         DirectoryInfo directoryInfo = new DirectoryInfo(objPath);
@@ -544,7 +702,7 @@ public class CommonToolEditor : MyEditor
                         }
                     }
                     PrefabUtility.SaveAsPrefabAsset(_obj, objPath);
-                    GameObject.DestroyImmediate(_obj);
+                    DestroyImmediate(_obj);
                     AssetDatabase.Refresh();
                 }
                 var dirs = directoryInfo.GetDirectories();
@@ -1063,14 +1221,15 @@ public class CommonToolEditor : MyEditor
                     {
                         continue;
                     }
-                    GameObject plantObj = GameObject.Instantiate(plantPrefab);
+
+                    var plantObj = Instantiate(plantPrefab);
                     if (plantSources.TryGetValue(plantData.plantName, out var sprites))
                     {
                         plantObj.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = sprites[sprites.Count - 2];
                     }
                     plantObj.name = plantData.plantName;
                     PrefabUtility.SaveAsPrefabAsset(plantObj, $"{plantObjPath}{plantData.plantName}.prefab");
-                    GameObject.DestroyImmediate(plantObj);
+                    DestroyImmediate(plantObj);
 
                     string animationDir = $"{plantAnimationDir}{plantData.plantName}";
                     if (Directory.Exists(animationDir))
