@@ -220,7 +220,7 @@ public class NPC : IReferenceData
     Season birthSeason;
     int birthDay;
     //NPCBehavior nPCBehavior;
-    public NPC(int instanceId, NPCData nPCData, Season birthSeason, int birthDay)
+    public NPC(int instanceId, NPCData nPCData, Season birthSeason, int birthDay, int startSleepHour)
     {
         characterInstance = instanceId;
         npcData = nPCData;
@@ -229,7 +229,8 @@ public class NPC : IReferenceData
         this.birthSeason = birthSeason; 
         this.birthDay = birthDay;
         NPCTaskScheduleManager.instance.AddNPCBehavior(instanceId);
-       // nPCBehavior = new NPCBehavior(instanceId);
+        this.startSleepHour = startSleepHour;
+        // nPCBehavior = new NPCBehavior(instanceId);
     }
     public FestivalData GetNpcBirthDay()
     {
@@ -310,10 +311,12 @@ public class NPC : IReferenceData
 
     private int resetDay = 0;
 
-    public bool isSleep { get; private set; }
-    public void SetSleep(bool isSleep)
+    public int startSleepHour { get; private set; }
+
+    public void SetSleep(int startSleepHour)
     {
-        this.isSleep = isSleep;
+        this.startSleepHour = startSleepHour;
+        GameDataSaveManager.instance.UserGameSaveData.SetNpcSleepTime(npcData.id, startSleepHour);
     }
     public void Rest()
     {
@@ -722,6 +725,28 @@ public class NPCManager : Singleton<NPCManager>
         GameActionManager.instance.AddListener<NewDay>(NewDay);
     }
 
+    public void TryWakeUp(bool force = false)
+    {
+        for (var i = 0; i < npcs.length; i++)
+        {
+            var npc = npcs[i];
+            if (npc.startSleepHour >= 0)
+            {
+                var wakeUp = force ? true : GameRandom.RandomInt(0, 100) > 50;
+                if (wakeUp)
+                {
+                    npc.SetSleep(-1);
+                    var sleepHour = 0;
+                    var nowHour = GameTimeManager.instance.Hour;
+                    if (nowHour < npc.startSleepHour)
+                        sleepHour = 24 - npc.startSleepHour + nowHour;
+                    else
+                        sleepHour = nowHour - npc.startSleepHour;
+                    npc.Character.WakeUp(sleepHour);
+                }
+            }
+        }
+    }
     protected override void Clear()
     {
         base.Clear();
@@ -895,7 +920,8 @@ public class NPCManager : Singleton<NPCManager>
                     GameDataSaveManager.instance.UserGameSaveData.SetNpcBirthDay(NPCData.id, (Season)saveBirthDay.x, saveBirthDay.y);
                 }
                 int instanceId = MyInstance.instance.CharacterId;
-                NPC npc = new NPC(instanceId, NPCData,(Season)saveBirthDay.x,saveBirthDay.y);
+                var sleepTime = GameDataSaveManager.instance.UserGameSaveData.GetNpcSleepHour(NPCData.id);
+                var npc = new NPC(instanceId, NPCData, (Season)saveBirthDay.x, saveBirthDay.y, sleepTime);
                 npcs.Add(npc.Key, npc);
                 instanceDatas[instanceId] = NPCData.id;
                 FriendManager.instance.ZeroFriendShip(NPCData.id, NPCData.zeroFriendShipLevel);

@@ -70,7 +70,7 @@ public class UserGameSaveData : IReferenceData
         openFormulas.AddRange(userGameSaveData.openFormulas);
 
         npcBirthDays.CopyData(userGameSaveData.npcBirthDays);
-
+        npcSleepTime.CopyData(userGameSaveData.npcSleepTime);
         endGuideFilmIndex = userGameSaveData.endGuideFilmIndex;
         playerStoreOpen = userGameSaveData.playerStoreOpen;
     }
@@ -94,6 +94,7 @@ public class UserGameSaveData : IReferenceData
 
     public FriendSaveData friendSaveData;
     public IntInt2Dictionary npcBirthDays = new IntInt2Dictionary();
+    public IntIntDictionary npcSleepTime = new();
     public IntChapterSaveDictionary chapters = new IntChapterSaveDictionary();
     public IntIntDictionary mapLineSaveData = new IntIntDictionary();
 
@@ -137,6 +138,12 @@ public class UserGameSaveData : IReferenceData
             return int2;
         }
         return new int2(-1, -1);
+    }
+
+    public int GetNpcSleepHour(int npdId)
+    {
+        if (npcSleepTime.TryGetValue(npdId, out var hour)) return hour;
+        return -1;
     }
     public void InitMapItemSaveData(int id)
     {
@@ -370,6 +377,11 @@ public class UserGameSaveData : IReferenceData
     public void SetNpcBirthDay(int  npcId,Season season,int day)
     {
         npcBirthDays[npcId] = new int2((int)season, day);
+    }
+
+    public void SetNpcSleepTime(int npcId, int hour)
+    {
+        npcSleepTime[npcId] = hour;
     }
     public void SetMapHomeEquipData(HomeEquip homeEquip)
     {
@@ -889,7 +901,7 @@ public class CharacterSaveData : IReferenceData
     public int2 weapon, clothes, shoe,headgear;
     public bool isMarried;
     public int hp, mp, power;
-
+    public int sleepHour;
  
     public CharacterSaveData(CharacterSaveData characterSaveData)
     {
@@ -907,6 +919,7 @@ public class CharacterSaveData : IReferenceData
         hp = characterSaveData.hp;
         mp = characterSaveData.mp;
         power = characterSaveData.power;
+        sleepHour = characterSaveData.sleepHour;
     }
     public CharacterSaveData()
     { }

@@ -103,7 +103,7 @@ public class CharacterManager : Singleton<CharacterManager>
             }
             else if (NPCManager.instance.GetNPCFormInstance(character.instanceId, out var npc))
             {
-                if (npc.isSleep)
+                if (npc.startSleepHour >= 0)
                 {
                     instance.RefreshSleep(character);
                 }
@@ -1502,7 +1502,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 {
                     if (NPCManager.instance.GetNPCFormInstance(character.instanceId, out var npc))
                     {
-                        if (npc.isSleep)
+                        if (npc.startSleepHour >= 0)
                         {
                             RefreshSleep(character);
                         }

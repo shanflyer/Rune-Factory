@@ -235,9 +235,9 @@ public struct MapLinkCell
 }
 public class MapCellController : Singleton<MapCellController>
 {
-    private Dictionary<int, RuntimeMapRoom> runtimeMapRooms = new Dictionary<int, RuntimeMapRoom>(); 
-    private NativeParallelHashMap<uint, ushort> mapObjBarriers;
-    public NativeParallelHashMap<uint, ushort>.ReadOnly MapObjBarriers => mapObjBarriers.AsReadOnly();
+    private readonly Dictionary<int, RuntimeMapRoom> runtimeMapRooms = new();
+    private NativeParallelHashMap<uint, short> mapObjBarriers;
+    public NativeParallelHashMap<uint, short>.ReadOnly MapObjBarriers => mapObjBarriers.AsReadOnly();
 
     
     NativeParallelMultiHashMap<int2, MapLinkCell> mapLinkCellSet;
@@ -561,7 +561,8 @@ public class MapCellController : Singleton<MapCellController>
         {
             for (int i = 0; i < cells.Length; i++)
             {
-                RemoveBarrier((uint)room, cells[i], runtimeMapRoom.startCoordinate, runtimeMapRoom.endCoordinate);  
+                var cell = cells[i] + itemPos;
+                RemoveBarrier((uint)room, cell, runtimeMapRoom.startCoordinate, runtimeMapRoom.endCoordinate);  
             }
         }
     }
@@ -1040,7 +1041,7 @@ public class MapCellController : Singleton<MapCellController>
         index = index +mapId* 1000_000;
         mapObjBarriers.TryGetValue(index, out var count);
         count++;
-        mapObjBarriers[index] = count;
+        mapObjBarriers[index] = count; 
     }
 
   
@@ -1049,16 +1050,12 @@ public class MapCellController : Singleton<MapCellController>
     {
         uint index = GetCoordinateIndex(coordinate.x,coordinate.y,startCoordinate,endCoordinate);
         index = index + mapId * 1000_000;
-        mapObjBarriers.TryGetValue(index, out var count);
+        mapObjBarriers.TryGetValue(index, out var count); 
         count--;
-        if (count == 0)
-        {
+        if (count <= 0)
             mapObjBarriers.Remove(index);
-        }
         else
-        {
             mapObjBarriers[index] = count;
-        }
     }
 
 
@@ -1491,7 +1488,7 @@ public class MapCellController : Singleton<MapCellController>
     {
         base.Init();
         GameActionManager.instance.AddListener<RemoveCellCharacter>(RemoveCellCharacter);
-        mapObjBarriers=new NativeParallelHashMap<uint, ushort>(204800,Allocator.Persistent);
+        mapObjBarriers = new NativeParallelHashMap<uint, short>(204800, Allocator.Persistent);
          
         mapLinkCellSet = new NativeParallelMultiHashMap<int2, MapLinkCell>(2048, Allocator.Persistent);
         mapLinkSet = new NativeHashMap<int3, MapLinkCell>(2048, Allocator.Persistent);

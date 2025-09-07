@@ -118,11 +118,28 @@ public class GameTimeManager : Singleton<GameTimeManager>
                     }
                     WeatherManager.instance.RefreshWeather(value);
                     GameActionManager.instance.QueueAction(new NewHour());
+                    if (_hour == 8) NPCManager.instance.TryWakeUp(true);
                 }
             }
         }
         private int _hour;
-        public int minute;
+
+        public int minute
+        {
+            get => _minute;
+            set
+            {
+                if (_minute != value)
+                {
+                    _minute = value;
+                    if (hour >= 6 && hour <= 8)
+                        if (value == 10 || value == 20 || value == 30 || value == 40 || value == 50 || value == 0)
+                            NPCManager.instance.TryWakeUp();
+                }
+            }
+        }
+
+        private int _minute;
         public int mySecond;
         public Week week;
 
@@ -797,123 +814,34 @@ public class GameTimeManager : Singleton<GameTimeManager>
 
     private void PlayerSleep(PlayerSleep playerSleep)
     {
-        int sleepHour = playerSleep.targetHour - nowGameTime.hour;
-        if (sleepHour < 0)
-        {
-            sleepHour += 24;
-        }
+       
         int characterId = playerSleep.characterId;
+        if (characterId == 0) characterId = CharacterManager.instance.controllerCharacter.instanceId;
         bool isController = CharacterManager.instance.controllerCharacter.instanceId == characterId;
         if (isController)
         {
             UIManager.instance.ShowGamePanel<SleepMaskPanel>();
         }
-        else
+        else if (NPCManager.instance.GetNPCFormInstance(characterId, out var npc))
         {
-            if (NPCManager.instance.GetNPCFormInstance(characterId, out var npc))
-            {
-                npc.SetSleep(true);
-            }
+            npc.SetSleep(nowGameTime.hour);
         }
-        void WakeUp()
-        {
-            CharacterManager.instance.controllerCharacter.linkItem = 0;
-            // Debug.Log($"characterId:{characterId}");
-            Character character = CharacterManager.instance.GetCharacter(characterId);
-            PlayerWakeUp playerWakeUp = new PlayerWakeUp
-            {
-                characterId = playerSleep.characterId
-            };
-            GameActionManager.instance.QueueAction(playerWakeUp, true);
-            SetCharacterAnimator setCharacterAnimator = new SetCharacterAnimator
-            {
-                characterId = playerSleep.characterId,
-                parameter = "State",
-                parameterType = ParameterType.INT,
-                intValue = 0
-            };
-            GameActionManager.instance.QueueAction(setCharacterAnimator, true);
-
-            SetCharacterAnimator setCharacterAnimatorDir_X = new SetCharacterAnimator
-            {
-                characterId = playerSleep.characterId,
-                parameter = "Dir_X",
-                parameterType = ParameterType.FLOAT,
-                floatValue = 0
-            };
-            GameActionManager.instance.QueueAction(setCharacterAnimatorDir_X, true);
-            SetCharacterAnimator setCharacterAnimatorDir_Y = new SetCharacterAnimator
-            {
-                characterId = playerSleep.characterId,
-                parameter = "Dir_Y",
-                parameterType = ParameterType.FLOAT,
-                floatValue = -1
-            };
-            GameActionManager.instance.QueueAction(setCharacterAnimatorDir_Y, true);
-
-            ChangeCharacterProperty changeCharacterProperty = new ChangeCharacterProperty
-            {
-                characterId = playerSleep.characterId,
-                propertyType = CharacterPropertyType.体力,
-                changeValue = (int)(character.CharacterProperty.MaxPower * 0.1667f * sleepHour)//六小时睡满体力
-            };
-            GameActionManager.instance.QueueAction(changeCharacterProperty, true);
-
-            var changeCharacterProperty1 = new ChangeCharacterProperty
-            {
-                characterId = playerSleep.characterId,
-                propertyType = CharacterPropertyType.生命,
-                changeValue = (int)(character.CharacterProperty.MaxHP * 0.1667f * sleepHour) //六小时睡满体力
-            };
-            GameActionManager.instance.QueueAction(changeCharacterProperty1, true);
-            var changeCharacterProperty2 = new ChangeCharacterProperty
-            {
-                characterId = playerSleep.characterId,
-                propertyType = CharacterPropertyType.法力,
-                changeValue = (int)(character.CharacterProperty.MaxMP * 0.1667f * sleepHour) //六小时睡满体力
-            };
-            GameActionManager.instance.QueueAction(changeCharacterProperty2, true);
-
-            if (NPCManager.instance.GetNPCFormInstance(characterId, out var npc))
-            {
-                npc.SetSleep(false);
-            }
-
-            WorldMapObjManager.instance.RefreshMapAudio();
-
-            GameTimerController.instance.DelayAction(1200,
-                () =>
-                {
-                    SetCharacterRandomCoordinate setCharacterRandomCoordinate = new SetCharacterRandomCoordinate
-                    {
-                        characterId = playerSleep.characterId,
-                        Coordinate = character.coordinate,
-                        range = 6
-                    };
-                    GameActionManager.instance.QueueAction(setCharacterRandomCoordinate);
-
-                    if (isController)
-                    {
-                        OpenOrCloseInputMap openOrCloseInputMap = new OpenOrCloseInputMap
-                        {
-                            open = true,
-                        };
-                        GameActionManager.instance.QueueAction(openOrCloseInputMap);
-                    }
-                });
-        }
-
-
+        
         var character = CharacterManager.instance.GetCharacter(characterId);
         CharacterManager.instance.RefreshSleep(character); 
 
         if (isController)
         {
+            var sleepHour = playerSleep.targetHour < nowGameTime.hour
+                ? 24 - nowGameTime.hour + playerSleep.targetHour
+                : playerSleep.targetHour - nowGameTime.hour;
             UIManager.instance.CloseGamePanel<OperateButtonPanel>();
-            LerpGameTime(playerSleep.targetHour, playerSleep.targetMinute, GameCommon.sleepCostTime, true, WakeUp);
+            LerpGameTime(playerSleep.targetHour, playerSleep.targetMinute,
+                GameCommon.sleepCostTime, true, () => { character.WakeUp(sleepHour); });
         }
         else
         {
+            /*
             int year = nowGameTime.year;
             int season = (int)nowGameTime.Season;
             int day = nowGameTime.day;
@@ -943,7 +871,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                     WakeUp();
                     GameActionManager.instance.RemoveListener<UpdateGameTime>(UpdateGameTime);
                 }
-            }
+            }*/
         }
     }
 

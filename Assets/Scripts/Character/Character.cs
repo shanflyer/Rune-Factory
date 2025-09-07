@@ -593,6 +593,72 @@ public partial class Character
     public int characterPackage;
     public List<int> skills = new List<int>();
 
+    public void WakeUp(int sleepHour)
+    {
+        linkItem = 0;
+        if (isController)
+        {
+            var playerWakeUp = new PlayerWakeUp
+            {
+                characterId = instanceId
+            };
+            GameActionManager.instance.QueueAction(playerWakeUp, true);
+            WorldMapObjManager.instance.RefreshMapAudio();
+            GameTimerController.instance.DelayAction(1200,
+                () =>
+                {
+                    var setCharacterRandomCoordinate = new SetCharacterRandomCoordinate
+                    {
+                        characterId = instanceId,
+                        Coordinate = coordinate,
+                        range = 6
+                    };
+                    GameActionManager.instance.QueueAction(setCharacterRandomCoordinate);
+
+                    if (isController)
+                    {
+                        var openOrCloseInputMap = new OpenOrCloseInputMap
+                        {
+                            open = true
+                        };
+                        GameActionManager.instance.QueueAction(openOrCloseInputMap);
+                    }
+                });
+        }
+
+        var setCharacterAnimator = new SetCharacterAnimator
+        {
+            characterId = instanceId,
+            parameter = "State",
+            parameterType = ParameterType.INT,
+            intValue = 0
+        };
+        GameActionManager.instance.QueueAction(setCharacterAnimator, true);
+
+        var changeCharacterProperty = new ChangeCharacterProperty
+        {
+            characterId = instanceId,
+            propertyType = CharacterPropertyType.体力,
+            changeValue = (int)(CharacterProperty.MaxPower * 0.1667f * sleepHour) //六小时睡满体力
+        };
+        AddProperty(changeCharacterProperty);
+
+        var changeCharacterProperty1 = new ChangeCharacterProperty
+        {
+            characterId = instanceId,
+            propertyType = CharacterPropertyType.生命,
+            changeValue = (int)(CharacterProperty.MaxHP * 0.1667f * sleepHour) //六小时睡满体力
+        };
+        AddProperty(changeCharacterProperty1);
+        var changeCharacterProperty2 = new ChangeCharacterProperty
+        {
+            characterId = instanceId,
+            propertyType = CharacterPropertyType.法力,
+            changeValue = (int)(CharacterProperty.MaxMP * 0.1667f * sleepHour) //六小时睡满体力
+        };
+        AddProperty(changeCharacterProperty2);
+        GameActionManager.instance.QueueAction(changeCharacterProperty2, true);
+    }
     public int2 GetMapStartIndex()
     {
         return MapCellController.instance.GetStartIndex(mapInstance, coordinate);
@@ -775,7 +841,7 @@ public partial class Character
         
         if (item.dataId != 0)
         {
-         await PackageManager.instance.SetItemInPackage(item, packageId);
+            await PackageManager.instance.SetItemInPackage(item, packageId);
         }
         if (itemData != null)
         {
@@ -941,7 +1007,7 @@ public partial class Character
                     return;
                 }
                 direction = GameCommon.GetCharacterDirect(moveDirection, direction);
-              // Debug.Log($"direction:{moveDirection}--{direction}");
+                // Debug.Log($"direction:{moveDirection}--{direction}");
                 if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var runtimeObj))
                 { 
                     runtimeObj.SetAnimationDirection(_moveDirection, direction); 
@@ -1138,11 +1204,27 @@ public partial class Character
         }
         else
         {
+            var isSleepNpc = false;
+            if (!character.isController && NPCManager.instance.GetNPCFormInstance(character.instanceId, out var npc))
+                if (npc.startSleepHour >= 0)
+                    isSleepNpc = true;
+
             int absX = math.abs(character.coordinate.x - coordinate.x);
             int absY = math.abs(character.coordinate.y - coordinate.y);
 
             if (NeighborhoodCharacters.Contains(character.instanceId))
             {
+                if (isSleepNpc)
+                {
+                    var refreshOperateCharacter = new RefreshOperateCharacter
+                    {
+                        characterId = character.instanceId,
+                        join = false
+                    };
+                    GameActionManager.instance.QueueAction(refreshOperateCharacter);
+                    NeighborhoodCharacters.Remove(character.instanceId);
+                    return;
+                }
                 if (absX > range || absY > range)
                 {
                     RefreshOperateCharacter refreshOperateCharacter = new RefreshOperateCharacter
@@ -1158,7 +1240,7 @@ public partial class Character
             {
                 if (absX <= range && absY <= range)
                 {
-                    if (NPCManager.instance.GetNPCFormInstance(character.instanceId, out var npc) && npc.isSleep)
+                    if (!character.isController || isSleepNpc)
                     {
                         RefreshOperateCharacter refreshOperateCharacter = new RefreshOperateCharacter
                         {
@@ -1196,7 +1278,7 @@ public partial class Character
         {
             if (NPCManager.instance.GetNPCFormInstance(id, out var npc))
             {
-                if (npc.isSleep)
+                if (npc.startSleepHour >= 0)
                 {
                     sleepCharacters.Remove(id);
                 }
@@ -1258,12 +1340,12 @@ public partial class Character
             {
                 name = "NextTalkEventId",
                 value = nextTalkEventId
-            }; 
-           await GameEventManager.instance.AddGameEvent(
-            eventId, new List<EventReferenceData>
-            {
+            };
+            await GameEventManager.instance.AddGameEvent(
+                eventId, new List<EventReferenceData>
+                {
                     eventReferenceData,targetReferenceData,NextTalkReferenceData
-            });
+                });
              
         }
          
@@ -1458,7 +1540,7 @@ public partial class Character
             }
             else
             {
-               // Debug.Log($"离开触发：{reference}");
+                // Debug.Log($"离开触发：{reference}");
                 if (oldOperateItem == reference)
                 {
                     oldOperateItem = -1;
@@ -1506,7 +1588,7 @@ public partial class Character
             value = reference
         });
 
-       await  GameEventManager.instance.AddGameEvent(eventid, eventReferenceDatas);
+        await GameEventManager.instance.AddGameEvent(eventid, eventReferenceDatas);
     }
 
     public void SetTriggerMapItem(int reference, int eventId)
@@ -1560,7 +1642,7 @@ public partial class Character
                     oldOperaCoordinate = OldOperaCoordinate;
                 }
                 MapCellController.instance.CheckPlayerTriggerEvent(
-                objCoordinate.z, oldCoordinate, true, TriggerEventAction,false, oldOperateItem);
+                    objCoordinate.z, oldCoordinate, true, TriggerEventAction, false, oldOperateItem);
 
                 /* DisplayMap displayMap = new DisplayMap
                  {
@@ -1574,7 +1656,7 @@ public partial class Character
         }
 
         MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.角色, coordinate.z, oldCoordinate, coordinate.xy,
-           TriggerEventAction);
+            TriggerEventAction);
         if (isController)
         {
             int2 oldOperaCoordinate = oldCoordinate.xy;
@@ -1605,12 +1687,12 @@ public partial class Character
         
 
             MapCellController.instance.CheckPlayerTriggerEvent(coordinate.z, oldOperaCoordinate, checkCoordinate.xy,
-           TriggerEventAction,false, oldOperateItem);
+                TriggerEventAction, false, oldOperateItem);
             oldCoordinate = OldOperaCoordinate = checkCoordinate.xy;
 
             checkCoordinate.xy += offsetCoordinate * 2;
             MapCellController.instance.CheckPlayerTriggerEvent(coordinate.z,forwardCoordinate, checkCoordinate.xy,
-          TriggerEventAction, true, oldOperateItem);
+                TriggerEventAction, true, oldOperateItem);
             forwardCoordinate = checkCoordinate.xy;
         }
         SetObjCoordinate(coordinate);
@@ -1623,7 +1705,7 @@ public partial class Character
 
         if (refreshObj)
         {
-             CharacterManager.instance.RefreshNpcRuntimeObj(this,isController, refreshMapTemp);
+            CharacterManager.instance.RefreshNpcRuntimeObj(this, isController, refreshMapTemp);
         }
        
         // ForwardTrigger(coordinate, direction);
@@ -1634,7 +1716,7 @@ public partial class Character
         int2 oldCoordinate = objCoordinate.xy;
         int3 checkCoordinate = new int3(coordinate.xy, mapInstance);
         MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.角色, mapInstance, oldCoordinate, coordinate.xy,
-           TriggerEventAction);
+            TriggerEventAction);
 
         SetObjCoordinate(checkCoordinate,refreshPos);
         CharacterCoordinateTrigger characterCoordinateTrigger = new CharacterCoordinateTrigger
@@ -1677,7 +1759,7 @@ public partial class Character
     public Int3Action failedMoveAction { get; private set; }
   
     public bool TryMove(int2 targetCoordinate, MoveEndAction moveEndAction = null, MoveEndAction changeCoordinateAction = null,
-       Int3Action failedMoveAction = null)
+        Int3Action failedMoveAction = null)
     {
         return TryMove(mapInstance, targetCoordinate, moveEndAction, changeCoordinateAction, failedMoveAction);
     }
@@ -1781,7 +1863,7 @@ public partial class Character
                     { 
                         MapCellJobController.instance.AddPathRequest(startCoordinate, targetCoordinate, nowMap, (Stack<int2> path, int map) =>
                         {
-                          //  Debug.Log($"PlayerMove：startCoordinate:{nowMap}startCoordinate{startCoordinate}targetCoordinate{targetCoordinate}-nowMap{nowMap}");
+                            //  Debug.Log($"PlayerMove：startCoordinate:{nowMap}startCoordinate{startCoordinate}targetCoordinate{targetCoordinate}-nowMap{nowMap}");
                             roadCells.Add(map, path);
                             roomCount--;
                             if (roomCount == 0)
@@ -1812,7 +1894,7 @@ public partial class Character
                     {
                         if (path.Count == 0)
                         {
-                            Debug.Log($"寻路失败:path.Count == 0");
+                            Debug.Log($"{characterData.characterName}寻路失败:path.Count == 0");
                             FailedMoveAction();
                             return;
                         }
@@ -1824,7 +1906,7 @@ public partial class Character
                             pathStr = GameCommon.BlendString(pathStr, ",", pList[i].ToString());
                         }*/
 
-                       // Debug.Log($"PlayerMove:map{map}-path.count{path.Count} pathStr{pathStr}");
+                        // Debug.Log($"PlayerMove:map{map}-path.count{path.Count} pathStr{pathStr}");
                         if (!zero)
                         {
                             var coordinate = path.Pop();

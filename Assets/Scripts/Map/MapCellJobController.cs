@@ -11,7 +11,7 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
 {
     [ReadOnly] public NativeArray<PathRequest> requests;
     [ReadOnly] public NativeArray<int4> mapRanges;
-    [ReadOnly] public NativeParallelHashMap<uint, ushort>.ReadOnly barrierMap;
+    [ReadOnly] public NativeParallelHashMap<uint, short>.ReadOnly barrierMap;
 
     // —— 方案B：每个请求的面积 & 该请求段的起始偏移（由控制器计算传入）——
     [ReadOnly] public NativeArray<int> areas;           // area[i] = (w*h) of request i

@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
-using System.Collections.Generic; 
+using UnityEngine;
 
 public enum BindItemType
 {
@@ -15,9 +15,6 @@ public class SelectBlindItemAndFindMoveTarget: Action
     [Header("角色ID")]
     [SerializeField]
     private SharedInt characterId;
-    [Header("最小范围")]
-    [SerializeField]
-    private SharedInt minRange; 
     [Header("最大范围")]
     [SerializeField]
     private SharedInt maxRange;
@@ -114,7 +111,9 @@ public class SelectBlindItemAndFindMoveTarget: Action
                         return; 
                     }
                 }
-                if (MapCellController.instance.GetCoordinates(SelectItem.Value.x, coordinate.xy, minRange.Value, maxRange.Value, true, out var rangeCoordinates))
+
+                var triggerCells = MapCellController.instance.GetItemTriggerCells(SelectItem.Value.x, coordinate.z);
+                if (triggerCells != null && triggerCells.Count > 0)
                 {
                     GameRandomData gameRandomData = new GameRandomData
                     {
@@ -124,7 +123,7 @@ public class SelectBlindItemAndFindMoveTarget: Action
                         randomItems = new List<RandomItem>(),
                         text = "选择目标"
                     };
-                    for (int i = 0; i < rangeCoordinates.Count; i++)
+                    for (var i = 0; i < triggerCells.Count; i++)
                     {
                         RandomItem randomItem = new RandomItem
                         {
@@ -141,7 +140,7 @@ public class SelectBlindItemAndFindMoveTarget: Action
                     if (randomResults.Count >= 0)
                     {
                         int index = randomResults[0].x;
-                        targetCoordinate.Value = new int3(rangeCoordinates[index], SelectItem.Value.x);
+                        targetCoordinate.Value = new int3(triggerCells[index], SelectItem.Value.x);
                         taskStatus = TaskStatus.Success;
                         return;
                     }
