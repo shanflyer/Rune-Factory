@@ -1,5 +1,4 @@
-﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -883,7 +882,8 @@ public class AudioController : Singleton<AudioController>
                                     childMixer.SetInputWeight(count + i, timeValue * audioClips[i].weight);
                                 }
                             }
-                            timeValue += Time.deltaTime;
+
+                            timeValue += Time.deltaTime * 0.25f;
                             yield return 0;
                         }
 

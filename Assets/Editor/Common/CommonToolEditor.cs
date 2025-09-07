@@ -135,9 +135,9 @@ public class CommonToolEditor : MyEditor
             SetSprite();
         }
 
-        if (GUILayout.Button("刷新TestRender"))
+        if (GUILayout.Button("输出地图bgm"))
         {
-            UpdateObjTestRender();
+            OutMapRoomBGM();
         }
         if (GUILayout.Button("输出UI内容"))
         {
@@ -742,6 +742,30 @@ public class CommonToolEditor : MyEditor
         File.WriteAllText("OutText", outStr);
     }
 
+    private void OutMapRoomBGM()
+    {
+        var mapPath = "Assets/Resources/Data/MapRoomData";
+        var directoryInfo = new DirectoryInfo(mapPath);
+        var files = directoryInfo.GetFiles("*.asset");
+        var audioClips = new HashSet<AudioClip>();
+        foreach (var file in files)
+        {
+            var mapRoomData = AssetDatabase.LoadAssetAtPath<MapRoomData>($"{mapPath}/{file.Name}");
+            for (var i = 0; i < mapRoomData.mapBGMDatas.Count; i++)
+            {
+                var clips = mapRoomData.mapBGMDatas[i].bgms;
+                foreach (var audioClip in clips) audioClips.Add(audioClip);
+            }
+        }
+
+        foreach (var audioClip in audioClips)
+        {
+            var s_p = $"Assets/Audio/Common/{audioClip.name}.mp3";
+            File.Copy(s_p, $"D:\\MyGame\\BGM/{audioClip.name}.mp3");
+        }
+
+        //File.WriteAllText("MapRoomBGM.text", bgmListStr);
+    }
     private void UpdateObjTestRender()
     {
         try

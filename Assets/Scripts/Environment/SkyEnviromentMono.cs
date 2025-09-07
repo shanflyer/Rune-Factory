@@ -269,7 +269,7 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
         {
             _cloud = value;
             //Debug.Log($"Cloud:{value}");
-            if (value > 0)
+            if (value > 0 && displayCloud)
             {
                 if (farCloud.isStopped) farCloud.Play();
 
