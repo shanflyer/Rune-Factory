@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
 using System.Text;
 using Unity.Collections;
 using Unity.Mathematics;
@@ -405,57 +404,18 @@ public static class GameCommon
     public const float dropItemFlyerSpeed = 3f;
     public const int SeasonDays = 30;
     public const float fightMapMovingSpeed = 1f;
-
-    public const int DefaultOutItemId = -1;
+ 
     public const float PromptTime = 2.0f;
     public const float cellWidth = 0.08f, cellHigh = 0.08f;
     public const float cellSize = 0.04f;
     public const float oneDividCellWidth = 12.5f, oneDividCellHigh = 12.5f;
     public const float slantValue = 0.707f;
 
-    public const int randomInnerGroupMax = 5;
-
-    public const int worldMapSizeX = 80;
-    public const int worldMapSizeY = 45;
-    public const float worldMapTileSize = 0.08f;
-
-    public const float hightMin = -0.5f;
-    public const float hightMax = 1;
-
-    public const float waterPerlinMin = 4;
-    public const float waterPerlinMax = 6;
-
-    public const float hightPerlinMin = 8;
-    public const float hightPerlinMax = 10;
-
-    public const int worldGridTypeSeedMin = 200;
-    public const int worldGridTypeSeedMax = 2000;
-
-    public const int hightSeedMin = 100;
-    public const int hightSeedMax = 400;
-
-    public const int waterSeedMin = 1000;
-    public const int waterSeedMax = 10000;
-
-    public const float waterMin = 0.01f;
-    public const float waterMax = 0.02f;
-
-    public const float waterRandomMin = 0;
-    public const float waterRandomMax = 1;
-
-    /// <summary>
-    /// 生成水面的噪声时对结果的重映射
-    /// </summary>
-    public const float waterLerpValueMin_Min = 0.5f;
-
-    public const float waterLerpValueMin_Max = 1f;
-    public const float waterLerpValueMax_Min = 1f;
-    public const float waterLerpValueMax_Max = 2.0f;
+    public const float worldMapTileSize = 0.08f; 
+ 
 
     public const float mapChangeLerpTime = 0.4f;
-
-    public const float ScreenHalfSizeX = 960;
-    public const float ScreenHalfSizeY = 540;
+ 
 
     public const int fishingGameTime = 15000;
 
@@ -463,8 +423,7 @@ public static class GameCommon
     public const string triggerRenferenceName = "Reference";
 
     public const string PlayerBoxId = "PlayerBoxId";
-
-    public const float weatherLerpTime = 5.0f;
+ 
 
     public static Vector2 GetScreenResolution()
     {
@@ -499,7 +458,36 @@ public static class GameCommon
     }
 
 #endif
+    public static int2 GridCenter(List<int> grid)
+    {
+        var _minX = int.MaxValue;
+        var _minY = int.MaxValue;
+        var _maxX = int.MinValue;
+        var _maxY = int.MinValue;
 
+        var gridCount = grid.Count / 4;
+
+        var cells = new List<int2>();
+        for (var i = 0; i < gridCount; i++)
+        {
+            var minX = grid[i * 4];
+            var minY = grid[i * 4 + 1];
+
+            var maxX = grid[i * 4 + 2];
+            var maxY = grid[i * 4 + 3];
+            if (maxX > _maxX) _maxX = maxX;
+
+            if (minX < _minX) _minX = minX;
+
+            if (minY > _minY) _minY = minY;
+
+            if (maxY < _maxY) _maxY = maxY;
+        }
+
+        var min = new int2(_minX, _minY);
+        var max = new int2(_maxX, _maxY);
+        return min + (max - min) / 2;
+    }
     public static List<int2> GridToCells(List<int> grid)
     {
         int gridCount = grid.Count / 4;
@@ -682,43 +670,8 @@ public static class GameCommon
         return value;
     }
 
-
-    
-    /// <summary>
-    /// 转换方向为值
-    /// </summary>
-    /// <param name="direction"></param>
-    /// <returns></returns>
-    public static int GetDirectionValue(Direction direction)
-    {
-        var value = 1;
-        for (int i = 0; i < (int)direction; i++)
-        {
-            value *= 2;
-        }
-        return value;
-    }
-
-    /// <summary>
-    /// 检查方向值
-    /// </summary>
-    /// <param name="direction"></param>
-    /// <param name="target"></param>
-    /// <returns></returns>
-    public static bool CheckDirectionValue(Direction direction, int target)
-    {
-        var value = Convert.ToString(target, 2).ToCharArray();
-        int index = (int)direction;
-        try
-        {
-            return value[value.Length - 1 - index] == '1';
-        }
-        catch
-        {
-            return false;
-        }
-    }
-
+ 
+ 
     public static int2 StringToInt2(string str)
     {
         int2 result = new int2();
@@ -824,13 +777,7 @@ public static class GameCommon
         int2 result = coordinate0 - coordinate1;
         return math.length(new float2(result.x * cellWidth, result.y * cellHigh));
     }
-
-    public static int GetCellDistance(int2 coordinate0, int2 coordinate1)
-    {
-        int2 result = coordinate0 - coordinate1;
-        return math.abs(result.x) + math.abs(result.y);
-    }
-
+  
     public static string AddString(string s0, string s1)
     {
         s1 = s1.Replace("_", "/");
@@ -850,27 +797,7 @@ public static class GameCommon
         } 
         return builder.ToString();
     }
-    public static void SetEnable(GameObject gameObject, bool enable, bool compontEnable)
-    {
-        gameObject.transform.localScale = enable ? Vector3.one : Vector3.zero;
-    }
-
-    public static int NextRandom(int numSeeds, int length)
-    {
-        // Create a byte array to hold the random value.
-        byte[] randomNumber = new byte[length];
-        // Create a new instance of the RNGCryptoServiceProvider.
-        RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
-        // Fill the array with a random value.
-        rng.GetBytes(randomNumber);
-        // Convert the byte to an uint value to make the modulus operation easier.
-        uint randomResult = 0x0;
-        for (int i = 0; i < length; i++)
-        {
-            randomResult |= ((uint)randomNumber[i] << ((length - 1 - i) * 8));
-        }
-        return (int)(randomResult % numSeeds) + 1;
-    }
+ 
 
     public static int CreateRandSeed()
     {
@@ -898,62 +825,7 @@ public static class GameCommon
         }
         return float2.zero;
     }
-
-    public static Direction GetDirect(int2 start, int2 target)
-    {
-        int2 offset = start - target;
-
-        if (Mathf.Abs(offset.x) > Mathf.Abs(offset.y))
-        {
-            if (offset.x < 0)
-            {
-                return Direction.RIGHT;
-            }
-            else
-            {
-                return Direction.LEFT;
-            }
-        }
-        else
-        {
-            if (offset.y < 0)
-            {
-                return Direction.UP;
-            }
-            else
-            {
-                return Direction.DOWN;
-            }
-        }
-    }
-
-    public static Direction GetDirect(Vector2Int start, Vector2Int target)
-    {
-        Vector2Int offset = start - target;
-
-        if (Mathf.Abs(offset.x) > Mathf.Abs(offset.y))
-        {
-            if (offset.x < 0)
-            {
-                return Direction.RIGHT;
-            }
-            else
-            {
-                return Direction.LEFT;
-            }
-        }
-        else
-        {
-            if (offset.y < 0)
-            {
-                return Direction.UP;
-            }
-            else
-            {
-                return Direction.DOWN;
-            }
-        }
-    }
+ 
     public static float VectorAngle(Vector2 from, Vector2 to)
     {
         float angle;
@@ -974,60 +846,7 @@ public static class GameCommon
     private static float2 RightUp = new float2(1, 1);
     private static float2 LeftDown = new float2(-1, -1);
     private static float2 RightDown = new float2(1, -1);
-
-    public static float2 InitMoveDirect(float2 movedirect)
-    {
-        if (movedirect.x == 0 && movedirect.y == 0)
-        {
-            return movedirect;
-        }
-        float value = math.abs(movedirect.y / movedirect.x);
-        if (value < tansMin)
-        {
-            if (movedirect.x < 0)
-            {
-                return Left;
-            }
-            else
-            {
-                return Right;
-            }
-        }
-        else if (value > tansMax)
-        {
-            if (movedirect.y < 0)
-            {
-                return Down;
-            }
-            else
-            {
-                return Up;
-            }
-        }
-        else if (movedirect.x < 0)
-        {
-            if (movedirect.y < 0)
-            {
-                return LeftDown;
-            }
-            else
-            {
-                return LeftUp;
-            }
-        }
-        else
-        {
-            if (movedirect.y < 0)
-            {
-                return RightDown;
-            }
-            else
-            {
-                return RightUp;
-            }
-        }
-    }
-
+ 
     public static Direction GetCharacterDirect(float2 offset, Direction oldDirection = Direction.Default)
     {
         if (Mathf.Abs(offset.x) > Mathf.Abs(offset.y))
@@ -1107,176 +926,7 @@ public static class GameCommon
         }
         return oldDirection;
     }
-
-    public static Direction GetCharacterDirect(int2 start, int2 target, Direction oldDirection = Direction.Default)
-    {
-        int2 offset = start - target;
-
-        if (Mathf.Abs(offset.x) > Mathf.Abs(offset.y))
-        {
-            if (offset.x < 0)
-            {
-                return Direction.RIGHT;
-            }
-            else
-            {
-                return Direction.LEFT;
-            }
-        }
-        if (Mathf.Abs(offset.x) < Mathf.Abs(offset.y))
-        {
-            if (offset.y < 0)
-            {
-                return Direction.UP;
-            }
-            else
-            {
-                return Direction.DOWN;
-            }
-        }
-        if (offset.x != 0 && offset.y != 0)
-        {
-            if (offset.x < 0)
-            {
-                if (offset.y < 0)
-                {
-                    if (oldDirection == Direction.RIGHT || oldDirection == Direction.UP)
-                    {
-                        return oldDirection;
-                    }
-                    else
-                    {
-                        return Direction.UP;
-                    }
-                }
-                else
-                {
-                    if (oldDirection == Direction.RIGHT || oldDirection == Direction.DOWN)
-                    {
-                        return oldDirection;
-                    }
-                    else
-                    {
-                        return Direction.DOWN;
-                    }
-                }
-            }
-            else
-            {
-                if (offset.y < 0)
-                {
-                    if (oldDirection == Direction.LEFT || oldDirection == Direction.UP)
-                    {
-                        return oldDirection;
-                    }
-                    else
-                    {
-                        return Direction.UP;
-                    }
-                }
-                else
-                {
-                    if (oldDirection == Direction.LEFT || oldDirection == Direction.DOWN)
-                    {
-                        return oldDirection;
-                    }
-                    else
-                    {
-                        return Direction.DOWN;
-                    }
-                }
-            }
-        }
-        return oldDirection;
-    }
-
-    public static Direction GetCharacterDirect(Vector2Int start, Vector2Int target, Direction oldDirection = Direction.Default)
-    {
-        Vector2Int offset = start - target;
-
-        if (Mathf.Abs(offset.x) > Mathf.Abs(offset.y))
-        {
-            if (offset.x < 0)
-            {
-                return Direction.RIGHT;
-            }
-            else
-            {
-                return Direction.LEFT;
-            }
-        }
-        if (Mathf.Abs(offset.x) < Mathf.Abs(offset.y))
-        {
-            if (offset.y < 0)
-            {
-                return Direction.UP;
-            }
-            else
-            {
-                return Direction.DOWN;
-            }
-        }
-        if (offset != Vector2Int.zero)
-        {
-            if (offset.x < 0)
-            {
-                if (offset.y < 0)
-                {
-                    if (oldDirection == Direction.RIGHT || oldDirection == Direction.UP)
-                    {
-                        return oldDirection;
-                    }
-                    else
-                    {
-                        return Direction.UP;
-                    }
-                }
-                else
-                {
-                    if (oldDirection == Direction.RIGHT || oldDirection == Direction.DOWN)
-                    {
-                        return oldDirection;
-                    }
-                    else
-                    {
-                        return Direction.DOWN;
-                    }
-                }
-            }
-            else
-            {
-                if (offset.y < 0)
-                {
-                    if (oldDirection == Direction.LEFT || oldDirection == Direction.UP)
-                    {
-                        return oldDirection;
-                    }
-                    else
-                    {
-                        return Direction.UP;
-                    }
-                }
-                else
-                {
-                    if (oldDirection == Direction.LEFT || oldDirection == Direction.DOWN)
-                    {
-                        return oldDirection;
-                    }
-                    else
-                    {
-                        return Direction.DOWN;
-                    }
-                }
-            }
-        }
-        return oldDirection;
-    }
-
-    public static float2 WorldCoordinateToPos(float2 coordinate)
-    {
-        float2 pos = new float2(coordinate.x * worldMapTileSize + worldMapTileSize * 0.5f, coordinate.y * worldMapTileSize + worldMapTileSize * 0.5f);
-        return pos;
-    }
+ 
 
     public static Vector2 GetMapPos(int x, int y)
     {
@@ -1337,60 +987,13 @@ public static class GameCommon
 
         return new int2(x, y);
     }
-
-    public static bool CompareGameTime(int year, int season, int day, int hour, int minute, int targetYear, int targetSeason, int
-        targetDay, int targetHour, int targetMinute)
-    {
-        if (targetYear > 0)
-        {
-            if (targetYear < year)
-                return true;
-            if (targetYear > year)
-                return false;
-        }
-        if (targetSeason > 0)
-        {
-            if (targetSeason < season)
-                return true;
-            if (targetSeason > season)
-                return false;
-        }
-        if (targetDay > 0)
-        {
-            if (targetDay < day)
-                return true;
-            if (targetDay > day)
-                return false;
-        }
-        if (targetHour > 0)
-        {
-            if (targetHour < hour)
-                return true;
-            if (targetHour > hour)
-                return false;
-        }
-        if (targetMinute > 0)
-        {
-            if (targetMinute <= minute)
-                return true;
-            if (targetMinute > minute)
-                return false;
-        }
-
-        return true;
-    }
+ 
 }
-
-public static class DefaultGameData
-{
-    public const int defaultDay = 1;
-    public const int defaultHour = 8;
-}
-
+  
 public static class EditorDataPath
 {
     public const string itemIconPath = "Item/";
-
+   
     public const string npcBehaviorPath = "Assets/Resources/Behavior/NPC/";
     public const string outDataPath = "Assets/Resources/Data/";
     public const string groundSourcePath = "Assets/Texture/Map/Ground/";
@@ -1419,6 +1022,7 @@ public static class DataPath
 {
     public static readonly Dictionary<Type, string> dataPathDic = new Dictionary<Type, string>
     {
+        { typeof(SpecialMapLink), "Data/SpecialMapLink" },
         {typeof(GameGlobalData),"Data/GameGlobalData" },
         {typeof(LanguageSwitchDataList),"Data/LanguageSwitchData" },
         {typeof(FunctionData),"Data/FunctionDataList" },

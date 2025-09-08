@@ -233,17 +233,23 @@ public struct MapLinkCell
     public int afterAction;
     public int3 targetCell;
 }
+
+public struct SpecialLinkCell
+{
+    public int lineInstance;
+    public int map0, map1;
+    public MapLinkCell MapLinkCell0, MapLinkCell1;
+}
 public class MapCellController : Singleton<MapCellController>
 {
     private readonly Dictionary<int, RuntimeMapRoom> runtimeMapRooms = new();
     private NativeParallelHashMap<uint, short> mapObjBarriers;
     public NativeParallelHashMap<uint, short>.ReadOnly MapObjBarriers => mapObjBarriers.AsReadOnly();
 
-    
     NativeParallelMultiHashMap<int2, MapLinkCell> mapLinkCellSet;
     NativeHashMap<int3, MapLinkCell> mapLinkSet;
     Dictionary<int, HashSet<int>> mapNeighbors=new Dictionary<int, HashSet<int>>();
-
+    private readonly List<SpecialLinkCell> SpecialLinkCells = new();
 
     public delegate void TriggerEvent(int eventId, int reference, bool enter, bool controller);
 
@@ -1113,26 +1119,38 @@ public class MapCellController : Singleton<MapCellController>
         runtimeMapRooms.Add(runtimeMapRoom.Key, runtimeMapRoom);
     }
 
-    public bool GetLinkMapInCoordinate(int nowMap, int linkMap, out int2 inCoordinate,out int2 targetCoordinate)
+    public bool GetLinkMapInCoordinate(int nowMap, int linkMap, out Queue<int4> changeCoordinate)
     {
         int2 key = new int2(nowMap, linkMap);
-        inCoordinate=targetCoordinate = key;
-        List<MapLinkCell> LinkCells = new List<MapLinkCell>();
+        changeCoordinate = null;
+        var LinkCells = new Dictionary<int2, List<MapLinkCell>>();
         if (mapLinkCellSet.TryGetFirstValue(key,out var mapLinkCell,out var it))
         {
             do
             {
                 if (CheckIsWalk(new int3(mapLinkCell.coordinate, nowMap)))
                 {
-                    LinkCells.Add(mapLinkCell);
+                    if (!LinkCells.TryGetValue(mapLinkCell.targetCell.xy, out var cells))
+                    {
+                        cells = new List<MapLinkCell>();
+                        LinkCells.Add(mapLinkCell.targetCell.xy, cells);
+                    }
+
+                    cells.Add(mapLinkCell);
                 }
                
             } while (mapLinkCellSet.TryGetNextValue(out mapLinkCell, ref it));
         }
         if (LinkCells.Count > 0)
         {
-            inCoordinate = LinkCells[GameRandom.RandomInt(0, LinkCells.Count)].coordinate;
-            targetCoordinate = LinkCells[GameRandom.RandomInt(0, LinkCells.Count)].targetCell.xy;
+            changeCoordinate = new Queue<int4>();
+            foreach (var linkCell in LinkCells.Values)
+            {
+                var inCoordinate = linkCell[GameRandom.RandomInt(0, linkCell.Count)].coordinate;
+                var targetCoordinate = linkCell[GameRandom.RandomInt(0, linkCell.Count)].targetCell.xy;
+                changeCoordinate.Enqueue(new int4(inCoordinate, targetCoordinate));
+            } 
+           
             return true;
         }
          
@@ -1253,6 +1271,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public void InitLinkMap(MapLine mapLine)
     {
+        var isSpecial = IsSpecialLink(mapLine.instanceId);
         int2 key0 = new int2(mapLine.map0, mapLine.map1);
         int2 key1 = new int2(mapLine.map1, mapLine.map0);
 
@@ -1262,6 +1281,33 @@ public class MapCellController : Singleton<MapCellController>
         {
             dir0= DirectionMask.Add(dir0,mapLine.cells0.directions[i]);
         }
+
+        if (isSpecial)
+        {
+            var mapLinkCell0 = new MapLinkCell
+            {
+                coordinate = GameCommon.GridCenter(mapLine.cells0.girds),
+                directionValue = dir0,
+                afterAction = mapLine.cells0.afterAction,
+                targetCell = mapLine.cells0.targetCell
+            };
+            var mapLinkCell1 = new MapLinkCell
+            {
+                coordinate = GameCommon.GridCenter(mapLine.cells1.girds),
+                directionValue = dir0,
+                afterAction = mapLine.cells0.afterAction,
+                targetCell = mapLine.cells0.targetCell
+            };
+            var specialLinkCell = new SpecialLinkCell
+            {
+                lineInstance = mapLine.instanceId,
+                map0 = mapLine.map0, map1 = mapLine.map1,
+                MapLinkCell0 = mapLinkCell0,
+                MapLinkCell1 = mapLinkCell1
+            };
+            SpecialLinkCells.Add(specialLinkCell);
+        }
+        
         var cells0 = GameCommon.GridToCells(mapLine.cells0.girds);
         for (int i = 0; i < cells0.Count; i++)
         {
@@ -1272,8 +1318,8 @@ public class MapCellController : Singleton<MapCellController>
                 afterAction = mapLine.cells0.afterAction,
                 targetCell = mapLine.cells0.targetCell,
             };
-            
-            mapLinkCellSet.Add(key0, mapLinkCell);
+            if (!isSpecial) mapLinkCellSet.Add(key0, mapLinkCell);
+
             mapLinkSet.Add(new int3(cells0[i].xy, mapLine.map0), mapLinkCell); 
            
         }
@@ -1305,8 +1351,8 @@ public class MapCellController : Singleton<MapCellController>
                 afterAction = mapLine.cells1.afterAction,
                 targetCell = mapLine.cells1.targetCell,
             };
+            if (!isSpecial) mapLinkCellSet.Add(key1, mapLinkCell);
 
-            mapLinkCellSet.Add(key1, mapLinkCell);
             mapLinkSet.Add(new int3(cells1[i].xy, mapLine.map1), mapLinkCell);
         }
          
@@ -1483,10 +1529,24 @@ public class MapCellController : Singleton<MapCellController>
         }
 
         return false;
-    } 
-    public override void Init()
+    }
+
+    private List<SpecialMapLink> allSpecialLink;
+
+    private bool IsSpecialLink(int lineId)
+    {
+        for (var i = 0; i < allSpecialLink.Count; i++)
+            if (allSpecialLink[i].specialId == lineId)
+                return true;
+
+        return false;
+    }
+
+    public override async void Init()
     {
         base.Init();
+        allSpecialLink = await GameDataManager.instance.GetAllAsyncData<SpecialMapLink>();
+        
         GameActionManager.instance.AddListener<RemoveCellCharacter>(RemoveCellCharacter);
         mapObjBarriers = new NativeParallelHashMap<uint, short>(204800, Allocator.Persistent);
          

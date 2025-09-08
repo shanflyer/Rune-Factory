@@ -1845,18 +1845,44 @@ public partial class Character
                     if (i < roomList.Count)
                     { 
                         nextMap = roomList[i];
-                        if (MapCellController.instance.GetLinkMapInCoordinate(nowMap, nextMap, out var tempTarget,out targetMapCell))
+                        if (MapCellController.instance.GetLinkMapInCoordinate(nowMap, nextMap,
+                                out var changeCoordinate))
                         {
-                            //Debug.Log($"PlayerMove：nowMap:{nowMap}tempTarget{tempTarget}startCoordinate{startCoordinate}-nextMap{nextMap}--targetMapCell{targetMapCell}");
-                            MapCellJobController.instance.AddPathRequest(startCoordinate, tempTarget, nowMap, (Stack<int2> path,int map) =>
+                            if (changeCoordinate != null && changeCoordinate.Count > 0)
                             {
-                                roadCells.Add(map, path);
-                                roomCount--;
-                                if (roomCount == 0)
+                                var tempTarget = changeCoordinate.Dequeue();
+                                MapCellJobController.instance.AddPathRequest(startCoordinate, tempTarget.xy, nowMap,
+                                    MoveWithPath);
+                            }
+
+                            void MoveWithPath(Stack<int2> path, int map)
+                            {
+                                if (changeCoordinate.Count > 0)
                                 {
-                                    Move(true);
+                                    if (path == null || path.Count == 0)
+                                    {
+                                        if (changeCoordinate != null && changeCoordinate.Count > 0)
+                                        {
+                                            var tempTarget = changeCoordinate.Dequeue();
+                                            MapCellJobController.instance.AddPathRequest(startCoordinate, tempTarget.xy,
+                                                nowMap,
+                                                MoveWithPath);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        roadCells.Add(map, path);
+                                        roomCount--;
+                                        if (roomCount == 0) Move(true);
+                                    }
                                 }
-                            });
+                                else
+                                {
+                                    roadCells.Add(map, path);
+                                    roomCount--;
+                                    if (roomCount == 0) Move(true);
+                                }
+                            }
                         }
                     }
                     else

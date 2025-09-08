@@ -11,7 +11,7 @@ using UnityEditor.U2D.PSD;
 using UnityEngine;
 using UnityEngine.U2D;
 
-public class CommonToolEditor : MyEditor
+public partial class CommonToolEditor : MyEditor
 {
     public static CommonToolEditor Instance;
 
@@ -135,10 +135,12 @@ public class CommonToolEditor : MyEditor
             SetSprite();
         }
 
+        if (GUILayout.Button("输出地图通路")) OutWorldMapLink();
+        /*
         if (GUILayout.Button("输出地图bgm"))
         {
             OutMapRoomBGM();
-        }
+        }*/
         if (GUILayout.Button("输出UI内容"))
         {
             OutUIText();
