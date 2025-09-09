@@ -246,6 +246,7 @@ public class MapCellController : Singleton<MapCellController>
     private NativeParallelHashMap<uint, short> mapObjBarriers;
     public NativeParallelHashMap<uint, short>.ReadOnly MapObjBarriers => mapObjBarriers.AsReadOnly();
 
+    private readonly Dictionary<int, MapLine> initMapLineDic = new();
     NativeParallelMultiHashMap<int2, MapLinkCell> mapLinkCellSet;
     NativeHashMap<int3, MapLinkCell> mapLinkSet;
     Dictionary<int, HashSet<int>> mapNeighbors=new Dictionary<int, HashSet<int>>();
@@ -1119,6 +1120,33 @@ public class MapCellController : Singleton<MapCellController>
         runtimeMapRooms.Add(runtimeMapRoom.Key, runtimeMapRoom);
     }
 
+    public bool GetLinkMapInCoordinate(int startMap, int endMap, int nowMap, int linkMap, int2 nowCoordinate,
+        int2 endCoordinate,
+        out int4 changeCoordinate)
+    {
+        if (GetSpecialLink(startMap, endMap, nowMap, nowCoordinate, linkMap, endCoordinate,
+                out changeCoordinate)) return true;
+
+        var key = new int2(nowMap, linkMap);
+        changeCoordinate = int4.zero;
+        var linkCells = new List<MapLinkCell>();
+        if (mapLinkCellSet.TryGetFirstValue(key, out var mapLinkCell, out var it))
+            do
+            {
+                if (CheckIsWalk(new int3(mapLinkCell.coordinate, nowMap))) linkCells.Add(mapLinkCell);
+            } while (mapLinkCellSet.TryGetNextValue(out mapLinkCell, ref it));
+
+        if (linkCells.Count > 0)
+        {
+            var inCoordinate = linkCells[GameRandom.RandomInt(0, linkCells.Count)].coordinate;
+            var targetCoordinate = linkCells[GameRandom.RandomInt(0, linkCells.Count)].targetCell.xy;
+            changeCoordinate = new int4(inCoordinate, targetCoordinate);
+            return true;
+        }
+
+        return false;
+    }
+
     public bool GetLinkMapInCoordinate(int nowMap, int linkMap, out Queue<int4> changeCoordinate)
     {
         int2 key = new int2(nowMap, linkMap);
@@ -1271,6 +1299,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public void InitLinkMap(MapLine mapLine)
     {
+        initMapLineDic[mapLine.instanceId] = mapLine;
         var isSpecial = IsSpecialLink(mapLine.instanceId);
         int2 key0 = new int2(mapLine.map0, mapLine.map1);
         int2 key1 = new int2(mapLine.map1, mapLine.map0);
@@ -1539,6 +1568,51 @@ public class MapCellController : Singleton<MapCellController>
             if (allSpecialLink[i].specialId == lineId)
                 return true;
 
+        return false;
+    }
+
+    public bool GetSpecialLink(int startMap, int endMap, int nowMap, int2 nowCoordinate, int nextMap,
+        int2 nextCoordinate,
+        out int4 changeCoordinate)
+    {
+        for (var i = 0; i < allSpecialLink.Count; i++)
+        {
+            var specialLink = allSpecialLink[i];
+            if (specialLink.IsMatchTarget(startMap))
+                if (initMapLineDic.TryGetValue(specialLink.specialId, out var mapLine))
+                {
+                    changeCoordinate = new int4(mapLine.start0, mapLine.center1);
+                    return true;
+                }
+
+            if (specialLink.IsMatchTarget(endMap))
+                if (initMapLineDic.TryGetValue(specialLink.specialId, out var mapLine))
+                {
+                    changeCoordinate = new int4(mapLine.start1, mapLine.center0);
+                    return true;
+                }
+
+            if (specialLink.map0.specialMap == nowMap)
+                if (specialLink.map0.IsInArea(nowCoordinate) &&
+                    specialLink.IsMatchTargetMap(nextMap, nextCoordinate, out var map))
+                    if (initMapLineDic.TryGetValue(specialLink.specialId, out var mapLine))
+                    {
+                        changeCoordinate = new int4(mapLine.start0, mapLine.center1);
+                        return true;
+                    }
+
+
+            if (specialLink.map0.specialMap == nextMap)
+                if (specialLink.map0.IsInArea(nextCoordinate) &&
+                    specialLink.IsMatchTargetMap(nowMap, nowCoordinate, out var map))
+                    if (initMapLineDic.TryGetValue(specialLink.specialId, out var mapLine))
+                    {
+                        changeCoordinate = new int4(mapLine.start1, mapLine.center0);
+                        return true;
+                    }
+        }
+
+        changeCoordinate = int4.zero;
         return false;
     }
 

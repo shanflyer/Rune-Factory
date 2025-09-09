@@ -1,12 +1,9 @@
 #if UNITY_EDITOR
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using Unity.Mathematics;
-using UnityEngine.Tilemaps;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
 using UnityEditor;
-using static UnityEngine.Tilemaps.Tile;
+using UnityEngine;
+using UnityEngine.Tilemaps;
 
 [ExecuteAlways]
 public class MapLinkEditor : MonoBehaviour
@@ -201,8 +198,13 @@ public class MapLinkEditor : MonoBehaviour
 
             DestroyImmediate(gameObject);
         }
-        string id = $"{mapLine.map0}{mapLine.map1}";
-        mapLine.instanceId = int.Parse(id); 
+
+        if (mapLine.instanceId == 0)
+        {
+            var id = $"{mapLine.map0}{mapLine.map1}";
+            mapLine.instanceId = int.Parse(id);
+        }
+       
     }
     // Update is called once per frame
     void Update1()
