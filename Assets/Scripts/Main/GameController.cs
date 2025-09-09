@@ -463,7 +463,7 @@ if (result.Success)
     public void TestLookup()
     {
         MapCellJobController.instance.AddPathRequest(testCoordinate.xy, testCoordinate.zw, testMap,
-            (Stack<int2> path, int map) => 
+            (Stack<int2> path, int map, int2 start, int2 end) => 
             {
                 string pathStr = "path";
                 var pList = path.ToList();

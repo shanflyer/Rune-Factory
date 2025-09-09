@@ -188,7 +188,7 @@ public class RuntimeMapRoom
         {
             do
             {
-                cells.Add(cell);
+                if (MapCellController.instance.CheckIsWalk(cell, id)) cells.Add(cell);
             } while (commonTriggerCells.TryGetNextValue(out cell, ref iterator));
         }
         return cells;
@@ -201,7 +201,7 @@ public class RuntimeMapRoom
         {
             do
             {
-                cells.Add(cell);
+                if (MapCellController.instance.CheckIsWalk(cell, id)) cells.Add(cell);
             } while (playerTriggerCells.TryGetNextValue(out cell, ref iterator));
         }
         return cells;
@@ -1389,7 +1389,8 @@ public class MapCellController : Singleton<MapCellController>
 
     public void FindPathNodeNearest(int2 startPos, int2 targetPos, int mapId,MoveWithPath moveWithPath)
     {
-        MapCellJobController.instance.AddPathRequest(startPos, targetPos, mapId, (Stack<int2> outData,int map) =>
+        MapCellJobController.instance.AddPathRequest(startPos, targetPos, mapId,
+            (Stack<int2> outData, int map, int2 start, int2 end) =>
         {
             if (outData.Count == 0)
             {
@@ -1405,18 +1406,20 @@ public class MapCellController : Singleton<MapCellController>
                     {
                         offsetCoordinate = _offsetCoordinate;
                         _targetPos = targetPos + offsetCoordinate;
-                        MapCellJobController.instance.AddPathRequest(startPos, _targetPos, mapId, (Stack<int2> outData1, int map) =>
+                        MapCellJobController.instance.AddPathRequest(startPos, _targetPos, mapId,
+                            (Stack<int2> outData1, int map, int2 start, int2 end) =>
                         {
                             if (outData1.Count != 0)
                             {
-                                moveWithPath.Invoke(outData1,map);
+                                moveWithPath.Invoke(outData1, map, start, end);
                             }
                         }); 
                     }
                     index++;
                 }
             }
-            moveWithPath.Invoke(outData, map);
+
+            moveWithPath.Invoke(outData, map, start, end);
         }); 
     }
  
@@ -1578,17 +1581,24 @@ public class MapCellController : Singleton<MapCellController>
         for (var i = 0; i < allSpecialLink.Count; i++)
         {
             var specialLink = allSpecialLink[i];
-            if (specialLink.IsMatchTarget(startMap))
+            if (specialLink.IsMatchTarget(startMap) && specialLink.map0.specialMap == nextMap)
                 if (initMapLineDic.TryGetValue(specialLink.specialId, out var mapLine))
                 {
-                    changeCoordinate = new int4(mapLine.start0, mapLine.center1);
+                    if (mapLine.map0 == nowMap)
+                        changeCoordinate = new int4(mapLine.start0, mapLine.center1);
+                    else
+                        changeCoordinate = new int4(mapLine.start1, mapLine.center0);
+
                     return true;
                 }
 
-            if (specialLink.IsMatchTarget(endMap))
+            if (specialLink.IsMatchTarget(endMap) && specialLink.map0.specialMap == nowMap)
                 if (initMapLineDic.TryGetValue(specialLink.specialId, out var mapLine))
                 {
-                    changeCoordinate = new int4(mapLine.start1, mapLine.center0);
+                    if (mapLine.map0 == nowMap)
+                        changeCoordinate = new int4(mapLine.start0, mapLine.center1);
+                    else
+                        changeCoordinate = new int4(mapLine.start1, mapLine.center0);
                     return true;
                 }
 
@@ -1597,7 +1607,10 @@ public class MapCellController : Singleton<MapCellController>
                     specialLink.IsMatchTargetMap(nextMap, nextCoordinate, out var map))
                     if (initMapLineDic.TryGetValue(specialLink.specialId, out var mapLine))
                     {
-                        changeCoordinate = new int4(mapLine.start0, mapLine.center1);
+                        if (mapLine.map0 == nowMap)
+                            changeCoordinate = new int4(mapLine.start0, mapLine.center1);
+                        else
+                            changeCoordinate = new int4(mapLine.start1, mapLine.center0);
                         return true;
                     }
 
@@ -1607,7 +1620,10 @@ public class MapCellController : Singleton<MapCellController>
                     specialLink.IsMatchTargetMap(nowMap, nowCoordinate, out var map))
                     if (initMapLineDic.TryGetValue(specialLink.specialId, out var mapLine))
                     {
-                        changeCoordinate = new int4(mapLine.start1, mapLine.center0);
+                        if (mapLine.map0 == nowMap)
+                            changeCoordinate = new int4(mapLine.start0, mapLine.center1);
+                        else
+                            changeCoordinate = new int4(mapLine.start1, mapLine.center0);
                         return true;
                     }
         }

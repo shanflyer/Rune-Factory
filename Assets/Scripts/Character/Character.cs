@@ -1766,6 +1766,7 @@ public partial class Character
     public bool TryMove(int targetMap, int2 targetCoordinate, MoveEndAction moveEndAction = null, MoveEndAction changeCoordinateAction = null,
         Int3Action failedMoveAction = null)
     {
+        if (targetMap == 948 && targetCoordinate.x == 0 && targetCoordinate.y == 0) Debug.Log("Error");
         if (targetMap == mapInstance && targetCoordinate.x == coordinate.x && targetCoordinate.y == coordinate.y)
         {
             if (moveEndAction != null)
@@ -1795,7 +1796,8 @@ public partial class Character
         }
         if (targetMap== objCoordinate.z)
         {
-            MapCellJobController.instance.AddPathRequest(objCoordinate.xy, targetCoordinate, targetMap, (Stack<int2> path,int map) =>
+            MapCellJobController.instance.AddPathRequest(objCoordinate.xy, targetCoordinate, targetMap,
+                (Stack<int2> path, int map, int2 start, int2 end) =>
             {
                 PlayerMove(path, () =>
                 {
@@ -1854,10 +1856,26 @@ public partial class Character
                                 nowMap, nextMap, nowCoordinate, endCoordinate,
                                 out var changeCoordinate))
                         {
+#if UNITY_EDITOR
+                            var mapRange = MapCellController.instance.GetRoomRange(nowMap);
+                            if (startCoordinate.x < mapRange.x || startCoordinate.y < mapRange.y ||
+                                startCoordinate.x > mapRange.z || startCoordinate.y > mapRange.w)
+                                Debug.Log("错误：起始超出地图范围！");
+
+                            if (changeCoordinate.x < mapRange.x || changeCoordinate.y < mapRange.y ||
+                                changeCoordinate.x > mapRange.z || changeCoordinate.y > mapRange.w)
+                                Debug.Log("错误：目标超出地图范围！");
+
+                            if (changeCoordinate.z < mapRange.x || changeCoordinate.w < mapRange.y ||
+                                changeCoordinate.z > mapRange.z || changeCoordinate.w > mapRange.w)
+                                Debug.Log("错误：目标超出地图范围！");
+#endif
+
+                            targetMapCell = changeCoordinate.zw;
                             MapCellJobController.instance.AddPathRequest(startCoordinate, changeCoordinate.xy, nowMap,
                                 MoveWithPath);
 
-                            void MoveWithPath(Stack<int2> path, int map)
+                            void MoveWithPath(Stack<int2> path, int map, int2 start, int2 end)
                             {
                                 roadCells.Add(map, path);
                                 roomCount--;
@@ -1866,10 +1884,24 @@ public partial class Character
                         }
                     }
                     else
-                    { 
-                        MapCellJobController.instance.AddPathRequest(startCoordinate, targetCoordinate, nowMap, (Stack<int2> path, int map) =>
+                    {
+#if UNITY_EDITOR
+                        var mapRange = MapCellController.instance.GetRoomRange(nowMap);
+                        if (startCoordinate.x < mapRange.x || startCoordinate.y < mapRange.y ||
+                            startCoordinate.x > mapRange.z || startCoordinate.y > mapRange.w)
+                            Debug.Log("错误：起始超出地图范围！");
+
+                        if (targetCoordinate.x < mapRange.x || targetCoordinate.y < mapRange.y ||
+                            targetCoordinate.x > mapRange.z || targetCoordinate.y > mapRange.w)
+                            Debug.Log("错误：目标超出地图范围！");
+#endif
+                        MapCellJobController.instance.AddPathRequest(startCoordinate, targetCoordinate, nowMap,
+                            (Stack<int2> path, int map, int2 start, int2 end) =>
                         {
-                            //  Debug.Log($"PlayerMove：startCoordinate:{nowMap}startCoordinate{startCoordinate}targetCoordinate{targetCoordinate}-nowMap{nowMap}");
+                            if (path.Count == 0)
+                                Debug.Log(
+                                    $"PlayerMove：startCoordinate{start}targetCoordinate{end}-nowMap{map}");
+
                             roadCells.Add(map, path);
                             roomCount--;
                             if (roomCount == 0)
@@ -1900,7 +1932,7 @@ public partial class Character
                     {
                         if (path.Count == 0)
                         {
-                            Debug.Log($"{characterData.characterName}寻路失败:path.Count == 0");
+                            Debug.Log($"{characterData.characterName}map{map}寻路失败:path.Count == 0");
                             FailedMoveAction();
                             return;
                         }

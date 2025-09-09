@@ -4,7 +4,7 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 
-public delegate void MoveWithPath(Stack<int2> path, int map);
+public delegate void MoveWithPath(Stack<int2> path, int map, int2 startCoordinate, int2 targetCoordinate);
 
 [BurstCompile]
 public struct SparsePathfindingSIMDJob : IJobParallelFor
@@ -383,7 +383,7 @@ public class MapCellJobController : Singleton<MapCellJobController>
             // 用快照，避免索引错位
             var req = requestsSnap[i];
 
-            callbacksSnap[i].Invoke(path, req.roomId);
+            callbacksSnap[i].Invoke(path, req.roomId, req.start, req.end);
         }
 
         // —— 释放（只释放一次）—— //

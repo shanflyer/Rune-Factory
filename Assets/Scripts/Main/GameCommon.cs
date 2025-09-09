@@ -479,9 +479,9 @@ public static class GameCommon
 
             if (minX < _minX) _minX = minX;
 
-            if (minY > _minY) _minY = minY;
+            if (minY < _minY) _minY = minY;
 
-            if (maxY < _maxY) _maxY = maxY;
+            if (maxY > _maxY) _maxY = maxY;
         }
 
         var min = new int2(_minX, _minY);
