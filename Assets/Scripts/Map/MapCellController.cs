@@ -3,64 +3,6 @@ using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class MapCharacterGrid
-{
-    public int mapInstance;
-    public NativeList<int3> characters;
-    public Dictionary<int, int> characterIndexs;
-
-    public void RemoveCharacter(int characterInstance, bool isTemp)
-    {
-        if (isTemp)
-        {
-        }
-        else
-        {
-            if (characterIndexs.TryGetValue(characterInstance, out var index))
-            {
-                if (index != characters.Length - 1)
-                {
-                    int3 lastCharacter = characters[characters.Length - 1];
-                    characters[index] = lastCharacter;
-                    characterIndexs[lastCharacter.z] = index;
-                }
-                characterIndexs.Remove(characterInstance);
-                characters.RemoveAt(characters.Length - 1);
-            }
-        }
-    }
-
-    public void ChangeCharacter(int characterInstance, int2 coordinate, bool isTemp)
-    {
-        if (isTemp)
-        {
-        }
-        else
-        {
-            if (!characterIndexs.TryGetValue(characterInstance, out int index))
-            {
-                characterIndexs.Add(characterInstance, characters.Length);
-                characters.Add(new int3(coordinate.xy, characterInstance));
-            }
-            else
-            {
-                characters[index] = new int3(coordinate.xy, characterInstance);
-            }
-        }
-    }
-
-    public MapCharacterGrid()
-    {
-        characters = new NativeList<int3>(16, Allocator.Persistent);
-        characterIndexs = new Dictionary<int, int>();
-    }
-
-    public void Dispose()
-    {
-        characters.Dispose();
-    }
-}
-
 //[BurstCompile]
 public class RuntimeMapRoom
 {
@@ -240,16 +182,18 @@ public struct SpecialLinkCell
     public int map0, map1;
     public MapLinkCell MapLinkCell0, MapLinkCell1;
 }
-public class MapCellController : Singleton<MapCellController>
+
+public partial class MapCellController : Singleton<MapCellController>
 {
     private readonly Dictionary<int, RuntimeMapRoom> runtimeMapRooms = new();
     private NativeParallelHashMap<uint, short> mapObjBarriers;
     public NativeParallelHashMap<uint, short>.ReadOnly MapObjBarriers => mapObjBarriers.AsReadOnly();
-
+    private Dictionary<int, int> tempMaps; 
+    
     private readonly Dictionary<int, MapLine> initMapLineDic = new();
     NativeParallelMultiHashMap<int2, MapLinkCell> mapLinkCellSet;
     NativeHashMap<int3, MapLinkCell> mapLinkSet;
-    Dictionary<int, HashSet<int>> mapNeighbors=new Dictionary<int, HashSet<int>>();
+    private readonly Dictionary<int, HashSet<int>> mapNeighbors = new(); 
     private readonly List<SpecialLinkCell> SpecialLinkCells = new();
 
     public delegate void TriggerEvent(int eventId, int reference, bool enter, bool controller);
@@ -258,93 +202,14 @@ public class MapCellController : Singleton<MapCellController>
 
     public const int characterRange = 5;
 
-    private Dictionary<int, MapCharacterGrid> MapCharacterGrids = new Dictionary<int, MapCharacterGrid>();
-
-    public HashSet<int2> GetMapCharacterCells(int mapInstance)
+    public void TransTempMap(ref int mapId)
     {
-        HashSet<int2> result = new HashSet<int2>();
-        if (MapCharacterGrids.TryGetValue(mapInstance, out var mapCharacterGrid))
-        {
-            for (int i = 0; i < mapCharacterGrid.characters.Length; i++)
-            {
-                result.Add(mapCharacterGrid.characters[i].xy);
-            }
-        }
-        return result;
+        if (tempMaps.TryGetValue(mapId, out var tempMap)) mapId = tempMap;
     }
-
-    public void SetCharacterCoordinate(int3 oldCoordinate, int3 newCoordinate, int characterId, bool isTemp)
-    {
-        if (newCoordinate.z != oldCoordinate.z)
-        {
-            if (MapCharacterGrids.TryGetValue(oldCoordinate.z, out var oldMapCharacterGrid))
-            {
-                oldMapCharacterGrid.RemoveCharacter(characterId, isTemp);
-            }
-        }
-        if (!MapCharacterGrids.TryGetValue(newCoordinate.z, out var mapCharacterGrid))
-        {
-            mapCharacterGrid = new MapCharacterGrid
-            {
-                mapInstance = newCoordinate.z,
-            };
-            MapCharacterGrids.Add(newCoordinate.z, mapCharacterGrid);
-        }
-        mapCharacterGrid.ChangeCharacter(characterId, newCoordinate.xy, isTemp);
-    }
-
-    public void RemoveCharacterCoordinate(int3 coordinate, int characterId, bool isTemp)
-    {
-        if (MapCharacterGrids.TryGetValue(coordinate.z, out var mapCharacterGrid))
-        {
-            mapCharacterGrid.RemoveCharacter(characterId, isTemp);
-        }
-    }
-
-    public HashSet<int> GetCharacters(int3 coordinate, int range = 5)
-    {
-        if (MapCharacterGrids.TryGetValue(coordinate.z, out var mapCharacterGrid))
-        {
-            var result = new HashSet<int>();
-            for (var index = 0; index < mapCharacterGrid.characters.Length; index++)
-            {
-                var target = mapCharacterGrid.characters[index];
-                var minX = target.x - range;
-                var minY = target.y - range;
-                var maxX = target.x + range;
-                var maxY = target.y + range;
-                if (minX <= coordinate.x && minY <= coordinate.y && maxX > coordinate.x && maxY > coordinate.y)
-                {
-                    result.Add(target.z);
-                }
-            }
-
-            return result;
-        }
-        return null;
-    }
-
-    public int GetClickCharacter(int3 coordinate, int range = 5)
-    {
-        if (MapCharacterGrids.TryGetValue(coordinate.z, out var mapCharacterGrid))
-        {
-            for (var index = 0; index < mapCharacterGrid.characters.Length; index++)
-            {
-                var target = mapCharacterGrid.characters[index];
-                var minX = target.x - range;
-                var minY = target.y - range;
-                var maxX = target.x + range;
-                var maxY = target.y + range;
-                if (minX <= coordinate.x && minY <= coordinate.y && maxX > coordinate.x && maxY > coordinate.y)
-                    return target.z;
-            } 
-             
-        }
-        return -1;
-    }
-
+  
     public int2 GetRandomWalkable(int3 centerCoordinate, int range)
     {
+        if (tempMaps.TryGetValue(centerCoordinate.z, out var trueMap)) centerCoordinate.z = trueMap;
         var cells = GetWalkableCells(centerCoordinate, range);
         if (cells.Count == 0)
         {
@@ -356,6 +221,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public List<int2> GetWalkableCells(int3 centerCoordinate, int range)
     {
+        if (tempMaps.TryGetValue(centerCoordinate.z, out var trueMap)) centerCoordinate.z = trueMap;
         List<int2> cells = new List<int2>();
 
         for (int x = -range; x < range; x++)
@@ -376,6 +242,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public int2 GetStartIndex(int mapInstance,int2 coordinate)
     {
+        if (tempMaps.TryGetValue(mapInstance, out var trueMap)) mapInstance = trueMap;
         if (runtimeMapRooms.TryGetValue(mapInstance, out var runtimeMapRoom))
         {
             return runtimeMapRoom.GetStartIndex(coordinate);
@@ -384,35 +251,48 @@ public class MapCellController : Singleton<MapCellController>
     }
     public int3 GetRandomBehaviorCell(int mapInstance, int areaId)
     {
+        var soureMap = mapInstance;
+        if (tempMaps.TryGetValue(mapInstance, out var trueMap)) mapInstance = trueMap;
         if (runtimeMapRooms.TryGetValue(mapInstance, out var runtimeMapRoom))
         {
-            return runtimeMapRoom.GetRandomBehaviorCell(areaId);
+            var result = runtimeMapRoom.GetRandomBehaviorCell(areaId);
+            result.z = soureMap;
+            return result;
         }
         return int3.zero;
     }
 
     public int3 GetRandomBehaviorCell(int mapInstance, BehaviorAreaType behaviorAreaType)
     {
+        var soureMap = mapInstance;
+        if (tempMaps.TryGetValue(mapInstance, out var trueMap)) mapInstance = trueMap;
         if (runtimeMapRooms.TryGetValue(mapInstance, out var runtimeMapRoom))
         {
-            return runtimeMapRoom.GetRandomBehaviorCell(behaviorAreaType);
+            var result = runtimeMapRoom.GetRandomBehaviorCell(behaviorAreaType);
+            result.z = soureMap;
+            return result; 
         }
         return int3.zero;
     }
 
-    public int2 GetRandomItemPlayerTriggerCell(int roomId, int itemInstanceId)
+    public bool GetRandomItemPlayerTriggerCell(int roomId, int itemInstanceId, out int2 cell)
     {
+        if (tempMaps.TryGetValue(roomId, out var trueMap)) roomId = trueMap;
         var cells = GetItemPlayerTriggerCells(itemInstanceId, roomId);
         if (cells != null)
         {
             int index = GameRandom.RandomInt(0, cells.Count);
-            return cells[index];
+            cell = cells[index];
+            return true;
         }
-        return int2.zero;
+
+        cell = int2.zero;
+        return false;
     }
 
     public int2 GetNearestItemPlayerTriggerCell(int roomId, int itemInstanceId, int2 cell)
     {
+        if (tempMaps.TryGetValue(roomId, out var trueMap)) roomId = trueMap;
         var cells = GetItemPlayerTriggerCells(itemInstanceId, roomId);
         if (cells != null && cells.Count > 0)
         {
@@ -436,6 +316,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public int2 GetItemCommonCenterTriggerCell(int roomId, int itemInstanceId)
     {
+        if (tempMaps.TryGetValue(roomId, out var trueMap)) roomId = trueMap;
         var cells = GetItemTriggerCells(itemInstanceId, roomId);
         int minX = int.MaxValue, minY = int.MaxValue, maxX = int.MinValue, maxY = int.MinValue;
         for (int i = 0; i < cells.Count; i++)
@@ -462,6 +343,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public int2 GetNearestItemCommonTriggerCell(int roomId, int itemInstanceId, int2 cell)
     {
+        if (tempMaps.TryGetValue(roomId, out var trueMap)) roomId = trueMap;
         var cells = GetItemTriggerCells(itemInstanceId, roomId);
         if (cells != null && cells.Count > 0)
         {
@@ -485,6 +367,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public int2 GetRandomRoomCell(int roomId)
     {
+        if (tempMaps.TryGetValue(roomId, out var trueMap)) roomId = trueMap;
         if (runtimeMapRooms.TryGetValue(roomId, out var runtimeMapRoom))
         {
             int2 startCoordinate = runtimeMapRoom.startCoordinate;
@@ -505,6 +388,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public int4 GetRoomRange(int roomId)
     {
+        if (tempMaps.TryGetValue(roomId, out var trueMap)) roomId = trueMap;
         if (runtimeMapRooms.TryGetValue(roomId, out var runtimeMapRoom))
         { 
             return   new int4(runtimeMapRoom.startCoordinate, runtimeMapRoom.endCoordinate);
@@ -512,9 +396,10 @@ public class MapCellController : Singleton<MapCellController>
         return int4.zero;
     }
     
-
+   
     public List<int2> GetItemTriggerCells(int instanceId, int room)
     {
+        if (tempMaps.TryGetValue(room, out var trueMap)) room = trueMap;
         if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
         {
             return runtimeMapRoom.GetTriggerAreaCells(instanceId);
@@ -524,6 +409,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public List<int2> GetItemPlayerTriggerCells(int instanceId, int room)
     {
+        if (tempMaps.TryGetValue(room, out var trueMap)) room = trueMap;
         if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
         {
             var cells = runtimeMapRoom.GetPlayerTriggerAreaCells(instanceId);
@@ -540,6 +426,7 @@ public class MapCellController : Singleton<MapCellController>
     /// <param name="room"></param>
     public void AddBarrierCell(int2[] cells, int2 itemPos, int room)
     {
+        if (tempMaps.TryGetValue(room, out var trueMap)) room = trueMap;
         if (runtimeMapRooms.TryGetValue(room, out RuntimeMapRoom runtimeMapRoom))
         {
             for (int i = 0; i < cells.Length; i++)
@@ -564,6 +451,7 @@ public class MapCellController : Singleton<MapCellController>
     /// <param name="room"></param>
     public void RemoveBarrierCell(int2[] cells, int2 itemPos, int room)
     {
+        if (tempMaps.TryGetValue(room, out var trueMap)) room = trueMap;
         if (runtimeMapRooms.TryGetValue(room, out RuntimeMapRoom runtimeMapRoom))
         {
             for (int i = 0; i < cells.Length; i++)
@@ -586,6 +474,7 @@ public class MapCellController : Singleton<MapCellController>
     /// <param name="offset"></param>
     public void AddTriggerCell(int2[] cells, int room, int enterEventId, int exitEventId, EntityType triggerType, int linkId, int2 offset)
     {
+        if (tempMaps.TryGetValue(room, out var trueMap)) room = trueMap;
         if (runtimeMapRooms.TryGetValue(room, out RuntimeMapRoom runtimeMapRoom))
         {
             int4 triggerEvent = new int4((int)triggerType, enterEventId, exitEventId, linkId);
@@ -615,6 +504,7 @@ public class MapCellController : Singleton<MapCellController>
     /// <param name="linkId"></param>
     public void RemoveTriggerCell(int room, int linkId)
     {
+        if (tempMaps.TryGetValue(room, out var trueMap)) room = trueMap;
         if (runtimeMapRooms.TryGetValue(room, out RuntimeMapRoom runtimeMapRoom))
         {
             if (runtimeMapRoom.commonTriggerCellIndexes.TryGetValue(linkId, out var index))
@@ -636,6 +526,7 @@ public class MapCellController : Singleton<MapCellController>
     /// <param name="offset"></param>
     public void AddPlayerTriggerCell(int2[] cells, int room, int enterEventId, int linkId, int2 offset, bool isForward)
     {
+        if (tempMaps.TryGetValue(room, out var trueMap)) room = trueMap;
         if (runtimeMapRooms.TryGetValue(room, out RuntimeMapRoom runtimeMapRoom))
         {
             TriggerAreaData triggerArea = new TriggerAreaData
@@ -677,6 +568,7 @@ public class MapCellController : Singleton<MapCellController>
     /// <param name="linkId"></param>
     public void RemovePlayerTriggerCell(int room, int linkId)
     {
+        if (tempMaps.TryGetValue(room, out var trueMap)) room = trueMap;
         if (runtimeMapRooms.TryGetValue(room, out RuntimeMapRoom runtimeMapRoom))
         {
             if (runtimeMapRoom.playerTriggerCellIndexes.TryGetValue(linkId, out var index))
@@ -691,6 +583,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public void CheckTriggerEvent(int entityId, EntityType entityType, int room, int2 cell, bool exit, TriggerEvent triggerEvent)
     {
+        if (tempMaps.TryGetValue(room, out var trueMap)) room = trueMap;
         if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
         {
             var areaCellMap = runtimeMapRoom.commonTriggerCells.AsReadOnly();
@@ -721,7 +614,8 @@ public class MapCellController : Singleton<MapCellController>
     public void CheckPlayerTriggerEvent(int room, int2 cell, bool exit,
         TriggerEvent triggerEvent, bool isForward, int oldLink = 0)
     {
-         
+        if (tempMaps.TryGetValue(room, out var trueMap)) room = trueMap;
+
         if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
         { 
             NativeArray<int3> triggerEvents = new NativeArray<int3>
@@ -814,6 +708,7 @@ public class MapCellController : Singleton<MapCellController>
     public void CheckTriggerEvent(int entityId, EntityType entityType, int room, int2 oldCell, int2 nowCell,
         TriggerEvent triggerEvent)
     {
+        if (tempMaps.TryGetValue(room, out var trueMap)) room = trueMap;
         if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
         {
             var areaCellMap = runtimeMapRoom.commonTriggerCells.AsReadOnly();
@@ -860,6 +755,7 @@ public class MapCellController : Singleton<MapCellController>
     public void CheckPlayerTriggerEvent(int room, int2 oldCell, int2 nowCell,
         TriggerEvent triggerEvent, bool isFroward, int oldLink = 0)
     {
+        if (tempMaps.TryGetValue(room, out var trueMap)) room = trueMap;
         if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
         {
             NativeArray<int3> triggerEvents = new NativeArray<int3>
@@ -949,6 +845,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public bool GetCoordinates(int mapInstance, int2 source, int minRange, int maxRange, bool isWalkable, out List<int2> result)
     {
+        if (tempMaps.TryGetValue(mapInstance, out var trueMap)) mapInstance = trueMap;
         if (GetRuntimeMapRoom(mapInstance, out var runtimeMapRoom))
         {
             List<int2> result1 = new List<int2>();
@@ -983,16 +880,19 @@ public class MapCellController : Singleton<MapCellController>
 
     public bool GetRuntimeMapRoom(int roomId, out RuntimeMapRoom runtimeMapRoom)
     {
+        if (tempMaps.TryGetValue(roomId, out var trueMap)) roomId = trueMap;
         return runtimeMapRooms.TryGetValue(roomId, out runtimeMapRoom);
     }
 
     public bool ContainsRoom(int roomId)
     {
+        if (tempMaps.TryGetValue(roomId, out var trueMap)) roomId = trueMap;
         return runtimeMapRooms.ContainsKey(roomId);
     }
 
     public int3 GetRoomCoordinate(int roomId)
     {
+        if (tempMaps.TryGetValue(roomId, out var trueMap)) roomId = trueMap;
         if (runtimeMapRooms.TryGetValue(roomId, out var runtimeMapRoom))
         {
             return runtimeMapRoom.coordinate;
@@ -1004,6 +904,8 @@ public class MapCellController : Singleton<MapCellController>
 
     public List<Vector3Int> GetAllCellData(int mapInstance)
     {
+        var sourceId = mapInstance;
+        if (tempMaps.TryGetValue(mapInstance, out var trueMap)) mapInstance = trueMap;
         List<Vector3Int> cellData = new List<Vector3Int>();
         if (runtimeMapRooms.TryGetValue(mapInstance, out var runtimeMapRoom))
         {
@@ -1027,6 +929,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public int2[] GetPlayerTrigger(int roomId)
     {
+        if (tempMaps.TryGetValue(roomId, out var trueMap)) roomId = trueMap;
         int2[] result = null;
         if (runtimeMapRooms.TryGetValue(roomId, out var runtimeMapRoom))
         {
@@ -1044,6 +947,7 @@ public class MapCellController : Singleton<MapCellController>
     }
     void AddBarrier(uint mapId, int x, int y, int2 startCoordinate, int2 endCoordinate)
     {
+        if (tempMaps.TryGetValue((int)mapId, out var trueMap)) mapId = (uint)trueMap;
         uint index = GetCoordinateIndex(x, y,startCoordinate,endCoordinate);
         index = index +mapId* 1000_000;
         mapObjBarriers.TryGetValue(index, out var count);
@@ -1055,6 +959,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public void RemoveBarrier(uint mapId, int2 coordinate, int2 startCoordinate, int2 endCoordinate)
     {
+        if (tempMaps.TryGetValue((int)mapId, out var trueMap)) mapId = (uint)trueMap;
         uint index = GetCoordinateIndex(coordinate.x,coordinate.y,startCoordinate,endCoordinate);
         index = index + mapId * 1000_000;
         mapObjBarriers.TryGetValue(index, out var count); 
@@ -1067,8 +972,7 @@ public class MapCellController : Singleton<MapCellController>
 
 
     public void InitMapData(int roomId, MapRoomData mapRoomData, int3 coordinate)
-    {
-       
+    { 
         var barrierGridCount = mapRoomData.barrierGrids.Count / 4;
         for (int j = 0; j < barrierGridCount; j++)
         {
@@ -1119,11 +1023,16 @@ public class MapCellController : Singleton<MapCellController>
         runtimeMapRoom.InitTriggerData();
         runtimeMapRooms.Add(runtimeMapRoom.Key, runtimeMapRoom);
     }
-
+ 
     public bool GetLinkMapInCoordinate(int startMap, int endMap, int nowMap, int linkMap, int2 nowCoordinate,
         int2 endCoordinate,
         out int4 changeCoordinate)
     {
+        if (tempMaps.TryGetValue(startMap, out var trueMap)) startMap = trueMap;
+        if (tempMaps.TryGetValue(endMap, out trueMap)) endMap = trueMap;
+        if (tempMaps.TryGetValue(nowMap, out trueMap)) nowMap = trueMap;
+        if (tempMaps.TryGetValue(linkMap, out trueMap)) linkMap = trueMap;
+
         if (GetSpecialLink(startMap, endMap, nowMap, nowCoordinate, linkMap, endCoordinate,
                 out changeCoordinate)) return true;
 
@@ -1146,48 +1055,10 @@ public class MapCellController : Singleton<MapCellController>
 
         return false;
     }
-
-    public bool GetLinkMapInCoordinate(int nowMap, int linkMap, out Queue<int4> changeCoordinate)
-    {
-        int2 key = new int2(nowMap, linkMap);
-        changeCoordinate = null;
-        var LinkCells = new Dictionary<int2, List<MapLinkCell>>();
-        if (mapLinkCellSet.TryGetFirstValue(key,out var mapLinkCell,out var it))
-        {
-            do
-            {
-                if (CheckIsWalk(new int3(mapLinkCell.coordinate, nowMap)))
-                {
-                    if (!LinkCells.TryGetValue(mapLinkCell.targetCell.xy, out var cells))
-                    {
-                        cells = new List<MapLinkCell>();
-                        LinkCells.Add(mapLinkCell.targetCell.xy, cells);
-                    }
-
-                    cells.Add(mapLinkCell);
-                }
-               
-            } while (mapLinkCellSet.TryGetNextValue(out mapLinkCell, ref it));
-        }
-        if (LinkCells.Count > 0)
-        {
-            changeCoordinate = new Queue<int4>();
-            foreach (var linkCell in LinkCells.Values)
-            {
-                var inCoordinate = linkCell[GameRandom.RandomInt(0, linkCell.Count)].coordinate;
-                var targetCoordinate = linkCell[GameRandom.RandomInt(0, linkCell.Count)].targetCell.xy;
-                changeCoordinate.Enqueue(new int4(inCoordinate, targetCoordinate));
-            } 
-           
-            return true;
-        }
-         
-        return false;
-    }
  
-
     public bool ChangeMapAction(int2 nowCoordinate, Direction direction, int nowMap, Int3Action action,bool isPlayer)
     {
+        if (tempMaps.TryGetValue(nowMap, out var _trueMap)) nowMap = _trueMap;
         int3 key = new int3(nowCoordinate.xy, nowMap);
         if (mapLinkSet.TryGetValue(key, out var mapLinkCell))
         {
@@ -1260,14 +1131,14 @@ public class MapCellController : Singleton<MapCellController>
 
     public void DeleteMapLink(MapLine mapLine)
     {
-        int2 key0 = new int2(mapLine.map0, mapLine.map1);
-        int2 key1 = new int2(mapLine.map1, mapLine.map0);
+        var key0 = new int2(mapLine.Map0, mapLine.Map1);
+        var key1 = new int2(mapLine.Map1, mapLine.Map0);
         HashSet<int> removeIt = new HashSet<int>();
         if(mapLinkCellSet.TryGetFirstValue(key0,out var item,out var it))
         {
             do
             {
-                int3 key = new int3(item.coordinate.xy, mapLine.map0); 
+                var key = new int3(item.coordinate.xy, mapLine.Map0); 
                 mapLinkSet.Remove(key);
 
             } while (mapLinkCellSet.TryGetNextValue(out item, ref it));
@@ -1276,33 +1147,33 @@ public class MapCellController : Singleton<MapCellController>
         {
             do
             {
-                int3 key = new int3(item.coordinate.xy, mapLine.map1);
+                var key = new int3(item.coordinate.xy, mapLine.Map1);
                 mapLinkSet.Remove(key);
 
             } while (mapLinkCellSet.TryGetNextValue(out item, ref it));
         }
         mapLinkCellSet.Remove(key0);
-        mapLinkCellSet.Remove(key1); 
+        mapLinkCellSet.Remove(key1);
 
-        if(mapNeighbors.TryGetValue(mapLine.map0,out var ints))
+        if (mapNeighbors.TryGetValue(mapLine.Map0, out var ints))
         {
-            ints.Remove(mapLine.map1);
-            mapNeighbors.Remove(mapLine.map0);
+            ints.Remove(mapLine.Map1);
+            mapNeighbors.Remove(mapLine.Map0);
         }
 
-        if (mapNeighbors.TryGetValue(mapLine.map1, out ints))
+        if (mapNeighbors.TryGetValue(mapLine.Map1, out ints))
         {
-            ints.Remove(mapLine.map0);
-            mapNeighbors.Remove(mapLine.map1);
-        }
+            ints.Remove(mapLine.Map0);
+            mapNeighbors.Remove(mapLine.Map1);
+        } 
     }
 
     public void InitLinkMap(MapLine mapLine)
     {
         initMapLineDic[mapLine.instanceId] = mapLine;
-        var isSpecial = IsSpecialLink(mapLine.instanceId);
-        int2 key0 = new int2(mapLine.map0, mapLine.map1);
-        int2 key1 = new int2(mapLine.map1, mapLine.map0);
+        var isSpecial = IsSpecialLink(mapLine.instanceId, out var specialMapLink);
+        var key0 = new int2(mapLine.Map0, mapLine.Map1);
+        var key1 = new int2(mapLine.Map1, mapLine.Map0);
 
         int dir0=0;
         int dir1 = 0;
@@ -1330,7 +1201,7 @@ public class MapCellController : Singleton<MapCellController>
             var specialLinkCell = new SpecialLinkCell
             {
                 lineInstance = mapLine.instanceId,
-                map0 = mapLine.map0, map1 = mapLine.map1,
+                map0 = mapLine.Map0, map1 = mapLine.Map1,
                 MapLinkCell0 = mapLinkCell0,
                 MapLinkCell1 = mapLinkCell1
             };
@@ -1349,7 +1220,7 @@ public class MapCellController : Singleton<MapCellController>
             };
             if (!isSpecial) mapLinkCellSet.Add(key0, mapLinkCell);
 
-            mapLinkSet.Add(new int3(cells0[i].xy, mapLine.map0), mapLinkCell); 
+            mapLinkSet.Add(new int3(cells0[i].xy, mapLine.Map0), mapLinkCell); 
            
         }
         if(!mapNeighbors.TryGetValue(mapLine.map0,out var ints))
@@ -1382,13 +1253,14 @@ public class MapCellController : Singleton<MapCellController>
             };
             if (!isSpecial) mapLinkCellSet.Add(key1, mapLinkCell);
 
-            mapLinkSet.Add(new int3(cells1[i].xy, mapLine.map1), mapLinkCell);
+            mapLinkSet.Add(new int3(cells1[i].xy, mapLine.Map1), mapLinkCell);
         }
          
     }
 
     public void FindPathNodeNearest(int2 startPos, int2 targetPos, int mapId,MoveWithPath moveWithPath)
     {
+        if (tempMaps.TryGetValue(mapId, out var _trueMap)) mapId = _trueMap;
         MapCellJobController.instance.AddPathRequest(startPos, targetPos, mapId,
             (Stack<int2> outData, int map, int2 start, int2 end) =>
         {
@@ -1425,6 +1297,7 @@ public class MapCellController : Singleton<MapCellController>
  
     public int GetGroundIndex(int2 coordinate, int mapId)
     {
+        if (tempMaps.TryGetValue(mapId, out var _trueMap)) mapId = _trueMap;
         if (runtimeMapRooms.TryGetValue(mapId, out RuntimeMapRoom runtimeMapRoom))
         {
             uint index = GetCoordinateIndex(coordinate.x, coordinate.y, runtimeMapRoom.startCoordinate, runtimeMapRoom.endCoordinate);
@@ -1436,6 +1309,7 @@ public class MapCellController : Singleton<MapCellController>
  
     public bool CheckIsWalk(int3 coordinate)
     {
+        if (tempMaps.TryGetValue(coordinate.z, out var _trueMap)) coordinate.z = _trueMap;
         if (runtimeMapRooms.TryGetValue(coordinate.z, out RuntimeMapRoom runtimeMapRoom))
         {
             uint index = GetCoordinateIndex(coordinate.x, coordinate.y, runtimeMapRoom.startCoordinate, runtimeMapRoom.endCoordinate);
@@ -1447,6 +1321,7 @@ public class MapCellController : Singleton<MapCellController>
      
     public bool CheckIsWalk(int2 coordinate,int mapId)
     {
+        if (tempMaps.TryGetValue(mapId, out var _trueMap)) mapId = _trueMap;
         if (runtimeMapRooms.TryGetValue(mapId, out RuntimeMapRoom runtimeMapRoom))
         {
             uint index = GetCoordinateIndex(coordinate.x, coordinate.y, runtimeMapRoom.startCoordinate, runtimeMapRoom.endCoordinate);
@@ -1457,6 +1332,7 @@ public class MapCellController : Singleton<MapCellController>
     }
     public bool CheckIsWalk(int x,int y, int mapId)
     {
+        if (tempMaps.TryGetValue(mapId, out var _trueMap)) mapId = _trueMap;
         if (runtimeMapRooms.TryGetValue(mapId, out RuntimeMapRoom runtimeMapRoom))
         {
             uint index = GetCoordinateIndex(x, y, runtimeMapRoom.startCoordinate, runtimeMapRoom.endCoordinate);
@@ -1468,6 +1344,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public bool CheckFutureIsWalk(HashSet<int2> cells, int mapId)
     {
+        if (tempMaps.TryGetValue(mapId, out var _trueMap)) mapId = _trueMap;
         if (runtimeMapRooms.TryGetValue(mapId, out var runtimeMapRoom))
         {
             using (var e = cells.GetEnumerator())
@@ -1490,14 +1367,18 @@ public class MapCellController : Singleton<MapCellController>
 
     private HashSet<int> GetRoomNeighbors(int roomId)
     {
+        if (tempMaps.TryGetValue(roomId, out var _trueMap)) roomId = _trueMap;
         if(mapNeighbors.TryGetValue(roomId,out var ints))
         {
             return ints;
         }
-        return null; 
+
+        return null;
     }
+
+    
     public bool FindRoomList(int sourceId, int targetId, out List<int> roomList)
-    {
+    { 
          roomList = new List<int>();
         if (sourceId == targetId)
         {
@@ -1565,12 +1446,16 @@ public class MapCellController : Singleton<MapCellController>
 
     private List<SpecialMapLink> allSpecialLink;
 
-    private bool IsSpecialLink(int lineId)
+    private bool IsSpecialLink(int lineId, out SpecialMapLink SpecialMapLink)
     {
         for (var i = 0; i < allSpecialLink.Count; i++)
             if (allSpecialLink[i].specialId == lineId)
+            {
+                SpecialMapLink = allSpecialLink[i];
                 return true;
+            }
 
+        SpecialMapLink = null;
         return false;
     }
 
@@ -1578,13 +1463,17 @@ public class MapCellController : Singleton<MapCellController>
         int2 nextCoordinate,
         out int4 changeCoordinate)
     {
+        if (tempMaps.TryGetValue(startMap, out var trueMap)) startMap = trueMap;
+        if (tempMaps.TryGetValue(endMap, out trueMap)) endMap = trueMap;
+        if (tempMaps.TryGetValue(nowMap, out trueMap)) nowMap = trueMap;
+        if (tempMaps.TryGetValue(nextMap, out trueMap)) nextMap = trueMap;
         for (var i = 0; i < allSpecialLink.Count; i++)
         {
             var specialLink = allSpecialLink[i];
             if (specialLink.IsMatchTarget(startMap) && specialLink.map0.specialMap == nextMap)
                 if (initMapLineDic.TryGetValue(specialLink.specialId, out var mapLine))
                 {
-                    if (mapLine.map0 == nowMap)
+                    if (mapLine.Map0 == nowMap)
                         changeCoordinate = new int4(mapLine.start0, mapLine.center1);
                     else
                         changeCoordinate = new int4(mapLine.start1, mapLine.center0);
@@ -1595,7 +1484,7 @@ public class MapCellController : Singleton<MapCellController>
             if (specialLink.IsMatchTarget(endMap) && specialLink.map0.specialMap == nowMap)
                 if (initMapLineDic.TryGetValue(specialLink.specialId, out var mapLine))
                 {
-                    if (mapLine.map0 == nowMap)
+                    if (mapLine.Map0 == nowMap)
                         changeCoordinate = new int4(mapLine.start0, mapLine.center1);
                     else
                         changeCoordinate = new int4(mapLine.start1, mapLine.center0);
@@ -1607,7 +1496,7 @@ public class MapCellController : Singleton<MapCellController>
                     specialLink.IsMatchTargetMap(nextMap, nextCoordinate, out var map))
                     if (initMapLineDic.TryGetValue(specialLink.specialId, out var mapLine))
                     {
-                        if (mapLine.map0 == nowMap)
+                        if (mapLine.Map0 == nowMap)
                             changeCoordinate = new int4(mapLine.start0, mapLine.center1);
                         else
                             changeCoordinate = new int4(mapLine.start1, mapLine.center0);
@@ -1620,7 +1509,7 @@ public class MapCellController : Singleton<MapCellController>
                     specialLink.IsMatchTargetMap(nowMap, nowCoordinate, out var map))
                     if (initMapLineDic.TryGetValue(specialLink.specialId, out var mapLine))
                     {
-                        if (mapLine.map0 == nowMap)
+                        if (mapLine.Map0 == nowMap)
                             changeCoordinate = new int4(mapLine.start0, mapLine.center1);
                         else
                             changeCoordinate = new int4(mapLine.start1, mapLine.center0);
@@ -1635,6 +1524,14 @@ public class MapCellController : Singleton<MapCellController>
     public override async void Init()
     {
         base.Init();
+        tempMaps = new Dictionary<int, int>();
+        var allTempMap = await GameDataManager.instance.GetAllAsyncData<TempMapData>();
+        for (var i = 0; i < allTempMap.Count; i++)
+        {
+            var tempMap = allTempMap[i];
+            tempMaps.Add(tempMap.tempMapId, tempMap.tempMapId);
+        }
+        
         allSpecialLink = await GameDataManager.instance.GetAllAsyncData<SpecialMapLink>();
         
         GameActionManager.instance.AddListener<RemoveCellCharacter>(RemoveCellCharacter);
@@ -1643,22 +1540,10 @@ public class MapCellController : Singleton<MapCellController>
         mapLinkCellSet = new NativeParallelMultiHashMap<int2, MapLinkCell>(2048, Allocator.Persistent);
         mapLinkSet = new NativeHashMap<int3, MapLinkCell>(2048, Allocator.Persistent);
     }
-
-    private void RemoveCellCharacter(RemoveCellCharacter removeCellCharacter)
-    {
-        if (removeCellCharacter.cell.Equals(int3.zero))
-        {
-            Character character = CharacterManager.instance.GetCharacter(removeCellCharacter.characterId);
-            RemoveCharacterCoordinate(character.ObjCoordinate, removeCellCharacter.characterId, removeCellCharacter.isTemp);
-        }
-        else
-        {
-            RemoveCharacterCoordinate(removeCellCharacter.cell, removeCellCharacter.characterId, removeCellCharacter.isTemp);
-        }
-    }
-
+ 
     public bool CheckTryMoveTarget(int2 startCoordinate, int2 targetCoordinate, int mapInstace)
     {
+        if (tempMaps.TryGetValue(mapInstace, out var trueMap)) mapInstace = trueMap;
         if (runtimeMapRooms.TryGetValue(mapInstace, out var runtimeMapRoom))
         {
             int dx = targetCoordinate.x - startCoordinate.x;
@@ -1709,6 +1594,7 @@ public class MapCellController : Singleton<MapCellController>
 
     public int2 GetTrueFreedomTarget(int2 startCoordinate, int2 targetCoordinate, int mapInstace)
     {
+        if (tempMaps.TryGetValue(mapInstace, out var trueMap)) mapInstace = trueMap;
         int2 result = startCoordinate;
         if (runtimeMapRooms.TryGetValue(mapInstace, out var runtimeMapRoom))
         {

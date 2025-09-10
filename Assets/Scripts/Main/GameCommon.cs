@@ -488,6 +488,31 @@ public static class GameCommon
         var max = new int2(_maxX, _maxY);
         return min + (max - min) / 2;
     }
+
+    public static int4 GridRange(List<int> grid)
+    {
+        var gridCount = grid.Count / 4;
+
+        var _minX = int.MaxValue;
+        var _minY = int.MaxValue;
+        var _maxX = int.MinValue;
+        var _maxY = int.MinValue;
+        for (var i = 0; i < gridCount; i++)
+        {
+            var minX = grid[i * 4];
+            var minY = grid[i * 4 + 1];
+
+            var maxX = grid[i * 4 + 2];
+            var maxY = grid[i * 4 + 3];
+
+            _maxX = _maxX < maxY ? maxX : _maxX;
+            _minX = _minX < minY ? minX : _minX;
+            _minY = _minY < minY ? minY : _minY;
+            _maxY = _maxY < maxY ? maxY : _maxY;
+        }
+
+        return new int4(_minX, _minY, _maxX, _maxY);
+    }
     public static List<int2> GridToCells(List<int> grid)
     {
         int gridCount = grid.Count / 4;
@@ -1022,6 +1047,7 @@ public static class DataPath
 {
     public static readonly Dictionary<Type, string> dataPathDic = new Dictionary<Type, string>
     {
+        { typeof(TempMapData), "Data/TempMapData" },
         { typeof(SpecialMapLink), "Data/SpecialMapLink" },
         {typeof(GameGlobalData),"Data/GameGlobalData" },
         {typeof(LanguageSwitchDataList),"Data/LanguageSwitchData" },

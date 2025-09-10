@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.TextCore.Text;
 
 public struct NPCTalkOperateData : IReferenceData
 {
@@ -138,8 +137,16 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
             if (WorldMapManager.instance.GetRuntimeMapItem(ShowMapObjTips.id, out var runtimMapItem))
             {
                 //触发物体链接角色事件
-                if (runtimMapItem.linkCharacter != 0&&runtimMapItem.linkCharacter!=CharacterManager.instance.controllerCharacter.instanceId)
+                if (runtimMapItem.linkCharacter != 0 &&
+                    runtimMapItem.linkCharacter != CharacterManager.instance.controllerCharacter.instanceId)
                 {
+                    if (NPCManager.instance.GetNPCFormInstance(runtimMapItem.linkCharacter, out var NPC))
+                        if (NPC.startSleepHour >= 0)
+                        {
+                            runtimMapItem.RefreshItemOperate();
+                            return;
+                        }
+
                     RefreshOperateCharacter refreshOperateCharacter = new RefreshOperateCharacter
                     {
                         characterId = runtimMapItem.linkCharacter,

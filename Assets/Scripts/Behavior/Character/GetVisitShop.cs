@@ -1,8 +1,7 @@
-﻿using UnityEngine;
-using BehaviorDesigner.Runtime;
+﻿using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
-
+using UnityEngine;
 
 [TaskCategory("Game/Character")]
 [TaskName("获取要拜访的商店")]
@@ -38,9 +37,12 @@ public class GetVisitShop : Action
                 visitMap.SetValue(mapItem.x);
                 shopItemId.SetValue(mapItem.y);
                //Debug.Log($"ShopMapItem:{mapItem}");
-                var cell = WorldMapManager.instance.GetRandomItemPlayerTriggerCell(mapItem.x, mapItem.y);
-                targetCell.Value = new int3(cell, visitMap.Value);
-                return TaskStatus.Success;
+               if (WorldMapManager.instance.GetRandomItemPlayerTriggerCell(mapItem.x, mapItem.y, out var cell))
+               {
+                   targetCell.Value = new int3(cell, visitMap.Value);
+                   return TaskStatus.Success;
+               }
+               
             }
         }
 

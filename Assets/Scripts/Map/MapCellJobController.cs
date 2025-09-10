@@ -416,6 +416,7 @@ public class MapCellJobController : Singleton<MapCellJobController>
 
     public void AddPathRequest(int2 start, int2 end, int roomId, MoveWithPath moveWithPath)
     {
+        MapCellController.instance.TransTempMap(ref roomId);
         if (jobRunning)
         {
             // Job 期间的请求先排队，防止改动本批快照/NativeList 触发重分配

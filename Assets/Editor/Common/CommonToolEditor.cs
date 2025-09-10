@@ -19,8 +19,8 @@ public partial class CommonToolEditor : MyEditor
     public static void WindowShow()
     {
         Instance = CreateWindow<CommonToolEditor>("通用工具");
-        Instance.minSize = new Vector2(240, 360);
-        Instance.maxSize = new Vector2(240, 360);
+        Instance.minSize = new Vector2(320, 480);
+        Instance.maxSize = new Vector2(320, 480);
         Instance.ShowAuxWindow();
     }
 
@@ -135,6 +135,7 @@ public partial class CommonToolEditor : MyEditor
             SetSprite();
         }
 
+        if (GUILayout.Button("检查地图通路")) CheckWorldMapLink();
         if (GUILayout.Button("输出地图通路")) OutWorldMapLink();
         /*
         if (GUILayout.Button("输出地图bgm"))

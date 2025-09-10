@@ -54,16 +54,22 @@ public class WorldMapManager : Singleton<WorldMapManager>
         GameActionManager.instance.AddListener<TryRemoveLinkMapItemCharacter>(TryRemoveLinkMapItemCharacter);
         GameActionManager.instance.AddListener<ResetOperateData>(ResetOperateData);
     }
-    public int2 GetRandomItemPlayerTriggerCell(int roomId, int itemEditorInstance)
+
+    public bool GetRandomItemPlayerTriggerCell(int roomId, int itemEditorInstance, out int2 cell)
     {
+        MapCellController.instance.TransTempMap(ref roomId);
         if (editorItemRemapInstanceIds.TryGetValue(new int2(roomId, itemEditorInstance), out var itemInstanceId))
         {
-            return MapCellController.instance.GetRandomItemPlayerTriggerCell(roomId, itemInstanceId);
+            if (MapCellController.instance.GetRandomItemPlayerTriggerCell(roomId, itemInstanceId, out cell))
+                return true;
         }
-        return new int2(int.MinValue, int.MinValue);
+
+        cell = int.MinValue;
+        return false;
     }
     public int2 GetItemCommonCenterTriggerCellForEditorInstance(int roomId, int itemEditorInstance)
     {
+        MapCellController.instance.TransTempMap(ref roomId);
         if (editorItemRemapInstanceIds.TryGetValue(new int2(roomId, itemEditorInstance), out var itemInstanceId))
         {
             return MapCellController.instance.GetItemCommonCenterTriggerCell(roomId, itemInstanceId);
@@ -72,6 +78,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
     }
     private void SetMapEditorItemLinkCharacter(SetMapEditorItemLinkCharacter SetMapEditorItemLinkCharacter)
     {
+        MapCellController.instance.TransTempMap(ref SetMapEditorItemLinkCharacter.mapId);
         if (editorItemRemapInstanceIds.TryGetValue(new int2(SetMapEditorItemLinkCharacter.mapId, SetMapEditorItemLinkCharacter.mapItemEditorId),
                out var instanceId))
         {
@@ -104,6 +111,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
     }
     public void CheckMapEditorItemLinkCharacter(CheckMapEditorItemLinkCharacter checkMapEditorItemLinkCharacter)
     {
+        MapCellController.instance.TransTempMap(ref checkMapEditorItemLinkCharacter.mapId);
         int2 editorKey = new int2(checkMapEditorItemLinkCharacter.mapId, checkMapEditorItemLinkCharacter.itemEditorId);
         bool result = CanLinkRuntimeMapItem(editorKey, checkMapEditorItemLinkCharacter.characterId);
         if (checkMapEditorItemLinkCharacter.setResult != null)
@@ -339,6 +347,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
     public List<int> GetMapItems(int mapId)
     {
+        MapCellController.instance.TransTempMap(ref mapId);
         if (!itemInMapDatas.TryGetValue(mapId, out var result))
         {
             return new List<int>();
@@ -431,6 +440,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
         if (setItemAnimation.mapId != 0)
         {
+            MapCellController.instance.TransTempMap(ref setItemAnimation.mapId);
             if (editorItemRemapInstanceIds.TryGetValue(new int2(setItemAnimation.mapId, setItemAnimation.editorId),
                 out instanceid))
             {
@@ -474,20 +484,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
     {
         return runtimeMapItems.TryGetValue(instanceId, out runtimeMapItem);
     }
-
-    public bool GetMapItemPos(int mapId, int editorInstanceId, out int3 objCoordinate)
-    {
-        objCoordinate = int3.zero;
-        if (editorItemRemapInstanceIds.TryGetValue(new int2(mapId, editorInstanceId), out var instance))
-        {
-            if (runtimeMapItems.TryGetValue(instance, out var mapItem))
-            {
-                objCoordinate = new int3(mapItem.coordinate, mapItem.mapInstanceId);
-                return true;
-            }
-        }
-        return false;
-    }
+ 
 
     public void SaveMapItemInstance(int instance)
     {
@@ -569,7 +566,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
     }
 
     private async Task<int> AddMapItem(MapItem mapItem, int mapId,int fixedInstance=0)
-    {
+    { 
         bool isInSaveData = true;
         int instanceId = 0;
         if (fixedInstance == 0)
@@ -690,6 +687,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
         {
             return;
         }
+
+        MapCellController.instance.TransTempMap(ref addMapItem.mapId);
         MapItem mapItem = new MapItem
         {
             id = addMapItem.dataId,
@@ -797,7 +796,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
     }
     private void MoveMapItem(MoveMapItem moveMapItem)
-    {
+    { 
         if (runtimeMapItems.TryGetValue(moveMapItem.mapItemInstanceId, out var runtimeMapItem))
         {
             if (runtimeMapItem.mapInstanceId == moveMapItem.mapItemInstanceId &&
@@ -886,78 +885,10 @@ public class WorldMapManager : Singleton<WorldMapManager>
         };
         GameActionManager.instance.QueueAction(setHomeEquipCoordinate,true);
     }
-
-    public bool InitNewSmoothMove(ref float2 direction, int2 coordinate, int mapId, out int2 targetCoordinate)
-    {
-        if (direction.x == 0 && direction.y == 0)
-        {
-            targetCoordinate = coordinate;
-            return false;
-        }
-
-        int2 offsetCoordinate = (int2)direction;
-
-        int2 checkTargetCoordinate = coordinate + offsetCoordinate;
-        targetCoordinate = checkTargetCoordinate;
-        if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate, mapId))
-        {
-            offsetCoordinate = new int2(0, (int)direction.y);
-            checkTargetCoordinate = coordinate + offsetCoordinate;
-            targetCoordinate = checkTargetCoordinate;
-            if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate, mapId))
-            {
-                offsetCoordinate = new int2((int)direction.x, 0);
-                checkTargetCoordinate = coordinate + offsetCoordinate;
-                if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate, mapId))
-                {
-                    targetCoordinate = checkTargetCoordinate;
-                    return false;
-                }
-                direction = new float2(direction.x, 0);
-                return true;
-            }
-            direction = new float2(0, direction.y);
-            return true;
-        }
-        return true;
-    }
-
-    public bool InitSmoothMove(ref Vector2 direction, Vector2 nowPos, int mapId, float distance)
-    {
-        if (direction == Vector2.zero)
-        {
-            return false;
-        }
-
-        Vector2 checkTargetPos = nowPos + direction * distance;
-        int2 checkTargetCoordinate = GameCommon.GetMapCoordinateInt(checkTargetPos);
-        if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate, mapId))
-        {
-            Vector2 direction1 = new Vector2(0, direction.y);
-            Vector2 checkTargetPos1 = nowPos + direction1 * distance;
-            int2 checkTargetCoordinate1 = GameCommon.GetMapCoordinateInt(checkTargetPos1);
-
-            if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate1, mapId))
-            {
-                Vector2 direction2 = new Vector2(direction.x, 0);
-                Vector2 checkTargetPos2 = nowPos + direction2 * distance;
-                int2 checkTargetCoordinate2 = GameCommon.GetMapCoordinateInt(checkTargetPos2);
-
-                if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate2, mapId))
-                {
-                    return false;
-                }
-                direction = direction2;
-                return true;
-            }
-            direction = direction1;
-            return true;
-        }
-        return true;
-    }
-
+ 
     public bool InitSmoothMove(ref Vector2 direction, Vector2 nowPos, int mapId, float distance, ref int2 target, ref Vector2 targetPos)
     {
+        MapCellController.instance.TransTempMap(ref mapId);
         if (direction == Vector2.zero)
         {
             return false;

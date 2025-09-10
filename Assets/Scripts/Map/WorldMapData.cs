@@ -50,7 +50,11 @@ public class MapLine
 {
     public int instanceId;
     public bool zeroInit;
-    public int map0, map1;
+    public int map0;
+    public int map1;
+    public int tempMap0, tempMap1;
+    public int Map0 => tempMap0 == 0 ? map0 : tempMap0;
+    public int Map1 => tempMap0 == 0 ? map1 : tempMap1;
     public LinkMapCell cells0=new LinkMapCell(), cells1=new LinkMapCell();
     public int afterActionId;
     public bool testInit;
@@ -85,6 +89,6 @@ public class LinkMapCell
     public List<Direction> directions=new List<Direction>();
     public List<int> girds=new List<int>();
     public int3 targetCell;
-    public int afterAction;
-
+    public int afterAction; 
 }
+ 

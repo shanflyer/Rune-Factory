@@ -4,6 +4,7 @@ using System.IO;
 using OfficeOpenXml;
 using Unity.Mathematics;
 using UnityEditor;
+using UnityEngine;
 
 public partial class CommonToolEditor
 {
@@ -52,6 +53,39 @@ public partial class CommonToolEditor
         return new int2(minX, minY) + new int2(maxX - minX, maxY - minY) / 2;
     }
 
+    public void CheckWorldMapLink()
+    {
+        var mapPath = "Assets/Resources/Data/MapRoomData";
+        var directoryInfo = new DirectoryInfo(mapPath);
+        var files = directoryInfo.GetFiles("*.asset");
+        var mapRangeDic = new Dictionary<string, int4>();
+        foreach (var file in files)
+        {
+            var filePath = $"{mapPath}/{file.Name}";
+            var mapData = AssetDatabase.LoadAssetAtPath<MapRoomData>(filePath);
+            mapRangeDic[mapData.roomName] = new int4(mapData.startCoordinate.xy, mapData.endCoordinate.xy);
+        }
+
+        var worldDataPath = "Assets/Resources/Data/WorldMapData/测试.asset";
+        var worldMapData = AssetDatabase.LoadAssetAtPath<WorldMapData>(worldDataPath);
+        var lines = worldMapData.mapLines;
+        var mapNameDic = new Dictionary<int, string>();
+        foreach (var worldMap in worldMapData.worldMapDic)
+            mapNameDic[worldMap.Key] = worldMap.Value.mapRoomData.roomName;
+
+
+        for (var i = 0; i < lines.Count; i++)
+        {
+            var line = lines[i];
+            if (mapNameDic.TryGetValue(line.Map0, out var mapName))
+                if (mapRangeDic.TryGetValue(mapName, out var mapRange))
+                {
+                    var range = GameCommon.GridRange(line.cells0.girds);
+                    if (range.x < mapRange.x || range.y < mapRange.y || range.z > mapRange.z || range.w > mapRange.w)
+                        Debug.Log($"line:{line.instanceId}--超出范围！");
+                }
+        }
+    }
     public void OutWorldMapLink()
     {
         var worldDataPath = "Assets/Resources/Data/WorldMapData/测试.asset";
@@ -64,47 +98,47 @@ public partial class CommonToolEditor
         for (var i = 0; i < lines.Count; i++)
         {
             var line = lines[i];
-            var key = new int2(line.map0, line.map1);
+            var key = new int2(line.Map0, line.Map1);
             if (mapDic.ContainsKey(key)) continue;
             mapDic.Add(key, new int2(line.center1));
 
-            if (!mapRoomPointDic.TryGetValue(line.map0, out var mapRoomPoint))
+            if (!mapRoomPointDic.TryGetValue(line.Map0, out var mapRoomPoint))
             {
                 mapRoomPoint = new MapRoomPointEditor
                 {
-                    mapId = line.map0,
+                    mapId = line.Map0,
                     neighbours = new List<link>()
                 };
-                mapRoomPointDic.Add(line.map0, mapRoomPoint);
+                mapRoomPointDic.Add(line.Map0, mapRoomPoint);
             }
 
             mapRoomPoint.neighbours.Add(new link
             {
                 start = GetGridsCenter(line.cells0.girds),
                 end = line.center1,
-                map = line.map1
+                map = line.Map1
             });
 
-            var key1 = new int2(line.map1, line.map0);
+            var key1 = new int2(line.Map1, line.Map0);
             mapDic.Add(key1, new int2(line.center0));
 
 
-            if (!mapRoomPointDic.TryGetValue(line.map1, out var mapRoomPoint1))
+            if (!mapRoomPointDic.TryGetValue(line.Map1, out var mapRoomPoint1))
             {
                 mapRoomPoint1 = new MapRoomPointEditor
                 {
-                    mapId = line.map1,
+                    mapId = line.Map1,
 
                     neighbours = new List<link>()
                 };
-                mapRoomPointDic.Add(line.map1, mapRoomPoint1);
+                mapRoomPointDic.Add(line.Map1, mapRoomPoint1);
             }
 
             mapRoomPoint1.neighbours.Add(new link
             {
                 start = GetGridsCenter(line.cells1.girds),
                 end = line.center0,
-                map = line.map0
+                map = line.Map0
             });
         }
 

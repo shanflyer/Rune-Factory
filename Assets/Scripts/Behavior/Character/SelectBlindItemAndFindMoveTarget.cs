@@ -15,9 +15,10 @@ public class SelectBlindItemAndFindMoveTarget: Action
     [Header("角色ID")]
     [SerializeField]
     private SharedInt characterId;
-    [Header("最大范围")]
+
+    [Header("随机")]
     [SerializeField]
-    private SharedInt maxRange;
+    private bool randomCell;
     [SerializeField]
     BindItemType selectBindItemType;
 
@@ -101,7 +102,7 @@ public class SelectBlindItemAndFindMoveTarget: Action
         {
             if(WorldMapManager.instance.GetMapItemPos(SelectItem.Value, out var coordinate))
             {
-                if(maxRange.Value<=0)
+                if (!randomCell)
                 {
                    int2 cell= WorldMapManager.instance.GetItemCommonCenterTriggerCellForEditorInstance(SelectItem.Value.x, SelectItem.Value.y);
                     if (cell.x > int.MinValue)
@@ -111,40 +112,16 @@ public class SelectBlindItemAndFindMoveTarget: Action
                         return; 
                     }
                 }
-
-                var triggerCells = MapCellController.instance.GetItemTriggerCells(SelectItem.Value.x, coordinate.z);
-                if (triggerCells != null && triggerCells.Count > 0)
+                else
                 {
-                    GameRandomData gameRandomData = new GameRandomData
+                    if (WorldMapManager.instance.GetRandomItemPlayerTriggerCell(
+                            SelectItem.Value.x, SelectItem.Value.y, out var cell))
                     {
-                        id = -1,
-                        weightRandom = true,
-                        barrels = new List<int3>(),
-                        randomItems = new List<RandomItem>(),
-                        text = "选择目标"
-                    };
-                    for (var i = 0; i < triggerCells.Count; i++)
-                    {
-                        RandomItem randomItem = new RandomItem
-                        {
-                            itemValue = i,
-                            randomValue = 10,
-                            maxCount = 1,
-                            minCount = 1
-                        };
-                        gameRandomData.randomItems.Add(randomItem);
-                    }
-                    gameRandomData.Pretreatment();
-
-                    var randomResults = GameRandom.instance.GetRandomValue(gameRandomData, randomResultCount: 1);
-                    if (randomResults.Count >= 0)
-                    {
-                        int index = randomResults[0].x;
-                        targetCoordinate.Value = new int3(triggerCells[index], SelectItem.Value.x);
+                        targetCoordinate.Value = new int3(cell, SelectItem.Value.x);
                         taskStatus = TaskStatus.Success;
                         return;
                     }
-                }
+                } 
             } 
         }
         taskStatus = TaskStatus.Failure;

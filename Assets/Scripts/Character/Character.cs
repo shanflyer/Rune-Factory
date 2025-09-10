@@ -1192,6 +1192,8 @@ public partial class Character
     {
         if (mapInstance != character.mapInstance)
         {
+            if (NPCManager.instance.GetNPCFormInstance(character.instanceId, out var npc) &&
+                npc.startSleepHour >= 0) return;
             if (NeighborhoodCharacters.Contains(character.instanceId))
             {
                 RefreshOperateCharacter refreshOperateCharacter = new RefreshOperateCharacter
@@ -1280,16 +1282,12 @@ public partial class Character
             {
                 if (npc.startSleepHour >= 0)
                 {
-                    sleepCharacters.Remove(id);
+                    sleepCharacters.Add(id);
                 }
             }
         }
         NeighborhoodCharacters1.ExceptWith(sleepCharacters);
-        if (NeighborhoodCharacters1 == null)
-        {
-            refreshOperateCharacters.leaveCharacters = NeighborhoodCharacters;
-        }
-        else
+        
         {
             refreshOperateCharacters.leaveCharacters = NeighborhoodCharacters.Except(NeighborhoodCharacters1).ToHashSet<int>();
             refreshOperateCharacters.joinCharacters= NeighborhoodCharacters1.Except(NeighborhoodCharacters).ToHashSet<int>(); 
@@ -1856,6 +1854,7 @@ public partial class Character
                                 nowMap, nextMap, nowCoordinate, endCoordinate,
                                 out var changeCoordinate))
                         {
+                            targetMapCell = changeCoordinate.zw;
 #if UNITY_EDITOR
                             var mapRange = MapCellController.instance.GetRoomRange(nowMap);
                             if (startCoordinate.x < mapRange.x || startCoordinate.y < mapRange.y ||
@@ -1866,17 +1865,23 @@ public partial class Character
                                 changeCoordinate.x > mapRange.z || changeCoordinate.y > mapRange.w)
                                 Debug.Log("错误：目标超出地图范围！");
 
-                            if (changeCoordinate.z < mapRange.x || changeCoordinate.w < mapRange.y ||
-                                changeCoordinate.z > mapRange.z || changeCoordinate.w > mapRange.w)
-                                Debug.Log("错误：目标超出地图范围！");
+                            var nextMapRange = MapCellController.instance.GetRoomRange(nextMap);
+                            if (targetMapCell.x < nextMapRange.x || targetMapCell.y < nextMapRange.y ||
+                                targetMapCell.x > nextMapRange.z || targetMapCell.y > nextMapRange.w)
+                                Debug.Log("错误：起始超出地图范围！");
+ 
+ 
 #endif
 
-                            targetMapCell = changeCoordinate.zw;
+                           
                             MapCellJobController.instance.AddPathRequest(startCoordinate, changeCoordinate.xy, nowMap,
                                 MoveWithPath);
 
                             void MoveWithPath(Stack<int2> path, int map, int2 start, int2 end)
                             {
+                                if (path.Count == 0)
+                                    Debug.Log(
+                                        $"PlayerMove：startCoordinate{start}targetCoordinate{end}-nowMap{map}");
                                 roadCells.Add(map, path);
                                 roomCount--;
                                 if (roomCount == 0) Move(true);
