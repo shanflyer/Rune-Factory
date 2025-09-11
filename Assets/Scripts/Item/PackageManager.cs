@@ -707,8 +707,7 @@ public class PackageManager : Singleton<PackageManager>
                     id = gamePackage.instanceId,
                     caseCount = gamePackage.caseCount,
                     dataId = gamePackage.packageSetData.id,
-                    level = gamePackage.level,
-                    packageType = gamePackage.packageType,
+                    level = gamePackage.level, 
                     packageName = gamePackage.name,
                     itemPackage = gamePackage.itemPackage,
                     items = gamePackage.GetItems()
