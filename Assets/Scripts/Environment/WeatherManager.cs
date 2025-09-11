@@ -7,12 +7,74 @@ using UnityEngine;
 [Serializable]
 public struct Weather
 {
+    [NonSerialized]
     public float cloud;
+
+    [NonSerialized]
     public float temperature;
+
+    [NonSerialized]
     public float fog;
+
+    [NonSerialized]
     public float wind;
+
+    [NonSerialized]
     public float waterFall;
+
+    [NonSerialized]
     public float lightning;
+
+    // 压缩字段
+    public ulong packed;
+
+    private static int ToInt01(float value)
+    {
+        // 0~1 -> 0~1000
+        var v = (int)Math.Round(value * 1000f);
+        return Math.Clamp(v, 0, 1000);
+    }
+
+    private static float ToFloat01(int value)
+    {
+        return value / 1000f;
+    }
+
+    private static int ToIntSigned(float value)
+    {
+        // -1~1 -> 0~2000
+        var v = (int)Math.Round((value + 1f) * 1000f);
+        return Math.Clamp(v, 0, 2000);
+    }
+
+    private static float ToFloatSigned(int value)
+    {
+        // 0~2000 -> -1~1
+        return value / 1000f - 1f;
+    }
+
+    // ========= 打包 =========
+    public void Pack()
+    {
+        packed = 0;
+        packed |= (ulong)ToInt01(cloud) << 0; // 10位
+        packed |= (ulong)ToInt01(temperature) << 10; // 10位
+        packed |= (ulong)ToInt01(fog) << 20; // 10位
+        packed |= (ulong)ToIntSigned(wind) << 30; // 11位
+        packed |= (ulong)ToInt01(waterFall) << 41; // 10位
+        packed |= (ulong)ToInt01(lightning) << 51; // 10位
+    }
+
+    // ========= 解包 =========
+    public void Unpack()
+    {
+        cloud = ToFloat01((int)((packed >> 0) & 0x3FFUL)); // 10位
+        temperature = ToFloat01((int)((packed >> 10) & 0x3FFUL)); // 10位
+        fog = ToFloat01((int)((packed >> 20) & 0x3FFUL)); // 10位
+        wind = ToFloatSigned((int)((packed >> 30) & 0x7FFUL)); // 11位
+        waterFall = ToFloat01((int)((packed >> 41) & 0x3FFUL)); // 10位
+        lightning = ToFloat01((int)((packed >> 51) & 0x3FFUL)); // 10位
+    }
 
     public static Weather Lerp(Weather weather0, Weather weather1, float value)
     {

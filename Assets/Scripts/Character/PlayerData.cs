@@ -12,6 +12,10 @@ public class UserGameSaveDataList : IReferenceData
     {
         commonSaveData = new CommonSaveData();
     }
+
+    public void UnPack()
+    {
+    }
 }
 
 public class CommonSaveData
@@ -21,6 +25,10 @@ public class CommonSaveData
 [Serializable]
 public class UserGameSaveData : IReferenceData
 {
+    public void UnPack()
+    {
+        playerData.Unpack();
+    }
     public UserGameSaveData() 
     {
         otherSaveData = new OtherSaveData
@@ -71,8 +79,7 @@ public class UserGameSaveData : IReferenceData
 
         npcBirthDays.CopyData(userGameSaveData.npcBirthDays);
         npcSleepTime.CopyData(userGameSaveData.npcSleepTime);
-        endGuideFilmIndex = userGameSaveData.endGuideFilmIndex;
-        playerStoreOpen = userGameSaveData.playerStoreOpen;
+        endGuideFilmIndex = userGameSaveData.endGuideFilmIndex; 
     }
     public void NewPlayer()
     {
@@ -81,8 +88,7 @@ public class UserGameSaveData : IReferenceData
     public string saveTime;
     public int index;
 
-    public int endGuideFilmIndex;
-    public int playerStoreOpen;
+    public int endGuideFilmIndex; 
     public CharacterSaveData playerData=new CharacterSaveData();
     public OtherSaveData otherSaveData=new OtherSaveData();
     public GameDateSaveData dateData;
@@ -808,18 +814,54 @@ public class FishSaveData
 
 public struct GameDateSaveData
 {
+    [NonSerialized]
     public int year;
+
+    [NonSerialized]
     public Season season;
+
+    [NonSerialized]
     public int day;
+
+    [NonSerialized]
     public int hour;
+
+    [NonSerialized]
     public int minute;
+
+    [NonSerialized]
     public Week week;
+
+    // 压缩字段
+    public ulong packed;
+
+    public void Pack()
+    {
+        packed = 0;
+        packed |= ((ulong)year & 0xFFFUL) << 0; // 12位
+        packed |= ((ulong)season & 0x3UL) << 12; // 2位
+        packed |= ((ulong)day & 0x1FUL) << 14; // 5位
+        packed |= ((ulong)hour & 0x1FUL) << 19; // 5位
+        packed |= ((ulong)minute & 0x3FUL) << 24; // 6位
+        packed |= ((ulong)week & 0x7UL) << 30; // 3位
+    }
+
+    public void Unpack()
+    {
+        year = (int)((packed >> 0) & 0xFFFUL);
+        season = (Season)((packed >> 12) & 0x3UL);
+        day = (int)((packed >> 14) & 0x1FUL);
+        hour = (int)((packed >> 19) & 0x1FUL);
+        minute = (int)((packed >> 24) & 0x3FUL);
+        week = (Week)((packed >> 30) & 0x7UL);
+    }
 
     public override string ToString()
     {
-      return  LanguageManage.instance.GameTimeToString(year, season, day); 
-    } 
+        return LanguageManage.instance.GameTimeToString(year, season, day);
+    }
 }
+
 
 public class ChapterSave
 {
@@ -890,18 +932,104 @@ public struct FriendSaveData
 
 public class CharacterSaveData : IReferenceData
 {
+    // ========= 原始字段 =========
     public string name;
     public int instanceId;
-    public int dataId;
-    public int level;
-    public int exp;
-    public Gender gender;
-    public BrithDay brithDay;
     public int packageId;
-    public int2 weapon, clothes, shoe,headgear;
+    public int exp;
+
+    [NonSerialized]
+    public int dataId;
+
+    [NonSerialized]
+    public int level;
+
+    [NonSerialized]
+    public Gender gender;
+
+    [NonSerialized]
+    public BrithDay brithDay;
+
+    [NonSerialized] public int2 weapon, clothes, shoe, headgear;
+
+    [NonSerialized]
     public bool isMarried;
+
+    [NonSerialized]
     public int hp, mp, power;
+
+    [NonSerialized]
     public int sleepHour;
+
+    // ========= 压缩存储 =========
+    public ulong baseData; // 基础属性 (61 位)
+    public ulong equipData1; // 武器 + 衣服 (38 位)
+    public ulong equipData2; // 鞋子 + 头饰 + 生日 (45 位)
+
+    // ========= 打包 =========
+    public void Pack()
+    {
+        // --- 基础字段 ---
+        baseData = 0;
+        baseData |= ((ulong)dataId & 0x1FFFUL) << 0; // 13位
+        baseData |= ((ulong)level & 0x7FUL) << 13; // 7位
+        baseData |= ((ulong)gender & 0x3UL) << 20; // 2位 (animal/male/female)
+        baseData |= ((ulong)hp & 0x7FFUL) << 22; // 11位
+        baseData |= ((ulong)mp & 0x7FFUL) << 33; // 11位
+        baseData |= ((ulong)power & 0x7FFUL) << 44; // 11位
+        baseData |= ((ulong)sleepHour & 0x1FUL) << 55; // 5位
+        baseData |= (isMarried ? 1UL : 0UL) << 60; // 1位
+
+        // --- 装备字段 1 (weapon + clothes) ---
+        equipData1 = 0;
+        equipData1 |= ((ulong)weapon.x & 0xFFFUL) << 0; // 12位
+        equipData1 |= ((ulong)weapon.y & 0x7FUL) << 12; // 7位
+        equipData1 |= ((ulong)clothes.x & 0xFFFUL) << 19; // 12位
+        equipData1 |= ((ulong)clothes.y & 0x7FUL) << 31; // 7位
+
+        // --- 装备字段 2 (shoe + headgear + birthday) ---
+        equipData2 = 0;
+        equipData2 |= ((ulong)shoe.x & 0xFFFUL) << 0; // 12位
+        equipData2 |= ((ulong)shoe.y & 0x7FUL) << 12; // 7位
+        equipData2 |= ((ulong)headgear.x & 0xFFFUL) << 19; // 12位
+        equipData2 |= ((ulong)headgear.y & 0x7FUL) << 31; // 7位
+        equipData2 |= ((ulong)brithDay.season & 0x3UL) << 38; // 2位
+        equipData2 |= ((ulong)brithDay.day & 0x1FUL) << 40; // 5位
+    }
+
+    // ========= 解包 =========
+    public void Unpack()
+    {
+        // --- 基础字段 ---
+        dataId = (int)((baseData >> 0) & 0x1FFFUL);
+        level = (int)((baseData >> 13) & 0x7FUL);
+        gender = (Gender)((baseData >> 20) & 0x3UL);
+        hp = (int)((baseData >> 22) & 0x7FFUL);
+        mp = (int)((baseData >> 33) & 0x7FFUL);
+        power = (int)((baseData >> 44) & 0x7FFUL);
+        sleepHour = (int)((baseData >> 55) & 0x1FUL);
+        isMarried = ((baseData >> 60) & 0x1UL) != 0;
+
+        // --- 装备字段 1 ---
+        weapon = new int2(
+            (int)((equipData1 >> 0) & 0xFFFUL),
+            (int)((equipData1 >> 12) & 0x7FUL));
+        clothes = new int2(
+            (int)((equipData1 >> 19) & 0xFFFUL),
+            (int)((equipData1 >> 31) & 0x7FUL));
+
+        // --- 装备字段 2 ---
+        shoe = new int2(
+            (int)((equipData2 >> 0) & 0xFFFUL),
+            (int)((equipData2 >> 12) & 0x7FUL));
+        headgear = new int2(
+            (int)((equipData2 >> 19) & 0xFFFUL),
+            (int)((equipData2 >> 31) & 0x7FUL));
+
+        // --- 生日 ---
+        brithDay.season = (Season)((equipData2 >> 38) & 0x3UL);
+        brithDay.day = (int)((equipData2 >> 40) & 0x1FUL);
+    }
  
     public CharacterSaveData(CharacterSaveData characterSaveData)
     {
@@ -920,13 +1048,14 @@ public class CharacterSaveData : IReferenceData
         mp = characterSaveData.mp;
         power = characterSaveData.power;
         sleepHour = characterSaveData.sleepHour;
+        Pack();
     }
     public CharacterSaveData()
     { }
 
     public CharacterSaveData(Character character)
     {
-        SetCharacter(character);
+        SetCharacter(character); 
     }
 
     public void SetCharacter(Character character,string overrideName=null)
@@ -952,24 +1081,46 @@ public class CharacterSaveData : IReferenceData
         hp = character.CharacterProperty.HP;
         mp = character.CharacterProperty.MP;
         power = character.CharacterProperty.Power;
+
+        Pack();
     }
 }
 
 public struct PackageSaveData
 {
-    public int caseCount;
-    public int id;
-    public int dataId;
-    public int level;
-    public PackageType packageType;
-    public string packageName;
+    public int id; // 不压缩
+    public string packageName; // 不压缩
+    [NonSerialized] public int caseCount; // ≤100 
+    [NonSerialized] public int dataId; // ≤5000
+    [NonSerialized] public int level; // ≤8 
+
+    [NonSerialized]
     public bool itemPackage;
     public List<Item> items;
+
+    // 压缩字段
+    public uint packed;
+
+    public void Pack()
+    {
+        packed = 0;
+        packed |= (uint)(caseCount & 0x7F) << 0; // 7位
+        packed |= (uint)(dataId & 0x1FFF) << 7; // 13位
+        packed |= (uint)(level & 0xF) << 20; // 4位
+        packed |= (uint)(itemPackage ? 1 : 0) << 24; // 1位
+    }
+
+    public void Unpack()
+    {
+        caseCount = (int)((packed >> 0) & 0x7F);
+        dataId = (int)((packed >> 7) & 0x1FFF);
+        level = (int)((packed >> 20) & 0xF);
+        itemPackage = ((packed >> 24) & 0x1) != 0;
+    }
 }
 
 public struct BrithDay
-{
-    public int year;
+{ 
     public Season season;
     public int day;
 }

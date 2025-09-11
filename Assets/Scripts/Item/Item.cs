@@ -5,14 +5,40 @@ using System.Threading.Tasks;
 [Serializable]
 public struct Item : IReferenceData
 {
-    public int instanceId;
-    public int packageId;
-    public int dataId;
-    public int count;
-    public int value;
+    public int instanceId; // 不压缩
+    public int packageId; // 不压缩
+    public int count; // 不压缩
+    [NonSerialized] public int dataId; // <5000
+    [NonSerialized] public int value; // ≤100
+
+    [NonSerialized]
     public bool isFresh;
-    public ItemType itemType;
-    public bool locked; 
+
+    [NonSerialized] public ItemType itemType; // <20
+    [NonSerialized] public bool locked;
+
+    [NonSerialized]
+    // 压缩字段
+    public uint packed;
+
+    public void Pack()
+    {
+        packed = 0;
+        packed |= (uint)(dataId & 0x1FFF) << 0; // 13位
+        packed |= (uint)(value & 0x7F) << 13; // 7位
+        packed |= (uint)(isFresh ? 1 : 0) << 20; // 1位
+        packed |= (uint)((int)itemType & 0x1F) << 21; // 5位
+        packed |= (uint)(locked ? 1 : 0) << 26; // 1位
+    }
+
+    public void Unpack()
+    {
+        dataId = (int)((packed >> 0) & 0x1FFF);
+        value = (int)((packed >> 13) & 0x7F);
+        isFresh = ((packed >> 20) & 0x1) != 0;
+        itemType = (ItemType)((packed >> 21) & 0x1F);
+        locked = ((packed >> 26) & 0x1) != 0;
+    }
     public Item(int dataId, int count,  int packageId = 0)
     {
         this.dataId = dataId;
@@ -22,7 +48,8 @@ public struct Item : IReferenceData
         itemType = ItemType.Default;
         isFresh = false;
         locked = false;
-        value = 100;  
+        value = 100;
+        packed = 0;
     } 
     
    public async Task<bool> IsSingleItem()

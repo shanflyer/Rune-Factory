@@ -1,17 +1,14 @@
-﻿using Newtonsoft.Json;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Unity.Entities.UniversalDelegates;
-using Unity.Mathematics; 
+using Newtonsoft.Json;
+using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.UIElements;
-using VoxelBusters.EssentialKit; 
+using VoxelBusters.EssentialKit;
 
 public class GameDataSaveManager : Singleton<GameDataSaveManager>
 {
@@ -260,6 +257,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     public void InitUserSaveData(string userName, string clundDataStr = null)
     {
         userGameSaveDataList = LoadUserGameSaveData(userName, clundDataStr);
+        userGameSaveDataList.UnPack();
     }
 
     private UserGameSaveDataList LoadUserGameSaveData(string userName, string clundDataStr = null)
@@ -386,8 +384,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         UserGameSaveData.playerData.name = playerName;
         UserGameSaveData.playerData.gender = gender;
         UserGameSaveData.playerData.brithDay = new BrithDay
-        {
-            year = year,
+        { 
             season = season,
             day = day
         };
@@ -398,11 +395,11 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     static JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings()
     {
         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-        NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
-        MissingMemberHandling = Newtonsoft.Json.MissingMemberHandling.Ignore,
-        DefaultValueHandling = Newtonsoft.Json.DefaultValueHandling.Ignore,
-        TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto,
-        Formatting = Newtonsoft.Json.Formatting.None,
+        NullValueHandling = NullValueHandling.Ignore,
+        MissingMemberHandling = MissingMemberHandling.Ignore,
+        DefaultValueHandling = DefaultValueHandling.Ignore,
+        TypeNameHandling = TypeNameHandling.Auto,
+        Formatting = Formatting.None
     };
 
     public static string ObjToString<T>(T t)
@@ -836,6 +833,8 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             }
             return userData;
         }
+
+        userGameSaveDataList.UnPack();
 
         loadCompleted = !string.IsNullOrEmpty(userGameSaveDataList.nowSaveData.saveTime) || !string.IsNullOrEmpty(userGameSaveDataList.userGameSaveDatas[0].saveTime) ||
             !string.IsNullOrEmpty(userGameSaveDataList.userGameSaveDatas[1].saveTime) || !string.IsNullOrEmpty(userGameSaveDataList.userGameSaveDatas[2].saveTime);
