@@ -45,8 +45,8 @@ public class CharacterManager : Singleton<CharacterManager>
     private void RecycleCharacterObj(Character character)
     {
        // Debug.Log($"RecycleCharacterObj:{character.name}");
-       
-        displayCharacters.Remove(character);
+       if (character == controllerCharacter) CameraManager.instance.SetCameraListener(true);
+       displayCharacters.Remove(character);
         GameActionManager.instance.QueueAction(new TryRecycleCharacterEmote { id = character.instanceId }, true);
         if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
         {

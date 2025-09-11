@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
@@ -275,18 +276,51 @@ public partial class MapCellController : Singleton<MapCellController>
         return int3.zero;
     }
 
+    public bool GetRandomItemTriggerCell(int roomId, int itemInstanceId, out int2 cell)
+    {
+        cell = int2.zero;
+        if (tempMaps.TryGetValue(roomId, out var trueMap)) roomId = trueMap;
+        var cells = GetItemTriggerCells(itemInstanceId, roomId);
+        if (cells != null)
+        {
+            try
+            {
+                var index = GameRandom.RandomInt(0, cells.Count);
+                cell = cells[index];
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError($"room:{roomId}-itemInstanceId{itemInstanceId}--{cells.Count}");
+            }
+
+            return true;
+        }
+
+
+        return false;
+    }
+
     public bool GetRandomItemPlayerTriggerCell(int roomId, int itemInstanceId, out int2 cell)
     {
+        cell = int2.zero;
         if (tempMaps.TryGetValue(roomId, out var trueMap)) roomId = trueMap;
         var cells = GetItemPlayerTriggerCells(itemInstanceId, roomId);
         if (cells != null)
         {
-            int index = GameRandom.RandomInt(0, cells.Count);
-            cell = cells[index];
+            try
+            {
+                var index = GameRandom.RandomInt(0, cells.Count);
+                cell = cells[index];
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError($"room:{roomId}-itemInstanceId{itemInstanceId}--{cells.Count}");
+            }
+           
             return true;
         }
 
-        cell = int2.zero;
+        
         return false;
     }
 
@@ -1223,19 +1257,22 @@ public partial class MapCellController : Singleton<MapCellController>
             mapLinkSet.Add(new int3(cells0[i].xy, mapLine.Map0), mapLinkCell); 
            
         }
-        if(!mapNeighbors.TryGetValue(mapLine.map0,out var ints))
+
+        if (!mapNeighbors.TryGetValue(mapLine.Map0, out var ints))
         {
             ints = new HashSet<int>();
-            mapNeighbors.Add(mapLine.map0,ints);
+            mapNeighbors.Add(mapLine.Map0, ints);
         }
-        ints.Add(mapLine.map1);
 
-        if (!mapNeighbors.TryGetValue(mapLine.map1, out var ints1))
+        ints.Add(mapLine.Map1);
+
+        if (!mapNeighbors.TryGetValue(mapLine.Map1, out var ints1))
         {
             ints1 = new HashSet<int>();
-            mapNeighbors.Add(mapLine.map1, ints1); 
+            mapNeighbors.Add(mapLine.Map1, ints1); 
         }
-        ints1.Add(mapLine.map0);
+
+        ints1.Add(mapLine.Map0);
 
         var cells1 = GameCommon.GridToCells(mapLine.cells1.girds);
         for (int i = 0; i < mapLine.cells1.directions.Count; i++)

@@ -114,7 +114,7 @@ public class SelectBlindItemAndFindMoveTarget: Action
                 }
                 else
                 {
-                    if (WorldMapManager.instance.GetRandomItemPlayerTriggerCell(
+                    if (WorldMapManager.instance.GetRandomItemTriggerCell(
                             SelectItem.Value.x, SelectItem.Value.y, out var cell))
                     {
                         targetCoordinate.Value = new int3(cell, SelectItem.Value.x);

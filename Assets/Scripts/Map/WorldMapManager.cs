@@ -60,9 +60,22 @@ public class WorldMapManager : Singleton<WorldMapManager>
         MapCellController.instance.TransTempMap(ref roomId);
         if (editorItemRemapInstanceIds.TryGetValue(new int2(roomId, itemEditorInstance), out var itemInstanceId))
         {
+            Debug.Log($"room:{roomId}-itemEditorInstance{itemEditorInstance}");
             if (MapCellController.instance.GetRandomItemPlayerTriggerCell(roomId, itemInstanceId, out cell))
                 return true;
         }
+
+        cell = int.MinValue;
+        return false;
+    }
+
+    public bool GetRandomItemTriggerCell(int roomId, int itemEditorInstance, out int2 cell)
+    {
+        MapCellController.instance.TransTempMap(ref roomId);
+        if (editorItemRemapInstanceIds.TryGetValue(new int2(roomId, itemEditorInstance), out var itemInstanceId))
+            // Debug.Log($"room:{roomId}-itemEditorInstance{itemEditorInstance}");
+            if (MapCellController.instance.GetRandomItemTriggerCell(roomId, itemInstanceId, out cell))
+                return true;
 
         cell = int.MinValue;
         return false;

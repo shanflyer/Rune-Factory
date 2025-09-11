@@ -54,7 +54,7 @@ public class MapLine
     public int map1;
     public int tempMap0, tempMap1;
     public int Map0 => tempMap0 == 0 ? map0 : tempMap0;
-    public int Map1 => tempMap0 == 0 ? map1 : tempMap1;
+    public int Map1 => tempMap1 == 0 ? map1 : tempMap1;
     public LinkMapCell cells0=new LinkMapCell(), cells1=new LinkMapCell();
     public int afterActionId;
     public bool testInit;
