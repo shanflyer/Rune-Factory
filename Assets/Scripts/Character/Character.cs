@@ -1855,7 +1855,7 @@ public partial class Character
                                 out var changeCoordinate))
                         {
                             targetMapCell = changeCoordinate.zw;
-#if UNITY_EDITOR
+#if UNITY_EDITOR 
                             var mapRange = MapCellController.instance.GetRoomRange(nowMap);
                             if (startCoordinate.x < mapRange.x || startCoordinate.y < mapRange.y ||
                                 startCoordinate.x > mapRange.z || startCoordinate.y > mapRange.w)
@@ -1941,18 +1941,9 @@ public partial class Character
                             FailedMoveAction();
                             return;
                         }
-                        /*
-                        string pathStr = "path";
-                        var pList= path.ToList();
-                        for(int i = 0; i < pList.Count; i++)
-                        {
-                            pathStr = GameCommon.BlendString(pathStr, ",", pList[i].ToString());
-                        }*/
-
-                        // Debug.Log($"PlayerMove:map{map}-path.count{path.Count} pathStr{pathStr}");
                         if (!zero)
                         {
-                            var coordinate = path.Pop();
+                            var coordinate = path.Pop(); 
                             SetCoordinate(new int3(coordinate.xy, map));
                         }
                         PlayerMove(path, () =>

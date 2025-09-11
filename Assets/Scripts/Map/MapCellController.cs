@@ -1081,8 +1081,9 @@ public partial class MapCellController : Singleton<MapCellController>
 
         if (linkCells.Count > 0)
         {
-            var inCoordinate = linkCells[GameRandom.RandomInt(0, linkCells.Count)].coordinate;
-            var targetCoordinate = linkCells[GameRandom.RandomInt(0, linkCells.Count)].targetCell.xy;
+            var cell = linkCells[GameRandom.RandomInt(0, linkCells.Count)];
+            var inCoordinate = cell.coordinate;
+            var targetCoordinate = cell.targetCell.xy;
             changeCoordinate = new int4(inCoordinate, targetCoordinate);
             return true;
         }
