@@ -59,25 +59,26 @@ public class MapLinkEditor : MonoBehaviour
 
     public bool CheckLink(int mapId)
     {
-        return mapLine.Map0 == mapId || mapLine.Map1 == mapId;
+        return mapLine.map0 == mapId || mapLine.map1
+            == mapId;
     }
     public void InitLinkData(MapLine mapLine)
     { 
         if (mapLine.instanceId == 0)
         {
-            var id = $"{mapLine.Map0}{mapLine.Map1}";
+            var id = $"{mapLine.map0}{mapLine.map1}";
             mapLine.instanceId = int.Parse(id);
         }
         this.mapLine = mapLine;
-        mapInstance0 = WorldInstanceEditor.Instance.mapInstanceEditors[mapLine.Map0];
-        mapInstance1 = WorldInstanceEditor.Instance.mapInstanceEditors[mapLine.Map1];
+        mapInstance0 = WorldInstanceEditor.Instance.mapInstanceEditors[mapLine.map0];
+        mapInstance1 = WorldInstanceEditor.Instance.mapInstanceEditors[mapLine.map1];
 
         mapPos0 = mapInstance0.transform.position;
         mapPos1 = mapInstance1.transform.position;
 
-        var linkName = $"{mapLine.Map0}-{mapLine.Map1}";
-        startPoint.gameObject.name = $"{linkName}:{mapLine.Map0}";
-        endPoint.gameObject.name = $"{linkName}:{mapLine.Map1}";
+        var linkName = $"{mapLine.map0}-{mapLine.map1}";
+        startPoint.gameObject.name = $"{linkName}:{mapLine.map0}";
+        endPoint.gameObject.name = $"{linkName}:{mapLine.map1}";
         startPoint.parent.name = linkName;
 
         SetLinePointPos();
@@ -152,9 +153,9 @@ public class MapLinkEditor : MonoBehaviour
         }
 
 
-        var linkName = $"{mapLine.Map0}-{mapLine.Map1}";
-        startPoint.gameObject.name = $"{linkName}:{mapLine.Map0}";
-        endPoint.gameObject.name = $"{linkName}:{mapLine.Map1}";
+        var linkName = $"{mapLine.map0}-{mapLine.map1}";
+        startPoint.gameObject.name = $"{linkName}:{mapLine.map0}";
+        endPoint.gameObject.name = $"{linkName}:{mapLine.map1}";
         startPoint.parent.name = linkName;
     }
 
@@ -171,8 +172,9 @@ public class MapLinkEditor : MonoBehaviour
             DestroyImmediate(gameObject);
         }
         */
-        mapInstance0 = WorldInstanceEditor.Instance.mapInstanceEditors[mapLine.Map0];
-        mapInstance1 = WorldInstanceEditor.Instance.mapInstanceEditors[mapLine.Map1];
+        mapInstance0 = WorldInstanceEditor.Instance.mapInstanceEditors[mapLine.map0];
+        mapInstance1 = WorldInstanceEditor.Instance.mapInstanceEditors[mapLine.map1
+        ];
     }
 
     private void Update()
@@ -201,7 +203,7 @@ public class MapLinkEditor : MonoBehaviour
 
         if (mapLine.instanceId == 0)
         {
-            var id = $"{mapLine.Map0}{mapLine.Map1}";
+            var id = $"{mapLine.map0}{mapLine.map1}";
             mapLine.instanceId = int.Parse(id);
         }
        
@@ -234,8 +236,9 @@ public class MapLinkEditor : MonoBehaviour
                 DestroyImmediate(gameObject);
             }
 
-            mapInstance0 = WorldInstanceEditor.Instance.mapInstanceEditors[mapLine.Map0];
-            mapInstance1 = WorldInstanceEditor.Instance.mapInstanceEditors[mapLine.Map1];
+            mapInstance0 = WorldInstanceEditor.Instance.mapInstanceEditors[mapLine.map0];
+            mapInstance1 = WorldInstanceEditor.Instance.mapInstanceEditors[mapLine.map1
+            ];
         }
     }
 }
