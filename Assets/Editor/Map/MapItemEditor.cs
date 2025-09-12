@@ -69,7 +69,7 @@ public class MapItemEditor : MyEditor
     [MenuItem("工具/地图道具")]
     public static void WindowShow()
     {
-        _Instance = EditorWindow.CreateWindow<MapItemEditor>("地图道具");
+        _Instance = CreateWindow<MapItemEditor>("地图道具");
         Instance.Init();
     }
 
@@ -177,7 +177,7 @@ public class MapItemEditor : MyEditor
         Model.transform.SetParent(selectItem.transform, false);
         Show.transform.SetParent(selectItem.transform, false);
 
-        MapItemData mapItemData = ScriptableObject.CreateInstance<MapItemData>();
+        MapItemData mapItemData = CreateInstance<MapItemData>();
 
         mapItemData.id = MyInstance.instance.CreateInstanceId();
         mapItemData.name = mapItemData.id.ToString();
@@ -371,7 +371,8 @@ public class MapItemEditor : MyEditor
         if (selectMapItemDataObj != null)
         {
             DrawIntField(ref selectMapItemDataObj.itemData.id, "物体Id:", 80, 120);
-            DrawTextField(ref selectMapItemDataObj.itemData.itemName, "物体名字:", 80, 120);
+            DrawTextField(ref selectMapItemDataObj.itemData.itemName, "展示名字:", 80, 120);
+            DrawTextField(ref selectMapItemDataObj.itemData.objName, "物体名字:", 80, 120);
         }
         GUILayout.EndVertical();
     }

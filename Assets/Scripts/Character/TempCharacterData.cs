@@ -8,7 +8,7 @@ using Unity.Mathematics;
 using UnityEditor;
 
 #endif
-
+ 
 public class TempCharacterData : ScriptableObject, IGameData
 {
     public int id;
