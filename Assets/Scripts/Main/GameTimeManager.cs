@@ -92,6 +92,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
 
         private Season season;
         private float seasonValue;
+ 
         private float dayValue;
 
         public int day 
@@ -611,6 +612,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             int nowYearHour = ((int)season * 30 - 30 + day - 1) * 24 + hour;
             seasonValue = (nowYearHour / totalYearHour)*4.0f;
             Shader.SetGlobalFloat("_SeasonValue", SeasonValue);
+            instance.UpdateSnowHideMonos();
         }
         const float totalYearHour = (4 * 30) * 24;
 
@@ -624,6 +626,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             Shader.SetGlobalFloat("_SeasonValue", SeasonValue);
             EnvironmentManger.instance.ChangeWeatherDisplayType(SetFixedSeason.weatherDisplayType);
             WorldMapObjManager.instance.RefreshMapAudio();
+            instance.UpdateSnowHideMonos();
         }
         private void UpDataGameTimeAction()
         {
@@ -647,6 +650,23 @@ public class GameTimeManager : Singleton<GameTimeManager>
 #if UNITY_EDITOR
 
 #endif
+    private readonly HashSet<SnowHideMono> SnowHideMonos = new();
+
+    public void AddSnowHideMono(SnowHideMono SnowHideMono)
+    {
+        SnowHideMono.HideAction(SeasonValue > 3.05 || SeasonValue < 0.1);
+        SnowHideMonos.Add(SnowHideMono);
+    }
+
+    public void RemoveSnowHideMono(SnowHideMono SnowHideMono)
+    {
+        if (SnowHideMonos.Contains(SnowHideMono)) SnowHideMonos.Remove(SnowHideMono);
+    }
+
+    private void UpdateSnowHideMonos()
+    {
+        foreach (var snowHideMono in SnowHideMonos) snowHideMono.HideAction(SeasonValue > 3.05 || SeasonValue < 0.1);
+    }
 
     public float timeLightValue
     {
