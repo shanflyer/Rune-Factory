@@ -275,7 +275,7 @@ public partial class MapCellController : Singleton<MapCellController>
         }
         return int3.zero;
     }
-
+     
     public bool GetRandomItemTriggerCell(int roomId, int itemInstanceId, out int2 cell)
     {
         cell = int2.zero;

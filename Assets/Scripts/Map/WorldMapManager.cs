@@ -23,8 +23,59 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
     private Dictionary<int2, int> editorItemRemapInstanceIds = new Dictionary<int2, int>();
 
+    public int GetNearestItem(int roomId, HashSet<int> itemDataIds, int2 coordinate)
+    {
+        if (itemInMapDatas.TryGetValue(roomId, out var itemIds))
+        {
+            float maxDistance = int.MinValue;
+            RuntimeMapItem nearestItem = null;
+            for (var i = 0; i < itemIds.length; i++)
+            {
+                var itemId = itemIds[i];
+                if (runtimeMapItems.TryGetValue(itemId, out var item))
+                    if (itemDataIds.Contains(item.mapItemData.id))
+                    {
+                        var distance = math.distancesq(coordinate, item.coordinate);
+                        if (distance > maxDistance)
+                        {
+                            maxDistance = distance;
+                            nearestItem = item;
+                        }
+                    }
+            }
 
+            if (nearestItem != null) return nearestItem.instanceId;
+        }
 
+        return 0;
+    }
+
+    public int GetNearestItem(int roomId, int itemDataId, int2 coordinate)
+    {
+        if (itemInMapDatas.TryGetValue(roomId, out var itemIds))
+        {
+            float maxDistance = int.MinValue;
+            RuntimeMapItem nearestItem = null;
+            for (var i = 0; i < itemIds.length; i++)
+            {
+                var itemId = itemIds[i];
+                if (runtimeMapItems.TryGetValue(itemId, out var item))
+                    if (item.mapItemData.id == itemDataId)
+                    {
+                        var distance = math.distancesq(coordinate, item.coordinate);
+                        if (distance > maxDistance)
+                        {
+                            maxDistance = distance;
+                            nearestItem = item;
+                        }
+                    }
+            }
+
+            if (nearestItem != null) return nearestItem.instanceId;
+        }
+
+        return 0;
+    }
     public override void Init()
     {
         base.Init();

@@ -62,6 +62,10 @@ public class CharacterManager : Singleton<CharacterManager>
             };
             GameActionManager.instance.QueueAction(destoryCharacter, true);
         }
+
+        if (WorldMapManager.instance.GetRuntimeMapItem(character.linkItem, out var linkItem))
+            linkItem.linkCharacter = 0;
+
         FishController.instance.RecycleFisherObj(character.instanceId);
     }
 
