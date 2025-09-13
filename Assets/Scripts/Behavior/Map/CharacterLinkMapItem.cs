@@ -20,6 +20,7 @@ public class CharacterLinkMapItem : Action
             var character = CharacterManager.instance.GetCharacter(characterId.Value);
             if (WorldMapManager.instance.GetRuntimeMapItem(linkId.Value, out var mapItem))
             {
+                if (mapItem.linkCharacter > 0) return TaskStatus.Failure;
                 mapItem.linkCharacter = character.instanceId;
                 var Pos = mapItem.mapItemData.offsetLinkPos + (Vector3)mapItem.pos;
                 var SetCharacterTempPos = new SetCharacterTempPos

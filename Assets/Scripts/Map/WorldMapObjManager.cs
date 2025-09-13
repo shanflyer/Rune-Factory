@@ -384,7 +384,8 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             DisplayMapRoomData.completedAction.Action();
         }
     }
-    public async Task DisplayMap(int mapId,bool fixedDisplay=false)
+
+    public async Task DisplayMap(int mapId, bool fixedDisplay = false, bool zeroInit = false)
     {
         if (!fixedDisplay &&displayMap == mapId)
         {
@@ -399,7 +400,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         mapDisplayCompleted.Clear();
         displayMap = mapId;
         DisplayMapRoomData = WorldMapManager.instance.GetWorldMap(mapId).mapRoomData;
-        if (DisplayMapRoomData.autoCreatTempNpc)
+        if (!zeroInit && DisplayMapRoomData.autoCreatTempNpc)
         {
             StartCreatTempCharacter startCreatTempCharacter = new StartCreatTempCharacter
             {
@@ -420,10 +421,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                 GameActionManager.instance.QueueAction(startCreatSpecialTempCharacter, true);
             }
         }
-        else
-        {
-            
-        } 
+       
         string dataId = DisplayMapRoomData.name;
         SetMapOverrideEnvirmentData(DisplayMapRoomData);
         if (!string.IsNullOrEmpty(dataId))
@@ -465,6 +463,31 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         await CharacterManager.instance.RefreshNpcRuntimeObj();
     }
 
+    public void DisplayTempNpc()
+    {
+        if (DisplayMapRoomData.autoCreatTempNpc)
+        {
+            var startCreatTempCharacter = new StartCreatTempCharacter
+            {
+                creatDataId = DisplayMapRoomData.creatTempCharacterId,
+                clearAll = true,
+                prewarm = DisplayMapRoomData.tempNpcPrewarm
+            };
+            GameActionManager.instance.QueueAction(startCreatTempCharacter, true);
+
+            for (var i = 0; i < DisplayMapRoomData.specialNpcBehaviorAreas.Count; i++)
+            {
+                var area = DisplayMapRoomData.specialNpcBehaviorAreas[i];
+                var startCreatSpecialTempCharacter = new StartCreatSpecialTempCharacter
+                {
+                    creatDataId = area.tempCreatId,
+                    gridRange = new int4(area.grids[0] + area.pos.x, area.grids[1] + area.pos.y,
+                        area.grids[2] + area.pos.x, area.grids[3] + area.pos.y)
+                };
+                GameActionManager.instance.QueueAction(startCreatSpecialTempCharacter, true);
+            }
+        }
+    }
     private async Task RuntimeMapItemPlay(RuntimeMapItem mapItem, RuntimeObj runtimeObj)
     {
         Animator animator = (runtimeObj.obj.transform).GetComponent<Animator>();

@@ -1098,7 +1098,7 @@ public class CharacterManager : Singleton<CharacterManager>
         // var direction = GameCommon.GetCharacterDirect(character.objCoordinate.coordinate, targetCoordinate, character.direction);
         if (!MapCellController.instance.CheckIsWalk(targetCoordinate, character.mapInstance))
         {
-            Debug.Log($"不可走！character:{character.name}--character.mapInstance:{character.mapInstance}");
+            //  Debug.Log($"不可走！character:{character.name}--character.mapInstance:{character.mapInstance}");
             if (failedMoveAction != null)
             {
                 failedMoveAction();

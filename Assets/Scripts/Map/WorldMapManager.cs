@@ -27,18 +27,18 @@ public class WorldMapManager : Singleton<WorldMapManager>
     {
         if (itemInMapDatas.TryGetValue(roomId, out var itemIds))
         {
-            float maxDistance = int.MinValue;
+            float minDistance = int.MaxValue;
             RuntimeMapItem nearestItem = null;
             for (var i = 0; i < itemIds.length; i++)
             {
                 var itemId = itemIds[i];
-                if (runtimeMapItems.TryGetValue(itemId, out var item))
+                if (runtimeMapItems.TryGetValue(itemId, out var item) && item.linkCharacter <= 0)
                     if (itemDataIds.Contains(item.mapItemData.id))
                     {
                         var distance = math.distancesq(coordinate, item.coordinate);
-                        if (distance > maxDistance)
+                        if (distance < minDistance)
                         {
-                            maxDistance = distance;
+                            minDistance = distance;
                             nearestItem = item;
                         }
                     }
@@ -111,7 +111,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         MapCellController.instance.TransTempMap(ref roomId);
         if (editorItemRemapInstanceIds.TryGetValue(new int2(roomId, itemEditorInstance), out var itemInstanceId))
         {
-            Debug.Log($"room:{roomId}-itemEditorInstance{itemEditorInstance}");
+            // Debug.Log($"room:{roomId}-itemEditorInstance{itemEditorInstance}");
             if (MapCellController.instance.GetRandomItemPlayerTriggerCell(roomId, itemInstanceId, out cell))
                 return true;
         }
@@ -1109,27 +1109,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
         } 
         //生成地图链接
         MapCellController.instance.InitLinkMap(worldMapData.mapLines);
-        /*
-        GameTimerController.instance.DelayAction(200, async () => {
-            var mapNpcDataList = await GameDataManager.instance.GetAsyncData<MapNpcDataList>();
-            var datas = mapNpcDataList.datas;
-
-            for(int i = 0; i < datas.Count; i++)
-            {
-                for(int j=0;j<datas[i].datas.Count; j++)
-                {
-                    if (datas[i].datas[j].initialBegin)
-                    {
-                       await CharacterManager.instance.CreateNpc(datas[i].datas[j]);
-                    }
-                }
-            }
-
-            NPCManager.instance.InitNPCBehavior();
-        }); */
-        // return true;
-
-        //WorldMapObjManager.instance.DefaultDisplayMap(displayMap);
+        WorldMapObjManager.instance.DisplayTempNpc();
+        
     }
     async Task CreateRoomRuntime(WorldMap room, bool display, int displayMap = 0)
     {
@@ -1147,7 +1128,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
         if (display)
         {
-             await WorldMapObjManager.instance.DisplayMap(displayMap);
+            await WorldMapObjManager.instance.DisplayMap(displayMap, zeroInit: true);
         }
         if (room.eventId != 0)
         {

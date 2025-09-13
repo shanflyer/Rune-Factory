@@ -29,9 +29,14 @@ public class GetNearestItem : Action
             var itemSet = new HashSet<int>();
             for (var i = 0; i < items.Value.Count; i++) itemSet.Add(items.Value[i]);
 
-            result.Value =
+            int value =
                 WorldMapManager.instance.GetNearestItem(character.mapInstance, itemSet, character.coordinate);
-            return TaskStatus.Success;
+            if (value != 0)
+            {
+                result.Value = value;
+                return TaskStatus.Success;
+            }
+            
         }
 
 
