@@ -27,6 +27,8 @@ public class SelectBlindItemAndFindMoveTarget: Action
     private SharedInt3 targetCoordinate;
     [SerializeField]
     private SharedInt2 SelectItem;
+
+    [SerializeField] private SharedInt SelectItemInstance;
     public override void OnStart()
     {
         if (characterId == null || characterId.IsNull())
@@ -70,7 +72,8 @@ public class SelectBlindItemAndFindMoveTarget: Action
                                         mapId = SelectItem.Value.x,
                                         mapItemEditorId = SelectItem.Value.y,
                                         linkInstanceId = characterId.Value,
-                                        setResult = SetMapEditorItemLinkResult
+                                        setResult = SetMapEditorItemLinkResult,
+                                        setValue = SetSelectItemInstance
                                     };
                                     GameActionManager.instance.QueueAction(setMapEditorItemLinkCharacter, true);
                                 }
@@ -95,6 +98,11 @@ public class SelectBlindItemAndFindMoveTarget: Action
             taskStatus = TaskStatus.Failure;
         }
 
+    }
+
+    private void SetSelectItemInstance(int instanceId)
+    {
+        if (SelectItemInstance != null) SelectItemInstance.Value = instanceId;
     }
     void SetMapEditorItemLinkResult(bool value)
     {

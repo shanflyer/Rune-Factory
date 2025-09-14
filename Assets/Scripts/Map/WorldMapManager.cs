@@ -161,6 +161,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
                     character.linkItem = runtimeMapItem.instanceId;
                 }
 
+                if (SetMapEditorItemLinkCharacter.setValue != null) SetMapEditorItemLinkCharacter.setValue(instanceId);
                 if (SetMapEditorItemLinkCharacter.setResult != null)
                 {
                     SetMapEditorItemLinkCharacter.setResult(true);
@@ -350,6 +351,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 intValue=0
             };
             GameActionManager.instance.QueueAction(setCharacterAnimator1);
+            runtimeMapItem.linkCharacter = 0;
             // runtimeMapItems.SetData(runtimeMapItem);
         }
     }

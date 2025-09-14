@@ -593,9 +593,14 @@ public partial class Character
     public int characterPackage;
     public List<int> skills = new List<int>();
 
+    public void UnLinkItem()
+    {
+        if (WorldMapManager.instance.GetRuntimeMapItem(linkItem, out var item)) item.linkCharacter = 0;
+        linkItem = 0;
+    }
     public void WakeUp(int sleepHour)
     {
-        linkItem = 0;
+        UnLinkItem();
         if (isController)
         {
             var playerWakeUp = new PlayerWakeUp
