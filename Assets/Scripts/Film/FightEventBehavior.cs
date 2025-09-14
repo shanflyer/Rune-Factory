@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
-using UnityEngine.Playables;
+﻿using UnityEngine.Playables;
 
 public class FightEventBehavior : PlayableBehaviour
 {
@@ -25,7 +23,7 @@ public class FightEventBehavior : PlayableBehaviour
                 displayHurt = hurtDisplay
             };
             GameActionManager.instance.QueueAction(actionSkillEstimate, true);
-            Debug.Log($"<color=green>战斗:{skillEstimateData.skillRuntime.instanceId}-SkillData:{skillEstimateData.skillRuntime.skillData.skillName}</color>");
+            // Debug.Log($"<color=green>战斗:{skillEstimateData.skillRuntime.instanceId}-SkillData:{skillEstimateData.skillRuntime.skillData.skillName}</color>");
         } 
         base.OnBehaviourPlay(playable, info);
     }

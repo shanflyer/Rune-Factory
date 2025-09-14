@@ -19,6 +19,11 @@ public class GameGuideManager:Singleton<GameGuideManager>
             GameDataSaveManager.instance.UserGameSaveData.endGuideFilmIndex = value;
         }
     }
+
+    public bool IsEndGuide()
+    {
+        return endGuideFilmIndex >= GameDataManager.instance.GlobalData.endGuideIndex;
+    }
     public async Task<GameGuideFilmData> GetGameGuideFilmData()
     {
         if (endGuideFilmIndex >= 0)
@@ -153,7 +158,7 @@ public class GameGuideManager:Singleton<GameGuideManager>
     int nowGuideSelectableId;
     public void GuideButtonAction(PointerEventData eventData) 
     {
-        Debug.Log($"指引点击00!!--{eventData.button}");
+        //Debug.Log($"指引点击00!!--{eventData.button}");
         if (guidStepData.waitTime > 0)
         {
             GameTimerController.instance.DelayAction(guidStepData.waitTime, () =>

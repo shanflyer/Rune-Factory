@@ -13,6 +13,8 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
     [SerializeField]
     private Button goldAdd, crystalAdd;
 
+    [SerializeField] private Image GoldAdd_Image, CrystalAdd_Image;
+
     [SerializeField]
     private TextMeshProUGUI season;
 
@@ -111,11 +113,38 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         GameActionManager.instance.AddListener<CharacterPropertyTrigger>(RefreshCharacterProperty);
         GameActionManager.instance.AddListener<SetWeather>(SetWeather);
         GameActionManager.instance.AddListener<NewHour>(NewHour);
+        GameActionManager.instance.AddListener<SaveGuideFilmIndexAction>(SaveGuideFilmIndexAction);
         UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
+
+        if (GameController.instance.startPlay || GameGuideManager.instance.IsEndGuide())
+        {
+            GoldAdd_Image.enabled = CrystalAdd_Image.enabled = true;
+            goldAdd.enabled = crystalAdd.enabled = true;
+        }
+        else
+        {
+            GoldAdd_Image.enabled = CrystalAdd_Image.enabled = false;
+            goldAdd.enabled = crystalAdd.enabled = false;
+        }
+    }
+
+    private void SaveGuideFilmIndexAction(SaveGuideFilmIndexAction SaveGuideFilmIndexAction)
+    {
+        if (GameController.instance.startPlay || GameGuideManager.instance.IsEndGuide())
+        {
+            GoldAdd_Image.enabled = CrystalAdd_Image.enabled = true;
+            goldAdd.enabled = crystalAdd.enabled = true;
+        }
+        else
+        {
+            GoldAdd_Image.enabled = CrystalAdd_Image.enabled = false;
+            goldAdd.enabled = crystalAdd.enabled = false;
+        }
     }
     private void LateUpdate()
     {
-        FPSText.text = $"FPS{1.0f / Time.smoothDeltaTime}"; 
+        if (FPSText.gameObject.activeSelf && FPSText.enabled)
+            FPSText.text = $"FPS{1.0f / Time.smoothDeltaTime}"; 
     }
 
     private void NewHour(NewHour newHour)

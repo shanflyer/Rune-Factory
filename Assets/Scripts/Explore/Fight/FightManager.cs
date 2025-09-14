@@ -1,12 +1,8 @@
-﻿using BehaviorDesigner.Runtime;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Rendering;
-
 
 public enum HurtResultType
 {
@@ -516,7 +512,7 @@ public class FightManager : Singleton<FightManager>
             FightMonster fightMonster = new FightMonster(monsterData, ExploreManager.instance.NewUid, new int2(col, raw));   
             fightCharacters.Add(fightMonster.instanceId, fightMonster);
             fightMonsters.Add(fightMonster.instanceId);
-            Debug.Log($"singleMonsterDic.Count{singleMonsterDic.Count}--fightMonster.instanceId}}{fightMonster.instanceId}--fightMonster.fightPos{fightMonster.fightPos}");
+            // Debug.Log($"singleMonsterDic.Count{singleMonsterDic.Count}--fightMonster.instanceId}}{fightMonster.instanceId}--fightMonster.fightPos{fightMonster.fightPos}");
             singleMonsterDic.Add(fightMonster.fightPos, fightMonster.instanceId);
             if (!horizontalMonsterDic.TryGetValue(fightMonster.fightPos.y, out var horizontalMonsters))
             {
@@ -1156,7 +1152,8 @@ public class FightManager : Singleton<FightManager>
                     hurt = actionValue;
                     hurtResultType = GetHurtResultType(source.characterProperty.Lucky, target.characterProperty.Lucky);
                 }
-                Debug.Log($"攻击hurt：<color=blue>{hurt}</color>");
+
+                // Debug.Log($"攻击hurt：<color=blue>{hurt}</color>");
                 if (hurt < 1)
                 {
                     hurt = 1;
@@ -1207,7 +1204,8 @@ public class FightManager : Singleton<FightManager>
             };
             GameActionManager.instance.QueueAction(displayHurt, true);
         }
-        Debug.Log($"角色HP：<color=blue>{target.Name}--{hp}</color>");
+
+        // Debug.Log($"角色HP：<color=blue>{target.Name}--{hp}</color>");
         if (hp <= 0)
         {
            // Debug.Log($"角色死亡：{target is FightMonster}");
@@ -1256,7 +1254,7 @@ public class FightManager : Singleton<FightManager>
         };
         GameActionManager.instance.QueueAction(changeCharacterProperty, true);
         SkillAction(skillData.fightType,skillData.skillActionType,skillData.actionValue, source, target, actionSkillEstimate.displayHurt);
-       Debug.Log("<color=blue>skillAction</color>");
+        // Debug.Log("<color=blue>skillAction</color>");
     }
 
     private FightRoundType nowFightRound;

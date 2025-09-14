@@ -70,7 +70,7 @@ public class ZeroPanel : GamePanel<IReferenceData>
         if (GameController.instance.startPlay)
         {
             Close();
-            GameDataSaveManager.instance.InitPlayerData("Test", Gender.male, Season.春, 1);
+            GameDataSaveManager.instance.InitPlayerData("Test", Gender.female, Season.春, 1);
             StartWorldInit startWorldInit = new StartWorldInit();
             GameActionManager.instance.QueueAction(startWorldInit);
             //SceneManager.instance.SwitchScene("World");
