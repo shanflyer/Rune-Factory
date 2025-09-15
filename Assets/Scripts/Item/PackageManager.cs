@@ -662,15 +662,20 @@ public class PackageManager : Singleton<PackageManager>
     {
         for (int i = 0; i < packageSaveDatas.Count; i++)
         {
+            packageSaveDatas[i].Unpack();
             if (gamePackages.TryGetValue(packageSaveDatas[i].id,out var gamePackage))
             {
                 gamePackage.caseCount = packageSaveDatas[i].caseCount;
                 gamePackage.level = packageSaveDatas[i].level;
                 gamePackage.name = packageSaveDatas[i].packageName;
-                for(int j = 0; j < packageSaveDatas[i].items.Count; j++)
+
+                var dataCount = packageSaveDatas[i].items.Count / 2;
+                for (var j = 0; j < dataCount; j++)
                 {
-                   await gamePackage.SetItemInPackage(packageSaveDatas[i].items[j]);
+                    var item = new Item(packageSaveDatas[i].items[j * 2], packageSaveDatas[i].items[j * 2 + 1]);
+                    await gamePackage.SetItemInPackage(item);
                 }
+                
                 GameActionManager.instance.QueueAction(new RefreshShortcut
                 {
                     packageId=gamePackage.instanceId
@@ -687,7 +692,16 @@ public class PackageManager : Singleton<PackageManager>
                     itemPackage = saveData.itemPackage,
 
                 };
-                gamePackage.InitSaveItemList(saveData.items); 
+
+                var dataCount = saveData.items.Count / 2;
+                var items = new List<Item>();
+                for (var j = 0; j < dataCount; j++)
+                {
+                    var item = new Item(saveData.items[j * 2], saveData.items[j * 2 + 1]);
+                    items.Add(item);
+                }
+
+                gamePackage.InitSaveItemList(items); 
                 gamePackages.Add(saveData.id, gamePackage);
             }
           
@@ -711,8 +725,17 @@ public class PackageManager : Singleton<PackageManager>
                     packageType = gamePackage.packageType,
                     packageName = gamePackage.name,
                     itemPackage = gamePackage.itemPackage,
-                    items = gamePackage.GetItems()
+                    items = new List<ulong>()
                 };
+                var items = gamePackage.GetItems();
+                for (var i = 0; i < items.Count; i++)
+                {
+                    var packed = items[i].Pack();
+                    packageSaveData.items.Add(packed.Item1);
+                    packageSaveData.items.Add(packed.Item2);
+                }
+
+                packageSaveData.Pack();
                 packageSaveDatas.Add(packageSaveData);
             }
         }

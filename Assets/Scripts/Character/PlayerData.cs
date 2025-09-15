@@ -69,8 +69,7 @@ public class UserGameSaveData : IReferenceData
 
         openFormulas.AddRange(userGameSaveData.openFormulas);
 
-        npcBirthDays.CopyData(userGameSaveData.npcBirthDays);
-        npcSleepTime.CopyData(userGameSaveData.npcSleepTime);
+        NpcTimeData.AddRange(userGameSaveData.NpcTimeData); 
         endGuideFilmIndex = userGameSaveData.endGuideFilmIndex;
         playerStoreOpen = userGameSaveData.playerStoreOpen;
     }
@@ -93,8 +92,7 @@ public class UserGameSaveData : IReferenceData
     public List<Weather> nextWeathers = new List<Weather>();
 
     public FriendSaveData friendSaveData;
-    public IntInt2Dictionary npcBirthDays = new IntInt2Dictionary();
-    public IntIntDictionary npcSleepTime = new();
+    public List<int> NpcTimeData = new();
     public IntChapterSaveDictionary chapters = new IntChapterSaveDictionary();
     public IntIntDictionary mapLineSaveData = new IntIntDictionary();
 
@@ -136,6 +134,7 @@ public class UserGameSaveData : IReferenceData
 
     private Dictionary<int, int2> animationStateMapItemsDic = new();
     private Dictionary<int, int3> changeMapItemsDic = new();
+    private Dictionary<int, NpcTimeData> NpcTimeDataDic = new();
     
     private HashSet<int> RemoveMapItemColliderSet = new HashSet<int>();
     private HashSet<int2> removeMapItemOperatesSet = new HashSet<int2>();
@@ -156,16 +155,16 @@ public class UserGameSaveData : IReferenceData
     }
     public int2 GetNpcBirthDay(int npdId)
     {
-        if(npcBirthDays.TryGetValue(npdId,out var int2))
+        if (NpcTimeDataDic.TryGetValue(npdId, out var npcTimeData))
         {
-            return int2;
+            return new int2(npcTimeData.birthSeason, npcTimeData.birthDay);
         }
         return new int2(-1, -1);
     }
 
     public int GetNpcSleepHour(int npdId)
     {
-        if (npcSleepTime.TryGetValue(npdId, out var hour)) return hour;
+        if (NpcTimeDataDic.TryGetValue(npdId, out var npcTimeData)) return npcTimeData.sleepTime;
         return -1;
     }
     public void InitMapItemSaveData(int id)
@@ -206,6 +205,15 @@ public class UserGameSaveData : IReferenceData
 
     public void Init()
     {
+        NpcTimeDataDic.Clear();
+        for (var i = 0; i < NpcTimeData.Count; i++)
+        {
+            var npcTimeData = new NpcTimeData();
+            npcTimeData.packed = NpcTimeData[i];
+            npcTimeData.Unpack();
+            NpcTimeDataDic.Add(npcTimeData.id, npcTimeData);
+        }
+        
         removeMapItemOperatesDic.Clear();
         mapItemOperates.Clear();
 
@@ -259,6 +267,13 @@ public class UserGameSaveData : IReferenceData
 
     public void SaveData()
     {
+        NpcTimeData = new List<int>();
+        foreach (var value in NpcTimeDataDic.Values)
+        {
+            value.Pack();
+            NpcTimeData.Add(value.packed);
+        }
+        
         changeMapItems.Clear();
         foreach (var changeMapItem in changeMapItemsDic)
             changeMapItems.Add(DataPacker.Int3PackLong(changeMapItem.Value));
@@ -399,12 +414,18 @@ public class UserGameSaveData : IReferenceData
     
     public void SetNpcBirthDay(int  npcId,Season season,int day)
     {
-        npcBirthDays[npcId] = new int2((int)season, day);
+        if (!NpcTimeDataDic.TryGetValue(npcId, out var npcSaveData)) npcSaveData = new NpcTimeData();
+        npcSaveData.id = npcId;
+        npcSaveData.birthSeason = (int)season;
+        npcSaveData.birthDay = day;
+        NpcTimeDataDic[npcId] = npcSaveData;
     }
 
     public void SetNpcSleepTime(int npcId, int hour)
     {
-        npcSleepTime[npcId] = hour;
+        if (!NpcTimeDataDic.TryGetValue(npcId, out var npcSaveData)) npcSaveData = new NpcTimeData();
+        npcSaveData.sleepTime = hour;
+        NpcTimeDataDic[npcId] = npcSaveData;
     }
     public void SetMapHomeEquipData(HomeEquip homeEquip)
     {
@@ -489,6 +510,33 @@ public class UserGameSaveData : IReferenceData
     }
 }
 
+[Serializable]
+public class NpcTimeData
+{
+    public int id; // ≤9999
+    public int birthSeason; // 1-4
+    public int birthDay; // 1-30
+    public int sleepTime; // 0-24
+
+    public int packed;
+
+    public void Pack()
+    {
+        packed = 0;
+        packed |= (id & 0x3FFF) << 0; // 14位
+        packed |= (birthSeason & 0x3) << 14; // 2位
+        packed |= (birthDay & 0x1F) << 16; // 5位
+        packed |= (sleepTime & 0x1F) << 21; // 5位
+    }
+
+    public void Unpack()
+    {
+        id = (packed >> 0) & 0x3FFF;
+        birthSeason = (packed >> 14) & 0x3;
+        birthDay = (packed >> 16) & 0x1F;
+        sleepTime = (packed >> 21) & 0x1F;
+    }
+}
 public class AnimalSaveData
 {
     public string name;
@@ -901,7 +949,7 @@ public class ManufatureSaveData
     public void Pack()
     {
         d1 = d2 = d3 = d4 = d5 = 0;
-
+        materials = new int2[4];
         // d1
         d1 |= (ulong)(instanceId & 0xFFFFF) << 0; // 20位
         d1 |= (ulong)(dataId & 0x3FFF) << 20; // 14位
@@ -933,6 +981,7 @@ public class ManufatureSaveData
 
     public void Unpack()
     {
+        materials = new int2[4];
         // d1
         instanceId = (int)((d1 >> 0) & 0xFFFFF);
         dataId = (int)((d1 >> 20) & 0x3FFF);
@@ -994,12 +1043,12 @@ public class ManufatureSaveData
 
 public class HomeEquipSaveData
 {
-    public int instanceId; // ≤ 999999
-    public int equipDataId; // ≤ 9999
-    public int mapEditorInstance; // ≤ 9999999
-    public int mapInstance; // ≤ 9999
-    public int2 coordinate; // x,y ≤ 999
-    public int characterId; // ≤ 999999
+    [NonSerialized] public int instanceId; // ≤ 999999
+    [NonSerialized] public int equipDataId; // ≤ 9999
+    [NonSerialized] public int mapEditorInstance; // ≤ 9999999
+    [NonSerialized] public int mapInstance; // ≤ 9999
+    [NonSerialized] public int2 coordinate; // x,y ≤ 999
+    [NonSerialized] public int characterId; // ≤ 999999
 
     public ulong data1;
     public ulong data2;
@@ -1307,16 +1356,43 @@ public class CharacterSaveData : IReferenceData
     }
 }
 
-public struct PackageSaveData
+public class PackageSaveData
 {
-    public int caseCount;
-    public int id;
-    public int dataId;
-    public int level;
-    public PackageType packageType;
-    public string packageName;
-    public bool itemPackage;
-    public List<Item> items;
+    [NonSerialized] public int caseCount; // ≤200
+    [NonSerialized] public int id; // ≤999999 (6位十进制)
+    [NonSerialized] public int dataId; // ≤99 (2位十进制)
+    [NonSerialized] public int level; // ≤8
+    [NonSerialized] public PackageType packageType; // 0/1/2
+
+    [NonSerialized] public bool itemPackage; // bool
+
+    public string packageName; // 不压缩
+
+    // 压缩字段
+    public ulong packed;
+
+    public void Pack()
+    {
+        packed = 0;
+        packed |= (ulong)(caseCount & 0xFF) << 0; // 8
+        packed |= (ulong)(id & 0xFFFFF) << 8; // 20
+        packed |= (ulong)(dataId & 0x7F) << 28; // 7
+        packed |= (ulong)(level & 0x7) << 35; // 3
+        packed |= (ulong)((int)packageType & 0x3) << 38; // 2
+        packed |= (itemPackage ? 1UL : 0UL) << 40; // 1
+    }
+
+    public void Unpack()
+    {
+        caseCount = (int)((packed >> 0) & 0xFF);
+        id = (int)((packed >> 8) & 0xFFFFF);
+        dataId = (int)((packed >> 28) & 0x7F);
+        level = (int)((packed >> 35) & 0x7);
+        packageType = (PackageType)((packed >> 38) & 0x3);
+        itemPackage = ((packed >> 40) & 0x1) != 0;
+    }
+
+    public List<ulong> items;
 }
 
 public struct BrithDay
