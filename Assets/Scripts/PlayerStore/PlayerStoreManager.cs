@@ -189,8 +189,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
             {
                 (runtimeObj.obj as SellItem).SetItemCount(runtimeStoreCounter.count);
             }
-
-            GameDataSaveManager.instance.UserGameSaveData.SetStoreCounterSaveData(runtimeStoreCounter);
+ 
             if (buyPlayerGood.setResult != null)
                 buyPlayerGood.setResult(true);
         }
@@ -232,8 +231,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 {
                     GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
                 }
-            }
-            GameDataSaveManager.instance.UserGameSaveData.SetStoreCounterSaveData(runtimeStoreCounter);
+            } 
         }
     }
 
@@ -250,8 +248,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
             else
             {
                 OpenStoreCounter(setStoreCounter.storeCounterId);
-            }
-            GameDataSaveManager.instance.UserGameSaveData.SetStoreCounterSaveData(runtimeStoreCounter);
+            } 
         }
     }
 
@@ -341,8 +338,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                     });
                 }
             }
-
-            GameDataSaveManager.instance.UserGameSaveData.SetStoreCounterSaveData(runtimeStoreCounter);
+ 
         }
     }
     public async void CreatStoreCounter(StoreCounterSaveData storeCounterSaveData)
@@ -379,8 +375,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                      
                 };
                 runtimeStoreCounters.Add(creatStoreCounter.itemInstanceId,runtimeStoreCounter);
-
-                GameDataSaveManager.instance.UserGameSaveData.SetStoreCounterSaveData(runtimeStoreCounter);
+ 
             }
         }
     }
@@ -430,8 +425,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                     nowRuntimeStoreCounterObjs.Remove(displayStoreCounter.itemInstanceId);
                 }
             }
-
-            GameDataSaveManager.instance.UserGameSaveData.SetStoreCounterSaveData(runtimeStoreCounter);
+ 
         }
     }
 
@@ -443,8 +437,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
             {
                 GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
                 nowRuntimeStoreCounterObjs.Remove(deleteMapItem.mapItemInstanceId);
-            }
-            GameDataSaveManager.instance.UserGameSaveData.DeleteStoreCounter(deleteMapItem.mapItemInstanceId) ;
+            } 
         }
     }
 

@@ -242,6 +242,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         }
         set
         {
+            if (value > 1000) value = 1000;
             _produceCount = value;
             ItemCountValue.SetSWText(produceCount.ToString());
             ReduceButton.transform.localScale = produceCount > 1 ? Vector3.one : Vector3.zero;
