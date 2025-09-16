@@ -461,11 +461,13 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
 
         //玩家商店
         UserGameSaveData.storeCounters.Clear();
-        foreach (var runtimeStoreCounter in PlayerStoreManager.instance.RuntimeStoreCounters.Values)
-            UserGameSaveData.storeCounters.Add(new StoreCounterSaveData(runtimeStoreCounter));
+        if (PlayerStoreManager.instance != null && PlayerStoreManager.instance.RuntimeStoreCounters != null)
+            foreach (var runtimeStoreCounter in PlayerStoreManager.instance.RuntimeStoreCounters.Values)
+                UserGameSaveData.storeCounters.Add(new StoreCounterSaveData(runtimeStoreCounter));
 
 
         //友情关系
+        if (FriendManager.instance != null)
         UserGameSaveData.friendSaveData = FriendManager.instance.GetFriendSaveData();
         UserGameSaveData.otherSaveData.gold = PayManager.instance.NowGold;
         UserGameSaveDataList.commonSaveData.diamond = PayManager.instance.NowDiamond;

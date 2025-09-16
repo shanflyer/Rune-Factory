@@ -221,7 +221,7 @@ public class UserGameSaveData : IReferenceData
             var npcTimeData = new NpcTimeData();
             npcTimeData.packed = NpcTimeData[i];
             npcTimeData.Unpack();
-            NpcTimeDataDic.Add(npcTimeData.id, npcTimeData);
+            NpcTimeDataDic[npcTimeData.id] = npcTimeData;
         }
         
         removeMapItemOperatesDic.Clear();

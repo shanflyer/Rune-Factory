@@ -793,7 +793,8 @@ public partial class MapCellController : Singleton<MapCellController>
         if (GetRuntimeMapRoom(room, out RuntimeMapRoom runtimeMapRoom))
         {
             NativeArray<int3> triggerEvents = new NativeArray<int3>
-                (isFroward ? runtimeMapRoom.playerForwardTriggerAreaDatas.Length : runtimeMapRoom.playerTriggerAreaDatas.Length, Allocator.TempJob);
+            (isFroward ? runtimeMapRoom.playerForwardTriggerAreaDatas.Length : runtimeMapRoom.playerTriggerAreaDatas.Length,
+                Allocator.Persistent);
 
             var TriggerAreas = isFroward
                 ? runtimeMapRoom.playerForwardTriggerAreaDatas
