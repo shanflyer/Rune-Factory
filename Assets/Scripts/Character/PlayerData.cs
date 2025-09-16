@@ -106,6 +106,7 @@ public class UserGameSaveData : IReferenceData
 
     public IntFieldSaveDataDictionary fields = new();
     public List<ShopListSaveData> shopList = new();
+    public List<ulong> mapItemCoordinates = new();
 
     public List<int> openFormulas = new List<int>();
     public List<long> changeMapItems = new();
@@ -132,6 +133,7 @@ public class UserGameSaveData : IReferenceData
         }
     }
 
+    public Dictionary<int, ChangeMapItemCoordinate> ChangeMapItemCoordinate = new();
     private Dictionary<int, int2> animationStateMapItemsDic = new();
     private Dictionary<int, int3> changeMapItemsDic = new();
     private Dictionary<int, NpcTimeData> NpcTimeDataDic = new();
@@ -205,6 +207,13 @@ public class UserGameSaveData : IReferenceData
 
     public void Init()
     {
+        ChangeMapItemCoordinate = new Dictionary<int, ChangeMapItemCoordinate>();
+        for (var i = 0; i < mapItemCoordinates.Count; i++)
+        {
+            var packed = mapItemCoordinates[i];
+            var changeMapItemCoordinate = new ChangeMapItemCoordinate(packed);
+            ChangeMapItemCoordinate.Add(changeMapItemCoordinate.instanceId, changeMapItemCoordinate);
+        }
         NpcTimeDataDic.Clear();
         for (var i = 0; i < NpcTimeData.Count; i++)
         {
@@ -267,6 +276,9 @@ public class UserGameSaveData : IReferenceData
 
     public void SaveData()
     {
+        mapItemCoordinates.Clear();
+        foreach (var changeMapItemCoordinate in ChangeMapItemCoordinate.Values)
+            mapItemCoordinates.Add(changeMapItemCoordinate.Pack());
         NpcTimeData = new List<int>();
         foreach (var value in NpcTimeDataDic.Values)
         {
@@ -306,6 +318,11 @@ public class UserGameSaveData : IReferenceData
         mapLineSaveData[id] = isInit?1:0;
     }
 
+    public void SetMapItemCoordinate(int2 editorKey, int instanceId, int mapInstance, int2 Coordinate)
+    {
+        AddSpecialMapItem(editorKey, instanceId);
+        ChangeMapItemCoordinate[instanceId] = new ChangeMapItemCoordinate(instanceId, mapInstance, Coordinate);
+    }
     public void RemoveMapItemOperate(int3 itemOperate,int instanceId)
     {
         if (itemOperate.y == 0)
@@ -507,6 +524,56 @@ public class UserGameSaveData : IReferenceData
             return;
         specialMapItem[editorKey] = instanceId;
         changeMapItemsDic[instanceId] = value; 
+    }
+}
+
+public class ChangeMapItemCoordinate
+{
+    public int instanceId;
+    public int newMap;
+    public int2 newCoordinate;
+
+    public ChangeMapItemCoordinate(int instanceId, int newMap, int2 newCoordinate)
+    {
+        this.instanceId = instanceId;
+        this.newMap = newMap;
+        this.newCoordinate = newCoordinate;
+    }
+
+    public ChangeMapItemCoordinate(ulong packed)
+    {
+        instanceId = (int)((packed >> 0) & 0xFFFFF);
+        newMap = (int)((packed >> 20) & 0x3FFF);
+
+        var x = (int)((packed >> 34) & 0x7FF);
+        var y = (int)((packed >> 45) & 0x7FF);
+
+        // 还原符号（11位二进制补码）
+        if ((x & 0x400) != 0) x |= unchecked((int)0xFFFFF800);
+        if ((y & 0x400) != 0) y |= unchecked((int)0xFFFFF800);
+
+        newCoordinate = new int2(x, y);
+    }
+
+    public ulong Pack()
+    {
+        ulong packed = 0;
+
+        // instanceId (20bit)
+        packed |= (ulong)(instanceId & 0xFFFFF) << 0;
+
+        // newMap (14bit)
+        packed |= (ulong)(newMap & 0x3FFF) << 20;
+
+        // newCoordinate.x (11bit, signed)
+        var x = newCoordinate.x & 0x7FF; // 保留符号的低11位
+        packed |= (ulong)x << 34;
+
+        // newCoordinate.y (11bit, signed)
+        var y = newCoordinate.y & 0x7FF;
+        packed |= (ulong)y << 45;
+
+        return packed;
     }
 }
 
@@ -1057,22 +1124,27 @@ public class HomeEquipSaveData
     {
         data1 = data2 = 0;
 
-        // data1
+        //    data1
         data1 |= (ulong)(instanceId & 0xFFFFF) << 0; // 20
         data1 |= (ulong)(equipDataId & 0x3FFF) << 20; // 14
         data1 |= (ulong)(mapEditorInstance & 0xFFFFFF) << 34; // 24
         data1 |= (ulong)(mapInstance & 0x3F) << 58; // 低6位
+
+        // d2
         data2 |= (ulong)((mapInstance >> 6) & 0xFF) << 0; // 高8位
 
-        // data2
-        data2 |= (ulong)(coordinate.x & 0x3FF) << 8; // 10
-        data2 |= (ulong)(coordinate.y & 0x3FF) << 18; // 10
-        data2 |= (ulong)(characterId & 0xFFFFF) << 28; // 20
+        // 坐标 (11位二进制补码)
+        var x = coordinate.x & 0x7FF;
+        var y = coordinate.y & 0x7FF;
+
+        data2 |= (ulong)x << 8; // 11位
+        data2 |= (ulong)y << 19; // 11位
+        data2 |= (ulong)(characterId & 0xFFFFF) << 30; // 20
     }
 
     public void Unpack()
     {
-        // data1
+        //    data1
         instanceId = (int)((data1 >> 0) & 0xFFFFF);
         equipDataId = (int)((data1 >> 20) & 0x3FFF);
         mapEditorInstance = (int)((data1 >> 34) & 0xFFFFFF);
@@ -1081,12 +1153,16 @@ public class HomeEquipSaveData
         var miHigh = (int)((data2 >> 0) & 0xFF);
         mapInstance = (miHigh << 6) | miLow;
 
-        // data2
-        coordinate = new int2(
-            (int)((data2 >> 8) & 0x3FF),
-            (int)((data2 >> 18) & 0x3FF)
-        );
-        characterId = (int)((data2 >> 28) & 0xFFFFF);
+        // 坐标 (11位补码还原)
+        var x = (int)((data2 >> 8) & 0x7FF);
+        var y = (int)((data2 >> 19) & 0x7FF);
+
+        if ((x & 0x400) != 0) x |= unchecked((int)0xFFFFF800);
+        if ((y & 0x400) != 0) y |= unchecked((int)0xFFFFF800);
+
+        coordinate = new int2(x, y);
+
+        characterId = (int)((data2 >> 30) & 0xFFFFF);
     }
 
     public HomeEquipSaveData() { }

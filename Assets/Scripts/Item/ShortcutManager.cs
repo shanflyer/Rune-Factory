@@ -1,14 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks; 
-using Unity.Collections; 
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public class ShortcutManager : Singleton<ShortcutManager>
 {
     Dictionary<int,ShortcutPackage> shortcutPackages = new Dictionary<int, ShortcutPackage>();
-    public ShortcutPackage playerShortcutPackage => GetShortcutPackage(CharacterManager.instance.controllerCharacter.instanceId);
+
+    public ShortcutPackage playerShortcutPackage
+    {
+        get
+        {
+            if (CharacterManager.instance == null || CharacterManager.instance.controllerCharacter == null) return null;
+            return GetShortcutPackage(CharacterManager.instance.controllerCharacter.instanceId);
+        }
+    } 
     public ShortcutPackage GetShortcutPackage(int characterId)
     {
         if(!shortcutPackages.TryGetValue(characterId,out var shortcutPackage))

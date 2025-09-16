@@ -160,9 +160,12 @@ public class GameController : MonoBehaviour
     public int ZeroMapInstance => zeroMapInstance;
     public int2 ZeroCoordinate => zeroCoordinate;
 
+    private bool loadMap;
     private void OnApplicationQuit()
     {
-        GameDataSaveManager.instance.TryAutoSaveData();
+        if (loadMap) GameDataSaveManager.instance.TryAutoSaveData();
+
+
         //Shader.SetGlobalInt("_backColor", 0);
         if (!SingletonType.Cleared&& SingletonType.instance!=null)
         {
@@ -172,24 +175,7 @@ public class GameController : MonoBehaviour
         instance = null;
     }
 
-    private void OnEnable()
-    {
-
-        CloudServices.OnUserChange += OnUserChange;
-        CloudServices.OnSavedDataChange += OnSavedDataChange;
-        CloudServices.OnSynchronizeComplete += OnSynchronizeComplete;
-    }
-
-
-    private void OnDisable()
-    {
-        CloudServices.OnUserChange -= OnUserChange;
-        CloudServices.OnSavedDataChange -= OnSavedDataChange;
-        CloudServices.OnSynchronizeComplete -= OnSynchronizeComplete;
-
-        // unregister from events
-
-    }
+ 
     private void OnSavedDataChange(CloudServicesSavedDataChangeResult arg)
     {
         switch (arg.ChangeReason)
@@ -289,6 +275,9 @@ if (result.Success)
     }
     private void Awake()
     {
+        CloudServices.OnUserChange += OnUserChange;
+        CloudServices.OnSavedDataChange += OnSavedDataChange;
+        CloudServices.OnSynchronizeComplete += OnSynchronizeComplete;
         //Unity.Collections.NativeLeakDetection.Mode = NativeLeakDetectionMode.EnabledWithStackTrace;
 
         var gameDataManager = GameDataManager.instance;
@@ -365,6 +354,7 @@ if (result.Success)
         };
         GameActionManager.instance.QueueAction(switchInputMap, true);
         ZeroSetCloudGlobal();
+        loadMap = true;
     }
     void ZeroSetCloudGlobal()
     { 

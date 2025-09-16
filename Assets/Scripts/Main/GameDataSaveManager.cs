@@ -451,10 +451,13 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
 
         UserGameSaveData.otherSaveData.shortcutItems = new List<int2>();
         var package= ShortcutManager.instance.playerShortcutPackage;
-         for(int i=0;i< package.items.Length; i++)
+        if (package != null)
         {
-            UserGameSaveData.otherSaveData.shortcutItems.Add(new int2(package.items[i].dataId, package.items[i].instanceId));
+            for (var i = 0; i < package.items.Length; i++)
+                UserGameSaveData.otherSaveData.shortcutItems.Add(new int2(package.items[i].dataId,
+                    package.items[i].instanceId));
         }
+       
 
         //玩家商店
         UserGameSaveData.storeCounters.Clear();
@@ -607,8 +610,8 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             userGameSaveDataList.userGameSaveDatas[selectSaveIndex] =new UserGameSaveData(UserGameSaveData);
             userGameSaveDataList.userGameSaveDatas[selectSaveIndex].index = selectSaveIndex;
         }
-        
-         SaveCloudData(selectSaveIndex);
+
+        SaveCloudData(selectSaveIndex);
         CloudServices.Synchronize();
         /*
 

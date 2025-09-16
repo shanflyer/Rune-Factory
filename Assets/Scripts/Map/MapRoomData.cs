@@ -1,11 +1,9 @@
-﻿ 
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using UnityEngine;
 
-[System.Serializable]
+[Serializable]
 public struct MapItem
 {
     public int id;
@@ -13,11 +11,11 @@ public struct MapItem
     public int2 coordinate;
     public int animationKey;
     public int blindHomeEquipment;
-
+    public bool funcItem;
     public List<MapItemEventReferenceData> eventReferenceDatas;
 }
 
-[System.Serializable]
+[Serializable]
 public struct MapCellData
 {
     public int2 coordinate;

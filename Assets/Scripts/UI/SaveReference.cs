@@ -75,17 +75,7 @@ public class SaveReference : UIObjReference<UserGameSaveData>
             Time.text = "-";
             SaveTime.text = "-";
         }
-        SelectToggle.onValueChanged.AddListener((bool value) =>
-        {
-            if (value)
-            {
-                if (SelectAction != null)
-                {
-                    SelectAction(data,index, value);
-                }
-            }
-            
-        });
+       
     }
 
     public void Awake()
@@ -96,5 +86,12 @@ public class SaveReference : UIObjReference<UserGameSaveData>
         Money.text = "-";
         Time.text = "-";
         SaveTime.text = "-";
+
+        SelectToggle.onValueChanged.AddListener(value =>
+        {
+            if (value)
+                if (SelectAction != null)
+                    SelectAction(data, index, value);
+        });
     }
 }
