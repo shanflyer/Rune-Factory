@@ -16,6 +16,7 @@ public class GameController : MonoBehaviour
     [SerializeField]
     private AudioClip startBGM;
     public bool startPlay = true;
+    public bool noGuide;
 #if UNITY_EDITOR
 
     public int testMap;

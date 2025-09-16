@@ -852,7 +852,8 @@ public class CharacterManager : Singleton<CharacterManager>
         if (character != null)
         {
             character.RemoveMove();
-            character.SetCoordinate(setCharacterCoordinate.coordinate); 
+            character.SetCoordinate(setCharacterCoordinate.coordinate,
+                fiexedDisplay: setCharacterCoordinate.fiexedDisplay); 
            //await RefreshNpcRuntimeObj(character);
         }
     }
@@ -1392,7 +1393,9 @@ public class CharacterManager : Singleton<CharacterManager>
         }
 
     }
-    public async Task RefreshNpcRuntimeObj(Character character, bool controller = false,bool RefreshMapTemp=true)
+
+    public async Task RefreshNpcRuntimeObj(Character character, bool controller = false, bool RefreshMapTemp = true,
+        bool fixedDisplay = false)
     {
         CharacterRuntimeObj characterRuntimeObj;
 
@@ -1444,8 +1447,8 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         else
         {
-             
-            if (character.mapInstance == WorldMapObjManager.instance.displayMap && !ExploreManager.instance.isExplore)
+            if (fixedDisplay || (character.mapInstance == WorldMapObjManager.instance.displayMap
+                                 && !ExploreManager.instance.isExplore))
             {
                 if(character is TempCharacter)
                 {

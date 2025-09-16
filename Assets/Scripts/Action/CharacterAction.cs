@@ -1345,6 +1345,8 @@ public struct SetCharacterCoordinate : GameAction
     /// x:坐标x,y:坐标y,z:地图id
     /// </summary>
     public int3 coordinate;
+
+    public bool fiexedDisplay;
 }
 
 public struct CharacterCoordinateTrigger : GameAction

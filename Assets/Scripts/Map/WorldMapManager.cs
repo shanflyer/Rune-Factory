@@ -1069,9 +1069,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 }
             }
 
-            NPCManager.instance.InitNPCBehavior();
-
-
+            NPCManager.instance.InitNPCBehavior(); 
             GameActionManager.instance.QueueAction(new LoadMapCompleted());
         }
     }
@@ -1095,7 +1093,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
             var room = mapList[i];
             MapCellController.instance.InitMapData(room.id, room.mapRoomData, room.coordinate);
         }
-
+ 
         //设定地图物体
         for (var j = 0; j < mapList.Count; j++)
         {
