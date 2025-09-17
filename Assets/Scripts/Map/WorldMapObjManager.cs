@@ -184,7 +184,8 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         }
         var itemObj =await GameRuntimeObjManager.instance.CreatRuntimeObj<Transform>(RuntimeObjType.MAPITEM.ToString(),
                 tempMapItem.MapItemData.id.ToString(), ProfabTransform, -1, overrideParent);
-        MapItemRuntimeObj tempMapItemObj = new MapItemRuntimeObj(itemObj, tempMapItem.instanceId, tempMapItem.MapItemData.id, tempMapItem.coordinate);
+        var tempMapItemObj = new MapItemRuntimeObj(itemObj, tempMapItem.instanceId, tempMapItem.MapItemData,
+            tempMapItem.coordinate);
         tempMapItemObj.SetDefaultLayer();
         tempMapItemObj.SetCoordinate(tempMapItem.coordinate);
         tempRuntimeMapItemObjs.Add(tempMapItem.instanceId, tempMapItemObj);
@@ -309,6 +310,16 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             return mapItemRuntime;
         }
         return null;
+    }
+
+    public void TryDisplayMask(int instanceId)
+    {
+        if (nowRuntimeMapItemObjs.TryGetValue(instanceId, out var mapItemObj)) mapItemObj.TryDisplayMask();
+    }
+
+    public void RecycleMaskObj(int instanceId)
+    {
+        if (nowRuntimeMapItemObjs.TryGetValue(instanceId, out var mapItemObj)) mapItemObj.RecycleMaskObj();
     }
 
     private void SetMapOverrideEnvirmentData(MapRoomData mapRoomData)
@@ -557,7 +568,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         tempRuntimeMapItemObjs.Clear();
         MyAnimationController.instance.ClearAnimation();
     }
-
+   
     private void TryDeleteRoomObj(TryDeleteRoom deleteRoom)
     {
         if (displayMap == deleteRoom.roomId)
@@ -717,7 +728,8 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         {
             var runtimeObj =await CreatMapItemRuntime(runtimeMapItem.mapItemData, runtimeMapItem.instanceId, runtimeMapItem.coordinate);
 
-            MapItemRuntimeObj MapItemRuntimeObj = new MapItemRuntimeObj(runtimeObj, runtimeMapItem.instanceId, runtimeMapItem.mapItemData.id, runtimeMapItem.coordinate);
+            var MapItemRuntimeObj = new MapItemRuntimeObj(runtimeObj, runtimeMapItem.instanceId,
+                runtimeMapItem.mapItemData, runtimeMapItem.coordinate);
             nowRuntimeMapItemObjs[runtimeMapItem.instanceId] = MapItemRuntimeObj;
             await RuntimeMapItemPlay(runtimeMapItem, runtimeObj);
 
@@ -767,7 +779,8 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
 
             runtimeObj.Recycle();
             var newObj =await CreatMapItemRuntime(runtimeMapItem.mapItemData, runtimeMapItem.instanceId, runtimeMapItem.coordinate);
-            MapItemRuntimeObj MapItemRuntimeObj = new MapItemRuntimeObj(newObj, runtimeMapItem.instanceId, runtimeMapItem.mapItemData.id, runtimeMapItem.coordinate);
+            var MapItemRuntimeObj = new MapItemRuntimeObj(newObj, runtimeMapItem.instanceId, runtimeMapItem.mapItemData,
+                runtimeMapItem.coordinate);
             nowRuntimeMapItemObjs[mapItemId] = MapItemRuntimeObj;
 
             MyAnimationController.instance.RemoveItemAnimation(mapItemId);
@@ -840,7 +853,7 @@ public struct CheckMapItemRuntomeObjPosJob : IJobParallelFor
 public class MapItemRuntimeObj
 {
     public int instanceId;
-    public int dataId;
+    public MapItemData mapItemData;
     private MySpriteMeshRender[] spriteRenderers;
     private Color[] rendererColors;
     public Animator animator;
@@ -850,9 +863,9 @@ public class MapItemRuntimeObj
     public int2 coordinate;
     public string key => runtimeObj.key;
 
-    public MapItemRuntimeObj(RuntimeObj runtimeObj, int instanceId, int dataId, int2 coordinate)
+    public MapItemRuntimeObj(RuntimeObj runtimeObj, int instanceId, MapItemData mapItemData, int2 coordinate)
     {
-        this.dataId = dataId;
+        this.mapItemData = mapItemData;
         this.instanceId = instanceId;
         this.runtimeObj = runtimeObj;
         this.coordinate = coordinate;
@@ -865,6 +878,38 @@ public class MapItemRuntimeObj
             rendererColors[i] = spriteRenderers[i].m_Color;
         }
         transform.TryGetComponent(out polygonCollider2D);
+    }
+
+    private RuntimeObj MaskObj;
+
+    public async void TryDisplayMask()
+    {
+        if (MaskObj != null)
+        {
+            MaskObj.obj.transform.position = transform.position;
+            return;
+        }
+
+        if (!string.IsNullOrEmpty(mapItemData.maskObj))
+        {
+            var maskPro =
+                await GameSourceManager.instance.GetPrefab(GameCommon.BlendString(DataPath.otherPrefabPath,
+                    mapItemData.maskObj));
+            if (maskPro != null)
+            {
+                MaskObj = await GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.OTHER.ToString(),
+                    "mapItemData.maskObj"
+                    , maskPro.transform, instanceId);
+                MaskObj.obj.transform.position = transform.position;
+            }
+        }
+    }
+
+    public void RecycleMaskObj()
+    {
+        if (GameRuntimeObjManager.instance != null && MaskObj != null)
+            GameRuntimeObjManager.instance.RecycleRuntimeObj(MaskObj);
+        MaskObj = null;
     }
 
     public void SetLayer(LayerMask layerMask)
@@ -921,6 +966,7 @@ public class MapItemRuntimeObj
 
     public void Recycle()
     {
+        RecycleMaskObj();
         if (spriteRenderers != null)
         {
             ResetColor();

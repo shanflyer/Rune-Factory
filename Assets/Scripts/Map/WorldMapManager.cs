@@ -1252,6 +1252,7 @@ public class RuntimeMapItem : INativeData
             operateDataList.eventReferenceDatas.Add(EventReferenceData);
         }
 
+       
         if (operateDataLength > 0)
         {
             HashSet<int> waitCheck=new HashSet<int>();
@@ -1274,7 +1275,7 @@ public class RuntimeMapItem : INativeData
                         }
                         if (waitCheck.Count == 0)
                         {
-                            UIManager.instance.ShowGamePanelImmediately<OperateButtonPanel, OperateDataList>(operateDataList);
+                            DisplayItemOperate();
                         }
                     }, immediately: true);
                 }
@@ -1290,16 +1291,26 @@ public class RuntimeMapItem : INativeData
             }
             if (waitCheck.Count == 0)
             {
-                UIManager.instance.ShowGamePanelImmediately<OperateButtonPanel, OperateDataList>(operateDataList);
+                DisplayItemOperate();
             }
             
         }
         else
         {
+            DisplayItemOperate(false);
+        }
+
+        void DisplayItemOperate(bool display = true)
+        {
+            if (display)
+                WorldMapObjManager.instance.TryDisplayMask(instanceId);
+            else
+                WorldMapObjManager.instance.RecycleMaskObj(instanceId);
+
             UIManager.instance.ShowGamePanelImmediately<OperateButtonPanel, OperateDataList>(operateDataList);
         }
-       
     }
+ 
     public void ResetOperateData(List<int> newOperates)
     {
         operateDatas.Clear();
@@ -1312,6 +1323,6 @@ public class RuntimeMapItem : INativeData
     public int Key => instanceId;
 
     public void Dispose()
-    { 
+    {     
     }
 }

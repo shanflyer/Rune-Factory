@@ -1126,6 +1126,7 @@ public static class DataPath
         return null;
     }
 
+    public const string otherPrefabPath = "Prefabs/Other/";
     public const string fishToolPrefab = "Prefabs/Other/鱼漂";
     public const string StoreCoinPrefab = "Prefabs/Other/Coin";
     public const string StoreCounterPrefab = "Prefabs/Other/SellItem";

@@ -181,7 +181,8 @@ public class ItemManager:Singleton<ItemManager>
                     count = buyCount
                 }, CharacterManager.instance.controllerCharacter.characterPackage);
 
-                InformationController.instance.AddInformation($"{LanguageManage.SwitchStr("成功购买")}{buyCount}{LanguageManage.SwitchStr("个+")} {LanguageManage.SwitchStr(itemData.name)} +");
+                InformationController.instance.AddInformation(
+                    $"{LanguageManage.SwitchStr("成功购买")}{buyCount}{LanguageManage.SwitchStr("个+")} {LanguageManage.SwitchStr(itemData.itemName)} +");
                 if (selectShopItemData.buyAction != 0)
                 {
                     var GameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(selectShopItemData.buyAction);

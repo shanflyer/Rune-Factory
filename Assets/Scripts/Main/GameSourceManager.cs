@@ -28,7 +28,7 @@ public class GameSourceManager:Singleton<GameSourceManager>
     }
     public async override void Init()
     {
-        //¼ÓÔØµôÂäÔ¤ÖÆÌå
+        //åŠ è½½æ‰è½é¢„åˆ¶ä½“
         var dropItemObj = await GameSourceManager.instance.GetPrefab(DataPath.DropItemPrefabPath);
         dropItem = dropItemObj.GetComponent<SpriteRenderer>();
         base.Init();

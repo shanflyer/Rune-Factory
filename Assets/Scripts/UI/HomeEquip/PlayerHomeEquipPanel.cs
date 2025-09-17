@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
@@ -493,7 +492,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                             coordinate = coordinate,
                             mapInstance = WorldMapObjManager.instance.displayMap,
                             mapItemInstanceId = selectMapItemRuntimeObj.instanceId,
-                            dataId = selectMapItemRuntimeObj.dataId,
+                            dataId = selectMapItemRuntimeObj.mapItemData.id,
                             setResult = (value) =>
                             {
                                 if (!value)

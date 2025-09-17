@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +6,9 @@ public class InformationController : Singleton<InformationController>
     string[] informations = new string[200];
     Queue<string> informationsQueue = new Queue<string>();
     int nowIndex = 0;
+    public override bool NeedUpdate => true;
+
+
     public override void Init()
     {
         informations = new string[200];
@@ -36,32 +38,37 @@ public class InformationController : Singleton<InformationController>
             return _PromptPanel;
         }
     }
-    PromptPanel _PromptPanel;
-    bool nowShow = false;
-   async void ShowInformation()
-    { 
-        if(informationsQueue.Count>0)
-        {
-            nowShow = true;
-            var information = informationsQueue.Dequeue();
-            GameTimerController.instance.DelayAction(2000, ShowInformation);
 
-            if (InformationShowPanel == null)
+    private PromptPanel _PromptPanel;
+
+    private float showTime;
+
+    protected override async void Update()
+    {
+        base.Update();
+        if (showTime <= 0)
+        {
+            if (informationsQueue.Count > 0)
             {
-                InformationShowPanel =await UIManager.instance.GetGamePanel<InformationShowPanel>(true);
+                var information = informationsQueue.Dequeue();
+                if (InformationShowPanel == null)
+                    InformationShowPanel = await UIManager.instance.GetGamePanel<InformationShowPanel>(true);
+                InformationShowPanel.SetInfo(information);
+                InformationShowPanel.Show();
+                showTime = 2.0f;
             }
-            InformationShowPanel.SetInfo(information);
-            InformationShowPanel.Show();
+            else
+            {
+                if (InformationShowPanel != null) InformationShowPanel.Close();
+            }
         }
         else
         {
-            nowShow = false;
-            if(InformationShowPanel != null)
-            {
-                InformationShowPanel.Close();
-            }
-        }       
+            showTime -= Time.deltaTime;
+            if (showTime < 0) showTime = 0;
+        }
     }
+ 
     public void AddInformation(string information,bool Show = true,bool PromptShow=false)
     {
         if (nowIndex >= 200)
@@ -75,10 +82,6 @@ public class InformationController : Singleton<InformationController>
         if (Show)
         {
             informationsQueue.Enqueue(information);
-            if (!nowShow)
-            {
-                ShowInformation();
-            }
         }
         if (PromptShow&& PromptPanel!=null)
         {
