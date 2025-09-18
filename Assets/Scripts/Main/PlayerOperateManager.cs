@@ -115,6 +115,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
     {
         if (WorldMapManager.instance.GetRuntimeMapItem(closeMapObjTips.id, out var runtimMapItem))
         {
+            WorldMapObjManager.instance.RecycleMaskObj(runtimMapItem.instanceId);
             //触发物体链接角色事件
             if (runtimMapItem.linkCharacter != 0 && runtimMapItem.linkCharacter != CharacterManager.instance.controllerCharacter.instanceId)
             {

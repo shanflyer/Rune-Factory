@@ -154,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 0.95
-  value: 1
+  value: 0
   renderer: {fileID: 2431694890925411703}
   fixedColor: 0
   polygonCollider: {fileID: 4928774585690634212}
@@ -322,7 +322,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 0.95
-  value: 1
+  value: 0
   renderer: {fileID: 1026087330563872693}
   fixedColor: 0
   polygonCollider: {fileID: 7511920650633479762}
@@ -491,7 +491,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
-  value: 1
+  value: 0
   renderer: {fileID: 6125699326034401454}
   fixedColor: 0
   polygonCollider: {fileID: 5210690002871154381}
@@ -658,7 +658,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
-  value: 1
+  value: 0
   renderer: {fileID: 904245823870042668}
   fixedColor: 0
   polygonCollider: {fileID: 2456291908355103326}
@@ -827,7 +827,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
-  value: 1
+  value: 0
   renderer: {fileID: 4181286861450297330}
   fixedColor: 0
   polygonCollider: {fileID: 8173469551945762032}
@@ -995,7 +995,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 0.95
-  value: 1
+  value: 0
   renderer: {fileID: 8543278883732307859}
   fixedColor: 0
   polygonCollider: {fileID: 6021900327313128337}
@@ -1163,7 +1163,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 0.95
-  value: 1
+  value: 0
   renderer: {fileID: 6466427565209664927}
   fixedColor: 0
   polygonCollider: {fileID: 5665370917485846117}
@@ -1251,7 +1251,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -1218760154, guid: 4552837b0af05a342af917b0a7e6acde, type: 3}
-  m_Color: {r: 1.216786, g: 0.8958136, b: 0.12104156, a: 1}
+  m_Color: {r: 1.216786, g: 0.8492473, b: 0.1248639, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1416,7 +1416,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
-  value: 1
+  value: 0
   renderer: {fileID: 5225869619636576223}
   fixedColor: 0
   polygonCollider: {fileID: 3736080703562932242}
@@ -1586,7 +1586,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
-  value: 1
+  value: 0
   renderer: {fileID: 6564414878709201964}
   fixedColor: 0
   polygonCollider: {fileID: 740470754844867503}
@@ -1628,6 +1628,8 @@ Transform:
   m_Children:
   - {fileID: 513116468113793757}
   - {fileID: 4258922545100697180}
+  - {fileID: 1775633515458942612}
+  - {fileID: 1192500972715469672}
   m_Father: {fileID: 4518422899094623404}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1735947600503936437
@@ -1788,7 +1790,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
-  value: 1
+  value: 0
   renderer: {fileID: 44478130122214917}
   fixedColor: 0
   polygonCollider: {fileID: 8247116244698562625}
@@ -1957,7 +1959,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 0.95
-  value: 1
+  value: 0
   renderer: {fileID: 3757602173991287307}
   fixedColor: 0
   polygonCollider: {fileID: 5409396317588983245}
@@ -2124,7 +2126,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
-  value: 1
+  value: 0
   renderer: {fileID: 2446620806173163994}
   fixedColor: 0
   polygonCollider: {fileID: 4051712479316544477}
@@ -2460,7 +2462,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 0.95
-  value: 1
+  value: 0
   renderer: {fileID: 8012433322786072903}
   fixedColor: 0
   polygonCollider: {fileID: 3219643963647969518}
@@ -2504,6 +2506,167 @@ Transform:
   - {fileID: 3511605884005792907}
   m_Father: {fileID: 4518422899094623404}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2970255484242680433
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1775633515458942612}
+  - component: {fileID: 2763712383339284525}
+  - component: {fileID: 3196717648972511018}
+  - component: {fileID: 4142712620461973519}
+  - component: {fileID: 2422534677425566282}
+  m_Layer: 6
+  m_Name: 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1775633515458942612
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2970255484242680433}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.09000003, y: -0.786, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4538409482831269968}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!60 &2763712383339284525
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2970255484242680433}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.01654122, y: 0.51929903}
+      - {x: 0.09948206, y: 0.5098038}
+      - {x: 0.11952269, y: 0.31520176}
+      - {x: 0.11782205, y: -0.25354075}
+      - {x: 0.10200703, y: -0.44435024}
+      - {x: -0.013909817, y: -0.45519972}
+  m_UseDelaunayMesh: 0
+--- !u!23 &3196717648972511018
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2970255484242680433}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 40d44a471c1f0bd46a30f69e7a7847db, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &4142712620461973519
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2970255484242680433}
+  m_Mesh: {fileID: 0}
+--- !u!114 &2422534677425566282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2970255484242680433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fd176582eae4a248b126c92a98ff0df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  polygonCollider: {fileID: 2763712383339284525}
+  meshFilter: {fileID: 4142712620461973519}
+  meshRenderer: {fileID: 3196717648972511018}
+  scale: 1
+  shadowLength: 0.5
+  shadow2Length: 0.2
+  shadowOffset: 0
+  color: {r: 0.6, g: 0, b: 0, a: 0}
 --- !u!1 &2970831311023878042
 GameObject:
   m_ObjectHideFlags: 0
@@ -2582,7 +2745,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 1919396080, guid: 4552837b0af05a342af917b0a7e6acde, type: 3}
-  m_Color: {r: 1.216786, g: 0.8958136, b: 0.12104156, a: 1}
+  m_Color: {r: 1.216786, g: 0.8492473, b: 0.1248639, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -2826,7 +2989,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 0.95
-  value: 1
+  value: 0
   renderer: {fileID: 5715161524257484571}
   fixedColor: 0
   polygonCollider: {fileID: 3553237835163978307}
@@ -2914,7 +3077,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -1562802308, guid: 4552837b0af05a342af917b0a7e6acde, type: 3}
-  m_Color: {r: 1.216786, g: 0.8958136, b: 0.12104156, a: 1}
+  m_Color: {r: 1.216786, g: 0.8492473, b: 0.1248639, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -3001,7 +3164,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -45688330, guid: 4552837b0af05a342af917b0a7e6acde, type: 3}
-  m_Color: {r: 1.216786, g: 0.8958136, b: 0.12104156, a: 1}
+  m_Color: {r: 1.216786, g: 0.8492473, b: 0.1248639, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -3088,7 +3251,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -318787749, guid: 4552837b0af05a342af917b0a7e6acde, type: 3}
-  m_Color: {r: 1.216786, g: 0.8958136, b: 0.12104156, a: 1}
+  m_Color: {r: 1.216786, g: 0.8492473, b: 0.1248639, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -3257,7 +3420,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
-  value: 1
+  value: 0
   renderer: {fileID: 1868757663777763435}
   fixedColor: 0
   polygonCollider: {fileID: 994474180801242953}
@@ -3454,7 +3617,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -721262001, guid: 4552837b0af05a342af917b0a7e6acde, type: 3}
-  m_Color: {r: 1.216786, g: 0.8958136, b: 0.12104156, a: 1}
+  m_Color: {r: 1.216786, g: 0.8492473, b: 0.1248639, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -3574,7 +3737,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -45688330, guid: 4552837b0af05a342af917b0a7e6acde, type: 3}
-  m_Color: {r: 1.216786, g: 0.8958136, b: 0.12104156, a: 1}
+  m_Color: {r: 1.216786, g: 0.8492473, b: 0.1248639, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -3826,7 +3989,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
-  value: 1
+  value: 0
   renderer: {fileID: 8068053766521880416}
   fixedColor: 0
   polygonCollider: {fileID: 8135832781399636836}
@@ -4191,7 +4354,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 0.75
-  value: 1
+  value: 0
   renderer: {fileID: 5886374252349324183}
   fixedColor: 0
   polygonCollider: {fileID: 4002952649005354713}
@@ -4279,7 +4442,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 2028785997, guid: 4552837b0af05a342af917b0a7e6acde, type: 3}
-  m_Color: {r: 1.216786, g: 0.8958136, b: 0.12104156, a: 1}
+  m_Color: {r: 1.216786, g: 0.8492473, b: 0.1248639, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -4401,7 +4564,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 1919396080, guid: 4552837b0af05a342af917b0a7e6acde, type: 3}
-  m_Color: {r: 1.216786, g: 0.8958136, b: 0.12104156, a: 1}
+  m_Color: {r: 1.216786, g: 0.8492473, b: 0.1248639, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -5059,7 +5222,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 0.9
-  value: 1
+  value: 0
   renderer: {fileID: 3224815662811441335}
   fixedColor: 0
   polygonCollider: {fileID: 6902731059685306818}
@@ -5314,7 +5477,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -721262001, guid: 4552837b0af05a342af917b0a7e6acde, type: 3}
-  m_Color: {r: 1.216786, g: 0.8958136, b: 0.12104156, a: 1}
+  m_Color: {r: 1.216786, g: 0.8492473, b: 0.1248639, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -5478,7 +5641,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 0.95
-  value: 1
+  value: 0
   renderer: {fileID: 9055016675546238051}
   fixedColor: 0
   polygonCollider: {fileID: 7913795264274473745}
@@ -5676,7 +5839,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 1919396080, guid: 4552837b0af05a342af917b0a7e6acde, type: 3}
-  m_Color: {r: 1.216786, g: 0.8958136, b: 0.12104156, a: 1}
+  m_Color: {r: 1.216786, g: 0.8492473, b: 0.1248639, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -5766,6 +5929,169 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 2
     m_NumAlphaKeys: 6
+--- !u!1 &8058917551936420541
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1192500972715469672}
+  - component: {fileID: 6788346439032685879}
+  - component: {fileID: 5388171755050027954}
+  - component: {fileID: 3361779070093419998}
+  - component: {fileID: 5293648583463621265}
+  m_Layer: 6
+  m_Name: 1 (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1192500972715469672
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8058917551936420541}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.75799996, y: -0.786, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4538409482831269968}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!60 &6788346439032685879
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8058917551936420541}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.08771914, y: -0.34257948}
+      - {x: -0.09342283, y: 0.21163392}
+      - {x: -0.044143416, y: 0.6063683}
+      - {x: 0.078243196, y: 0.6029208}
+      - {x: 0.07835615, y: 0.2987349}
+      - {x: 0.0684222, y: -0.26726294}
+      - {x: 0.07253474, y: -0.5071567}
+      - {x: -0.041511953, y: -0.454046}
+  m_UseDelaunayMesh: 0
+--- !u!23 &5388171755050027954
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8058917551936420541}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 1f4d8a34a3ca07d4692dd747a1076287, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &3361779070093419998
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8058917551936420541}
+  m_Mesh: {fileID: 0}
+--- !u!114 &5293648583463621265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8058917551936420541}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fd176582eae4a248b126c92a98ff0df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  polygonCollider: {fileID: 6788346439032685879}
+  meshFilter: {fileID: 3361779070093419998}
+  meshRenderer: {fileID: 5388171755050027954}
+  scale: 1
+  shadowLength: 0.5
+  shadow2Length: 0.2
+  shadowOffset: 0
+  color: {r: 0.6, g: 0, b: 0, a: 0}
 --- !u!1 &8238404572127636907
 GameObject:
   m_ObjectHideFlags: 0
@@ -5921,7 +6247,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
-  value: 1
+  value: 0
   renderer: {fileID: 8183690099968491422}
   fixedColor: 0
   polygonCollider: {fileID: 5456849930020990640}
@@ -6091,7 +6417,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 1
-  value: 1
+  value: 0
   renderer: {fileID: 1363899857341630190}
   fixedColor: 0
   polygonCollider: {fileID: 7252262030770926757}
@@ -6179,7 +6505,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -721262001, guid: 4552837b0af05a342af917b0a7e6acde, type: 3}
-  m_Color: {r: 1.216786, g: 0.8958136, b: 0.12104156, a: 1}
+  m_Color: {r: 1.216786, g: 0.8492473, b: 0.1248639, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -6266,7 +6592,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -45688330, guid: 4552837b0af05a342af917b0a7e6acde, type: 3}
-  m_Color: {r: 1.216786, g: 0.8958136, b: 0.12104156, a: 1}
+  m_Color: {r: 1.216786, g: 0.8492473, b: 0.1248639, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -6434,7 +6760,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 0.95
-  value: 1
+  value: 0
   renderer: {fileID: 8409819693368084582}
   fixedColor: 0
   polygonCollider: {fileID: 415446049189940427}
@@ -6600,7 +6926,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.71979797, b: 0.23921567, a: 1}
   intensity: 0.95
-  value: 1
+  value: 0
   renderer: {fileID: 6166911919760317232}
   fixedColor: 0
   polygonCollider: {fileID: 5158880436754028180}

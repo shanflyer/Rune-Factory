@@ -1121,8 +1121,12 @@ public class CharacterManager : Singleton<CharacterManager>
 
         var lineSpeed = slant ? moveSpeed * GameCommon.slantValue : moveSpeed;
         lineSpeed *= character.propertySpeed;
-        if(character.moveEnumeratorId!=0)
+        if (character.moveEnumeratorId != 0)
+        {
+            GameObjectCurveController.instance.RemoveLineMove(character.moveEnumeratorId);
             Debug.Log($"Waring:{character.name}--noStop");
+        }
+            
         character.moveEnumeratorId =
         GameObjectCurveController.instance.Line(lineSpeed, startPos, targetPos, (Vector2 pos) =>
              {
@@ -1507,6 +1511,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
                 else
                 {
+                    /*
                     if (NPCManager.instance.GetNPCFormInstance(character.instanceId, out var npc))
                     {
                         if (npc.startSleepHour >= 0)
@@ -1528,9 +1533,13 @@ public class CharacterManager : Singleton<CharacterManager>
                         Transform transform = characterRuntimeObj.transform;
                         transform.localPosition = pos;
                     }
-                   
+                   */
                 }
-            } 
+            }
+
+            if (NPCManager.instance.GetNPCFormInstance(character.instanceId, out var npc))
+                if (npc.startSleepHour >= 0)
+                    RefreshSleep(character);
         }
 
         //CharacterManager.SetShaderPlayerPos(ControllerRuntimeObj.transform.position);

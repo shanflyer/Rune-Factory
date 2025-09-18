@@ -1885,8 +1885,8 @@ public partial class Character
 
                             void MoveWithPath(Stack<int2> path, int map, int2 start, int2 end)
                             {
-                                // if (path.Count == 0)
-                                //  Debug.Log($"PlayerMove：startCoordinate{start}targetCoordinate{end}-nowMap{map}");
+                                if (path.Count == 0)
+                                    Debug.Log($"PlayerMove：startCoordinate{start}targetCoordinate{end}-nowMap{map}");
                                 roadCells.Add(map, path);
                                 roomCount--;
                                 if (roomCount == 0) Move(true);
@@ -1942,7 +1942,7 @@ public partial class Character
                     {
                         if (path.Count == 0)
                         {
-                            // Debug.Log($"{characterData.characterName}map{map}寻路失败:path.Count == 0");
+                            Debug.Log($"{characterData.characterName}map{map}寻路失败:path.Count == 0");
                             FailedMoveAction();
                             return;
                         }

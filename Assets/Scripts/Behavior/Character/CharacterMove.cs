@@ -117,7 +117,7 @@ public class CharacterMove : Action
         {
             if (startTime + waitDuration < Time.time)
             {
-                Debug.Log($"行为树移动失败--等待时间太长");
+                Debug.Log($"{character.name}--行为树移动失败--等待时间太长");
                 return TaskStatus.Failure;
             }
 

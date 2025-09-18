@@ -257,6 +257,7 @@ public partial class MapCellController : Singleton<MapCellController>
         if (runtimeMapRooms.TryGetValue(mapInstance, out var runtimeMapRoom))
         {
             var result = runtimeMapRoom.GetRandomBehaviorCell(areaId);
+            while (!CheckIsWalk(result.x, result.y, soureMap)) result = runtimeMapRoom.GetRandomBehaviorCell(areaId);
             result.z = soureMap;
             return result;
         }
@@ -270,6 +271,8 @@ public partial class MapCellController : Singleton<MapCellController>
         if (runtimeMapRooms.TryGetValue(mapInstance, out var runtimeMapRoom))
         {
             var result = runtimeMapRoom.GetRandomBehaviorCell(behaviorAreaType);
+            while (!CheckIsWalk(result.x, result.y, soureMap))
+                result = runtimeMapRoom.GetRandomBehaviorCell(behaviorAreaType);
             result.z = soureMap;
             return result; 
         }
