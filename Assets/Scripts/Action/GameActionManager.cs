@@ -89,7 +89,7 @@ public class GameActionManager : Singleton<GameActionManager>
     }
 
     public void QueueAction<T>(T gameAction, bool immediately = false) where T : GameAction
-    {
+    { 
         if (GameDataManager.instance!=null&& GameDataManager.instance.GlobalData !=null&& GameDataManager.instance.GlobalData.immediatelyAction)
         {
             TriggerAction(gameAction); return;

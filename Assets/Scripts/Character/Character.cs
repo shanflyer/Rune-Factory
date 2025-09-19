@@ -1193,7 +1193,7 @@ public partial class Character
 
     private HashSet<int> NeighborhoodCharacters=new HashSet<int>();
 
-    public void TryRefreshNeighborhood(Character character,int range=5)
+    public void TryRefreshNeighborhood(Character character, int range = 8)
     {
         if (mapInstance != character.mapInstance)
         {
@@ -1805,6 +1805,7 @@ public partial class Character
             {
                 PlayerMove(path, () =>
                 {
+                    // Debug.Log($"character:{name}--MovePathEnd");
                     if (this == CharacterManager.instance.controllerCharacter)
                     {
                         canMove = false;
@@ -1953,6 +1954,7 @@ public partial class Character
                         }
                         PlayerMove(path, () =>
                         {
+                            //Debug.Log($"character:{name}--PlayerMovePathEnd");
                             if (this == CharacterManager.instance.controllerCharacter)
                             {
                                 canMove = false;
@@ -2001,6 +2003,7 @@ public partial class Character
         }
         else
         {
+          
             moveTarget = new int3(0, 0, 0);
             if (endAction != null)
             {

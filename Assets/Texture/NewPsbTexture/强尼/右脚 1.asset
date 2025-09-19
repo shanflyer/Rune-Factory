@@ -1,5 +1,113 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-2836532272215105473
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e715ea371f114f4a8d2584ad476634d, type: 3}
+  m_Name: "\u53F3\u811A 1_Data"
+  m_EditorClassIdentifier: 
+  m_PivotPoint: {x: 93.5, y: 244}
+  m_Vertices:
+  - {x: 88, y: 247}
+  - {x: 99, y: 247}
+  - {x: 88, y: 241}
+  - {x: 99, y: 241}
+  m_BoneWeights:
+  - weight0: 1
+    weight1: 0
+    weight2: 0
+    weight3: 0
+    boneIndex0: 1
+    boneIndex1: 0
+    boneIndex2: 0
+    boneIndex3: 0
+  - weight0: 1
+    weight1: 0
+    weight2: 0
+    weight3: 0
+    boneIndex0: 1
+    boneIndex1: 0
+    boneIndex2: 0
+    boneIndex3: 0
+  - weight0: 1
+    weight1: 0
+    weight2: 0
+    weight3: 0
+    boneIndex0: 1
+    boneIndex1: 0
+    boneIndex2: 0
+    boneIndex3: 0
+  - weight0: 1
+    weight1: -0
+    weight2: 0
+    weight3: 0
+    boneIndex0: 1
+    boneIndex1: 0
+    boneIndex2: 0
+    boneIndex3: 0
+  m_Edges:
+  - index1: 0
+    index2: 1
+  - index1: 1
+    index2: 3
+  - index1: 0
+    index2: 2
+  - index1: 2
+    index2: 3
+  m_Holes: []
+  m_Indices: 000000000100000002000000020000000100000003000000
+  m_BindPoses:
+  - bindPose:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0.068924785
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0.015483885
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    boneLength: 0
+    path: 
+    name: Front_Root
+    color: {r: 1, g: 0, b: 0, a: 1}
+    zOrder: 0
+  - bindPose:
+      e00: 0.942991
+      e01: -0.33281848
+      e02: 0
+      e03: 0.025649069
+      e10: 0.33281848
+      e11: 0.942991
+      e12: 0
+      e13: 0.00035240682
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    boneLength: 0.0325
+    path: Front_RightLeg_Up/Front_RightLeg_Down/Front_RightFoot
+    name: Front_RightFoot
+    color: {r: 1, g: 0.75, b: 0, a: 1}
+    zOrder: 0
+  m_Blendshapes: []
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13,10 +121,10 @@ MonoBehaviour:
   m_Name: "\u53F3\u811A 1"
   m_EditorClassIdentifier: 
   m_ApiVersion: 4
-  m_Sprite: {fileID: 400821403, guid: 4891f64bbfefea040a47aa74075886fa, type: 3}
-  m_SharedMesh: {fileID: 1316363576490302107}
+  m_Sprite: {fileID: 1207765547, guid: 4891f64bbfefea040a47aa74075886fa, type: 3}
+  m_SharedMesh: {fileID: 6284327105382621475}
   m_SharedMaterials: []
---- !u!43 &1316363576490302107
+--- !u!43 &6284327105382621475
 Mesh:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -57,14 +165,14 @@ Mesh:
     e31: 0
     e32: 0
     e33: 1
-  - e00: 0.94299126
-    e01: -0.3328185
+  - e00: 0.942991
+    e01: -0.33281848
     e02: 0
-    e03: 0.025649056
-    e10: 0.3328185
-    e11: 0.94299126
+    e03: 0.025649069
+    e10: 0.33281848
+    e11: 0.942991
     e12: 0
-    e13: 0.00035239386
+    e13: 0.00035240682
     e20: 0
     e21: 0
     e22: 1
@@ -78,8 +186,8 @@ Mesh:
   m_BonesAABB:
   - m_Min: {x: Infinity, y: Infinity, z: Infinity}
     m_Max: {x: -Infinity, y: -Infinity, z: -Infinity}
-  - m_Min: {x: -0.036200017, y: -0.04624236, z: 0}
-    m_Max: {x: 0.08749813, y: 0.046947148, z: 0}
+  - m_Min: {x: -0.036199987, y: -0.04624234, z: 0}
+    m_Max: {x: 0.08749813, y: 0.04694715, z: 0}
   m_VariableBoneCountWeights:
     m_Data: 
   m_MeshCompression: 0
@@ -149,7 +257,7 @@ Mesh:
       format: 10
       dimension: 4
     m_DataSize: 320
-    _typelessdata: ae4761bd8fc2f53c000000000000000000000000000080bf0000803f0000000000000000000080bfae47613d8fc2f53c000000000000000000000000000080bf0000803f0000000000000000000080bfae4761bd8fc2f5bc000000000000000000000000000080bf0000803f0000000000000000000080bfae47613d8fc2f5bc000000000000000000000000000080bf0000803f0000000000000000000080bf0000503f0000243f0000663f0000243f0000503f00001e3f0000663f00001e3f0000803f000000000000000000000000010000000000000000000000000000000000803f000000000000000000000000010000000000000000000000000000000000803f000000000000000000000000010000000000000000000000000000000000803f00000080000000000000000001000000000000000000000000000000
+    _typelessdata: ae4761bd8fc2f53c000000000000000000000000000080bf0000803f0000000000000000000080bfae47613d8fc2f53c000000000000000000000000000080bf0000803f0000000000000000000080bfae4761bd8fc2f5bc000000000000000000000000000080bf0000803f0000000000000000000080bfae47613d8fc2f5bc000000000000000000000000000080bf0000803f0000000000000000000080bf0000303f0000773f0000463f0000773f0000303f0000713f0000463f0000713f0000803f000000000000000000000000010000000000000000000000000000000000803f000000000000000000000000010000000000000000000000000000000000803f000000000000000000000000010000000000000000000000000000000000803f00000080000000000000000001000000000000000000000000000000
   m_CompressedMesh:
     m_Vertices:
       m_NumItems: 0
@@ -217,111 +325,3 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!114 &7665471946834836110
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e715ea371f114f4a8d2584ad476634d, type: 3}
-  m_Name: "\u53F3\u811A 1_Data"
-  m_EditorClassIdentifier: 
-  m_PivotPoint: {x: 109.5, y: 161}
-  m_Vertices:
-  - {x: 104, y: 164}
-  - {x: 115, y: 164}
-  - {x: 104, y: 158}
-  - {x: 115, y: 158}
-  m_BoneWeights:
-  - weight0: 1
-    weight1: 0
-    weight2: 0
-    weight3: 0
-    boneIndex0: 1
-    boneIndex1: 0
-    boneIndex2: 0
-    boneIndex3: 0
-  - weight0: 1
-    weight1: 0
-    weight2: 0
-    weight3: 0
-    boneIndex0: 1
-    boneIndex1: 0
-    boneIndex2: 0
-    boneIndex3: 0
-  - weight0: 1
-    weight1: 0
-    weight2: 0
-    weight3: 0
-    boneIndex0: 1
-    boneIndex1: 0
-    boneIndex2: 0
-    boneIndex3: 0
-  - weight0: 1
-    weight1: -0
-    weight2: 0
-    weight3: 0
-    boneIndex0: 1
-    boneIndex1: 0
-    boneIndex2: 0
-    boneIndex3: 0
-  m_Edges:
-  - index1: 0
-    index2: 1
-  - index1: 1
-    index2: 3
-  - index1: 0
-    index2: 2
-  - index1: 2
-    index2: 3
-  m_Holes: []
-  m_Indices: 000000000100000002000000020000000100000003000000
-  m_BindPoses:
-  - bindPose:
-      e00: 1
-      e01: 0
-      e02: 0
-      e03: 0.068924785
-      e10: 0
-      e11: 1
-      e12: 0
-      e13: 0.015483885
-      e20: 0
-      e21: 0
-      e22: 1
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 1
-    boneLength: 0
-    path: 
-    name: Front_Root
-    color: {r: 1, g: 0, b: 0, a: 1}
-    zOrder: 0
-  - bindPose:
-      e00: 0.94299126
-      e01: -0.3328185
-      e02: 0
-      e03: 0.025649056
-      e10: 0.3328185
-      e11: 0.94299126
-      e12: 0
-      e13: 0.00035239386
-      e20: 0
-      e21: 0
-      e22: 1
-      e23: 0
-      e30: 0
-      e31: 0
-      e32: 0
-      e33: 1
-    boneLength: 0.0325
-    path: Front_RightLeg_Up/Front_RightLeg_Down/Front_RightFoot
-    name: Front_RightFoot
-    color: {r: 1, g: 0.75, b: 0, a: 1}
-    zOrder: 0
-  m_Blendshapes: []

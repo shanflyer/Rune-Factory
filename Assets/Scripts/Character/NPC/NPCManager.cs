@@ -230,6 +230,7 @@ public class NPC : IReferenceData
         this.birthDay = birthDay;
         NPCTaskScheduleManager.instance.AddNPCBehavior(instanceId);
         this.startSleepHour = startSleepHour;
+        if (startSleepHour >= 0) Debug.Log($"new Npc:{npcData.npcName}--startSleepHour:{startSleepHour}");
         // nPCBehavior = new NPCBehavior(instanceId);
     }
     public FestivalData GetNpcBirthDay()
@@ -315,6 +316,7 @@ public class NPC : IReferenceData
 
     public void SetSleep(int startSleepHour)
     {
+        // Debug.Log($"{character.name} setSleep {startSleepHour}");
         this.startSleepHour = startSleepHour;
         GameDataSaveManager.instance.UserGameSaveData.SetNpcSleepTime(npcData.id, startSleepHour);
     }
@@ -743,6 +745,7 @@ public class NPCManager : Singleton<NPCManager>
                     else
                         sleepHour = nowHour - npc.startSleepHour;
                     npc.Character.WakeUp(sleepHour);
+                    NPCTaskScheduleManager.instance.SetNowBehaviorTree(npc.Character.instanceId);
                 }
             }
         }

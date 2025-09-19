@@ -30,6 +30,11 @@ public class UserGameSaveData : IReferenceData
         };
         packageSaveDatas = new List<PackageSaveData>();
         endGuideFilmIndex = -1;
+        friendSaveData = new FriendSaveData
+        {
+            friendShips = new List<int3>(),
+            friendAdds = new List<int4>()
+        };
     }
     public UserGameSaveData(UserGameSaveData userGameSaveData)
     {
@@ -581,20 +586,31 @@ public class ChangeMapItemCoordinate
 [Serializable]
 public class NpcTimeData
 {
-    public int id; // ≤9999
-    public int birthSeason; // 1-4
-    public int birthDay; // 1-30
-    public int sleepTime; // 0-24
+    [NonSerialized] public int id; // ≤9999
+    [NonSerialized] public int birthSeason; // 1-4
+    [NonSerialized] public int birthDay; // 1-30
+    [NonSerialized] public int sleepTime; // -1 或 0-24
 
     public int packed;
 
+    public NpcTimeData()
+    {
+        sleepTime = -1;
+    }
     public void Pack()
     {
         packed = 0;
-        packed |= (id & 0x3FFF) << 0; // 14位
-        packed |= (birthSeason & 0x3) << 14; // 2位
-        packed |= (birthDay & 0x1F) << 16; // 5位
-        packed |= (sleepTime & 0x1F) << 21; // 5位
+        packed |= (id & 0x3FFF) << 0; // 14
+        packed |= (birthSeason & 0x3) << 14; // 2
+        packed |= (birthDay & 0x1F) << 16; // 5
+
+        // sleepTime: 6 位带符号数
+        var st = sleepTime;
+        if (st < -1 || st > 24)
+            throw new ArgumentOutOfRangeException(nameof(sleepTime), "必须在 -1 到 24 之间");
+
+        var encoded = st & 0x3F; // 保留 6 位
+        packed |= encoded << 21;
     }
 
     public void Unpack()
@@ -602,7 +618,14 @@ public class NpcTimeData
         id = (packed >> 0) & 0x3FFF;
         birthSeason = (packed >> 14) & 0x3;
         birthDay = (packed >> 16) & 0x1F;
-        sleepTime = (packed >> 21) & 0x1F;
+
+        var encoded = (packed >> 21) & 0x3F;
+
+        // 还原 -1 (补码 6 位 111111 = -1)
+        if ((encoded & 0x20) != 0) // 6位符号位
+            sleepTime = encoded | unchecked((int)0xFFFFFFC0); // 符号扩展
+        else
+            sleepTime = encoded;
     }
 }
 public class AnimalSaveData

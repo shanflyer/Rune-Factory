@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public struct NPCReferenceData
 {
-    public NPC npc;
+    public Character Character;
     public Vector2 parentPos;
     public GetVectorForMap getVectorForMap;
     public ChangeUINPCReferenceMap changeUINPCReferenceMap;
@@ -15,11 +15,9 @@ public delegate bool GetVectorForMap(int mapInstance, out Vector2 pos);
 public delegate void ChangeUINPCReferenceMap(int oldMap, int newMap, RectTransform rectTransform);
 public class NPCHeadReference : UIObjReference<NPCReferenceData>
 {
-    [SerializeField]
-    Image NPCHead;
+    [SerializeField] private Image NPCHead, PlayerMask;
     [SerializeField]
     RectTransform _rectTransform;
-
 #if UNITY_EDITOR
     [SerializeField]
     int2 _coordinateIndex;
@@ -29,7 +27,8 @@ public class NPCHeadReference : UIObjReference<NPCReferenceData>
     public override Task InitData(NPCReferenceData t, SelectAction<NPCReferenceData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         oldMapInstance = -1;
-        NPCHead.sprite = t.npc.Character.characterData.head.sprite;
+        NPCHead.sprite = t.Character.characterData.head.sprite;
+        PlayerMask.enabled = t.Character == CharacterManager.instance.controllerCharacter;
         // t.changeUINPCReferenceMap(0, data.npc.Character.mapInstance, transform as RectTransform);
         return base.InitData(t, SelectAction, toggleGroup);
     }
@@ -41,30 +40,26 @@ public class NPCHeadReference : UIObjReference<NPCReferenceData>
     }
     private void Update()
     {
-        if (oldMapInstance < 0 || oldMapInstance != data.npc.Character.mapInstance)
+        if (oldMapInstance < 0 || oldMapInstance != data.Character.mapInstance)
         {
-            data.changeUINPCReferenceMap(oldMapInstance, data.npc.Character.mapInstance, transform as RectTransform);
-            oldMapInstance = data.npc.Character.mapInstance;
+            data.changeUINPCReferenceMap(oldMapInstance, data.Character.mapInstance, transform as RectTransform);
+            oldMapInstance = data.Character.mapInstance;
 
-            /*if (GameCommon.CheckDisplay(data.npc.Character.mapInstance))
-                RectTransformPresets.Apply(_rectTransform, RectTransformPresets.Preset.BottomLeft);
-            else
-                RectTransformPresets.Apply(_rectTransform, RectTransformPresets.Preset.TopLeft);*/
             data.getVectorForMap(oldMapInstance, out data.parentPos);
 
 #if UNITY_EDITOR
-            _mapInstance = data.npc.Character.mapInstance;
+            _mapInstance = data.Character.mapInstance;
 #endif
         }
 
-        if(GameCommon.CheckDisplay(data.npc.Character.mapInstance))
+        if (GameCommon.CheckDisplay(data.Character.mapInstance))
         {  //_rectTransform.localScale = Vector2.one;
-            int2 coordinateIndex = data.npc.Character.GetMapStartIndex();
+            var coordinateIndex = data.Character.GetMapStartIndex();
           
             _rectTransform.anchoredPosition = data.parentPos + new Vector2(coordinateIndex.x, coordinateIndex.y) * 2;
 #if UNITY_EDITOR
             _coordinateIndex=coordinateIndex;
-            _mapInstance= data.npc.Character.mapInstance;
+            _mapInstance = data.Character.mapInstance;
 #endif
           
         }

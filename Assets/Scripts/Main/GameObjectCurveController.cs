@@ -278,7 +278,7 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
             Vector2 nowPos = GetObjectPos();
             float speed = character.propertySpeed;
 
-            Vector2 targetPos = nowPos + direction * speed * GameCommon.freedomMoveValue * Time.deltaTime; 
+            var targetPos = nowPos + direction * speed * GameCommon.freedomMoveValue * 1.1f * Time.deltaTime; 
             int2 targetCoordinate = GameCommon.GetMapCoordinateInt(targetPos);
             int2 trueTargetCoordinate = MapCellController.instance.GetTrueFreedomTarget(character.coordinate, targetCoordinate, character.mapInstance);
             if (direction != Vector2.zero && trueTargetCoordinate.Equals(character.coordinate))

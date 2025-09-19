@@ -248,7 +248,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
         if (character != null&&character.linkItem!=0)
         {
            if(CharacterManager.instance.GetRuntimeCharacterObj(character.instanceId,out var characterRuntimeObj)&&
-                GetRuntimeMapItem(character.linkItem, out var runtimeMapItem))
+              GetRuntimeMapItem(character.linkItem, out var runtimeMapItem) &&
+              runtimeMapItem.mapInstanceId == character.mapInstance)
             {
                 SetCharacterTempPos setCharacterTempPos = new SetCharacterTempPos
                 {

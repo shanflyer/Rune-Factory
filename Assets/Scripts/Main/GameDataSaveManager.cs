@@ -783,9 +783,18 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         {
             diamond = diamond
         };
-        userGameSaveDataList.nowSaveData = LoadUserData("auto_");
-        userGameSaveDataList.nowSaveData.index=-1;
-        userGameSaveDataList.nowSaveData.Init();
+        if (GameController.instance.startPlay)
+        {
+            userGameSaveDataList.nowSaveData = new UserGameSaveData();
+        }
+        else
+        {
+            userGameSaveDataList.nowSaveData = LoadUserData("auto_");
+            userGameSaveDataList.nowSaveData.index = -1;
+            userGameSaveDataList.nowSaveData.Init();
+        }
+        
+        
         userGameSaveDataList.userGameSaveDatas = new List<UserGameSaveData>();
 
         var nowSaveData0 = LoadUserData("player_0");

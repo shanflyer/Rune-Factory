@@ -44,7 +44,7 @@ public partial class MapCellController
             mapCharacterGrid.RemoveCharacter(characterId, isTemp);
     }
 
-    public HashSet<int> GetCharacters(int3 coordinate, int range = 5)
+    public HashSet<int> GetCharacters(int3 coordinate, int range = 8)
     {
         if (tempMaps.TryGetValue(coordinate.z, out var trueMap)) coordinate.z = trueMap;
         if (MapCharacterGrids.TryGetValue(coordinate.z, out var mapCharacterGrid))

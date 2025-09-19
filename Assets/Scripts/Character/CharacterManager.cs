@@ -361,6 +361,8 @@ public class CharacterManager : Singleton<CharacterManager>
                 {
                     setCharacterTempPos.setResult(true);
                 }
+
+                Debug.Log($" character:{character.name} setTemp StopMove!");
                 character.StopMove();
             }
         }
@@ -1120,10 +1122,9 @@ public class CharacterManager : Singleton<CharacterManager>
         Vector2Int offsetCoordinate = Vector2Int.zero;
 
         var lineSpeed = slant ? moveSpeed * GameCommon.slantValue : moveSpeed;
-        lineSpeed *= character.propertySpeed;
+        lineSpeed *= character.propertySpeed * 0.9f;
         if (character.moveEnumeratorId != 0)
-        {
-            GameObjectCurveController.instance.RemoveLineMove(character.moveEnumeratorId);
+        { 
             Debug.Log($"Waring:{character.name}--noStop");
         }
             
@@ -1177,7 +1178,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
                 else
                 {
-                 //  Debug.Log($"character:{character.name}--tryCorssMap");
+                    //  Debug.Log($"character:{character.name}--tryCorssMap");
                     if (runtimeObj != null)
                     {
                         SetCharacterAnimationSpeed(0, runtimeObj);
@@ -1279,6 +1280,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         else if (!(character is TempCharacter))
         {
+            GameObjectCurveController.instance.RemoveLineMove(character.moveEnumeratorId);
             character.moveEnumeratorId = 0;
             character.SetCoordinate(new int3(targetCoordinate, targetMap),refreshMapTemp:false);
             await SetPlayerPos(character);
@@ -1291,7 +1293,7 @@ public class CharacterManager : Singleton<CharacterManager>
         // int2 offsetCoordinate = targetCoordinate - character.coordinate;
         character.SetCoordinate(new int3(targetCoordinate.xy, character.mapInstance), !character.isController,false);
         var crossed = false;
-        if (!(character is TempCharacter))
+        if (!(character is TempCharacter)) 
         {
             crossed = MapCellController.instance.ChangeMapAction(targetCoordinate,
                 defaultDirection ? Direction.Default : character.direction,

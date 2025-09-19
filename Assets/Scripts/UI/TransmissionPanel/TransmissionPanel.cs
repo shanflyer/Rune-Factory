@@ -84,7 +84,7 @@ public class TransmissionPanel : GamePanel<IReferenceData>
     }
     void SetScale(float  Value)
     {
-        float scaleValue = Value + 1;
+        var scaleValue = Value * 1.5f;
         MapImage.localScale = new Vector3(scaleValue, scaleValue, scaleValue);
     }
   
@@ -134,13 +134,22 @@ public class TransmissionPanel : GamePanel<IReferenceData>
         {
             NPCReferenceData nPCReferenceData = new NPCReferenceData
             {
-                npc = npcs.npcs[i],
+                Character = npcs.npcs[i].Character,
                 getVectorForMap = GetParentPos,
                 changeUINPCReferenceMap = ChangeUIMapNPCReference
             }; 
             GetParentPos(npcs.npcs[i].Character.mapInstance, out nPCReferenceData.parentPos);
             nPCReferenceDatas.Add(nPCReferenceData);
         }
+
+        var playerReferenceData = new NPCReferenceData
+        {
+            Character = CharacterManager.instance.controllerCharacter,
+            getVectorForMap = GetParentPos,
+            changeUINPCReferenceMap = ChangeUIMapNPCReference
+        };
+        GetParentPos(CharacterManager.instance.controllerCharacter.mapInstance, out playerReferenceData.parentPos);
+        nPCReferenceDatas.Add(playerReferenceData);
 
         npcList.InitListData(nPCReferenceDatas);
     }
