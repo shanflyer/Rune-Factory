@@ -1,5 +1,4 @@
-﻿using System;
-using Unity.Cinemachine;
+﻿using Unity.Cinemachine;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -144,6 +143,12 @@ public class CameraManager : Singleton<CameraManager>
         return screenPoint;
     }
 
+    public static Vector2 WorldPointToUIScreenPoint(Vector3 worldPoint)
+    {
+        // Camera.main 世界摄像机
+        Vector2 screenPoint = instance.uiCamera.WorldToScreenPoint(worldPoint);
+        return screenPoint;
+    }
     // 屏幕坐标转换为 UGUI 坐标
     public static Vector3 ScreenPointToUIPoint(RectTransform rt, Vector2 screenPoint)
     {

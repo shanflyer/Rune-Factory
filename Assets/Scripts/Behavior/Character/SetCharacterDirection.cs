@@ -1,10 +1,6 @@
-﻿using BehaviorDesigner.Runtime.Tasks;
-using BehaviorDesigner.Runtime; 
-using System.Collections.Generic;
-using System.Linq;
-using UnityEngine; 
-
-
+﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime.Tasks;
+using UnityEngine;
 
 [TaskCategory("Game/Character")]
 [TaskName("设置角色面向目标")]
@@ -54,13 +50,24 @@ public class SetCharacterDirection : Action
         }else
         if (faceCharacter)
         {
-            var target = NPCManager.instance.GetNPCCharacter(targetNPC.Value);
-            if (target != null)
+            if (NPCManager.instance.GetNPCFormInstance(targetNPC.Value, out var target))
             {
                 SetTargetDirection SetTargetDirection = new SetTargetDirection
                 {
                     characterId = characterId.Value,
-                    targetCoordinate = target.coordinate
+                    targetCoordinate = target.Character.coordinate
+                };
+                GameActionManager.instance.QueueAction(SetTargetDirection, true);
+            }
+            else if (CharacterManager.instance.controllerCharacter.instanceId == targetNPC.Value)
+            {
+            }
+
+            {
+                var SetTargetDirection = new SetTargetDirection
+                {
+                    characterId = characterId.Value,
+                    targetCoordinate = CharacterManager.instance.controllerCharacter.coordinate
                 };
                 GameActionManager.instance.QueueAction(SetTargetDirection, true);
             }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnityEngine;
 
 public class TalkManager : Singleton<TalkManager>
 {
@@ -120,12 +119,13 @@ public class TalkManager : Singleton<TalkManager>
                     return;
                 }
             }
-            await UIManager.instance.ShowGamePanel<TalkPanel, NPCTalkOperateData>(NPCTalkOperateData);
+
+            await UIManager.instance.ShowGamePanel<SimpleTalkPanel, NPCTalkOperateData>(NPCTalkOperateData);
         }
 
         if (functionCheckResult == null)
         {
-            await UIManager.instance.ShowGamePanel<TalkPanel, NPCTalkOperateData>(NPCTalkOperateData);
+            await UIManager.instance.ShowGamePanel<SimpleTalkPanel, NPCTalkOperateData>(NPCTalkOperateData);
         }
         
        

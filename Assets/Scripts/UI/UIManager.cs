@@ -166,7 +166,7 @@ public class UIManager : Singleton<UIManager>
         {
             foreach (var panel in gamePanels.Values)
             {
-                if (panel.show&&panel.GetType()!=typeof(TalkPanel) && panel.GetType() != typeof(FilmPanel))
+                if (panel.show && panel.GetType() != typeof(SimpleTalkPanel) && panel.GetType() != typeof(FilmPanel))
                 {
                     if(panel.canvas)
                         panel.canvas.enabled = false;
