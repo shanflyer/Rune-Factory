@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
-using UnityEngine;
 
 public struct SpecialAreaTempCharacterCreatData
 {
@@ -72,11 +71,14 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
 #endif
      
     Dictionary<int2, SpecialAreaTempCharacterCreatData> specialTempCharacterCreatDataDic = new Dictionary<int2, SpecialAreaTempCharacterCreatData>();
-    private async void StartCreateSpecialTempCharacter(StartCreatSpecialTempCharacter startCreatSpecialTempCharacter)
+
+    private void StartCreateSpecialTempCharacter(StartCreatSpecialTempCharacter startCreatSpecialTempCharacter)
     {
         if (!specialTempCharacterCreatDataDic.ContainsKey(startCreatSpecialTempCharacter.areaKey))
         {
-           var  SpecialTempCharacterCreatData = await GameDataManager.instance.GetAsyncData<TempCharacterCreateData>(startCreatSpecialTempCharacter.creatDataId);
+            var SpecialTempCharacterCreatData =
+                GameDataManager.instance.GetData<TempCharacterCreateData>(startCreatSpecialTempCharacter.creatDataId
+                    .ToString());
             if (SpecialTempCharacterCreatData == null)
                 return;
 
@@ -273,15 +275,15 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
                 tempList = GameRandom.instance.GetRandomItemList(tempId);
                 tempCharacters.SetList(tempList);
             }
+
+            if (tempCharacters.length == 0) tempCharacters.SetList(tempList);
         }
-        if (tempCharacters.length == 0)
+        else
         {
-            tempCharacters.SetList(tempList);
+            tempCharacters.Clear();
         }
-        if (tempCharacters.length == 0)
-        {
-            return;
-        }
+
+        if (tempCharacters.length == 0) return;
         int randomIndex = GameRandom.RandomInt(0, tempCharacters.length);
         characterId = tempCharacters[randomIndex];
         tempCharacters.RemoveAt(randomIndex);

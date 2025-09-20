@@ -282,6 +282,10 @@ public class UserGameSaveData : IReferenceData
 
     public void SaveData()
     {
+        animationStateMapItems.Clear();
+        foreach (var value in animationStateMapItemsDic.Values)
+            animationStateMapItems.Add(DataPacker.Int2PackInt(value));
+
         mapItemCoordinates.Clear();
         foreach (var changeMapItemCoordinate in ChangeMapItemCoordinate.Values)
             mapItemCoordinates.Add(changeMapItemCoordinate.Pack());

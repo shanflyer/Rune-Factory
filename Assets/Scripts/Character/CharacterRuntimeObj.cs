@@ -1,12 +1,9 @@
-﻿using BehaviorDesigner.Runtime;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using BehaviorDesigner.Runtime;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Playables;
-using UnityEngine.TextCore.Text;
-using static UnityEngine.ParticleSystem;
-
 #if UNITY_EDITOR
 #endif
 
@@ -330,7 +327,7 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
         equip = transform.Find("Equip");
         shadow = transform.Find("Shadow");
         myShadow = shadow.GetComponent<MyShadowPolygon>();
-        equipRenderer = equip.GetChild(1).GetComponent<MySpriteMeshRender>();
+        equipRenderer = equip.GetChild(1).GetComponent<MySpriteMeshRender>(); 
         behaviorTree = transform.GetComponent<BehaviorTree>();
       
     }
