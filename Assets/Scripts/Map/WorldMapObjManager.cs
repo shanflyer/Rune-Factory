@@ -567,6 +567,8 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         nowRuntimeMapItemObjs.Clear();
         tempRuntimeMapItemObjs.Clear();
         MyAnimationController.instance.ClearAnimation();
+
+        Resources.UnloadUnusedAssets();
     }
    
     private void TryDeleteRoomObj(TryDeleteRoom deleteRoom)

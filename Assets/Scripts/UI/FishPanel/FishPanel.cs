@@ -208,7 +208,7 @@ public class FishPanel : GamePanel<IReferenceData>
                 {
                     if (i > 0)
                     {
-                        seasonStr.Add("°¢");
+                        seasonStr.Add("„ÄÅ");
                     }
                     seasonStr.Add(((Season)(fishReferenceData.seasons[i])).ToString());
                 }
@@ -221,7 +221,7 @@ public class FishPanel : GamePanel<IReferenceData>
                     var roomName = find?WorldMapManager.instance.GetWorldMap(place).mapRoomData.name :"???";
                     if (i > 0)
                     {
-                        placeStr.Add("°¢"); 
+                        placeStr.Add("„ÄÅ"); 
                     }
                     placeStr.Add(roomName); 
                 }

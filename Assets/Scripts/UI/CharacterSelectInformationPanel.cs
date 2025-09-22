@@ -1,4 +1,6 @@
-﻿using TMPro;
+﻿using System;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -67,7 +69,16 @@ public class CharacterSelectInformationPanel : GamePanel<SelectCharacterData>
         {
             filmName = "角色选择",
             assetName = "ZeroStory"
-        });
+        }, true);
         GameDataSaveManager.instance.InitPlayerData(data.name, data.gender, data.brithSeason, data.brithDay);
+
+        var types = new List<Type>
+        {
+            typeof(CharacterSelectInformationPanel),
+            typeof(ZeroPanel),
+            typeof(SelectCharacterPanel),
+            typeof(SelectLoadPanel)
+        };
+        UIManager.instance.UnLoadPanel(types);
     }
 }

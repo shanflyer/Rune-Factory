@@ -6,8 +6,7 @@ using UnityEngine.UI;
 
 public class UIManager : Singleton<UIManager>
 {
-    private Dictionary<Type, BaseReference> gamePanels = new Dictionary<Type, BaseReference>();
-    private Dictionary<Type, List<BaseReference>> mulitPanels = new Dictionary<Type, List<BaseReference>>();
+    private readonly Dictionary<Type, BaseReference> gamePanels = new(); 
 
     private Transform canvasParent;
     private CanvasGroup canvasGroup;
@@ -473,6 +472,43 @@ public class UIManager : Singleton<UIManager>
         return gamePanel;
     }
 
+    public void UnLoadPanel(List<Type> panels)
+    {
+        for (var i = 0; i < panels.Count; i++)
+        {
+            var type = panels[i];
+            if (gamePanels.TryGetValue(type, out var gamePanel))
+            {
+                if (gamePanel == null)
+                {
+                    gamePanels.Remove(type);
+                    return;
+                }
+
+                if (gamePanel.show) gamePanel.Close();
+                GameObject.Destroy(gamePanel);
+            }
+        }
+
+        Resources.UnloadUnusedAssets();
+    }
+
+    public void UnLoadPanel<T>()
+    {
+        var type = typeof(T);
+        if (gamePanels.TryGetValue(type, out var gamePanel))
+        {
+            if (gamePanel == null)
+            {
+                gamePanels.Remove(type);
+                return;
+            }
+
+            if (gamePanel.show) gamePanel.Close();
+            GameObject.Destroy(gamePanel);
+            Resources.UnloadUnusedAssets();
+        }
+    }
     public void CloseGamePanel<T>()
     {
         var type = typeof(T);
@@ -494,6 +530,8 @@ public class UIManager : Singleton<UIManager>
            
         }
     }
+
+    
 
     private void ClosePanel(ClosePanelAction closePanelEvent)
     {

@@ -1,5 +1,5 @@
-using System.Threading.Tasks;
-using Unity.Entities.UniversalDelegates;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -100,6 +100,16 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
             // UIManager.instance.ShowGamePanel<LoadingPanel>();
 
             Close();
+
+            var types = new List<Type>
+            {
+                typeof(CharacterSelectInformationPanel),
+                typeof(ZeroPanel),
+                typeof(SelectCharacterPanel),
+                typeof(SelectLoadPanel)
+            };
+            UIManager.instance.UnLoadPanel(types);
+             
         }
     }
 

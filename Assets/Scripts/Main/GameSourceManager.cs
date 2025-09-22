@@ -1,15 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnityEngine;
-using BehaviorDesigner;
 using BehaviorDesigner.Runtime;
+using UnityEngine;
 
 public class GameSourceManager:Singleton<GameSourceManager>
-{
-    private Dictionary<string, GameObject> prefabs = new Dictionary<string, GameObject>();
-    private Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
-    private Dictionary<string, Sprite> sprites = new Dictionary<string, Sprite>();
+{  
     private Dictionary<string, ScriptableObject> scriptableObjects = new Dictionary<string, ScriptableObject>();
     private Dictionary<string, AudioClip> audioClips = new Dictionary<string, AudioClip>();
 
@@ -18,10 +13,7 @@ public class GameSourceManager:Singleton<GameSourceManager>
     public SpriteRenderer dropItem;
     protected override void Clear()
     {
-        base.Clear();
-        prefabs.Clear();
-        textures.Clear();
-        sprites.Clear();
+        base.Clear();  
         scriptableObjects.Clear();
         audioClips.Clear();
         behaviors.Clear();
@@ -29,7 +21,7 @@ public class GameSourceManager:Singleton<GameSourceManager>
     public async override void Init()
     {
         //加载掉落预制体
-        var dropItemObj = await GameSourceManager.instance.GetPrefab(DataPath.DropItemPrefabPath);
+        var dropItemObj = await instance.GetPrefab(DataPath.DropItemPrefabPath);
         dropItem = dropItemObj.GetComponent<SpriteRenderer>();
         base.Init();
     }
@@ -47,11 +39,7 @@ public class GameSourceManager:Singleton<GameSourceManager>
     }
     public async Task<Sprite> GetSprite(string path)
     {
-        if(sprites.TryGetValue(path,out Sprite sprite))
-        {
-            return sprite;
-        }
-        sprite = await ExtensionsResources.LoadResourceAsync<Sprite>(path);
+        var sprite = await ExtensionsResources.LoadResourceAsync<Sprite>(path);
         if (sprite == null)
         {
            var spriteReference= await ExtensionsResources.LoadResourceAsync<SpriteResourceRenference>(path);
@@ -60,8 +48,7 @@ public class GameSourceManager:Singleton<GameSourceManager>
                 sprite = spriteReference.sprite;
             }
         }
-         
-        sprites.Add(path, sprite);
+          
         return sprite;
     }
      
@@ -75,59 +62,43 @@ public class GameSourceManager:Singleton<GameSourceManager>
         audioClips[path]= audioClip;
         return audioClip;
     }
-    public async Task<Texture2D> GetTexture(string path)
-    {
-        if(textures.TryGetValue(path,out Texture2D texture))
-        {
-            return texture;
-        }
-        texture = await ExtensionsResources.LoadResourceAsync<Texture2D>(path);
-        textures.Add(path, texture);
-        return texture;
-    }
+    
     public async Task<T> GetComponent<T>(string path) where T: Component
     {
-        if (prefabs.TryGetValue(path, out GameObject obj))
-        {
-            return obj.GetComponentInChildren<T>();
-        }
-        obj = await ExtensionsResources.LoadResourceAsync<GameObject>(path);
-        prefabs.Add(path, obj);
+        var obj = await ExtensionsResources.LoadResourceAsync<GameObject>(path); 
         return obj.GetComponentInChildren<T>();
     }
     public GameObject GetPrefabImmediately(string path)
     {
-        if (prefabs.TryGetValue(path, out GameObject obj))
-        {
-            return obj;
-        }
-        obj =  ExtensionsResources.LoadResource<GameObject>(path);
-        prefabs[path] = obj;
+        var obj = Resources.Load<GameObject>(path); 
         return obj;
     }
     public async Task<GameObject> GetPrefab(string path)
     {
-        if(prefabs.TryGetValue(path,out GameObject obj))
-        {
-            return obj;
-        }
-        obj =await ExtensionsResources.LoadResourceAsync<GameObject>(path);
-        prefabs[path]=obj;
+        var obj = await ExtensionsResources.LoadResourceAsync<GameObject>(path); 
         return obj;
     }
 
-    public async Task<T> GetScriptableObject<T>(string path) where T : ScriptableObject
+    public async Task<T> GetScriptableObject<T>(string path, bool saveTemp = false) where T : ScriptableObject
     {
-        if(scriptableObjects.TryGetValue(path,out ScriptableObject scriptableObject))
+        if (saveTemp)
         {
-            return scriptableObject as T;
+            if (scriptableObjects.TryGetValue(path, out var scriptableObject))
+            {
+                return scriptableObject as T;
+            }
+            else
+            {
+                scriptableObject = await ExtensionsResources.LoadResourceAsync<T>(path);
+                scriptableObjects.Add(path, scriptableObject);
+                return scriptableObject as T;
+            }
         }
         else
         {
-            scriptableObject= await ExtensionsResources.LoadResourceAsync<T>(path);
-            scriptableObjects.Add(path, scriptableObject);
+            var scriptableObject = await ExtensionsResources.LoadResourceAsync<T>(path); 
             return scriptableObject as T;
-        }
+        } 
     }
     public async Task<T> GetSingleScriptableObject<T>(string path) where T: ScriptableObject
     {

@@ -1,9 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>  
 {  
@@ -116,43 +114,44 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
         runtimeObj.use = true;
         return runtimeObj;
     }
-    public void RecycleRuntimeObj(RuntimeObj runtimeObj,bool setActive=true)
+
+    public void RecycleRuntimeObj(RuntimeObj runtimeObj, bool setActive = true, bool trueMove = false)
     {
         if(runtimeObj.obj != null)
         {  
             runtimeObj.use = false;
             var component = runtimeObj.obj as Component;
 
-            if (objParents.TryGetValue(runtimeObj.runtimeObjType, out Transform parent))
-            {
-                component.transform.SetParent(parent, false);
-            }
-            if (setActive)
-            {
-                component.gameObject.SetActive(false);
-            }
-           
-            Dictionary<string, Stack<RuntimeObj>> objs;
-            if (!unusedRuntimeObjs.TryGetValue(runtimeObj.runtimeObjType, out objs))
-            {
-                objs = new Dictionary<string, Stack<RuntimeObj>>();
-                unusedRuntimeObjs.Add(runtimeObj.runtimeObjType, objs);
-            }
-            Stack<RuntimeObj> runtimeObjs;
-            if (!objs.TryGetValue(runtimeObj.key, out runtimeObjs))
-            {
-                runtimeObjs = new Stack<RuntimeObj>();
-                objs[runtimeObj.key] = runtimeObjs;
-            }
-            if(runtimeObjs.Count <10||!setActive)
-            {
-                runtimeObjs.Push(runtimeObj);
-            }
-            else
+            if (trueMove)
             {
                 GameObject.Destroy(component.gameObject); 
             }
-           
+            else
+            {
+                if (objParents.TryGetValue(runtimeObj.runtimeObjType, out var parent))
+                    component.transform.SetParent(parent, false);
+                if (setActive) component.gameObject.SetActive(false);
+
+                Dictionary<string, Stack<RuntimeObj>> objs;
+                if (!unusedRuntimeObjs.TryGetValue(runtimeObj.runtimeObjType, out objs))
+                {
+                    objs = new Dictionary<string, Stack<RuntimeObj>>();
+                    unusedRuntimeObjs.Add(runtimeObj.runtimeObjType, objs);
+                }
+
+                Stack<RuntimeObj> runtimeObjs;
+                if (!objs.TryGetValue(runtimeObj.key, out runtimeObjs))
+                {
+                    runtimeObjs = new Stack<RuntimeObj>();
+                    objs[runtimeObj.key] = runtimeObjs;
+                }
+
+                if (runtimeObjs.Count < 4 || !setActive)
+                    runtimeObjs.Push(runtimeObj);
+                else
+                    GameObject.Destroy(component.gameObject);
+            }
+             
         }
         //runtimeObj = null;
     }

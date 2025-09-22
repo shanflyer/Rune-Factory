@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 public class CharacterInformationPanel : GamePanel<CharacterInformationData>
@@ -356,7 +354,9 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             = SpeedDown.enabled = SpeedUp.enabled = LuckUp.enabled = LuckDown.enabled = false;
 
         LevelValue.text = v.level.ToString();
-        var spriteRenference  = await GameSourceManager.instance.GetScriptableObject<SpriteResourceRenference>($"Reference/AttributeType{(int)v.attributeType}");
+        var spriteRenference = await GameSourceManager.instance.GetScriptableObject<SpriteResourceRenference>(
+            $"Reference/AttributeType{(int)v.attributeType}",
+            true);
         if (spriteRenference == null)
         {
             Attribute.sprite = null;

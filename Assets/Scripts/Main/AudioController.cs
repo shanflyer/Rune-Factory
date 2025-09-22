@@ -466,7 +466,9 @@ public class AudioController : Singleton<AudioController>
                 {
                     for (int i = count - 1; i >= 0; i--)
                     {
+                        var oldPlayable = childMixer.GetInput(i);
                         playableGraph.Disconnect(childMixer, i);
+                        if (oldPlayable.IsValid()) playableGraph.DestroyPlayable(oldPlayable);
                     }
                     if (audioClip != null)
                     {
@@ -489,7 +491,10 @@ public class AudioController : Singleton<AudioController>
                             {
                                 var playable = childMixer.GetInput(i);
                                 float oldWeight = childMixer.GetInputWeight(i);
+                                var oldPlayable = childMixer.GetInput(i);
                                 playableGraph.Disconnect(childMixer, i);
+                                if (oldPlayable.IsValid()) playableGraph.DestroyPlayable(oldPlayable);
+
                                 playableGraph.Connect(playable, 0, childMixer, i + 1);
                                 childMixer.SetInputWeight(i + 1, oldWeight);
                             }
@@ -499,7 +504,9 @@ public class AudioController : Singleton<AudioController>
                     }
                     else
                     {
+                        var oldPlayable = childMixer.GetInput(count - 1);
                         playableGraph.Disconnect(childMixer, count - 1);
+                        if (oldPlayable.IsValid()) playableGraph.DestroyPlayable(oldPlayable);
                         childMixer.SetInputCount(count - 1);
                     }
                 }
@@ -567,10 +574,16 @@ public class AudioController : Singleton<AudioController>
 
                             yield return 0;
                         }
+                        
                         for (int i = 0; i < childMixer.GetInputCount(); i++)
                         {
+                            var input = childMixer.GetInput(i);
                             childMixer.DisconnectInput(i);
+
+                            if (input.IsValid())
+                                playableGraph.DestroyPlayable(input);
                         }
+                         
                         childMixer.SetInputCount(0);
                         if (audioClip != null)
                         {
@@ -627,7 +640,10 @@ public class AudioController : Singleton<AudioController>
                             {
                                 var playable = childMixer.GetInput(i);
                                 float oldWeight1 = childMixer.GetInputWeight(i);
+
+                                var oldPlayable = childMixer.GetInput(i);
                                 playableGraph.Disconnect(childMixer, i);
+                                if (oldPlayable.IsValid()) playableGraph.DestroyPlayable(oldPlayable);
                                 playableGraph.Connect(playable, 0, childMixer, i + 1);
                                 childMixer.SetInputWeight(i + 1, oldWeight1);
                             }
@@ -636,7 +652,10 @@ public class AudioController : Singleton<AudioController>
                         }
                         else
                         {
+                            var oldPlayable = childMixer.GetInput(count - 1);
                             playableGraph.Disconnect(childMixer, count - 1);
+                            if (oldPlayable.IsValid()) playableGraph.DestroyPlayable(oldPlayable);
+
                             childMixer.SetInputCount(count - 1);
                         }
 
