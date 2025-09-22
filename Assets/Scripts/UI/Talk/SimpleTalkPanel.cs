@@ -29,9 +29,11 @@ public class SimpleTalkPanel : GamePanel<NPCTalkOperateData>
     private TalkData talkData;
     private NPCTalkOperateData NPCTalkOperateData;
 
+    private Vector3 zeroContentPosition;
     protected override void Awake()
     {
         base.Awake();
+        zeroContentPosition = Content.localPosition;
         _nextButton.onClick.AddListener(NextAction);
         CloseBtn.onClick.AddListener(Close);
         NPCFunctionList = new DisplayList<NPCFunctionReference, NPCFunctionData>(NPCFunctionReference, NPCFunctions);
@@ -77,6 +79,7 @@ public class SimpleTalkPanel : GamePanel<NPCTalkOperateData>
             case 1:
                 var hidePanel = new HidePanel
                 {
+                    hide = true,
                     type = typeof(SimpleTalkPanel)
                 };
                 GameActionManager.instance.QueueAction(hidePanel);
@@ -162,8 +165,8 @@ public class SimpleTalkPanel : GamePanel<NPCTalkOperateData>
                 case TalkSource.Player:
                     talkerName = GameDataSaveManager.instance.UserGameSaveData.playerData.name;
                     talkerIcon = CharacterManager.instance.PlayerHead;
-
-                    characterTransform = CharacterManager.instance.ControllerRuntimeObj.transform;
+                    if (CharacterManager.instance.ControllerRuntimeObj != null)
+                        characterTransform = CharacterManager.instance.ControllerRuntimeObj.transform;
                     break;
 
                 case TalkSource.Dynamic:
@@ -232,6 +235,10 @@ public class SimpleTalkPanel : GamePanel<NPCTalkOperateData>
                     ContentPosition.y = UIPos.y;
                     Content.localPosition = ContentPosition;
                 }
+            }
+            else
+            {
+                Content.localPosition = zeroContentPosition;
             }
         }
     }

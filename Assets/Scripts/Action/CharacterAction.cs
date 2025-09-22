@@ -1319,10 +1319,11 @@ public struct SetCharacterCoordinate : GameAction
         if (parameters.Count >= 2)
         {
             characterId = int.Parse(parameters[0].value);
-            coordinate.z = int.Parse(parameters[1].value);
+           
             var parameter = parameters[1];
             if (parameter.parameters.Count >= 2)
             {
+                coordinate.z = int.Parse(parameters[1].value);
                 coordinate.x = int.Parse(parameter.parameters[0].value);
                 coordinate.y = int.Parse(parameter.parameters[1].value);
             }

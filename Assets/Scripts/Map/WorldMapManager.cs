@@ -1303,10 +1303,10 @@ public class RuntimeMapItem : INativeData
 
         void DisplayItemOperate(bool display = true)
         {
-            if (display)
-                WorldMapObjManager.instance.TryDisplayMask(instanceId);
-            else
-                WorldMapObjManager.instance.RecycleMaskObj(instanceId);
+            // if (display)
+            //     WorldMapObjManager.instance.TryDisplayMask(instanceId);
+            // else
+            //     WorldMapObjManager.instance.RecycleMaskObj(instanceId);
 
             UIManager.instance.ShowGamePanelImmediately<OperateButtonPanel, OperateDataList>(operateDataList);
         }

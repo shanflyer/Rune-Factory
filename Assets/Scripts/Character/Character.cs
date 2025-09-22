@@ -582,7 +582,17 @@ public partial class Character
     public bool isController { get; private set; }
     public int linkItem;
     private int oldOperateItem = -1;
-    public int OperateItem => oldOperateItem;
+
+    public int OperateItem
+    {
+        get => oldOperateItem;
+        set
+        {
+            if (oldOperateItem != 0) WorldMapObjManager.instance.RecycleMaskObj(oldOperateItem);
+            oldOperateItem = value;
+            if (oldOperateItem != 0) WorldMapObjManager.instance.TryDisplayMask(oldOperateItem);
+        }
+    }  
 
     private int2 OldOperaCoordinate = new int2(int.MinValue);
 
@@ -671,7 +681,7 @@ public partial class Character
     public void SetController(bool controller)
     {
         isController = controller;
-        oldOperateItem = -1;
+        OperateItem = -1;
     }
     public Character() { }
     public Character(CharacterData characterData,ProfessionData professionData, int instanceId, 
@@ -1528,7 +1538,7 @@ public partial class Character
             {
                 //Debug.Log($"进入触发：{reference}");
 
-                oldOperateItem = reference;
+                OperateItem = reference;
                 ShowMapObjTips showMapObjTips = new ShowMapObjTips
                 {
                     id = reference
@@ -1544,9 +1554,9 @@ public partial class Character
             else
             {
                 // Debug.Log($"离开触发：{reference}");
-                if (oldOperateItem == reference)
+                if (OperateItem == reference)
                 {
-                    oldOperateItem = -1;
+                    OperateItem = -1;
                 }
                 CloseMapObjTips closeMapObjTips = new CloseMapObjTips
                 {
@@ -1596,7 +1606,7 @@ public partial class Character
 
     public void SetTriggerMapItem(int reference, int eventId)
     {
-        oldOperateItem = reference;
+        OperateItem = reference;
         var showMapObjTips = new ShowMapObjTips
         {
             id = reference
@@ -1646,7 +1656,7 @@ public partial class Character
                     oldOperaCoordinate = OldOperaCoordinate;
                 }
                 MapCellController.instance.CheckPlayerTriggerEvent(
-                    objCoordinate.z, oldCoordinate, true, TriggerEventAction, false, oldOperateItem);
+                    objCoordinate.z, oldCoordinate, true, TriggerEventAction, false, OperateItem);
 
                 /* DisplayMap displayMap = new DisplayMap
                  {
@@ -1691,12 +1701,12 @@ public partial class Character
         
 
             MapCellController.instance.CheckPlayerTriggerEvent(coordinate.z, oldOperaCoordinate, checkCoordinate.xy,
-                TriggerEventAction, false, oldOperateItem);
+                TriggerEventAction, false, OperateItem);
             oldCoordinate = OldOperaCoordinate = checkCoordinate.xy;
 
             checkCoordinate.xy += offsetCoordinate * 2;
             MapCellController.instance.CheckPlayerTriggerEvent(coordinate.z,forwardCoordinate, checkCoordinate.xy,
-                TriggerEventAction, true, oldOperateItem);
+                TriggerEventAction, true, OperateItem);
             forwardCoordinate = checkCoordinate.xy;
         }
         SetObjCoordinate(coordinate);

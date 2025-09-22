@@ -35,12 +35,13 @@ RectTransform:
   - {fileID: 716751467573640346}
   - {fileID: 2502690922356247936}
   - {fileID: 6703249022189908259}
+  - {fileID: 5276657527525896854}
   - {fileID: 6073990511219354358}
   m_Father: {fileID: 5389416624248559984}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 5.17}
+  m_AnchoredPosition: {x: 0, y: -144}
   m_SizeDelta: {x: 0, y: 288.19}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &4056457320790313255
@@ -120,17 +121,17 @@ RectTransform:
   m_GameObject: {fileID: 292666960091558468}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8933838311202957519}
   - {fileID: 545042033629338187}
-  m_Father: {fileID: 6703249022189908259}
+  m_Father: {fileID: 9031989266603348538}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 80, y: 35}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &288169953261881634
 CanvasRenderer:
@@ -152,8 +153,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_setUid: 0
-  m_guid: 0
+  m_setUid: 6000
+  m_guid: -1
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -203,7 +204,7 @@ MonoBehaviour:
   raycaster: {fileID: 0}
   show: 0
   index: 0
-  guideSelectable: {fileID: 0}
+  guideSelectable: {fileID: 2998818619002003650}
   icon: {fileID: 7712206562653502568}
   Name: {fileID: 2499005735289636275}
   button: {fileID: 2998818619002003650}
@@ -642,8 +643,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 5276657527525896854}
+  m_Children: []
   m_Father: {fileID: 9031989266603348538}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -1972,7 +1972,7 @@ GameObject:
   - component: {fileID: 5212458439894038169}
   m_Layer: 5
   m_Name: SimpletalkPanel
-  m_TagString: Untagged
+  m_TagString: MenuOpen
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2018,7 +2018,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 3
   m_TargetDisplay: 0
 --- !u!114 &4420903697499560639
 MonoBehaviour:
