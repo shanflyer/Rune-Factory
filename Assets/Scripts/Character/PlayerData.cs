@@ -212,6 +212,7 @@ public class UserGameSaveData : IReferenceData
 
     public void Init()
     {
+        var d = AnimationStateMapItemsDic;
         playerData.Unpack();
         ChangeMapItemCoordinate = new Dictionary<int, ChangeMapItemCoordinate>();
         for (var i = 0; i < mapItemCoordinates.Count; i++)

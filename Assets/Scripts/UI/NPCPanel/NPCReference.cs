@@ -72,7 +72,7 @@ public class NPCReference : UIObjReference<NPC>
          
         NPCName.SetADDText("+ ", characterData.characterName," +");
 
-        FriendValue.SetSWText(FriendManager.instance.GetFriendShipLevel(data.characterInstance));
+        FriendValue.SetSWText(FriendManager.instance.GetFriendShipLevel(data.dataId));
         StateValue.SetSWText(data.npcState.ToString());
         if (data.npcState == NPCState.修养中)
         {

@@ -358,11 +358,14 @@ public class AudioController : Singleton<AudioController>
                 seMixerDic.Add(Group, audioMixerPlayable);
                 seMixer.AddInput(audioMixerPlayable, 0, 1);
             }
-            AudioClipPlayable oldAudioClip = (AudioClipPlayable)PlayableExtensions.GetInput(audioMixerPlayable, 0);
-            if (!oldAudioClip.IsNull())
+
+            var oldPlayable = audioMixerPlayable.GetInput(0);
+            if (oldPlayable.IsValid())
             {
-                DestroyPlayable(oldAudioClip, false); // 只销毁，不卸载 SE Clip
+                var oldAudioClip = (AudioClipPlayable)oldPlayable;
+                if (!oldAudioClip.IsNull()) DestroyPlayable(oldAudioClip, false); // 只销毁，不卸载 SE Clip
             }
+          
             audioMixerPlayable.SetInputCount(0);
             audioMixerPlayable.AddInput(audioClipPlayable, 0, 1);
             seOut.SetSourcePlayable(audioClipPlayable);
@@ -383,12 +386,17 @@ public class AudioController : Singleton<AudioController>
     {
         for (int i = 0; i < audioMixerPlayable.GetInputCount(); i++)
         {
-            AudioClipPlayable audioClipPlayable = (AudioClipPlayable)audioMixerPlayable.GetInput(i);
-            if (audioClipPlayable.GetClip() == audioClip)
+            var oldPlayable = audioMixerPlayable.GetInput(i);
+            if (oldPlayable.IsValid())
             {
-                audioMixerPlayable.SetInputWeight(i, weight);
-                break;
+                var audioClipPlayable = (AudioClipPlayable)oldPlayable;
+                if (audioClipPlayable.GetClip() == audioClip)
+                {
+                    audioMixerPlayable.SetInputWeight(i, weight);
+                    break;
+                }
             }
+          
         }
     }
 

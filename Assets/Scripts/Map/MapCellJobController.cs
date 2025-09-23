@@ -287,56 +287,69 @@ public class MapCellJobController : Singleton<MapCellJobController>
         base.Update();
         if (jobRunning) return;
 
-        int requestCount = pathRequests.Length;
+        var requestCount = pathRequests.Length;
         if (requestCount == 0) return;
 
+        // ★ 限制最多并行数量
+        var batchCount = math.min(requestCount, 50);
+
         // —— 做快照（防止运行中被改动）——
-        requestsSnap = new NativeArray<PathRequest>(requestCount, Allocator.TempJob);
-        for (int i = 0; i < requestCount; i++) requestsSnap[i] = pathRequests[i];
+        requestsSnap = new NativeArray<PathRequest>(batchCount, Allocator.TempJob);
+        for (var i = 0; i < batchCount; i++)
+            requestsSnap[i] = pathRequests[i];
 
-        callbacksSnap = new List<MoveWithPath>(requestCount);
-        for (int i = 0; i < requestCount; i++) callbacksSnap.Add(MoveWithPath[i]);
+        callbacksSnap = new List<MoveWithPath>(batchCount);
+        for (var i = 0; i < batchCount; i++)
+            callbacksSnap.Add(MoveWithPath[i]);
 
-        // 本批清空，新的请求都进 pending
+        // —— 本批处理完的从列表里移除，剩下的留着下次跑 —— 
+        if (requestCount > batchCount)
+            // 把没跑的搬去 pending，等待下轮
+            for (var i = batchCount; i < requestCount; i++)
+            {
+                pendingRequests.Add(pathRequests[i]);
+                pendingCallbacks.Add(MoveWithPath[i]);
+            }
+
         pathRequests.Clear();
         MoveWithPath.Clear();
 
         // —— 房间范围 & 面积/偏移 —— //
-        mapRanges = new NativeArray<int4>(requestCount, Allocator.TempJob);
-        for (int i = 0; i < requestCount; i++)
+        mapRanges = new NativeArray<int4>(batchCount, Allocator.TempJob);
+        for (var i = 0; i < batchCount; i++)
             mapRanges[i] = MapCellController.instance.GetRoomRange(requestsSnap[i].roomId);
 
-        areas = new NativeArray<int>(requestCount, Allocator.TempJob);
-        baseOffsets = new NativeArray<int>(requestCount, Allocator.TempJob);
-        int totalArea = 0;
-        for (int i = 0; i < requestCount; i++)
+        areas = new NativeArray<int>(batchCount, Allocator.TempJob);
+        baseOffsets = new NativeArray<int>(batchCount, Allocator.TempJob);
+        var totalArea = 0;
+        for (var i = 0; i < batchCount; i++)
         {
-            int4 r = mapRanges[i];
-            int w = r.z - r.x + 1;
-            int h = r.w - r.y + 1;
-            int area = w * h;
+            var r = mapRanges[i];
+            var w = r.z - r.x + 1;
+            var h = r.w - r.y + 1;
+            var area = w * h;
             areas[i] = area;
             baseOffsets[i] = totalArea;
             totalArea += area;
         }
 
-        // —— 分配按 totalArea 的总数组（更省内存）——
+        // —— 分配数组 —— //
         openCells = new NativeArray<ushort>(totalArea, Allocator.TempJob);
         openCosts = new NativeArray<ushort>(totalArea, Allocator.TempJob);
-        openCounts = new NativeArray<int>(requestCount, Allocator.TempJob);
+        openCounts = new NativeArray<int>(batchCount, Allocator.TempJob);
 
         bestG = new NativeArray<ushort>(totalArea, Allocator.TempJob);
         nodeState = new NativeArray<byte>(totalArea, Allocator.TempJob);
         parentFlat = new NativeArray<ushort>(totalArea, Allocator.TempJob);
-        for (int i = 0; i < totalArea; i++)
+        for (var i = 0; i < totalArea; i++)
         {
             bestG[i] = ushort.MaxValue;
-            parentFlat[i] = 0xFFFF;  // 无父标记
+            parentFlat[i] = 0xFFFF;
             nodeState[i] = 0;
         }
 
         // —— Stream 按请求数分段 —— //
-        pathStream = new NativeStream(requestCount, Allocator.TempJob);
+        pathStream = new NativeStream(batchCount, Allocator.TempJob);
 
         var job = new SparsePathfindingSIMDJob
         {
@@ -358,9 +371,10 @@ public class MapCellJobController : Singleton<MapCellJobController>
             pathWriter = pathStream.AsWriter()
         };
 
-        pathJobHandle = job.Schedule(requestCount, 2);
+        pathJobHandle = job.Schedule(batchCount, 2);
         jobRunning = true;
     }
+
 
     protected override void LateUpdate()
     {
