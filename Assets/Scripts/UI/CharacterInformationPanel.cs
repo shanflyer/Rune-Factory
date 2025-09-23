@@ -355,8 +355,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
 
         LevelValue.text = v.level.ToString();
         var spriteRenference = await GameSourceManager.instance.GetScriptableObject<SpriteResourceRenference>(
-            $"Reference/AttributeType{(int)v.attributeType}",
-            true);
+            $"Reference/AttributeType{(int)v.attributeType}");
         if (spriteRenference == null)
         {
             Attribute.sprite = null;

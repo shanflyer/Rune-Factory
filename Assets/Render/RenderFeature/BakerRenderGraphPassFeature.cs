@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine.Rendering.RenderGraphModule;
 
@@ -101,7 +102,7 @@ namespace UnityEngine.Rendering.Universal.Internal
                     RenderingUtils.CreateRendererListWithRenderStateBlock(renderGraph, ref renderingData.cullResults, drawSettings, filteringSettings, m_RenderStateBlock, ref passData.rendererList);
                      
                     builder.UseRendererList(passData.rendererList);
-
+                    builder.UseTexture(resourceData.cameraColor);
 
                     RenderTextureDescriptor desc = cameraData.cameraTargetDescriptor; 
 
@@ -239,7 +240,7 @@ namespace UnityEngine.Rendering.Universal.Internal
             }
         }
 
-        [System.Serializable]
+        [Serializable]
         public class Settings
         {
             public TransparencySortMode m_transparencySortMode;

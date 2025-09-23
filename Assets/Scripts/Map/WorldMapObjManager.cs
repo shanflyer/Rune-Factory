@@ -542,8 +542,8 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         {
             return;
         }
-        GameRuntimeObjManager.instance.RecycleRuntimeObj(nowMapRoomObj);
 
+        GameRuntimeObjManager.instance.RecycleRuntimeObj(nowMapRoomObj, trueMove: true);
         foreach (var runTimeMapItemData in nowRuntimeMapItemObjs)
         {
             DisplayStoreCounter displayStoreCounter = new DisplayStoreCounter

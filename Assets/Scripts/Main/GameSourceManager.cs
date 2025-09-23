@@ -1,22 +1,13 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using BehaviorDesigner.Runtime;
 using UnityEngine;
 
 public class GameSourceManager:Singleton<GameSourceManager>
-{  
-    private Dictionary<string, ScriptableObject> scriptableObjects = new Dictionary<string, ScriptableObject>();
-    private Dictionary<string, AudioClip> audioClips = new Dictionary<string, AudioClip>();
-
-    private Dictionary<string, ExternalBehavior> behaviors = new Dictionary<string, ExternalBehavior>();
-
+{   
     public SpriteRenderer dropItem;
     protected override void Clear()
     {
-        base.Clear();  
-        scriptableObjects.Clear();
-        audioClips.Clear();
-        behaviors.Clear();
+        base.Clear();   
     }
     public async override void Init()
     {
@@ -28,13 +19,7 @@ public class GameSourceManager:Singleton<GameSourceManager>
 
     public async Task<ExternalBehavior> GetBehavior(string path)
     {
-        if (behaviors.TryGetValue(path, out ExternalBehavior behavior))
-        {
-            return behavior;
-        }
-        behavior = await ExtensionsResources.LoadResourceAsync<ExternalBehavior>(path);
-        
-        behaviors[path]= behavior;
+        var behavior = await ExtensionsResources.LoadResourceAsync<ExternalBehavior>(path); 
         return behavior;
     }
     public async Task<Sprite> GetSprite(string path)
@@ -54,12 +39,7 @@ public class GameSourceManager:Singleton<GameSourceManager>
      
     public async Task<AudioClip> GetAudioClip(string path)
     {
-        if(audioClips.TryGetValue(path,out AudioClip audioClip))
-        {
-            return audioClip;
-        }
-        audioClip= await ExtensionsResources.LoadResourceAsync<AudioClip>(path);
-        audioClips[path]= audioClip;
+        var audioClip = await ExtensionsResources.LoadResourceAsync<AudioClip>(path); 
         return audioClip;
     }
     
@@ -79,26 +59,10 @@ public class GameSourceManager:Singleton<GameSourceManager>
         return obj;
     }
 
-    public async Task<T> GetScriptableObject<T>(string path, bool saveTemp = false) where T : ScriptableObject
+    public async Task<T> GetScriptableObject<T>(string path) where T : ScriptableObject
     {
-        if (saveTemp)
-        {
-            if (scriptableObjects.TryGetValue(path, out var scriptableObject))
-            {
-                return scriptableObject as T;
-            }
-            else
-            {
-                scriptableObject = await ExtensionsResources.LoadResourceAsync<T>(path);
-                scriptableObjects.Add(path, scriptableObject);
-                return scriptableObject as T;
-            }
-        }
-        else
-        {
-            var scriptableObject = await ExtensionsResources.LoadResourceAsync<T>(path); 
-            return scriptableObject as T;
-        } 
+        var scriptableObject = await ExtensionsResources.LoadResourceAsync<T>(path);
+        return scriptableObject;
     }
     public async Task<T> GetSingleScriptableObject<T>(string path) where T: ScriptableObject
     {
