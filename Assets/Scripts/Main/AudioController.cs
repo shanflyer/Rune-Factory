@@ -451,9 +451,8 @@ public class AudioController : Singleton<AudioController>
 
                     if (audioClip != null)
                     {
-                        childMixer.SetInputCount(1);
-                        playableGraph.Connect(audioClipPlayable, 0, childMixer, 0);
-                        childMixer.SetInputWeight(0, weight);
+                        var newPlayable = AudioClipPlayable.Create(playableGraph, audioClip, loop);
+                        ReplaceInput(childMixer, 0, playableGraph, newPlayable, weight); // ✅ 用安全方法
                     }
                     else
                     {
@@ -642,6 +641,27 @@ public class AudioController : Singleton<AudioController>
         }
     }
 
+    private void ReplaceInput(AudioMixerPlayable mixer, int index, PlayableGraph graph, Playable newPlayable,
+        float weight, bool unloadOldClip = true)
+    {
+        if (!mixer.IsValid() || !graph.IsValid() || !newPlayable.IsValid()) return;
+
+        if (index < mixer.GetInputCount())
+        {
+            var oldPlayable = mixer.GetInput(index);
+            if (oldPlayable.IsValid())
+            {
+                mixer.DisconnectInput(index);
+                DestroyPlayable(oldPlayable, unloadOldClip);
+            }
+        }
+
+        if (index >= mixer.GetInputCount()) mixer.SetInputCount(index + 1);
+
+        graph.Connect(newPlayable, 0, mixer, index);
+        mixer.SetInputWeight(index, weight);
+    }
+
     private void PlayAudio(PlayableGraph playableGraph, AudioMixerPlayable audioMixer, Dictionary<string, AudioMixerPlayable> childMixers, List<AudioPlayData> audioClips,
        AudioClearType audioClearType = AudioClearType.NoClear, bool isLerp = false, string Group = "Default")
     {
@@ -679,7 +699,7 @@ public class AudioController : Singleton<AudioController>
         {
             TryEndLerpAudioIEnumerator(playableGraph);
             if (count > 0)
-            {
+            { 
                 if (audioClearType == AudioClearType.All)
                 {
                     var toDestroy = new List<Playable>();
@@ -795,7 +815,12 @@ public class AudioController : Singleton<AudioController>
                                     var oldPlayable = childMixer.GetInput(i);
                                     toDestroy.Add(oldPlayable);
 
-                                    playableGraph.Connect(audioClipPlayable, 0, childMixer, i);
+
+                                    if (mixerCount > i)
+                                        ReplaceInput(childMixer, i, playableGraph, audioClipPlayable,
+                                            audioClips[i].weight); // ✅ 统一走安全替换
+                                    else
+                                        childMixer.AddInput(audioClipPlayable, 0, audioClips[i].weight);
                                     childMixer.SetInputWeight(i, audioClips[i].weight);
                                 }
                                 else

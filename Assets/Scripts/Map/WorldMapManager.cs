@@ -1212,7 +1212,7 @@ public class RuntimeMapItem : INativeData
 
     public void SetAnimationKey(int2 animationKey)
     {
-        if (animationKey.x != int.MinValue || animationKey.y != int.MinValue)
+        if (animationKey.x != int.MinValue && animationKey.y != int.MinValue)
         {
             int2 nowAnimationKey = this.animationKey;
             if (animationKey.x != int.MinValue)

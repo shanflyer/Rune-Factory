@@ -54,7 +54,7 @@ public class SaveReference : UIObjReference<UserGameSaveData>
     {
        await  base.InitData(t, SelectAction, toggleGroup);
         SelectToggle.group = toggleGroup;
-        if (!string.IsNullOrEmpty(data.saveTime))
+        if (!string.IsNullOrEmpty(data.saveTime) || data.playerData == null || data.playerData.dataId == 0)
         {
             Icon.enabled = true;
             CharacterData characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(data.playerData.dataId);

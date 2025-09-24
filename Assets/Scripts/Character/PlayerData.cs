@@ -129,9 +129,10 @@ public class UserGameSaveData : IReferenceData
                 for (var i = 0; i < animationStateMapItems.Count; i++)
                 {
                     var value = DataPacker.IntUnpackInt2(animationStateMapItems[i]);
+                    if (value.x == 0) continue;
                     var _valueX = value.y / 10;
                     var _valueY = value.y - _valueX * 10;
-                    animationStateMapItemsDic.Add(value.x, new int2(_valueX, _valueY));
+                    animationStateMapItemsDic[value.x] = new int2(_valueX, _valueY);
                 }
 
             return animationStateMapItemsDic;
@@ -512,7 +513,7 @@ public class UserGameSaveData : IReferenceData
     }
     public void AddAnimationStateMapItem(int2 value,int2 editorKey,int instanceId)
     {
-        if (editorKey.y == 0)
+        if (editorKey.y == 0 || (value.x == 0 && value.y == 0))
             return;
         if (animationStateMapItems == null)
         {
