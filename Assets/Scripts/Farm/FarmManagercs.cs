@@ -707,13 +707,13 @@ public class Plant
             case PlantState.枯死:
             case PlantState.死亡:
                 keyY = 2;
-                tryUpDataItemEmote = new TryUpDataItemEmote
-                {
-                    id = instanceId,
-                    showTime = -1,
-                    emote = GameCommon.plantDeath
-                };
-                GameActionManager.instance.QueueAction(tryUpDataItemEmote);
+                /* tryUpDataItemEmote = new TryUpDataItemEmote
+                 {
+                     id = instanceId,
+                     showTime = -1,
+                     emote = GameCommon.plantDeath
+                 };
+                 GameActionManager.instance.QueueAction(tryUpDataItemEmote);*/
                 break;
         }
         if (needShowDryEmote)

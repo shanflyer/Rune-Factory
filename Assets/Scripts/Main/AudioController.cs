@@ -527,27 +527,50 @@ public class AudioController : Singleton<AudioController>
                             yield return null;
                         }
 
-                        var toDestroy = new List<Playable>();
+                        //var toDestroy = new List<Playable>();
+                        // --- 淡入结束后 ---
                         var oldCount = childMixerLocal.GetInputCount();
+
+
+                        var newIndex = -1;
                         for (var i = 0; i < oldCount; i++)
                         {
+                            var p = childMixerLocal.GetInput(i);
+                            if (p.Equals(audioClipPlayable))
+                            {
+                                newIndex = i;
+                                break;
+                            }
+                        }
+
+                        for (var i = oldCount - 1; i >= 0; i--)
+                        {
                             var oldPlayable = childMixerLocal.GetInput(i);
+                            if (!oldPlayable.IsValid()) continue;
+
+                            // 跳过“新”的 playable，避免误删
+                            if (newIndex == i) continue;
+
                             childMixerLocal.DisconnectInput(i);
-                            toDestroy.Add(oldPlayable);
+                            DestroyPlayable(oldPlayable, true); // 卸载旧 BGM
                         }
 
-                        foreach (var p in toDestroy)
+                        if (audioClipLocal != null && audioClipPlayable.IsValid())
                         {
-                            DestroyPlayable(p, true); // 渐变结束后卸载旧 BGM/BGS
+                            // ✅ 直接保留新曲子，强制它在 slot 0
+                            childMixerLocal.DisconnectInput(newIndex);
+                            if (newIndex != 0) playableGraph.Connect(audioClipPlayable, 0, childMixerLocal, 0);
+                            childMixerLocal.SetInputWeight(0, weight);
                         }
-
-                        childMixerLocal.SetInputCount(0);
-                        if (audioClipLocal != null)
+                        else
                         {
-                            childMixerLocal.AddInput(audioClipPlayable, 0, weight);
+                            childMixerLocal.SetInputCount(0);
                         }
-
+ 
                         lerpIEnumeratorDic.Remove(playableGraph);
+                        if (audioClipPlayable.IsValid())
+                            childMixerLocal.SetInputWeight(childMixerLocal.GetInputCount() - 1, weight);
+
                     }
                 }
                 else
@@ -572,11 +595,7 @@ public class AudioController : Singleton<AudioController>
         }
     }
 
-    private void DestroyPlayable(Playable playable)
-    {
-        // 兼容旧签名（若代码里还有调用），默认不卸载
-        DestroyPlayable(playable, false);
-    }
+ 
 
     /// <summary>
     ///     安全销毁 Playable；当且仅当是 AudioClipPlayable 且需要时卸载对应 AudioClip。
@@ -660,6 +679,9 @@ public class AudioController : Singleton<AudioController>
 
         graph.Connect(newPlayable, 0, mixer, index);
         mixer.SetInputWeight(index, weight);
+
+        // 保底：确保 Graph 在 Play
+        if (!graph.IsPlaying()) graph.Play();
     }
 
     private void PlayAudio(PlayableGraph playableGraph, AudioMixerPlayable audioMixer, Dictionary<string, AudioMixerPlayable> childMixers, List<AudioPlayData> audioClips,
@@ -801,7 +823,9 @@ public class AudioController : Singleton<AudioController>
                             timeValue += Time.deltaTime * 0.25f;
                             yield return null;
                         }
+                     
 
+                        
                         int mixerCount = childMixer.GetInputCount();
                         if (audioClips.Count > 0)
                         {
@@ -812,16 +836,8 @@ public class AudioController : Singleton<AudioController>
 
                                 if (mixerCount > i)
                                 {
-                                    var oldPlayable = childMixer.GetInput(i);
-                                    toDestroy.Add(oldPlayable);
-
-
-                                    if (mixerCount > i)
-                                        ReplaceInput(childMixer, i, playableGraph, audioClipPlayable,
-                                            audioClips[i].weight); // ✅ 统一走安全替换
-                                    else
-                                        childMixer.AddInput(audioClipPlayable, 0, audioClips[i].weight);
-                                    childMixer.SetInputWeight(i, audioClips[i].weight);
+                                    // ✅ 用安全替换，内部会先 Disconnect 再 Connect，并销毁旧的
+                                    ReplaceInput(childMixer, i, playableGraph, audioClipPlayable, audioClips[i].weight);
                                 }
                                 else
                                 {
@@ -832,6 +848,7 @@ public class AudioController : Singleton<AudioController>
                             for (var i = 0; i < toDestroy.Count; i++) DestroyPlayable(toDestroy[i], true);
                         }
                         lerpAudioIEnumeratorDic.Remove(playableGraph);
+                        
                     }
                 }
                 else
@@ -871,6 +888,8 @@ public class AudioController : Singleton<AudioController>
 
                                 yield return null;
                             }
+                            
+                            
                             lerpAudioIEnumeratorDic.Remove(playableGraph);
                         }
                     }

@@ -1760,14 +1760,8 @@ public class CharacterManager : Singleton<CharacterManager>
             (int2 targetCoordinate, Vector2 targetPos) =>
             {
                 if (controllerCharacter.canMove)
-                {
-                    float length = Vector2.Distance(targetPos, new Vector2(controllerTransform.position.x, controllerTransform.position.y));
-                    TryTeamLeaderMove tryTeamLeaderMove = new TryTeamLeaderMove
-                    {
-                        characterId = controllerCharacter.instanceId,
-                        length = length
-                    };
-                    GameActionManager.instance.QueueAction(tryTeamLeaderMove, true);
+                { 
+                   
                     ControllerRuntimeObj.SetPosition(new Vector3(targetPos.x, targetPos.y, controllerTransform.position.z)); 
                     //Debug.Log("SetShaderPlayerPos7");
 
@@ -1807,13 +1801,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             // Debug.Log($"no way!!");
             controllerCharacter.moveDirection = Vector2.zero;
-            TryTeamLeaderMove tryTeamLeaderMove = new TryTeamLeaderMove
-            {
-                characterId = controllerCharacter.instanceId,
-                length = 0
-            };
-            GameActionManager.instance.QueueAction(tryTeamLeaderMove, true);
-
+            
             GameObjectCurveController.instance.StopObjectMove(ControllerRuntimeObj.runtimeObj.linkId);
         }
         else

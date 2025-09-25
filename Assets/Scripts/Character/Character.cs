@@ -990,6 +990,17 @@ public partial class Character
     public int2 coordinate => objCoordinate.xy;
     public int mapInstance => objCoordinate.z;
 
+    public Vector2 pos
+    {
+        get
+        {
+            if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var obj))
+                return obj.transform.position;
+
+            return GameCommon.GetMapPos(coordinate);
+        }
+    }
+
     public int instanceId;
     public Direction direction { private set; get; }
 
@@ -1047,6 +1058,7 @@ public partial class Character
                 _nowSpeed = value;
                 if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var runtimeObj))
                 {
+                    /*
                     if (_nowSpeed == 0)
                     {
                         TryTeamLeaderStop tryTeamLeaderStop = new TryTeamLeaderStop
@@ -1054,7 +1066,7 @@ public partial class Character
                             characterId = instanceId
                         };
                         GameActionManager.instance.QueueAction(tryTeamLeaderStop);
-                    }
+                    }*/
                     float animationSpeed = 0;
                     if (value != 0)
                     {
@@ -1136,15 +1148,34 @@ public partial class Character
     private void SetObjCoordinate(int3 coordinate, bool refreshPos = true)
     {
         MapCellController.instance.SetCharacterCoordinate(objCoordinate, coordinate, instanceId,this is TempCharacter);
-        bool changeMap = mapInstance != coordinate.z;
+        var changeMap = refreshPos = mapInstance != coordinate.z;
         if (coordinate.z == 0)
         {
             Debug.Log("set coordinate.z == 0");
         }
+
+        if (!changeMap && objCoordinate.x == coordinate.x && objCoordinate.y == coordinate.y)
+        {
+            return;
+        }
+
         objCoordinate = coordinate;
         if (changeMap)
         {
-            refreshPos = true;
+            if (team != null && team.leader == this) team.ChangeMap(coordinate.xy, coordinate.z);
+        }
+        else
+        {
+            if (team != null && team.leader == this)
+            {
+                var tryTeamLeaderMove = new TryTeamLeaderMove
+                {
+                    characterId = instanceId,
+                    targetCoordinate = coordinate.xy,
+                    targetPos = pos
+                };
+                GameActionManager.instance.QueueAction(tryTeamLeaderMove, true);
+            }
         }
         //Debug.Log($"{name}--SetObjCoordinate:{coordinate}");
         if (mapInstance == WorldMapObjManager.instance.displayMap&& refreshPos)
@@ -1288,8 +1319,11 @@ public partial class Character
     {
         RefreshOperateCharacters refreshOperateCharacters = new RefreshOperateCharacters();
         var NeighborhoodCharacters1 = MapCellController.instance.GetCharacters(objCoordinate);
+        
         NeighborhoodCharacters1.Remove(instanceId);
-        NeighborhoodCharacters1.ExceptWith(TeamManager.instance.playerTeam.TeamCharacters);
+        if (TeamManager.instance.playerTeam != null)
+            NeighborhoodCharacters1.ExceptWith(TeamManager.instance.playerTeam.TeamCharacters);
+
         HashSet<int> sleepCharacters = new HashSet<int>();
         foreach(var id in NeighborhoodCharacters1)
         {

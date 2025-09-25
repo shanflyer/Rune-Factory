@@ -64,7 +64,7 @@ public partial class MapCellController
             return result;
         }
 
-        return null;
+        return new HashSet<int>();
     }
 
     public int GetClickCharacter(int3 coordinate, int range = 5)
