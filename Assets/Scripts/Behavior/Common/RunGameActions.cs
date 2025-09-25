@@ -92,12 +92,19 @@ public class RunGameActions : Action
                 DynamicData otherData = otherDatas[i];
                 gameActionDatas[i].Action(otherData.source.Value, otherData.target.Value, otherData.value.Value,
                    setResult: waitResult ? SetActionResult : null, setValue: SetValue, immediately: immediately);
+
+                if (dynamicParameterDatas != null && i < dynamicParameterDatas.Count)
+                    gameActionDatas[i]._parameters.Clear();
             }
             else
             {
                 gameActionDatas[i].Action(source.Value, target.Value, sharedSetIntValue.Value, setResult: waitResult ? SetActionResult : null,
                     setValue: SetValue, immediately: immediately);
+
+                if (dynamicParameterDatas != null && i < dynamicParameterDatas.Count)
+                    gameActionDatas[i]._parameters.Clear();
             }
+            
         }
     }
 

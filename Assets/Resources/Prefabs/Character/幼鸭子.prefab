@@ -248,7 +248,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -0.023000002, z: 0}
-  m_LocalScale: {x: 0.75, y: 0.5, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3526556760358109885}
@@ -307,7 +307,8 @@ PolygonCollider2D:
       - {x: -0.003133811, y: 0.033142805}
       - {x: -0.010431606, y: 0.027563572}
       - {x: -0.013857476, y: 0.01568079}
-      - {x: -0.008566234, y: -0.000077962875}
+      - {x: -0.012152208, y: -0.0012733937}
+      - {x: -0.004345524, y: -0.010879947}
       - {x: 0.004084274, y: -0.012336493}
       - {x: 0.012505889, y: -0.011992931}
       - {x: 0.020423159, y: -0.008774668}
@@ -530,15 +531,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e13c5c54c81ecd244b3ad1fcb3a1e7ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  body: {fileID: 1210211828070399656}
   equip: {fileID: 5196164794444921074}
   shadow: {fileID: 7138573453290809605}
   animator: {fileID: 5625578865214932197}
   myShadow: {fileID: 4015550302143036111}
   equipRenderer: {fileID: 0}
   behaviorTree: {fileID: 3105138138304804186}
-  DirOther: {fileID: 0}
-  footStep: {fileID: 0}
   audioSource: {fileID: 0}
   isDisplayFootStep: 1
   leftFootPos: {x: -0.05, y: -0.025, z: 0}

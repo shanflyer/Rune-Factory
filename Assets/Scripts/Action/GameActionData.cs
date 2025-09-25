@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Data/GameActionData")]
-[System.Serializable]
+[Serializable]
 public class GameActionData : ScriptableObject, IGameData
 {
     public int id;
@@ -41,6 +42,7 @@ public class GameActionData : ScriptableObject, IGameData
         }
 
         GameActionDataManager.instance.GameAction(typeName, _parameters, source, target, value, setResult, setValue, immediately);
+      
     }
 
 #if UNITY_EDITOR
@@ -57,7 +59,7 @@ public class GameActionData : ScriptableObject, IGameData
     }
 }
 
-[System.Serializable]
+[Serializable]
 public class Parameter
 {
     public string value;
