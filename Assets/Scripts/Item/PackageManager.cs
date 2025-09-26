@@ -692,7 +692,7 @@ public class PackageManager : Singleton<PackageManager>
                     itemPackage = saveData.itemPackage,
 
                 };
-
+                  
                 var dataCount = saveData.items.Count / 2;
                 var items = new List<Item>();
                 for (var j = 0; j < dataCount; j++)
@@ -703,6 +703,7 @@ public class PackageManager : Singleton<PackageManager>
 
                 gamePackage.InitSaveItemList(items); 
                 gamePackages.Add(saveData.id, gamePackage);
+                RefreshPackageMapDisplay(gamePackage.caseCount, gamePackage.itemCount, gamePackage.instanceId);
             }
           
         }
@@ -953,8 +954,9 @@ public class PackageManager : Singleton<PackageManager>
     {
         if (dataId == 0) return -1;
         int packageInstanceId = instanceId == 0 ? MyInstance.instance.Uid : instanceId;
-        if(gamePackages.ContainsKey(packageInstanceId))
+        if (gamePackages.TryGetValue(packageInstanceId, out var _oldGamePackage))
         {
+            RefreshPackageMapDisplay(_oldGamePackage.caseCount, _oldGamePackage.itemCount, _oldGamePackage.instanceId);
             return -1;
         }
         

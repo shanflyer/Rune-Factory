@@ -409,7 +409,8 @@ public struct CreatPackage : GameAction
                 if (value != 0 && value != int.MinValue)
                     level = value;
             }
-            
+
+            if (source > 10000) instanceId = source;
         }
         else
         {
