@@ -536,17 +536,18 @@ public class Field
                         break;
                 }
 
-                if (plant != null)
-                {
-                    plant.setWater = false;
-                    plant.RefreshPlant();
-                }
+               
             }
             if (plant != null && plant.plantState == PlantState.正常)
             {
                 plant.Grow();
             }
             RefreshField();
+            if (plant != null)
+            {
+                plant.setWater = false;
+                plant.RefreshPlant();
+            }
         }
         else
         {
@@ -555,6 +556,8 @@ public class Field
             {
                 plant.Grow();
             }
+
+            if (plant != null) plant.RefreshPlant();
             RefreshField();
         }
        
@@ -611,7 +614,7 @@ public class Field
             {
                 case PlantState.正常:
                 case PlantState.干旱:
-                    plant.plantState = PlantState.正常;
+                    plant.plantState = PlantState.正常;  
                     //setWaterField.setResult(true);
                     break;
 
@@ -655,7 +658,7 @@ public class Plant
     public bool setWater;
     public PlantState plantState;
     public int nowCycle;
-
+    public int emote;
     public Plant(int instanceId,PlantData PlantData,int field,bool setWater,PlantState plantState=PlantState.正常,int nowCycle=0)
     {
         this.instanceId = instanceId;
@@ -664,6 +667,7 @@ public class Plant
         this.setWater = setWater;
         this.plantState = plantState;
         this.nowCycle = nowCycle;
+        emote = 0;
         for(int i = 0; i < PlantData.goodSeason.Count; i++)
         {
             goodSeason.Add((Season)PlantData.goodSeason[i]);
@@ -679,9 +683,8 @@ public class Plant
     public void RefreshPlant()
     {
         int keyY = 0;
-       
-        bool needShowDryEmote=false;
-        GameActionManager.instance.QueueAction(new TryRecycleItemEmote { id = instanceId });
+
+        var needShowDryEmote = false; 
         switch (plantState)
         {
             case PlantState.正常:
@@ -690,13 +693,18 @@ public class Plant
                 break;
             case PlantState.成熟:
                 keyY = setWater ? 3 : 0;
-                TryUpDataItemEmote tryUpDataItemEmote = new TryUpDataItemEmote
+                if (emote != GameCommon.fritEmote)
                 {
-                    id = instanceId,
-                    showTime = -1,
-                    emote = GameCommon.fritEmote
-                };
-                GameActionManager.instance.QueueAction(tryUpDataItemEmote);
+                    var tryUpDataItemEmote = new TryUpDataItemEmote
+                    {
+                        id = instanceId,
+                        showTime = -1,
+                        emote = GameCommon.fritEmote
+                    };
+                    GameActionManager.instance.QueueAction(tryUpDataItemEmote, true);
+                    emote = GameCommon.fritEmote;
+                }
+              
                 break;
 
             case PlantState.干旱:
@@ -718,13 +726,22 @@ public class Plant
         }
         if (needShowDryEmote)
         {
-            TryUpDataItemEmote tryUpDataItemEmote = new TryUpDataItemEmote
+            if (emote != GameCommon.dryPlantEmote)
             {
-                id = instanceId,
-                showTime = -1,
-                emote = GameCommon.dryPlantEmote
-            };
-            GameActionManager.instance.QueueAction(tryUpDataItemEmote);
+                var tryUpDataItemEmote = new TryUpDataItemEmote
+                {
+                    id = instanceId,
+                    showTime = -1,
+                    emote = GameCommon.dryPlantEmote
+                };
+                GameActionManager.instance.QueueAction(tryUpDataItemEmote, true);
+                emote = GameCommon.dryPlantEmote;
+            } 
+        }
+        else if (plantState != PlantState.成熟)
+        {
+            emote = 0;
+            GameActionManager.instance.QueueAction(new TryRecycleItemEmote { id = instanceId }, true);
         }
         SetItemAnimation setItemAnimation = new SetItemAnimation
         {
@@ -732,7 +749,7 @@ public class Plant
             keyY = keyY,
             id = instanceId
         };
-        GameActionManager.instance.QueueAction(setItemAnimation);
+        GameActionManager.instance.QueueAction(setItemAnimation); 
     }
 
     public void Grow()
@@ -772,8 +789,7 @@ public class Plant
                 };
                 GameActionManager.instance.QueueAction(addMapItemOperate);
             }
-        }
-        RefreshPlant();
+        } 
     }
 
     public bool GetPlantFruit(out int fruitId)

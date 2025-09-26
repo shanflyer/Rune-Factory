@@ -299,13 +299,18 @@ public class ShortcutPackage : IReferenceData, INativeData
     {
         if (index <= items.Length)
         {
-            haveItems.Remove(items[index - 1].instanceId);
+            haveItems.Remove(items[index - 1].instanceId != 0 ? items[index - 1].instanceId : items[index - 1].dataId);
             items[index-1] = default(Item); 
         }
     }
     public bool SetItem(Item item)
     {
-        if (item.instanceId!=0&&haveItems.Contains(item.instanceId))
+        if (item.instanceId != 0)
+        {
+            if (haveItems.Contains(item.instanceId)) return false;
+        }
+
+        if (haveItems.Contains(item.dataId))
         {
             return false;
         }
@@ -314,7 +319,7 @@ public class ShortcutPackage : IReferenceData, INativeData
             if (items[i].instanceId == 0&& items[i].count<=0)
             {
                 items[i] = item;
-                haveItems.Add(item.instanceId);
+                haveItems.Add(item.instanceId != 0 ? item.instanceId : item.dataId);
                 return true; 
             }
         }

@@ -37,12 +37,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
 
     void StopTempCharacterCreat(StopTempCharacterCreat stopTempCharacterCreat)
     {
-        totalCharacterCount = 0;
-        if (creatTempDelegate != null)
-        {
-            GameTimerController.instance.RemoveWaiter(creatTempDelegate);
-        }
-        NowTempCharacterCreatData = null;
+        maxTempCount = 0; 
     }
     private void ClearTempCharacter(ClearTempCharacter clearTempCharacter)
     {
@@ -52,6 +47,8 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
            // Debug.Log("ClearTempCharacter!!");
             GameTimerController.instance.RemoveWaiter(creatTempDelegate);
         }
+
+        creatTempDelegate = null;
         NowTempCharacterCreatData = null;
     }
 
@@ -216,6 +213,16 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
      
     private async void StartCreatTempCharacter(StartCreatTempCharacter startCreatTempCharacter)
     {
+        if (NowTempCharacterCreatData != null &&
+            NowTempCharacterCreatData.id == startCreatTempCharacter.creatDataId && creatTempDelegate != null)
+        {
+            if (startCreatTempCharacter.overrideMaxCount > 0)
+                maxTempCount = startCreatTempCharacter.overrideMaxCount;
+            else
+                maxTempCount = NowTempCharacterCreatData.maxCharacterCount;
+            return;
+        }
+        
        // return;
         if (startCreatTempCharacter.clearAll)
         {
@@ -224,6 +231,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
             ClearTempCharacter clearTempCharacter = new ClearTempCharacter();
             GameActionManager.instance.QueueAction(clearTempCharacter, true);
         }
+        
         NowTempCharacterCreatData = await GameDataManager.instance.GetAsyncData<TempCharacterCreateData>(startCreatTempCharacter.creatDataId);
         if (NowTempCharacterCreatData == null)
         {

@@ -119,6 +119,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                     }
                     WeatherManager.instance.RefreshWeather(value);
                     GameActionManager.instance.QueueAction(new NewHour());
+                    WorldMapObjManager.instance.RefreshMapAudio(); 
                     if (_hour == 8) NPCManager.instance.TryWakeUp(true);
                 }
             }
@@ -198,11 +199,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
         {
             if (GameDataManager.instance.GlobalData.debug)
                 Debug.Log($"hour:{hour}--minute:{minute}");
-            if (this.hour != hour)
-            {
-                WorldMapObjManager.instance.RefreshMapAudio();
-                GameActionManager.instance.QueueAction(newHour);
-            }
+         
             if (hour >= 0)
                 this.hour = hour;
             if (minute >= 0)
@@ -598,11 +595,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             week = (Week)x;
             SetLightValue();
 
-            if (oldhour != hour)
-            {
-                WorldMapObjManager.instance.RefreshMapAudio();
-                GameActionManager.instance.QueueAction(newHour);
-            }
+            
 
             if (dayRefresh)
             {
