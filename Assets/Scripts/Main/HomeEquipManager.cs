@@ -31,13 +31,14 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         homeEquips.Clear();
     }
 
-    public HomeEquip GetHomeEquip(int instanceId)
+    public bool GetHomeEquip(int instanceId, out HomeEquip homeEquip)
     {
-        if (homeEquips.TryGetValue(instanceId, out var homeEquip))
+        if (homeEquips.TryGetValue(instanceId, out homeEquip))
         {
-            return homeEquip;
+            return true;
         }
-        return null;
+
+        return false;
     }
 
     public HomeEquipList GetHomeEquipList(int characterId)
@@ -75,14 +76,14 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         }
     }
 
-    public async void CreatHomeEquip(HomeEquipSaveData homeEquipSaveData)
+    public void CreatHomeEquip(HomeEquipSaveData homeEquipSaveData)
     {
-        HomeEquipmentData homeEquipmentData = 
-            await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(homeEquipSaveData.equipDataId);
+        var homeEquipmentData =
+            GameDataManager.instance.GetData<HomeEquipmentData>(homeEquipSaveData.equipDataId.ToString());
         HomeEquip homeEquip = 
             new HomeEquip(homeEquipSaveData.instanceId, homeEquipSaveData.mapEditorInstance,
             homeEquipSaveData.characterId, homeEquipmentData);
-
+        homeEquips.Add(homeEquip.instanceId, homeEquip);
         homeEquip.mapInstance = homeEquipSaveData.mapInstance;
         homeEquip.coordinate = homeEquipSaveData.coordinate;
         if (!characterHomeEquips.TryGetValue(homeEquipSaveData.characterId, out var ints))
@@ -117,7 +118,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(creatHomeEquip.equipDataId);
         int instanceId = creatHomeEquip.instanceId == 0 ? MyInstance.instance.Uid : creatHomeEquip.instanceId;
         HomeEquip homeEquip = new HomeEquip(instanceId, instanceId, creatHomeEquip.characterId, homeEquipmentData);
-
+      
         if (creatHomeEquip.instanceId == 0)
         {
             AddMapItem addMapItem = new AddMapItem

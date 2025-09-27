@@ -105,6 +105,10 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
         Return.onClick.AddListener(async () =>
         { 
             Close();
+            GameActionManager.instance.QueueAction(new StopFilm
+            {
+                filmName = "角色选择"
+            });
            var zeroPanel= await UIManager.instance.ShowGamePanel<ZeroPanel>(); 
             zeroPanel.PlayZeroBGM();
         });

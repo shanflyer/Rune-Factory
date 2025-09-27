@@ -1735,7 +1735,8 @@ public class CharacterManager : Singleton<CharacterManager>
         if (_moveDirection == Vector2.zero)
         {
             controllerCharacter.moveDirection = _moveDirection;
-            GameObjectCurveController.instance.StopObjectMove(ControllerRuntimeObj.runtimeObj.linkId);
+            if (ControllerRuntimeObj != null && ControllerRuntimeObj.runtimeObj != null)
+                GameObjectCurveController.instance.StopObjectMove(ControllerRuntimeObj.runtimeObj.linkId);
             return true;
         }
         return CheckSmoothMove(controllerCharacter.coordinate, ref _moveDirection, controllerTransform.position,

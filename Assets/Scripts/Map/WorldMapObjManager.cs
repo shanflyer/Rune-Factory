@@ -267,6 +267,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
     }
     void RefreshMapCamera(RefreshMapCamera  refreshMapCamera)
     {
+        if (DisplayMapRoomData == null) return;
         SetFixedCamera setFixedCamera = new SetFixedCamera
         {
             fixedCamera = DisplayMapRoomData.fixedCamera,

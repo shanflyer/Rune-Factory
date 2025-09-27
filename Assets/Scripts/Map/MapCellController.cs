@@ -590,7 +590,7 @@ public partial class MapCellController : Singleton<MapCellController>
                     runtimeMapRoom.playerTriggerCells.Add(linkId, cell);
                 }
                 runtimeMapRoom.playerTriggerAreaDatas.Add(triggerArea);
-                runtimeMapRoom.playerForwardTriggerIndexes.Add(linkId, runtimeMapRoom.playerForwardTriggerAreaDatas.Length - 1);
+                runtimeMapRoom.playerTriggerCellIndexes.Add(linkId, runtimeMapRoom.playerTriggerAreaDatas.Length - 1);
             }
 
             //runtimeMapRooms.SetData(runtimeMapRoom);

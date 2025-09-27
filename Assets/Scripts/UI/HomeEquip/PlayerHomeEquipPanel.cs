@@ -7,6 +7,8 @@ using UnityEngine.UI;
 
 public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
 {
+    [SerializeField] private List<int> CanSetMaps = new();
+
     [SerializeField]
     private Animator animator;
 
@@ -294,38 +296,50 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
             }
         }
 
-        cameraValue.SetSWText("x1"); 
-        mapData = WorldMapObjManager.instance.DisplayMapRoomData;
-        if (mapData.fixedCamera)
+        cameraValue.SetSWText("x1");
+
+        if (CanSetMaps.Contains(WorldMapObjManager.instance.displayMap))
         {
-            cameraValueIndex = 1;
-            CameraChange.localScale = Vector3.zero;
-            SetFixedCamera setFixedCamera = new SetFixedCamera
+            mapData = WorldMapObjManager.instance.DisplayMapRoomData;
+            if (mapData.fixedCamera)
             {
-                fixedCamera = true,
-                fixedPos = mapData.fixedCameraPos,
-            };
-            GameActionManager.instance.QueueAction(setFixedCamera, true);
+                cameraValueIndex = 1;
+                CameraChange.localScale = Vector3.zero;
+                var setFixedCamera = new SetFixedCamera
+                {
+                    fixedCamera = true,
+                    fixedPos = mapData.fixedCameraPos
+                };
+                GameActionManager.instance.QueueAction(setFixedCamera, true);
+            }
+            else
+            {
+                cameraValueIndex = 2;
+                cameraValue.SetSWText("x2");
+                CameraChange.localScale = Vector3.one;
+                var setFixedCamera = new SetFixedCamera
+                {
+                    fixedCamera = true,
+                    fixedPos = new Vector3(-1000, -1000, -1000),
+                    pixelValue = 300
+                };
+                GameActionManager.instance.QueueAction(setFixedCamera, true);
+            }
+
+            TitleButton.interactable = true;
+            InputManager.instance.AddInputActionDelegate(MyInputNameData.Other_Pointer, MousePos);
         }
         else
         {
-            cameraValueIndex = 2;
-            cameraValue.SetSWText("x2");
-            CameraChange.localScale=Vector3.one;
-            SetFixedCamera setFixedCamera = new SetFixedCamera
-            {
-                fixedCamera = true,
-                fixedPos =new Vector3(-1000,-1000,-1000),
-                pixelValue = 300
-            };
-            GameActionManager.instance.QueueAction(setFixedCamera, true);
+            TitleButton.interactable = false;
         }
+        
 
         upState = true;
         animator.SetTrigger("UP");
 
-        InputManager.instance.AddInputActionDelegate(MyInputNameData.Other_CameraMove, CameraMove);
-        InputManager.instance.AddInputActionDelegate(MyInputNameData.Other_Pointer, MousePos);
+        // InputManager.instance.AddInputActionDelegate(MyInputNameData.Other_CameraMove, CameraMove);
+     
     }
 
     private MapRoomData mapData;
@@ -352,16 +366,19 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 GameActionManager.instance.QueueAction(changeMapItemObjLayer, true);
             }
         }
-        SetFixedCamera setFixedCamera = new SetFixedCamera
-        {
-            fixedCamera = mapData.fixedCamera,
-            fixedPos = mapData.fixedCameraPos,
-            flowCameraType = mapData.flowCameraType
-        };
-        GameActionManager.instance.QueueAction(setFixedCamera, true);
 
-        InputManager.instance.RemoveInputActionDelegate(MyInputNameData.Other_Pointer, MousePos);
-        InputManager.instance.RemoveInputActionDelegate(MyInputNameData.Other_CameraMove, CameraMove);
+        if (mapData != null)
+        {
+            var setFixedCamera = new SetFixedCamera
+            {
+                fixedCamera = mapData.fixedCamera,
+                fixedPos = mapData.fixedCameraPos,
+                flowCameraType = mapData.flowCameraType
+            };
+            GameActionManager.instance.QueueAction(setFixedCamera, true);
+            InputManager.instance.RemoveInputActionDelegate(MyInputNameData.Other_Pointer, MousePos);
+        }
+        //InputManager.instance.RemoveInputActionDelegate(MyInputNameData.Other_CameraMove, CameraMove);
     }
     bool canMoveCamera = false;
 
@@ -472,7 +489,9 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 }
                 else
                 {
-                    if (WorldMapObjManager.instance.GetClickMapItemRuntimeObj(mouseWorldPos, out var _selectMapItemRuntimeObj))
+                    if (WorldMapObjManager.instance.GetClickMapItemRuntimeObj(mouseWorldPos,
+                            out var _selectMapItemRuntimeObj) &&
+                        HomeEquipManager.instance.GetHomeEquip(_selectMapItemRuntimeObj.instanceId, out var equip))
                     {
                         if (_selectMapItemRuntimeObj != selectMapItemRuntimeObj)
                         {

@@ -923,9 +923,10 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 RefreshMapItemDisplay refreshMapItemDisplay = new RefreshMapItemDisplay { runtimeMapItem = runtimeMapItem };
                 GameActionManager.instance.QueueAction(refreshMapItemDisplay, true);
 
-                GameDataSaveManager.instance.loadGameSaveData.SetMapItemCoordinate(runtimeMapItem.editorKey,
-                    runtimeMapItem.instanceId,
-                    runtimeMapItem.mapInstanceId, runtimeMapItem.coordinate);
+                if (GameDataSaveManager.instance.loadGameSaveData != null)
+                    GameDataSaveManager.instance.loadGameSaveData.SetMapItemCoordinate(runtimeMapItem.editorKey,
+                        runtimeMapItem.instanceId,
+                        runtimeMapItem.mapInstanceId, runtimeMapItem.coordinate);
             }
 
             if (moveMapItem.setResult != null)

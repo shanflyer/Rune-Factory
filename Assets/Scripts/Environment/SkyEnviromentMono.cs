@@ -121,6 +121,7 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
         nearMain = nearCloud.main;
         starEmission = star.emission;
         starEmission.rateOverTime = 0;
+        star.Clear();
         float screenHeight = Screen.height;
         float dt = screenHeight - environmentLerpOffset.x;
         dt *= environmentLerpOffset.y;

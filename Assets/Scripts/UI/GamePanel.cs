@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
-using Unity.Transforms;
-using UnityEngine.InputSystem.HID;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -189,7 +185,7 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
             }
             
         }
-        else
+        else if (gameObject != null)
         {
             gameObject.layer = HideLayer;
             if (graphicRaycaster)
