@@ -119,9 +119,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             displayCharacters.Remove(character);
             characterRuntimeObj.Clear();
-        }
-         
-       
+        } 
     }
 
     public override void Init()
@@ -845,6 +843,13 @@ public class CharacterManager : Singleton<CharacterManager>
     void SetCharacterStopCreate(SetCharacterStopCreate setCharacterStopCreate)
     {
         hideCharacter = setCharacterStopCreate.hide;
+        if (!hideCharacter)
+            for (var i = 0; i < characters.length; i++)
+            {
+                var character = characters[i];
+                if (character.mapInstance == WorldMapObjManager.instance.displayMap)
+                    RefreshNpcRuntimeObj(character, character == controllerCharacter);
+            }
     }
 
     private async void SetCharacterCoordinate(SetCharacterCoordinate setCharacterCoordinate)

@@ -1151,7 +1151,7 @@ public partial class Character
         var changeMap = refreshPos = mapInstance != coordinate.z;
         if (coordinate.z == 0)
         {
-            Debug.Log("set coordinate.z == 0");
+            //  Debug.Log("set coordinate.z == 0");
         }
 
         if (!changeMap && objCoordinate.x == coordinate.x && objCoordinate.y == coordinate.y)

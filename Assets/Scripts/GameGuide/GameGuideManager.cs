@@ -48,26 +48,22 @@ public class GameGuideManager:Singleton<GameGuideManager>
             hour = data.fixedHour,
         };
         GameActionManager.instance.QueueAction(setFixedTime);
-        if (!data.displayCharacter)
+        var setCharacterCoordinate = new SetCharacterCoordinate
         {
-            SetCharacterStopCreate setCharacterStopCreate = new SetCharacterStopCreate
-            {
-                hide = !data.displayCharacter
-            };
-           GameActionManager.instance.QueueAction(setCharacterStopCreate);
-        }
-        else
+            characterId = characterId,
+            coordinate = data.fixedMap
+        };
+        GameActionManager.instance.QueueAction(setCharacterCoordinate);
+
+        var setCharacterStopCreate = new SetCharacterStopCreate
         {
-            SetCharacterCoordinate setCharacterCoordinate = new SetCharacterCoordinate
-            {
-                characterId = characterId,
-                coordinate = data.fixedMap
-            };
-            GameActionManager.instance.QueueAction(setCharacterCoordinate); 
-        }
+            hide = !data.displayCharacter
+        };
+        GameActionManager.instance.QueueAction(setCharacterStopCreate); 
+         
         GameTimerController.instance.DelayAction(1000, () =>
         {
-            //GameActionDataManager.instance.Action(data.beforeEventId);
+            GameActionDataManager.instance.Action(data.beforeEventId);
         });
         
     }
