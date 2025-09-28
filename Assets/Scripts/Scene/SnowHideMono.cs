@@ -9,7 +9,7 @@ public class SnowHideMono : MonoBehaviour
 
     private void OnDisable()
     {
-        GameTimeManager.instance.RemoveSnowHideMono(this);
+        if (!SingletonType.Cleared) GameTimeManager.instance.RemoveSnowHideMono(this);
     }
 
     public void HideAction(bool hide)

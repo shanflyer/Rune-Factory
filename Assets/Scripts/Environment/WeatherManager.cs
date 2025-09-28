@@ -160,19 +160,22 @@ public class WeatherManager : Singleton<WeatherManager>
         if (creatWeather.nowWeathers != null && creatWeather.nowWeathers.Count > 0)
         {
             nowDayWeathers = await CreatWeather(creatWeather.nowWeathers);
-            GameDataSaveManager.instance.UserGameSaveData.nowWeathers = nowDayWeathers;
+            if (GameDataSaveManager.instance.loadGameSaveData != null)
+                GameDataSaveManager.instance.loadGameSaveData.nowWeathers = nowDayWeathers;
         }
         else
         {
             nowDayWeathers.Clear();
             nowDayWeathers.AddRange(nextDayWeathers);
-            GameDataSaveManager.instance.UserGameSaveData.nowWeathers = nowDayWeathers;
+            if (GameDataSaveManager.instance.loadGameSaveData != null)
+                GameDataSaveManager.instance.loadGameSaveData.nowWeathers = nowDayWeathers;
             RefreshWeather(GameTimeManager.instance.Hour);
         }
         if (creatWeather.nextWeather != null && creatWeather.nextWeather.Count > 0)
         {
             nextDayWeathers = await CreatWeather(creatWeather.nextWeather);
-            GameDataSaveManager.instance.UserGameSaveData.nextWeathers = nextDayWeathers;
+            if (GameDataSaveManager.instance.loadGameSaveData != null)
+                GameDataSaveManager.instance.loadGameSaveData.nextWeathers = nextDayWeathers;
         }
     }
 

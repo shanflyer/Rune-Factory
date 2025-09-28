@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class GameGuideManager:Singleton<GameGuideManager>
@@ -109,12 +108,11 @@ public class GameGuideManager:Singleton<GameGuideManager>
     private void SetIntAction(int id, Selectable selectable)
     {
         guidSelectableDic[id] = selectable;
-        if (waitGuide != 0 && waitGuide == id) InitShowGuide();
-        // if (id== nowGuideSelectableId)
+        if (waitGuide != 0 && waitGuide == id)
         {
-           // Debug.Log("等待 guid");
-           //InitShowGuide();
-        }
+            UIManager.instance.ShowGamePanel<GameGuidePanel, GuidStepData>(guidStepData);
+        } 
+        
     }
     void RemoveIntAction(int id,Selectable selectable)
     {
@@ -136,7 +134,11 @@ public class GameGuideManager:Singleton<GameGuideManager>
         }
         if(nowGameGuideData.GetGuidStepData(out guidStepData))
         {
-            UIManager.instance.ShowGamePanel<GameGuidePanel, GuidStepData>(guidStepData);
+            nowGuideSelectableId = guidStepData.selectableId;
+            if (guidSelectableDic.TryGetValue(nowGuideSelectableId, out var selectable))
+                UIManager.instance.ShowGamePanel<GameGuidePanel, GuidStepData>(guidStepData);
+            else
+                waitGuide = nowGuideSelectableId;
         }
         else
         {
@@ -152,44 +154,19 @@ public class GameGuideManager:Singleton<GameGuideManager>
 
 
     int nowGuideSelectableId;
-    public void GuideButtonAction(PointerEventData eventData) 
-    {
-        //Debug.Log($"指引点击00!!--{eventData.button}");
-        if (guidStepData.waitTime > 0)
-        {
-            GameTimerController.instance.DelayAction(guidStepData.waitTime, () =>
-            {
-                InitShowGuide();
-            });
-        }
-        else
-        {
-            InitShowGuide();
-        } 
-    }
+ 
     public void GuideButtonAction()
     {
-        if (guidStepData.waitTime > 0)
-        {
-            GameTimerController.instance.DelayAction(guidStepData.waitTime, () =>
-            {
-                InitShowGuide();
-            });
-        }
-        else
-        {
-            InitShowGuide();
-        }
+        InitShowGuide();
     }
 
     private int waitGuide;
     void InitShowGuide()
     {
         if (guidSelectableDic.TryGetValue(nowGuideSelectableId, out var selectable))
-        {
-           
+        { 
             selectable.HideSelected = true;
-            //Debug.Log($"指引点击01!!-");
+            Debug.Log("指引点击01!!-");
             if (selectable is Button button)
             {
                 button.OnPointerClick();
@@ -201,11 +178,21 @@ public class GameGuideManager:Singleton<GameGuideManager>
 
             ShowGuide();
         }
-        else
+         
+    }
+
+    public bool GetSelectRectTransform(int guid, out RectTransform guidRect)
+    {
+        if (guidSelectableDic.TryGetValue(guid, out var selectable))
         {
-            waitGuide = nowGuideSelectableId;
-            Debug.Log("指引等待！");
+            nowGuideSelectableId = guid;
+            guidRect = selectable.transform as RectTransform;
+
+            return true;
         }
+
+        guidRect = null;
+        return false;
     }
     public bool GetSelectableSize(int guid,out Vector3 pos,out Vector2 size)
     {

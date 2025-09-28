@@ -318,7 +318,7 @@ public class NPC : IReferenceData
     {
         // Debug.Log($"{character.name} setSleep {startSleepHour}");
         this.startSleepHour = startSleepHour;
-        GameDataSaveManager.instance.UserGameSaveData.SetNpcSleepTime(npcData.id, startSleepHour);
+        GameDataSaveManager.instance.loadGameSaveData.SetNpcSleepTime(npcData.id, startSleepHour);
     }
     public void Rest()
     {

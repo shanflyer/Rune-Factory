@@ -20,7 +20,17 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         get => userGameSaveDataList;
     }
 
-    public int loadingIndex = -99;
+    public int loadingIndex
+    {
+        get => _loadingIndex;
+        set
+        {
+            _loadingIndex = value;
+            userGameSaveDataList.nowSaveData = new UserGameSaveData(loadGameSaveData);
+        }
+    }
+
+    public int _loadingIndex = -99;
     public UserGameSaveData UserGameSaveData
     {
         get
@@ -40,7 +50,8 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                 }
                 if (loadingIndex < 3)
                 {
-                    return   userGameSaveDataList.userGameSaveDatas[loadingIndex];
+                    var saveData = userGameSaveDataList.userGameSaveDatas[loadingIndex];
+                    return saveData;
                 } 
             }
              
