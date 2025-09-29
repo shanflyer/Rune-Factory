@@ -1,19 +1,28 @@
 ﻿using System;
-using System.Globalization;
-using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using System.Reflection;
-using System.Linq;
+using Object = UnityEngine.Object;
 
 public enum MyLanguage
 {
     英语=22, 简体中文 =1,繁体中文=2,日语=3,韩语=4,法语=5,德语=6,意大利语=7,西班牙语=8,葡萄牙语=9,土耳其语=10,越南语=11,泰语=12, 波兰语=13,
     荷兰语=14, 希腊语=15, 阿拉伯语=16,印地语=17,乌尔都语=18,马来语=19,印尼语=20, 俄语=21,
-    希伯来语=22,瑞典语=23,捷克语=24,乌克兰语=25,罗马尼亚语=26,挪威语=27,匈牙利语=28,斯瓦希里语=29,塞尔维亚语=30 
+    希伯来语 = 22,
+    瑞典语 = 23,
+    捷克语 = 24,
+    乌克兰语 = 25,
+    罗马尼亚语 = 26,
+    挪威语 = 27,
+    匈牙利语 = 28,
+    斯瓦希里语 = 29,
+    塞尔维亚语 = 30,
+    芬兰语 = 31,
+    丹麦语 = 32
 }
 public class LanguageManage : Singleton<LanguageManage>
 {
@@ -92,13 +101,13 @@ public class LanguageManage : Singleton<LanguageManage>
         PlayerPrefs.SetInt("MyLanguage", (int)myLanguage);
         GetLocalLanguage(myLanguage);
 
-        var allTMP_Text = UnityEngine.Object.FindObjectsByType<TMP_Text>(FindObjectsSortMode.None);
+        var allTMP_Text = Object.FindObjectsByType<TMP_Text>(FindObjectsSortMode.None);
         for(int i = 0; i < allTMP_Text.Length; i++)
         {
             allTMP_Text[i].FixedSwitchString();
         }
 
-        var languageSwitchImages=UnityEngine.Object.FindObjectsByType<LanguageSwitchImage>(FindObjectsSortMode.None);
+        var languageSwitchImages=Object.FindObjectsByType<LanguageSwitchImage>(FindObjectsSortMode.None);
         for(int i = 0; i < languageSwitchImages.Length; i++)
         {
             languageSwitchImages[i].SetImage(myLanguage);

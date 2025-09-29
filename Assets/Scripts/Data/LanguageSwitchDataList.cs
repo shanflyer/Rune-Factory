@@ -1,8 +1,6 @@
-﻿
+﻿using System;
 using UnityEngine;
-using System;
 #if UNITY_EDITOR
-using UnityEditor;
 #endif
 
 public class LanguageSwitchDataList : ScriptableObject, IGameData
@@ -36,5 +34,15 @@ public class LanguageSwitchDataList : ScriptableObject, IGameData
 public class LanguageSwitchData
 {
     public string cn, en, tw, ja, ko, fr, de, ru, es, pt, it, tr, vi, th, pl, nl, el, ar, hi, ur, ms, id,
-        he, sv, cs, uk, ro, no, hu, sw, sr;
+        he,
+        sv,
+        cs,
+        uk,
+        ro,
+        no,
+        hu,
+        sw,
+        sr,
+        fi,
+        da;
 }
