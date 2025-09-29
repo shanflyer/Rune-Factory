@@ -1,10 +1,11 @@
-﻿using OfficeOpenXml;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using TexturePackerImporter;
+using OfficeOpenXml;
 using UnityEditor;
 using UnityEditor.U2D.Sprites;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 public class CommonTool : MonoBehaviour
 {
@@ -81,7 +82,7 @@ public class CommonTool : MonoBehaviour
                             // 载入PSB的主资源
                             Object[] assets = AssetDatabase.LoadAllAssetsAtPath(psbPath);
                             Texture2D texture = null;
-                            var sprites = new System.Collections.Generic.List<Sprite>();
+                            var sprites = new List<Sprite>();
 
                             foreach (var asset in assets)
                             {
@@ -152,7 +153,6 @@ public class CommonTool : MonoBehaviour
     {
         // 载入PSB的主资源
         Object[] assets = AssetDatabase.LoadAllAssetsAtPath(psbPath);
-        Texture2D texture = null; 
         GameObject obj = null;
         foreach (var asset in assets)
         {  if (obj == null && asset is GameObject pre)
@@ -170,7 +170,7 @@ public class CommonTool : MonoBehaviour
         // 载入PSB的主资源
         Object[] assets = AssetDatabase.LoadAllAssetsAtPath(psbPath);
         Texture2D texture = null;
-        var sprites = new System.Collections.Generic.List<Sprite>();
+        var sprites = new List<Sprite>();
         GameObject obj = null;
         foreach (var asset in assets)
         {
@@ -370,7 +370,7 @@ public class CommonTool : MonoBehaviour
 
             // 将新贴图编码为 PNG
             byte[] pngData = newTex.EncodeToPNG();
-            Object.DestroyImmediate(newTex);
+            DestroyImmediate(newTex);
 
             // 生成输出文件名：PSB 文件名 + “_” + 子 Sprite 名称 + “.png”
             string psbFileName = Path.GetFileNameWithoutExtension(assetPath);
@@ -382,7 +382,7 @@ public class CommonTool : MonoBehaviour
             // 写入磁盘（覆盖同名文件）
             File.WriteAllBytes(fullPath, pngData); 
         }
-        catch (System.Exception e)
+        catch (Exception)
         {
             
         }
@@ -493,7 +493,7 @@ public class CommonTool : MonoBehaviour
                 if (string.IsNullOrEmpty(path))
                     continue;
 
-                if (System.IO.Directory.Exists(path))
+                if (Directory.Exists(path))
                 {
                     DirectoryInfo dir = new DirectoryInfo(path);
                     OpenDirectoryInfo(dir, path);
@@ -590,7 +590,7 @@ public class CommonTool : MonoBehaviour
                 if (string.IsNullOrEmpty(path))
                     continue;
 
-                if (System.IO.Directory.Exists(path))
+                if (Directory.Exists(path))
                 {
                     DirectoryInfo dir = new DirectoryInfo(path);
                     OpenDirectoryInfo1(dir, path);
@@ -677,7 +677,7 @@ public class CommonTool : MonoBehaviour
                 if (string.IsNullOrEmpty(path))
                     continue;
 
-                if (System.IO.Directory.Exists(path))
+                if (Directory.Exists(path))
                 {
                     DirectoryInfo dir = new DirectoryInfo(path);
                     OpenDirectoryInfo2(dir, path);

@@ -91,39 +91,42 @@ public class TimeLineManger : Singleton<TimeLineManger>
                                     }
 
                                 animator.playableGraph.SetTimeUpdateMode(DirectorUpdateMode.Manual);
-                            }
-                            var parameters = animator.parameters;
-                            List<AnimationParameter> AnimationParameters = new List<AnimationParameter>();
-                            for (int j = 0; j < parameters.Length; j++)
-                            {
-                                AnimationParameter animationParameter = new AnimationParameter
-                                {
-                                    parameter = parameters[j].name,
 
-                                };
-                                switch (parameters[j].type)
+                                var parameters = animator.parameters;
+                                var AnimationParameters = new List<AnimationParameter>();
+                                for (var j = 0; j < parameters.Length; j++)
                                 {
-                                    case AnimatorControllerParameterType.Float:
-                                        animationParameter.parameterType = ParameterType.FLOAT;
-                                        animationParameter.floatValue = animator.GetFloat(parameters[j].name);
-                                        break;
-                                    case AnimatorControllerParameterType.Int:
-                                        animationParameter.parameterType = ParameterType.INT;
-                                        animationParameter.intValue = animator.GetInteger(parameters[j].name);
-                                        break;
-                                    case AnimatorControllerParameterType.Bool:
-                                        animationParameter.parameterType = ParameterType.BOOL;
-                                        animationParameter.boolValue = animator.GetBool(parameters[j].name);
-                                        break;
-                                    case AnimatorControllerParameterType.Trigger:
-                                        animationParameter.parameterType = ParameterType.TRIGGER;
-                                        break;
+                                    var animationParameter = new AnimationParameter
+                                    {
+                                        parameter = parameters[j].name
+                                    };
+                                    switch (parameters[j].type)
+                                    {
+                                        case AnimatorControllerParameterType.Float:
+                                            animationParameter.parameterType = ParameterType.FLOAT;
+                                            animationParameter.floatValue = animator.GetFloat(parameters[j].name);
+                                            break;
+                                        case AnimatorControllerParameterType.Int:
+                                            animationParameter.parameterType = ParameterType.INT;
+                                            animationParameter.intValue = animator.GetInteger(parameters[j].name);
+                                            break;
+                                        case AnimatorControllerParameterType.Bool:
+                                            animationParameter.parameterType = ParameterType.BOOL;
+                                            animationParameter.boolValue = animator.GetBool(parameters[j].name);
+                                            break;
+                                        case AnimatorControllerParameterType.Trigger:
+                                            animationParameter.parameterType = ParameterType.TRIGGER;
+                                            break;
+                                    }
+
+                                    AnimationParameters.Add(animationParameter);
                                 }
-                                AnimationParameters.Add(animationParameter);
-                            }
-                            animationParameters.Add(AnimationParameters);
 
-                            animators.Add(animator);
+                                animationParameters.Add(AnimationParameters);
+
+                                animators.Add(animator);
+                            }
+                           
                             playableDirector.SetGenericBinding(sourceObject, animator.gameObject);
                         } 
                        

@@ -52,9 +52,10 @@ public class SaveReference : UIObjReference<UserGameSaveData>
 
     public override async Task InitData(UserGameSaveData t, SelectAction<UserGameSaveData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-       await  base.InitData(t, SelectAction, toggleGroup);
+        await base.InitData(t, SelectAction, toggleGroup);
         SelectToggle.group = toggleGroup;
-        if (!string.IsNullOrEmpty(data.saveTime) || data.playerData == null || data.playerData.dataId == 0)
+        if (data != null && !string.IsNullOrEmpty(data.saveTime) && data.playerData != null &&
+            data.playerData.dataId != 0)
         {
             Icon.enabled = true;
             CharacterData characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(data.playerData.dataId);

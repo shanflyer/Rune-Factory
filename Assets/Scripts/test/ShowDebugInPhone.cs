@@ -1,8 +1,7 @@
-﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using UnityEngine;
+
 public class logdata
 {
     public string output = "";
@@ -53,15 +52,15 @@ public class ShowDebugInPhone : MonoBehaviour
         outpathWarning = Application.persistentDataPath + @"/outLogWarining.txt";
 
         //每次启动客户端删除之前保存的Log  
-        if (System.IO.File.Exists(outpathLog))
+        if (File.Exists(outpathLog))
         {
             File.Delete(outpathLog);
         }
-        if (System.IO.File.Exists(outpathError))
+        if (File.Exists(outpathError))
         {
             File.Delete(outpathError);
         }
-        if (System.IO.File.Exists(outpathWarning))
+        if (File.Exists(outpathWarning))
         {
             File.Delete(outpathWarning);
         }
@@ -155,7 +154,8 @@ public class ShowDebugInPhone : MonoBehaviour
             sw.Close();
         }
     }
-    bool LogShow = false;
+
+    private bool LogShow = false;
     void Update()
     { 
         //因为写入文件的操作必须在主线程中完成,所以在Update中才给你写入文件。  

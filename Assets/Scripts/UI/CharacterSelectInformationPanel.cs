@@ -61,6 +61,7 @@ public class CharacterSelectInformationPanel : GamePanel<SelectCharacterData>
     private void YesButtonAction()
     {
         Close();
+        GameDataSaveManager.instance.loadingIndex = -1;
         var teamManager = TeamManager.instance;
         NPCManager.instance.CreateZeroNPC();
         UIManager.instance.CloseGamePanel<SelectCharacterPanel>();

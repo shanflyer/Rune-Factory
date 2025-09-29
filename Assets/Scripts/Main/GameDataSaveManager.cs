@@ -656,9 +656,9 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                 var saveData = userGameSaveDataList.userGameSaveDatas[i];
                 if (saveData==userGameSaveData)
                 {
-                    userGameSaveDataList.userGameSaveDatas[i] = new UserGameSaveData();
+                    userGameSaveDataList.userGameSaveDatas[i] = null;
 
-                    SetCloudData(userGameSaveDataList.userGameSaveDatas[i], $"player_{i}");
+                    ClearCloudData($"player_{i}");
                     break;
                 }
             }
@@ -670,7 +670,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         for(int i=0;i< userGameSaveDataList.userGameSaveDatas.Count; i++)
         {
             var saveData = userGameSaveDataList.userGameSaveDatas[i];
-            if (string.IsNullOrEmpty(saveData.saveTime))
+            if (saveData == null || string.IsNullOrEmpty(saveData.saveTime))
             {
                 userGameSaveDataList.userGameSaveDatas[i] = new UserGameSaveData(userGameSaveData);
                 SetCloudData(userGameSaveDataList.userGameSaveDatas[i], $"player_{i}");
@@ -759,6 +759,31 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         {
             SetCloudData(userGameSaveDataList.userGameSaveDatas[index], $"player_{index}");
         }
+    }
+
+    private void ClearCloudData(string keyStr)
+    {
+        for (var i = 0; i < UserGameSaveDataIntFields.Count; i++)
+        {
+            var field = UserGameSaveDataIntFields[i];
+            var key = GameCommon.BlendString(keyStr, field.Name);
+            CloudServices.RemoveKey(key);
+        }
+
+        for (var i = 0; i < UserGameSaveDataStringFields.Count; i++)
+        {
+            var field = UserGameSaveDataStringFields[i];
+            var key = GameCommon.BlendString(keyStr, field.Name);
+            CloudServices.RemoveKey(key);
+        }
+
+        for (var i = 0; i < UserGameSaveDataJsonFields.Count; i++)
+        {
+            var field = UserGameSaveDataJsonFields[i];
+            var key = GameCommon.BlendString(keyStr, field.Name);
+            CloudServices.RemoveKey(key);
+        }
+        //CloudServices.RemoveKey(GameCommon.BlendString(keyStr, "specialMapItemList"));
     }
     void SetCloudData(UserGameSaveData nowSaveData, string keyStr)
     {

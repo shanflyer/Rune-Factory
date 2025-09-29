@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unity.Services.RemoteConfig;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
+using Unity.Services.RemoteConfig;
 using UnityEngine;
+
 public class CloudRemoteConfig:Singleton<CloudRemoteConfig>
 {
     Dictionary<string, object> defaultConfigs = new Dictionary<string, object>();
@@ -38,12 +39,9 @@ public class CloudRemoteConfig:Singleton<CloudRemoteConfig>
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
         }
     }
-
-
-    bool isGetConfig = false;
+ 
     void ApplyRemoteSettings(ConfigResponse configResponse)
-    {
-        isGetConfig = true;
+    { 
         if (GameDataManager.instance.GlobalData.debug)
             Debug.Log("RemoteConfigService.Instance.appConfig fetched: " + RemoteConfigService.Instance.appConfig.config.ToString());
     }

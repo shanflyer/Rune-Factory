@@ -77,6 +77,11 @@ public struct Weather
         return fogValue * timelightValue;
     }
 
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(cloud, temperature, fog, wind, waterFall, lightning);
+    }
+
     public override bool Equals(object obj)
     {
         if (obj is Weather weather)
