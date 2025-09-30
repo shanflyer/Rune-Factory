@@ -10,14 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f30c6030c4ed304383e0d88a9676ae8, type: 3}
-  m_Name: "\u6539\u53D8\u73A9\u5BB6\u5730\u56FE"
+  m_Name: "\u9690\u85CF\u8001\u5934"
   m_EditorClassIdentifier: 
-  id: 10000
-  typeName: ChangeMap
+  id: 0
+  typeName: ActionList
   _parameters:
-  - value: 0
-    parameters: []
-  - value: 0
-    parameters: []
-  - value: 695
-    parameters: []
+  - value: DisplayOrHideCharacter
+    parameters:
+    - value: 23
+      parameters: []
+    - value: false
+      parameters: []
+  - value: SetCharacterStopCreate
+    parameters:
+    - value: true
+      parameters: []

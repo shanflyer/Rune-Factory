@@ -185,7 +185,7 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
             }
             
         }
-        else if (gameObject != null)
+        else if (gameObject)
         {
             gameObject.layer = HideLayer;
             if (graphicRaycaster)

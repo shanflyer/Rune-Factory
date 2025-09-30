@@ -1189,7 +1189,8 @@ public partial class Character
         {
             RefreshNeighborhood();
         }
-        else if (!(this is TempCharacter) && !TeamManager.instance.playerTeam.CheckCharacter(instanceId))
+        else if (!(this is TempCharacter) && (TeamManager.instance.playerTeam == null ||
+                                              !TeamManager.instance.playerTeam.CheckCharacter(instanceId)))
         {
             CharacterManager.instance.controllerCharacter.TryRefreshNeighborhood(this);
         }

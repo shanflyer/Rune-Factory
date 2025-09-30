@@ -68,7 +68,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     }
     public async Task InitLoadSaveData()
     {
-        if (loadGameSaveData != null&&CharacterManager.instance.controllerCharacter==null)
+        if (loadDataIsNotNull && CharacterManager.instance.controllerCharacter == null)
         { 
             PackageManager.instance.InitFromSaveData(loadGameSaveData.packageSaveDatas);
             PackageManager.instance.playerPackages.AddRange(loadGameSaveData.otherSaveData.playerPackages);
@@ -143,7 +143,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     }
     public void InitMapItemSaveData(int instanceId)
     {
-        if (loadGameSaveData != null)
+        if (loadDataIsNotNull)
         {
             if (loadGameSaveData.GetChangeMapItem(instanceId, out var data))
             {
@@ -172,7 +172,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     private bool loadCompleted = false;
     public void AfterInitMapLoadSaveData()
     {
-        if (loadGameSaveData != null)
+        if (loadDataIsNotNull)
         {
             using(var e = loadGameSaveData.fields.Values.GetEnumerator())
             {
@@ -217,7 +217,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
 
     public void InitSaveDate()
     {
-        if (loadGameSaveData != null)
+        if (loadDataIsNotNull && loadGameSaveData.dateData.season != Season.Default)
         {
             GameTimeManager.instance.InitSaveDate(loadGameSaveData.dateData); 
         }
@@ -252,7 +252,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
    
     public int CheckMapLine(int id)
     {
-        if (loadGameSaveData != null)
+        if (loadDataIsNotNull)
         { 
             if(loadGameSaveData.mapLineSaveData.TryGetValue(id,out var value))
             {
@@ -366,11 +366,12 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             }
 
         }
-    } 
-     
+    }
+
+    public bool loadDataIsNotNull => loadGameSaveData != null && loadGameSaveData.dateData.season != Season.Default;
     public CharacterSaveData GetCharacterSaveData(int dataId)
     {
-        if (loadGameSaveData != null)
+        if (loadDataIsNotNull)
         {
             if(loadGameSaveData.characterSaveDatas.TryGetValue(dataId,out var characterSaveData))
             {
