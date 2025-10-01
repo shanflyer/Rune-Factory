@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Unity.Collections; 
+using MyGame;
 using Unity.Mathematics;
 using UnityEngine;
-using MyGame;
+
 public class FightChapter : IReferenceData
 {
     public int mapId;
@@ -162,7 +162,8 @@ public class ExploreManager : Singleton<ExploreManager>
             GameActionManager.instance.QueueAction(SetCameraConfiner2D); 
 
             FightController.instance.CreateFightMap(nowFightMapData);
-            AudioController.instance.PlayBGM(null, audioClearType: AudioClearType.All, isLerp: true, Group: BGMGroup.Theme.ToString());
+            AudioController.instance.PlayBGM(null, audioClearType: AudioClearType.All, isLerp: false,
+                Group: BGMGroup.Theme.ToString());
             AudioController.instance.PlayBGM(nowFightMapData.exploreBGM, Group: BGMGroup.Battle.ToString(), audioClearType: AudioClearType.All,isLerp:true);
              
             AudioController.instance.SetBGMGroupValue(BGMGroup.Map.ToString(), 0);
@@ -183,7 +184,7 @@ public class ExploreManager : Singleton<ExploreManager>
              
             GameTimerController.instance.DelayAction(100, async () =>
             {
-                await UIManager.instance.ShowGamePanel<FightPanel>(ExploreManager.instance.NowChapter.ToString(), layer: 2); 
+                await UIManager.instance.ShowGamePanel<FightPanel>(instance.NowChapter.ToString(), layer: 2); 
                 UIManager.instance.CloseGamePanel<PlayerTopPanel>();
                 UIManager.instance.CloseGamePanel<MainPanel>();
                 UIManager.instance.CloseGamePanel<ShortcutPanel>();
@@ -313,7 +314,8 @@ public class ExploreManager : Singleton<ExploreManager>
         }
         else
         {
-            AudioController.instance.PlayBGM(nowFightMapData.exploreBGM, Group: BGMGroup.Battle.ToString(), audioClearType: AudioClearType.All, isLerp: true);
+            AudioController.instance.PlayBGM(nowFightMapData.exploreBGM, Group: BGMGroup.Battle.ToString(),
+                audioClearType: AudioClearType.All, isLerp: false);
             RefreshFightChapter refreshFightChapter = new RefreshFightChapter
             {
                 id = nowChapter
