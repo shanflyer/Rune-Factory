@@ -346,7 +346,7 @@ public class ExploreManager : Singleton<ExploreManager>
         var gameEventData = await GameDataManager.instance.GetAsyncData<GameEventData>(fightChapter.failureEventId);
         var FightResult = FightManager.instance.FightResult;
         FightResult.victory = false;
-       await UIManager.instance.ShowGamePanel<AdventureResultPanel, FightResult>(FightResult, layer: 2);
+        UIManager.instance.ShowGamePanelImmediately<AdventureResultPanel, FightResult>(FightResult, 2);
         Debug.Log("章节探索失败");
         if (gameEventData != null)
         {

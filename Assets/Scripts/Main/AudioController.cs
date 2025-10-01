@@ -183,9 +183,14 @@ public class AudioController : Singleton<AudioController>
         PlayME(audioClip, loop, audioClearType, weight, isLerp, Group);
     }
 
+    private float lastBgsPlayTime = -999f;
     public void PlayAudioBGS(AudioClip bgs, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear, float weight = 1,
         bool isLerp = false, string Group = "Default")
     {
+        if (Time.realtimeSinceStartup - lastBgsPlayTime < 0.5f)
+            return; // ✅ 节流，避免短时间内多次调用
+
+        lastBgsPlayTime = Time.realtimeSinceStartup;
         if (nowBGSs.TryGetValue(Group, out var nowBGS))
         {
             nowBGS = "NULL";
@@ -221,7 +226,7 @@ public class AudioController : Singleton<AudioController>
         {
             bgmWeight = weight;
             nowBGM = bgm != null ? bgm.name : "NULL";
-            PlayBGM(bgm, loop, audioClearType, weight, isLerp, Group);
+            PlayBGM(bgm, loop, audioClearType, weight, false, Group);
         }
         else if (bgmWeight != weight)
         {
@@ -428,9 +433,9 @@ public class AudioController : Singleton<AudioController>
             return;
         }
 
+        TryEndLerpAudioIEnumerator(playableGraph);
         if (!isLerp)
-        {
-            TryEndLerpAudioIEnumerator(playableGraph);
+        { 
             AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(playableGraph, audioClip, loop);
 
             if (count > 0)

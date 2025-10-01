@@ -241,6 +241,16 @@ public class UIManager : Singleton<UIManager>
         return  gamePanel as T;
     }
 
+    public T ShowGamePanelImmediately<T>(string dataKey = null, int layer = -1, Transform parent = null)
+        where T : BaseReference
+    {
+        var type = typeof(T);
+        var gamePanel = ShowGamePanelImmediately(type, dataKey, layer, parent);
+        if (GameDataManager.instance.GlobalData.debug)
+            Debug.Log($"ShowPanel:{type}");
+        return gamePanel as T;
+    }
+
     public async Task<T> ShowGamePanel<T, V>(V data, int layer = -1, Transform parent = null) where T : GamePanel<V> where V : IReferenceData
     {
         var type = typeof(T);
@@ -408,18 +418,7 @@ public class UIManager : Singleton<UIManager>
 
     HashSet<Type> openedPanels = new HashSet<Type>();
     private async Task<BaseReference> ShowGamePanel(Type type, string dataKey = null, int layer = -1, Transform parent = null)
-    {
-        /*if (!IsPluralUI(type))
-        {
-            if (openedPanels.Contains(type))
-            {
-                return null;
-            }
-            else
-            {
-                openedPanels.Add(type);
-            }
-        }*/
+    { 
         if (!gamePanels.TryGetValue(type, out BaseReference gamePanel) || gamePanel == null || IsPluralUI(type))
         {
             string path = $"{DataPath.UIPath}{type}";
@@ -469,6 +468,57 @@ public class UIManager : Singleton<UIManager>
         gamePanel.Show(layer);
         await gamePanel.InitData(dataKey);
       
+        return gamePanel;
+    }
+
+    private BaseReference ShowGamePanelImmediately(Type type, string dataKey = null, int layer = -1,
+        Transform parent = null)
+    {
+        if (!gamePanels.TryGetValue(type, out var gamePanel) || gamePanel == null || IsPluralUI(type))
+        {
+            var path = $"{DataPath.UIPath}{type}";
+            var gamePanelObj = GameSourceManager.instance.GetPrefabImmediately(path);
+            var _Panel = GameObject.Instantiate(gamePanelObj, parent == null ? canvasParent : parent);
+
+
+            if (!Application.isPlaying || SingletonType.Cleared)
+            {
+                GameObject.DestroyImmediate(gamePanelObj);
+                return null;
+            }
+
+            if (SingletonType.Cleared)
+            {
+                GameObject.Destroy(gamePanelObj);
+                return null;
+            }
+
+            _Panel.transform.localPosition = Vector3.zero;
+            var gamePanelComponent = _Panel.GetComponent(type);
+
+            if (gamePanelComponent == null)
+                gamePanel = (BaseReference)_Panel.AddComponent(type);
+            else
+                gamePanel = (BaseReference)gamePanelComponent;
+            if (!IsPluralUI(type))
+            {
+                if (gamePanels.TryGetValue(type, out var _panel))
+                    if (_panel != gamePanel)
+                        _panel.Close();
+
+                gamePanels[type] = gamePanel;
+            }
+        }
+
+        if (parent != null)
+        {
+            gamePanel.transform.SetParent(parent);
+            gamePanel.transform.localPosition = Vector3.zero;
+        }
+
+        gamePanel.Show(layer);
+        gamePanel.InitData(dataKey);
+
         return gamePanel;
     }
 
