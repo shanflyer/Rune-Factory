@@ -76,7 +76,7 @@ public class AdventureResultPanel: GamePanel<FightResult>
         base.InitReferenceData(fightResult);
         SuccessTitle.transform.localScale = fightResult.victory ? Vector3.one : Vector3.zero;
         FailureTitle.transform.localScale = fightResult.victory ? Vector3.zero : Vector3.one;
-        AudioController.instance.PlayBGM(null, Group: BGMGroup.Battle.ToString(), audioClearType: AudioClearType.All);
+        AudioController.instance.ClearBGM(Group: BGMGroup.Battle.ToString(), audioClearType: AudioClearType.All);
         AudioController.instance.PlayAudioME(fightResult.victory ? successAudioClip : failedAudioClip, Group: MEGroup.Battle.ToString());
         Debug.Log("fightResult.getItems");
         await itemList.InitListData(fightResult.getItems);

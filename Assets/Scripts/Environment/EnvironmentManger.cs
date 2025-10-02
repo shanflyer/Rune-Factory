@@ -150,10 +150,10 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             groundIndex = defaultGround;
         }
         FootstepSource footstepSource = GetMapFootStepSource(groundIndex);
-        if (footstepSource.clips != null)
+        if (footstepSource.Clips != null)
         {
-            AudioClip audioClip = footstepSource.clips[GameRandom.RandomInt(0, footstepSource.clips.Count)];
-            characterGetFootStep.SetFootStepAction(audioClip, footstepSource.footStepColor);
+            var se = footstepSource.Clips[GameRandom.RandomInt(0, footstepSource.Clips.Count)];
+            characterGetFootStep.SetFootStepAction(se, footstepSource.footStepColor);
         }
     }
 
@@ -170,10 +170,10 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
                         try
                         {
                             FootstepSource footstepSource = GetMapFootStepSource(index);
-                            if (footstepSource.clips != null)
+                            if (footstepSource.Clips != null)
                             {
-                                AudioClip audioClip = footstepSource.clips[GameRandom.RandomInt(0, footstepSource.clips.Count)];
-                                characterGetFootStep.SetFootStepAction(audioClip, footstepSource.footStepColor);
+                                var se = footstepSource.Clips[GameRandom.RandomInt(0, footstepSource.Clips.Count)];
+                                characterGetFootStep.SetFootStepAction(se, footstepSource.footStepColor);
                             }
                         }
                         catch { } 

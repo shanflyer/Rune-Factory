@@ -98,7 +98,7 @@ public class WorldMapController : MonoBehaviour
         yield return 0;
         var weatherManager = WeatherManager.instance;
         yield return 0;
-        AudioController.instance.PlayBGM(null, audioClearType: AudioClearType.All, isLerp: true, Group: BGMGroup.Theme.ToString());
+        AudioController.instance.ClearBGM(AudioClearType.All, BGMGroup.Theme.ToString());
        
          yield return 0;
         InputManager.instance.SwitchInputMap(false);

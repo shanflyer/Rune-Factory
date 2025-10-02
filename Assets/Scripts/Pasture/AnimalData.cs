@@ -1,12 +1,9 @@
-﻿using BehaviorDesigner.Runtime;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using BehaviorDesigner.Runtime;
 using Unity.Mathematics;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
-
 using UnityEngine;
+#if UNITY_EDITOR
+#endif
 
 public class AnimalData : ScriptableObject, IGameData
 { 
@@ -25,7 +22,10 @@ public class AnimalData : ScriptableObject, IGameData
     public int2 talkId;
     public List<int> dailyTasks = new List<int>();
     public string behavior;
-    public ExternalBehaviorTree externalBehavior;
+
+    public ExternalBehaviorTree externalBehavior => Resources.Load<ExternalBehaviorTree>(GameCommon.BlendString(
+        DataPath.npcBehaviorPath,
+        behavior));
 
 #if UNITY_EDITOR
     public string GrowthStageStr;
@@ -62,7 +62,6 @@ public class AnimalData : ScriptableObject, IGameData
             }
         }
 
-        externalBehavior= AssetDatabase.LoadAssetAtPath<ExternalBehaviorTree>($"{EditorDataPath.npcBehaviorPath}{behavior}.asset");
     }
 #endif
 }

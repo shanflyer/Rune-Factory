@@ -1148,7 +1148,7 @@ public partial class Character
     private void SetObjCoordinate(int3 coordinate, bool refreshPos = true)
     {
         MapCellController.instance.SetCharacterCoordinate(objCoordinate, coordinate, instanceId,this is TempCharacter);
-        var changeMap = refreshPos = mapInstance != coordinate.z;
+        var changeMap = mapInstance != coordinate.z;
         if (coordinate.z == 0)
         {
             //  Debug.Log("set coordinate.z == 0");
@@ -1178,7 +1178,7 @@ public partial class Character
             }
         }
         //Debug.Log($"{name}--SetObjCoordinate:{coordinate}");
-        if (mapInstance == WorldMapObjManager.instance.displayMap&& refreshPos)
+        if (mapInstance == WorldMapObjManager.instance.displayMap)
         {
             if(CharacterManager.instance.GetRuntimeCharacterObj(instanceId,out var characterRuntimeObj))
             {

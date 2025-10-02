@@ -67,7 +67,7 @@ public class CharacterSelectInformationPanel : GamePanel<SelectCharacterData>
         var teamManager = TeamManager.instance;
         NPCManager.instance.CreateZeroNPC();
         UIManager.instance.CloseGamePanel<SelectCharacterPanel>();
-        AudioController.instance.PlayBGM(null, audioClearType: AudioClearType.All, isLerp: true, Group: BGMGroup.Theme.ToString());
+        AudioController.instance.ClearBGM(AudioClearType.All, BGMGroup.Theme.ToString());
         GameActionManager.instance.QueueAction(new PlayFilm
         {
             filmName = "角色选择",

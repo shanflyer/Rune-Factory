@@ -16,20 +16,17 @@ MonoBehaviour:
   - mapName: "\u6D77\u6EE8"
     id: 4000
     fightMapObjName: 
-    exploreBGMName: 
-    fightBGMName: 
     info: 
     season: 2
     weatherDisplayType: 0
     cycleSize: -8.52
-    fightMapObj: {fileID: 0}
     items: 
     monsterDeploys: 66000000
     endMonsterEvents: 
-    exploreBGM: {fileID: 0}
-    fightBGM: {fileID: 8300000, guid: 93c427bae5e924348960bf998e9369e9, type: 3}
-    bossBGM: {fileID: 8300000, guid: 3f0cc4311253c794eb029d81647c93f4, type: 3}
-    footStepAudioClip: {fileID: 8300000, guid: 54e168f6e72b8fe4bad863f4175a9261, type: 3}
+    exploreBGM: "Battle_\u6218\u65974"
+    fightBGM: "Battle_\u6218\u65974"
+    bossBGM: "Battle_Boss\u6218"
+    footStep: "Footsteps_\u6C99\u57301"
     clearWeather: 0
     skyDisplay: 1
     displaySunlight: 0
@@ -49,21 +46,17 @@ MonoBehaviour:
   - mapName: "\u6625\u4E4B\u5C71\u8109"
     id: 4001
     fightMapObjName: "\u6625\u4E4B\u5C71\u8109"
-    exploreBGMName: 
-    fightBGMName: 
     info: "\u5206\u5E03\u6709\u98CE\u5C5E\u6027\u3001\u6C34\u5C5E\u6027\u602A\u7269,\u9002\u5408\u7A7F\u6234\u51B0\u5C5E\u6027\u3001\u571F\u5C5E\u6027\u88C5\u5907"
     season: 1
     weatherDisplayType: 0
     cycleSize: -8.52
-    fightMapObj: {fileID: 642984142648823538, guid: 085ed7886a0c3264aa0ce177a63e636d,
-      type: 3}
     items: c900000069000000f1000000ca00000028010000cb00000029010000cc000000680000001201000011010000cf00000018010000d0000000
     monsterDeploys: 6e0000006f000000700000007100000072000000
     endMonsterEvents: 
-    exploreBGM: {fileID: 8300000, guid: bacdaac6032b6784c9411d4d6338380e, type: 3}
-    fightBGM: {fileID: 8300000, guid: 05907e15edf853045ad2e0d415461560, type: 3}
-    bossBGM: {fileID: 8300000, guid: 3f0cc4311253c794eb029d81647c93f4, type: 3}
-    footStepAudioClip: {fileID: 8300000, guid: 42135a1be9f47c340bca0a6958c817d3, type: 3}
+    exploreBGM: "Explorer_\u6625\u4E4B\u5C71\u8109"
+    fightBGM: "Battle_\u6218\u65971"
+    bossBGM: "Battle_Boss\u6218"
+    footStep: "Footsteps_\u6D45\u83491"
     clearWeather: 0
     skyDisplay: 1
     displaySunlight: 0
@@ -83,21 +76,17 @@ MonoBehaviour:
   - mapName: "\u7011\u5E03\u6D1E\u7A74"
     id: 4002
     fightMapObjName: "\u7011\u5E03\u6D1E\u7A74"
-    exploreBGMName: 
-    fightBGMName: 
     info: "\u5206\u5E03\u6709\u51B0\u5C5E\u6027\u3001\u571F\u5C5E\u6027\u602A\u7269,\u9002\u5408\u7A7F\u6234\u706B\u5C5E\u6027\u3001\u98CE\u5C5E\u6027\u88C5\u5907"
     season: 1
     weatherDisplayType: 1
     cycleSize: -8.52
-    fightMapObj: {fileID: 1412776159340138775, guid: 8dcb132012c11734fb71ef4bf9f4ffae,
-      type: 3}
     items: 16010000d2000000c9000000d3000000d5000000d60000001e01000012010000d8000000cd000000ea00000028010000bb0b0000da000000
     monsterDeploys: 78000000790000007a0000007b0000007c000000
     endMonsterEvents: 
-    exploreBGM: {fileID: 8300000, guid: 093d90797172ec84ea9545941ef627e6, type: 3}
-    fightBGM: {fileID: 8300000, guid: 461cb1f0ef790a94796cb402883c1275, type: 3}
-    bossBGM: {fileID: 8300000, guid: 3f0cc4311253c794eb029d81647c93f4, type: 3}
-    footStepAudioClip: {fileID: 8300000, guid: 066a5ca13ebdd5a40b1942873cd9df23, type: 3}
+    exploreBGM: "Explorer_\u7011\u5E03\u6D1E\u7A74"
+    fightBGM: "Battle_\u6218\u65978"
+    bossBGM: "Battle_Boss\u6218"
+    footStep: "Footsteps_\u77F3\u8DEF1"
     clearWeather: 0
     skyDisplay: 1
     displaySunlight: 0
@@ -117,21 +106,17 @@ MonoBehaviour:
   - mapName: "\u590F\u4E4B\u4E1B\u6797"
     id: 4003
     fightMapObjName: "\u590F\u4E4B\u4E1B\u6797"
-    exploreBGMName: 
-    fightBGMName: 
     info: "\u5206\u5E03\u6709\u98CE\u5C5E\u6027\u3001\u6C34\u5C5E\u6027\u602A\u7269,\u9002\u5408\u7A7F\u6234\u51B0\u5C5E\u6027\u3001\u6C34\u5C5E\u6027\u88C5\u5907"
     season: 2
     weatherDisplayType: 2
     cycleSize: -8.52
-    fightMapObj: {fileID: 2999703704297244466, guid: adb994fb452ab9348b2bbb0abcac972e,
-      type: 3}
     items: 1f0100006600000023010000dc00000025010000e4000000dd00000069000000de000000cb000000bd0b0000ef000000df000000180100000e010000fb000000ee000000e000000028010000
     monsterDeploys: 8200000083000000840000008500000086000000
     endMonsterEvents: 
-    exploreBGM: {fileID: 8300000, guid: 71184d12957715f4eb32eb051bd6d6da, type: 3}
-    fightBGM: {fileID: 8300000, guid: 463bcfd72f579754e9f13cd191e2fe05, type: 3}
-    bossBGM: {fileID: 8300000, guid: 3f0cc4311253c794eb029d81647c93f4, type: 3}
-    footStepAudioClip: {fileID: 8300000, guid: 42135a1be9f47c340bca0a6958c817d3, type: 3}
+    exploreBGM: "Explorer_\u590F\u4E4B\u4E1B\u6797"
+    fightBGM: "Battle_\u6218\u65973"
+    bossBGM: "Battle_Boss\u6218"
+    footStep: "Footsteps_\u6D45\u83491"
     clearWeather: 0
     skyDisplay: 1
     displaySunlight: 0
@@ -151,21 +136,17 @@ MonoBehaviour:
   - mapName: "\u548C\u98CE\u6D77\u5CB8"
     id: 4004
     fightMapObjName: "\u548C\u98CE\u6D77\u5CB8"
-    exploreBGMName: 
-    fightBGMName: 
     info: "\u5206\u5E03\u6709\u571F\u5C5E\u6027\u3001\u6C34\u5C5E\u6027\u602A\u7269,\u9002\u5408\u7A7F\u6234\u98CE\u5C5E\u6027\u3001\u571F\u5C5E\u6027\u88C5\u5907"
     season: 2
     weatherDisplayType: 0
     cycleSize: -8.52
-    fightMapObj: {fileID: 1676019569791133225, guid: 0d5daeb2000506a4a87699a271a7aad1,
-      type: 3}
     items: e1000000c8000000d500000016010000e300000010010000e4000000d6000000e500000029010000e6000000cd0000001a01000028010000e800000022010000ff000000ea00000009010000
     monsterDeploys: 8c0000008d0000008e0000008f00000090000000
     endMonsterEvents: 
-    exploreBGM: {fileID: 8300000, guid: 3dc3fe35fe4865246b680d22cfa1119a, type: 3}
-    fightBGM: {fileID: 8300000, guid: 93c427bae5e924348960bf998e9369e9, type: 3}
-    bossBGM: {fileID: 8300000, guid: 3f0cc4311253c794eb029d81647c93f4, type: 3}
-    footStepAudioClip: {fileID: 8300000, guid: 54e168f6e72b8fe4bad863f4175a9261, type: 3}
+    exploreBGM: "Explorer_\u548C\u98CE\u6D77\u5CB8"
+    fightBGM: "Battle_\u6218\u65974"
+    bossBGM: "Battle_Boss\u6218"
+    footStep: "Footsteps_\u6C99\u57301"
     clearWeather: 0
     skyDisplay: 1
     displaySunlight: 0
@@ -185,21 +166,17 @@ MonoBehaviour:
   - mapName: "\u79CB\u98CE\u4E4B\u8C37"
     id: 4005
     fightMapObjName: "\u79CB\u98CE\u4E4B\u8C37"
-    exploreBGMName: 
-    fightBGMName: 
     info: "\u5206\u5E03\u6709\u706B\u5C5E\u6027\u602A\u7269,\u9002\u5408\u7A7F\u6234\u6C34\u5C5E\u6027\u88C5\u5907"
     season: 3
     weatherDisplayType: 2
     cycleSize: -8.52
-    fightMapObj: {fileID: 2005043979413813926, guid: be7f5a666f046264cb2b196ceb00411d,
-      type: 3}
     items: 29010000df000000ec000000d4000000ed00000068000000da00000028010000cb000000ee000000fe000000ef000000d600000021010000bd0b0000f000000020010000f1000000260100001201000018010000030100001d010000
     monsterDeploys: 960000009700000098000000990000009a000000
     endMonsterEvents: 
-    exploreBGM: {fileID: 8300000, guid: 3e9a99e9db360d542a495ae5ad1abc26, type: 3}
-    fightBGM: {fileID: 8300000, guid: 05907e15edf853045ad2e0d415461560, type: 3}
-    bossBGM: {fileID: 8300000, guid: 3f0cc4311253c794eb029d81647c93f4, type: 3}
-    footStepAudioClip: {fileID: 8300000, guid: 42135a1be9f47c340bca0a6958c817d3, type: 3}
+    exploreBGM: "Explorer_\u79CB\u98CE\u4E4B\u8C37"
+    fightBGM: "Battle_\u6218\u65971"
+    bossBGM: "Battle_Boss\u6218"
+    footStep: "Footsteps_\u6D45\u83491"
     clearWeather: 0
     skyDisplay: 1
     displaySunlight: 0
@@ -219,21 +196,17 @@ MonoBehaviour:
   - mapName: "\u6C99\u6F20\u5E9F\u589F"
     id: 4006
     fightMapObjName: "\u6C99\u6F20\u5E9F\u589F"
-    exploreBGMName: 
-    fightBGMName: 
     info: "\u5206\u5E03\u6709\u706B\u5C5E\u6027\u3001\u571F\u5C5E\u6027\u602A\u7269,\u9002\u5408\u7A7F\u6234\u6C34\u5C5E\u6027\u3001\u98CE\u5C5E\u6027\u88C5\u5907"
     season: 3
     weatherDisplayType: 0
     cycleSize: -8.52
-    fightMapObj: {fileID: 680016123527123269, guid: e7e53762ac488e74597d1e64f0ab67ca,
-      type: 3}
     items: 1c01000028010000f4000000c800000016010000f5000000d6000000ff000000f600000024010000f7000000bd0b000019010000cc00000000010000e0000000f80000000801000013010000fa000000e500000012010000
     monsterDeploys: a0000000a1000000a2000000a3000000a4000000
     endMonsterEvents: 
-    exploreBGM: {fileID: 8300000, guid: b24b65141e0beef449b3a18b4403779d, type: 3}
-    fightBGM: {fileID: 8300000, guid: f850c8d57f7e2964a9c30d18fc23cc3b, type: 3}
-    bossBGM: {fileID: 8300000, guid: 3f0cc4311253c794eb029d81647c93f4, type: 3}
-    footStepAudioClip: {fileID: 8300000, guid: 54e168f6e72b8fe4bad863f4175a9261, type: 3}
+    exploreBGM: "Explorer_\u6C99\u6F20\u5E9F\u589F"
+    fightBGM: "Battle_\u6218\u65976"
+    bossBGM: "Battle_Boss\u6218"
+    footStep: "Footsteps_\u6C99\u57301"
     clearWeather: 0
     skyDisplay: 1
     displaySunlight: 0
@@ -253,21 +226,17 @@ MonoBehaviour:
   - mapName: "\u51AC\u4E4B\u96EA\u539F"
     id: 4007
     fightMapObjName: "\u51AC\u4E4B\u96EA\u539F"
-    exploreBGMName: 
-    fightBGMName: 
     info: "\u5206\u5E03\u6709\u51B0\u5C5E\u6027\u3001\u6C34\u5C5E\u6027\u602A\u7269,\u9002\u5408\u7A7F\u6234\u706B\u5C5E\u6027\u3001\u571F\u5C5E\u6027\u88C5\u5907"
     season: 4
     weatherDisplayType: 0
     cycleSize: -8.52
-    fightMapObj: {fileID: 1400414780534030205, guid: f73273466de0c2546b81d25e455ea6ef,
-      type: 3}
     items: fb000000df0000000d010000d000000022010000d3000000fd000000c800000005010000fe00000020010000ff000000ec00000000010000f6000000010100000e010000020100001d0100000301000017010000f5000000
     monsterDeploys: aa000000ab000000ac000000ad000000ae000000
     endMonsterEvents: 
-    exploreBGM: {fileID: 8300000, guid: e162f9d9b141300448aef6e7b24b0d1f, type: 3}
-    fightBGM: {fileID: 8300000, guid: edcb64fd1f48d344f9aa05c277a10f3f, type: 3}
-    bossBGM: {fileID: 8300000, guid: 3f0cc4311253c794eb029d81647c93f4, type: 3}
-    footStepAudioClip: {fileID: 8300000, guid: fc7066ebd1dbb524c94b6ad7e9bbd7f5, type: 3}
+    exploreBGM: "Explorer_\u51AC\u4E4B\u96EA\u539F"
+    fightBGM: "Battle_\u6218\u65977"
+    bossBGM: "Battle_Boss\u6218"
+    footStep: "Footsteps_\u571F\u8DEF\u96EA2"
     clearWeather: 0
     skyDisplay: 1
     displaySunlight: 0
@@ -287,21 +256,17 @@ MonoBehaviour:
   - mapName: "\u6781\u5BD2\u51B0\u9699"
     id: 4008
     fightMapObjName: "\u6781\u5BD2\u51B0\u9699"
-    exploreBGMName: 
-    fightBGMName: 
     info: "\u5206\u5E03\u6709\u98CE\u5C5E\u6027\u3001\u51B0\u5C5E\u6027\u602A\u7269,\u9002\u5408\u7A7F\u6234\u51B0\u5C5E\u6027\u3001\u706B\u5C5E\u6027\u88C5\u5907"
     season: 4
     weatherDisplayType: 1
     cycleSize: -8.52
-    fightMapObj: {fileID: 5931606654353822122, guid: be30b7788af7f2045a2768d238ffd5a4,
-      type: 3}
     items: 0401000005010000e80000002401000010010000280100001d01000007010000fd000000080100002501000009010000f1000000ed0000000b010000010100000c010000f6000000
     monsterDeploys: b4000000b5000000b6000000b7000000b8000000
     endMonsterEvents: 
-    exploreBGM: {fileID: 8300000, guid: c9a7a025d01690849b90f2ee745da125, type: 3}
-    fightBGM: {fileID: 8300000, guid: 461cb1f0ef790a94796cb402883c1275, type: 3}
-    bossBGM: {fileID: 8300000, guid: 3f0cc4311253c794eb029d81647c93f4, type: 3}
-    footStepAudioClip: {fileID: 8300000, guid: c84868f0ebcbc5645b3527ee1bf1c86a, type: 3}
+    exploreBGM: "Explorer_\u6781\u5BD2\u51B0\u9699"
+    fightBGM: "Battle_\u6218\u65978"
+    bossBGM: "Battle_Boss\u6218"
+    footStep: "Footsteps_\u51B0\u9762"
     clearWeather: 0
     skyDisplay: 1
     displaySunlight: 0

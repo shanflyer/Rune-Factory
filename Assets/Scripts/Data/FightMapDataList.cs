@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -31,25 +31,21 @@ public class FightMapDataList : ScriptableObject, IGameData,IDataArray<FightMapD
     }
 }
 
-[System.Serializable]
+[Serializable]
 public struct FightMapData : IGameData
 { 
     public string mapName;
     public int id;
 
-    public string fightMapObjName;
-    public string exploreBGMName, fightBGMName;
+    public string fightMapObjName; 
     public string info;
     public Season season;
     public WeatherDisplayType weatherDisplayType;
-    public float cycleSize;   
-    public GameObject fightMapObj;
+    public float cycleSize;    
     public List<int> items;
     public List<int> monsterDeploys;
     public List<int> endMonsterEvents;
-    private string exploreBGMStr, fightBGMStr,bossBGMStr,footStepStr;
-    public AudioClip exploreBGM,fightBGM,bossBGM;
-    public AudioClip footStepAudioClip;
+    public string exploreBGM, fightBGM, bossBGM, footStep; 
     public bool clearWeather;
     public bool skyDisplay;
     public bool displaySunlight;
@@ -65,11 +61,7 @@ public struct FightMapData : IGameData
 #if UNITY_EDITOR
     public void SetReferenceData()
     {
-        fightMapObj = Resources.Load<GameObject>($"Prefabs/FightMap/{fightMapObjName}");
-        exploreBGM = Resources.Load<AudioClip>($"Audio/BGM/{exploreBGMStr}");
-        fightBGM = Resources.Load<AudioClip>($"Audio/BGM/Battle/{fightBGMStr}");
-        bossBGM = Resources.Load<AudioClip>($"Audio/BGM/Battle/{bossBGMStr}");
-        footStepAudioClip= Resources.Load<AudioClip>($"Audio/SE/Footsteps/{footStepStr}");
+        
     }
 #endif
     public string GetKey()

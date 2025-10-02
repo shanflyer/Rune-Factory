@@ -162,8 +162,7 @@ public class ExploreManager : Singleton<ExploreManager>
             GameActionManager.instance.QueueAction(SetCameraConfiner2D); 
 
             FightController.instance.CreateFightMap(nowFightMapData);
-            AudioController.instance.PlayBGM(null, audioClearType: AudioClearType.All, isLerp: false,
-                Group: BGMGroup.Theme.ToString());
+            AudioController.instance.ClearBGM(AudioClearType.All, BGMGroup.Theme.ToString());
             AudioController.instance.PlayBGM(nowFightMapData.exploreBGM, Group: BGMGroup.Battle.ToString(), audioClearType: AudioClearType.All,isLerp:true);
              
             AudioController.instance.SetBGMGroupValue(BGMGroup.Map.ToString(), 0);

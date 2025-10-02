@@ -569,7 +569,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         tempRuntimeMapItemObjs.Clear();
         MyAnimationController.instance.ClearAnimation();
 
-        Resources.UnloadUnusedAssets();
+        GameTimerController.instance.DelayAction(1000, () => { Resources.UnloadUnusedAssets(); }); 
     }
    
     private void TryDeleteRoomObj(TryDeleteRoom deleteRoom)

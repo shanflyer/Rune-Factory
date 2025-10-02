@@ -220,6 +220,31 @@ public class AudioController : Singleton<AudioController>
         }
     }
 
+    public void ClearBGM(AudioClearType audioClearType = AudioClearType.NoClear, string Group = "Default")
+    {
+        PlayAudioBGM(null, false, audioClearType, 1, false, Group);
+    }
+
+    public async void PlayBGM(string clipName, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear,
+        float weight = 1, bool isLerp = false, string Group = "Default")
+    {
+        var audioClip = await GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.BGMPath, clipName));
+        PlayAudioBGM(audioClip, loop, audioClearType, weight, isLerp, Group);
+    }
+
+    public async void PlayBGM(BGM bgm, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear,
+        float weight = 1, bool isLerp = false, string Group = "Default")
+    {
+        var audioClip =
+            await GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.BGMPath, bgm.ToString()));
+        PlayAudioBGM(audioClip, loop, audioClearType, weight, isLerp, Group);
+    }
+
+    public async void PlaySE(string clipName, bool loop = false, string Group = "Default")
+    {
+        var audioClip = await GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.SEPath, clipName));
+        PlaySE(audioClip, loop, Group);
+    }
     public void PlayAudioBGM(AudioClip bgm, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear, float weight = 1, bool isLerp = false, string Group = "Default")
     {
         if ((bgm == null && nowBGM != "NULL") || (bgm != null && nowBGM != bgm.name))
@@ -407,6 +432,7 @@ public class AudioController : Singleton<AudioController>
 
     Dictionary<PlayableGraph, IEnumerator> lerpIEnumeratorDic = new Dictionary<PlayableGraph, IEnumerator>();
 
+    private readonly HashSet<AudioClip> playAudioClips = new();
     private void PlayAudio(PlayableGraph playableGraph, AudioMixerPlayable audioMixer, Dictionary<string, AudioMixerPlayable> childMixers, AudioClip audioClip, bool loop = false,
         AudioClearType audioClearType = AudioClearType.NoClear, float weight = 1, bool isLerp = false, string Group = "Default")
     {
@@ -435,8 +461,7 @@ public class AudioController : Singleton<AudioController>
 
         TryEndLerpAudioIEnumerator(playableGraph);
         if (!isLerp)
-        { 
-            AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(playableGraph, audioClip, loop);
+        {  
 
             if (count > 0)
             {
@@ -456,6 +481,7 @@ public class AudioController : Singleton<AudioController>
 
                     if (audioClip != null)
                     {
+                        if (loop) playAudioClips.Add(audioClip);
                         var newPlayable = AudioClipPlayable.Create(playableGraph, audioClip, loop);
                         ReplaceInput(childMixer, 0, playableGraph, newPlayable, weight); // ✅ 用安全方法
                     }
@@ -467,13 +493,13 @@ public class AudioController : Singleton<AudioController>
                 else
                 {
                     if (audioClip != null)
-                        childMixer.AddInput(audioClipPlayable, 0, weight);
+                        childMixer.AddInput(AudioClipPlayable.Create(playableGraph, audioClip, loop), 0, weight);
                 }
             }
             else
             {
                 if (audioClip != null)
-                    childMixer.AddInput(audioClipPlayable, 0, weight);
+                    childMixer.AddInput(AudioClipPlayable.Create(playableGraph, audioClip, loop), 0, weight);
             }
         }
         else
@@ -615,6 +641,8 @@ public class AudioController : Singleton<AudioController>
             var acp = (AudioClipPlayable)playable;
             var oldAudioClip = acp.GetClip();
             if (oldAudioClip != null)
+            {
+                playAudioClips.Remove(oldAudioClip);
                 try
                 {
                     Resources.UnloadAsset(oldAudioClip);
@@ -623,6 +651,8 @@ public class AudioController : Singleton<AudioController>
                 {
                     Debug.LogWarning($"UnloadAsset failed: {oldAudioClip.name} - {e.Message}");
                 }
+            }
+                
         }
 
         playable.Destroy();

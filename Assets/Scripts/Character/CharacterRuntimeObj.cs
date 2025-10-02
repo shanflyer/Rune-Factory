@@ -7,7 +7,7 @@ using UnityEngine.Playables;
 #if UNITY_EDITOR
 #endif
 
-public delegate void SetFootStepAction(AudioClip audioClip, Color color);
+public delegate void SetFootStepAction(SE se, Color color);
 
 public class CharacterRuntimeObj : MonoBehaviour, IGameData
 {
@@ -249,37 +249,39 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
 
     private CharacterGetFootStep characterGetFootStep;
 
-    private AudioClip stepAudioClip;
+    private SE se;
     private Color footStepColor;
-    private Dictionary<AudioClip, int> audioClipIndex = new Dictionary<AudioClip, int>();
+    private readonly Dictionary<SE, int> audioClipIndex = new();
 
-    private void SetFootStepAction(AudioClip audioClip, Color color)
+    private async void SetFootStepAction(SE se, Color color)
     {
         footStepColor = color;
-        if (stepAudioClip != audioClip)
+        if (this.se != se)
         {
-            stepAudioClip = audioClip;
-            if (!audioClipIndex.ContainsKey(audioClip))
+            this.se = se;
+            if (!audioClipIndex.ContainsKey(se))
             {
+                var audioClip =
+                    await GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.SEPath, se.ToString()));
                 int inputCount = leftMixerPlayable.GetInputCount();
-                var leftAudioClipPlayable = AudioClipPlayable.Create(singlePlayableGraph, stepAudioClip, false);
+                var leftAudioClipPlayable = AudioClipPlayable.Create(singlePlayableGraph, audioClip, false);
                 leftMixerPlayable.AddInput(leftAudioClipPlayable, 0, 0);
 
-                var rightAudioClipPlayable = AudioClipPlayable.Create(singlePlayableGraph, stepAudioClip, false);
+                var rightAudioClipPlayable = AudioClipPlayable.Create(singlePlayableGraph, audioClip, false);
                 rightMixerPlayable.AddInput(rightAudioClipPlayable, 0, 0);
-                audioClipIndex[audioClip] = inputCount;
+                audioClipIndex[se] = inputCount;
             }
         }
     }
      
     private void PlayFootStep(bool isLeft)
     {
-        if (stepAudioClip == null)
+        if (se == SE.NULL)
         {
             return;
         }
         //Debug.Log($"播放:{stepAudioClip.name}");
-        if (audioClipIndex.TryGetValue(stepAudioClip, out var index))
+        if (audioClipIndex.TryGetValue(se, out var index))
         {
             if (isLeft)
             {

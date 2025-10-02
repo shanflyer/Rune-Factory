@@ -66,14 +66,15 @@ public struct MapBGSData
 public struct MapBGMData
 {
     public string name;
-    public List<AudioClip> bgms;
+    public List<BGM> BGMs; 
     public AnimationCurve timeCurve;
     public AnimationCurve seasonCurve;
     public AnimationCurve weatherCurve;
-    public AudioClip GetBGMValue(float seasonValue, float timeValue, float weatherValue,out float value)
+
+    public BGM GetBGMValue(float seasonValue, float timeValue, float weatherValue, out float value)
     {
         value= seasonCurve.Evaluate(seasonValue) * timeCurve.Evaluate(timeValue) * weatherCurve.Evaluate(weatherValue);
-        return bgms[GameRandom.RandomInt(0, bgms.Count)];
+        return BGMs[GameRandom.RandomInt(0, BGMs.Count)];
     }
 }
 
@@ -88,7 +89,7 @@ public class MapRoomData : ScriptableObject, IGameData
 
     public List<MapItem> mapItems = new List<MapItem>();
     public int2 startCoordinate, endCoordinate;
-    public GameObject mapObj;
+    public GameObject mapObj => Resources.Load<GameObject>($"Prefabs/Ground/{roomName}");
     public string dayEnvironmentDataName, duskEnvironmentDataName, dawnEnvironmentDataName, nightEnvironmentDataName;
     public bool displaySky = true;
     public bool displaySunlight = false;
@@ -111,18 +112,19 @@ public class MapRoomData : ScriptableObject, IGameData
     public List<SpecialNpcBehaviorArea> specialNpcBehaviorAreas = new List<SpecialNpcBehaviorArea>();
     public void SetBGM(float seasonValue, float timeValue, float weatherValue)
     {
-        AudioClip bgm=null;
+        var bgm = BGM.NULL;
         float nowValue = 0;
         for(int i=0;i<mapBGMDatas.Count;i++)
         {
-            AudioClip _bgm = mapBGMDatas[i].GetBGMValue(seasonValue, timeValue, weatherValue, out var value);
+            var _bgm = mapBGMDatas[i].GetBGMValue(seasonValue, timeValue, weatherValue, out var value);
             if (value > nowValue)
             {
                 bgm = _bgm;
                 nowValue = value;
             }
         }
-        AudioController.instance.PlayAudioBGM(bgm, true, AudioClearType.All, nowValue, true, "Map");
+
+        AudioController.instance.PlayBGM(bgm, true, AudioClearType.All, nowValue, true, "Map");
     }
     public void SetBGS(float seasonValue,float timeValue,float waterFallValue)
     {
@@ -150,7 +152,7 @@ public class MapRoomData : ScriptableObject, IGameData
 
     public void SetReferenceData()
     {
-        
+       
     }
 
 #endif
