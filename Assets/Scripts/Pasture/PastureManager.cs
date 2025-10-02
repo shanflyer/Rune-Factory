@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -487,7 +487,35 @@ public class PastureManager : Singleton<PastureManager>
             }
             void SetValue(int instanceId)
             {
-                CreatPackage creatFoodPackage = new CreatPackage
+                if (!pastureLinkItems.TryGetValue(instanceId, out var pastureInstance))
+                {
+                    if (pastures.TryGetValue(pastureInstance, out var pasture))
+                    {
+                        var TryDeleteRoom = new TryDeleteRoom
+                        {
+                            roomId = tryCreatPasture.roomId
+                        };
+                        GameActionManager.instance.QueueAction(TryDeleteRoom);
+
+                        pasture.linkItem = instanceId;
+                        pasture.level++;
+                        pasture.animalCase = pastureLevelData.animalCase;
+
+
+                        foreach (var animal in animals)
+                        {
+                            var character =
+                                CharacterManager.instance.GetCharacter(animal.Value.instanceId);
+                            if (character != null && character.mapInstance == pasture.linkRoom)
+                                character.SetCoordinate(new int3(character.coordinate, tryCreatPasture.roomId));
+                        }
+
+                        pasture.linkRoom = tryCreatPasture.roomId;
+                    }
+                }
+                else
+                {
+                    CreatPackage creatFoodPackage = new CreatPackage
                 {
                     level = 0,
                     packageDataId = pastureData.foodPackage,
@@ -509,10 +537,12 @@ public class PastureManager : Singleton<PastureManager>
 
                                 void SetPackageInstanceId(int packageInstanceId)
                                 {
-                                    Pasture pasture = new Pasture
+                                    var pasture = new Pasture
                                     {
                                         instanceId = MyInstance.instance.Uid,
-                                        name = string.IsNullOrEmpty(tryCreatPasture.pastureName) ? pastureData.pastureName : tryCreatPasture.pastureName,
+                                        name = string.IsNullOrEmpty(tryCreatPasture.pastureName)
+                                            ? pastureData.pastureName
+                                            : tryCreatPasture.pastureName,
                                         pastureState = PastureState.平常,
                                         linkItem = instanceId,
                                         foodPackage = foodPackageId,
@@ -525,28 +555,23 @@ public class PastureManager : Singleton<PastureManager>
                                         linkRoom = tryCreatPasture.roomId
                                     };
                                     pastureLinkItems.Add(instanceId, pasture.instanceId);
-                                    RefreshPasture refreshPasture = new RefreshPasture
+
+                                    var refreshPasture = new RefreshPasture
                                     {
                                         instanceId = pasture.instanceId
                                     };
                                     GameActionManager.instance.QueueAction(refreshPasture);
 
-                                    SimpleTalk simpleTalk = new SimpleTalk
+                                    var simpleTalk = new SimpleTalk
                                     {
                                         characterId = CharacterManager.instance.controllerCharacter.instanceId,
-                                        talkId = pastureLevelData.successTalk,
+                                        talkId = pastureLevelData.successTalk
                                     };
                                     GameActionManager.instance.QueueAction(simpleTalk);
 
-                                    if (tryCreatPasture.setValue != null)
-                                    {
-                                        tryCreatPasture.setValue(pasture.instanceId);
-                                    }
+                                    if (tryCreatPasture.setValue != null) tryCreatPasture.setValue(pasture.instanceId);
 
-                                    if (tryCreatPasture.setResult != null)
-                                    {
-                                        tryCreatPasture.setResult(true);
-                                    }
+                                    if (tryCreatPasture.setResult != null) tryCreatPasture.setResult(true);
 
                                     pastures.Add(pasture.instanceId, pasture);
                                     GameDataSaveManager.instance.UserGameSaveData.SetPastureData(pasture);
@@ -557,6 +582,7 @@ public class PastureManager : Singleton<PastureManager>
                     }
                 };
                 GameActionManager.instance.QueueAction(creatFoodPackage, true);
+                } 
             }
         }
         else
@@ -775,7 +801,7 @@ public class PastureManager : Singleton<PastureManager>
     }
 }
 
-[System.Serializable]
+[Serializable]
 public enum AnimalState
 {
     正常 = 0,
@@ -786,7 +812,7 @@ public enum AnimalState
     衰老=5
 }
 
-[System.Serializable]
+[Serializable]
 public enum AgeStatus
 {
     幼年 = 0,

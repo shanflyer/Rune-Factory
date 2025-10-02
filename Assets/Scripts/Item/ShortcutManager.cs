@@ -68,6 +68,7 @@ public class ShortcutManager : Singleton<ShortcutManager>
                     PackageManager.instance.GetPackageItemCount(CharacterManager.instance.controllerCharacter.characterPackage, item.dataId);
                     if (itemCount <= 0)
                     {
+                        shortcutPackage.haveItems.Remove(shortcutPackage.items[i].dataId);
                         shortcutPackage.haveItems.Remove(shortcutPackage.items[i].instanceId);
                         shortcutPackage.items[i] = default(Item);
                     }

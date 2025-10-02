@@ -310,10 +310,10 @@ public static class GameCommon
     }
     public static Dictionary<Direction, Vector2> fishToolOffsets = new Dictionary<Direction, Vector2>
     {
-        {Direction.LEFT,new Vector2(-0.556f,0.034f)},
-        {Direction.RIGHT,new Vector2(0.556f,0.034f)},
-        {Direction.UP,new Vector2(0,0.6531f)},
-        {Direction.DOWN,new Vector2(0,-0.39f)},
+        { Direction.LEFT, new Vector2(-0.658f, 0.076f) },
+        { Direction.RIGHT, new Vector2(0.658f, 0.076f) },
+        { Direction.UP, new Vector2(0, 0.742f) },
+        { Direction.DOWN, new Vector2(0f, -0.42f) }
     };
   
     public const int AddATBuff = 11;

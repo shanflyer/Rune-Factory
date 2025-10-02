@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomName: "\u68DA\u5B50"
   barrierGrids: f0fffffff8ffffff0f000000f9fffffff0fffffffafffffffcfffffffbfffffff0fffffffcfffffffafffffffcfffffff0fffffffdfffffff0ffffff0b000000f1ffffff0b0000000f0000000b000000feffffff020000000100000002000000ffffffff01000000000000000100000003000000faffffff0f000000fbffffff05000000fcffffff0f000000fcffffff0f000000fdffffff0f0000000a000000
-  groundIndexes: 0400000004000000040000000400000004000000040000000400000004000000
-  groundGrids: f1ffffff050000000a0000000a0000000b000000070000000e0000000a000000f1ffffff050000000a0000000a0000000b000000070000000e0000000a000000f1ffffff050000000a0000000a0000000b000000070000000e0000000a000000f1ffffff050000000a0000000a0000000b000000070000000e0000000a000000
+  groundIndexes: 04000000040000000400000004000000040000000400000004000000040000000400000004000000
+  groundGrids: f1ffffff050000000a0000000a0000000b000000070000000e0000000a000000f1ffffff050000000a0000000a0000000b000000070000000e0000000a000000f1ffffff050000000a0000000a0000000b000000070000000e0000000a000000f1ffffff050000000a0000000a0000000b000000070000000e0000000a000000f1ffffff050000000a0000000a0000000b000000070000000e0000000a000000
   defaultGround: 2
   mapItems:
   - id: 1096
@@ -25,10 +25,8 @@ MonoBehaviour:
       y: -3
     animationKey: 0
     blindHomeEquipment: 0
-    funcItem: 1
-    eventReferenceDatas:
-    - name: PackageId
-      value: 12
+    funcItem: 0
+    eventReferenceDatas: []
   - id: 1094
     instanceId: 1094123
     coordinate:
@@ -36,17 +34,14 @@ MonoBehaviour:
       y: -3
     animationKey: 0
     blindHomeEquipment: 0
-    funcItem: 1
-    eventReferenceDatas:
-    - name: PackageId
-      value: 10
+    funcItem: 0
+    eventReferenceDatas: []
   startCoordinate:
     x: -16
     y: -8
   endCoordinate:
     x: 15
     y: 11
-  mapObj: {fileID: 3463793771520103631, guid: 98318f2f4debccd49a69102573cc2bfa, type: 3}
   dayEnvironmentDataName: "\u5BA4\u5185\u767D\u5929"
   duskEnvironmentDataName: "\u5BA4\u5185\u9EC4\u660F"
   dawnEnvironmentDataName: "\u5BA4\u5185\u9ECE\u660E"
@@ -483,8 +478,6 @@ MonoBehaviour:
   mapBGMDatas:
   - name: "\u767D\u5929"
     BGMs: 15000000
-    bgms:
-    - {fileID: 8300000, guid: 07798b98c6b0d3047ac8d76a7bd59a18, type: 3}
     timeCurve:
       serializedVersion: 2
       m_Curve:
@@ -577,8 +570,6 @@ MonoBehaviour:
       m_RotationOrder: 4
   - name: "\u665A\u4E0A"
     BGMs: 0d000000
-    bgms:
-    - {fileID: 8300000, guid: f8c177f1903336649a111cc7ad395837, type: 3}
     timeCurve:
       serializedVersion: 2
       m_Curve:

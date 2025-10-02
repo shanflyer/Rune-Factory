@@ -469,7 +469,11 @@ public partial class MapCellController : Singleton<MapCellController>
             for (int i = 0; i < cells.Length; i++)
             {
                 var cell = cells[i] + itemPos;
-                AddBarrier((uint)room, cell.x, cell.y, runtimeMapRoom.startCoordinate, runtimeMapRoom.endCoordinate); 
+                if (cell.x >= runtimeMapRoom.startCoordinate.x && cell.y >= runtimeMapRoom.startCoordinate.y &&
+                    cell.x <= runtimeMapRoom.endCoordinate.x && cell.y <= runtimeMapRoom.endCoordinate.y)
+                    AddBarrier((uint)room, cell.x, cell.y, runtimeMapRoom.startCoordinate,
+                        runtimeMapRoom.endCoordinate);
+
 
                 /*
                 int index = roomCellDatas[runtimeMapRoom.roomCellDataIndex].GetCoordinateIndex(cells[i] + itemPos);
@@ -494,7 +498,9 @@ public partial class MapCellController : Singleton<MapCellController>
             for (int i = 0; i < cells.Length; i++)
             {
                 var cell = cells[i] + itemPos;
-                RemoveBarrier((uint)room, cell, runtimeMapRoom.startCoordinate, runtimeMapRoom.endCoordinate);  
+                if (cell.x >= runtimeMapRoom.startCoordinate.x && cell.y >= runtimeMapRoom.startCoordinate.y &&
+                    cell.x <= runtimeMapRoom.endCoordinate.x && cell.y <= runtimeMapRoom.endCoordinate.y)
+                    RemoveBarrier((uint)room, cell, runtimeMapRoom.startCoordinate, runtimeMapRoom.endCoordinate);
             }
         }
     }
@@ -526,7 +532,9 @@ public partial class MapCellController : Singleton<MapCellController>
             for (int i = 0; i < cells.Length; i++)
             {
                 var cell = cells[i] + offset;
-                runtimeMapRoom.commonTriggerCells.Add(linkId, cell);
+                if (cell.x >= runtimeMapRoom.startCoordinate.x && cell.y >= runtimeMapRoom.startCoordinate.y &&
+                    cell.x <= runtimeMapRoom.endCoordinate.x && cell.y <= runtimeMapRoom.endCoordinate.y)
+                    runtimeMapRoom.commonTriggerCells.Add(linkId, cell);
             }
             runtimeMapRoom.commonTriggerDatas.Add(triggerAreaData);
             runtimeMapRoom.commonTriggerCellIndexes.Add(linkId, runtimeMapRoom.commonTriggerDatas.Length - 1);
@@ -577,7 +585,9 @@ public partial class MapCellController : Singleton<MapCellController>
                 for (int i = 0; i < cells.Length; i++)
                 {
                     var cell = cells[i] + offset;
-                    runtimeMapRoom.playerForwardTriggerCells.Add(linkId, cell);
+                    if (cell.x >= runtimeMapRoom.startCoordinate.x && cell.y >= runtimeMapRoom.startCoordinate.y &&
+                        cell.x <= runtimeMapRoom.endCoordinate.x && cell.y <= runtimeMapRoom.endCoordinate.y)
+                        runtimeMapRoom.playerForwardTriggerCells.Add(linkId, cell);
                 }
                 runtimeMapRoom.playerForwardTriggerAreaDatas.Add(triggerArea);
                 runtimeMapRoom.playerForwardTriggerIndexes.Add(linkId, runtimeMapRoom.playerTriggerAreaDatas.Length - 1);
@@ -587,7 +597,9 @@ public partial class MapCellController : Singleton<MapCellController>
                 for (int i = 0; i < cells.Length; i++)
                 {
                     var cell = cells[i] + offset;
-                    runtimeMapRoom.playerTriggerCells.Add(linkId, cell);
+                    if (cell.x >= runtimeMapRoom.startCoordinate.x && cell.y >= runtimeMapRoom.startCoordinate.y &&
+                        cell.x <= runtimeMapRoom.endCoordinate.x && cell.y <= runtimeMapRoom.endCoordinate.y)
+                        runtimeMapRoom.playerTriggerCells.Add(linkId, cell);
                 }
                 runtimeMapRoom.playerTriggerAreaDatas.Add(triggerArea);
                 runtimeMapRoom.playerTriggerCellIndexes.Add(linkId, runtimeMapRoom.playerTriggerAreaDatas.Length - 1);
@@ -1354,9 +1366,15 @@ public partial class MapCellController : Singleton<MapCellController>
         if (tempMaps.TryGetValue(coordinate.z, out var _trueMap)) coordinate.z = _trueMap;
         if (runtimeMapRooms.TryGetValue(coordinate.z, out RuntimeMapRoom runtimeMapRoom))
         {
-            uint index = GetCoordinateIndex(coordinate.x, coordinate.y, runtimeMapRoom.startCoordinate, runtimeMapRoom.endCoordinate);
-            index = index + (uint)coordinate.z * 1000_000;
-            return !mapObjBarriers.ContainsKey(index); 
+            if (runtimeMapRoom.startCoordinate.x <= coordinate.x && runtimeMapRoom.startCoordinate.y <= coordinate.y &&
+                runtimeMapRoom.endCoordinate.x >= coordinate.x && runtimeMapRoom.endCoordinate.y >= coordinate.y)
+            {
+                var index = GetCoordinateIndex(coordinate.x, coordinate.y, runtimeMapRoom.startCoordinate,
+                    runtimeMapRoom.endCoordinate);
+                index = index + (uint)coordinate.z * 1000_000;
+                return !mapObjBarriers.ContainsKey(index);
+            }
+          
         }
         return false;
     }
@@ -1366,9 +1384,15 @@ public partial class MapCellController : Singleton<MapCellController>
         if (tempMaps.TryGetValue(mapId, out var _trueMap)) mapId = _trueMap;
         if (runtimeMapRooms.TryGetValue(mapId, out RuntimeMapRoom runtimeMapRoom))
         {
-            uint index = GetCoordinateIndex(coordinate.x, coordinate.y, runtimeMapRoom.startCoordinate, runtimeMapRoom.endCoordinate);
-            index = index + (uint)mapId * 1000_000;
-            return !mapObjBarriers.ContainsKey(index);
+            if (runtimeMapRoom.startCoordinate.x <= coordinate.x && runtimeMapRoom.startCoordinate.y <= coordinate.y &&
+                runtimeMapRoom.endCoordinate.x >= coordinate.x && runtimeMapRoom.endCoordinate.y >= coordinate.y)
+            {
+                var index = GetCoordinateIndex(coordinate.x, coordinate.y, runtimeMapRoom.startCoordinate,
+                    runtimeMapRoom.endCoordinate);
+                index = index + (uint)mapId * 1000_000;
+                return !mapObjBarriers.ContainsKey(index);
+            }
+           
         }
         return false;
     }
@@ -1377,9 +1401,14 @@ public partial class MapCellController : Singleton<MapCellController>
         if (tempMaps.TryGetValue(mapId, out var _trueMap)) mapId = _trueMap;
         if (runtimeMapRooms.TryGetValue(mapId, out RuntimeMapRoom runtimeMapRoom))
         {
-            uint index = GetCoordinateIndex(x, y, runtimeMapRoom.startCoordinate, runtimeMapRoom.endCoordinate);
-            index = index + (uint)mapId * 1000_000;
-            return !mapObjBarriers.ContainsKey(index);
+            if (runtimeMapRoom.startCoordinate.x <= x && runtimeMapRoom.startCoordinate.y <= y &&
+                runtimeMapRoom.endCoordinate.x >= x && runtimeMapRoom.endCoordinate.y >= y)
+            {
+                var index = GetCoordinateIndex(x, y, runtimeMapRoom.startCoordinate, runtimeMapRoom.endCoordinate);
+                index = index + (uint)mapId * 1000_000;
+                return !mapObjBarriers.ContainsKey(index);
+            }
+           
         }
         return false;
     }
