@@ -1,4 +1,6 @@
+using System;
 using UnityEngine.Scripting.APIUpdating;
+using UnityEngine.U2D;
 
 namespace UnityEngine.Rendering.Universal
 {
@@ -119,7 +121,7 @@ namespace UnityEngine.Rendering.Universal
         /// Set to true to have the Scene rendered to a temporary texture set as close as possible to the Reference Resolution,
         /// while maintaining the full screen aspect ratio. This temporary texture is then upscaled to fit the full screen.
         /// </summary>
-        [System.Obsolete("Use gridSnapping instead", false)]
+        [Obsolete("Use gridSnapping instead", false)]
         public bool upscaleRT
         {
             get
@@ -136,7 +138,7 @@ namespace UnityEngine.Rendering.Universal
         /// Set to true to prevent subpixel movement and make Sprites appear to move in pixel-by-pixel increments.
         /// Only applicable when upscaleRT is false.
         /// </summary>
-        [System.Obsolete("Use gridSnapping instead", false)]
+        [Obsolete("Use gridSnapping instead", false)]
         public bool pixelSnapping
         {
             get
@@ -152,7 +154,7 @@ namespace UnityEngine.Rendering.Universal
         /// <summary>
         /// Set to true to crop the viewport with black bars to match refResolutionX in the horizontal direction.
         /// </summary>
-        [System.Obsolete("Use cropFrame instead", false)]
+        [Obsolete("Use cropFrame instead", false)]
         public bool cropFrameX
         {
             get
@@ -181,7 +183,7 @@ namespace UnityEngine.Rendering.Universal
         /// <summary>
         /// Set to true to crop the viewport with black bars to match refResolutionY in the vertical direction.
         /// </summary>
-        [System.Obsolete("Use cropFrame instead", false)]
+        [Obsolete("Use cropFrame instead", false)]
         public bool cropFrameY
         {
             get
@@ -211,7 +213,7 @@ namespace UnityEngine.Rendering.Universal
         /// Set to true to expand the viewport to fit the screen resolution while maintaining the viewport's aspect ratio.
         /// Only applicable when both cropFrameX and cropFrameY are true.
         /// </summary>
-        [System.Obsolete("Use cropFrame instead", false)]
+        [Obsolete("Use cropFrame instead", false)]
         public bool stretchFill
         {
             get
@@ -392,14 +394,14 @@ namespace UnityEngine.Rendering.Universal
                     m_Camera.orthographicSize = m_Internal.orthoSize;
                 }
 
-                UnityEngine.U2D.PixelPerfectRendering.pixelSnapSpacing = m_Internal.unitsPerPixel;
+                PixelPerfectRendering.pixelSnapSpacing = m_Internal.unitsPerPixel;
             }
         }
 
         void OnEndCameraRendering(ScriptableRenderContext context, Camera camera)
         {
             if (camera == m_Camera)
-                UnityEngine.U2D.PixelPerfectRendering.pixelSnapSpacing = 0.0f;
+                PixelPerfectRendering.pixelSnapSpacing = 0.0f;
         }
 
         void OnEnable()
@@ -433,7 +435,7 @@ namespace UnityEngine.Rendering.Universal
             if (renderResolution.x % 2 != 0 || renderResolution.y % 2 != 0)
             {
                 string warning = string.Format("Rendering at an odd-numbered resolution ({0} * {1}). Pixel Perfect Camera may not work properly in this situation.", renderResolution.x, renderResolution.y);
-                GUILayout.Box(warning);
+                //  GUILayout.Box(warning);
             }
 
             var targetTexture = m_Camera.targetTexture;
@@ -441,7 +443,7 @@ namespace UnityEngine.Rendering.Universal
 
             if (rtSize.x < refResolutionX || rtSize.y < refResolutionY)
             {
-                GUILayout.Box("Target resolution is smaller than the reference resolution. Image may appear stretched or cropped.");
+                //  GUILayout.Box("Target resolution is smaller than the reference resolution. Image may appear stretched or cropped.");
             }
 
             GUI.color = oldColor;
