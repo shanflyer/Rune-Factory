@@ -10,6 +10,7 @@ using Object = UnityEngine.Object;
 
 public enum MyLanguage
 {
+    NULL = -1,
     英语 = 0,
     简体中文 = 1,
     繁体中文 = 2,
@@ -135,9 +136,10 @@ public class LanguageManage : Singleton<LanguageManage>
     }
 
     static float nowLineSpacing = 0,nowCharacterSpacing;
-    void GetLocalLanguage(MyLanguage overrideLanguage = 0)
+
+    private void GetLocalLanguage(MyLanguage overrideLanguage = MyLanguage.NULL)
     {
-        if (overrideLanguage == 0)
+        if (overrideLanguage == MyLanguage.NULL)
         {
             int value = PlayerPrefs.GetInt("MyLanguage");
             if (value > 0)
@@ -171,7 +173,7 @@ public class LanguageManage : Singleton<LanguageManage>
         languageFields.TryGetValue("en", out nowFieldInfo);
     }
 
-    public void SystemLanguageMatch(MyLanguage SetSystemLanguage=0)
+    public void SystemLanguageMatch(MyLanguage SetSystemLanguage = MyLanguage.NULL)
     {
         GetLocalLanguage(SetSystemLanguage); 
     }

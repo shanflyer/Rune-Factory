@@ -346,7 +346,7 @@ if (result.Success)
         var audio = transform.Find("Audio");
         AudioController.instance.SetAudioSource(audio.gameObject);
         GameRuntimeObjManager.instance.CreatParent<RuntimeObjType>(transform);
-        LanguageManage.instance.SystemLanguageMatch(SetLanguage?SetSystemLanguage:0);
+        LanguageManage.instance.SystemLanguageMatch(SetLanguage ? SetSystemLanguage : MyLanguage.NULL);
         UIManager.instance.ShowGamePanel<ZeroPanel>();
          
         SwitchInputMap switchInputMap = new SwitchInputMap

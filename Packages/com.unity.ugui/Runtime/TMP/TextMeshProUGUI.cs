@@ -1,12 +1,13 @@
 using System;
 using System.Collections;
-using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.UI;
 using System.Collections.Generic;
 using Unity.Profiling;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.TextCore;
 using UnityEngine.TextCore.LowLevel;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 
@@ -842,6 +843,7 @@ namespace TMPro
 
         protected override void OnEnable()
         {
+            base.OnEnable();
             //Debug.Log("***** OnEnable() called on object ID " + GetInstanceID() + ". *****");
 
             // Return if Awake() has not been called on the text object.
@@ -862,7 +864,7 @@ namespace TMPro
                 TMPro_EventManager.COLOR_GRADIENT_PROPERTY_EVENT.Add(ON_COLOR_GRADIENT_CHANGED);
                 TMPro_EventManager.TMP_SETTINGS_PROPERTY_EVENT.Add(ON_TMP_SETTINGS_CHANGED);
 
-                UnityEditor.PrefabUtility.prefabInstanceUpdated += OnPrefabInstanceUpdate;
+                PrefabUtility.prefabInstanceUpdated += OnPrefabInstanceUpdate;
                 #endif
                 m_isRegisteredForEvents = true;
             }
@@ -950,7 +952,7 @@ namespace TMPro
             TMPro_EventManager.TMP_SETTINGS_PROPERTY_EVENT.Remove(ON_TMP_SETTINGS_CHANGED);
             TMPro_EventManager.RESOURCE_LOAD_EVENT.Remove(ON_RESOURCES_LOADED);
 
-            UnityEditor.PrefabUtility.prefabInstanceUpdated -= OnPrefabInstanceUpdate;
+            PrefabUtility.prefabInstanceUpdated -= OnPrefabInstanceUpdate;
             #endif
             m_isRegisteredForEvents = false;
         }
@@ -1013,7 +1015,7 @@ namespace TMPro
             // Remove Callback if this prefab has been deleted.
             if (this == null)
             {
-                UnityEditor.PrefabUtility.prefabInstanceUpdated -= OnPrefabInstanceUpdate;
+                PrefabUtility.prefabInstanceUpdated -= OnPrefabInstanceUpdate;
                 return;
             }
 
@@ -1079,8 +1081,8 @@ namespace TMPro
             // Make sure material properties are synchronized between the assigned material and masking material.
             if (m_MaskMaterial != null)
             {
-                UnityEditor.Undo.RecordObject(m_MaskMaterial, "Material Property Changes");
-                UnityEditor.Undo.RecordObject(m_sharedMaterial, "Material Property Changes");
+                Undo.RecordObject(m_MaskMaterial, "Material Property Changes");
+                Undo.RecordObject(m_sharedMaterial, "Material Property Changes");
 
                 if (materialID == sharedMaterialID)
                 {
@@ -1162,10 +1164,10 @@ namespace TMPro
             //Debug.Log("Drag-n-Drop Event - Receiving Object ID " + GetInstanceID() + ". Sender ID " + obj.GetInstanceID()); // +  ". Prefab Parent is " + UnityEditor.PrefabUtility.GetPrefabParent(gameObject).GetInstanceID()); // + ". New Material is " + newMaterial.name + " with ID " + newMaterial.GetInstanceID() + ". Base Material is " + m_baseMaterial.name + " with ID " + m_baseMaterial.GetInstanceID());
 
             // Check if event applies to this current object
-            if (obj == gameObject || UnityEditor.PrefabUtility.GetCorrespondingObjectFromSource(gameObject) == obj)
+            if (obj == gameObject || PrefabUtility.GetCorrespondingObjectFromSource(gameObject) == obj)
             {
-                UnityEditor.Undo.RecordObject(this, "Material Assignment");
-                UnityEditor.Undo.RecordObject(m_canvasRenderer, "Material Assignment");
+                Undo.RecordObject(this, "Material Assignment");
+                Undo.RecordObject(m_canvasRenderer, "Material Assignment");
 
                 m_sharedMaterial = newMaterial;
 

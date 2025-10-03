@@ -1,13 +1,14 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
+using UnityEngine.Pool;
+using UnityEngine.Serialization;
+using UnityEngine.UI.CoroutineTween;
 #if UNITY_EDITOR
 using System.Reflection;
 #endif
-using System.Collections.Generic;
-using UnityEngine.Events;
-using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
-using UnityEngine.UI.CoroutineTween;
-using UnityEngine.Pool;
 
 namespace UnityEngine.UI
 {
@@ -758,9 +759,12 @@ namespace UnityEngine.UI
                 return s_Mesh;
             }
         }
-        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("Use OnPopulateMesh instead.", true)]
-        protected virtual void OnFillVBO(System.Collections.Generic.List<UIVertex> vbo) {}
+        protected virtual void OnFillVBO(List<UIVertex> vbo)
+        {
+        }
 
         [Obsolete("Use OnPopulateMesh(VertexHelper vh) instead.", false)]
         /// <summary>
@@ -822,21 +826,32 @@ namespace UnityEngine.UI
         /// </summary>
         public virtual void OnRebuildRequested()
         {
-            // when rebuild is requested we need to rebuild all the graphics /
-            // and associated components... The correct way to do this is by
-            // calling OnValidate... Because MB's don't have a common base class
-            // we do this via reflection. It's nasty and ugly... Editor only.
-            m_SkipLayoutUpdate = true;
-            var mbs = gameObject.GetComponents<MonoBehaviour>();
-            foreach (var mb in mbs)
+            try
             {
-                if (mb == null)
-                    continue;
-                var methodInfo = mb.GetType().GetMethod("OnValidate", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                if (methodInfo != null)
-                    methodInfo.Invoke(mb, null);
+                // when rebuild is requested we need to rebuild all the graphics /
+                // and associated components... The correct way to do this is by
+                // calling OnValidate... Because MB's don't have a common base class
+                // we do this via reflection. It's nasty and ugly... Editor only.
+                m_SkipLayoutUpdate = true;
+                var mbs = gameObject.GetComponents<MonoBehaviour>();
+                foreach (var mb in mbs)
+                {
+                    if (mb == null)
+                        continue;
+                    var methodInfo = mb.GetType().GetMethod("OnValidate",
+                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                    if (methodInfo != null)
+                        methodInfo.Invoke(mb, null);
+                }
+
+                m_SkipLayoutUpdate = false;
             }
-            m_SkipLayoutUpdate = false;
+            catch (Exception e)
+            {
+                // Console.WriteLine(e);
+                //  throw;
+            }
+           
         }
 
         protected override void Reset()
