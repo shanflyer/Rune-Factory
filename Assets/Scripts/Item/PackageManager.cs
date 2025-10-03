@@ -1598,7 +1598,16 @@ public class PackageManager : Singleton<PackageManager>
                     count = itemCount;
                 }
 
-                packageItemCounts[itemDataId] = itemCount - count;
+                int _count=itemCount - count;
+                if (_count > 0)
+                {
+                    packageItemCounts[itemDataId] = _count;
+                }
+                else
+                {
+                    packageItemCounts.Remove(itemDataId);
+                }
+               
                 List<int> indexDatas = packageItemIndexDatas[itemDataId];
                 int index = indexDatas.Count - 1;
 

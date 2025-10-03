@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Purchasing;
 
 public class PastureDataList : ScriptableObject, IGameData,IDataArray<PastureData>
 {
@@ -72,7 +71,10 @@ public struct PastureLevelData
     public int foodPackage;
     [HideInInspector]
     public int waterPackage;
-#endif 
+#endif
+    public int linkProductItem;
+    public int linkFoodItem;
+    public int linkWaterItem;
     public int level;
     public int2 animationKey;
     public int creatMoney;
