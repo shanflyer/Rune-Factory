@@ -193,8 +193,8 @@ public class GameController : MonoBehaviour
         if (GameDataSaveManager.instance.LoadDataSuccess)
         {
             hideSave = true;
-          //  GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr($"ÔÆ´æµµÊı¾İ·¢Éú±ä»¯£¡--ChangeReason:{arg.ChangeReason}"), Application.Quit, Application.Quit);
-         //   Debug.Log($"ÔÆ´æµµÊı¾İ·¢Éú±ä»¯£¡--ChangeReason:{arg.ChangeReason}");
+          //  GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr($"äº‘å­˜æ¡£æ•°æ®å‘ç”Ÿå˜åŒ–ï¼--ChangeReason:{arg.ChangeReason}"), Application.Quit, Application.Quit);
+         //   Debug.Log($"äº‘å­˜æ¡£æ•°æ®å‘ç”Ÿå˜åŒ–ï¼--ChangeReason:{arg.ChangeReason}");
         }
        
     }
@@ -203,7 +203,7 @@ public class GameController : MonoBehaviour
     public bool hideSave { get; private set; }
     private void OnUserChange(CloudServicesUserChangeResult result, Error error)
     {
-       // Debug.Log($"ÔÆ´æµµOnUserChange£¡--result.User.UserId:{result.User.UserId}");
+       // Debug.Log($"äº‘å­˜æ¡£OnUserChangeï¼--result.User.UserId:{result.User.UserId}");
         if (string.IsNullOrEmpty(nowUserId))
         {
             nowUserId = result.User.UserId;
@@ -213,7 +213,7 @@ public class GameController : MonoBehaviour
             if (result.User.UserId != nowUserId)
             {
                 hideSave = true;
-                GameManager.instance.ShowTwoSelectAction("ÓÃ»§¸Ä±ä", LanguageManage.SwitchStr("ÔÆ´æµµÓÃ»§·¢Éú±ä»¯£¬ÇëÍË³öÓÎÏ·ÖØĞÂ½øÈë"), Application.Quit, Application.Quit);
+                GameManager.instance.ShowTwoSelectAction("ç”¨æˆ·æ”¹å˜", LanguageManage.SwitchStr("äº‘å­˜æ¡£ç”¨æˆ·å‘ç”Ÿå˜åŒ–ï¼Œè¯·é€€å‡ºæ¸¸æˆé‡æ–°è¿›å…¥"), Application.Quit, Application.Quit);
             } 
         }
        
@@ -222,7 +222,7 @@ public class GameController : MonoBehaviour
     private void OnSynchronizeComplete(CloudServicesSynchronizeResult result)
     {
        // if (GameDataManager.instance.GlobalData.debug)
-            Debug.Log($"ÔÆ´æµµOnSynchronizeComplete:{result.Success}");
+            Debug.Log($"äº‘å­˜æ¡£OnSynchronizeComplete:{result.Success}");
         // var gameDataSaveManager= GameDataSaveManager.instance;
 
         if (result.Success)
@@ -238,12 +238,12 @@ public class GameController : MonoBehaviour
         else if (Application.internetReachability == NetworkReachability.NotReachable)
         {
             hideSave = true;
-            GameManager.instance.ShowTwoSelectAction("NetError", LanguageManage.SwitchStr("Ã»ÓĞÍøÂçÁ¬½ÓÎŞ·¨Í¬²½´æµµ£¬ÇëÍË³öÖØÊÔ"), Application.Quit, Application.Quit);
+            GameManager.instance.ShowTwoSelectAction("NetError", LanguageManage.SwitchStr("æ²¡æœ‰ç½‘ç»œè¿æ¥æ— æ³•åŒæ­¥å­˜æ¡£ï¼Œè¯·é€€å‡ºé‡è¯•"), Application.Quit, Application.Quit);
         }
         else
         {
             hideSave = true;
-            GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr("ÔÆ´æµµ¼ÓÔØ´íÎó"), Application.Quit, Application.Quit);
+            GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr("äº‘å­˜æ¡£åŠ è½½é”™è¯¯"), Application.Quit, Application.Quit);
         }
         /*
 #if UNITY_EDITOR
@@ -258,12 +258,12 @@ if (result.Success)
         else if (Application.internetReachability == NetworkReachability.NotReachable)
         {
             hideSave = true;
-            GameManager.instance.ShowTwoSelectAction("NetError", LanguageManage.SwitchStr("Ã»ÓĞÍøÂçÁ¬½ÓÎŞ·¨Í¬²½´æµµ£¬ÇëÍË³öÖØÊÔ"), Application.Quit, Application.Quit);
+            GameManager.instance.ShowTwoSelectAction("NetError", LanguageManage.SwitchStr("æ²¡æœ‰ç½‘ç»œè¿æ¥æ— æ³•åŒæ­¥å­˜æ¡£ï¼Œè¯·é€€å‡ºé‡è¯•"), Application.Quit, Application.Quit);
         }
         else
         {
             hideSave = true;
-            GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr("ÔÆ´æµµ¼ÓÔØ´íÎó"), Application.Quit, Application.Quit);
+            GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr("äº‘å­˜æ¡£åŠ è½½é”™è¯¯"), Application.Quit, Application.Quit);
         }
 #endif
         */
@@ -312,7 +312,7 @@ if (result.Success)
         GameDataSaveManager.instance.InitUserSaveData("Test");
         StartGame();
 #else
- Debug.Log($"ÔÆ´æµµ³õÊ¼»¯11");
+ Debug.Log($"äº‘å­˜æ¡£åˆå§‹åŒ–11");
             CloudServices.Synchronize();
             BillingServices.InitializeStore();
 #endif*/

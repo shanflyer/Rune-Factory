@@ -27,6 +27,11 @@ public class CameraManager : Singleton<CameraManager>
     public override bool NeedUpdate => true;
     public override bool NeedLateUpdate => true;
     public bool fixedView { get; private set; }
+
+    public void SetVolumeLevel(int level)
+    {
+        DepthOfField.active = level != 0;
+    }
     
     public void RefreshDepthOfField()
     {
@@ -70,13 +75,8 @@ public class CameraManager : Singleton<CameraManager>
             mixingCamera.ChildCameras[1].GetComponent<CinemachineCameraOffset>(),
             mixingCamera.ChildCameras[2].GetComponent<CinemachineCameraOffset>()
         };
-
-        /* cinemachineFramingTransposers = new CinemachinePositionComposer[3]
-         {
-              //followCameras[0].GetCinemachineComponent(CinemachineCore.Stage.),
-             //followCameras[1].GetCinemachineComponent<CinemachinePositionComposer>(),
-            //  followCameras[2].GetCinemachineComponent<CinemachinePositionComposer>()
-         };*/
+ 
+       
         GameActionManager.instance.AddListener<SetFixedPlayerShaderPos>(SetFixedPlayerShaderPos);
         GameActionManager.instance.AddListener<SetFixedCamera>(SetFixedCamera);
         GameActionManager.instance.AddListener<SetCameraPixelValue>(SetCameraPixelValue);

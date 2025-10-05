@@ -62,6 +62,7 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
                     ScalableBufferManager.ResizeBuffers(1f, 1f);
                     break;
             }
+            CameraManager.instance.SetVolumeLevel(value);
         }
         get
         {

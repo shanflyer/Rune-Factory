@@ -8,6 +8,10 @@ public class MainPanel : GamePanel<IReferenceData>
 {
     public override bool changeInputModel => false;
     [SerializeField]
+    private Toggle Toggle;
+    [SerializeField]
+    private Transform List;
+    [SerializeField]
     Button InfoButton;
     [SerializeField]
     Button TeamButton, HomeEquipmentButton,MyTalk;
@@ -65,6 +69,10 @@ public class MainPanel : GamePanel<IReferenceData>
         MyTalk.onClick.AddListener(() =>
         {
             UIManager.instance.ShowGamePanel<MyTalkPanel>();
+        });
+        Toggle.onValueChanged.AddListener((value)=>
+        {
+            List.gameObject.SetActive(value);
         });
     }
     public override Task InitData(string dataKey)
