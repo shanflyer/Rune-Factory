@@ -29,4 +29,5 @@ public partial struct CharacterEquipSystem:ISystem
             setCharacterEquipmentDic.Dispose();
         }
     }
+    
 }

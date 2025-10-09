@@ -73,8 +73,8 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
                     instanceId = equipment.characterId,
                     dataId = equipment.dataId, 
                 },
-                
-                ActionName = isController ? "–∂œ¬" : null,
+
+                ActionName = isController ? "Âç∏‰∏ã" : null,
                 action = SelectAction,
                 OffsetPos=infoOffsetY
             };
@@ -100,7 +100,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             OpenPackage openPackage = new OpenPackage
             {
                 packageId = -1,
-                selectActionName = "◊∞±∏",
+                selectActionName = "Ë£ÖÂ§á",
                 targetObj = equipment.characterId,
                 itemMatchData=new ItemMatchData(),
                 selectAction = ChangeEquip,
@@ -246,7 +246,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
 
     private int characterId;
 
-    private void DisplayProperty(CharacterProperty characterProperty)
+    private void DisplayProperty(GameProperty characterProperty)
     {
         int maxHP = characterProperty.MaxHP;
         int maxRP = characterProperty.MaxPower;
@@ -370,7 +370,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             characterId = characterId,
             dataId = v.equip.weapon.x,
             itemValue = v.equip.weapon.y / 100.0f,
-            ItemType = ItemType.Œ‰∆˜,
+            ItemType = ItemType.Ê≠¶Âô®,
             hide= v.isAnimal
       }, SelectEquipReference); ;
       await  ClothesBox.InitData(new Equipment
@@ -378,7 +378,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             characterId = characterId,
             dataId = v.equip.clothes.x,
             itemValue = v.equip.clothes.y / 100.0f,
-            ItemType = ItemType.∑¿æﬂ,
+            ItemType = ItemType.Èò≤ÂÖ∑,
              hide = v.isAnimal
       }, SelectEquipReference);
 
@@ -387,7 +387,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             characterId = characterId,
             dataId = v.equip.headgear.x,
             itemValue = v.equip.headgear.y / 100.0f,
-            ItemType = ItemType.√±◊”,
+            ItemType = ItemType.Â∏ΩÂ≠ê,
           hide = v.isAnimal
       }, SelectEquipReference); ;
 
@@ -396,7 +396,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             characterId = characterId,
             dataId = v.equip.shoes.x,
             itemValue = v.equip.shoes.y / 100.0f,
-            ItemType = ItemType.–¨◊”,
+            ItemType = ItemType.ÈûãÂ≠ê,
           hide = v.isAnimal
       }, SelectEquipReference);
 
