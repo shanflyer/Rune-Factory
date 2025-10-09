@@ -1,9 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using System;
 
 public class AdventureResultPanel: GamePanel<FightResult>
 {
@@ -32,42 +29,16 @@ public class AdventureResultPanel: GamePanel<FightResult>
         teamerList=new DisplayList<AdventureTeamerRenference, FighterResult>(teamerRenference,Team);
         base.Awake();
     }
-    async void OKAction()
-    {
-        /*WaitAction waitAction = new WaitAction();
-        Parameter parameter = new Parameter
-        {
-            value = "2",
-            parameters = new List<Parameter>()
-        };
-        parameter.parameters.Add(new Parameter
-        {
-            value= "ExploreEnd"
-        });
-        waitAction.Init(new List<Parameter> {parameter});*/
-        //GameActionManager.instance.QueueAction(new ExploreEnd());
+
+    private void OKAction()
+    { 
         Close();
-
-        /*
-        DisplayMap displayMap = new DisplayMap
-        {
-            displayMap = CharacterManager.instance.controllerCharacter.mapInstance
-        };
-        GameActionManager.instance.QueueAction(displayMap,true);*/
-
-
+   
         GameRuntimeObjManager.instance.ClearRuntime<FightRuntimeObjType>();
 
         ExploreEnd exploreEnd = new ExploreEnd();
         GameActionManager.instance.QueueAction(exploreEnd, true);
-
-        await  UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
-        await UIManager.instance.ShowGamePanel<PlayerTopPanel>();
-        await UIManager.instance.ShowGamePanel<MainPanel>();
-        await UIManager.instance.ShowGamePanel<ShortcutPanel>();
-        await UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
-
-
+  
         if (!data.victory)
         {
            var teamers=  TeamManager.instance.playerTeam.Teamers;
@@ -97,9 +68,7 @@ public class AdventureResultPanel: GamePanel<FightResult>
 
 
             }
-        }
-       // SceneManager.instance.UnloadNowScene();
-        // UIManager.instance.
+        } 
     }
     List<int> characters = new List<int>();
     public override async void InitReferenceData(FightResult fightResult)
@@ -107,7 +76,7 @@ public class AdventureResultPanel: GamePanel<FightResult>
         base.InitReferenceData(fightResult);
         SuccessTitle.transform.localScale = fightResult.victory ? Vector3.one : Vector3.zero;
         FailureTitle.transform.localScale = fightResult.victory ? Vector3.zero : Vector3.one;
-        AudioController.instance.PlayBGM(null, Group: BGMGroup.Battle.ToString(), audioClearType: AudioClearType.All);
+        AudioController.instance.ClearBGM(Group: BGMGroup.Battle.ToString(), audioClearType: AudioClearType.All);
         AudioController.instance.PlayAudioME(fightResult.victory ? successAudioClip : failedAudioClip, Group: MEGroup.Battle.ToString());
         Debug.Log("fightResult.getItems");
         await itemList.InitListData(fightResult.getItems);

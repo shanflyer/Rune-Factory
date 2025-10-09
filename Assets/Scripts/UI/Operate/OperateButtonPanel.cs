@@ -59,19 +59,24 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
             }
             List<OperateDataReferenceData> operateDatas = new List<OperateDataReferenceData>();
 
+            var debugLog = "";
             for (int i = 3; i < operateDataList.OperateDatas.Count; i++)
             {
                 var operateData = operateDataList.OperateDatas[i];
                 if (operateData.operateData != null)
                 {
+                    if (GameDataManager.instance.GlobalData.debug)
+                        debugLog = $"{debugLog};{operateData.operateData.name}:{operateData.operateData.id}";
                     operateDatas.Add(operateDataList.OperateDatas[i]);
                 }
-               
-            } 
+            }
+
+            if (GameDataManager.instance.GlobalData.debug)
+                Debug.Log(debugLog);
             OperateList1.InitListData(operateDatas, SelectAction);
         }
     }
-    void SelectAction(OperateDataReferenceData operateData,bool select)
+    void SelectAction(OperateDataReferenceData operateData,int index,bool select)
     {
         PlayerOperateManager.instance.OperateAction(operateData, operateDataList.eventReferenceDatas);
     }
@@ -87,10 +92,22 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
         }
 
         operateDataList = v;
+      
+        
         OperateList1.ClearAll();
         otherListShow = false;
         if (v.OperateDatas.Count <= 4)
         {
+            var debugLog = "";
+            for (var i = 0; i < v.OperateDatas.Count; i++)
+                if (GameDataManager.instance.GlobalData.debug)
+                {
+                    var operateData = v.OperateDatas[i];
+                    debugLog = $"{debugLog};{operateData.operateData.name}:{operateData.operateData.id}";
+                }
+
+            if (GameDataManager.instance.GlobalData.debug)
+                Debug.Log(debugLog);
             OperateList0.InitListData(v.OperateDatas, SelectAction);
         }
         else

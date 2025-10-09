@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -28,7 +29,7 @@ public class WorldMapController : MonoBehaviour
     {
         instance = this;
         worldMapManager = WorldMapManager.instance;
-        if (eventSystemObj&&UnityEngine.SceneManagement.SceneManager.sceneCount > 1)
+        if (eventSystemObj && SceneManager.sceneCount > 1)
         {
             eventSystemObj.SetActive(false);
         }
@@ -97,7 +98,7 @@ public class WorldMapController : MonoBehaviour
         yield return 0;
         var weatherManager = WeatherManager.instance;
         yield return 0;
-        AudioController.instance.PlayBGM(null, audioClearType: AudioClearType.All, isLerp: true, Group: BGMGroup.Theme.ToString());
+        AudioController.instance.ClearBGM(AudioClearType.All, BGMGroup.Theme.ToString());
        
          yield return 0;
         InputManager.instance.SwitchInputMap(false);
@@ -109,9 +110,9 @@ public class WorldMapController : MonoBehaviour
 
         
         yield return 0;
-       
 
-        if(GameGuideManager.instance.endGuideFilmIndex < 0)
+
+        if (GameGuideManager.instance.endGuideFilmIndex < 0 && !GameController.instance.noGuide)
         {
             GameActionManager.instance.QueueAction(new ChangeWorld
             {
@@ -123,13 +124,15 @@ public class WorldMapController : MonoBehaviour
                 SetCharacterCoordinate setCharacterCoordinate = new SetCharacterCoordinate
                 {
                     characterId = characterId,
+                    fiexedDisplay = true,
                     coordinate = new int3(GameController.instance.ZeroCoordinate.xy, GameController.instance.ZeroMapInstance),
                 };
                 GameActionManager.instance.QueueAction(setCharacterCoordinate);
             }
            
         }
-        else if (GameGuideManager.instance.endGuideFilmIndex >= GameDataManager.instance.GlobalData.endGuideIndex)
+        else if (GameController.instance.noGuide || GameGuideManager.instance.endGuideFilmIndex >=
+                 GameDataManager.instance.GlobalData.endGuideIndex)
         {
             GameActionManager.instance.QueueAction(new ChangeWorld
             {
@@ -140,6 +143,7 @@ public class WorldMapController : MonoBehaviour
             {
                 characterId = characterId,
                 coordinate = new int3(GameController.instance.Coordinate.xy, GameController.instance.MapInstance),
+                fiexedDisplay = true
             };
             GameActionManager.instance.QueueAction(setCharacterCoordinate);
         }

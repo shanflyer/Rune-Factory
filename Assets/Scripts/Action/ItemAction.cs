@@ -1,8 +1,36 @@
 ﻿using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
+public struct ShowItemAction : GameAction
+{
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Clear()
+    {
+        this = default;
+    }
+
+    public int itemId;
+    public int mapInstanceId;
+    public Vector3 position;
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        if (parameters.Count > 2)
+        {
+            itemId = int.Parse(parameters[0].value);
+            mapInstanceId = int.Parse(parameters[1].value);
+            position = GameCommon.StringToVector3(parameters[2].value);
+        }
+
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct AddItemValue : GameAction
 {
     public SetValue setValue { get; set; }
@@ -18,7 +46,8 @@ public struct AddItemValue : GameAction
             selectItem = int.Parse(parameters[1].value);
             this.value = int.Parse(parameters[2].value);
         }
-        
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -38,6 +67,8 @@ public struct SetItemValue : GameAction
             selectItem = int.Parse(parameters[1].value);
             this.value = int.Parse(parameters[2].value);
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -47,8 +78,12 @@ public struct SetPackageSelectItem : GameAction
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int packageId;
     public int selectItem;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
+        this.setResult = setResult;
+        this.setValue = setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -57,8 +92,12 @@ public struct RefreshShortcut : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int packageId;
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
+        this.setResult = setResult;
+        this.setValue = setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -84,6 +123,8 @@ public struct SortShortcutItem : GameAction
         {
             index = target;
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -109,6 +150,8 @@ public struct RemoveShortcutItem : GameAction
         {
             index = target;
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -119,6 +162,14 @@ public struct SetShortcutItem : GameAction
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int characterId; 
     public Item Item;
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
 }
 
  
@@ -151,7 +202,8 @@ public struct SortPackageItem : GameAction
             itemId = int.Parse(parameters[1].value);
             index = int.Parse(parameters[2].value);
         }
-       
+              this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -236,6 +288,8 @@ public struct RemovePackageItem : GameAction
             itemDataId = int.Parse(parameters[1].value);
             itemCount = int.Parse(parameters[2].value);
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -254,6 +308,8 @@ public struct RemovePackageItemInstance : GameAction
             packageId = int.Parse(parameters[0].value);
             itemInstanceId = int.Parse(parameters[1].value); 
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -279,6 +335,8 @@ public struct ChangePackageInnstance : GameAction
         {
             newInstanceId = target;
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 
@@ -288,7 +346,15 @@ public struct AddPackageItemList : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int packageId;
-    public List<int2> items; 
+    public List<int2> items;
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
 }
 public struct AddPackageItem : GameAction
 {
@@ -306,6 +372,8 @@ public struct AddPackageItem : GameAction
             itemDataId = int.Parse(parameters[1].value);
             itemCount = int.Parse(parameters[2].value);
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -331,12 +399,18 @@ public struct CreatPackage : GameAction
             {
                 instanceId = int.Parse(parameters[2].value);
             }
-            if (source != 0 && source != int.MinValue)
-                instanceId = source;
-            if (target != 0 && target != int.MinValue)
-                packageDataId = target;
-            if (value != 0 && value != int.MinValue)
-                level = value;
+
+            if (target < 20)
+            {
+                if (source != 0 && source != int.MinValue)
+                    instanceId = source;
+                if (target != 0 && target != int.MinValue)
+                    packageDataId = target;
+                if (value != 0 && value != int.MinValue)
+                    level = value;
+            }
+
+            if (source > 10000) instanceId = source;
         }
         else
         {
@@ -436,6 +510,8 @@ public struct RemoveRuntimePackage : GameAction
                 key.y = int.Parse(parameter.parameters[1].value);
             }
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -457,6 +533,8 @@ public struct ItemUseAction : GameAction
             itemId = int.Parse(parameters[1].value);
             itemCount = int.Parse(parameters[2].value);
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

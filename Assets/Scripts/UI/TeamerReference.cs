@@ -20,7 +20,7 @@ public class TeamerReference : UIObjReference<CharacterInformationData>
         {
             if (SelectAction != null)
             {
-                SelectAction(data, value);
+                SelectAction(data,  index, value);
             }
         });
     }
@@ -30,7 +30,7 @@ public class TeamerReference : UIObjReference<CharacterInformationData>
         toggle.SetIsOnWithoutNotify(true);
         if (SelectAction != null)
         {
-            SelectAction(data, true);
+            SelectAction(data,  index, true);
         }
 
     }

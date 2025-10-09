@@ -50,7 +50,7 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
         {
             if (action != null)
             {
-                action(ItemInfo.item);
+                action(ItemInfo.item,index);
             }
             Close();
         });

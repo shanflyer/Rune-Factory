@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Drawing;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class GameGuidePanel : GamePanel<GuidStepData>
@@ -45,23 +43,19 @@ public class GameGuidePanel : GamePanel<GuidStepData>
         rectTransform.sizeDelta = Vector2.zero ;
         ring.localScale = Vector2.zero;
         icon.enabled = false;
-        GameTimerController.instance.DelayAction(200, () =>
+        // GameTimerController.instance.DelayAction(200, () =>
         {
-            if (GameGuideManager.instance.GetSelectableSize(data.selectableId, out var pos, out var size))
+            if (GameGuideManager.instance.GetSelectRectTransform(data.selectableId, out guidTransform))
             { 
-                rectTransform.position = pos;
-                rectTransform.sizeDelta = size;
-                float ringSize = (size.x > size.y ? size.x : size.y)*0.5f;
-                ring.localScale = new Vector3(ringSize, ringSize, 100);
-                icon.enabled = true;
                 noLookupGuidStep = false;
-                // Debug.Log($"guideButton:{guideButton.transform.position}");
+                icon.enabled = true;
             }
             else
             {
                 noLookupGuidStep = true;
             }
-        });
+        }
+        //);
     }
     public override void Close()
     {
@@ -69,4 +63,21 @@ public class GameGuidePanel : GamePanel<GuidStepData>
         ring.gameObject.SetActive(false);
     }
 
+    private RectTransform guidTransform;
+
+    private void Update()
+    {
+        if (guidTransform != null)
+        {
+            var rectTransform = guideButton.transform as RectTransform;
+            rectTransform.position = guidTransform.position;
+            var size = guidTransform.sizeDelta;
+            var localPos = rectTransform.localPosition;
+            localPos.z = 0;
+            rectTransform.localPosition = localPos;
+            rectTransform.sizeDelta = size;
+            var ringSize = (size.x > size.y ? size.x : size.y) * 0.5f;
+            ring.localScale = new Vector3(ringSize, ringSize, 100);
+        }
+    }
 }

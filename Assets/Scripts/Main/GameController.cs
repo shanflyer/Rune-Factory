@@ -1,16 +1,12 @@
- 
+using System.Collections.Generic;
+using System.Linq;
+using MyGame;
+using Unity.Mathematics;
 using UnityEngine;
- 
-using Unity.Mathematics;   
-using UnityEngine.InputSystem; 
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using MyGame; 
-using Unity.Transforms;
 using VoxelBusters.CoreLibrary;
 using VoxelBusters.EssentialKit;
-using System;
-using System.Collections.Generic;
-using Unity.Collections;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -20,7 +16,12 @@ public class GameController : MonoBehaviour
     [SerializeField]
     private AudioClip startBGM;
     public bool startPlay = true;
+    public bool noGuide;
 #if UNITY_EDITOR
+
+    public int testMap;
+    public int4 testCoordinate;
+
     public Selectable selectable;
     public Weather weather;
     public bool autoWeather;
@@ -160,9 +161,12 @@ public class GameController : MonoBehaviour
     public int ZeroMapInstance => zeroMapInstance;
     public int2 ZeroCoordinate => zeroCoordinate;
 
+    private bool loadMap;
     private void OnApplicationQuit()
     {
-        GameDataSaveManager.instance.TryAutoSaveData();
+        if (loadMap) GameDataSaveManager.instance.TryAutoSaveData();
+
+
         //Shader.SetGlobalInt("_backColor", 0);
         if (!SingletonType.Cleared&& SingletonType.instance!=null)
         {
@@ -172,24 +176,7 @@ public class GameController : MonoBehaviour
         instance = null;
     }
 
-    private void OnEnable()
-    {
-
-        CloudServices.OnUserChange += OnUserChange;
-        CloudServices.OnSavedDataChange += OnSavedDataChange;
-        CloudServices.OnSynchronizeComplete += OnSynchronizeComplete;
-    }
-
-
-    private void OnDisable()
-    {
-        CloudServices.OnUserChange -= OnUserChange;
-        CloudServices.OnSavedDataChange -= OnSavedDataChange;
-        CloudServices.OnSynchronizeComplete -= OnSynchronizeComplete;
-
-        // unregister from events
-
-    }
+ 
     private void OnSavedDataChange(CloudServicesSavedDataChangeResult arg)
     {
         switch (arg.ChangeReason)
@@ -206,8 +193,8 @@ public class GameController : MonoBehaviour
         if (GameDataSaveManager.instance.LoadDataSuccess)
         {
             hideSave = true;
-          //  GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr($"ÔÆ´æµµÊý¾Ý·¢Éú±ä»¯£¡--ChangeReason:{arg.ChangeReason}"), Application.Quit, Application.Quit);
-         //   Debug.Log($"ÔÆ´æµµÊý¾Ý·¢Éú±ä»¯£¡--ChangeReason:{arg.ChangeReason}");
+          //  GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr($"äº‘å­˜æ¡£æ•°æ®å‘ç”Ÿå˜åŒ–ï¼--ChangeReason:{arg.ChangeReason}"), Application.Quit, Application.Quit);
+         //   Debug.Log($"äº‘å­˜æ¡£æ•°æ®å‘ç”Ÿå˜åŒ–ï¼--ChangeReason:{arg.ChangeReason}");
         }
        
     }
@@ -216,7 +203,7 @@ public class GameController : MonoBehaviour
     public bool hideSave { get; private set; }
     private void OnUserChange(CloudServicesUserChangeResult result, Error error)
     {
-       // Debug.Log($"ÔÆ´æµµOnUserChange£¡--result.User.UserId:{result.User.UserId}");
+       // Debug.Log($"äº‘å­˜æ¡£OnUserChangeï¼--result.User.UserId:{result.User.UserId}");
         if (string.IsNullOrEmpty(nowUserId))
         {
             nowUserId = result.User.UserId;
@@ -226,7 +213,7 @@ public class GameController : MonoBehaviour
             if (result.User.UserId != nowUserId)
             {
                 hideSave = true;
-                GameManager.instance.ShowTwoSelectAction("ÓÃ»§¸Ä±ä", LanguageManage.SwitchStr("ÔÆ´æµµÓÃ»§·¢Éú±ä»¯£¬ÇëÍË³öÓÎÏ·ÖØÐÂ½øÈë"), Application.Quit, Application.Quit);
+                GameManager.instance.ShowTwoSelectAction("ç”¨æˆ·æ”¹å˜", LanguageManage.SwitchStr("äº‘å­˜æ¡£ç”¨æˆ·å‘ç”Ÿå˜åŒ–ï¼Œè¯·é€€å‡ºæ¸¸æˆé‡æ–°è¿›å…¥"), Application.Quit, Application.Quit);
             } 
         }
        
@@ -235,7 +222,7 @@ public class GameController : MonoBehaviour
     private void OnSynchronizeComplete(CloudServicesSynchronizeResult result)
     {
        // if (GameDataManager.instance.GlobalData.debug)
-            Debug.Log($"ÔÆ´æµµOnSynchronizeComplete:{result.Success}");
+            Debug.Log($"äº‘å­˜æ¡£OnSynchronizeComplete:{result.Success}");
         // var gameDataSaveManager= GameDataSaveManager.instance;
 
         if (result.Success)
@@ -251,12 +238,12 @@ public class GameController : MonoBehaviour
         else if (Application.internetReachability == NetworkReachability.NotReachable)
         {
             hideSave = true;
-            GameManager.instance.ShowTwoSelectAction("NetError", LanguageManage.SwitchStr("Ã»ÓÐÍøÂçÁ¬½ÓÎÞ·¨Í¬²½´æµµ£¬ÇëÍË³öÖØÊÔ"), Application.Quit, Application.Quit);
+            GameManager.instance.ShowTwoSelectAction("NetError", LanguageManage.SwitchStr("æ²¡æœ‰ç½‘ç»œè¿žæŽ¥æ— æ³•åŒæ­¥å­˜æ¡£ï¼Œè¯·é€€å‡ºé‡è¯•"), Application.Quit, Application.Quit);
         }
         else
         {
             hideSave = true;
-            GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr("ÔÆ´æµµ¼ÓÔØ´íÎó"), Application.Quit, Application.Quit);
+            GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr("äº‘å­˜æ¡£åŠ è½½é”™è¯¯"), Application.Quit, Application.Quit);
         }
         /*
 #if UNITY_EDITOR
@@ -271,12 +258,12 @@ if (result.Success)
         else if (Application.internetReachability == NetworkReachability.NotReachable)
         {
             hideSave = true;
-            GameManager.instance.ShowTwoSelectAction("NetError", LanguageManage.SwitchStr("Ã»ÓÐÍøÂçÁ¬½ÓÎÞ·¨Í¬²½´æµµ£¬ÇëÍË³öÖØÊÔ"), Application.Quit, Application.Quit);
+            GameManager.instance.ShowTwoSelectAction("NetError", LanguageManage.SwitchStr("æ²¡æœ‰ç½‘ç»œè¿žæŽ¥æ— æ³•åŒæ­¥å­˜æ¡£ï¼Œè¯·é€€å‡ºé‡è¯•"), Application.Quit, Application.Quit);
         }
         else
         {
             hideSave = true;
-            GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr("ÔÆ´æµµ¼ÓÔØ´íÎó"), Application.Quit, Application.Quit);
+            GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr("äº‘å­˜æ¡£åŠ è½½é”™è¯¯"), Application.Quit, Application.Quit);
         }
 #endif
         */
@@ -289,6 +276,9 @@ if (result.Success)
     }
     private void Awake()
     {
+        CloudServices.OnUserChange += OnUserChange;
+        CloudServices.OnSavedDataChange += OnSavedDataChange;
+        CloudServices.OnSynchronizeComplete += OnSynchronizeComplete;
         //Unity.Collections.NativeLeakDetection.Mode = NativeLeakDetectionMode.EnabledWithStackTrace;
 
         var gameDataManager = GameDataManager.instance;
@@ -322,7 +312,7 @@ if (result.Success)
         GameDataSaveManager.instance.InitUserSaveData("Test");
         StartGame();
 #else
- Debug.Log($"ÔÆ´æµµ³õÊ¼»¯11");
+ Debug.Log($"äº‘å­˜æ¡£åˆå§‹åŒ–11");
             CloudServices.Synchronize();
             BillingServices.InitializeStore();
 #endif*/
@@ -348,6 +338,7 @@ if (result.Success)
         var gameTimeEventManager = GameTimeEventManager.instance;
         var teamManager = TeamManager.instance;
         var gameGuideManager = GameGuideManager.instance;
+        var showItemManager = ShowItemManager.instance;
         GameTimeManager.instance.ZeroGameTime();
 
         GameTimerController.instance.DelayAction(100, () => { GameTimeManager.instance.SetTime(12, 0); });
@@ -355,7 +346,7 @@ if (result.Success)
         var audio = transform.Find("Audio");
         AudioController.instance.SetAudioSource(audio.gameObject);
         GameRuntimeObjManager.instance.CreatParent<RuntimeObjType>(transform);
-        LanguageManage.instance.SystemLanguageMatch(SetLanguage?SetSystemLanguage:0);
+        LanguageManage.instance.SystemLanguageMatch(SetLanguage ? SetSystemLanguage : MyLanguage.NULL);
         UIManager.instance.ShowGamePanel<ZeroPanel>();
          
         SwitchInputMap switchInputMap = new SwitchInputMap
@@ -364,6 +355,7 @@ if (result.Success)
         };
         GameActionManager.instance.QueueAction(switchInputMap, true);
         ZeroSetCloudGlobal();
+        loadMap = true;
     }
     void ZeroSetCloudGlobal()
     { 
@@ -458,13 +450,22 @@ if (result.Success)
         int instanceId = selectable.GetInstanceID();
         Debug.LogWarning($"instanceId:{instanceId}");
     }
-    public void Test()
+
+    public void TestLookup()
     {
-        Vector2 pos = Camera.main.WorldToScreenPoint(testObj.position);
-        Vector2 screenSize = GameCommon.GetScreenResolution();
-        Vector2 screenValue = new Vector2(pos.x / screenSize.x, pos.y / screenSize.y);
-        Debug.Log($"pos:{pos}--ScreenSize:{screenSize}--ScreenValue:{screenValue}");
+        MapCellJobController.instance.AddPathRequest(testCoordinate.xy, testCoordinate.zw, testMap,
+            (Stack<int2> path, int map, int2 start, int2 end) => 
+            {
+                string pathStr = "path";
+                var pList = path.ToList();
+                for (int j = 0; j < pList.Count; j++)
+                {
+                    pathStr = GameCommon.BlendString(pathStr, ",", pList[j].ToString());
+                }
+                Debug.Log($"PlayerMove Job  pathStr{pathStr}");
+            });
     }
+ 
     public void SetCloudGlobal()
     {
         Shader.SetGlobalFloat("_CloudValue", _CloudValue);
@@ -515,7 +516,7 @@ public class GameControllerEditor : Editor
         
         if (GUILayout.Button("test"))
         {
-            gameController.Test();
+            gameController.TestLookup();
         }
 
        

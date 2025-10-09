@@ -50,6 +50,11 @@ public class GameEventManager : Singleton<GameEventManager>
     void SampleGameEvent(SampleGameEvent sampleGameEvent)
     {
         AddGameEvent(sampleGameEvent.eventId);
+        if (sampleGameEvent.setResult != null)
+        {
+            sampleGameEvent.setResult(true);
+        }
+
     }
     private void RemoveGameEvent(RemoveGameEvent removeGameEvent)
     {

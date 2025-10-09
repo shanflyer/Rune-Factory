@@ -177,7 +177,7 @@ public class PlantPanel : GamePanel<IReferenceData>
     }
      
 
-    private async void SelectPlantReference(PlantData plantData, bool selected)
+    private async void SelectPlantReference(PlantData plantData,int index, bool selected)
     {
         if (selected)
         {

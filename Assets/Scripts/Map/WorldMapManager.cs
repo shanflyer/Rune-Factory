@@ -1,8 +1,6 @@
-﻿using ProFlares;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -25,8 +23,59 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
     private Dictionary<int2, int> editorItemRemapInstanceIds = new Dictionary<int2, int>();
 
+    public int GetNearestItem(int roomId, HashSet<int> itemDataIds, int2 coordinate)
+    {
+        if (itemInMapDatas.TryGetValue(roomId, out var itemIds))
+        {
+            float minDistance = int.MaxValue;
+            RuntimeMapItem nearestItem = null;
+            for (var i = 0; i < itemIds.length; i++)
+            {
+                var itemId = itemIds[i];
+                if (runtimeMapItems.TryGetValue(itemId, out var item) && item.linkCharacter <= 0)
+                    if (itemDataIds.Contains(item.mapItemData.id))
+                    {
+                        var distance = math.distancesq(coordinate, item.coordinate);
+                        if (distance < minDistance)
+                        {
+                            minDistance = distance;
+                            nearestItem = item;
+                        }
+                    }
+            }
 
+            if (nearestItem != null) return nearestItem.instanceId;
+        }
 
+        return 0;
+    }
+
+    public int GetNearestItem(int roomId, int itemDataId, int2 coordinate)
+    {
+        if (itemInMapDatas.TryGetValue(roomId, out var itemIds))
+        {
+            float maxDistance = int.MinValue;
+            RuntimeMapItem nearestItem = null;
+            for (var i = 0; i < itemIds.length; i++)
+            {
+                var itemId = itemIds[i];
+                if (runtimeMapItems.TryGetValue(itemId, out var item))
+                    if (item.mapItemData.id == itemDataId)
+                    {
+                        var distance = math.distancesq(coordinate, item.coordinate);
+                        if (distance > maxDistance)
+                        {
+                            maxDistance = distance;
+                            nearestItem = item;
+                        }
+                    }
+            }
+
+            if (nearestItem != null) return nearestItem.instanceId;
+        }
+
+        return 0;
+    }
     public override void Init()
     {
         base.Init();
@@ -56,16 +105,35 @@ public class WorldMapManager : Singleton<WorldMapManager>
         GameActionManager.instance.AddListener<TryRemoveLinkMapItemCharacter>(TryRemoveLinkMapItemCharacter);
         GameActionManager.instance.AddListener<ResetOperateData>(ResetOperateData);
     }
-    public int2 GetRandomItemPlayerTriggerCell(int roomId, int itemEditorInstance)
+
+    public bool GetRandomItemPlayerTriggerCell(int roomId, int itemEditorInstance, out int2 cell)
     {
+        MapCellController.instance.TransTempMap(ref roomId);
         if (editorItemRemapInstanceIds.TryGetValue(new int2(roomId, itemEditorInstance), out var itemInstanceId))
         {
-            return MapCellController.instance.GetRandomItemPlayerTriggerCell(roomId, itemInstanceId);
+            // Debug.Log($"room:{roomId}-itemEditorInstance{itemEditorInstance}");
+            if (MapCellController.instance.GetRandomItemPlayerTriggerCell(roomId, itemInstanceId, out cell))
+                return true;
         }
-        return new int2(int.MinValue, int.MinValue);
+
+        cell = int.MinValue;
+        return false;
+    }
+
+    public bool GetRandomItemTriggerCell(int roomId, int itemEditorInstance, out int2 cell)
+    {
+        MapCellController.instance.TransTempMap(ref roomId);
+        if (editorItemRemapInstanceIds.TryGetValue(new int2(roomId, itemEditorInstance), out var itemInstanceId))
+            // Debug.Log($"room:{roomId}-itemEditorInstance{itemEditorInstance}");
+            if (MapCellController.instance.GetRandomItemTriggerCell(roomId, itemInstanceId, out cell))
+                return true;
+
+        cell = int.MinValue;
+        return false;
     }
     public int2 GetItemCommonCenterTriggerCellForEditorInstance(int roomId, int itemEditorInstance)
     {
+        MapCellController.instance.TransTempMap(ref roomId);
         if (editorItemRemapInstanceIds.TryGetValue(new int2(roomId, itemEditorInstance), out var itemInstanceId))
         {
             return MapCellController.instance.GetItemCommonCenterTriggerCell(roomId, itemInstanceId);
@@ -74,6 +142,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
     }
     private void SetMapEditorItemLinkCharacter(SetMapEditorItemLinkCharacter SetMapEditorItemLinkCharacter)
     {
+        MapCellController.instance.TransTempMap(ref SetMapEditorItemLinkCharacter.mapId);
         if (editorItemRemapInstanceIds.TryGetValue(new int2(SetMapEditorItemLinkCharacter.mapId, SetMapEditorItemLinkCharacter.mapItemEditorId),
                out var instanceId))
         {
@@ -92,6 +161,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
                     character.linkItem = runtimeMapItem.instanceId;
                 }
 
+                if (SetMapEditorItemLinkCharacter.setValue != null) SetMapEditorItemLinkCharacter.setValue(instanceId);
                 if (SetMapEditorItemLinkCharacter.setResult != null)
                 {
                     SetMapEditorItemLinkCharacter.setResult(true);
@@ -106,6 +176,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
     }
     public void CheckMapEditorItemLinkCharacter(CheckMapEditorItemLinkCharacter checkMapEditorItemLinkCharacter)
     {
+        MapCellController.instance.TransTempMap(ref checkMapEditorItemLinkCharacter.mapId);
         int2 editorKey = new int2(checkMapEditorItemLinkCharacter.mapId, checkMapEditorItemLinkCharacter.itemEditorId);
         bool result = CanLinkRuntimeMapItem(editorKey, checkMapEditorItemLinkCharacter.characterId);
         if (checkMapEditorItemLinkCharacter.setResult != null)
@@ -177,7 +248,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
         if (character != null&&character.linkItem!=0)
         {
            if(CharacterManager.instance.GetRuntimeCharacterObj(character.instanceId,out var characterRuntimeObj)&&
-                GetRuntimeMapItem(character.linkItem, out var runtimeMapItem))
+              GetRuntimeMapItem(character.linkItem, out var runtimeMapItem) &&
+              runtimeMapItem.mapInstanceId == character.mapInstance)
             {
                 SetCharacterTempPos setCharacterTempPos = new SetCharacterTempPos
                 {
@@ -280,6 +352,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 intValue=0
             };
             GameActionManager.instance.QueueAction(setCharacterAnimator1);
+            runtimeMapItem.linkCharacter = 0;
             // runtimeMapItems.SetData(runtimeMapItem);
         }
     }
@@ -341,6 +414,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
     public List<int> GetMapItems(int mapId)
     {
+        MapCellController.instance.TransTempMap(ref mapId);
         if (!itemInMapDatas.TryGetValue(mapId, out var result))
         {
             return new List<int>();
@@ -433,6 +507,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
         if (setItemAnimation.mapId != 0)
         {
+            MapCellController.instance.TransTempMap(ref setItemAnimation.mapId);
             if (editorItemRemapInstanceIds.TryGetValue(new int2(setItemAnimation.mapId, setItemAnimation.editorId),
                 out instanceid))
             {
@@ -460,25 +535,23 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
         return -1;
     }
-     
+
+    public bool GetRuntimeMapItem(int2 editorKey, out RuntimeMapItem runtimeMapItem)
+    {
+        if (editorItemRemapInstanceIds.TryGetValue(editorKey, out var instanceid))
+        {
+            runtimeMapItem = runtimeMapItems[instanceid];
+            return true;
+        }
+
+        runtimeMapItem = null;
+        return false;
+    }
     public bool GetRuntimeMapItem(int instanceId, out RuntimeMapItem runtimeMapItem)
     {
         return runtimeMapItems.TryGetValue(instanceId, out runtimeMapItem);
     }
-
-    public bool GetMapItemPos(int mapId, int editorInstanceId, out int3 objCoordinate)
-    {
-        objCoordinate = int3.zero;
-        if (editorItemRemapInstanceIds.TryGetValue(new int2(mapId, editorInstanceId), out var instance))
-        {
-            if (runtimeMapItems.TryGetValue(instance, out var mapItem))
-            {
-                objCoordinate = new int3(mapItem.coordinate, mapItem.mapInstanceId);
-                return true;
-            }
-        }
-        return false;
-    }
+ 
 
     public void SaveMapItemInstance(int instance)
     {
@@ -560,7 +633,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
     }
 
     private async Task<int> AddMapItem(MapItem mapItem, int mapId,int fixedInstance=0)
-    {
+    { 
         bool isInSaveData = true;
         int instanceId = 0;
         if (fixedInstance == 0)
@@ -590,6 +663,12 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
         RuntimeMapItem runtimeMapItem = new RuntimeMapItem(instanceId, mapItem.instanceId, await GameDataManager.instance.GetAsyncData<MapItemData>(mapItem.id),
             mapId, mapItem.coordinate, mapItem.animationKey);
+        if (GameDataSaveManager.instance.UserGameSaveData.ChangeMapItemCoordinate.TryGetValue(instanceId,
+                out var mapItemData))
+        {
+            runtimeMapItem.mapInstanceId = mapItemData.newMap;
+            runtimeMapItem.coordinate = mapItemData.newCoordinate;
+        }
 
         runtimeMapItems.Add(instanceId, runtimeMapItem);
         if (!itemInMapDatas.TryGetValue(mapId, out var items))
@@ -639,7 +718,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
         if (runtimeMapItem.mapItemData.creatAction != null)
         {
-            runtimeMapItem.mapItemData.creatAction.Action(instanceId);
+            runtimeMapItem.mapItemData.creatAction.Action(instanceId,runtimeMapItem.editorInstanceId, mapId);
         }
 
         if (runtimeMapItem.mapInstanceId > 0)
@@ -664,35 +743,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 WorldMapObjManager.instance.DisplayMapItem(runtimeMapItem);
             }
         }
-        if (!isInSaveData)
-        {
-            TryCreatField tryCreatField = new TryCreatField
-            {
-                roomId = mapId,
-                itemInstanceId = mapItem.instanceId,
-                coordinate = mapItem.coordinate
-            };
-            GameActionManager.instance.QueueAction(tryCreatField, true);
-        }
-        else
-        {
-            if (!GameDataSaveManager.instance.HaveSaveFileData(instanceId))
-            {
-                TryCreatField tryCreatField = new TryCreatField
-                {
-                    roomId = mapId,
-                    itemInstanceId = mapItem.instanceId,
-                    coordinate = mapItem.coordinate
-                };
-                GameActionManager.instance.QueueAction(tryCreatField, true);
-            }
-        }
-
-        RefreshField refreshField = new RefreshField
-        {
-            fieldId = runtimeMapItem.instanceId
-        };
-        GameActionManager.instance.QueueAction(refreshField);
+        
 
         if (mapItem.instanceId != 0)
         {
@@ -709,6 +760,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
         {
             return;
         }
+
+        MapCellController.instance.TransTempMap(ref addMapItem.mapId);
         MapItem mapItem = new MapItem
         {
             id = addMapItem.dataId,
@@ -816,7 +869,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
     }
     private void MoveMapItem(MoveMapItem moveMapItem)
-    {
+    { 
         if (runtimeMapItems.TryGetValue(moveMapItem.mapItemInstanceId, out var runtimeMapItem))
         {
             if (runtimeMapItem.mapInstanceId == moveMapItem.mapItemInstanceId &&
@@ -869,6 +922,11 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 //runtimeMapItems.SetData(runtimeMapItem);
                 RefreshMapItemDisplay refreshMapItemDisplay = new RefreshMapItemDisplay { runtimeMapItem = runtimeMapItem };
                 GameActionManager.instance.QueueAction(refreshMapItemDisplay, true);
+
+                if (GameDataSaveManager.instance.loadDataIsNotNull)
+                    GameDataSaveManager.instance.loadGameSaveData.SetMapItemCoordinate(runtimeMapItem.editorKey,
+                        runtimeMapItem.instanceId,
+                        runtimeMapItem.mapInstanceId, runtimeMapItem.coordinate);
             }
 
             if (moveMapItem.setResult != null)
@@ -905,78 +963,10 @@ public class WorldMapManager : Singleton<WorldMapManager>
         };
         GameActionManager.instance.QueueAction(setHomeEquipCoordinate,true);
     }
-
-    public bool InitNewSmoothMove(ref float2 direction, int2 coordinate, int mapId, out int2 targetCoordinate)
-    {
-        if (direction.x == 0 && direction.y == 0)
-        {
-            targetCoordinate = coordinate;
-            return false;
-        }
-
-        int2 offsetCoordinate = (int2)direction;
-
-        int2 checkTargetCoordinate = coordinate + offsetCoordinate;
-        targetCoordinate = checkTargetCoordinate;
-        if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate, mapId))
-        {
-            offsetCoordinate = new int2(0, (int)direction.y);
-            checkTargetCoordinate = coordinate + offsetCoordinate;
-            targetCoordinate = checkTargetCoordinate;
-            if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate, mapId))
-            {
-                offsetCoordinate = new int2((int)direction.x, 0);
-                checkTargetCoordinate = coordinate + offsetCoordinate;
-                if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate, mapId))
-                {
-                    targetCoordinate = checkTargetCoordinate;
-                    return false;
-                }
-                direction = new float2(direction.x, 0);
-                return true;
-            }
-            direction = new float2(0, direction.y);
-            return true;
-        }
-        return true;
-    }
-
-    public bool InitSmoothMove(ref Vector2 direction, Vector2 nowPos, int mapId, float distance)
-    {
-        if (direction == Vector2.zero)
-        {
-            return false;
-        }
-
-        Vector2 checkTargetPos = nowPos + direction * distance;
-        int2 checkTargetCoordinate = GameCommon.GetMapCoordinateInt(checkTargetPos);
-        if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate, mapId))
-        {
-            Vector2 direction1 = new Vector2(0, direction.y);
-            Vector2 checkTargetPos1 = nowPos + direction1 * distance;
-            int2 checkTargetCoordinate1 = GameCommon.GetMapCoordinateInt(checkTargetPos1);
-
-            if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate1, mapId))
-            {
-                Vector2 direction2 = new Vector2(direction.x, 0);
-                Vector2 checkTargetPos2 = nowPos + direction2 * distance;
-                int2 checkTargetCoordinate2 = GameCommon.GetMapCoordinateInt(checkTargetPos2);
-
-                if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate2, mapId))
-                {
-                    return false;
-                }
-                direction = direction2;
-                return true;
-            }
-            direction = direction1;
-            return true;
-        }
-        return true;
-    }
-
+ 
     public bool InitSmoothMove(ref Vector2 direction, Vector2 nowPos, int mapId, float distance, ref int2 target, ref Vector2 targetPos)
     {
+        MapCellController.instance.TransTempMap(ref mapId);
         if (direction == Vector2.zero)
         {
             return false;
@@ -1081,9 +1071,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 }
             }
 
-            NPCManager.instance.InitNPCBehavior();
-
-
+            NPCManager.instance.InitNPCBehavior(); 
             GameActionManager.instance.QueueAction(new LoadMapCompleted());
         }
     }
@@ -1099,10 +1087,19 @@ public class WorldMapManager : Singleton<WorldMapManager>
         worldMapData = await GameDataManager.instance.GetAsyncData<WorldMapData>(worldName);
         //MapCellController.instance.InitWorldRoomDatas(worldMapData.worldMaps.Count);
         waitMaps.Clear();
+        var mapList = worldMapData.worldMapDic.Values.ToList();
 
-
-        foreach (var room in worldMapData.worldMapDic.Values)
+        //设置地图障碍
+        for (var i = 0; i < mapList.Count; i++)
         {
+            var room = mapList[i];
+            MapCellController.instance.InitMapData(room.id, room.mapRoomData, room.coordinate);
+        }
+ 
+        //设定地图物体
+        for (var j = 0; j < mapList.Count; j++)
+        {
+            var room = mapList[j];
             if (room.mapRoomData.mapItems.Count > 0)
             {
                 waitMaps.Add(room.id, new HashSet<int>());
@@ -1112,66 +1109,44 @@ public class WorldMapManager : Singleton<WorldMapManager>
                     waitMaps[room.id].Add(item.instanceId);
                 }
             }
-           
-        }
-
+        } 
         //roomMapDatas.Clear();
         if (displayMap == 0)
         {
             displayMap = worldMapData.defaultMap;
         }
         var displayRoom = worldMapData.worldMapDic[displayMap];
-        await CreateRoomRuntime(displayRoom, true, displayMap);
+        await CreateRoomItem(displayRoom, true, displayMap);
 
-         
-        foreach (var room in worldMapData.worldMapDic.Values)
-        { 
+        for (var j = 0; j < mapList.Count; j++)
+        {
+            var room = mapList[j];
             if (room.id != displayMap)
             {
-                await CreateRoomRuntime(room, false, displayMap);
+                await CreateRoomItem(room, false, displayMap);
             }
-        } 
+        }
+       
         //生成地图链接
         MapCellController.instance.InitLinkMap(worldMapData.mapLines);
-        /*
-        GameTimerController.instance.DelayAction(200, async () => {
-            var mapNpcDataList = await GameDataManager.instance.GetAsyncData<MapNpcDataList>();
-            var datas = mapNpcDataList.datas;
-
-            for(int i = 0; i < datas.Count; i++)
-            {
-                for(int j=0;j<datas[i].datas.Count; j++)
-                {
-                    if (datas[i].datas[j].initialBegin)
-                    {
-                       await CharacterManager.instance.CreateNpc(datas[i].datas[j]);
-                    }
-                }
-            }
-
-            NPCManager.instance.InitNPCBehavior();
-        }); */
-        // return true;
-
-        //WorldMapObjManager.instance.DefaultDisplayMap(displayMap);
+        WorldMapObjManager.instance.DisplayTempNpc();
+        
     }
-    async Task CreateRoomRuntime(WorldMap room, bool display, int displayMap = 0)
+
+    private async Task CreateRoomItem(WorldMap room, bool display, int displayMap = 0)
     {
         //获取房间数据
         var MapRoomData = room.mapRoomData;
-        //roomMapDatas.Add(room.id, room.map);
 
-        //创建地图房间
-        MapCellController.instance.InitMapData(room.id, MapRoomData, room.coordinate);
-
-        foreach (var data in MapRoomData.mapItems)
+        for (var i = 0; i < MapRoomData.mapItems.Count; i++)
         {
+            var data = MapRoomData.mapItems[i];
             int itemInstanceId = await AddMapItem(data, room.id);
-            GameDataSaveManager.instance.InitMapItemSaveData(itemInstanceId); 
-        }
+            if (data.funcItem) GameDataSaveManager.instance.InitMapItemSaveData(itemInstanceId);
+        } 
         if (display)
         {
-             await WorldMapObjManager.instance.DisplayMap(displayMap);
+            await WorldMapObjManager.instance.DisplayMap(displayMap, zeroInit: true);
         }
         if (room.eventId != 0)
         {
@@ -1212,7 +1187,7 @@ public class RuntimeMapItem : INativeData
     public int2 animationKey { get; private set; }
     public int linkCharacter;
     public int leftCharacter, rightCharacter;
-    public int2 editorKey { get => new int2(mapInstanceId, editorInstanceId); }
+    public int2 editorKey { get; }
     public Vector2 pos => GameCommon.GetMapPos(coordinate);
     public RuntimeMapItem(int instanceId, int editorInstanceId, MapItemData mapItemData, int mapInstanceId, int2 coordinate, int2 animationKey)
     {
@@ -1222,6 +1197,7 @@ public class RuntimeMapItem : INativeData
         this.mapInstanceId = mapInstanceId;
         this.coordinate = coordinate;
         this.animationKey = animationKey;
+        editorKey = new int2(mapInstanceId, editorInstanceId);
         operateDatas = new List<int>();
         EventReferenceData = new Dictionary<string, int>();
 
@@ -1237,7 +1213,7 @@ public class RuntimeMapItem : INativeData
 
     public void SetAnimationKey(int2 animationKey)
     {
-        if (animationKey.x != int.MinValue || animationKey.y != int.MinValue)
+        if (animationKey.x != int.MinValue && animationKey.y != int.MinValue)
         {
             int2 nowAnimationKey = this.animationKey;
             if (animationKey.x != int.MinValue)
@@ -1278,6 +1254,7 @@ public class RuntimeMapItem : INativeData
             operateDataList.eventReferenceDatas.Add(EventReferenceData);
         }
 
+       
         if (operateDataLength > 0)
         {
             HashSet<int> waitCheck=new HashSet<int>();
@@ -1300,7 +1277,7 @@ public class RuntimeMapItem : INativeData
                         }
                         if (waitCheck.Count == 0)
                         {
-                            UIManager.instance.ShowGamePanelImmediately<OperateButtonPanel, OperateDataList>(operateDataList);
+                            DisplayItemOperate();
                         }
                     }, immediately: true);
                 }
@@ -1316,16 +1293,26 @@ public class RuntimeMapItem : INativeData
             }
             if (waitCheck.Count == 0)
             {
-                UIManager.instance.ShowGamePanelImmediately<OperateButtonPanel, OperateDataList>(operateDataList);
+                DisplayItemOperate();
             }
             
         }
         else
         {
+            DisplayItemOperate(false);
+        }
+
+        void DisplayItemOperate(bool display = true)
+        {
+            // if (display)
+            //     WorldMapObjManager.instance.TryDisplayMask(instanceId);
+            // else
+            //     WorldMapObjManager.instance.RecycleMaskObj(instanceId);
+
             UIManager.instance.ShowGamePanelImmediately<OperateButtonPanel, OperateDataList>(operateDataList);
         }
-       
     }
+ 
     public void ResetOperateData(List<int> newOperates)
     {
         operateDatas.Clear();
@@ -1338,6 +1325,6 @@ public class RuntimeMapItem : INativeData
     public int Key => instanceId;
 
     public void Dispose()
-    { 
+    {     
     }
 }

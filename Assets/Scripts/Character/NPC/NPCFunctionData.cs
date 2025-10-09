@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 #if UNITY_EDITOR
-using UnityEditor;
 #endif
 
 public class NPCFunctionData : ScriptableObject, IGameData,IReferenceData
@@ -13,7 +8,7 @@ public class NPCFunctionData : ScriptableObject, IGameData,IReferenceData
     public string npcFunctionName;
     public string iconName;
     public Sprite icon;
-    public bool closeTalk;
+    public int closeTalk;
     public int checkAction;
     [Header("交互事件")]
     public int OperateAction;

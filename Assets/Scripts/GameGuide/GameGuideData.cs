@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+
 [CreateAssetMenu(menuName ="Data/指引数据")]
 public class GameGuideData : ScriptableObject,IGameData
 {
@@ -48,6 +49,5 @@ public class GameGuideData : ScriptableObject,IGameData
 public class GuidStepData:IReferenceData
 {
     public int selectableId;
-    public string showText;
-    public int waitTime;
+    public string showText; 
 }

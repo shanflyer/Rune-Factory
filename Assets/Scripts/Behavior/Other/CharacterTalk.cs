@@ -31,6 +31,11 @@ public class CharacterTalk : Action
             eventId = ID.Value
         };
         GameActionManager.instance.QueueAction(RemoveGameEvent, true);
+        var startCharacterBehavior = new StartCharacterBehavior
+        {
+            characterId = characterId.Value
+        };
+        GameActionManager.instance.QueueAction(startCharacterBehavior);
     }
 
     public override void OnStart()
@@ -97,8 +102,14 @@ public class CharacterTalk : Action
                 () => { RemoveEvent(); }
             };
             GameActionManager.instance.QueueAction(talk, true);
+            //NPCTaskScheduleManager.instance.PauseCharacterBehavior(characterId.Value);
+            var pauseCharacterBehavior = new PauseCharacterBehavior
+            {
+                characterId = characterId.Value
+            };
+            GameActionManager.instance.QueueAction(pauseCharacterBehavior, true);
         }
-
+        
         taskStatus = TaskStatus.Success;
     }
 

@@ -225,9 +225,20 @@ public class MapTexture:MonoBehaviour
             {
                 var sprite = tilemap.GetSprite(new Vector3Int(x, y, 0));
 
+               
 
                 if (sprite != null)
                 {
+                    if (!sprite.texture.isReadable)
+                    {
+                        AssetImporter assetImporter = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(sprite.texture));
+                        TextureImporter textureImporter = (TextureImporter)assetImporter;
+                        textureImporter.isReadable = true;
+                        textureImporter.filterMode = FilterMode.Point;
+                        textureImporter.textureCompression = TextureImporterCompression.Uncompressed;
+                        textureImporter.SaveAndReimport();
+                        AssetDatabase.Refresh();
+                    }
                     if (!spriteColorDic.TryGetValue(sprite, out var spriteColor))
                     {
                         try

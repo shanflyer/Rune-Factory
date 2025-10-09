@@ -23,7 +23,7 @@ public class ShopItemReference : UIObjReference<ShopItemData>
         {
             if (value && SelectAction != null)
             {
-                SelectAction(ShopItemData);
+                SelectAction(ShopItemData, index);
             }
         });
     }

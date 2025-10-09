@@ -13,6 +13,8 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
     [SerializeField]
     private Button goldAdd, crystalAdd;
 
+    [SerializeField] private Image GoldAdd_Image, CrystalAdd_Image;
+
     [SerializeField]
     private TextMeshProUGUI season;
 
@@ -45,7 +47,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
     [SerializeField]
     private TextMeshProUGUI FPSText;
     [SerializeField]
-    private Button playerButton;
+    private Button playerButton,MapButton;
     [SerializeField]
     private Vector2 headSize = new Vector2(448, 512);
 
@@ -100,18 +102,54 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
             // AudioController.instance.PlayAudio(SE.click);
            await UIManager.instance.ShowGamePanel<SetPanel>();
         });
+        MapButton.onClick.AddListener(() =>
+        {
+            UIManager.instance.ShowGamePanel<TransmissionPanel>();
+        });
 
         GameActionManager.instance.AddListener<NewDay>(NewDay);
         GameActionManager.instance.AddListener<RefreshPlayerGold>(RefreshPlayerGold);
         GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
         GameActionManager.instance.AddListener<CharacterPropertyTrigger>(RefreshCharacterProperty);
         GameActionManager.instance.AddListener<SetWeather>(SetWeather);
-
+        GameActionManager.instance.AddListener<NewHour>(NewHour);
+        GameActionManager.instance.AddListener<SaveGuideFilmIndexAction>(SaveGuideFilmIndexAction);
         UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
+
+        if (GameController.instance.startPlay || GameGuideManager.instance.IsEndGuide())
+        {
+            GoldAdd_Image.enabled = CrystalAdd_Image.enabled = true;
+            goldAdd.enabled = crystalAdd.enabled = true;
+        }
+        else
+        {
+            GoldAdd_Image.enabled = CrystalAdd_Image.enabled = false;
+            goldAdd.enabled = crystalAdd.enabled = false;
+        }
+    }
+
+    private void SaveGuideFilmIndexAction(SaveGuideFilmIndexAction SaveGuideFilmIndexAction)
+    {
+        if (GameController.instance.startPlay || GameGuideManager.instance.IsEndGuide())
+        {
+            GoldAdd_Image.enabled = CrystalAdd_Image.enabled = true;
+            goldAdd.enabled = crystalAdd.enabled = true;
+        }
+        else
+        {
+            GoldAdd_Image.enabled = CrystalAdd_Image.enabled = false;
+            goldAdd.enabled = crystalAdd.enabled = false;
+        }
     }
     private void LateUpdate()
     {
-        FPSText.text = $"FPS{1.0f / Time.smoothDeltaTime}"; 
+        if (FPSText.gameObject.activeSelf && FPSText.enabled)
+            FPSText.text = $"FPS{1.0f / Time.smoothDeltaTime}"; 
+    }
+
+    private void NewHour(NewHour newHour)
+    {
+        weather.sprite = WeatherManager.instance.GetWeatherIcon();
     }
     void SetWeather(SetWeather setWeather)
     {
@@ -143,7 +181,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         RPSlider.fillAmount = characterProperty.Power / (float)characterProperty.MaxPower;
         HPValue.text = $"{characterProperty.HP}/{characterProperty.MaxHP}";
         RPValue.text = $"{characterProperty.Power}/{characterProperty.MaxPower}";
-
+        weather.sprite = WeatherManager.instance.GetWeatherIcon();
         RefreshPlayerGold(default(RefreshPlayerGold));
         NewDay(default(NewDay)); 
         return base.InitData(dataKay);

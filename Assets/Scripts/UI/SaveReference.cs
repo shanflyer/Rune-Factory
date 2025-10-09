@@ -34,7 +34,7 @@ public class SaveReference : UIObjReference<UserGameSaveData>
         SelectToggle.SetIsOnWithoutNotify(true);
         if (SelectAction != null)
         {
-            SelectAction(data, true);
+            SelectAction(data, index, true);
         }
     }
     public override void SetPanelUISerializeObj()
@@ -52,9 +52,10 @@ public class SaveReference : UIObjReference<UserGameSaveData>
 
     public override async Task InitData(UserGameSaveData t, SelectAction<UserGameSaveData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-       await  base.InitData(t, SelectAction, toggleGroup);
+        await base.InitData(t, SelectAction, toggleGroup);
         SelectToggle.group = toggleGroup;
-        if (!string.IsNullOrEmpty(data.saveTime))
+        if (data != null && !string.IsNullOrEmpty(data.saveTime) && data.playerData != null &&
+            data.playerData.dataId != 0)
         {
             Icon.enabled = true;
             CharacterData characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(data.playerData.dataId);
@@ -75,17 +76,7 @@ public class SaveReference : UIObjReference<UserGameSaveData>
             Time.text = "-";
             SaveTime.text = "-";
         }
-        SelectToggle.onValueChanged.AddListener((bool value) =>
-        {
-            if (value)
-            {
-                if (SelectAction != null)
-                {
-                    SelectAction(data, value);
-                }
-            }
-            
-        });
+       
     }
 
     public void Awake()
@@ -96,5 +87,12 @@ public class SaveReference : UIObjReference<UserGameSaveData>
         Money.text = "-";
         Time.text = "-";
         SaveTime.text = "-";
+
+        SelectToggle.onValueChanged.AddListener(value =>
+        {
+            if (value)
+                if (SelectAction != null)
+                    SelectAction(data, index, value);
+        });
     }
 }

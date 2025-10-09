@@ -36,7 +36,7 @@ public class PolyColliderToMeshEditor : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        if (GUILayout.Button("´´½¨Mesh"))
+        if (GUILayout.Button("åˆ›å»ºMesh"))
         {
             polyColliderToMesh.CreatMeshAsset();
         }

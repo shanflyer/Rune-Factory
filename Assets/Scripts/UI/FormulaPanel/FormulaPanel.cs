@@ -140,7 +140,7 @@ public class FormulaPanel : GamePanel<IReferenceData>
     {
         base.InitReferenceData(v);
     }
-    void SelectFormulaData(FormulaReferenceData formulaReferenceData,bool selected)
+    void SelectFormulaData(FormulaReferenceData formulaReferenceData, int index, bool selected)
     {
         if (selected)
         {
@@ -194,7 +194,7 @@ public class FormulaPanel : GamePanel<IReferenceData>
             frontButton.gameObject.SetActive(true);
         }
     }
-    async void SelectFormulaType(FormulaType formulaType,bool select)
+    async void SelectFormulaType(FormulaType formulaType, int index, bool select)
     {
         if (select)
         {

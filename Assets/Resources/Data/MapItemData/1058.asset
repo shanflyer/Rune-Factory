@@ -16,9 +16,10 @@ MonoBehaviour:
   itemName: "\u7272\u755C\u68DA"
   objName: "\u7272\u755C\u68DA"
   itemObj: {fileID: 1748769392031025434, guid: b8e82ec7921f867448c098914866e301, type: 3}
-  colliderGrids: f5fffffffbfffffffefffffffcfffffff5fffffffdfffffff7ffffff08000000f6fffffffafffffffefffffffafffffff8ffffff070000000f00000008000000faffffff04000000000000000600000001000000050000000a0000000600000004000000040000000a0000000400000006000000faffffff0e000000fcffffff0b000000060000000f000000060000000d000000fdffffff0f000000050000000f000000fbffffff0f000000fcffffff
+  colliderGrids: f5fffffffbfffffffefffffffcfffffff5fffffffdfffffff7ffffff08000000f6fffffffafffffffefffffffafffffff8ffffff070000000f00000008000000f9ffffff03000000fcffffff06000000fdffffff04000000fdffffff06000000feffffff050000000b0000000600000000000000040000000b0000000400000001000000030000000b0000000300000006000000faffffff0e000000fcffffff0c000000060000000f000000060000000d000000fdffffff0f000000050000000f000000fbffffff0f000000fcffffff
   triggerGrids: 
-  playerTriggerGrids: f8ffffffffffffff0c00000002000000faffffff05000000fdffffff06000000feffffff06000000ffffffff06000000080000000600000009000000060000000c000000060000000c00000006000000
+  playerTriggerGrids: f9ffffff010000000b00000002000000
+  isPlayerForwardTrigger: 0
   playerTriggerEvent: 0
   operateIds: 
   creatAction: {fileID: 0}
@@ -26,3 +27,7 @@ MonoBehaviour:
   defaultEnter: 0
   displayTips: 1
   playerOperateInfo: 
+  offsetLinkPos: {x: 0, y: 0, z: 0}
+  leftLinkPos: {x: 0, y: 0, z: 0}
+  rightLinkPos: {x: 0, y: 0, z: 0}
+  linkDirection: 0

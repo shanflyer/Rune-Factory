@@ -144,7 +144,7 @@ public class CalendarPanel : GamePanel<IReferenceData>
     }
 
 
-    void DisplayClickDate(GameDate _gameDate,bool value)
+    void DisplayClickDate(GameDate _gameDate, int index, bool value)
     {
         if (value)
         {

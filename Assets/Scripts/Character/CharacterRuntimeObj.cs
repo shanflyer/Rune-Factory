@@ -1,16 +1,13 @@
-﻿using BehaviorDesigner.Runtime;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using BehaviorDesigner.Runtime;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Playables;
-using UnityEngine.TextCore.Text;
-using static UnityEngine.ParticleSystem;
-
 #if UNITY_EDITOR
 #endif
 
-public delegate void SetFootStepAction(AudioClip audioClip, Color color);
+public delegate void SetFootStepAction(SE se, Color color);
 
 public class CharacterRuntimeObj : MonoBehaviour, IGameData
 {
@@ -49,7 +46,7 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
     private RuntimeObj _runtimeObj;
 
     [SerializeField]
-    private Transform body, equip, shadow;
+    private Transform  equip, shadow;
 
     public Animator Animator => animator;
 
@@ -93,9 +90,10 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
 
             this.enabled = false;
             Vector3 offset = new Vector3(0, 0, -99999);
-            body.localScale = Vector3.zero;
-            equip.Translate(offset);
-            shadow.Translate(offset);
+            if (equip)
+                equip.Translate(offset);
+            if (shadow)
+                shadow.Translate(offset);
 
             GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj, true);
         }
@@ -182,13 +180,19 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
         waitFootTime = 0;
         isLeftFoot = false;
 
-        body.localScale = Vector3.one;
-        Vector3 offset = equip.localPosition;
-        offset.z = 0;
-        equip.localPosition = offset;
-        offset = shadow.localPosition;
-        offset.z = 0;
-        shadow.localPosition = offset; 
+        if (equip)
+        {
+            Vector3 offset = equip.localPosition;
+            offset.z = 0;
+            equip.localPosition = offset;
+        }
+        if (shadow)
+        {
+            Vector3 offset = shadow.localPosition;
+            offset.z = 0;
+            shadow.localPosition = offset;
+        }
+       
 
         /*if(runtimeObj!=null)
             EnvironmentManger.instance.AddCharacterGetFootStep(runtimeObj.linkId, characterGetFootStep);*/
@@ -245,37 +249,39 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
 
     private CharacterGetFootStep characterGetFootStep;
 
-    private AudioClip stepAudioClip;
+    private SE se;
     private Color footStepColor;
-    private Dictionary<AudioClip, int> audioClipIndex = new Dictionary<AudioClip, int>();
+    private readonly Dictionary<SE, int> audioClipIndex = new();
 
-    private void SetFootStepAction(AudioClip audioClip, Color color)
+    private async void SetFootStepAction(SE se, Color color)
     {
         footStepColor = color;
-        if (stepAudioClip != audioClip)
+        if (this.se != se)
         {
-            stepAudioClip = audioClip;
-            if (!audioClipIndex.ContainsKey(audioClip))
+            this.se = se;
+            if (!audioClipIndex.ContainsKey(se))
             {
+                var audioClip =
+                    await GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.SEPath, se.ToString()));
                 int inputCount = leftMixerPlayable.GetInputCount();
-                var leftAudioClipPlayable = AudioClipPlayable.Create(singlePlayableGraph, stepAudioClip, false);
+                var leftAudioClipPlayable = AudioClipPlayable.Create(singlePlayableGraph, audioClip, false);
                 leftMixerPlayable.AddInput(leftAudioClipPlayable, 0, 0);
 
-                var rightAudioClipPlayable = AudioClipPlayable.Create(singlePlayableGraph, stepAudioClip, false);
+                var rightAudioClipPlayable = AudioClipPlayable.Create(singlePlayableGraph, audioClip, false);
                 rightMixerPlayable.AddInput(rightAudioClipPlayable, 0, 0);
-                audioClipIndex[audioClip] = inputCount;
+                audioClipIndex[se] = inputCount;
             }
         }
     }
      
     private void PlayFootStep(bool isLeft)
     {
-        if (stepAudioClip == null)
+        if (se == SE.NULL)
         {
             return;
         }
         //Debug.Log($"播放:{stepAudioClip.name}");
-        if (audioClipIndex.TryGetValue(stepAudioClip, out var index))
+        if (audioClipIndex.TryGetValue(se, out var index))
         {
             if (isLeft)
             {
@@ -320,11 +326,10 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
     public void SetReferenceData()
     {
         animator = gameObject.GetComponentInChildren<Animator>();
-        body = transform.Find("Body");
         equip = transform.Find("Equip");
         shadow = transform.Find("Shadow");
         myShadow = shadow.GetComponent<MyShadowPolygon>();
-        equipRenderer = transform.GetChild(1).GetChild(1).GetComponent<MySpriteMeshRender>();
+        equipRenderer = equip.GetChild(1).GetComponent<MySpriteMeshRender>(); 
         behaviorTree = transform.GetComponent<BehaviorTree>();
       
     }

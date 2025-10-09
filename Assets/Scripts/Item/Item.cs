@@ -2,17 +2,53 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-[System.Serializable]
+[Serializable]
 public struct Item : IReferenceData
 {
-    public int instanceId;
-    public int packageId;
-    public int dataId;
-    public int count;
-    public int value;
-    public bool isFresh;
-    public ItemType itemType;
-    public bool locked; 
+    [NonSerialized] public int instanceId; // ≤999999
+    [NonSerialized] public int packageId; // ≤999999
+    [NonSerialized] public int dataId; // ≤9999
+    [NonSerialized] public int count; // ≤100
+    [NonSerialized] public int value; // ≤100
+    [NonSerialized] public bool isFresh;
+    [NonSerialized] public ItemType itemType; // ≤20
+    [NonSerialized] public bool locked;
+
+
+    public (ulong, ulong) Pack()
+    {
+        ulong d1, d2;
+        d1 = d2 = 0;
+
+        // d1
+        d1 |= (ulong)(instanceId & 0xFFFFF) << 0; // 20
+        d1 |= (ulong)(packageId & 0xFFFFF) << 20; // 20
+        d1 |= (ulong)(dataId & 0x3FFF) << 40; // 14
+        d1 |= (ulong)(count & 0x7F) << 54; // 7
+
+        // d2
+        d2 |= (ulong)(value & 0x7F) << 0; // 7
+        d2 |= (isFresh ? 1UL : 0UL) << 7; // 1
+        d2 |= (ulong)((int)itemType & 0x1F) << 8; // 5
+        d2 |= (locked ? 1UL : 0UL) << 13; // 1
+
+        return (d1, d2);
+    }
+
+
+    public Item(ulong d1, ulong d2)
+    {
+        instanceId = (int)((d1 >> 0) & 0xFFFFF);
+        packageId = (int)((d1 >> 20) & 0xFFFFF);
+        dataId = (int)((d1 >> 40) & 0x3FFF);
+        count = (int)((d1 >> 54) & 0x7F);
+
+        // d2
+        value = (int)((d2 >> 0) & 0x7F);
+        isFresh = ((d2 >> 7) & 0x1) != 0;
+        itemType = (ItemType)((d2 >> 8) & 0x1F);
+        locked = ((d2 >> 13) & 0x1) != 0;
+    }
     public Item(int dataId, int count,  int packageId = 0)
     {
         this.dataId = dataId;
@@ -22,7 +58,7 @@ public struct Item : IReferenceData
         itemType = ItemType.Default;
         isFresh = false;
         locked = false;
-        value = 100;  
+        value = 100; 
     } 
     
    public async Task<bool> IsSingleItem()
@@ -122,7 +158,8 @@ public class ItemManager:Singleton<ItemManager>
 
     public async Task BuyActionAsync(ShopItemData selectShopItemData, int buyCount)
     {
-        if (!await PackageManager.instance.CheckPackageTryItemIn(CharacterManager.instance.controllerCharacter.characterPackage, selectShopItemData.item, buyCount))
+        if (!PackageManager.instance.CheckPackageTryItemIn(
+                CharacterManager.instance.controllerCharacter.characterPackage, selectShopItemData.item, buyCount))
         {
             GameNotificationManager.instance.DisplayTips($"空间不足", "背包无法放下这么多东西");
             return;
@@ -144,7 +181,8 @@ public class ItemManager:Singleton<ItemManager>
                     count = buyCount
                 }, CharacterManager.instance.controllerCharacter.characterPackage);
 
-                InformationController.instance.AddInformation($"{LanguageManage.SwitchStr("成功购买")}{buyCount}{LanguageManage.SwitchStr("个+")} {LanguageManage.SwitchStr(itemData.name)} +");
+                InformationController.instance.AddInformation(
+                    $"{LanguageManage.SwitchStr("成功购买")}{buyCount}{LanguageManage.SwitchStr("个+")} {LanguageManage.SwitchStr(itemData.itemName)} +");
                 if (selectShopItemData.buyAction != 0)
                 {
                     var GameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(selectShopItemData.buyAction);

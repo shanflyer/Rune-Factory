@@ -121,7 +121,7 @@ public class MiniPackagePanel : GamePanel<PackageList>
         //this.RefreshPackage();
         //RefreshPackage();
     }
-    private async void SelectPackageItem(Item item, bool selected = true)
+    private async void SelectPackageItem(Item item, int index, bool selected = true)
     {
         if (selected)
         {
@@ -144,7 +144,7 @@ public class MiniPackagePanel : GamePanel<PackageList>
 
                 if (otherSelectItemAction != null)
                 {
-                    otherSelectItemAction.Invoke(item);
+                    otherSelectItemAction.Invoke(item, index);
                 }
             }
         }

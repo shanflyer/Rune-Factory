@@ -72,7 +72,7 @@ MonoBehaviour:
       failOperation: 0
       zFailOperation: 0
     opaque: 0
-    renderPassEvent: 250
+    renderPassEvent: 300
     layerMask:
       serializedVersion: 2
       m_Bits: 456081
@@ -84,7 +84,7 @@ MonoBehaviour:
     textureName: _Normalmap
     blitScale: 1
     blitToCameraTarget: 0
-    clearFlag: 1
+    clearFlag: -1
     clearColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!114 &-2331962285970830670
 MonoBehaviour:
@@ -115,7 +115,7 @@ MonoBehaviour:
       failOperation: 0
       zFailOperation: 0
     opaque: 0
-    renderPassEvent: 210
+    renderPassEvent: 300
     layerMask:
       serializedVersion: 2
       m_Bits: 69632
@@ -158,7 +158,7 @@ MonoBehaviour:
       failOperation: 0
       zFailOperation: 0
     opaque: 0
-    renderPassEvent: 250
+    renderPassEvent: 300
     layerMask:
       serializedVersion: 2
       m_Bits: 262144
@@ -274,7 +274,7 @@ MonoBehaviour:
     failOperation: 0
     zFailOperation: 0
   m_ShadowTransparentReceive: 0
-  m_RenderingMode: 0
+  m_RenderingMode: 2
   m_DepthPrimingMode: 0
   m_CopyDepthMode: 0
   m_DepthAttachmentFormat: 0
@@ -423,7 +423,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baf9c50b2c19fc746bb05181b86be594, type: 3}
   m_Name: BackMask
   m_EditorClassIdentifier: 
-  m_Active: 1
+  m_Active: 0
   VolumeLevel: 0
   settings:
     m_transparencySortMode: 3

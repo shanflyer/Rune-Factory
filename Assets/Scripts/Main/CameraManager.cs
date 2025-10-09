@@ -1,5 +1,4 @@
-﻿using System;
-using Unity.Cinemachine;
+﻿using Unity.Cinemachine;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -28,6 +27,11 @@ public class CameraManager : Singleton<CameraManager>
     public override bool NeedUpdate => true;
     public override bool NeedLateUpdate => true;
     public bool fixedView { get; private set; }
+
+    public void SetVolumeLevel(int level)
+    {
+        DepthOfField.active = level != 0;
+    }
     
     public void RefreshDepthOfField()
     {
@@ -71,13 +75,8 @@ public class CameraManager : Singleton<CameraManager>
             mixingCamera.ChildCameras[1].GetComponent<CinemachineCameraOffset>(),
             mixingCamera.ChildCameras[2].GetComponent<CinemachineCameraOffset>()
         };
-
-        /* cinemachineFramingTransposers = new CinemachinePositionComposer[3]
-         {
-              //followCameras[0].GetCinemachineComponent(CinemachineCore.Stage.),
-             //followCameras[1].GetCinemachineComponent<CinemachinePositionComposer>(),
-            //  followCameras[2].GetCinemachineComponent<CinemachinePositionComposer>()
-         };*/
+ 
+       
         GameActionManager.instance.AddListener<SetFixedPlayerShaderPos>(SetFixedPlayerShaderPos);
         GameActionManager.instance.AddListener<SetFixedCamera>(SetFixedCamera);
         GameActionManager.instance.AddListener<SetCameraPixelValue>(SetCameraPixelValue);
@@ -144,6 +143,12 @@ public class CameraManager : Singleton<CameraManager>
         return screenPoint;
     }
 
+    public static Vector2 WorldPointToUIScreenPoint(Vector3 worldPoint)
+    {
+        // Camera.main 世界摄像机
+        Vector2 screenPoint = instance.uiCamera.WorldToScreenPoint(worldPoint);
+        return screenPoint;
+    }
     // 屏幕坐标转换为 UGUI 坐标
     public static Vector3 ScreenPointToUIPoint(RectTransform rt, Vector2 screenPoint)
     {

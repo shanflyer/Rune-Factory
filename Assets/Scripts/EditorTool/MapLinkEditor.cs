@@ -1,12 +1,9 @@
 #if UNITY_EDITOR
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using Unity.Mathematics;
-using UnityEngine.Tilemaps;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
 using UnityEditor;
-using static UnityEngine.Tilemaps.Tile;
+using UnityEngine;
+using UnityEngine.Tilemaps;
 
 [ExecuteAlways]
 public class MapLinkEditor : MonoBehaviour
@@ -62,13 +59,14 @@ public class MapLinkEditor : MonoBehaviour
 
     public bool CheckLink(int mapId)
     {
-        return mapLine.map0 == mapId || mapLine.map1 == mapId;
+        return mapLine.map0 == mapId || mapLine.map1
+            == mapId;
     }
     public void InitLinkData(MapLine mapLine)
     { 
         if (mapLine.instanceId == 0)
         {
-            string id = $"{mapLine.map0}{mapLine.map1}";
+            var id = $"{mapLine.map0}{mapLine.map1}";
             mapLine.instanceId = int.Parse(id);
         }
         this.mapLine = mapLine;
@@ -78,8 +76,8 @@ public class MapLinkEditor : MonoBehaviour
         mapPos0 = mapInstance0.transform.position;
         mapPos1 = mapInstance1.transform.position;
 
-        string linkName = $"{mapLine.map0}-{mapLine.map1}";
-        startPoint.gameObject.name=$"{linkName}:{mapLine.map0}";
+        var linkName = $"{mapLine.map0}-{mapLine.map1}";
+        startPoint.gameObject.name = $"{linkName}:{mapLine.map0}";
         endPoint.gameObject.name = $"{linkName}:{mapLine.map1}";
         startPoint.parent.name = linkName;
 
@@ -154,8 +152,8 @@ public class MapLinkEditor : MonoBehaviour
             tilemap1.SetTiles(poses.ToArray(), tileBases.ToArray());
         }
 
-        
-        string linkName = $"{mapLine.map0}-{mapLine.map1}";
+
+        var linkName = $"{mapLine.map0}-{mapLine.map1}";
         startPoint.gameObject.name = $"{linkName}:{mapLine.map0}";
         endPoint.gameObject.name = $"{linkName}:{mapLine.map1}";
         startPoint.parent.name = linkName;
@@ -175,7 +173,8 @@ public class MapLinkEditor : MonoBehaviour
         }
         */
         mapInstance0 = WorldInstanceEditor.Instance.mapInstanceEditors[mapLine.map0];
-        mapInstance1 = WorldInstanceEditor.Instance.mapInstanceEditors[mapLine.map1];
+        mapInstance1 = WorldInstanceEditor.Instance.mapInstanceEditors[mapLine.map1
+        ];
     }
 
     private void Update()
@@ -201,8 +200,13 @@ public class MapLinkEditor : MonoBehaviour
 
             DestroyImmediate(gameObject);
         }
-        string id = $"{mapLine.map0}{mapLine.map1}";
-        mapLine.instanceId = int.Parse(id); 
+
+        if (mapLine.instanceId == 0)
+        {
+            var id = $"{mapLine.map0}{mapLine.map1}";
+            mapLine.instanceId = int.Parse(id);
+        }
+       
     }
     // Update is called once per frame
     void Update1()
@@ -231,8 +235,10 @@ public class MapLinkEditor : MonoBehaviour
             {
                 DestroyImmediate(gameObject);
             }
+
             mapInstance0 = WorldInstanceEditor.Instance.mapInstanceEditors[mapLine.map0];
-            mapInstance1 = WorldInstanceEditor.Instance.mapInstanceEditors[mapLine.map1];
+            mapInstance1 = WorldInstanceEditor.Instance.mapInstanceEditors[mapLine.map1
+            ];
         }
     }
 }

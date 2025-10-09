@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class GameGuideManager:Singleton<GameGuideManager>
@@ -23,6 +17,11 @@ public class GameGuideManager:Singleton<GameGuideManager>
         {
             GameDataSaveManager.instance.UserGameSaveData.endGuideFilmIndex = value;
         }
+    }
+
+    public bool IsEndGuide()
+    {
+        return endGuideFilmIndex >= GameDataManager.instance.GlobalData.endGuideIndex;
     }
     public async Task<GameGuideFilmData> GetGameGuideFilmData()
     {
@@ -48,26 +47,22 @@ public class GameGuideManager:Singleton<GameGuideManager>
             hour = data.fixedHour,
         };
         GameActionManager.instance.QueueAction(setFixedTime);
-        if (!data.displayCharacter)
+        var setCharacterCoordinate = new SetCharacterCoordinate
         {
-            SetCharacterStopCreate setCharacterStopCreate = new SetCharacterStopCreate
-            {
-                hide = !data.displayCharacter
-            };
-           GameActionManager.instance.QueueAction(setCharacterStopCreate);
-        }
-        else
+            characterId = characterId,
+            coordinate = data.fixedMap
+        };
+        GameActionManager.instance.QueueAction(setCharacterCoordinate);
+
+        var setCharacterStopCreate = new SetCharacterStopCreate
         {
-            SetCharacterCoordinate setCharacterCoordinate = new SetCharacterCoordinate
-            {
-                characterId = characterId,
-                coordinate = data.fixedMap
-            };
-            GameActionManager.instance.QueueAction(setCharacterCoordinate); 
-        }
+            hide = !data.displayCharacter
+        };
+        GameActionManager.instance.QueueAction(setCharacterStopCreate); 
+         
         GameTimerController.instance.DelayAction(1000, () =>
         {
-            //GameActionDataManager.instance.Action(data.beforeEventId);
+            GameActionDataManager.instance.Action(data.beforeEventId);
         });
         
     }
@@ -109,15 +104,15 @@ public class GameGuideManager:Singleton<GameGuideManager>
            
         }
     }
-    async void SetIntAction(int id,Selectable selectable)
+
+    private void SetIntAction(int id, Selectable selectable)
     {
         guidSelectableDic[id] = selectable;
-         
-       // if (id== nowGuideSelectableId)
+        if (waitGuide != 0 && waitGuide == id)
         {
-           // Debug.Log("等待 guid");
-           //InitShowGuide();
-        }
+            UIManager.instance.ShowGamePanel<GameGuidePanel, GuidStepData>(guidStepData);
+        } 
+        
     }
     void RemoveIntAction(int id,Selectable selectable)
     {
@@ -132,13 +127,18 @@ public class GameGuideManager:Singleton<GameGuideManager>
     }
     void ShowGuide()
     {
+        waitGuide = 0;
         if (nowGameGuideData == null)
         {
             return;
         }
         if(nowGameGuideData.GetGuidStepData(out guidStepData))
         {
-            UIManager.instance.ShowGamePanel<GameGuidePanel, GuidStepData>(guidStepData);
+            nowGuideSelectableId = guidStepData.selectableId;
+            if (guidSelectableDic.TryGetValue(nowGuideSelectableId, out var selectable))
+                UIManager.instance.ShowGamePanel<GameGuidePanel, GuidStepData>(guidStepData);
+            else
+                waitGuide = nowGuideSelectableId;
         }
         else
         {
@@ -154,41 +154,19 @@ public class GameGuideManager:Singleton<GameGuideManager>
 
 
     int nowGuideSelectableId;
-    public void GuideButtonAction(PointerEventData eventData) 
-    {
-        Debug.Log($"指引点击00!!--{eventData.button}");
-        if (guidStepData.waitTime > 0)
-        {
-            GameTimerController.instance.DelayAction(guidStepData.waitTime, () =>
-            {
-                InitShowGuide();
-            });
-        }
-        else
-        {
-            InitShowGuide();
-        } 
-    }
+ 
     public void GuideButtonAction()
     {
-        if (guidStepData.waitTime > 0)
-        {
-            GameTimerController.instance.DelayAction(guidStepData.waitTime, () =>
-            {
-                InitShowGuide();
-            });
-        }
-        else
-        {
-            InitShowGuide();
-        }
+        InitShowGuide();
     }
+
+    private int waitGuide;
     void InitShowGuide()
     {
         if (guidSelectableDic.TryGetValue(nowGuideSelectableId, out var selectable))
-        {
+        { 
             selectable.HideSelected = true;
-            //Debug.Log($"指引点击01!!-");
+            Debug.Log("指引点击01!!-");
             if (selectable is Button button)
             {
                 button.OnPointerClick();
@@ -200,10 +178,21 @@ public class GameGuideManager:Singleton<GameGuideManager>
 
             ShowGuide();
         }
-        else
+         
+    }
+
+    public bool GetSelectRectTransform(int guid, out RectTransform guidRect)
+    {
+        if (guidSelectableDic.TryGetValue(guid, out var selectable))
         {
-            Debug.Log("指引未命中！");
+            nowGuideSelectableId = guid;
+            guidRect = selectable.transform as RectTransform;
+
+            return true;
         }
+
+        guidRect = null;
+        return false;
     }
     public bool GetSelectableSize(int guid,out Vector3 pos,out Vector2 size)
     {

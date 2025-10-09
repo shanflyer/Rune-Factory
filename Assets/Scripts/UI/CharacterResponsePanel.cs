@@ -53,10 +53,13 @@ public class CharacterResponsePanel : GamePanel<CharacterResponseData>
         TalkValue.SetSWText(characterResponseData.talkValue);
         Icon.sprite = characterResponseData.icon;
         Icon.SetNativeSize();
-        var clipPlayable = AnimationClipPlayable.Create(graph, characterResponseData.clip);
-        animationPlayableOutput.SetSourcePlayable(clipPlayable);
-        graph.Play();
-
+        if (characterResponseData.clip != null)
+        {
+            var clipPlayable = AnimationClipPlayable.Create(graph, characterResponseData.clip);
+            animationPlayableOutput.SetSourcePlayable(clipPlayable);
+            graph.Play();
+        }
+      
         GameTimerController.instance.DelayAction(characterResponseData.displayTime == 0 ? GameCommon.defaultPlayerTalkTime : characterResponseData.displayTime,
             () =>
             {

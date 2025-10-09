@@ -1,14 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks; 
-using Unity.Collections; 
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public class ShortcutManager : Singleton<ShortcutManager>
 {
     Dictionary<int,ShortcutPackage> shortcutPackages = new Dictionary<int, ShortcutPackage>();
-    public ShortcutPackage playerShortcutPackage => GetShortcutPackage(CharacterManager.instance.controllerCharacter.instanceId);
+
+    public ShortcutPackage playerShortcutPackage
+    {
+        get
+        {
+            if (CharacterManager.instance == null || CharacterManager.instance.controllerCharacter == null) return null;
+            return GetShortcutPackage(CharacterManager.instance.controllerCharacter.instanceId);
+        }
+    } 
     public ShortcutPackage GetShortcutPackage(int characterId)
     {
         if(!shortcutPackages.TryGetValue(characterId,out var shortcutPackage))
@@ -64,6 +68,7 @@ public class ShortcutManager : Singleton<ShortcutManager>
                     PackageManager.instance.GetPackageItemCount(CharacterManager.instance.controllerCharacter.characterPackage, item.dataId);
                     if (itemCount <= 0)
                     {
+                        shortcutPackage.haveItems.Remove(shortcutPackage.items[i].dataId);
                         shortcutPackage.haveItems.Remove(shortcutPackage.items[i].instanceId);
                         shortcutPackage.items[i] = default(Item);
                     }
@@ -295,13 +300,18 @@ public class ShortcutPackage : IReferenceData, INativeData
     {
         if (index <= items.Length)
         {
-            haveItems.Remove(items[index - 1].instanceId);
+            haveItems.Remove(items[index - 1].instanceId != 0 ? items[index - 1].instanceId : items[index - 1].dataId);
             items[index-1] = default(Item); 
         }
     }
     public bool SetItem(Item item)
     {
-        if (item.instanceId!=0&&haveItems.Contains(item.instanceId))
+        if (item.instanceId != 0)
+        {
+            if (haveItems.Contains(item.instanceId)) return false;
+        }
+
+        if (haveItems.Contains(item.dataId))
         {
             return false;
         }
@@ -310,7 +320,7 @@ public class ShortcutPackage : IReferenceData, INativeData
             if (items[i].instanceId == 0&& items[i].count<=0)
             {
                 items[i] = item;
-                haveItems.Add(item.instanceId);
+                haveItems.Add(item.instanceId != 0 ? item.instanceId : item.dataId);
                 return true; 
             }
         }

@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 public class PackageManager : Singleton<PackageManager>
 {
@@ -29,7 +28,7 @@ public class PackageManager : Singleton<PackageManager>
             packageList.packageDatas.Add(gamePackage.OutGamePackageData());
         }
         var warehousePanel = await UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
-        warehousePanel.SetSelectItemAction((Item item,bool select) =>
+        warehousePanel.SetSelectItemAction((Item item,int index,bool select) =>
         {
             UsingAction(item);
             if (close)
@@ -51,7 +50,7 @@ public class PackageManager : Singleton<PackageManager>
             packageList.packageDatas.Add(gamePackage.OutGamePackageData());
         }
         var warehousePanel = await UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
-        warehousePanel.SetSelectItemAction((Item item, bool select) =>
+        warehousePanel.SetSelectItemAction((Item item, int index, bool select) =>
         {
 
             FightManager.instance.TryUseItem(item);
@@ -663,15 +662,20 @@ public class PackageManager : Singleton<PackageManager>
     {
         for (int i = 0; i < packageSaveDatas.Count; i++)
         {
+            packageSaveDatas[i].Unpack();
             if (gamePackages.TryGetValue(packageSaveDatas[i].id,out var gamePackage))
             {
                 gamePackage.caseCount = packageSaveDatas[i].caseCount;
                 gamePackage.level = packageSaveDatas[i].level;
                 gamePackage.name = packageSaveDatas[i].packageName;
-                for(int j = 0; j < packageSaveDatas[i].items.Count; j++)
+
+                var dataCount = packageSaveDatas[i].items.Count / 2;
+                for (var j = 0; j < dataCount; j++)
                 {
-                   await gamePackage.SetItemInPackage(packageSaveDatas[i].items[j]);
+                    var item = new Item(packageSaveDatas[i].items[j * 2], packageSaveDatas[i].items[j * 2 + 1]);
+                    await gamePackage.SetItemInPackage(item);
                 }
+                
                 GameActionManager.instance.QueueAction(new RefreshShortcut
                 {
                     packageId=gamePackage.instanceId
@@ -688,8 +692,18 @@ public class PackageManager : Singleton<PackageManager>
                     itemPackage = saveData.itemPackage,
 
                 };
-                gamePackage.InitSaveItemList(saveData.items); 
+                  
+                var dataCount = saveData.items.Count / 2;
+                var items = new List<Item>();
+                for (var j = 0; j < dataCount; j++)
+                {
+                    var item = new Item(saveData.items[j * 2], saveData.items[j * 2 + 1]);
+                    items.Add(item);
+                }
+
+                gamePackage.InitSaveItemList(items); 
                 gamePackages.Add(saveData.id, gamePackage);
+                RefreshPackageMapDisplay(gamePackage.caseCount, gamePackage.itemCount, gamePackage.instanceId);
             }
           
         }
@@ -712,19 +726,28 @@ public class PackageManager : Singleton<PackageManager>
                     packageType = gamePackage.packageType,
                     packageName = gamePackage.name,
                     itemPackage = gamePackage.itemPackage,
-                    items = gamePackage.GetItems()
+                    items = new List<ulong>()
                 };
+                var items = gamePackage.GetItems();
+                for (var i = 0; i < items.Count; i++)
+                {
+                    var packed = items[i].Pack();
+                    packageSaveData.items.Add(packed.Item1);
+                    packageSaveData.items.Add(packed.Item2);
+                }
+
+                packageSaveData.Pack();
                 packageSaveDatas.Add(packageSaveData);
             }
         }
         return packageSaveDatas;
     }
 
-    public async Task<bool> CheckPackageTryItemIn(int packageId, int itemDataId, int count)
+    public bool CheckPackageTryItemIn(int packageId, int itemDataId, int count)
     {
         if (gamePackages.TryGetValue(packageId, out GamePackage gamePackage))
         {
-            return await gamePackage.CheckPackageTryItemIn(itemDataId, count);
+            return gamePackage.CheckPackageTryItemIn(itemDataId, count);
         }
         return false;
     }
@@ -929,14 +952,20 @@ public class PackageManager : Singleton<PackageManager>
 
     public async Task<int> CreatGamePackage(int dataId, int level, int instanceId = 0)
     {
+        if (dataId == 0) return -1;
         int packageInstanceId = instanceId == 0 ? MyInstance.instance.Uid : instanceId;
-        if(gamePackages.ContainsKey(packageInstanceId))
+        if (gamePackages.TryGetValue(packageInstanceId, out var _oldGamePackage))
         {
+            RefreshPackageMapDisplay(_oldGamePackage.caseCount, _oldGamePackage.itemCount, _oldGamePackage.instanceId);
             return -1;
         }
-
-
-        PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(dataId); 
+        
+        PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(dataId);
+        if (packageSetData == null)
+        {
+            Debug.LogError($"null packageSetData:{dataId}");
+            return -1;
+        }
         int nowCount = packageSetData.count + packageSetData.levelUpAddCount * level;
         GamePackage gamePackage = new GamePackage(nowCount, packageSetData.name, packageInstanceId, packageSetData,level);
         gamePackages.Add(packageInstanceId, gamePackage);
@@ -1569,7 +1598,16 @@ public class PackageManager : Singleton<PackageManager>
                     count = itemCount;
                 }
 
-                packageItemCounts[itemDataId] = itemCount - count;
+                int _count=itemCount - count;
+                if (_count > 0)
+                {
+                    packageItemCounts[itemDataId] = _count;
+                }
+                else
+                {
+                    packageItemCounts.Remove(itemDataId);
+                }
+               
                 List<int> indexDatas = packageItemIndexDatas[itemDataId];
                 int index = indexDatas.Count - 1;
 
@@ -1668,14 +1706,14 @@ public class PackageManager : Singleton<PackageManager>
             return packageItemCounts.ContainsKey(itemDataId);
         }
 
-        public async Task<bool> CheckPackageTryItemIn(int itemDataId, int count)
+        public bool CheckPackageTryItemIn(int itemDataId, int count)
         {
             if (caseCount < itemCount)
             {
                 return false;
             }
 
-            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(itemDataId.ToString());
+            var itemData = GameDataManager.instance.GetData<ItemData>(itemDataId.ToString());
             if (!string.IsNullOrEmpty(itemData.name))
             {
                 if (itemData.groupCount > 1)

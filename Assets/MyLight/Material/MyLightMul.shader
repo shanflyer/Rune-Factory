@@ -16,9 +16,10 @@ Shader "MyLight/LightMul"
     SubShader
     {
         Tags {"Queue" = "Transparent" "RenderType" = "Transparent" "RenderPipeline" = "UniversalPipeline" }
-
-        Blend SrcAlpha OneMinusSrcAlpha
-        //Blend SrcAlpha OneMinusSrcAlpha, One OneMinusSrcAlpha
+        
+        
+         Blend SrcAlpha OneMinusSrcAlpha
+       // Blend SrcAlpha OneMinusSrcAlpha, One OneMinusSrcAlpha
         Cull Off
         ZWrite off
 		//ZTest LEqual
@@ -127,6 +128,7 @@ Shader "MyLight/LightMul"
                 half value=1;
                 Unity_Remap_float(distance,float2(0.5,0),float2(_MinSize,_MaxSize),value);
                 
+               // return float4(value.xxx,1);
 
                 value=clamp(value,0,1)*_PointLight+(1-_PointLight)*clamp(i.uv,0,1);
                 float2 screenUV=i.screenUV.xy/i.screenUV.w;
@@ -134,16 +136,19 @@ Shader "MyLight/LightMul"
 
                 half4 normal_col =SAMPLE_TEXTURE2D(_Normalmap, sampler_Normalmap,screenUV);
               
-                //return normal_col;
+               //  return normal_col;
                 half3 normalUnpacked = UnpackNormalRGBNoScale(normal_col);
                 half3 dirToLight = normalize(i.lightDirection.xyz); 
                
 
                 half4 lightColor = i.color*value;   
+                //return float4(lightColor.xyzw);
                 lightColor = lightColor * saturate(dot(dirToLight, normalUnpacked))*_NormalLight+(1-_NormalLight)*lightColor;
  
                 lightColor=(1-_BlendTex)*lightColor+_BlendTex*lightColor;
                 lightColor.xyz*=0.25;
+
+ 
 
                 return lightColor; 
             }

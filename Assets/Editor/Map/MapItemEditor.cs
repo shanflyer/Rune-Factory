@@ -66,10 +66,10 @@ public class MapItemEditor : MyEditor
         _Instance = null;
     }
 
-    [MenuItem("¹¤¾ß/µØÍ¼µÀ¾ß")]
+    [MenuItem("å·¥å…·/åœ°å›¾é“å…·")]
     public static void WindowShow()
     {
-        _Instance = EditorWindow.CreateWindow<MapItemEditor>("µØÍ¼µÀ¾ß");
+        _Instance = CreateWindow<MapItemEditor>("åœ°å›¾é“å…·");
         Instance.Init();
     }
 
@@ -106,7 +106,7 @@ public class MapItemEditor : MyEditor
         var MapEditor = GameObject.Find("MapEditor");
         if (MapEditor == null)
         {
-            Debug.LogError("³¡¾°²»¶Ô»òÎŞMapEditorÎïÌå£¡");
+            Debug.LogError("åœºæ™¯ä¸å¯¹æˆ–æ— MapEditorç‰©ä½“ï¼");
             return;
         }
         ground = MapEditor.transform.Find("Ground").GetComponent<Tilemap>();
@@ -177,7 +177,7 @@ public class MapItemEditor : MyEditor
         Model.transform.SetParent(selectItem.transform, false);
         Show.transform.SetParent(selectItem.transform, false);
 
-        MapItemData mapItemData = ScriptableObject.CreateInstance<MapItemData>();
+        MapItemData mapItemData = CreateInstance<MapItemData>();
 
         mapItemData.id = MyInstance.instance.CreateInstanceId();
         mapItemData.name = mapItemData.id.ToString();
@@ -356,11 +356,11 @@ public class MapItemEditor : MyEditor
         mapItemsPanel.DisplayCommonObjList<MapItemDataObj>(400, 360, mapItemDataObjs, 4, false);
 
         EditorGUILayout.BeginHorizontal();
-        DrawButton("ĞÂ½¨µØÍ¼ÎïÌå", NewMapItem, 100);
-        DrawButton("±à¼­µØÍ¼ÎïÌå", EditMapItem, 100);
-        DrawButton("±£´æ", SaveMapItem, 50);
+        DrawButton("æ–°å»ºåœ°å›¾ç‰©ä½“", NewMapItem, 100);
+        DrawButton("ç¼–è¾‘åœ°å›¾ç‰©ä½“", EditMapItem, 100);
+        DrawButton("ä¿å­˜", SaveMapItem, 50);
         EditorGUILayout.EndHorizontal();
-        DrawButton("´´½¨µØÍ¼µÀ¾ß", CreatMapItem, 100);
+        DrawButton("åˆ›å»ºåœ°å›¾é“å…·", CreatMapItem, 100);
 
         DisplayMapObjProperty();
     }
@@ -370,8 +370,9 @@ public class MapItemEditor : MyEditor
         GUILayout.BeginVertical("button");
         if (selectMapItemDataObj != null)
         {
-            DrawIntField(ref selectMapItemDataObj.itemData.id, "ÎïÌåId:", 80, 120);
-            DrawTextField(ref selectMapItemDataObj.itemData.itemName, "ÎïÌåÃû×Ö:", 80, 120);
+            DrawIntField(ref selectMapItemDataObj.itemData.id, "ç‰©ä½“Id:", 80, 120);
+            DrawTextField(ref selectMapItemDataObj.itemData.itemName, "å±•ç¤ºåå­—:", 80, 120);
+            DrawTextField(ref selectMapItemDataObj.itemData.objName, "ç‰©ä½“åå­—:", 80, 120);
         }
         GUILayout.EndVertical();
     }

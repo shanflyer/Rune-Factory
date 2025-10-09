@@ -1,9 +1,8 @@
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering.RenderGraphModule;
-using UnityEngine.Experimental.Rendering;
-using Unity.Mathematics;
+using UnityEngine.Rendering.Universal;
 
 public class MyScreenRenderPassFeature : ScriptableRendererFeature
 {
@@ -93,7 +92,7 @@ public class MyScreenRenderPassFeature : ScriptableRendererFeature
                 {
                     passData.source = outTexHandle;
                     passData.material = material;
-                    builder.UseTexture(outTexHandle);
+                    builder.UseTexture(outTexHandle); // 输入依赖 
                     builder.SetRenderAttachment(resourceData.activeColorTexture, 0);
                     builder.AllowPassCulling(false);
                     builder.SetRenderFunc((PassData data, RasterGraphContext context) => ExecutePass(data, context)); 

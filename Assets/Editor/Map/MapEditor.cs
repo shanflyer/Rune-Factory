@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Random = UnityEngine.Random;
 
 public class MapEditor : MyEditor
 {
@@ -53,7 +54,7 @@ public class MapEditor : MyEditor
     [MenuItem("工具/地图编辑")]
     public static void WindowShow()
     {
-        Instance = EditorWindow.CreateWindow<MapEditor>("地图编辑");
+        Instance = CreateWindow<MapEditor>("地图编辑");
         Instance.minSize = new Vector2(360, 480);
         Instance.maxSize = new Vector2(360, 480);
         Instance.ShowAuxWindow();
@@ -183,10 +184,10 @@ public class MapEditor : MyEditor
     public int CreatMapItemInstance(int id)
     {
         var mapItemInstances = FindObjectsByType<MapItemInstanceEditor>(FindObjectsInactive.Include, FindObjectsSortMode.None).ToList();
-        int intanceid = id * 1000 + UnityEngine.Random.Range(0, 1000);
+        int intanceid = id * 1000 + Random.Range(0, 1000);
         while (mapItemInstances.Exists(m => m.mapItem.instanceId == intanceid))
         {
-            intanceid = id * 1000 + UnityEngine.Random.Range(0, 1000);
+            intanceid = id * 1000 + Random.Range(0, 1000);
         }
         return intanceid;
     }
@@ -196,7 +197,7 @@ public class MapEditor : MyEditor
         if (selectMapRoomDataObj != null && mapInstance != null)
         {
             GameObject roomObj = mapInstance.Save(changeMapName);
-            selectMapRoomDataObj.mapRoomData.mapObj = roomObj;
+            //selectMapRoomDataObj.mapRoomData.mapObj = roomObj;
 
             selectMapRoomDataObj.mapRoomData.mapItems.Clear();
             var mapItemInstances = FindObjectsByType<MapItemInstanceEditor>(FindObjectsSortMode.None);
@@ -205,7 +206,7 @@ public class MapEditor : MyEditor
             {
                 if (instanceId.Contains(mapItemInstance.mapItem.instanceId))
                 {
-                    mapItemInstance.mapItem.instanceId = MapEditor.Instance.CreatMapItemInstance(mapItemInstance.mapItem.id);
+                    mapItemInstance.mapItem.instanceId = Instance.CreatMapItemInstance(mapItemInstance.mapItem.id);
                 }
                 instanceId.Add(mapItemInstance.mapItem.instanceId);
                 selectMapRoomDataObj.mapRoomData.mapItems.Add(mapItemInstance.mapItem);

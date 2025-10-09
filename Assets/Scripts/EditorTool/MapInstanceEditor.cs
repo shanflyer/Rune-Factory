@@ -1,15 +1,11 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
-using System.Threading;
+using System.IO;
 using TMPro;
-using TreeEditor;
-using Unity.Core;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.Tilemaps;
-using System.IO;
 
 [ExecuteAlways]
 public class MapInstanceEditor : MonoBehaviour
@@ -169,7 +165,8 @@ public class MapInstanceEditor : MonoBehaviour
         };
         return worldMap;
     }
-    public void InitData(MapRoomData mapRoomData, int id, bool hideTilemap = false)
+
+    public void InitData(MapRoomData mapRoomData, int id, bool hideTilemap = false, bool displayTile = true)
     {
         this.mapRoomData = mapRoomData;
         this.id = id;
@@ -193,44 +190,52 @@ public class MapInstanceEditor : MonoBehaviour
                 itemParentObj.transform.localPosition = new Vector3(0, 0, 0);
                 itemParent = itemParentObj.transform;
 
-                GameObject Grid = new GameObject("Grid");
-                Grid.transform.SetParent(transform, false);
+                if (displayTile)
+                {
+                    var Grid = new GameObject("Grid");
+                    Grid.transform.SetParent(transform, false);
 
-                GameObject MapTile = new GameObject("MapTile");
-                MapTile.transform.SetParent(Grid.transform, false);
+                    var MapTile = new GameObject("MapTile");
+                    MapTile.transform.SetParent(Grid.transform, false);
 
-                GameObject GroundTile = new GameObject("GroundTile");
-                GroundTile.transform.SetParent(Grid.transform, false);
+                    var GroundTile = new GameObject("GroundTile");
+                    GroundTile.transform.SetParent(Grid.transform, false);
 
-                coordinateDisplayParent = new GameObject("CoordinateDisplay");
-                coordinateDisplayParent.transform.SetParent(transform, false);
+                    coordinateDisplayParent = new GameObject("CoordinateDisplay");
+                    coordinateDisplayParent.transform.SetParent(transform, false);
 
-                var grid = Grid.AddComponent<Grid>();
-                tilemap = MapTile.AddComponent<Tilemap>();
-                var tilemapRenderer = MapTile.AddComponent<TilemapRenderer>();
-                tilemap.color = new Color(1, 1, 1, 0.5f);
-                tilemapRenderers.Add(tilemapRenderer);
-                tilemapRenderer.sharedMaterial = material;
+                    var grid = Grid.AddComponent<Grid>();
+                    tilemap = MapTile.AddComponent<Tilemap>();
+                    var tilemapRenderer = MapTile.AddComponent<TilemapRenderer>();
+                    tilemap.color = new Color(1, 1, 1, 0.5f);
+                    tilemapRenderers.Add(tilemapRenderer);
+                    tilemapRenderer.sharedMaterial = material;
 
 
-                groundTilemap=GroundTile.AddComponent<Tilemap>();
-                var groundTilemapRenderer = GroundTile.AddComponent<TilemapRenderer>();
-                groundTilemap.color = new Color(1, 1, 1, 0.5f);
-                groundTilemapRenderers.Add(groundTilemapRenderer);
-                groundTilemapRenderer.sharedMaterial = material;
-                groundTilemapRenderer.enabled = !hidegGroundTilemap;
+                    groundTilemap = GroundTile.AddComponent<Tilemap>();
+                    var groundTilemapRenderer = GroundTile.AddComponent<TilemapRenderer>();
+                    groundTilemap.color = new Color(1, 1, 1, 0.5f);
+                    groundTilemapRenderers.Add(groundTilemapRenderer);
+                    groundTilemapRenderer.sharedMaterial = material;
+                    groundTilemapRenderer.enabled = !hidegGroundTilemap;
 
-                grid.cellSize = new Vector3(GameCommon.cellWidth, GameCommon.cellHigh, 0);
-                tilemapRenderer.enabled = !hideTilemap;
+                    grid.cellSize = new Vector3(GameCommon.cellWidth, GameCommon.cellHigh, 0);
+                    tilemapRenderer.enabled = !hideTilemap;
 
-                GameObject areaParentObj = new GameObject("AreaParent");
-                areaParentObj.transform.SetParent(transform, false);
-                areaParent = areaParentObj.transform;
+                    var areaParentObj = new GameObject("AreaParent");
+                    areaParentObj.transform.SetParent(transform, false);
+                    areaParent = areaParentObj.transform;
+                }
+              
             }
             InitMapObj();
-            InitMapTile();
-            InitGroundMapTile();
-            InitMapArea();
+            if (displayTile)
+            {
+                InitMapTile();
+                InitGroundMapTile();
+                InitMapArea();
+            }
+          
         }
     }
     public bool CheckPos(ref int2 clickCoordinate)
@@ -446,7 +451,7 @@ public class MapInstanceEditor : MonoBehaviour
     {
         tilemap.ClearAllTiles();
 
-        GameObject.DestroyImmediate(coordinateDisplayParent);
+        DestroyImmediate(coordinateDisplayParent);
         coordinateDisplayParent = new GameObject("CoordinateDisplay");
         coordinateDisplayParent.transform.SetParent(transform, false);
 

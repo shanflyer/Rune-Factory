@@ -47,7 +47,7 @@ public class GoldCreatPanel : GamePanel<IReferenceData>
     } 
 
     MoneyCreatData selectMoneyCreatData;
-    void SelectCreater(MoneyCreatData MoneyCreatData,bool selected)
+    void SelectCreater(MoneyCreatData MoneyCreatData, int index, bool selected)
     {
         if (selected)
         {

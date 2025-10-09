@@ -258,8 +258,9 @@ public class GlobalShaderSetMono : MonoBehaviour
             }
             if (skyEnviromentMono != null)
             {
-                float screenScale = Screen.width / (float)Screen.height;
-                float screenScaleX = 1f + screenScale;
+                var ScreenResolution = GameCommon.GetScreenResolution();
+                float screenScale = ScreenResolution.x / ScreenResolution.y;
+                float screenScaleX = 1f + screenScale; 
                 float screenScaleY = 1f + screenScale * 0.5f;
                 Vector2 sunPos = natureLightData.sunPos * new Vector2(screenScaleX, screenScaleY);
                 if (skyEnviromentMono.Sun)
@@ -350,19 +351,19 @@ public class GlobalShaderSetMonoEditor : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        if (GUILayout.Button("²âÊÔGUID"))
+        if (GUILayout.Button("æµ‹è¯•GUID"))
         {
             globalShaderSetMono.TestGUID();
         }
-        if (GUILayout.Button("ÉèÖÃ"))
+        if (GUILayout.Button("è®¾ç½®"))
         {
             globalShaderSetMono.SetGlobalShaderValue();
         }
-        if (GUILayout.Button("ÉèÖÃlightValue"))
+        if (GUILayout.Button("è®¾ç½®lightValue"))
         {
             globalShaderSetMono.TestLightValue();
         }
-        if (GUILayout.Button("²âÊÔÏà»ú"))
+        if (GUILayout.Button("æµ‹è¯•ç›¸æœº"))
         {
             globalShaderSetMono.TestCameraRect();
         }

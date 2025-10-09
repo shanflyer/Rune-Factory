@@ -1,8 +1,6 @@
-﻿
-using System;
+﻿using System;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 using static UnityEngine.ParticleSystem;
 
 [Serializable]
@@ -11,9 +9,9 @@ public struct SkyCloudData
     public ParticleSystem particleSystem;
     public Color startColor, endColor; 
 
-    ParticleSystem.MainModule mainModule;
-    ParticleSystem.EmissionModule emissionModule;
-    ParticleSystem.VelocityOverLifetimeModule VelocityOverLifetimeModule;
+    MainModule mainModule;
+    EmissionModule emissionModule;
+    VelocityOverLifetimeModule VelocityOverLifetimeModule;
     ParticleSystemRenderer ParticleSystemRenderer;
 
     public void DisplayEnable(bool enable)
@@ -41,7 +39,7 @@ public struct SkyCloudData
     {
         float speed = math.lerp(1, 3, math.abs(windValue));
         mainModule.simulationSpeed = speed;
-        VelocityOverLifetimeModule.x =new ParticleSystem.MinMaxCurve( -windValue * 0.2f, -windValue * 0.2f);
+        VelocityOverLifetimeModule.x =new MinMaxCurve( -windValue * 0.2f, -windValue * 0.2f);
     }
     
 }
@@ -107,14 +105,14 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
             return sun.transform;
         }
     }
-    ParticleSystem.VelocityOverLifetimeModule farVelocity, nearVelocity;
-    ParticleSystem.EmissionModule farEmission, nearEmission,starEmission;
-    ParticleSystem.MainModule farMain, nearMain;
+    VelocityOverLifetimeModule farVelocity, nearVelocity;
+    EmissionModule farEmission, nearEmission,starEmission;
+    MainModule farMain, nearMain;
     private void Awake()
     { 
         GameActionManager.instance.AddListener<DisplaySky>(DisplaySky);
         GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
-
+       
         farVelocity = farCloud.velocityOverLifetime;
         nearVelocity = nearCloud.velocityOverLifetime;
         farEmission = farCloud.emission;
@@ -122,7 +120,8 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
         farMain = farCloud.main;
         nearMain = nearCloud.main;
         starEmission = star.emission;
-
+        starEmission.rateOverTime = 0;
+        star.Clear();
         float screenHeight = Screen.height;
         float dt = screenHeight - environmentLerpOffset.x;
         dt *= environmentLerpOffset.y;
@@ -163,7 +162,7 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
     }
     async void DisplaySky(DisplaySky displaySky)
     {
-        displayCloud = displaySky.display;
+        displayCloud = !(!displaySky.display && !displaySky.displaySunlight);
         bgOffset =float4.zero;
         if (displaySky.display)
         {
@@ -189,19 +188,28 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
             sun.enabled = false;
             bg.enabled = false;
             sea.enabled = false;
-            farCloud.Stop();
-            nearCloud.Stop();
-            star.Stop();
+           
             sun.gameObject.SetActive(false);
             sunClollider.enabled = false;
             if (displaySky.displaySunlight)
             {
+                farEmission.rateOverTime = (int)math.lerp(farCloudCount.x, farCloudCount.y, cloud);
+                nearEmission.rateOverTime = (int)math.lerp(nearCloudCount.x, nearCloudCount.y, cloud);
+                farCloud.Play();
+                nearCloud.Play();
+                star.Play();
                 ProFlareBatch.gameObject.SetActive(true);
                 ProFlareBatch.SetTrigger2DGameObject(true);
                 ProFlareBatch.ForceRefresh();
             }
             else
             {
+                farCloud.Stop();
+                nearCloud.Stop();
+                farCloud.Clear();
+                nearCloud.Clear();
+                
+                star.Stop();
                 ProFlareBatch.gameObject.SetActive(false);
             }
         }
@@ -241,7 +249,14 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
 
     public void ChangeWeatherDisplayType(WeatherDisplayType weatherDisplayType)
     {
-        weatherMono.HideWeather(weatherDisplayType == WeatherDisplayType.Inside);
+        var inSide = weatherDisplayType == WeatherDisplayType.Inside;
+        if (inSide)
+        {
+            farCloud.Stop();
+            nearCloud.Stop();
+        }
+
+        weatherMono.HideWeather(inSide);
         weatherMono.ChangeWeatherAudio((int)weatherDisplayType);
     }
 
@@ -255,6 +270,12 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
         {
             _cloud = value;
             //Debug.Log($"Cloud:{value}");
+            if (value > 0 && displayCloud)
+            {
+                if (farCloud.isStopped) farCloud.Play();
+
+                if (nearCloud.isStopped) nearCloud.Play();
+            }
             
             float farCount = math.lerp(farCloudCount.x, farCloudCount.y, cloud);
             if (farCount < farEmission.rateOverTime.constant)

@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -91,18 +90,23 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
         nextButton.interactable = true;
     }
 
-    private async void SelectNPCFunctionData(NPCFunctionData NPCFunctionData, bool selected = true)
+    private async void SelectNPCFunctionData(NPCFunctionData NPCFunctionData, int index, bool selected = true)
     {
-        /* HidePanel hidePanel = new HidePanel
-         {
-             hide = true,
-             type = typeof(TalkPanel)
-         };
-         GameActionManager.instance.QueueAction(hidePanel);*/
-        if (NPCFunctionData.closeTalk)
+        switch (NPCFunctionData.closeTalk)
         {
-            UIManager.instance.CloseGamePanel<TalkPanel>();
-            UIManager.instance.CloseGamePanel<Team>();
+            case 0:
+                break;
+            case 1:
+                var hidePanel = new HidePanel
+                {
+                    type = typeof(SimpleTalkPanel)
+                };
+                GameActionManager.instance.QueueAction(hidePanel);
+                break;
+            case 2:
+                UIManager.instance.CloseGamePanel<SimpleTalkPanel>();
+                UIManager.instance.CloseGamePanel<Team>();
+                break;
         }
         List<EventReferenceData> eventReferenceDatas = new List<EventReferenceData>();
 
@@ -136,7 +140,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
         }
         else
         {
-            NPCFunctionList.InitListData(null);
+            NPCFunctionList.InitListData(new List<NPCFunctionData>());
         }
 
         InitData();

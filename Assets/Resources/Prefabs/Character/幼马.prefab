@@ -89,7 +89,8 @@ PolygonCollider2D:
       - {x: -0.003133811, y: 0.033142805}
       - {x: -0.010431606, y: 0.027563572}
       - {x: -0.013857476, y: 0.01568079}
-      - {x: -0.008566234, y: -0.000077962875}
+      - {x: -0.012152208, y: -0.0012733937}
+      - {x: -0.004345524, y: -0.010879947}
       - {x: 0.004084274, y: -0.012336493}
       - {x: 0.012505889, y: -0.011992931}
       - {x: 0.020423159, y: -0.008774668}
@@ -279,15 +280,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e13c5c54c81ecd244b3ad1fcb3a1e7ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  body: {fileID: 1902852716372865323}
   equip: {fileID: 6545315722176804334}
   shadow: {fileID: 339914544114151476}
   animator: {fileID: 2927642210308602155}
   myShadow: {fileID: 1978833578840868509}
   equipRenderer: {fileID: 0}
   behaviorTree: {fileID: 3685020247511353405}
-  DirOther: {fileID: 0}
-  footStep: {fileID: 0}
   audioSource: {fileID: 0}
   isDisplayFootStep: 1
   leftFootPos: {x: -0.05, y: -0.025, z: 0}

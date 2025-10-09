@@ -1,11 +1,11 @@
 #if UNITY_EDITOR
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
 using System.Linq;
 using Unity.Mathematics;
-using Random = UnityEngine.Random;
+using UnityEditor;
+using UnityEngine;
 using UnityEngine.Tilemaps;
+using Random = UnityEngine.Random;
 
 [ExecuteAlways]
 public class WorldInstanceEditor : MonoBehaviour
@@ -229,7 +229,7 @@ public class WorldInstanceEditor : MonoBehaviour
         mapObj.transform.SetParent(mapParent, false);
 
         MapInstanceEditor mapInstanceEditor = mapObj.AddComponent<MapInstanceEditor>();
-        mapInstanceEditor.InitData(mapData, id, true);
+        mapInstanceEditor.InitData(mapData, id, true, false);
         mapInstanceEditor.UpDataPos = true;
         mapInstanceEditors.Add(id, mapInstanceEditor);
 

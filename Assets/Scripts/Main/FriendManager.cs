@@ -1,5 +1,4 @@
-﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 
@@ -44,7 +43,8 @@ public class FriendShip
         }
         if (this.friendLevel != friendLevel)
         {
-            if(NPCManager.instance.GetNPC(characterId,out var npc))
+            if (NPCManager.instance.GetNPCFormInstance(characterId, out var npc) ||
+                NPCManager.instance.GetNPC(characterId, out npc))
             {
                 RefreshShopLevel refreshShopLevel = new RefreshShopLevel
                 {
@@ -152,7 +152,7 @@ public class FriendManager : Singleton<FriendManager>
             var warehousePanel = await UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
             warehousePanel.SetSelectItemAction(SelectAction, isAnimal?"投喂": "赠送");
 
-            void SelectAction(Item item,bool select)
+            void SelectAction(Item item, int index, bool select)
             {
                 warehousePanel.Close();
                 int count = PackageManager.instance.GetPackageItemCount(item.packageId, item.dataId);

@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 1172177614684588828}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.04, y: -0.04, z: 0}
+  m_LocalPosition: {x: -0.04, y: -0.04, z: 0.04}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -108,7 +108,7 @@ MonoBehaviour:
   size: 1
   Size: {x: 1, y: 1}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Material: {fileID: 2100000, guid: 4b4599894d31c6b4d884bd1956eb5c28, type: 2}
+  m_Material: {fileID: 2100000, guid: fd078cb3204b6f54d8a97389421dd153, type: 2}
   SpriteResourceRenference: {fileID: 0}
 --- !u!1 &2888286238671607834
 GameObject:
@@ -120,7 +120,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8443135738222520042}
   - component: {fileID: 7005268433046706674}
-  - component: {fileID: 1115212301563820379}
   m_Layer: 0
   m_Name: Fantasy Interior - Other Engines-Objects-!Table_Decoration_png_processed_0
   m_TagString: Untagged
@@ -166,7 +165,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4b4599894d31c6b4d884bd1956eb5c28, type: 2}
+  - {fileID: 2100000, guid: fd078cb3204b6f54d8a97389421dd153, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -199,19 +198,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1115212301563820379
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2888286238671607834}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 421e7d29e339100448b28790e3d53915, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 0}
 --- !u!1 &3807891834325842572
 GameObject:
   m_ObjectHideFlags: 0

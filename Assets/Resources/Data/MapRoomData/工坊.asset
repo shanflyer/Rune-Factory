@@ -25,6 +25,7 @@ MonoBehaviour:
       y: -5
     animationKey: 0
     blindHomeEquipment: 2108
+    funcItem: 1
     eventReferenceDatas: []
   startCoordinate:
     x: -44
@@ -46,6 +47,7 @@ MonoBehaviour:
   creatTempCharacterId: 0
   fixedSeason: 1.5
   weatherDisplayType: 1
+  completedAction: {fileID: 0}
   mapBGSDatas:
   - bgs: 1
     timeCurve:
@@ -467,6 +469,7 @@ MonoBehaviour:
   bgmTag: "\u5BB6"
   mapBGMDatas:
   - name: "\u4E0A\u5348"
+    BGMs: 0e0000005a0000001f000000
     bgms:
     - {fileID: 8300000, guid: a9c7811cafd105342ba0953829d8e9b7, type: 3}
     - {fileID: 8300000, guid: 1c4a1df813dc2dd4db89ff61d395ebc0, type: 3}
@@ -562,6 +565,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   - name: "\u4E0B\u5348"
+    BGMs: 710000006000000069000000
     bgms:
     - {fileID: 8300000, guid: 7930c31d9d8849e418378425983d8c8a, type: 3}
     - {fileID: 8300000, guid: ea1da9ff46a332348a1a3331e3721f99, type: 3}
@@ -657,6 +661,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   - name: "\u665A\u4E0A"
+    BGMs: 0f00000010000000b6000000
     bgms:
     - {fileID: 8300000, guid: 6ffaaaf39bb79254b89c2c2bfaf57a2b, type: 3}
     - {fileID: 8300000, guid: 9c95eac6b4ce13d478cca750024cdf13, type: 3}
@@ -752,6 +757,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   - name: "\u96E8"
+    BGMs: 9c000000
     bgms:
     - {fileID: 8300000, guid: 9f1bd6a1c7e924b44b02ce6c5a0f39ee, type: 3}
     timeCurve:

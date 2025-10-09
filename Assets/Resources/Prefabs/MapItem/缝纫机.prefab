@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3820445825362568104}
+  - component: {fileID: 8320706300586637273}
   m_Layer: 0
   m_Name: "\u7F1D\u7EAB\u673A"
   m_TagString: Untagged
@@ -33,6 +34,28 @@ Transform:
   - {fileID: 6814512653650820453}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &8320706300586637273
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 822500955980978364}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3f8efcf8625a01649ba22254fb410dfd, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3487801257205372908
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,8 +148,8 @@ Transform:
   m_GameObject: {fileID: 6694408802009502281}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.04, y: -0.04, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.049, y: -0.063, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8629452268379428141}
@@ -198,13 +221,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshRenderer: {fileID: 7505262897671005611}
   meshFilter: {fileID: 4522791011604116416}
-  m_Sprite: {fileID: -1887418965, guid: 6a334efa69d47b54399183793d2533b0, type: 3}
+  m_Sprite: {fileID: 1729237584, guid: 6a334efa69d47b54399183793d2533b0, type: 3}
   flip: 0
   spriteDrawMode: 0
   size: 1
   Size: {x: 1, y: 1}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Material: {fileID: 2100000, guid: 4b4599894d31c6b4d884bd1956eb5c28, type: 2}
+  m_Material: {fileID: 2100000, guid: fd078cb3204b6f54d8a97389421dd153, type: 2}
   SpriteResourceRenference: {fileID: 0}
 --- !u!1 &7969675965292317535
 GameObject:

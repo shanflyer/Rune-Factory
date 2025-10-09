@@ -19,7 +19,7 @@ public class ShopSelectReference : UIObjReference<Shop>
             shopName1.enabled = value;
             if (value && SelectAction != null)
             {
-                SelectAction(data);
+                SelectAction(data, index);
             }
         });
     }

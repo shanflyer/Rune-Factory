@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Data/GameActionData")]
-[System.Serializable]
+[Serializable]
 public class GameActionData : ScriptableObject, IGameData
 {
     public int id;
@@ -21,9 +22,9 @@ public class GameActionData : ScriptableObject, IGameData
     {
         if (GameDataManager.instance.GlobalData.debug)
         {
-            if (name != "440Õ¹Ê¾Ëæ»ú±íÇé" && name != "ShowEmote" && name != "ShowRandomEmote")
+            if (name != "440å±•ç¤ºéšæœºè¡¨æƒ…" && name != "ShowEmote" && name != "ShowRandomEmote")
             {
-                if (name == "34ĞÂÊÖ½øÈëÉÌµê")
+                if (name == "34æ–°æ‰‹è¿›å…¥å•†åº—")
                 {
                     Debug.Log($"Match!!!");
                 }
@@ -41,6 +42,7 @@ public class GameActionData : ScriptableObject, IGameData
         }
 
         GameActionDataManager.instance.GameAction(typeName, _parameters, source, target, value, setResult, setValue, immediately);
+      
     }
 
 #if UNITY_EDITOR
@@ -57,7 +59,7 @@ public class GameActionData : ScriptableObject, IGameData
     }
 }
 
-[System.Serializable]
+[Serializable]
 public class Parameter
 {
     public string value;
@@ -66,12 +68,12 @@ public class Parameter
     public override string ToString()
     {
         string outStr = value;
-        outStr = $"{outStr}-parameters£º";
+        outStr = $"{outStr}-parametersï¼š";
         if(parameters != null)
         {
             for (int i = 0; i < parameters.Count; i++)
             {
-                outStr = $"{outStr}£»{parameters[i]}";
+                outStr = $"{outStr}ï¼›{parameters[i]}";
             }
         }
        

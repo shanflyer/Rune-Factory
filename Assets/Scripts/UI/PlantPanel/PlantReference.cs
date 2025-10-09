@@ -23,7 +23,7 @@ public class PlantReference : UIObjReference<PlantData>
         {
             if (SelectAction != null)
             {
-                SelectAction(data, isOn);
+                SelectAction(data,index, isOn);
             }
         });
     }
@@ -33,7 +33,7 @@ public class PlantReference : UIObjReference<PlantData>
         toggle.SetIsOnWithoutNotify(true);
         if (SelectAction != null)
         {
-            SelectAction(data, true);
+            SelectAction(data, index, true);
         }
     }
     public override void SetPanelUISerializeObj()

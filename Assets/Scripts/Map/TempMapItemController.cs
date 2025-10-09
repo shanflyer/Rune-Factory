@@ -174,7 +174,7 @@ public class TempMapItemController : Singleton<TempMapItemController>
             roomId = WorldMapObjManager.instance.displayMap,
             coordinate = creatControllerTempMapItem.coordinate,
             characterId = -1,
-            colliderCells = new NativeList<int2>(8, Allocator.TempJob)
+            colliderCells = new NativeList<int2>(8, Allocator.Persistent)
         };
         var cells = GameCommon.GridToCells(mapItemData.colliderGrids);
         for (int i = 0; i < cells.Count; i++)
@@ -232,7 +232,7 @@ public class TempMapItemController : Singleton<TempMapItemController>
             instanceId = mapItemInstanceId,
             MapItemData = mapItemData,
             roomId = character.mapInstance,
-            colliderCells = new NativeList<int2>(8, Allocator.TempJob)
+            colliderCells = new NativeList<int2>(8, Allocator.Persistent)
         };
 
         var cells = GameCommon.GridToCells(mapItemData.colliderGrids);

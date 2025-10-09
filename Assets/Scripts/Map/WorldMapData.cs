@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -35,7 +36,7 @@ public class WorldMapData : ScriptableObject, IGameData
     }
 }
 
-[System.Serializable]
+[Serializable]
 public struct WorldMap
 { 
     public MapRoomData mapRoomData;
@@ -44,15 +45,19 @@ public struct WorldMap
     public int eventId;
 }
 
-[System.Serializable]
+[Serializable]
 public class MapLine
 {
     public int instanceId;
     public bool zeroInit;
-    public int map0, map1;
+    public int map0;
+    public int map1;
+    public int tempMap0, tempMap1;
+    public int Map0 => tempMap0 == 0 ? map0 : tempMap0;
+    public int Map1 => tempMap1 == 0 ? map1 : tempMap1;
     public LinkMapCell cells0=new LinkMapCell(), cells1=new LinkMapCell();
-    public int beforeActionId, afterActionId;
-
+    public int afterActionId;
+    public bool testInit;
     public MapLine()
     {
 
@@ -72,14 +77,18 @@ public class MapLine
             return cells0.targetCell.xy;
         }
     }
+
+    public int2 start0 => GameCommon.GridCenter(cells0.girds);
+
+    public int2 start1 => GameCommon.GridCenter(cells1.girds);
 }
 
-[System.Serializable]
+[Serializable]
 public class LinkMapCell
 {
     public List<Direction> directions=new List<Direction>();
     public List<int> girds=new List<int>();
     public int3 targetCell;
-    public int beforeAction, afterAction, checkAction;
-
+    public int afterAction; 
 }
+ 

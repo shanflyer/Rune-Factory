@@ -41,7 +41,7 @@ public class LanguagePanel : GamePanel<IReferenceData>
     }
     void RefreshLanguage()
     {
-        languages.InitListData(LanguageManage.instance.languageDatas, (LanguageData languageData, bool selected) =>
+        languages.InitListData(LanguageManage.instance.languageDatas, (LanguageData languageData,int index, bool selected) =>
         {
             if (selected)
             {

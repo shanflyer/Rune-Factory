@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Unity.Mathematics;
-using UnityEngine; 
+using UnityEngine;
 
 public struct CharacterEquipAndPropertyData
 {
@@ -53,7 +53,17 @@ public partial class Character
     public bool isController { get; private set; }
     public int linkItem;
     private int oldOperateItem = -1;
-    public int OperateItem => oldOperateItem;
+
+    public int OperateItem
+    {
+        get => oldOperateItem;
+        set
+        {
+            if (oldOperateItem != 0) WorldMapObjManager.instance.RecycleMaskObj(oldOperateItem);
+            oldOperateItem = value;
+            if (oldOperateItem != 0) WorldMapObjManager.instance.TryDisplayMask(oldOperateItem);
+        }
+    }  
 
     private int2 OldOperaCoordinate = new int2(int.MinValue);
 
@@ -64,10 +74,85 @@ public partial class Character
     public int characterPackage;
     public List<int> skills = new List<int>();
 
+    public void UnLinkItem()
+    {
+        if (WorldMapManager.instance.GetRuntimeMapItem(linkItem, out var item)) item.linkCharacter = 0;
+        linkItem = 0;
+    }
+    public void WakeUp(int sleepHour)
+    {
+        UnLinkItem();
+        if (isController)
+        {
+            var playerWakeUp = new PlayerWakeUp
+            {
+                characterId = instanceId
+            };
+            GameActionManager.instance.QueueAction(playerWakeUp, true);
+            WorldMapObjManager.instance.RefreshMapAudio();
+            GameTimerController.instance.DelayAction(1200,
+                () =>
+                {
+                    var setCharacterRandomCoordinate = new SetCharacterRandomCoordinate
+                    {
+                        characterId = instanceId,
+                        Coordinate = coordinate,
+                        range = 6
+                    };
+                    GameActionManager.instance.QueueAction(setCharacterRandomCoordinate);
+
+                    if (isController)
+                    {
+                        var openOrCloseInputMap = new OpenOrCloseInputMap
+                        {
+                            open = true
+                        };
+                        GameActionManager.instance.QueueAction(openOrCloseInputMap);
+                    }
+                });
+        }
+
+        var setCharacterAnimator = new SetCharacterAnimator
+        {
+            characterId = instanceId,
+            parameter = "State",
+            parameterType = ParameterType.INT,
+            intValue = 0
+        };
+        GameActionManager.instance.QueueAction(setCharacterAnimator, true);
+
+        var changeCharacterProperty = new ChangeCharacterProperty
+        {
+            characterId = instanceId,
+            propertyType = CharacterPropertyType.体力,
+            changeValue = (int)(CharacterProperty.MaxPower * 0.1667f * sleepHour) //六小时睡满体力
+        };
+        AddProperty(changeCharacterProperty);
+
+        var changeCharacterProperty1 = new ChangeCharacterProperty
+        {
+            characterId = instanceId,
+            propertyType = CharacterPropertyType.生命,
+            changeValue = (int)(CharacterProperty.MaxHP * 0.1667f * sleepHour) //六小时睡满体力
+        };
+        AddProperty(changeCharacterProperty1);
+        var changeCharacterProperty2 = new ChangeCharacterProperty
+        {
+            characterId = instanceId,
+            propertyType = CharacterPropertyType.法力,
+            changeValue = (int)(CharacterProperty.MaxMP * 0.1667f * sleepHour) //六小时睡满体力
+        };
+        AddProperty(changeCharacterProperty2);
+        GameActionManager.instance.QueueAction(changeCharacterProperty2, true);
+    }
+    public int2 GetMapStartIndex()
+    {
+        return MapCellController.instance.GetStartIndex(mapInstance, coordinate);
+    }
     public void SetController(bool controller)
     {
         isController = controller;
-        oldOperateItem = -1;
+        OperateItem = -1;
     }
     public Character() { }
     public Character(CharacterData characterData,ProfessionData professionData, int instanceId, 
@@ -113,6 +198,23 @@ public partial class Character
          
     }
 
+    public void SetCellOffset(Vector2 offset)
+    {
+        if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var characterRuntimeObj))
+        {
+            characterRuntimeObj.transform.Translate(offset);
+        }
+    }
+
+    public Vector2 GetCellOffset()
+    {
+        if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var characterRuntimeObj))
+        {
+            Vector3 pos = GameCommon.GetMapPos(coordinate);
+            return characterRuntimeObj.transform.position - pos;
+        }
+        return Vector2.zero;
+    }
 
     protected virtual async Task CreatCharacterPackage(int overridePackage = 0,int instanceId=0)
     {
@@ -225,7 +327,7 @@ public partial class Character
         
         if (item.dataId != 0)
         {
-         await PackageManager.instance.SetItemInPackage(item, packageId);
+            await PackageManager.instance.SetItemInPackage(item, packageId);
         }
         if (itemData != null)
         {
@@ -359,6 +461,17 @@ public partial class Character
     public int2 coordinate => objCoordinate.xy;
     public int mapInstance => objCoordinate.z;
 
+    public Vector2 pos
+    {
+        get
+        {
+            if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var obj))
+                return obj.transform.position;
+
+            return GameCommon.GetMapPos(coordinate);
+        }
+    }
+
     public int instanceId;
     public Direction direction { private set; get; }
 
@@ -374,8 +487,8 @@ public partial class Character
         }
         set
         {
-            var bool2 = _moveDirection != value;
-            if (bool2.x || bool2.y)
+            // var bool2 = _moveDirection != value;
+            // if (bool2.x || bool2.y)
             {
                 _moveDirection = value;
                 if (_moveDirection.x == float.NaN)
@@ -391,7 +504,7 @@ public partial class Character
                     return;
                 }
                 direction = GameCommon.GetCharacterDirect(moveDirection, direction);
-              // Debug.Log($"direction:{moveDirection}--{direction}");
+                // Debug.Log($"direction:{moveDirection}--{direction}");
                 if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var runtimeObj))
                 { 
                     runtimeObj.SetAnimationDirection(_moveDirection, direction); 
@@ -416,6 +529,7 @@ public partial class Character
                 _nowSpeed = value;
                 if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var runtimeObj))
                 {
+                    /*
                     if (_nowSpeed == 0)
                     {
                         TryTeamLeaderStop tryTeamLeaderStop = new TryTeamLeaderStop
@@ -423,7 +537,7 @@ public partial class Character
                             characterId = instanceId
                         };
                         GameActionManager.instance.QueueAction(tryTeamLeaderStop);
-                    }
+                    }*/
                     float animationSpeed = 0;
                     if (value != 0)
                     {
@@ -505,18 +619,37 @@ public partial class Character
     private void SetObjCoordinate(int3 coordinate, bool refreshPos = true)
     {
         MapCellController.instance.SetCharacterCoordinate(objCoordinate, coordinate, instanceId,this is TempCharacter);
-        bool changeMap = mapInstance != coordinate.z;
+        var changeMap = mapInstance != coordinate.z;
         if (coordinate.z == 0)
         {
-            Debug.Log("set coordinate.z == 0");
+            //  Debug.Log("set coordinate.z == 0");
         }
+
+        if (!changeMap && objCoordinate.x == coordinate.x && objCoordinate.y == coordinate.y)
+        {
+            return;
+        }
+
         objCoordinate = coordinate;
         if (changeMap)
         {
-            refreshPos = true;
+            if (team != null && team.leader == this) team.ChangeMap(coordinate.xy, coordinate.z);
+        }
+        else
+        {
+            if (team != null && team.leader == this)
+            {
+                var tryTeamLeaderMove = new TryTeamLeaderMove
+                {
+                    characterId = instanceId,
+                    targetCoordinate = coordinate.xy,
+                    targetPos = pos
+                };
+                GameActionManager.instance.QueueAction(tryTeamLeaderMove, true);
+            }
         }
         //Debug.Log($"{name}--SetObjCoordinate:{coordinate}");
-        if (mapInstance == WorldMapObjManager.instance.displayMap&& refreshPos)
+        if (mapInstance == WorldMapObjManager.instance.displayMap)
         {
             if(CharacterManager.instance.GetRuntimeCharacterObj(instanceId,out var characterRuntimeObj))
             {
@@ -527,7 +660,8 @@ public partial class Character
         {
             RefreshNeighborhood();
         }
-        else if (!(this is TempCharacter) && !TeamManager.instance.playerTeam.CheckCharacter(instanceId))
+        else if (!(this is TempCharacter) && (TeamManager.instance.playerTeam == null ||
+                                              !TeamManager.instance.playerTeam.CheckCharacter(instanceId)))
         {
             CharacterManager.instance.controllerCharacter.TryRefreshNeighborhood(this);
         }
@@ -572,10 +706,12 @@ public partial class Character
 
     private HashSet<int> NeighborhoodCharacters=new HashSet<int>();
 
-    public void TryRefreshNeighborhood(Character character,int range=5)
+    public void TryRefreshNeighborhood(Character character, int range = 8)
     {
         if (mapInstance != character.mapInstance)
         {
+            if (NPCManager.instance.GetNPCFormInstance(character.instanceId, out var npc) &&
+                npc.startSleepHour >= 0) return;
             if (NeighborhoodCharacters.Contains(character.instanceId))
             {
                 RefreshOperateCharacter refreshOperateCharacter = new RefreshOperateCharacter
@@ -588,11 +724,27 @@ public partial class Character
         }
         else
         {
+            var isSleepNpc = false;
+            if (!character.isController && NPCManager.instance.GetNPCFormInstance(character.instanceId, out var npc))
+                if (npc.startSleepHour >= 0)
+                    isSleepNpc = true;
+
             int absX = math.abs(character.coordinate.x - coordinate.x);
             int absY = math.abs(character.coordinate.y - coordinate.y);
 
             if (NeighborhoodCharacters.Contains(character.instanceId))
             {
+                if (isSleepNpc)
+                {
+                    var refreshOperateCharacter = new RefreshOperateCharacter
+                    {
+                        characterId = character.instanceId,
+                        join = false
+                    };
+                    GameActionManager.instance.QueueAction(refreshOperateCharacter);
+                    NeighborhoodCharacters.Remove(character.instanceId);
+                    return;
+                }
                 if (absX > range || absY > range)
                 {
                     RefreshOperateCharacter refreshOperateCharacter = new RefreshOperateCharacter
@@ -608,7 +760,7 @@ public partial class Character
             {
                 if (absX <= range && absY <= range)
                 {
-                    if(NPCManager.instance.GetNPC(character.instanceId,out var npc)&&npc.isSleep)
+                    if (!character.isController || isSleepNpc)
                     {
                         RefreshOperateCharacter refreshOperateCharacter = new RefreshOperateCharacter
                         {
@@ -639,25 +791,24 @@ public partial class Character
     {
         RefreshOperateCharacters refreshOperateCharacters = new RefreshOperateCharacters();
         var NeighborhoodCharacters1 = MapCellController.instance.GetCharacters(objCoordinate);
+        
         NeighborhoodCharacters1.Remove(instanceId);
-        NeighborhoodCharacters1.ExceptWith(TeamManager.instance.playerTeam.TeamCharacters);
+        if (TeamManager.instance.playerTeam != null)
+            NeighborhoodCharacters1.ExceptWith(TeamManager.instance.playerTeam.TeamCharacters);
+
         HashSet<int> sleepCharacters = new HashSet<int>();
         foreach(var id in NeighborhoodCharacters1)
         {
-            if(NPCManager.instance.GetNPC(id,out var npc))
+            if (NPCManager.instance.GetNPCFormInstance(id, out var npc))
             {
-                if (npc.isSleep)
+                if (npc.startSleepHour >= 0)
                 {
-                    sleepCharacters.Remove(id);
+                    sleepCharacters.Add(id);
                 }
             }
         }
         NeighborhoodCharacters1.ExceptWith(sleepCharacters);
-        if (NeighborhoodCharacters1 == null)
-        {
-            refreshOperateCharacters.leaveCharacters = NeighborhoodCharacters;
-        }
-        else
+        
         {
             refreshOperateCharacters.leaveCharacters = NeighborhoodCharacters.Except(NeighborhoodCharacters1).ToHashSet<int>();
             refreshOperateCharacters.joinCharacters= NeighborhoodCharacters1.Except(NeighborhoodCharacters).ToHashSet<int>(); 
@@ -708,12 +859,12 @@ public partial class Character
             {
                 name = "NextTalkEventId",
                 value = nextTalkEventId
-            }; 
-           await GameEventManager.instance.AddGameEvent(
-            eventId, new List<EventReferenceData>
-            {
+            };
+            await GameEventManager.instance.AddGameEvent(
+                eventId, new List<EventReferenceData>
+                {
                     eventReferenceData,targetReferenceData,NextTalkReferenceData
-            });
+                });
              
         }
          
@@ -893,7 +1044,7 @@ public partial class Character
             {
                 //Debug.Log($"进入触发：{reference}");
 
-                oldOperateItem = reference;
+                OperateItem = reference;
                 ShowMapObjTips showMapObjTips = new ShowMapObjTips
                 {
                     id = reference
@@ -908,10 +1059,10 @@ public partial class Character
             }
             else
             {
-               // Debug.Log($"离开触发：{reference}");
-                if (oldOperateItem == reference)
+                // Debug.Log($"离开触发：{reference}");
+                if (OperateItem == reference)
                 {
-                    oldOperateItem = -1;
+                    OperateItem = -1;
                 }
                 CloseMapObjTips closeMapObjTips = new CloseMapObjTips
                 {
@@ -956,14 +1107,43 @@ public partial class Character
             value = reference
         });
 
-       await  GameEventManager.instance.AddGameEvent(eventid, eventReferenceDatas);
+        await GameEventManager.instance.AddGameEvent(eventid, eventReferenceDatas);
     }
 
+    public void SetTriggerMapItem(int reference, int eventId)
+    {
+        OperateItem = reference;
+        var showMapObjTips = new ShowMapObjTips
+        {
+            id = reference
+        };
+        GameActionManager.instance.QueueAction(showMapObjTips, true);
+
+        var triggerEnter = new TriggerEnter
+        {
+            eventId = reference
+        };
+        GameActionManager.instance.QueueAction(triggerEnter, true);
+        var eventReferenceDatas = new List<EventReferenceData>(2);
+        eventReferenceDatas.Add(new EventReferenceData
+        {
+            name = GameCommon.characterTriggerRenferenceName,
+            value = instanceId
+        });
+        eventReferenceDatas.Add(new EventReferenceData
+        {
+            name = GameCommon.triggerRenferenceName,
+            value = reference
+        });
+
+        GameEventManager.instance.AddGameEvent(eventId, eventReferenceDatas);
+    }
     /// <summary>
     /// 设置坐标
     /// </summary>
     /// <param name="coordinate">x.y;z:地图id</param>
-    public void SetCoordinate(int3 coordinate,bool refreshObj=true,bool refreshMapTemp=true)
+    public void SetCoordinate(int3 coordinate, bool refreshObj = true, bool refreshMapTemp = true,
+        bool fiexedDisplay = false)
     {
         //int2 forwordCoordinate = objCoordinate.xy + 2 * GameCommon.GetDirectionInt2(direction);
         int2 oldCoordinate = objCoordinate.xy;
@@ -982,7 +1162,7 @@ public partial class Character
                     oldOperaCoordinate = OldOperaCoordinate;
                 }
                 MapCellController.instance.CheckPlayerTriggerEvent(
-                objCoordinate.z, oldCoordinate, true, TriggerEventAction,false, oldOperateItem);
+                    objCoordinate.z, oldCoordinate, true, TriggerEventAction, false, OperateItem);
 
                 /* DisplayMap displayMap = new DisplayMap
                  {
@@ -996,7 +1176,7 @@ public partial class Character
         }
 
         MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.角色, coordinate.z, oldCoordinate, coordinate.xy,
-           TriggerEventAction);
+            TriggerEventAction);
         if (isController)
         {
             int2 oldOperaCoordinate = oldCoordinate.xy;
@@ -1027,12 +1207,12 @@ public partial class Character
         
 
             MapCellController.instance.CheckPlayerTriggerEvent(coordinate.z, oldOperaCoordinate, checkCoordinate.xy,
-           TriggerEventAction,false, oldOperateItem);
+                TriggerEventAction, false, OperateItem);
             oldCoordinate = OldOperaCoordinate = checkCoordinate.xy;
 
             checkCoordinate.xy += offsetCoordinate * 2;
             MapCellController.instance.CheckPlayerTriggerEvent(coordinate.z,forwardCoordinate, checkCoordinate.xy,
-          TriggerEventAction, true, oldOperateItem);
+                TriggerEventAction, true, OperateItem);
             forwardCoordinate = checkCoordinate.xy;
         }
         SetObjCoordinate(coordinate);
@@ -1045,7 +1225,7 @@ public partial class Character
 
         if (refreshObj)
         {
-             CharacterManager.instance.RefreshNpcRuntimeObj(this,isController, refreshMapTemp);
+            CharacterManager.instance.RefreshNpcRuntimeObj(this, isController, refreshMapTemp, fiexedDisplay);
         }
        
         // ForwardTrigger(coordinate, direction);
@@ -1056,7 +1236,7 @@ public partial class Character
         int2 oldCoordinate = objCoordinate.xy;
         int3 checkCoordinate = new int3(coordinate.xy, mapInstance);
         MapCellController.instance.CheckTriggerEvent(instanceId, EntityType.角色, mapInstance, oldCoordinate, coordinate.xy,
-           TriggerEventAction);
+            TriggerEventAction);
 
         SetObjCoordinate(checkCoordinate,refreshPos);
         CharacterCoordinateTrigger characterCoordinateTrigger = new CharacterCoordinateTrigger
@@ -1097,118 +1277,237 @@ public partial class Character
     public MoveEndAction moveEndAction { get; private set; }
     public MoveEndAction changeCoordinateAction { get; private set; }
     public Int3Action failedMoveAction { get; private set; }
-    public bool MoveCrossMap(int2 targetCoordinate, MoveEndAction moveEndAction = null, MoveEndAction changeCoordinateAction = null,
-       Int3Action failedMoveAction = null)
-    {
-        return MoveCrossMap(mapInstance, targetCoordinate, moveEndAction, changeCoordinateAction, failedMoveAction);
-    }
-    public bool MoveCrossMap(int targetMap, int2 targetCoordinate, MoveEndAction moveEndAction = null, MoveEndAction changeCoordinateAction = null,
+  
+    public bool TryMove(int2 targetCoordinate, MoveEndAction moveEndAction = null, MoveEndAction changeCoordinateAction = null,
         Int3Action failedMoveAction = null)
     {
+        return TryMove(mapInstance, targetCoordinate, moveEndAction, changeCoordinateAction, failedMoveAction);
+    }
+    public bool TryMove(int targetMap, int2 targetCoordinate, MoveEndAction moveEndAction = null, MoveEndAction changeCoordinateAction = null,
+        Int3Action failedMoveAction = null)
+    {
+        if (targetMap == 948 && targetCoordinate.x == 0 && targetCoordinate.y == 0) Debug.Log("Error");
+        if (targetMap == mapInstance && targetCoordinate.x == coordinate.x && targetCoordinate.y == coordinate.y)
+        {
+            if (moveEndAction != null)
+            {
+                moveEndAction.Invoke();
+            }
+            return true;
+        }
         this.moveEndAction = moveEndAction;
         this.changeCoordinateAction = changeCoordinateAction;
         this.failedMoveAction = failedMoveAction;
         if (!CanMoveCrossMap)
         {
-          //  Debug.Log($"NoCanMoveCrossMap");
+            Debug.Log($"NoCanMoveCrossMap");
             return false;
         }
-        moveTarget = new int3(targetCoordinate, targetMap);
-
-        
-        bool result = false;
-        Queue<int> resultList = MapCellController.instance.FindRoomList(objCoordinate.z, targetMap, ref result);
-        if (result)
+        void FailedMoveAction()
         {
-            //Debug.Log($"resultList{resultList.Count}");
-            void FailedMoveAction()
+            moveTarget = new int3(-1, -1, -1);
+            if (failedMoveAction != null)
             {
-                moveTarget = new int3(-1, -1, -1); 
-                if (failedMoveAction != null)
-                {
-                    failedMoveAction(new int3(targetCoordinate.xy,targetMap));
-                }
-                moveEndAction = null;
-                changeCoordinateAction = null;
-                failedMoveAction = null;
+                failedMoveAction(new int3(targetCoordinate.xy, targetMap));
             }
-
-            MoveCrossMap(resultList, targetCoordinate, moveEndAction, changeCoordinateAction, FailedMoveAction);
+            moveEndAction = null;
+            changeCoordinateAction = null;
+            failedMoveAction = null;
         }
-        else
+        if (targetMap== objCoordinate.z)
         {
-           // Debug.Log($"result = false");
-        }
-        return result;
-    }
-
-    private void MoveCrossMap(Queue<int> moveRoomList, int2 targetCoordinate, MoveEndAction moveEndAction = null,
-        MoveEndAction changeCoordinateAction = null, MoveEndAction failedMoveAction = null)
-    {
-        int nowMap = objCoordinate.z;
-        if (moveRoomList.Count > 0)
-        {
-            int target = moveRoomList.Dequeue();
-
-            int2 inCoordinate = int2.zero;
-            if (MapCellController.instance.GetLinkMapInCoordinate(nowMap, target, ref inCoordinate))
+            MapCellJobController.instance.AddPathRequest(objCoordinate.xy, targetCoordinate, targetMap,
+                (Stack<int2> path, int map, int2 start, int2 end) =>
             {
-                MapCellJobController.instance.AddPathRequest(objCoordinate.xy, inCoordinate, nowMap, (Stack<int2> path) =>
+                PlayerMove(path, () =>
                 {
-                    PlayerMove(path, () =>
-                    {
-                        if (this == CharacterManager.instance.controllerCharacter)
-                        {
-                            canMove = false;
-                            GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), () =>
-                            {
-                                MoveCrossMap(moveRoomList, targetCoordinate, moveEndAction);
-                            });
-                        }
-                        else
-                        {
-                            MoveCrossMap(moveRoomList, targetCoordinate, moveEndAction);
-                        }
-                    }, changeCoordinateAction, failedMoveAction);
-                }); 
-
-                /*
-                Stack<int2> pathNodes = MapCellController.instance.FindPathNode(objCoordinate.xy, inCoordinate, nowMap); 
-                PlayerMove(pathNodes, () =>
-                {
+                    // Debug.Log($"character:{name}--MovePathEnd");
                     if (this == CharacterManager.instance.controllerCharacter)
                     {
                         canMove = false;
                         GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), () =>
                         {
-                            MoveCrossMap(moveRoomList, targetCoordinate, moveEndAction);
+                            if (this.moveEndAction != null)
+                            {
+                                this.moveEndAction.Invoke();
+                                moveEndAction = null;
+                                changeCoordinateAction = null;
+                                failedMoveAction = null;
+                            }
                         });
                     }
                     else
                     {
-                        MoveCrossMap(moveRoomList, targetCoordinate, moveEndAction);
+                        if (this.moveEndAction != null)
+                        {
+                            this.moveEndAction.Invoke();
+                            moveEndAction = null;
+                            changeCoordinateAction = null;
+                            failedMoveAction = null;
+                        }
                     }
-                }, changeCoordinateAction, failedMoveAction);
-                */
-            }
+                }, changeCoordinateAction, FailedMoveAction);
+            });
+
+            return true;
         }
         else
         {
-            MapCellJobController.instance.AddPathRequest(objCoordinate.xy, targetCoordinate, objCoordinate.z, (Stack<int2> path) =>
+            Dictionary<int,Stack<int2>> roadCells = new Dictionary<int,Stack<int2>>();
+            Queue<int> roomQueue = new Queue<int>();
+            if(MapCellController.instance.FindRoomList(objCoordinate.z, targetMap, out var roomList))
             {
-                PlayerMove(path, moveEndAction, changeCoordinateAction, failedMoveAction);
-            });
+                int nowMap = objCoordinate.z;
+                int2 startCoordinate = objCoordinate.xy;
+                int roomCount = roomList.Count+1;
+                int nextMap= nowMap;
+                int2 targetMapCell = int2.zero;
+                for (int i = 0; i <= roomList.Count; i++)
+                {
+                    roomQueue.Enqueue(nowMap);
+                    if (i < roomList.Count)
+                    { 
+                        nextMap = roomList[i];
+                        var nowCoordinate = startCoordinate;
+                        var endCoordinate = targetCoordinate;
+                        if (i != 0) nowCoordinate = new int2(int.MinValue, int.MinValue);
+                        if (i != roomList.Count - 1) endCoordinate = new int2(int.MinValue, int.MinValue);
 
-            /* 
-            Stack<int2> pathNodes = MapCellController.instance.FindPathNode(objCoordinate.xy, targetCoordinate, objCoordinate.z);
-            PlayerMove(pathNodes, moveEndAction, changeCoordinateAction, failedMoveAction);
-            if (CellDebugDisplay.Instance)
+                        if (MapCellController.instance.GetLinkMapInCoordinate(mapInstance, targetMap,
+                                nowMap, nextMap, nowCoordinate, endCoordinate,
+                                out var changeCoordinate))
+                        {
+                            targetMapCell = changeCoordinate.zw;
+#if UNITY_EDITOR 
+                            var mapRange = MapCellController.instance.GetRoomRange(nowMap);
+                            if (startCoordinate.x < mapRange.x || startCoordinate.y < mapRange.y ||
+                                startCoordinate.x > mapRange.z || startCoordinate.y > mapRange.w)
+                                Debug.Log("错误：起始超出地图范围！");
+
+                            if (changeCoordinate.x < mapRange.x || changeCoordinate.y < mapRange.y ||
+                                changeCoordinate.x > mapRange.z || changeCoordinate.y > mapRange.w)
+                                Debug.Log("错误：目标超出地图范围！");
+
+                            var nextMapRange = MapCellController.instance.GetRoomRange(nextMap);
+                            if (targetMapCell.x < nextMapRange.x || targetMapCell.y < nextMapRange.y ||
+                                targetMapCell.x > nextMapRange.z || targetMapCell.y > nextMapRange.w)
+                                Debug.Log("错误：起始超出地图范围！");
+ 
+ 
+#endif
+
+                           
+                            MapCellJobController.instance.AddPathRequest(startCoordinate, changeCoordinate.xy, nowMap,
+                                MoveWithPath);
+
+                            void MoveWithPath(Stack<int2> path, int map, int2 start, int2 end)
+                            {
+                                if (path.Count == 0)
+                                    Debug.Log($"PlayerMove：startCoordinate{start}targetCoordinate{end}-nowMap{map}");
+                                roadCells.Add(map, path);
+                                roomCount--;
+                                if (roomCount == 0) Move(true);
+                            }
+                        }
+                    }
+                    else
+                    {
+#if UNITY_EDITOR
+                        var mapRange = MapCellController.instance.GetRoomRange(nowMap);
+                        if (startCoordinate.x < mapRange.x || startCoordinate.y < mapRange.y ||
+                            startCoordinate.x > mapRange.z || startCoordinate.y > mapRange.w)
+                            Debug.Log("错误：起始超出地图范围！");
+
+                        if (targetCoordinate.x < mapRange.x || targetCoordinate.y < mapRange.y ||
+                            targetCoordinate.x > mapRange.z || targetCoordinate.y > mapRange.w)
+                            Debug.Log("错误：目标超出地图范围！");
+#endif
+                        MapCellJobController.instance.AddPathRequest(startCoordinate, targetCoordinate, nowMap,
+                            (Stack<int2> path, int map, int2 start, int2 end) =>
+                        {
+                            if (path.Count == 0)
+                                Debug.Log(
+                                    $"PlayerMove：startCoordinate{start}targetCoordinate{end}-nowMap{map}");
+
+                            roadCells.Add(map, path);
+                            roomCount--;
+                            if (roomCount == 0)
+                            {
+                                Move(true);
+                            }
+                        });
+                    } 
+                      
+                    nowMap = nextMap;
+                    startCoordinate = targetMapCell;
+                }
+
+                return true;
+
+            }
+            else
             {
-                CellDebugDisplay.Instance.DisplayPath(pathNodes.ToArray());
-             }*/
+                return false;
+            }
+            
+            void Move(bool zero)
+            {
+                if (roomQueue.Count > 0)
+                {
+                    int map = roomQueue.Dequeue();
+                    if(roadCells.TryGetValue(map,out var path))
+                    {
+                        if (path.Count == 0)
+                        {
+                            Debug.Log($"{characterData.characterName}map{map}寻路失败:path.Count == 0");
+                            FailedMoveAction();
+                            return;
+                        }
+                        if (!zero)
+                        {
+                            var coordinate = path.Pop(); 
+                            SetCoordinate(new int3(coordinate.xy, map));
+                        }
+                        PlayerMove(path, () =>
+                        {
+                            //Debug.Log($"character:{name}--PlayerMovePathEnd");
+                            if (this == CharacterManager.instance.controllerCharacter)
+                            {
+                                canMove = false;
+                                GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), () =>
+                                {
+                                    if (this.moveEndAction != null)
+                                    {
+                                        this.moveEndAction.Invoke();
+                                        moveEndAction = null;
+                                        changeCoordinateAction = null;
+                                        failedMoveAction = null;
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                Move(false);
+                            }
+                        }, changeCoordinateAction, FailedMoveAction);
+                    }
 
+                }
+                else
+                {
+                    if (this.moveEndAction != null)
+                    {
+                        this.moveEndAction.Invoke();
+                        moveEndAction = null;
+                        changeCoordinateAction = null;
+                        failedMoveAction = null;
+                    }
+                }
+            } 
         }
+         
     }
+     
 
     public void PlayerMove(Stack<int2> pathNodes, MoveEndAction endAction = null, MoveEndAction changeCoordinateAction = null,
         MoveEndAction failedMoveAction = null)
@@ -1220,6 +1519,7 @@ public partial class Character
         }
         else
         {
+          
             moveTarget = new int3(0, 0, 0);
             if (endAction != null)
             {

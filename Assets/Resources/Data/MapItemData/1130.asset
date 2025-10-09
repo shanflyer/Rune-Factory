@@ -16,9 +16,10 @@ MonoBehaviour:
   itemName: "\u70D8\u70E4\u7089"
   objName: 
   itemObj: {fileID: 8492909158366323769, guid: 2713eba1c82bae04da0e67b5b2a8b8e7, type: 3}
-  colliderGrids: fcfffffffeffffff0300000000000000fdfffffffdffffff02000000fdffffff
-  triggerGrids: fbfffffffcffffff0400000001000000
-  playerTriggerGrids: fbfffffffdfffffffcfffffffdfffffffbfffffffefffffffbffffff01000000fcfffffffcffffff03000000fcfffffffcffffff01000000040000000100000003000000fdffffff04000000fdffffff04000000feffffff0400000000000000
+  colliderGrids: fcffffffffffffff0300000001000000
+  triggerGrids: fbfffffffffffffffbffffff01000000fcfffffffeffffff03000000fefffffffcffffff02000000030000000200000004000000ffffffff0400000001000000
+  playerTriggerGrids: fbfffffffffffffffbffffff01000000fcfffffffeffffff03000000fefffffffcffffff02000000030000000200000004000000ffffffff0400000001000000
+  isPlayerForwardTrigger: 0
   playerTriggerEvent: 0
   operateIds: 
   creatAction: {fileID: 0}
@@ -26,7 +27,7 @@ MonoBehaviour:
   defaultEnter: 0
   displayTips: 1
   playerOperateInfo: 
-  offsetLinkPos: {x: 0, y: 0}
-  leftLinkPos: {x: 0, y: 0}
-  rightLinkPos: {x: 0, y: 0}
+  offsetLinkPos: {x: 0, y: 0, z: 0}
+  leftLinkPos: {x: 0, y: 0, z: 0}
+  rightLinkPos: {x: 0, y: 0, z: 0}
   linkDirection: 0

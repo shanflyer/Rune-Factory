@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -43,7 +42,7 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
     }
     List<MyInt> nowCharacters = new List<MyInt>();
     HashSet<int> characters = new HashSet<int>();
-    async void SelectAction(MyInt seletCharacter, bool selected = true)
+    async void SelectAction(MyInt seletCharacter, int index, bool selected = true)
     {
 
         Character character = CharacterManager.instance.GetCharacter(seletCharacter.value);
@@ -107,7 +106,7 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
         }
     }
 
-    void RefreshOperateCharacters(RefreshOperateCharacters refreshOperateCharacters)
+    private async void RefreshOperateCharacters(RefreshOperateCharacters refreshOperateCharacters)
     {
         bool refresh = false; 
         refreshOperateCharacters.joinCharacters.ExceptWith(TeamManager.instance.playerTeam.TeamCharacters); 
@@ -117,7 +116,12 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
             characters.UnionWith(refreshOperateCharacters.joinCharacters);
         }
         if (refreshOperateCharacters.leaveCharacters != null)
-        { 
+        {
+            var simpleTalkPanel = await UIManager.instance.GetGamePanel<SimpleTalkPanel>();
+            if (simpleTalkPanel != null)
+                foreach (var leaveCharacter in refreshOperateCharacters.leaveCharacters)
+                    simpleTalkPanel.TryClose(leaveCharacter);
+
             refresh = true;
             characters.ExceptWith(refreshOperateCharacters.leaveCharacters);
         }
@@ -167,7 +171,7 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
         }
     }
 
-    void RefreshOperateCharacter(RefreshOperateCharacter refreshOperateCharacter)
+    private async void RefreshOperateCharacter(RefreshOperateCharacter refreshOperateCharacter)
     {
         if (CharacterManager.instance.IsTempCharacter(refreshOperateCharacter.characterId))
         {
@@ -185,6 +189,8 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
         else
         {
             characters.Remove(refreshOperateCharacter.characterId);
+            var simpleTalkPanel = await UIManager.instance.GetGamePanel<SimpleTalkPanel>();
+            if (simpleTalkPanel != null) simpleTalkPanel.TryClose(refreshOperateCharacter.characterId);
         }
         if (characters.Count != oldCount)
         { 

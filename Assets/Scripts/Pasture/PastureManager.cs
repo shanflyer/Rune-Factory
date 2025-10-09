@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -775,7 +775,7 @@ public class PastureManager : Singleton<PastureManager>
     }
 }
 
-[System.Serializable]
+[Serializable]
 public enum AnimalState
 {
     正常 = 0,
@@ -786,7 +786,7 @@ public enum AnimalState
     衰老=5
 }
 
-[System.Serializable]
+[Serializable]
 public enum AgeStatus
 {
     幼年 = 0,

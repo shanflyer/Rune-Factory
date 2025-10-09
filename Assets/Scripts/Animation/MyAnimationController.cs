@@ -1,7 +1,7 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Playables;
-using System.Collections.Generic;
 
 //using Unity.Collections;
 
@@ -34,8 +34,11 @@ public class MyAnimationController : Singleton<MyAnimationController>
 
     public void RemoveItemAnimation(int id)
     {
-        animationStructData[id].Dispose();
-        animationStructData.Remove(id);
+        if (animationStructData.TryGetValue(id, out var animationStruct))
+        {
+            animationStruct.Dispose();
+            animationStructData.Remove(id);
+        } 
     }
 
     public override void Init()

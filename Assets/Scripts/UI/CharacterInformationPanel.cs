@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 public class CharacterInformationPanel : GamePanel<CharacterInformationData>
@@ -61,7 +59,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
     [SerializeField]
     private float infoOffsetY =330f;
 
-    private async void SelectEquipReference(Equipment equipment, bool selected = false)
+    private async void SelectEquipReference(Equipment equipment, int index, bool selected = false)
     {
         bool isController = equipment.characterId == CharacterManager.instance.controllerCharacter.instanceId;
 
@@ -81,7 +79,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
                 OffsetPos=infoOffsetY
             };
             itemInfo.item=await Item.SetValue(itemInfo.item,(int)equipment.itemValue * 100);
-            void SelectAction(Item item, bool selected = true)
+            void SelectAction(Item item, int index, bool selected = true)
             {
                 Character character = CharacterManager.instance.GetCharacter(equipment.characterId); 
 
@@ -118,7 +116,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
 
             GameActionManager.instance.QueueAction(openPackage,true);
 
-            async void ChangeEquip(Item item, bool select)
+            async void ChangeEquip(Item item, int index, bool select)
             {
                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
                 if (itemData.type != equipment.ItemType)
@@ -248,7 +246,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
 
     private int characterId;
 
-    private void DisplayProperty(GameProperty characterProperty)
+    private void DisplayProperty(CharacterProperty characterProperty)
     {
         int maxHP = characterProperty.MaxHP;
         int maxRP = characterProperty.MaxPower;
@@ -356,7 +354,8 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             = SpeedDown.enabled = SpeedUp.enabled = LuckUp.enabled = LuckDown.enabled = false;
 
         LevelValue.text = v.level.ToString();
-        var spriteRenference  = await GameSourceManager.instance.GetScriptableObject<SpriteResourceRenference>($"Reference/AttributeType{(int)v.attributeType}");
+        var spriteRenference = await GameSourceManager.instance.GetScriptableObject<SpriteResourceRenference>(
+            $"Reference/AttributeType{(int)v.attributeType}");
         if (spriteRenference == null)
         {
             Attribute.sprite = null;

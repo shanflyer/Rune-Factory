@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
-using Object = UnityEngine.Object;
 
- 
 public class TimeLineManger : Singleton<TimeLineManger>
 {
+   
     public override bool NeedUpdate => true;
     struct RuntimePlayable
     { 
@@ -20,6 +16,9 @@ public class TimeLineManger : Singleton<TimeLineManger>
         public Action StopEvent;
 
         private int source;
+
+        private readonly Dictionary<RuntimeAnimatorController, Dictionary<AnimationClip, AnimationClip>>
+            animatorOverrideClips;
         public RuntimePlayable(PlayableDirector playableDirector, MyTimeLineData myTimeLineData, SkillEstimateData skillEstimateData, Action StopAction,int source= -1)
         {
             animators = new List<Animator>();
@@ -27,6 +26,8 @@ public class TimeLineManger : Singleton<TimeLineManger>
             this.playableDirector = playableDirector; 
             this.StopEvent = StopAction;
             this.source = source;
+            animatorOverrideClips =
+                new Dictionary<RuntimeAnimatorController, Dictionary<AnimationClip, AnimationClip>>();
             BindPlayable(playableDirector, myTimeLineData,skillEstimateData,source);
           
         }
@@ -36,13 +37,22 @@ public class TimeLineManger : Singleton<TimeLineManger>
             TimelineAsset timelineAsset = (TimelineAsset)playableDirector.playableAsset;
             int attackType = FightManager.instance.GetAttackType(source);
             var bindDatas= myTimeLineData.bindDatas; 
+            
             using(var playBindings = timelineAsset.outputs.GetEnumerator())
             {
+                var targets = new List<Transform>();
+                if (skillEstimateData != null && skillEstimateData.targets != null)
+                    for (var index = 0; index < skillEstimateData.targets.Count; index++)
+                    {
+                        var target = FightController.instance.FindFightCharacter(skillEstimateData.targets[index]);
+                        if (target != null) targets.Add(target.transform);
+                    }
+
                 int i = 0;
-                while (playBindings.MoveNext() && i < bindDatas.Count)
+                while (playBindings.MoveNext())
                 {
-                    Object sourceObject = playBindings.Current.sourceObject;
-                    var bindData = bindDatas[i];
+                    var sourceObject = playBindings.Current.sourceObject;
+                    var bindData = i < bindDatas.Count ? bindDatas[i] : default;
                     string streamName = playBindings.Current.streamName;
                     Animator animator=null; 
                     if (streamName == bindData.outName)
@@ -66,154 +76,146 @@ public class TimeLineManger : Singleton<TimeLineManger>
                             
                         }
                         if(animator!=null)
-                        {
+                        { 
                             if (animator.runtimeAnimatorController!=null)
                             {
+                                if (animator.runtimeAnimatorController is AnimatorOverrideController animatorController)
+                                    if (!animatorOverrideClips.TryGetValue(animator.runtimeAnimatorController,
+                                            out var overrideClips))
+                                    {
+                                        overrideClips = new Dictionary<AnimationClip, AnimationClip>();
+                                        animatorOverrideClips.Add(animator.runtimeAnimatorController, overrideClips);
+                                        var keyValuePairs = new List<KeyValuePair<AnimationClip, AnimationClip>>();
+                                        animatorController.GetOverrides(keyValuePairs);
+                                        foreach (var pair in keyValuePairs) overrideClips.Add(pair.Key, pair.Value);
+                                    }
+
                                 animator.playableGraph.SetTimeUpdateMode(DirectorUpdateMode.Manual);
-                            }
-                            var parameters = animator.parameters;
-                            List<AnimationParameter> AnimationParameters = new List<AnimationParameter>();
-                            for (int j = 0; j < parameters.Length; j++)
-                            {
-                                AnimationParameter animationParameter = new AnimationParameter
-                                {
-                                    parameter = parameters[j].name,
 
-                                };
-                                switch (parameters[j].type)
+                                var parameters = animator.parameters;
+                                var AnimationParameters = new List<AnimationParameter>();
+                                for (var j = 0; j < parameters.Length; j++)
                                 {
-                                    case AnimatorControllerParameterType.Float:
-                                        animationParameter.parameterType = ParameterType.FLOAT;
-                                        animationParameter.floatValue = animator.GetFloat(parameters[j].name);
-                                        break;
-                                    case AnimatorControllerParameterType.Int:
-                                        animationParameter.parameterType = ParameterType.INT;
-                                        animationParameter.intValue = animator.GetInteger(parameters[j].name);
-                                        break;
-                                    case AnimatorControllerParameterType.Bool:
-                                        animationParameter.parameterType = ParameterType.BOOL;
-                                        animationParameter.boolValue = animator.GetBool(parameters[j].name);
-                                        break;
-                                    case AnimatorControllerParameterType.Trigger:
-                                        animationParameter.parameterType = ParameterType.TRIGGER;
-                                        break;
+                                    var animationParameter = new AnimationParameter
+                                    {
+                                        parameter = parameters[j].name
+                                    };
+                                    switch (parameters[j].type)
+                                    {
+                                        case AnimatorControllerParameterType.Float:
+                                            animationParameter.parameterType = ParameterType.FLOAT;
+                                            animationParameter.floatValue = animator.GetFloat(parameters[j].name);
+                                            break;
+                                        case AnimatorControllerParameterType.Int:
+                                            animationParameter.parameterType = ParameterType.INT;
+                                            animationParameter.intValue = animator.GetInteger(parameters[j].name);
+                                            break;
+                                        case AnimatorControllerParameterType.Bool:
+                                            animationParameter.parameterType = ParameterType.BOOL;
+                                            animationParameter.boolValue = animator.GetBool(parameters[j].name);
+                                            break;
+                                        case AnimatorControllerParameterType.Trigger:
+                                            animationParameter.parameterType = ParameterType.TRIGGER;
+                                            break;
+                                    }
+
+                                    AnimationParameters.Add(animationParameter);
                                 }
-                                AnimationParameters.Add(animationParameter);
-                            }
-                            animationParameters.Add(AnimationParameters);
 
-                            animators.Add(animator);
+                                animationParameters.Add(AnimationParameters);
+
+                                animators.Add(animator);
+                            }
+                           
                             playableDirector.SetGenericBinding(sourceObject, animator.gameObject);
                         } 
                        
                     }
-                     
-                        i++;
-                }
-            }
-             
-            using(var tracks = timelineAsset.GetOutputTracks().GetEnumerator())
-            {
 
-                List<Transform> targets = new List<Transform>();
-                if (skillEstimateData!=null&&skillEstimateData.targets != null)
-                {
-                    for (int i = 0; i < skillEstimateData.targets.Count; i++)
+                    var type = sourceObject.GetType();
+                    if (type == typeof(AnimationTrack))
                     {
-                        var target = FightController.instance.FindFightCharacter(skillEstimateData.targets[i]);
-                        if (target != null)
-                        {
-                            targets.Add(target.transform);
-                        }
+                        if (type == typeof(AnimationTrack) && animator != null &&
+                            animator.runtimeAnimatorController != null &&
+                            animatorOverrideClips.TryGetValue(animator.runtimeAnimatorController, out var clipDic))
+                            if (clipDic.Count > 0)
+                            {
+                                var animationTrack = (AnimationTrack)sourceObject;
+                                var clips = animationTrack.GetClips().GetEnumerator();
+                                while (clips.MoveNext())
+                                {
+                                    var clip = clips.Current;
+                                    clipDic.TryGetValue(clip.assetClip, out var animationClip2);
+
+                                    clip.overideClip = animationClip2;
+                                }
+                            }
                     }
-                }
-               
-
-                while (tracks.MoveNext())
-                {
-                    var current = tracks.Current;
-                    Type type = current.GetType();
-                    if (type == typeof(AudioTrack))
+                    else if (type == typeof(AudioTrack))
                     {
-                        AudioTrack track = (AudioTrack)current;
-                        current.muted = false;
+                        var track = (AudioTrack)sourceObject;
+                        track.muted = false;
                         var matchDatas = track.matchDatas;
                         if (matchDatas.Count > 0)
                         {
                             var matchData = matchDatas.Find(m => m.key == "AttackType");
                             if (matchData.key == "AttackType")
-                            {
                                 if (matchData.value != attackType.ToString())
-                                {
-                                    current.muted = true;
-                                }
-                            }
-
+                                    track.muted = true;
                         }
                     }
-                    else
-                    if (type == typeof(ControlTrack))
+                    else if (type == typeof(ControlTrack))
                     {
-                        ControlTrack controlTrack = (ControlTrack)current;
-                        current.muted = false;
+                        var controlTrack = (ControlTrack)sourceObject;
+                        controlTrack.muted = false;
                         var matchDatas = controlTrack.matchDatas;
                         if (matchDatas.Count > 0)
                         {
                             var matchData = matchDatas.Find(m => m.key == "AttackType");
                             if (matchData.key == "AttackType")
-                            {
                                 if (matchData.value != attackType.ToString())
-                                {
-                                    current.muted = true;
-                                }
-                            }
-                           
+                                    controlTrack.muted = true;
                         }
 
-                        var clips = current.GetClips().GetEnumerator();
+                        var clips = controlTrack.GetClips().GetEnumerator();
 
-                        var bindData = bindDatas.Find(g => g.outName == current.name);
-                        int i = 0;
+                        var controllerIndex = 0;
                         while (clips.MoveNext())
                         {
                             var clipCurrent = clips.Current;
                             var asset = (ControlPlayableAsset)clipCurrent.asset;
                             asset.targets = targets;
 
-                            if (bindData.bindChildren != null && bindData.bindChildren.Count > 0&& i < bindData.bindChildren.Count)
+                            if (bindData.bindChildren != null && bindData.bindChildren.Count > 0 &&
+                                controllerIndex < bindData.bindChildren.Count)
                             {
                                 GameObject childObj = null;
 
-                                var myTrackAssetBind = bindData.bindChildren[i];
+                                var myTrackAssetBind = bindData.bindChildren[controllerIndex];
                                 switch (myTrackAssetBind.bindType)
                                 {
                                     case BindType.FightSource:
                                         var childAnimator = FightController.instance.FindFightCharacter(source);
-                                        if (childAnimator)
-                                        {
-                                            childObj = childAnimator.gameObject;
-                                        }
+                                        if (childAnimator) childObj = childAnimator.gameObject;
                                         break;
                                     case BindType.FightTarget:
                                         if (skillEstimateData != null)
                                         {
-                                            childAnimator = FightController.instance.FindFightCharacter(skillEstimateData.targets[0]);
-                                            if (childAnimator)
-                                            {
-                                                childObj = childAnimator.gameObject;
-                                            }
+                                            childAnimator =
+                                                FightController.instance.FindFightCharacter(
+                                                    skillEstimateData.targets[0]);
+                                            if (childAnimator) childObj = childAnimator.gameObject;
                                         }
-                                       
+
                                         break;
                                     case BindType.Character:
-                                        if (CharacterManager.instance.GetRuntimeCharacterObj(source, out var characterRuntimeObj))
+                                        if (CharacterManager.instance.GetRuntimeCharacterObj(source,
+                                                out var characterRuntimeObj))
                                         {
                                             childAnimator = characterRuntimeObj.Animator;
-                                            if (childAnimator)
-                                            {
-                                                childObj = childAnimator.gameObject;
-                                            }
+                                            if (childAnimator) childObj = childAnimator.gameObject;
                                         }
+
                                         break;
                                     case BindType.Target:
                                         childObj = FightController.instance.GetParentObj(source, false);
@@ -222,6 +224,7 @@ public class TimeLineManger : Singleton<TimeLineManger>
                                         childObj = FightController.instance.GetParentObj(source, true);
                                         break;
                                 }
+
                                 if (childObj != null)
                                 {
                                     var parentObj = new ExposedReference<GameObject>();
@@ -235,20 +238,22 @@ public class TimeLineManger : Singleton<TimeLineManger>
                                 parentObj.defaultValue = skillEstimateData.target.gameObject;
                                 asset.sourceGameObject = parentObj;
                             }
-                            i++;
-                        }
 
-                       
+                            controllerIndex++;
+                        }
                     }
-                    else if(type==typeof(FightEventTrack))
+                    else if (type == typeof(FightEventTrack))
                     {
-                        FightEventTrack fightEventTrack = (FightEventTrack)current;
+                        var fightEventTrack = (FightEventTrack)sourceObject;
                         //fightEventTrack.skillEstimateData = skillEstimateData;
                         fightEventTrack.SetSkillEstimateData(skillEstimateData);
                     }
+
+                    i++;
                 }
             }
-
+             
+          
             playableDirector.stopped += StopAction;
         }
         public void Evaluate()

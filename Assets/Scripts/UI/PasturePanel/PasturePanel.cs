@@ -98,7 +98,7 @@ public class PasturePanel : GamePanel<MyListInt>
         animalParent = FindChildGameObject("Animals");
     }
     Pasture selectPasture;
-    void SelectPasture(Pasture pasture,bool selected)
+    void SelectPasture(Pasture pasture,int index,bool selected)
     {
         if (selected)
         {
@@ -145,7 +145,7 @@ public class PasturePanel : GamePanel<MyListInt>
         return base.InitData(dataKey);
     }
     Vector2 animalIconSize = new Vector2(48, 48);
-    void SelectAnimal(MyInt myInt,bool select)
+    void SelectAnimal(MyInt myInt,int index,bool select)
     {
         if (select)
         {
@@ -214,7 +214,7 @@ public class PasturePanel : GamePanel<MyListInt>
         {
            if(PastureManager.instance.GetPasture(selectPasture.instanceId,out selectPasture))
             {
-                SelectPasture(selectPasture, true);
+                SelectPasture(selectPasture,selectPasture.index, true);
             }
         }
     }

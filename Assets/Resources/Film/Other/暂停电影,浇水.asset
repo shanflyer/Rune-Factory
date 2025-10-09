@@ -23,6 +23,12 @@ MonoBehaviour:
     parameters:
     - value: 8
       parameters: []
+  - value: DisplayOrHideCharacter
+    parameters:
+    - value: 0
+      parameters: []
+    - value: true
+      parameters: []
   - value: SetDirection
     parameters:
     - value: 0
@@ -39,19 +45,3 @@ MonoBehaviour:
         parameters: []
       - value: 2
         parameters: []
-  - value: DisplayOrHideCharacter
-    parameters:
-    - value: 0
-      parameters: []
-    - value: true
-      parameters: []
-  - value: SetCharacterAnimator
-    parameters:
-    - value: 0
-      parameters: []
-    - value: Dir_X
-      parameters: []
-    - value: 2
-      parameters: []
-    - value: -1
-      parameters: []

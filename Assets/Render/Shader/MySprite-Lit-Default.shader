@@ -4,9 +4,8 @@ Shader "MySprite-Lit-Default"
     {
         [Toggle(WATER)] _Water("Water",int)=0 
         [Toggle(DAMPBLEND)]_DampBlend("_DampBlend",int)=0 
-        [Toggle(MOVE)] _Move("Move",int)=0 
-        [Toggle(GRASSBLEND)]_GrassBlend("_GrassBlend",int)=0
-        [Toggle(BACKBLEND)]_BackBlend("BackBlend",int)=1
+        [Toggle(MOVE)] _Move("Move",int)=0
+        [Toggle(GRASSBLEND)]_GrassBlend("_GrassBlend",int)=0 
         [Toggle(SNOWBLEND)]_SnowBlend("_SnowBlend",int)=1
         [Toggle(SEASONCOLORBLEND)]seasonColorBlend("seasonColorBlend",int)=0
         [Toggle(SHADOWSTEP)]_shadowStep("ShadowStep",int)=0 
@@ -27,8 +26,9 @@ Shader "MySprite-Lit-Default"
         _NormalMap("Normal Map", 2D) = "bump" {}
         _WaterMaskTex("WaterMaskTex", 2D) ="black"{} 
         _DepthTex("DepthTex", 2D) ="gray"{} 
-        _WetValue("WetValue",Range(0,1))=0 
-        _LightBlend("LightBlend",float)=1 
+        _WetValue("WetValue",Range(0,1))=0
+        _LightBlend("LightBlend",float)=1
+        _MirrorBlend("MirrorBlend",Color)=(1,1,1,1)
         
         [Toggle]_BlendVertexColor("BlendVertexColor",int)=0
 
@@ -140,10 +140,7 @@ Shader "MySprite-Lit-Default"
 
             TEXTURE2D(_ShadowTex);
             SAMPLER(sampler_ShadowTex);
-            
-            TEXTURE2D(_BackMaskTex);
-            SAMPLER(sampler_BackMaskTex);
-
+              
             TEXTURE2D(_WaterNormalMap);
             SAMPLER(sampler_WaterNormalMap); 
   
@@ -175,6 +172,7 @@ Shader "MySprite-Lit-Default"
             int _Damp;
             int _HideNormal;
             float4 _FixedColor;
+            float4 _MirrorBlend;
  
             int NativePos;
             float4 _FlowerRemap;
@@ -320,8 +318,9 @@ Shader "MySprite-Lit-Default"
 
                 mirrorUV.x+=water_valueX;
                 mirrorUV.y+=water_valueY;
- 
-                float3 MirrorTexColor= SAMPLE_TEXTURE2D(_MirrorTex, sampler_MirrorTex, mirrorUV).xyz;  
+
+                float3 MirrorTexColor = SAMPLE_TEXTURE2D(_MirrorTex, sampler_MirrorTex, mirrorUV).xyz;
+                MirrorTexColor.xyz *= _MirrorBlend.xyz;
                 float MirrorValue=(MirrorTexColor.x+MirrorTexColor.y+MirrorTexColor.z)/3;
                  //return MirrorTexColor;
 
@@ -563,14 +562,7 @@ Shader "MySprite-Lit-Default"
                 return result;  
            } 
           #endif
-          #if BACKBLEND
-           float3 BackColor(float3 main,float2 uv)
-           { 
-                half4 backColor=SAMPLE_TEXTURE2D(_BackMaskTex, sampler_BackMaskTex, uv); 
-                half backColorValue=(backColor.r+backColor.g+backColor.b)/3;
-                return half3(0,0.5,0.8)*backColorValue+main*(1-backColorValue); 
-           }
-          #endif  
+           
          
         ENDHLSL 
 
@@ -593,8 +585,7 @@ Shader "MySprite-Lit-Default"
             #pragma shader_feature_local _ SNOWBLEND
             #pragma shader_feature_local _ GRASSBLEND
             #pragma shader_feature_local _ SHADOWSTEP
-            #pragma shader_feature_local _ FLOWERSTEP
-            #pragma shader_feature_local _ BACKBLEND 
+            #pragma shader_feature_local _ FLOWERSTEP 
              
             struct Attributes
             {
@@ -764,12 +755,7 @@ Shader "MySprite-Lit-Default"
                 #if SHADOWSTEP
                 result=ShadowColor(result,lightCol.xyz,lightingUV,i.uv);
                 #endif 
-
-                #if  BACKBLEND 
-                result.xyz=BackColor(result.xyz,lightingUV);
-                #endif
-
-                
+  
                 result.xyz=result.xyz*(1-_FixedColor.a)+_FixedColor.xyz*_FixedColor.a;
 
                 return result;
@@ -1231,71 +1217,7 @@ Shader "MySprite-Lit-Default"
             }
             ENDHLSL
         }
-
-        Pass
-        {
-            Name "BackColor" 
-            Tags {"LightMode" = "BackColor" "Queue"="Transparent" "RenderType"="Transparent"}
-
-            HLSLPROGRAM
-           
-            #pragma vertex UnlitVertex
-            #pragma fragment UnlitFragment
-
-            #pragma multi_compile _ SKINNED_SPRITE 
- 
-
-            struct Attributes
-            {
-                float3 positionOS   : POSITION;
-                float4 color        : COLOR;
-                float2 uv           : TEXCOORD0;
-                UNITY_SKINNED_VERTEX_INPUTS
-                UNITY_VERTEX_INPUT_INSTANCE_ID
-            };
-
-            struct Varyings
-            {
-                float4  positionCS      : SV_POSITION;
-                float4  color           : COLOR;
-                float2  uv              : TEXCOORD0;
-                #if defined(DEBUG_DISPLAY)
-                    float3  positionWS  : TEXCOORD2;
-                #endif
-                UNITY_VERTEX_OUTPUT_STEREO
-            };
-            
-            
-
-            Varyings UnlitVertex(Attributes attributes)
-            {
-                Varyings o = (Varyings)0;
-                UNITY_SETUP_INSTANCE_ID(attributes);
-                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
-                UNITY_SKINNED_VERTEX_COMPUTE(attributes);
-
-                attributes.positionOS = UnityFlipSprite( attributes.positionOS, unity_SpriteProps.xy);
-                o.positionCS = TransformObjectToHClip(attributes.positionOS);
-                #if defined(DEBUG_DISPLAY)
-                    o.positionWS = TransformObjectToWorld(v.positionOS);
-                #endif
-                o.uv = attributes.uv;
-                o.color = attributes.color *   unity_SpriteColor;
-                return o;
-            }
-
-            float4 UnlitFragment(Varyings i) : SV_Target
-            {
-                float4 mainTex = i.color *_MainTex.Sample(sampler_MainTex,i.uv); 
-
-              
-                float value=(mainTex.x+mainTex.y+mainTex.z)/3;
-                float stepValue=1-step(0.5,value);
-                return float4(stepValue.xxx,mainTex.a);
-            }
-            ENDHLSL
-        }
- 
+  
         Pass
         {
             Name "Water" 

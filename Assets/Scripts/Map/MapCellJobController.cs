@@ -1,274 +1,209 @@
-﻿using BehaviorDesigner.Runtime.Tasks.Unity.UnityPlayerPrefs;
-using NativeCollections;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
-using UnityEngine;
-using UnityEngine.InputSystem;
 
-public static class PathUtil64
-{
-    public static ulong Pack(ulong fCost, ulong cameFrom, ulong state)
-    {
-        return (fCost << 40) | (cameFrom << 4) | (state & 0xFuL);
-    }
-
-    public static void Unpack(ulong packed, out ulong fCost, out ulong cameFrom, out ulong state)
-    {
-        state = packed & 0xFuL;
-        cameFrom = (packed >> 4) & 0xFFFFFFFFFL;
-        fCost = packed >> 40;
-    }
-
-    public static ulong SetState(ulong packed, ulong state)
-    {
-        return (packed & ~0xFuL) | (state & 0xFuL);
-    }
-}
-
-public delegate void MoveWithPath(Stack<int2> path);
+public delegate void MoveWithPath(Stack<int2> path, int map, int2 startCoordinate, int2 targetCoordinate);
 
 [BurstCompile]
 public struct SparsePathfindingSIMDJob : IJobParallelFor
 {
     [ReadOnly] public NativeArray<PathRequest> requests;
     [ReadOnly] public NativeArray<int4> mapRanges;
-    [ReadOnly] public NativeParallelHashMap<uint, ushort>.ReadOnly barrierMap;
-    [NativeDisableParallelForRestriction] public NativeArray<uint> openCells;
-    [NativeDisableParallelForRestriction] public NativeArray<uint> openCosts;
-    public NativeArray<int> openCounts;
-    public int capacityPerMap;
-    [NativeDisableParallelForRestriction]
-    public NativeHashMap<uint, ulong>  cellMap; 
+    [ReadOnly] public NativeParallelHashMap<uint, short>.ReadOnly barrierMap;
+
+    // —— 方案B：每个请求的面积 & 该请求段的起始偏移（由控制器计算传入）——
+    [ReadOnly] public NativeArray<int> areas;           // area[i] = (w*h) of request i
+
+    [ReadOnly] public NativeArray<int> baseOffsets;     // prefix sum offsets per request
+
+    // —— 每格数据（总数组，长度= Σ areas[i]）——
+    // 代价：只保留 g；f 用 (newG+h) 现场算、只进 open 用
+    [NativeDisableParallelForRestriction] public NativeArray<ushort> bestG;        // 初始=ushort.MaxValue，起点=0
+
+    [NativeDisableParallelForRestriction] public NativeArray<ushort> parentFlat;
+    [NativeDisableParallelForRestriction] public NativeArray<byte> nodeState;    // 0=未见,1=open,2=closed
+
+    // —— open 集（总数组，长度= Σ areas[i]，每请求一段）——
+    [NativeDisableParallelForRestriction] public NativeArray<ushort> openCells;    // flat（<= area-1）
+
+    [NativeDisableParallelForRestriction] public NativeArray<ushort> openCosts;    // f= g+h（存为 ushort）
+    public NativeArray<int> openCounts;                                            // 每请求当前 open 数量
+
     public NativeStream.Writer pathWriter;
 
     public void Execute(int index)
     {
-       // Debug.Log($"execute index:{index}");
         var req = requests[index];
-        var mapRange = mapRanges[index];
+        var range = mapRanges[index];
+
+        int area = areas[index];
+        int baseOff = baseOffsets[index];
+
         int2 start = req.start;
         int2 end = req.end;
 
-        int baseOffset = index * capacityPerMap;
-        int count = 0;
+        uint startFlat = GetCoordinateIndex(start.x, start.y, range.xy, range.zw);
+        uint endFlat = GetCoordinateIndex(end.x, end.y, range.xy, range.zw);
 
-        uint startFlat = GetCoordinateIndex(start.x, start.y, mapRange.xy, mapRange.zw);
-        uint endFlat = GetCoordinateIndex(end.x, end.y, mapRange.xy, mapRange.zw);
-        uint keyStart = (uint)index * 1_000_000 + startFlat;
-        var startPacked = PathUtil64.Pack(0, startFlat, 1);
-        var addResult= cellMap.TryAdd(keyStart, startPacked);
-        //Debug.Log($"startFlat:{startFlat}--endFlat:{endFlat}-新增keyStart{keyStart}--{index}--addResult:{addResult}");
-        openCells[baseOffset + count] = startFlat;
-        openCosts[baseOffset + count] = 0;
+        // 边界防御
+        if (startFlat >= (uint)area || endFlat >= (uint)area)
+        {
+            pathWriter.BeginForEachIndex(index);
+            pathWriter.EndForEachIndex();
+            return;
+        }
+
+        // —— 起点入队 —— //
+        int sSlot = baseOff + (int)startFlat;
+        nodeState[sSlot] = 1;         // open
+        bestG[sSlot] = 0;
+
+        int count = 0;
+        openCells[baseOff + count] = (ushort)startFlat;
+        openCosts[baseOff + count] = 0;           // 也可写启发式 h(start)
         count++;
         openCounts[index] = count;
 
-        int triedAddCount = 0;
         uint currentFlat = 0;
+
         while (count > 0)
         {
-            uint minCost = uint.MaxValue;
-            int minIndex = -1;
+            // —— 取 open 最小 f（向量化线扫）——
+            uint minCost = uint.MaxValue; int minIdx = -1;
+
             int i = 0;
             for (; i <= count - 4; i += 4)
             {
-                uint4 costs = new uint4(openCosts[baseOffset + i], openCosts[baseOffset + i + 1], openCosts[baseOffset + i + 2], openCosts[baseOffset + 3]);
-                bool4 mask = costs < minCost;
-                if (math.any(mask))
-                {
-                    for (int j = 0; j < 4; j++)
-                    {
-                        if (costs[j] < minCost)
-                        {
-                            minCost = costs[j];
-                            minIndex = i + j;
-                        }
-                    }
-                }
+                uint4 c = new uint4(
+                    openCosts[baseOff + i],
+                    openCosts[baseOff + i + 1],
+                    openCosts[baseOff + i + 2],
+                    openCosts[baseOff + i + 3]); // 注意 i+3
+                if (c.x < minCost) { minCost = c.x; minIdx = i; }
+                if (c.y < minCost) { minCost = c.y; minIdx = i + 1; }
+                if (c.z < minCost) { minCost = c.z; minIdx = i + 2; }
+                if (c.w < minCost) { minCost = c.w; minIdx = i + 3; }
             }
-
             for (; i < count; i++)
             {
-                if (openCosts[baseOffset + i] < minCost)
-                {
-                    minCost = openCosts[baseOffset + i];
-                    minIndex = i;
-                }
+                uint c = openCosts[baseOff + i];
+                if (c < minCost) { minCost = c; minIdx = i; }
             }
-            if (minIndex == -1) break;
+            if (minIdx < 0) break;
 
-            currentFlat = openCells[baseOffset + minIndex]; 
-            uint currentKey= (uint)index * 1_000_000 + currentFlat;
-            // Debug.Log($"index={index}, count={count}, currentKey={currentKey}");
-           
-
-            int2 current = end;
-            ulong currentPacked=0;
-            if (currentKey == keyStart)
-            {
-                currentPacked = startPacked;
-            }
-            else
-            {
-              
-                var result = cellMap.TryGetValue(currentKey, out currentPacked);
-                if (!result)
-                {
-#if UNITY_EDITOR
-                  //  Debug.LogError($"startFlat:{startFlat}--endFlat:{endFlat}--获取错误--{currentKey}");
-#endif
-
-                }
-            }
-
+            // pop
+            currentFlat = openCells[baseOff + minIdx];
             count--;
             openCounts[index] = count;
-            openCells[baseOffset + minIndex] = openCells[baseOffset + count];
-            openCosts[baseOffset + minIndex] = openCosts[baseOffset + count];
+            openCells[baseOff + minIdx] = openCells[baseOff + count];
+            openCosts[baseOff + minIdx] = openCosts[baseOff + count];
 
-
-            //Debug.Log($"访问:{currentKey}");
-            current = GetCoordinate(currentFlat, mapRange.xy, mapRange.zw);
-
-            if (current.Equals(end))
-            {
-#if UNITY_EDITOR
-               // Debug.Log($"发现路径{end}---{index}");
-#endif
-
+            int2 current = GetCoordinate(currentFlat, range.xy, range.zw);
+            if (math.all(current == end))
                 break;
-            } 
 
-            PathUtil64.Unpack(currentPacked, out ulong gCost, out _, out _);
-            cellMap[currentKey] = PathUtil64.SetState(currentPacked, 2);
-            
+            uint currG = bestG[baseOff + (int)currentFlat];
+            if (currG == ushort.MaxValue) currG = 0;
+
+            nodeState[baseOff + (int)currentFlat] = 2; // closed
 
             bool foundEnd = false;
-         
+
+            // 8 邻域
             for (int dx = -1; dx <= 1; dx++)
-            {
                 for (int dy = -1; dy <= 1; dy++)
-                { 
+                {
                     if (dx == 0 && dy == 0) continue;
-                    int2 neighbor = current + new int2(dx, dy);
 
+                    int2 nb = current + new int2(dx, dy);
+                    if (!InBounds(nb, range.xy, range.zw)) continue;
 
-                    if (!InBounds(neighbor, mapRange.xy, mapRange.zw)) continue;
+                    uint flat = GetCoordinateIndex(nb.x, nb.y, range.xy, range.zw);
+                    if (flat >= (uint)area) continue;
 
-                    uint flat = GetCoordinateIndex(neighbor.x, neighbor.y, mapRange.xy, mapRange.zw);
-                    uint baseKey = (uint)index * 1_000_000 + flat;
-                    uint mapCellIndex = (uint)req.roomId * 1_000_000 + flat;
-
-                   // Debug.Log($"index={index}, current={current}, neighbor={neighbor}, flat={flat}, baseKey={baseKey}");
-
-                    if (barrierMap.ContainsKey(mapCellIndex))
-                    {
-                      //  Debug.Log($"index={index}, blocked by barrier: {mapCellIndex}");
-                        continue;
-                    }
-                        
+                    uint mapCellIndex = (uint)req.roomId * 1_000_000u + flat;
+                    if (barrierMap.ContainsKey(mapCellIndex)) continue;
 
                     uint moveCost = (dx == 0 || dy == 0) ? 2u : 3u;
-                    ulong newG = gCost + moveCost;
+                    uint newG = currG + moveCost;
+                    if (newG > ushort.MaxValue) newG = ushort.MaxValue; // 限幅，防溢出
 
-                    int dxCost = math.abs(neighbor.x - end.x);
-                    int dyCost = math.abs(neighbor.y - end.y);
-                    ulong h = (ulong)(math.min(dxCost, dyCost) * 3 + math.abs(dxCost - dyCost) * 2) * 3;
-                    ulong fCost = newG + h;
+                    int dxCost = math.abs(nb.x - end.x);
+                    int dyCost = math.abs(nb.y - end.y);
+                    uint h = (uint)((math.min(dxCost, dyCost) * 3 + math.abs(dxCost - dyCost) * 2) * 3);
 
-                   var result = cellMap.TryGetValue(baseKey, out ulong old);
+                    uint fCost = newG + h;
+                    if (fCost > ushort.MaxValue) fCost = ushort.MaxValue; // 限幅，便于存 ushort
 
-                    if (result)
+                    int slot = baseOff + (int)flat;
+                    byte st = nodeState[slot];
+
+                    if (st == 0) // 未见：首次发现
                     {
-                        PathUtil64.Unpack(old, out ulong oldF, out _, out ulong state);
-                        if (state == 2) continue;
-                        if (fCost < oldF)
+                        nodeState[slot] = 1; // open
+                        parentFlat[slot] = (ushort)currentFlat;
+                        bestG[slot] = (ushort)newG;
+
+                        // 入队
+                        if (count < area)
                         {
-                            //  Debug.Log($"保存:{baseKey}");
-                            cellMap[baseKey] = PathUtil64.Pack(fCost, currentFlat, 1);
-                            openCells[baseOffset + count] = flat;
-                            openCosts[baseOffset + count] = (uint)fCost;
+                            openCells[baseOff + count] = (ushort)flat;
+                            openCosts[baseOff + count] = (ushort)fCost;
                             count++;
                             openCounts[index] = count;
                         }
-                    }
-                    else
-                    {
-                       //  Debug.Log($"startFlat:{startFlat}--endFlat:{endFlat}--新增{baseKey}--{index}");
-                        triedAddCount++;
 
-                        if (!cellMap.TryAdd(baseKey, PathUtil64.Pack(fCost, currentFlat, 1)))
-                        {
-#if UNITY_EDITOR
-                          //  Debug.Log($"保存:{baseKey} 失败--{Enum.GetName(typeof(TryGetResult), result) ?? result.ToString()}");
-#endif
-
-                        }
-
-                        openCells[baseOffset + count] = flat;
-                        openCosts[baseOffset + count] = (uint)fCost;
-                        count++;
-                        openCounts[index] = count;
-
-                        if (neighbor.Equals(end))
+                        if (flat == endFlat)
                         {
                             currentFlat = flat;
-#if UNITY_EDITOR
-                            //Debug.Log($"发现路径{end}---{index}");
-#endif
-
                             foundEnd = true;
                             break;
                         }
                     }
+                    else if (st != 2) // open：尝试改优（只看 g，更优 => f 也更优）
+                    {
+                        if (newG < bestG[slot])
+                        {
+                            parentFlat[slot] = (ushort)currentFlat;  // 更新父
+                            bestG[slot] = (ushort)newG;
+
+                            if (count < area)
+                            {
+                                openCells[baseOff + count] = (ushort)flat;
+                                openCosts[baseOff + count] = (ushort)fCost;
+                                count++;
+                                openCounts[index] = count;
+                            }
+                        }
+                    }
+                    // closed 直接跳过
                 }
-                if (foundEnd) break;
-            }
-           
 
             if (foundEnd) break;
         }
-        //Debug.Log($"index={index} 尝试新增数量: {triedAddCount}");
 
-        if (currentFlat != endFlat)
+        // —— 回溯（只读 cameFromDir）——
+        pathWriter.BeginForEachIndex(index);
+        if (currentFlat == endFlat)
         {
-#if UNITY_EDITOR
-         //   Debug.Log($"未发现路径");
-#endif
+            int w = range.z - range.x + 1;
+            int h = range.w - range.y + 1;
+            int maxSteps = math.min(w * h, areas[index]);
 
-        }
-        else
-        {
-            pathWriter.BeginForEachIndex(index);
-            
-            for (int iter = 0; iter < 512; iter++)
+            for (int t = 0; t < maxSteps; t++)
             {
-                uint key = (uint)index * 1_000_000 + currentFlat;
-                var result = cellMap.TryGetValue(key, out ulong packed);
-                if (!result)
-                {
-#if UNITY_EDITOR
-                //    Debug.Log($"index:{index}---获取失败key:{key}");
-#endif
-
-                    break;
-                }
-                // uint flat = currentFlat - (uint)index * 1_000_000;
-                pathWriter.Write(GetCoordinate(currentFlat, mapRange.xy, mapRange.zw));
-
+                pathWriter.Write(GetCoordinate(currentFlat, range.xy, range.zw));
                 if (currentFlat == startFlat) break;
 
-                PathUtil64.Unpack(packed, out _, out ulong from, out _);
-                if (from == currentFlat) break;
-                currentFlat = (uint)from;
+                int slot = baseOff + (int)currentFlat;
+                ushort p = parentFlat[slot];
+                if (p == 0xFFFF || p == (ushort)currentFlat) break; // 无父/自指保护
+                currentFlat = p;
             }
-            pathWriter.EndForEachIndex();
         }
-       
+        pathWriter.EndForEachIndex();
     }
 
     public int2 GetCoordinate(uint index, int2 start, int2 end)
@@ -301,80 +236,211 @@ public class MapCellJobController : Singleton<MapCellJobController>
     public NativeList<PathRequest> pathRequests;
     public List<MoveWithPath> MoveWithPath = new List<MoveWithPath>();
     public override bool NeedUpdate => true;
+    public override bool NeedLateUpdate => true;
+
+    private JobHandle pathJobHandle;
+    private bool jobRunning;
+
+    // —— 本批资源 —— //
+    private NativeArray<int4> mapRanges;
+
+    private NativeArray<int> areas;
+    private NativeArray<int> baseOffsets;
+
+    private NativeArray<ushort> openCells;
+    private NativeArray<ushort> openCosts;
+    private NativeArray<int> openCounts;
+
+    private NativeArray<ushort> bestG;
+    private NativeArray<ushort> parentFlat;
+    private NativeArray<byte> nodeState;
+
+    private NativeStream pathStream;
+
+    // —— 快照（这批要跑的请求/回调）—— //
+    private NativeArray<PathRequest> requestsSnap;
+
+    private List<MoveWithPath> callbacksSnap;
+
+    // —— 等待下一批 —— //
+    private NativeList<PathRequest> pendingRequests;
+
+    private List<MoveWithPath> pendingCallbacks = new List<MoveWithPath>();
 
     public override void Init()
     {
         base.Init();
         pathRequests = new NativeList<PathRequest>(Allocator.Persistent);
+        pendingRequests = new NativeList<PathRequest>(Allocator.Persistent);
     }
 
     protected override void Clear()
     {
         base.Clear();
-        pathRequests.Dispose();
+        if (jobRunning) pathJobHandle.Complete();
+        if (pathRequests.IsCreated) pathRequests.Dispose();
+        if (pendingRequests.IsCreated) pendingRequests.Dispose();
     }
 
     protected override void Update()
     {
         base.Update();
-        int requestCount = pathRequests.Length;
+        if (jobRunning) return;
+
+        var requestCount = pathRequests.Length;
         if (requestCount == 0) return;
 
-        const int capacityPerMap = 2048;
-        int totalCapacity = requestCount * capacityPerMap;
+        // ★ 限制最多并行数量
+        var batchCount = math.min(requestCount, 50);
 
-        NativeArray<int4> mapRanges = new NativeArray<int4>(requestCount, Allocator.TempJob);
-        for (int i = 0; i < requestCount; i++)
-            mapRanges[i] = MapCellController.instance.GetRoomRange(pathRequests[i].roomId);
+        // —— 做快照（防止运行中被改动）——
+        requestsSnap = new NativeArray<PathRequest>(batchCount, Allocator.TempJob);
+        for (var i = 0; i < batchCount; i++)
+            requestsSnap[i] = pathRequests[i];
 
-        NativeArray<uint> openCells = new NativeArray<uint>(totalCapacity, Allocator.TempJob);
-        NativeArray<uint> openCosts = new NativeArray<uint>(totalCapacity, Allocator.TempJob);
-        NativeArray<int> openCounts = new NativeArray<int>(requestCount, Allocator.TempJob);
+        callbacksSnap = new List<MoveWithPath>(batchCount);
+        for (var i = 0; i < batchCount; i++)
+            callbacksSnap.Add(MoveWithPath[i]);
 
-        int estimatedCapacity = requestCount * 4096;
-        int actualCapacity = math.ceilpow2(estimatedCapacity);
-        NativeHashMap<uint, ulong> cellMap = new NativeHashMap<uint, ulong>(actualCapacity, Allocator.TempJob);
-        NativeStream pathStream = new NativeStream(requestCount, Allocator.TempJob);
+        // —— 本批处理完的从列表里移除，剩下的留着下次跑 —— 
+        if (requestCount > batchCount)
+            // 把没跑的搬去 pending，等待下轮
+            for (var i = batchCount; i < requestCount; i++)
+            {
+                pendingRequests.Add(pathRequests[i]);
+                pendingCallbacks.Add(MoveWithPath[i]);
+            }
+
+        pathRequests.Clear();
+        MoveWithPath.Clear();
+
+        // —— 房间范围 & 面积/偏移 —— //
+        mapRanges = new NativeArray<int4>(batchCount, Allocator.TempJob);
+        for (var i = 0; i < batchCount; i++)
+            mapRanges[i] = MapCellController.instance.GetRoomRange(requestsSnap[i].roomId);
+
+        areas = new NativeArray<int>(batchCount, Allocator.TempJob);
+        baseOffsets = new NativeArray<int>(batchCount, Allocator.TempJob);
+        var totalArea = 0;
+        for (var i = 0; i < batchCount; i++)
+        {
+            var r = mapRanges[i];
+            var w = r.z - r.x + 1;
+            var h = r.w - r.y + 1;
+            var area = w * h;
+            areas[i] = area;
+            baseOffsets[i] = totalArea;
+            totalArea += area;
+        }
+
+        // —— 分配数组 —— //
+        openCells = new NativeArray<ushort>(totalArea, Allocator.TempJob);
+        openCosts = new NativeArray<ushort>(totalArea, Allocator.TempJob);
+        openCounts = new NativeArray<int>(batchCount, Allocator.TempJob);
+
+        bestG = new NativeArray<ushort>(totalArea, Allocator.TempJob);
+        nodeState = new NativeArray<byte>(totalArea, Allocator.TempJob);
+        parentFlat = new NativeArray<ushort>(totalArea, Allocator.TempJob);
+        for (var i = 0; i < totalArea; i++)
+        {
+            bestG[i] = ushort.MaxValue;
+            parentFlat[i] = 0xFFFF;
+            nodeState[i] = 0;
+        }
+
+        // —— Stream 按请求数分段 —— //
+        pathStream = new NativeStream(batchCount, Allocator.TempJob);
 
         var job = new SparsePathfindingSIMDJob
         {
-            requests = pathRequests.AsArray(),
+            requests = requestsSnap,
             mapRanges = mapRanges,
+            barrierMap = MapCellController.instance.MapObjBarriers,
+
+            areas = areas,
+            baseOffsets = baseOffsets,
+
+            bestG = bestG,
+            parentFlat = parentFlat,
+            nodeState = nodeState,
+
             openCells = openCells,
             openCosts = openCosts,
             openCounts = openCounts,
-            capacityPerMap = capacityPerMap,
-            cellMap = cellMap, 
-            barrierMap = MapCellController.instance.MapObjBarriers,
+
             pathWriter = pathStream.AsWriter()
         };
-       // job.Run(requestCount);
-        job.Schedule(requestCount, 2).Complete();
 
+        pathJobHandle = job.Schedule(batchCount, 2);
+        jobRunning = true;
+    }
+
+
+    protected override void LateUpdate()
+    {
+        base.LateUpdate();
+        if (!jobRunning) return;
+        if (!pathJobHandle.IsCompleted) return;
+
+        pathJobHandle.Complete();
+
+        // —— 读取 —— //
         var reader = pathStream.AsReader();
-        for (int i = 0; i < pathStream.ForEachCount; i++)
+        int n = reader.ForEachCount; // == requestsSnap.Length
+        for (int i = 0; i < n; i++)
         {
             reader.BeginForEachIndex(i);
             Stack<int2> path = new Stack<int2>();
             while (reader.RemainingItemCount > 0)
                 path.Push(reader.Read<int2>());
             reader.EndForEachIndex();
-            MoveWithPath[i].Invoke(path);
+            // 用快照，避免索引错位
+            var req = requestsSnap[i];
+
+            callbacksSnap[i].Invoke(path, req.roomId, req.start, req.end);
         }
+
+        // —— 释放（只释放一次）—— //
+        pathStream.Dispose();
 
         openCells.Dispose();
         openCosts.Dispose();
         openCounts.Dispose();
-        cellMap.Dispose();
+
+        bestG.Dispose();
+        parentFlat.Dispose();
+        nodeState.Dispose();
+
+        areas.Dispose();
+        baseOffsets.Dispose();
         mapRanges.Dispose();
-        pathStream.Dispose();
-        pathRequests.Clear();
-        MoveWithPath.Clear();
+        requestsSnap.Dispose();
+
+        // 把 pending 并回下一批
+        for (int i = 0; i < pendingRequests.Length; i++)
+            pathRequests.Add(pendingRequests[i]);
+        pendingRequests.Clear();
+
+        foreach (var cb in pendingCallbacks)
+            MoveWithPath.Add(cb);
+        pendingCallbacks.Clear();
+
+        jobRunning = false; // ★★ 关键：避免下帧再次读已释放的 stream
     }
 
     public void AddPathRequest(int2 start, int2 end, int roomId, MoveWithPath moveWithPath)
     {
-        pathRequests.Add(new PathRequest { start = start, end = end, roomId = roomId });
-        MoveWithPath.Add(moveWithPath);
+        MapCellController.instance.TransTempMap(ref roomId);
+        if (jobRunning)
+        {
+            // Job 期间的请求先排队，防止改动本批快照/NativeList 触发重分配
+            pendingRequests.Add(new PathRequest { start = start, end = end, roomId = roomId });
+            pendingCallbacks.Add(moveWithPath);
+        }
+        else
+        {
+            pathRequests.Add(new PathRequest { start = start, end = end, roomId = roomId });
+            MoveWithPath.Add(moveWithPath);
+        }
     }
 }

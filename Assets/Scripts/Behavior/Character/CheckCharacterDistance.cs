@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-using BehaviorDesigner.Runtime;
+﻿using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
+using UnityEngine;
 
 [TaskCategory("Game/Character")]
 [TaskName("检查角色与目标距离")]
@@ -54,6 +54,7 @@ public class CheckCharacterDistance : Action
                         if (distance <= this.distance.Value)
                         {
                             taskStatus = TaskStatus.Success;
+                            return;
                         }
                     }
                     break;
@@ -66,6 +67,7 @@ public class CheckCharacterDistance : Action
                         if (distance <= this.distance.Value)
                         {
                             taskStatus = TaskStatus.Success;
+                            return;
                         }
                     }
                     break;
@@ -81,6 +83,7 @@ public class CheckCharacterDistance : Action
                     if (distance <= this.distance.Value)
                     {
                         taskStatus = TaskStatus.Success;
+                        return;
                     }
                 }
                 break;
@@ -93,6 +96,7 @@ public class CheckCharacterDistance : Action
                     if (distance <= this.distance.Value)
                     {
                         taskStatus = TaskStatus.Success;
+                        return;
                     }
                 }
                 break;

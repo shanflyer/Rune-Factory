@@ -1,8 +1,6 @@
-﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Unity.Collections;
-using Unity.Mathematics; 
+using Unity.Mathematics;
 
 public class Formula
 {
@@ -148,12 +146,13 @@ public class ManufactureManager : Singleton<ManufactureManager>
             startTime = manufatureSaveData.startTime, 
             product=manufatureSaveData.product,
 
-             
-            materials = new NativeArray<int2>(4, Allocator.Persistent)
+
+            materials = new int2[4]
         };
         GetFormula(manufatureSaveData.matchFormula, out manufature.matchFormula);
-        manufature.materials.CopyFrom(manufatureSaveData.materials);
-         
+        for (var i = 0; i < manufatureSaveData.materials.Length; i++)
+            manufature.materials[i] = manufatureSaveData.materials[i];
+
         Manufactures.Add(manufatureSaveData.instanceId, manufature);
     }
 
@@ -165,8 +164,8 @@ public class ManufactureManager : Singleton<ManufactureManager>
             Manufature manufature = new Manufature
             {
                 instanceId = creatManufature.instanceId,
-                dataId = creatManufature.manufatureId, 
-                materials = new NativeArray<int2>(4, Allocator.Persistent),
+                dataId = creatManufature.manufatureId,
+                materials = new int2[4],
                 open = false
             };
             Manufactures.Add(creatManufature.instanceId, manufature);
@@ -205,7 +204,7 @@ public class Manufature :  IReferenceData
     public int instanceId;
     public int dataId;
     public bool open;
-    public NativeArray<int2> materials;
+    public int2[] materials;
     public int3 product;
     public int waitTime;
     public int startTime;
@@ -243,7 +242,6 @@ public class Manufature :  IReferenceData
 
     public void Dispose()
     {
-        formulas.Clear();
-        materials.Dispose();
+        formulas.Clear(); 
     }
 }

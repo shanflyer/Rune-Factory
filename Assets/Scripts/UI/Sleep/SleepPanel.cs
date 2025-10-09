@@ -40,7 +40,7 @@ public class SleepPanel : GamePanel<MyInt>
 
     private int mapItemInstance = 0;
 
-    private void SelectAction(SleepSetData data, bool value)
+    private void SelectAction(SleepSetData data, int index, bool value)
     {
         CharacterManager.instance.controllerCharacter.linkItem = mapItemInstance;
 

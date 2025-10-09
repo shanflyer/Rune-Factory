@@ -1,14 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using Unity.Mathematics;
-using UnityEngine.Playables;
 
 public class FarmManager : Singleton<FarmManager>
 {
     private Dictionary<int, Field> fields = new Dictionary<int, Field>();
     //private Dictionary<int, Plant> plants = new Dictionary<int, Plant>();
 
-    private Dictionary<int, List<FieldArea>> FieldAreas = new Dictionary<int, List<FieldArea>>();
 
     protected override void Clear()
     {
@@ -23,18 +20,7 @@ public class FarmManager : Singleton<FarmManager>
         fields.Clear();
         // plants.Clear();
 
-        var allFieldAreas = await GameDataManager.instance.GetAllAsyncData<FieldArea>();
-        for (int i = 0; i < allFieldAreas.Count; i++)
-        {
-            var fieldArea = allFieldAreas[i];
-            if (!FieldAreas.TryGetValue(fieldArea.mapId, out var fieldAreas))
-            {
-                fieldAreas = new List<FieldArea>();
-                FieldAreas[fieldArea.mapId] = fieldAreas;
-            }
-            fieldAreas.Add(fieldArea);
-        }
-        GameActionManager.instance.AddListener<TryCreatField>(TryCreatField);
+        GameActionManager.instance.AddListener<TryCreateField>(TryCreateField);
         GameActionManager.instance.AddListener<CheckFieldState>(CheckFieldState);
         GameActionManager.instance.AddListener<TrySmoothField>(TrySmoothField);
         GameActionManager.instance.AddListener<TryCreatPlant>(TryCreatPlant);
@@ -97,9 +83,11 @@ public class FarmManager : Singleton<FarmManager>
                 waterHour = fieldSaveData.waterHour
                
             };
-            var PlantData = await GameDataManager.instance.GetAsyncData<PlantData>(fieldSaveData.PlantDataId);
+            fields.Add(instanceId, field);
+          
             if (fieldSaveData.PlantinstaceId != 0)
             {
+                var PlantData = await GameDataManager.instance.GetAsyncData<PlantData>(fieldSaveData.PlantDataId);
                 field.plant = new Plant(fieldSaveData.PlantinstaceId, PlantData, field.instanceId, field.isSetWater,fieldSaveData.plantState,fieldSaveData.nowCycle); 
                 
                 AddMapItem addMapItem = new AddMapItem
@@ -111,7 +99,7 @@ public class FarmManager : Singleton<FarmManager>
                 };
                 GameActionManager.instance.QueueAction(addMapItem);
             } 
-            fields.Add(instanceId, field);
+          
             field.RefreshField();
             //GameDataSaveManager.instance.UserGameSaveData.SetFieldData(field);
         }
@@ -125,54 +113,25 @@ public class FarmManager : Singleton<FarmManager>
             field.SetData(fieldSaveData.fieldState, fieldSaveData.isSetWater, fieldSaveData.waterHour);
         }
     }
-    private void TryCreatField(TryCreatField tryCreatField)
+    void TryCreateField(TryCreateField tryCreateField)
     {
-        if (FieldAreas.TryGetValue(tryCreatField.roomId, out var fieldAreas))
+        int2 editorKey = new int2(tryCreateField.roomId, tryCreateField.editorInstanceId);
+        int instanceId = tryCreateField.itemInstanceId;
+        GameDataSaveManager.instance.UserGameSaveData.SaveSpecialMapItem(editorKey, instanceId);
+        if (!fields.ContainsKey(instanceId))
         {
-            for (int i = 0; i < fieldAreas.Count; i++)
+            if(WorldMapManager.instance.GetRuntimeMapItem(instanceId,out var runtimeMapItem))
             {
-                if (fieldAreas[i].fields.Contains(tryCreatField.itemInstanceId))
+                Field field = new Field
                 {
-                    int2 editorKey = new int2(tryCreatField.roomId, tryCreatField.itemInstanceId);
-                    int instanceId = WorldMapManager.instance.GetInstanceFromEditorId(editorKey);
-                    GameDataSaveManager.instance.UserGameSaveData.SaveSpecialMapItem(editorKey, instanceId);
-                    if (!fields.ContainsKey(instanceId))
-                    {
-                        Field field = new Field
-                        {
-                            instanceId = instanceId,
-                            mapInstance = tryCreatField.roomId,
-                            coordinate = tryCreatField.coordinate,
-                            editorInstanceId=tryCreatField.itemInstanceId,
-                            fieldState = FieldState.待平整
-                        };
-                        fields.Add(instanceId, field);
-                        if (!tryCreatField.noSaveRefresh)
-                        {
-                            field.RefreshField();
-                        }
-                       
-                    }
-                }
-            }
-            /*
-            if(fieldArea.open)
-            {
-                for (int i = 0; i < fieldArea.fields.Count; i++)
-                {
-                    int2 editorKey = new int2(tryCreatField.roomId,fieldArea.fields[i]);
-                    int instanceId = WorldMapManager.instance.GetInstanceFromEditorId(editorKey);
-                    if (!fields.Contains(instanceId))
-                    {
-                        Field field = new Field
-                        {
-                            instanceId = instanceId,
-                            fieldState = FieldState.待平整
-                        };
-                        fields.SetData(field);
-                    }
-                }
-            }*/
+                    instanceId = instanceId,
+                    mapInstance = tryCreateField.roomId,
+                    coordinate = runtimeMapItem.coordinate,
+                    editorInstanceId = tryCreateField.itemInstanceId,
+                    fieldState = FieldState.待平整
+                };
+                fields.Add(instanceId, field);
+            } 
         }
     }
 
@@ -180,7 +139,11 @@ public class FarmManager : Singleton<FarmManager>
     {
         if (fields.TryGetValue(checkFieldState.instanceid, out var field))
         {
-            checkFieldState.setValue((int)field.fieldState);
+            if (checkFieldState.plantDeath && field.plant != null &&
+                (field.plant.plantState == PlantState.枯死 || field.plant.plantState == PlantState.死亡))
+                checkFieldState.setValue(0);
+            else
+                checkFieldState.setValue((int)field.fieldState);
         }
     }
     private void CheckPlant(CheckPlant checkPlant)
@@ -207,7 +170,7 @@ public class FarmManager : Singleton<FarmManager>
                 case FieldState.已平整:
                     if (field.plant != null)
                     {
-                        if (field.plant.plantState != PlantState.枯死 || field.plant.plantState != PlantState.死亡)
+                        if (field.plant.plantState != PlantState.枯死 && field.plant.plantState != PlantState.死亡)
                         {
                             GameManager.instance.ShowTwoSelectAction("注意", "土地上已有作物，是否铲除旧作物？", () =>
                             {
@@ -315,25 +278,35 @@ public class FarmManager : Singleton<FarmManager>
             data.Value.NewHour();
         }
     }
-    private async void TrySicklePlant(TrySicklePlant trySicklePlant)
+
+    private void TrySicklePlant(TrySicklePlant trySicklePlant)
     {
         if (fields.TryGetValue(trySicklePlant.fieldId, out var field))
         {
-            bool result = await field.TrySicklePlant();
+            var result = field.TrySicklePlant();
             if(trySicklePlant.setResult!=null)
                 trySicklePlant.setResult(result);
         }
         if (trySicklePlant.setResult != null)
             trySicklePlant.setResult(false);
     }
-    private async void TryGetPlantFruit(TryGetPlantFruit tryGetPlantFruit)
+
+    private void TryGetPlantFruit(TryGetPlantFruit tryGetPlantFruit)
     {
         if (fields.TryGetValue(tryGetPlantFruit.fieldId, out var field))
         {
-            bool result = await field.TryGetPlantFruit();
-            tryGetPlantFruit.setResult(result); 
+            var fruit = 0;
+            var result = field.TryGetPlantFruit(out fruit);
+            tryGetPlantFruit.setResult(result);
+            tryGetPlantFruit.setValue(fruit);
         }
         tryGetPlantFruit.setResult(false);
+    }
+
+    public int3 GetFieldCoordinate(int fieldId)
+    {
+        if (fields.TryGetValue(fieldId, out var field)) return new int3(field.coordinate, field.mapInstance);
+        return int3.zero;
     }
 }
 
@@ -391,11 +364,12 @@ public class Field
         };
         GameActionManager.instance.QueueAction(addMapItem, true);
     }
-    public async Task<bool> TrySicklePlant()
+
+    public bool TrySicklePlant()
     {
         if (plant != null)
         {
-            bool result = await plant.GetSicklePlant();
+            var result = plant.GetSicklePlant();
              
             plant.RefreshPlant();
             GameActionManager.instance.QueueAction(new DeleteMapItem
@@ -410,11 +384,13 @@ public class Field
         }
         return false;
     }
-    public async Task<bool> TryGetPlantFruit()
+
+    public bool TryGetPlantFruit(out int fruit)
     {
+        fruit = 0;
         if (plant != null)
         {
-            bool result = await plant.GetPlantFruit();
+            var result = plant.GetPlantFruit(out fruit);
             if (result && plant.plantState == PlantState.死亡)
             {
                 /* field.fieldState = FieldState.待平整;
@@ -560,17 +536,18 @@ public class Field
                         break;
                 }
 
-                if (plant != null)
-                {
-                    plant.setWater = false;
-                    plant.RefreshPlant();
-                }
+               
             }
             if (plant != null && plant.plantState == PlantState.正常)
             {
                 plant.Grow();
             }
             RefreshField();
+            if (plant != null)
+            {
+                plant.setWater = false;
+                plant.RefreshPlant();
+            }
         }
         else
         {
@@ -579,6 +556,8 @@ public class Field
             {
                 plant.Grow();
             }
+
+            if (plant != null) plant.RefreshPlant();
             RefreshField();
         }
        
@@ -635,7 +614,7 @@ public class Field
             {
                 case PlantState.正常:
                 case PlantState.干旱:
-                    plant.plantState = PlantState.正常;
+                    plant.plantState = PlantState.正常;  
                     //setWaterField.setResult(true);
                     break;
 
@@ -679,7 +658,7 @@ public class Plant
     public bool setWater;
     public PlantState plantState;
     public int nowCycle;
-
+    public int emote;
     public Plant(int instanceId,PlantData PlantData,int field,bool setWater,PlantState plantState=PlantState.正常,int nowCycle=0)
     {
         this.instanceId = instanceId;
@@ -688,6 +667,7 @@ public class Plant
         this.setWater = setWater;
         this.plantState = plantState;
         this.nowCycle = nowCycle;
+        emote = 0;
         for(int i = 0; i < PlantData.goodSeason.Count; i++)
         {
             goodSeason.Add((Season)PlantData.goodSeason[i]);
@@ -703,9 +683,8 @@ public class Plant
     public void RefreshPlant()
     {
         int keyY = 0;
-       
-        bool needShowDryEmote=false;
-        GameActionManager.instance.QueueAction(new TryRecycleItemEmote { id = instanceId });
+
+        var needShowDryEmote = false; 
         switch (plantState)
         {
             case PlantState.正常:
@@ -714,13 +693,18 @@ public class Plant
                 break;
             case PlantState.成熟:
                 keyY = setWater ? 3 : 0;
-                TryUpDataItemEmote tryUpDataItemEmote = new TryUpDataItemEmote
+                if (emote != GameCommon.fritEmote)
                 {
-                    id = instanceId,
-                    showTime = -1,
-                    emote = GameCommon.fritEmote
-                };
-                GameActionManager.instance.QueueAction(tryUpDataItemEmote);
+                    var tryUpDataItemEmote = new TryUpDataItemEmote
+                    {
+                        id = instanceId,
+                        showTime = -1,
+                        emote = GameCommon.fritEmote
+                    };
+                    GameActionManager.instance.QueueAction(tryUpDataItemEmote, true);
+                    emote = GameCommon.fritEmote;
+                }
+              
                 break;
 
             case PlantState.干旱:
@@ -731,32 +715,41 @@ public class Plant
             case PlantState.枯死:
             case PlantState.死亡:
                 keyY = 2;
-                tryUpDataItemEmote = new TryUpDataItemEmote
-                {
-                    id = instanceId,
-                    showTime = -1,
-                    emote = GameCommon.plantDeath
-                };
-                GameActionManager.instance.QueueAction(tryUpDataItemEmote);
+                /* tryUpDataItemEmote = new TryUpDataItemEmote
+                 {
+                     id = instanceId,
+                     showTime = -1,
+                     emote = GameCommon.plantDeath
+                 };
+                 GameActionManager.instance.QueueAction(tryUpDataItemEmote);*/
                 break;
         }
         if (needShowDryEmote)
         {
-            TryUpDataItemEmote tryUpDataItemEmote = new TryUpDataItemEmote
+            if (emote != GameCommon.dryPlantEmote)
             {
-                id = instanceId,
-                showTime = -1,
-                emote = GameCommon.dryPlantEmote
-            };
-            GameActionManager.instance.QueueAction(tryUpDataItemEmote);
+                var tryUpDataItemEmote = new TryUpDataItemEmote
+                {
+                    id = instanceId,
+                    showTime = -1,
+                    emote = GameCommon.dryPlantEmote
+                };
+                GameActionManager.instance.QueueAction(tryUpDataItemEmote, true);
+                emote = GameCommon.dryPlantEmote;
+            } 
+        }
+        else if (plantState != PlantState.成熟)
+        {
+            emote = 0;
+            GameActionManager.instance.QueueAction(new TryRecycleItemEmote { id = instanceId }, true);
         }
         SetItemAnimation setItemAnimation = new SetItemAnimation
         {
-            keyX = growthStage,
+            keyX = plantState == PlantState.死亡 ? 5 : growthStage,
             keyY = keyY,
             id = instanceId
         };
-        GameActionManager.instance.QueueAction(setItemAnimation);
+        GameActionManager.instance.QueueAction(setItemAnimation); 
     }
 
     public void Grow()
@@ -796,17 +789,19 @@ public class Plant
                 };
                 GameActionManager.instance.QueueAction(addMapItemOperate);
             }
-        }
-        RefreshPlant();
+        } 
     }
 
-    public async Task<bool> GetPlantFruit()
+    public bool GetPlantFruit(out int fruitId)
     {
+        fruitId = 0;
         if (plantState == PlantState.成熟)
         {
-            if (await PackageManager.instance.CheckPackageTryItemIn(CharacterManager.instance.controllerCharacter.characterPackage,
-                PlantData.fruit, PlantData.fruitCount))
+            if (PackageManager.instance.CheckPackageTryItemIn(
+                    CharacterManager.instance.controllerCharacter.characterPackage,
+                    PlantData.fruit, PlantData.fruitCount))
             {
+                fruitId = PlantData.fruit;
                 Item item = new Item
                 {
                     dataId = PlantData.fruit,
@@ -824,7 +819,8 @@ public class Plant
                     nowCycle++;
                 }
                 GameDataSaveManager.instance.SetPlantFruitCount(PlantData.id, PlantData.fruitCount);
-                await PackageManager.instance.SetItemInPackage(item, CharacterManager.instance.controllerCharacter.characterPackage,true);
+                PackageManager.instance.SetItemInPackage(item,
+                    CharacterManager.instance.controllerCharacter.characterPackage, true);
                 return true;
             }
 
@@ -833,20 +829,22 @@ public class Plant
         return false;
     }
 
-    public async Task<bool> GetSicklePlant()
+    public bool GetSicklePlant()
     {
         var growthStateData = PlantData.growthStages[growthStage];
         if (growthStateData.productValue>0)
         {
-            if (await PackageManager.instance.CheckPackageTryItemIn(CharacterManager.instance.controllerCharacter.characterPackage,
-                GameCommon.grassItem, growthStateData.productValue))
+            if (PackageManager.instance.CheckPackageTryItemIn(
+                    CharacterManager.instance.controllerCharacter.characterPackage,
+                    GameCommon.grassItem, growthStateData.productValue))
             {
                 Item item = new Item
                 {
                     dataId = GameCommon.grassItem,
                     count = growthStateData.productValue
-                }; 
-                await PackageManager.instance.SetItemInPackage(item, CharacterManager.instance.controllerCharacter.characterPackage,true); 
+                };
+                PackageManager.instance.SetItemInPackage(item,
+                    CharacterManager.instance.controllerCharacter.characterPackage, true); 
             }
              
         }

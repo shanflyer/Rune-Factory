@@ -1,5 +1,5 @@
-using System.Threading.Tasks;
-using Unity.Entities.UniversalDelegates;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -60,18 +60,21 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
            await UIManager.instance.ShowGamePanel<ZeroPanel>();
             Close();
         });
-
+        SaveReference.index = -1;
         saveList = new DisplayList<SaveReference, UserGameSaveData>(SaveReference, SaveDataParent);
     }
 
-    private void SelectAction(UserGameSaveData userGameSaveData, bool selected)
+    private int selectedIndex = -1;
+    private void SelectAction(UserGameSaveData userGameSaveData,int index, bool selected)
     {
         if (selected)
         {
+            selectedIndex = index;
             selectGameSaveData = userGameSaveData;
-            bool dataIsNull = string.IsNullOrEmpty(userGameSaveData.saveTime);
+            var dataIsNull = userGameSaveData == null || string.IsNullOrEmpty(userGameSaveData.saveTime) ||
+                             userGameSaveData.playerData.gender == Gender.animal;
             Copy.interactable = !dataIsNull;
-            Delete.interactable = userGameSaveData.index >= 0 && !dataIsNull;
+            Delete.interactable = !dataIsNull && userGameSaveData.index >= 0; 
             Start.interactable = !dataIsNull;
         }
     }
@@ -89,23 +92,40 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
 
     private void StartAction()
     {
-        if (selectGameSaveData!=null)
+        if (selectGameSaveData == null)
         {
-            GameDataSaveManager.instance.loadingIndex = selectGameSaveData.index;
-
-            StartWorldInit startWorldInit = new StartWorldInit();
-            GameActionManager.instance.QueueAction(startWorldInit);
-            NPCManager.instance.CreateZeroNPC();
-            // SceneManager.instance.SwitchScene("World");
-            // UIManager.instance.ShowGamePanel<LoadingPanel>();
-
-            Close();
+            GameDataSaveManager.instance.loadingIndex = selectedIndex;
+            if (selectedIndex == -1)
+                data.nowSaveData = UserGameSaveData.CreatSaveData(-1);
+            else
+                data.userGameSaveDatas[selectedIndex] = UserGameSaveData.CreatSaveData(selectedIndex);
         }
+        else
+        { 
+            GameDataSaveManager.instance.loadingIndex = selectGameSaveData.index;
+        }
+
+        var startWorldInit = new StartWorldInit();
+        GameActionManager.instance.QueueAction(startWorldInit);
+        NPCManager.instance.CreateZeroNPC();
+        // SceneManager.instance.SwitchScene("World");
+        // UIManager.instance.ShowGamePanel<LoadingPanel>();
+
+        Close();
+
+        var types = new List<Type>
+        {
+            typeof(CharacterSelectInformationPanel),
+            typeof(ZeroPanel),
+            typeof(SelectCharacterPanel),
+            typeof(SelectLoadPanel)
+        };
+        UIManager.instance.UnLoadPanel(types);
     }
 
     private async void CopyDataAsync()
     {
-        if (!string.IsNullOrEmpty(selectGameSaveData.saveTime))
+        if (selectGameSaveData != null && !string.IsNullOrEmpty(selectGameSaveData.saveTime))
         {
             GameDataSaveManager.instance.CopySaveData(selectGameSaveData);
             await SaveReference.InitData(data.nowSaveData, SelectAction, toggleGroup);

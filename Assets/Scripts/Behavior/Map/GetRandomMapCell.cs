@@ -16,6 +16,8 @@ public class GetRandomMapCell : Action
     [SerializeField]
     private BehaviorAreaType behaviorAreaType;
 
+    private readonly bool fixedArea = false;
+
     [Header("获取的结果")]
     [SerializeField]
     private SharedInt3 result;
@@ -29,9 +31,13 @@ public class GetRandomMapCell : Action
         int3 cell = int3.zero;
         if (room != null&& !room.IsNull())
         {
-            cell = MapCellController.instance.GetRandomBehaviorCell(room.Value, behaviorAreaType);
+            if (!fixedArea)
+                cell = MapCellController.instance.GetRandomBehaviorCell(room.Value, behaviorAreaType);
+            else
+                cell = MapCellController.instance.GetRandomBehaviorCell(room.Value, areaId.Value);
+
             result.SetValue(new int3(cell.xy, room.Value));
-            areaId.SetValue(cell.z);
+            // areaId.SetValue(cell.z);
             return TaskStatus.Success;
         }
        
@@ -41,9 +47,13 @@ public class GetRandomMapCell : Action
             Character character = CharacterManager.instance.GetCharacter(characterId.Value);
             if (cell.x == 0)
             {
-                cell = MapCellController.instance.GetRandomBehaviorCell(character.mapInstance, behaviorAreaType);
+                if (!fixedArea)
+                    cell = MapCellController.instance.GetRandomBehaviorCell(character.mapInstance, behaviorAreaType);
+                else
+                    cell = MapCellController.instance.GetRandomBehaviorCell(character.mapInstance, areaId.Value);
+
                 result.SetValue(new int3(cell.xy, character.mapInstance));
-                areaId.SetValue(cell.z);
+                // areaId.SetValue(cell.z);
             }
             if(character is TempCharacter tempCharacter)
             {

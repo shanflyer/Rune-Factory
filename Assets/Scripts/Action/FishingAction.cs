@@ -33,6 +33,8 @@ public struct TryGetFish : GameAction
         {
             itemInstance = target;
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -48,6 +50,8 @@ public struct RecycleFisher : GameAction
         {
             characterInstance = source;
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -63,6 +67,8 @@ public struct CreatFisher : GameAction
         {
             characterInstance = source;
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -153,6 +159,8 @@ public struct StartFishingGame : GameAction
         {
             itemInstanceId = target;
         }
+        this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }

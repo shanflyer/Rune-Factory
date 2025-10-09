@@ -1,16 +1,10 @@
 fileFormatVersion: 2
-guid: afa679f5edc14d94581b3acb40501541
+guid: a78b5481c4bee6e44b18491b79a75c41
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 1475696758973268642
-    second: "\u8239\u575E\u4E8C\u5C42-02_0"
-  - first:
-      213: 263139723564727142
-    second: "\u8239\u575E\u4E8C\u5C42-02_1"
-  - first:
-      213: -1032402826526065473
-    second: "\u8239\u575E\u4E8C\u5C42-02_2"
+      213: -902596521865413279
+    second: "\u8239\u575E\u4E8C\u5C42_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -115,17 +109,30 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 1
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "\u8239\u575E\u4E8C\u5C42-02_0"
+      name: "\u8239\u575E\u4E8C\u5C42_0"
       rect:
         serializedVersion: 2
-        x: 0
-        y: 607
-        width: 321
-        height: 289
+        x: 31
+        y: 287
+        width: 386
+        height: 545
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -134,52 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2a20cca326aba7410800000000000000
-      internalID: 1475696758973268642
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "\u8239\u575E\u4E8C\u5C42-02_1"
-      rect:
-        serializedVersion: 2
-        x: 127
-        y: 351
-        width: 34
-        height: 194
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 66bbe553f2cd6a300800000000000000
-      internalID: 263139723564727142
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: "\u8239\u575E\u4E8C\u5C42-02_2"
-      rect:
-        serializedVersion: 2
-        x: 191
-        y: 351
-        width: 258
-        height: 226
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: fbcfdc3691b2ca1f0800000000000000
-      internalID: -1032402826526065473
+      spriteID: 16d75bade355973f0800000000000000
+      internalID: -902596521865413279
       vertices: []
       indices: 
       edges: []
@@ -195,14 +158,16 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures:
-    - texture: {fileID: 2800000, guid: 303c67e0f69f2104b82a70c21bad4b68, type: 3}
+    - texture: {fileID: 2800000, guid: f11bdad5813ee5b4692b38e9ab255324, type: 3}
       name: _NormalMap
+    - texture: {fileID: 2800000, guid: 9f168587cd9c39a4fb8e0bef5990e8e2, type: 3}
+      name: _MoveMask
+    - texture: {fileID: 2800000, guid: 675309dfe4c9b0048bbcb53659600857, type: 3}
+      name: _SnowTex
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      "\u8239\u575E\u4E8C\u5C42-02_0": 1475696758973268642
-      "\u8239\u575E\u4E8C\u5C42-02_1": 263139723564727142
-      "\u8239\u575E\u4E8C\u5C42-02_2": -1032402826526065473
+      "\u8239\u575E\u4E8C\u5C42_0": -902596521865413279
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

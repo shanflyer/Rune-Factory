@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,7 +15,7 @@ public interface IReferenceData
 
 public delegate void SelectUIAction<T>(T t, bool selected = true) where T : BaseReference;
 
-public delegate void SelectAction<T>(T t, bool selected = true);
+public delegate void SelectAction<T>(T t, int index, bool selected = true);
 
 public class UIObjReference<T> : BaseReference 
 {
@@ -66,7 +67,7 @@ public class UIObjReference<T> : BaseReference
     {
         if (SelectAction != null)
         {
-            SelectAction(data);
+            SelectAction(data,index);
         }
     }
 
@@ -96,6 +97,47 @@ public class UIObjReference<T> : BaseReference
                 Debug.LogWarning($"{gameObject.name}:{e}");
             }
         }
+        Type type = this.GetType();
+        var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+        SetFieldValue(fields);
+        var baseFields = type.BaseType.GetFields(BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+        SetFieldValue(baseFields);
+        void SetFieldValue(FieldInfo[] fields)
+        {
+            for (int i = 0; i < fields.Length; i++)
+            {
+                try
+                {
+                    var field = fields[i];
+                    string keyName = field.Name;
+                    if (field.Name.Contains("_"))
+                    {
+                        keyName = field.Name.Split('_')[0];
+                    }
+                    if (string.IsNullOrEmpty(keyName))
+                    {
+                        var component = gameObject.GetComponent(field.FieldType);
+                        field.SetValue(this, component);
+                    }
+                    else
+                    if (objectDatas.TryGetValue(keyName, out var transform))
+                    {
+                        try
+                        {
+                            var component = transform.GetComponent(field.FieldType);
+                            field.SetValue(this, component);
+                        }
+                        finally { }
+                    }
+                }
+                catch
+                {
+
+                }
+                
+            }
+        }
+        
     }
 
     public override void SetPanelUISerializeObj()

@@ -126,21 +126,7 @@ public class IntPastureSaveDataDictionary : SerializableDictionary<int, PastureS
     }
 }
 
-[Serializable]
-public class IntShopSaveDataDictionary : SerializableDictionary<int, ShopSaveData>
-{
-    public IntShopSaveDataDictionary()
-    { }
-
-    public void CopyData(IntShopSaveDataDictionary data)
-    {
-        Clear();
-        foreach (var kvp in data)
-        {
-            this[kvp.Key] = new ShopSaveData(kvp.Value);
-        }
-    }
-}
+ 
 
 [Serializable]
 public class StringShopListSaveDataDictionary : SerializableDictionary<int, ShopListSaveData>

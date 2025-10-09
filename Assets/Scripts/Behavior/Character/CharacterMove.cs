@@ -79,9 +79,10 @@ public class CharacterMove : Action
             }
             else
             {
-                if (!character.MoveCrossMap(targetCoordinate.z, targetCoordinate.xy, MoveEndAction,failedMoveAction:FailedMoveAction))
+                if (!character.TryMove(targetCoordinate.z, targetCoordinate.xy, MoveEndAction,failedMoveAction:FailedMoveAction))
                 {
-                     Debug.Log("MoveCrossMapFailure");
+                    Debug.Log(
+                        $"{character.name}character.mapInstance {character.mapInstance}-character.coordinate{character.coordinate}-targetCoordinate.z{targetCoordinate.z}targetCoordinate.xy{targetCoordinate.xy}-MoveCrossMapFailure");
                      taskStatus = TaskStatus.Failure;
                 }
             }
@@ -98,7 +99,7 @@ public class CharacterMove : Action
         {
           
             //var character = CharacterManager.instance.GetCharacter(characterId.Value);
-            if (!character.MoveCrossMap(target.Value.z, target.Value.xy, MoveEndAction))
+            if (!character.TryMove(target.Value.z, target.Value.xy, MoveEndAction))
             {
                 taskStatus = TaskStatus.Failure;
                 Debug.Log($"faile;value{value}");
@@ -116,7 +117,7 @@ public class CharacterMove : Action
         {
             if (startTime + waitDuration < Time.time)
             {
-                Debug.Log($"行为树移动失败--等待时间太长");
+                Debug.Log($"{character.name}--行为树移动失败--等待时间太长");
                 return TaskStatus.Failure;
             }
 

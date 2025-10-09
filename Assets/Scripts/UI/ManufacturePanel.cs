@@ -242,6 +242,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         }
         set
         {
+            if (value > 1000) value = 1000;
             _produceCount = value;
             ItemCountValue.SetSWText(produceCount.ToString());
             ReduceButton.transform.localScale = produceCount > 1 ? Vector3.one : Vector3.zero;
@@ -954,7 +955,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         }
         else
         {
-            this.formulaTypes.InitListData(null, SelectFormulaTypeData);
+            this.formulaTypes.InitListData(new List<FormulaTypeData>(), SelectFormulaTypeData);
         }
 
         RefreshFormulaSelect();
@@ -984,7 +985,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         GameActionManager.instance.QueueAction(setFixedCamera);
     }
 
-    private void SelectFormulaTypeData(FormulaTypeData formulaTypeData, bool seleted)
+    private void SelectFormulaTypeData(FormulaTypeData formulaTypeData, int index, bool seleted)
     {
         if (!seleted)
         {
@@ -1002,7 +1003,8 @@ public class ManufacturePanel : GamePanel<Manufature>
 
     private async void GetOutProduct()
     {
-        bool allSet = await PackageManager.instance.CheckPackageTryItemIn(CharacterManager.instance.controllerCharacter.characterPackage, manufature.product.x, manufature.product.y);
+        var allSet = PackageManager.instance.CheckPackageTryItemIn(
+            CharacterManager.instance.controllerCharacter.characterPackage, manufature.product.x, manufature.product.y);
         if (!allSet)
         {
             InformationController.instance.AddInformation(LanguageManage.SwitchStr("背包空间不足!"));
@@ -1050,7 +1052,7 @@ public class ManufacturePanel : GamePanel<Manufature>
     }
 
 
-    async void SetFormulaItem(Item item, bool select)
+    async void SetFormulaItem(Item item, int index, bool select)
     {
         item.count = 0;
         await SelectItemBoxRefrence.InitData(item, null, FormulaItemBoxGroup);

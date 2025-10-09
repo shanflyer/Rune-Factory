@@ -1,8 +1,8 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+
 [CreateAssetMenu(menuName = "Datas/脚步声")]
 public class FootstepDataList : ScriptableObject, IGameData
 {
@@ -34,14 +34,15 @@ public class FootstepDataList : ScriptableObject, IGameData
     }
 
     public void SetReferenceData()
-    { 
+    {
+        
     }
 }
 [Serializable]
 public struct FootstepSource
 {
     public Color footStepColor;
-    public List<AudioClip> clips;
+    public List<SE> Clips;
 }
 
 [Serializable]

@@ -1,15 +1,16 @@
 ﻿#define TMP_PRESENT
 
 using System;
-using System.Text;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
 using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.TextCore;
 using UnityEngine.TextCore.LowLevel;
 using UnityEngine.UI;
-
+using Debug = UnityEngine.Debug;
 
 namespace TMPro
 {
@@ -223,9 +224,16 @@ namespace TMPro
             base.Awake();
             originalLineSpacing = lineSpacing;
             originalCharacterSpacing=characterSpacing;
-            FixedSwitchString();
+            
             
         }
+
+        protected override void OnEnable()
+        {
+            FixedSwitchString();
+            base.OnEnable();
+        }
+
         public void FixedSwitchString()
         {
             if (isSwLanguage)
@@ -789,7 +797,7 @@ namespace TMPro
             }
         }
         [SerializeField]
-        [UnityEngine.Serialization.FormerlySerializedAs("m_lineJustification")]
+        [FormerlySerializedAs("m_lineJustification")]
         protected TextAlignmentOptions m_textAlignment = TextAlignmentOptions.Converted;
 
         protected HorizontalAlignmentOptions m_lineJustification;
@@ -1730,7 +1738,7 @@ namespace TMPro
         /// </summary>
         internal int m_InternalTextProcessingArraySize;
 
-        [System.Diagnostics.DebuggerDisplay("Unicode ({unicode})  '{(char)unicode}'")]
+        [DebuggerDisplay("Unicode ({unicode})  '{(char)unicode}'")]
         internal struct TextProcessingElement
         {
             public TextProcessingElementType elementType;
@@ -3577,14 +3585,14 @@ namespace TMPro
         {
             int size = Mathf.NextPowerOfTwo(array.Length + 1);
 
-            System.Array.Resize(ref array, size);
+            Array.Resize(ref array, size);
         }
 
         void ResizeInternalArray<T>(ref T[] array, int size)
         {
             size = Mathf.NextPowerOfTwo(size + 1);
 
-            System.Array.Resize(ref array, size);
+            Array.Resize(ref array, size);
         }
 
 

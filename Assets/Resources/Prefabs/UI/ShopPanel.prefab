@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 560842032510228481}
   m_Layer: 5
   m_Name: AddButton
-  m_TagString: Untagged
+  m_TagString: Notification1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -60,6 +60,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -183,6 +188,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -260,12 +270,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  isSwLanguage: 1
   m_text: Enter text...
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: be5f2ca715dc20644930e1204db37478, type: 2}
@@ -417,6 +433,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -447,7 +468,7 @@ GameObject:
   - component: {fileID: 6753143249222164516}
   m_Layer: 5
   m_Name: ShopItem
-  m_TagString: Untagged
+  m_TagString: SelectButton
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -487,7 +508,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_setUid: 7600
+  m_setUid: 7700
   m_guid: -1
   m_Navigation:
     m_Mode: 3
@@ -541,6 +562,7 @@ MonoBehaviour:
   canvas: {fileID: 0}
   raycaster: {fileID: 0}
   show: 0
+  index: 0
   guideSelectable: {fileID: 1663777957485347434}
   itemIcon: {fileID: 8478221367762214066}
   toggle: {fileID: 1663777957485347434}
@@ -605,6 +627,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -799,12 +826,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  isSwLanguage: 1
   m_text: "\u7F8E\u5473\u7684\u7EA2\u8272\u679C\u5B9E\uFF0C\u4E5F\u8BB8\u4F60\u60F3\u5C1D\u5C1D\uFF0C\u4E0D\u8FC7\u5C0F\u5FC3\u5B83
     \u7684"
   m_isRightToLeft: 0
@@ -892,7 +925,7 @@ GameObject:
   - component: {fileID: 7472822776699794382}
   m_Layer: 5
   m_Name: CloseButton
-  m_TagString: Untagged
+  m_TagString: Return1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -938,6 +971,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1065,6 +1103,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1141,6 +1184,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1218,6 +1266,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1332,6 +1385,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1444,6 +1502,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1523,6 +1586,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1629,6 +1697,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1705,6 +1778,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1828,6 +1906,7 @@ MonoBehaviour:
   canvas: {fileID: 0}
   raycaster: {fileID: 0}
   show: 0
+  index: 0
   guideSelectable: {fileID: 0}
   shopName0: {fileID: 5326184958306144676}
   shopName1: {fileID: 4798051285840650695}
@@ -1894,6 +1973,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2034,12 +2118,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  isSwLanguage: 1
   m_text: "\u8D2D\u4E70"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5837010e61c326e4c97d452682b26411, type: 2}
@@ -2174,6 +2264,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2352,12 +2447,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  isSwLanguage: 1
   m_text: "\u6218\u6597\u65F6 \u653B\u51FB+7 10\u56DE\u5408 \u9632\u5FA1+10"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7fe2d9d77c3cbee478ff2a4e673f2766, type: 2}
@@ -2496,7 +2597,7 @@ GameObject:
   - component: {fileID: 5562793551243009293}
   m_Layer: 5
   m_Name: ReduceButton
-  m_TagString: Untagged
+  m_TagString: Notification1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2542,6 +2643,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2665,6 +2771,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2741,12 +2852,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  isSwLanguage: 1
   m_text: "\u79CD\u5B50"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: be5f2ca715dc20644930e1204db37478, type: 2}
@@ -2878,12 +2995,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  isSwLanguage: 1
   m_text: "123\u200B"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: be5f2ca715dc20644930e1204db37478, type: 2}
@@ -2973,7 +3096,7 @@ GameObject:
   - component: {fileID: 1813991015879831165}
   m_Layer: 5
   m_Name: ShopPanel
-  m_TagString: Untagged
+  m_TagString: Decline1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3072,6 +3195,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0.5019608}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3104,6 +3232,7 @@ MonoBehaviour:
   canvas: {fileID: 5777032649020816713}
   raycaster: {fileID: 1813991015879831165}
   show: 0
+  index: 0
   Title: {fileID: 795972575291751393}
   CloseButton: {fileID: 7472822776699794382}
   ShopItemParent: {fileID: 4552847305741581172}
@@ -3199,12 +3328,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  isSwLanguage: 1
   m_text: 12345678
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: be5f2ca715dc20644930e1204db37478, type: 2}
@@ -3336,6 +3471,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0.45248845, b: 0.3176471, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3412,6 +3552,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3443,7 +3588,7 @@ GameObject:
   - component: {fileID: 4774665379375909596}
   m_Layer: 5
   m_Name: BuyButton
-  m_TagString: Untagged
+  m_TagString: Click1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3490,6 +3635,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3613,12 +3763,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  isSwLanguage: 1
   m_text: "\u690D\u7269\u5E97"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 441b28c13cdf1e8449f4486ce8c232c3, type: 2}
@@ -3750,12 +3906,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  isSwLanguage: 1
   m_text: 123456
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: be5f2ca715dc20644930e1204db37478, type: 2}
@@ -3842,7 +4004,7 @@ GameObject:
   - component: {fileID: 5351461550547480621}
   m_Layer: 5
   m_Name: BuyCountValue
-  m_TagString: Untagged
+  m_TagString: Notification1
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3889,6 +4051,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3960,7 +4127,7 @@ MonoBehaviour:
   m_ContentType: 2
   m_InputType: 0
   m_AsteriskChar: 42
-  m_KeyboardType: 4
+  m_KeyboardType: 2
   m_LineType: 0
   m_HideMobileInput: 0
   m_HideSoftKeyboard: 0
@@ -4071,6 +4238,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4201,6 +4373,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4277,6 +4454,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4353,12 +4535,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  isSwLanguage: 1
   m_text: "\u79CD\u5B50"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7fe2d9d77c3cbee478ff2a4e673f2766, type: 2}
@@ -4494,6 +4682,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4570,6 +4763,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4646,6 +4844,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4722,6 +4925,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -4798,12 +5006,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
+  isSwLanguage: 1
   m_text: "+ \u7834\u788E\u7684\u65E0\u540D\u82F9\u679C +"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7fe2d9d77c3cbee478ff2a4e673f2766, type: 2}
@@ -4935,6 +5149,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
+  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

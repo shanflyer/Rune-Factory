@@ -29,7 +29,7 @@ MonoBehaviour:
   duskEnvironmentDataName: "\u9EC4\u660F"
   dawnEnvironmentDataName: "\u9ECE\u660E"
   nightEnvironmentDataName: "\u665A\u4E0A"
-  displaySky: 1
+  displaySky: 0
   displaySunlight: 0
   fixedCamera: 0
   flowCameraType: 0
@@ -306,6 +306,7 @@ MonoBehaviour:
   bgmTag: 
   mapBGMDatas:
   - name: "\u767D\u5929"
+    BGMs: c9000000
     bgms:
     - {fileID: 8300000, guid: 412fa0a1ef4cd3845b675474742b0402, type: 3}
     timeCurve:
@@ -399,6 +400,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   - name: "\u665A\u4E0A"
+    BGMs: d1000000
     bgms:
     - {fileID: 8300000, guid: d68262bf348a6ec4aa58be4f38491aa1, type: 3}
     timeCurve:
@@ -492,6 +494,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   - name: "\u96E8"
+    BGMs: 9c000000
     bgms:
     - {fileID: 8300000, guid: 9f1bd6a1c7e924b44b02ce6c5a0f39ee, type: 3}
     timeCurve:

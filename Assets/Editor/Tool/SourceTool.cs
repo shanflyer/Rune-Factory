@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Unity.Entities.UniversalDelegates;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -68,8 +67,8 @@ public class SourceTool : MonoBehaviour
                    
                   AssetDatabase.MoveAsset(path, newPath);
                 }
-                 
-                if (System.IO.Directory.Exists(path))
+
+                if (Directory.Exists(path))
                 {
                     DirectoryInfo dir = new DirectoryInfo(path);
                     OpenDirectoryInfo(dir, path);
@@ -156,7 +155,7 @@ public class SourceTool : MonoBehaviour
                 if (string.IsNullOrEmpty(path))
                     continue;
 
-                if (System.IO.Directory.Exists(path))
+                if (Directory.Exists(path))
                 {
                     DirectoryInfo dir = new DirectoryInfo(path);
                     OpenDirectoryInfo(dir, path);
@@ -286,7 +285,13 @@ public class SourceTool : MonoBehaviour
                 var strs = path.Split('.');
                 if (strs[strs.Length - 1] == "png")
                 {
-                    OutSprite(path);
+                    var sources = AssetDatabase.LoadAllAssetsAtPath(path);
+                    foreach (var source in sources)
+                        if (source.GetType().Name == "Sprite")
+                        {
+                            var sprite = (Sprite)source;
+                            ExportSprite(sprite);
+                        }
                 }
             }
 
@@ -360,6 +365,84 @@ public class SourceTool : MonoBehaviour
             }
         }
     }
+
+    private static void ExportSprite(Sprite sprite)
+    {
+        var tex = sprite.texture;
+
+        // --- 主图 ---
+        var texRect = sprite.textureRect;
+        var sw = Mathf.RoundToInt(texRect.width);
+        var sh = Mathf.RoundToInt(texRect.height);
+
+        var pixels = tex.GetPixels(
+            Mathf.RoundToInt(texRect.x),
+            Mathf.RoundToInt(texRect.y),
+            sw, sh
+        );
+
+        var pivotInCrop = sprite.pivot - sprite.textureRectOffset;
+
+        var left = pivotInCrop.x;
+        var right = sw - pivotInCrop.x;
+        var down = pivotInCrop.y;
+        var up = sh - pivotInCrop.y;
+
+        var newWidth = Mathf.CeilToInt(Mathf.Max(left, right) * 2f);
+        var newHeight = Mathf.CeilToInt(Mathf.Max(up, down) * 2f);
+
+        var offsetX = Mathf.RoundToInt(newWidth / 2f - pivotInCrop.x);
+        var offsetY = Mathf.RoundToInt(newHeight / 2f - pivotInCrop.y);
+
+        var dir = $"OutTexture/{sprite.texture.name}";
+        if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+
+        // === 导出主图 ===
+        var mainTex = new Texture2D(newWidth, newHeight, TextureFormat.RGBA32, false);
+        mainTex.SetPixels(new Color[newWidth * newHeight]); // 清空透明
+
+        for (var y = 0; y < sh; y++)
+        for (var x = 0; x < sw; x++)
+        {
+            var c = pixels[y * sw + x];
+            mainTex.SetPixel(x + offsetX, y + offsetY, c);
+        }
+
+        mainTex.Apply();
+        SaveFileTexture(dir, mainTex, sprite.name);
+
+        // --- Secondary Textures ---
+        var secondaries = new SecondarySpriteTexture[sprite.GetSecondaryTextureCount()];
+        sprite.GetSecondaryTextures(secondaries);
+
+        foreach (var sec in secondaries)
+        {
+            if (sec.texture == null) continue;
+
+            var secPixels = sec.texture.GetPixels(
+                Mathf.RoundToInt(texRect.x),
+                Mathf.RoundToInt(texRect.y),
+                sw, sh
+            );
+
+            var secTex = new Texture2D(newWidth, newHeight, TextureFormat.RGBA32, false);
+            secTex.SetPixels(new Color[newWidth * newHeight]);
+
+            for (var y = 0; y < sh; y++)
+            for (var x = 0; x < sw; x++)
+            {
+                var c = secPixels[y * sw + x];
+                secTex.SetPixel(x + offsetX, y + offsetY, c);
+            }
+
+            secTex.Apply();
+
+            // 文件名 = 主精灵名字 + "_" + secondary 名字
+            var secName = sprite.name + sec.name;
+            SaveFileTexture(dir, secTex, secName);
+        }
+    }
+
 
     private static void SaveTexture(Sprite sprite, int scale = 1)
     {

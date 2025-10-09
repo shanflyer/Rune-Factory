@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public partial class GameDataManager : Singleton<GameDataManager>
@@ -99,55 +99,30 @@ public partial class GameDataManager : Singleton<GameDataManager>
     {
         List<T> results = new List<T>(); ;
         Type type = typeof(T);
-        /*if (allGameStaticDatas.TryGetValue(type, out var dataDic))
+
+        var _results = ExtensionsResources.LoadAllIGameData<T>(DataPath.GetDataPath(type));
+        if (_results != null && _results.Count != 0)
         {
-            using (var e = dataDic.GetEnumerator())
-            {
-                while (e.MoveNext())
-                {
-                    var data = e.Current.Value;
-                    results.Add((T)data);
-                }
-            }
-        }
-        else*/
-        var dataDic = new Dictionary<string, IGameData>();
-        {
-            var _results = ExtensionsResources.LoadAllIGameData<T>(DataPath.GetDataPath(type));
-            if (_results != null && _results.Count != 0)
-            {
-                dataDic = new Dictionary<string, IGameData>();
-                results = _results.ToList();
-                for (int i = 0; i < results.Count; i++)
-                {
-                    var data = results[i];
-                    data.Init();
-                    dataDic.Add(data.GetKey(), data);
-                }
-                allGameStaticDatas[type] = dataDic;
-            }
+            results = _results.ToList();
+
+            //allGameStaticDatas[type] = dataDic;
         }
         if (results.Count == 0)
         {
             var dataAsset = await ExtensionsResources.LoadResourceAsync(DataPath.GetDataPath(type));
             if (dataAsset != null && dataAsset is IDataArray<T> dataArray)
             {
-                dataDic = new Dictionary<string, IGameData>();
+                
                 try
                 {
                     results = dataArray.DataList.ToList();
-                    for (int i = 0; i < results.Count; i++)
-                    {
-                        var data = results[i];
-                        data.Init();
-                        dataDic.Add(data.GetKey(), data);
-                    }
+                    
                 }
                 catch (Exception e)
                 {
                     Debug.LogWarning(e);
                 }
-                allGameStaticDatas[type] = dataDic;
+                // allGameStaticDatas[type] = dataDic;
             }
         }
         if (results.Count == 0)
@@ -156,23 +131,18 @@ public partial class GameDataManager : Singleton<GameDataManager>
 
             if (dataAsset != null)
             {
-                dataDic = new Dictionary<string, IGameData>();
+                
 
                 try
                 {
                     results = JsonConvert.DeserializeObject<List<T>>(dataAsset.text);
-                    for (int i = 0; i < results.Count; i++)
-                    {
-                        var data = results[i];
-                        data.Init();
-                        dataDic.Add(data.GetKey(), data);
-                    }
+                   
                 }
                 catch (Exception e)
                 {
                     Debug.LogWarning(e);
                 }
-                allGameStaticDatas[type] = dataDic;
+                //allGameStaticDatas[type] = dataDic;
             }
         }
         return results;
@@ -364,7 +334,7 @@ public struct ShowData : IGameData
 #endif
 }
 
-[System.Serializable]
+[Serializable]
 public struct LangLanguageSwitch : IGameData
 {
     public string cn, jp, en, ko;

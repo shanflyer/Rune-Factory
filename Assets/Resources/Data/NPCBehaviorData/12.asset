@@ -61,26 +61,36 @@ MonoBehaviour:
   externalBehavior: {fileID: 11400000, guid: 31909e5c773408a419a63237df9472ee, type: 2}
   gameTimeKeyVisitMapDic:
     m_keys:
-    - minHour: 6
-      minMinute: 0
-      maxHour: 9
-      maxMinute: 0
-    - minHour: 9
-      minMinute: 0
-      maxHour: 17
-      maxMinute: 30
-    - minHour: 17
-      minMinute: 30
-      maxHour: 19
-      maxMinute: 30
-    - minHour: 19
-      minMinute: 30
-      maxHour: 22
-      maxMinute: 0
-    - minHour: 22
-      minMinute: 0
-      maxHour: 24
-      maxMinute: 0
+    - minTime:
+        x: 6
+        y: 0
+      maxTime:
+        x: 9
+        y: 0
+    - minTime:
+        x: 9
+        y: 0
+      maxTime:
+        x: 17
+        y: 30
+    - minTime:
+        x: 17
+        y: 30
+      maxTime:
+        x: 19
+        y: 30
+    - minTime:
+        x: 19
+        y: 30
+      maxTime:
+        x: 22
+        y: 0
+    - minTime:
+        x: 22
+        y: 0
+      maxTime:
+        x: 24
+        y: 0
     m_values: 61ea000062ea000063ea000064ea000065ea0000
   npcFriends:
   - x: 5

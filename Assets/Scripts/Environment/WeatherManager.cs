@@ -77,6 +77,11 @@ public struct Weather
         return fogValue * timelightValue;
     }
 
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(cloud, temperature, fog, wind, waterFall, lightning);
+    }
+
     public override bool Equals(object obj)
     {
         if (obj is Weather weather)
@@ -144,6 +149,11 @@ public class WeatherManager : Singleton<WeatherManager>
     {
        return  weatherIconData.GetWeatherIcon(weather,overrideNight,night);
     }
+
+    public Sprite GetWeatherIcon(bool overrideNight = false, bool night = false)
+    {
+        return weatherIconData.GetWeatherIcon(nowWeather, overrideNight, night);
+    }
     public void InitSaveWeather(List<Weather> nowDayWeathers, List<Weather> nextDayWeathers)
     {
         this.nowDayWeathers = nowDayWeathers;
@@ -168,6 +178,7 @@ public class WeatherManager : Singleton<WeatherManager>
         {
             nextDayWeathers = await CreatWeather(creatWeather.nextWeather);
             GameDataSaveManager.instance.UserGameSaveData.nextWeathers = nextDayWeathers;
+                
         }
     }
 
@@ -191,7 +202,7 @@ public class WeatherManager : Singleton<WeatherManager>
     }
 
     private int nowIndex = 0;
-    
+    private Weather nowWeather;
     public void RefreshWeather(int hour)
     {
 #if UNITY_EDITOR
@@ -204,10 +215,10 @@ public class WeatherManager : Singleton<WeatherManager>
         if (hourIndex != nowIndex&& nowDayWeathers.Count>hourIndex)
         {
             nowIndex = hourIndex;
-            Weather weather = nowDayWeathers[hourIndex];
+            nowWeather = nowDayWeathers[hourIndex];
             SetWeather setWeather = new SetWeather
             {
-                weather = weather,
+                weather = nowWeather
             };
             GameActionManager.instance.QueueAction(setWeather); 
         }

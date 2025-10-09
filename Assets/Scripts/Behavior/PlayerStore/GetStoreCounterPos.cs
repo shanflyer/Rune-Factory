@@ -5,7 +5,7 @@ using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
 
 [TaskCategory("Game/PlayerStore")]
-[TaskName("»ñÈ¡¹ñÌ¨¿ÉĞĞ×ß·¶Î§×ø±ê")]
+[TaskName("è·å–æŸœå°å¯è¡Œèµ°èŒƒå›´åæ ‡")]
 public class GetStoreCounterPos : Action
 { 
     public SharedInt3 targetCoordinate;

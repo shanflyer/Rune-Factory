@@ -1,10 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
-using UnityEngine.UI;
 using static UnityEngine.ParticleSystem;
 
  
@@ -65,6 +62,7 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
                     ScalableBufferManager.ResizeBuffers(1f, 1f);
                     break;
             }
+            CameraManager.instance.SetVolumeLevel(value);
         }
         get
         {
@@ -135,6 +133,8 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
         var screenPos = CameraManager.instance.mainCamera.WorldToScreenPoint(LerpScreenCycleValue.cyclePos);
         var screenSize = GameCommon.GetScreenResolution();
         Vector2 cyclePos = new Vector2(screenPos.x / screenSize.x, screenPos.y / screenSize.y);
+        cyclePos.x = math.clamp(cyclePos.x, 0, 1);
+        cyclePos.y = math.clamp(cyclePos.y, 0, 1);
         screenMat.SetVector("_Offset", cyclePos); 
        // Debug.Log($"screenPos:{screenPos}--screenSize:{screenSize}-LerpScreenCycleValue.cyclePos:{LerpScreenCycleValue.cyclePos}--{cyclePos}");
         float timeValue = 0;

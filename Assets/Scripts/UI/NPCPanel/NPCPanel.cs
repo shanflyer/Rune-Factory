@@ -114,7 +114,7 @@ public class NPCPanel : GamePanel<NPCList>
 
     private NPC selectNpc;
 
-    private void SelectAction(NPC npc, bool selected)
+    private void SelectAction(NPC npc, int index, bool selected)
     {
         if (selected)
         {

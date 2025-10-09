@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
-using Unity.Mathematics;
-using System.Linq;
-
 #if UNITY_EDITOR
 
 using UnityEditor;
@@ -10,7 +8,7 @@ using UnityEditor;
 #endif
 
 [CreateAssetMenu(menuName = "Data/地图物体")]
-[System.Serializable]
+[Serializable]
 public class MapItemData : ScriptableObject, IGameData
 {
     public int id;
@@ -21,6 +19,8 @@ public class MapItemData : ScriptableObject, IGameData
 
     public List<int> colliderGrids, triggerGrids, playerTriggerGrids;
     public bool isPlayerForwardTrigger;
+
+    public string maskObj;
 
     public int playerTriggerEvent;
     public List<int> operateIds = new List<int>();

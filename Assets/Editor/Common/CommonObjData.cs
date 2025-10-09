@@ -1,3 +1,5 @@
+using System;
+
 public class WorldDataObj : CommonObj
 {
     public WorldMapData data;
@@ -183,12 +185,12 @@ public class MapItemDataObj : CommonObj
 
     public CommonObj CreatNew(int count)
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     public void Delete()
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     public void DrawTextureWithTexCoords(float posX, float posY, int texSize)
@@ -202,7 +204,10 @@ public class MapItemDataObj : CommonObj
 
     public string GetName()
     {
-        return itemData.itemName;
+        if (!string.IsNullOrEmpty(itemData.objName))
+            return itemData.objName;
+        else
+            return itemData.itemObj.name;
     }
 
     public bool GetSearch()
@@ -220,7 +225,7 @@ public class MapItemDataObj : CommonObj
 
     public void Save()
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     public void SelectAction()
@@ -258,7 +263,7 @@ public class ExcelDataObj : CommonObj
 
     public CommonObj CreatNew(int count)
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     public void Delete()

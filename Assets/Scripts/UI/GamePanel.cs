@@ -1,9 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class GamePanel<V> : BaseReference where V:IReferenceData
 {
@@ -53,24 +55,57 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
             catch (Exception e)
             {
                 Debug.Log($"{gameObject.name}:{e}");
-            } 
+            }
         }
-       
-       
+        Type type = this.GetType();
+
+        var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+        for (int i = 0; i < fields.Length; i++)
+        {
+            var field = fields[i];
+            string keyName = field.Name;
+            if (field.Name.Contains("_"))
+            {
+                keyName = field.Name.Split('_')[0];
+            }
+            if (string.IsNullOrEmpty(keyName))
+            {
+                var component = transform.GetComponent(field.FieldType);
+                field.SetValue(this, component);
+            }
+            else
+            if (objectDatas.TryGetValue(keyName, out var transform))
+            {
+                try
+                {
+                    var component = transform.GetComponent(field.FieldType);
+                    field.SetValue(this, component);
+                }
+                finally { }
+            }
+        }
+
+
     }
     public override void SetPanelUISerializeObj()
     {
+#if UNITY_EDITOR
         base.SetPanelUISerializeObj();
         InitChildObjData();
+     
         var uiObjReferences = gameObject.GetComponentsInChildren<BaseReference>(true);
-        foreach(var uiObj in uiObjReferences)
+        foreach (var uiObj in uiObjReferences)
         {
+            Undo.RecordObject(uiObj, "SetPanelUISerializeObj");
             if (uiObj == this)
             {
                 continue;
             }
             uiObj.SetPanelUISerializeObj();
         }
+        EditorUtility.SetDirty(gameObject);
+#endif
+
 
     }
     
@@ -150,7 +185,7 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
             }
             
         }
-        else
+        else if (gameObject)
         {
             gameObject.layer = HideLayer;
             if (graphicRaycaster)

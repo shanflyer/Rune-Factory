@@ -15,10 +15,11 @@ MonoBehaviour:
   id: 1025
   itemName: "\u6B66\u5668\u67DC"
   objName: "\u6B66\u5668\u67DC\u53F3"
-  itemObj: {fileID: 730638872350326545, guid: 04e19de3ec2a8a64a91d1926e3f97c41, type: 3}
+  itemObj: {fileID: 447586829284413326, guid: 4b6d4f89ef1d70c439bd5ec0f5631c23, type: 3}
   colliderGrids: ffffffff000000000100000004000000
   triggerGrids: fdffffff00000000feffffff04000000feffffffffffffff02000000fffffffffeffffff050000000200000005000000fffffffffeffffff01000000feffffffffffffff06000000010000000600000002000000000000000300000004000000
-  playerTriggerGrids: fdfffffffeffffff0300000006000000
+  playerTriggerGrids: fdfffffffeffffff03000000fefffffffdfffffffffffffffeffffff06000000ffffffff06000000030000000600000002000000ffffffff0300000005000000
+  isPlayerForwardTrigger: 0
   playerTriggerEvent: 0
   operateIds: 
   creatAction: {fileID: 0}
@@ -26,7 +27,7 @@ MonoBehaviour:
   defaultEnter: 0
   displayTips: 1
   playerOperateInfo: 
-  offsetLinkPos: {x: 0, y: 0}
-  leftLinkPos: {x: 0, y: 0}
-  rightLinkPos: {x: 0, y: 0}
+  offsetLinkPos: {x: 0, y: 0, z: 0}
+  leftLinkPos: {x: 0, y: 0, z: 0}
+  rightLinkPos: {x: 0, y: 0, z: 0}
   linkDirection: 0

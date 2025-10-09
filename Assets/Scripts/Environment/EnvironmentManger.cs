@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 public struct EnvironmentLightData
 {
@@ -151,10 +150,10 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             groundIndex = defaultGround;
         }
         FootstepSource footstepSource = GetMapFootStepSource(groundIndex);
-        if (footstepSource.clips != null)
+        if (footstepSource.Clips != null)
         {
-            AudioClip audioClip = footstepSource.clips[GameRandom.RandomInt(0, footstepSource.clips.Count)];
-            characterGetFootStep.SetFootStepAction(audioClip, footstepSource.footStepColor);
+            var se = footstepSource.Clips[GameRandom.RandomInt(0, footstepSource.Clips.Count)];
+            characterGetFootStep.SetFootStepAction(se, footstepSource.footStepColor);
         }
     }
 
@@ -171,10 +170,10 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
                         try
                         {
                             FootstepSource footstepSource = GetMapFootStepSource(index);
-                            if (footstepSource.clips != null)
+                            if (footstepSource.Clips != null)
                             {
-                                AudioClip audioClip = footstepSource.clips[GameRandom.RandomInt(0, footstepSource.clips.Count)];
-                                characterGetFootStep.SetFootStepAction(audioClip, footstepSource.footStepColor);
+                                var se = footstepSource.Clips[GameRandom.RandomInt(0, footstepSource.Clips.Count)];
+                                characterGetFootStep.SetFootStepAction(se, footstepSource.footStepColor);
                             }
                         }
                         catch { } 
@@ -343,9 +342,10 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             {
                 Shader.SetGlobalFloat("_DampValue", nowWeather.waterFall > 0 && !nowWeather.IsSnow() ? 1 : 0);
             }
-            skyEnviromentMono.ChangeWeatherDisplayType(weatherDisplayType);
+           
         }
-       
+
+        skyEnviromentMono.ChangeWeatherDisplayType(weatherDisplayType);
     }
    
     IEnumerator LerpWeather(Weather newWeather)
@@ -463,8 +463,9 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             Shader.SetGlobalColor("_SunColor", sunColor);
             Shader.SetGlobalInt("_Sun", natureLightData.sunValue);
 
-            float screenScale = Screen.width / (float)Screen.height;
-            float screenScaleX = 1f + screenScale;
+            var ScreenResolution = GameCommon.GetScreenResolution();
+            float screenScale = ScreenResolution.x / ScreenResolution.y ;
+            float screenScaleX = 1f;// + screenScale;
             float screenScaleY = 1f + screenScale * 0.5f;
             Vector2 sunPos= natureLightData.sunPos * new Vector2(screenScaleX, screenScaleY);
             if (sunTransform)
@@ -526,7 +527,8 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
                 Shader.SetGlobalInt("_Sun", overrideLightData.sunValue);
 
 
-                float screenScale = Screen.width / (float)Screen.height;
+                var ScreenResolution = GameCommon.GetScreenResolution();
+                float screenScale = ScreenResolution.x / ScreenResolution.y ;
                 float screenScaleX = 1f + screenScale;
                 float screenScaleY = 1f + screenScale * 0.5f;
                 Vector2 sunPos = overrideLightData.sunPos * new Vector2(screenScaleX, screenScaleY);
@@ -574,7 +576,8 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         Shader.SetGlobalColor("_SkyBottomColor", natureLightData.skyBottomColor);
         Shader.SetGlobalFloat("_SkyHalfValue", natureLightData.skyHalfValue);
         Shader.SetGlobalColor("_SunColor", natureLightData.sunColor);
-        float screenScale = Screen.width / (float)Screen.height;
+        var ScreenResolution = GameCommon.GetScreenResolution();
+        float screenScale = ScreenResolution.x / ScreenResolution.y ;
         float screenScaleX = 1f + screenScale;
         float screenScaleY = 1f + screenScale * 0.5f;
         Vector2 sunPos = natureLightData.sunPos * new Vector2(screenScaleX, screenScaleY);

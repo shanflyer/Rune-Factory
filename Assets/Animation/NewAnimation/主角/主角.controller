@@ -135,7 +135,7 @@ BlendTree:
     m_DirectBlendParameter: Speed
     m_Mirror: 0
   m_BlendParameter: Dir_X
-  m_BlendParameterY: Dir_X
+  m_BlendParameterY: Dir_Y
   m_MinThreshold: 0
   m_MaxThreshold: 1
   m_UseAutomaticThresholds: 1
@@ -814,7 +814,7 @@ AnimatorController:
     m_Controller: {fileID: 9100000}
   - m_Name: Dir_Y
     m_Type: 1
-    m_DefaultFloat: 0
+    m_DefaultFloat: -1
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
@@ -1549,7 +1549,7 @@ AnimatorStateTransition:
   m_Conditions:
   - m_ConditionMode: 7
     m_ConditionEvent: State
-    m_EventTreshold: 0
+    m_EventTreshold: 1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4449140483386932785}
   m_Solo: 0
@@ -1699,7 +1699,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: c79f21d82529f8d45846c40de148f4ed, type: 2}
     m_Threshold: 0
-    m_Position: {x: 0, y: 0}
+    m_Position: {x: 0, y: 1}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Speed
@@ -1707,7 +1707,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 08a0b33af5a7c304bad4e29329004442, type: 2}
     m_Threshold: 0.33333334
-    m_Position: {x: 0, y: 0}
+    m_Position: {x: -1, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Speed
@@ -1715,7 +1715,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: c79f21d82529f8d45846c40de148f4ed, type: 2}
     m_Threshold: 0.6666667
-    m_Position: {x: -1, y: 0}
+    m_Position: {x: 0, y: -1}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Speed
@@ -1723,7 +1723,7 @@ BlendTree:
   - serializedVersion: 2
     m_Motion: {fileID: 7400000, guid: 08a0b33af5a7c304bad4e29329004442, type: 2}
     m_Threshold: 1
-    m_Position: {x: -0.96, y: 0.26}
+    m_Position: {x: 1, y: 0}
     m_TimeScale: 1
     m_CycleOffset: 0
     m_DirectBlendParameter: Speed
@@ -2114,7 +2114,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Get
-  m_Speed: 1
+  m_Speed: 0.6
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 7635777350201828436}

@@ -13,11 +13,20 @@ MonoBehaviour:
   m_Name: "\u5BB6\u5177\u5E97\u504F\u5BA4"
   m_EditorClassIdentifier: 
   roomName: "\u5BB6\u5177\u5E97\u504F\u5BA4"
-  barrierGrids: f3fffffff4ffffff15000000f4fffffff3fffffff5ffffff00000000f8fffffff3fffffff9fffffff6ffffff01000000f3ffffff02000000f4ffffff11000000f5ffffff0e000000fdffffff11000000fdffffff020000000d00000004000000fdffffff050000000a00000005000000feffffff10000000150000001100000002000000070000000400000008000000020000000e000000050000000f00000007000000f5ffffff15000000f8ffffff090000000e000000150000000f0000000f000000f9ffffff15000000fcffffff10000000fdffffff15000000fdffffff11000000feffffff15000000ffffffff120000000000000015000000000000001300000001000000150000000d000000
-  groundIndexes: 0300000003000000
-  groundGrids: f8fffffffcffffff0f0000000f000000f8fffffffcffffff0f0000000f000000
+  barrierGrids: f3fffffff4ffffff15000000f4fffffff3fffffff5ffffff00000000f8fffffff3fffffff9fffffff6ffffff01000000f3ffffff02000000f4ffffff11000000f5ffffff0e000000fdffffff11000000feffffff020000000900000004000000feffffff100000001500000011000000020000000e000000050000000f00000007000000f5ffffff15000000f8ffffff090000000e000000150000000f0000000f000000f9ffffff15000000fcffffff10000000fdffffff15000000fdffffff11000000feffffff15000000ffffffff120000000000000015000000000000001300000001000000150000000d000000
+  groundIndexes: 030000000300000003000000
+  groundGrids: f8fffffffcffffff0f0000000f000000f8fffffffcffffff0f0000000f000000f8fffffffcffffff0f0000000f000000
   defaultGround: 6
   mapItems:
+  - id: 1003
+    instanceId: 1003947
+    coordinate:
+      x: 3
+      y: 6
+    animationKey: 0
+    blindHomeEquipment: 0
+    funcItem: 0
+    eventReferenceDatas: []
   - id: 1090
     instanceId: 1090881
     coordinate:
@@ -25,6 +34,7 @@ MonoBehaviour:
       y: 15
     animationKey: 0
     blindHomeEquipment: 0
+    funcItem: 0
     eventReferenceDatas: []
   - id: 1090
     instanceId: 1090312
@@ -33,6 +43,16 @@ MonoBehaviour:
       y: 15
     animationKey: 0
     blindHomeEquipment: 0
+    funcItem: 0
+    eventReferenceDatas: []
+  - id: 1007
+    instanceId: 1007838
+    coordinate:
+      x: -4
+      y: 3
+    animationKey: 0
+    blindHomeEquipment: 0
+    funcItem: 0
     eventReferenceDatas: []
   startCoordinate:
     x: -13
@@ -322,6 +342,7 @@ MonoBehaviour:
   bgmTag: "\u5BB6\u5177\u5E97"
   mapBGMDatas:
   - name: "\u767D\u5929"
+    BGMs: ae000000
     bgms:
     - {fileID: 8300000, guid: 1f7312d9e83c4b544ab44053a344dfb7, type: 3}
     timeCurve:
@@ -415,6 +436,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   - name: "\u665A\u4E0A"
+    BGMs: 94000000
     bgms:
     - {fileID: 8300000, guid: 2f184a01d7d40fe44abbe82322ed9f51, type: 3}
     timeCurve:

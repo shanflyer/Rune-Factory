@@ -24,7 +24,7 @@ public class FightChapterReference : UIObjReference<UIFightChapterData>
         {
             if (SelectAction != null)
             {
-                SelectAction(data, value);
+                SelectAction(data,index, value);
             }
         });
     }
@@ -36,7 +36,7 @@ public class FightChapterReference : UIObjReference<UIFightChapterData>
             selected.SetIsOnWithoutNotify(true);
             if (SelectAction != null)
             {
-                SelectAction(data, true);
+                SelectAction(data,index, true);
             }
             return true;
         }

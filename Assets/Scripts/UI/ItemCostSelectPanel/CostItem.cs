@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -22,7 +20,7 @@ public class CostItem : UIObjReference<MyInt3>
         ItemData itemData=await GameDataManager.instance.GetAsyncData<ItemData>(t.value.x);
         icon.sprite = itemData.icon;
         countText.text = $"{t.value.y}/{t.value.z}";
-        countText.color=t.value.y>=t.value.z? Color.red : Color.green;
+        countText.color = t.value.y > t.value.z ? Color.red : Color.green;
 
       await  base.InitData(t, SelectAction, toggleGroup);
         

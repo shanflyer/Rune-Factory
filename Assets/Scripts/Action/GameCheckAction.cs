@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 public struct CheckPlayerStoreOpen : GameAction
 {
     public SetValue setValue { get; set; }
@@ -129,6 +130,7 @@ public struct CheckIsNotInTeam : GameAction
             characterId = source;
 
         this.setResult = setResult;
+        this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
 }
@@ -232,10 +234,14 @@ public struct GameCheckAction : GameAction
     public void Clear()
     { this = default; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
+        this.setResult = setResult;
+        this.setValue = setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
+    
 }
 
 public struct CheckCharacterTemp : GameAction
@@ -247,8 +253,12 @@ public struct CheckCharacterTemp : GameAction
     public void Clear()
     { this = default; }
 
-    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
+        this.setResult = setResult;
+        this.setValue = setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
+    
 }

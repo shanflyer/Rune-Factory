@@ -1,10 +1,8 @@
-﻿using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
-using System.Collections;
+﻿using System.Collections.Generic;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.Rendering.ReloadAttribute;
 
 public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
 {
@@ -63,7 +61,7 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
 
         PackageList packageList = new PackageList
         {
-            packageDatas = new System.Collections.Generic.List<PackageData>
+            packageDatas = new List<PackageData>
             {
                 packageData
             }
@@ -73,7 +71,7 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
     }
     int changeCount = 0;
 
-    async void SelectPackageItem(Item item,bool select)
+    async void SelectPackageItem(Item item, int index, bool select)
     {
         SetStoreCounterItem setStoreCounterItem = new SetStoreCounterItem
         {
@@ -140,7 +138,8 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
         int packageId = CharacterManager.instance.controllerCharacter.characterPackage;
         if (PlayerStoreManager.instance.GetRuntimeStoreCounter(storeCunterSetData.storeCounterId, out var runtimeStoreCounter))
         {
-            if (await PackageManager.instance.CheckPackageTryItemIn(packageId, storeCunterSetData.itemId, runtimeStoreCounter.count))
+            if (PackageManager.instance.CheckPackageTryItemIn(packageId, storeCunterSetData.itemId,
+                    runtimeStoreCounter.count))
             {
               int count=await PackageManager.instance.SetItemInPackage(new Item { 
                     dataId= storeCunterSetData.itemId,

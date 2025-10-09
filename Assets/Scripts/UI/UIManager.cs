@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks; 
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : Singleton<UIManager>
 {
-    private Dictionary<Type, BaseReference> gamePanels = new Dictionary<Type, BaseReference>();
-    private Dictionary<Type, List<BaseReference>> mulitPanels = new Dictionary<Type, List<BaseReference>>();
+    private readonly Dictionary<Type, BaseReference> gamePanels = new(); 
 
     private Transform canvasParent;
     private CanvasGroup canvasGroup;
@@ -166,7 +165,7 @@ public class UIManager : Singleton<UIManager>
         {
             foreach (var panel in gamePanels.Values)
             {
-                if (panel.show&&panel.GetType()!=typeof(TalkPanel) && panel.GetType() != typeof(FilmPanel))
+                if (panel.show && panel.GetType() != typeof(SimpleTalkPanel) && panel.GetType() != typeof(FilmPanel))
                 {
                     if(panel.canvas)
                         panel.canvas.enabled = false;
@@ -240,6 +239,16 @@ public class UIManager : Singleton<UIManager>
         if (GameDataManager.instance.GlobalData.debug)
             Debug.Log($"ShowPanel:{type}");
         return  gamePanel as T;
+    }
+
+    public T ShowGamePanelImmediately<T>(string dataKey = null, int layer = -1, Transform parent = null)
+        where T : BaseReference
+    {
+        var type = typeof(T);
+        var gamePanel = ShowGamePanelImmediately(type, dataKey, layer, parent);
+        if (GameDataManager.instance.GlobalData.debug)
+            Debug.Log($"ShowPanel:{type}");
+        return gamePanel as T;
     }
 
     public async Task<T> ShowGamePanel<T, V>(V data, int layer = -1, Transform parent = null) where T : GamePanel<V> where V : IReferenceData
@@ -409,18 +418,7 @@ public class UIManager : Singleton<UIManager>
 
     HashSet<Type> openedPanels = new HashSet<Type>();
     private async Task<BaseReference> ShowGamePanel(Type type, string dataKey = null, int layer = -1, Transform parent = null)
-    {
-        /*if (!IsPluralUI(type))
-        {
-            if (openedPanels.Contains(type))
-            {
-                return null;
-            }
-            else
-            {
-                openedPanels.Add(type);
-            }
-        }*/
+    { 
         if (!gamePanels.TryGetValue(type, out BaseReference gamePanel) || gamePanel == null || IsPluralUI(type))
         {
             string path = $"{DataPath.UIPath}{type}";
@@ -430,10 +428,14 @@ public class UIManager : Singleton<UIManager>
 
             if (!Application.isPlaying||SingletonType.Cleared)
             {
+                GameObject.DestroyImmediate(gamePanelObj);
+                return null;
+            }else
+            if ( SingletonType.Cleared)
+            {
                 GameObject.Destroy(gamePanelObj);
                 return null;
             }
-
             var _Panel = async.Result[0]; 
             _Panel.transform.localPosition = Vector3.zero;
             var gamePanelComponent = _Panel.GetComponent(type);
@@ -469,6 +471,94 @@ public class UIManager : Singleton<UIManager>
         return gamePanel;
     }
 
+    private BaseReference ShowGamePanelImmediately(Type type, string dataKey = null, int layer = -1,
+        Transform parent = null)
+    {
+        if (!gamePanels.TryGetValue(type, out var gamePanel) || gamePanel == null || IsPluralUI(type))
+        {
+            var path = $"{DataPath.UIPath}{type}";
+            var gamePanelObj = GameSourceManager.instance.GetPrefabImmediately(path);
+            var _Panel = GameObject.Instantiate(gamePanelObj, parent == null ? canvasParent : parent);
+
+
+            if (!Application.isPlaying || SingletonType.Cleared)
+            {
+                GameObject.DestroyImmediate(gamePanelObj);
+                return null;
+            }
+
+            if (SingletonType.Cleared)
+            {
+                GameObject.Destroy(gamePanelObj);
+                return null;
+            }
+
+            _Panel.transform.localPosition = Vector3.zero;
+            var gamePanelComponent = _Panel.GetComponent(type);
+
+            if (gamePanelComponent == null)
+                gamePanel = (BaseReference)_Panel.AddComponent(type);
+            else
+                gamePanel = (BaseReference)gamePanelComponent;
+            if (!IsPluralUI(type))
+            {
+                if (gamePanels.TryGetValue(type, out var _panel))
+                    if (_panel != gamePanel)
+                        _panel.Close();
+
+                gamePanels[type] = gamePanel;
+            }
+        }
+
+        if (parent != null)
+        {
+            gamePanel.transform.SetParent(parent);
+            gamePanel.transform.localPosition = Vector3.zero;
+        }
+
+        gamePanel.Show(layer);
+        gamePanel.InitData(dataKey);
+
+        return gamePanel;
+    }
+
+    public void UnLoadPanel(List<Type> panels)
+    {
+        for (var i = 0; i < panels.Count; i++)
+        {
+            var type = panels[i];
+            if (gamePanels.TryGetValue(type, out var gamePanel))
+            {
+                if (gamePanel == null)
+                {
+                    gamePanels.Remove(type);
+                    return;
+                }
+
+                if (gamePanel.show) gamePanel.Close();
+                GameObject.Destroy(gamePanel);
+            }
+        }
+
+        Resources.UnloadUnusedAssets();
+    }
+
+    public void UnLoadPanel<T>()
+    {
+        var type = typeof(T);
+        if (gamePanels.TryGetValue(type, out var gamePanel))
+        {
+            if (gamePanel == null)
+            {
+                gamePanels.Remove(type);
+                return;
+            }
+
+            if (gamePanel.show) gamePanel.Close();
+            GameObject.Destroy(gamePanel);
+            Resources.UnloadUnusedAssets();
+        }
+    }
     public void CloseGamePanel<T>()
     {
         var type = typeof(T);
@@ -491,6 +581,8 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    
+
     private void ClosePanel(ClosePanelAction closePanelEvent)
     {
         if (gamePanels.TryGetValue(closePanelEvent.type, out BaseReference gamePanel))
@@ -508,3 +600,100 @@ public class UIManager : Singleton<UIManager>
         }
     }
 }
+public static class RectTransformPresets
+{
+    public enum Preset
+    {
+        // 9宫
+        TopLeft, TopCenter, TopRight,
+        MiddleLeft, MiddleCenter, MiddleRight,
+        BottomLeft, BottomCenter, BottomRight,
+
+        // 常用拉伸（和面板里那几种一致）
+        StretchTop,
+        StretchMiddle,
+        StretchBottom, // 横向拉伸
+        StretchLeft,
+        StretchCenter,
+        StretchRight, // 纵向拉伸
+        StretchAll // 全拉伸
+    }
+
+    /// <summary>
+    /// 模拟 Anchor Presets 的点击/Alt/Shift/Alt+Shift。
+    /// keepPosition = Shift；alsoSetPivot = Alt。
+    /// </summary>
+    public static void Apply(RectTransform rt, Preset preset, bool keepPosition = false, bool alsoSetPivot = false)
+    {
+        if (rt == null || rt.parent == null) return;
+        var parentRT = rt.parent as RectTransform;
+        if (parentRT == null) return;
+
+        // 记录旧锚/偏移，为 Shift 计算做准备
+        Vector2 oldAnchorMin = rt.anchorMin;
+        Vector2 oldAnchorMax = rt.anchorMax;
+        Vector2 oldOffsetMin = rt.offsetMin;
+        Vector2 oldOffsetMax = rt.offsetMax;
+
+        // 预设 -> 目标锚与目标 pivot
+        (Vector2 aMin, Vector2 aMax, Vector2 pivot) = GetPresetAnchorsAndPivot(preset);
+
+        // 设置 anchors
+        rt.anchorMin = aMin;
+        rt.anchorMax = aMax;
+
+        // Shift：保持位置/尺寸不动（等价编辑器里按住 Shift）
+        if (keepPosition)
+        {
+            // 关键：offset 要加上锚变化 * 父尺寸
+            Vector2 parentSize = parentRT.rect.size;
+            Vector2 deltaMin = (aMin - oldAnchorMin) * parentSize;
+            Vector2 deltaMax = (aMax - oldAnchorMax) * parentSize;
+            rt.offsetMin = oldOffsetMin + deltaMin;
+            rt.offsetMax = oldOffsetMax + deltaMax;
+        }
+
+        // Alt：同步 pivot
+        if (alsoSetPivot)
+        {
+            rt.pivot = pivot;
+        }
+    }
+
+    private static (Vector2 aMin, Vector2 aMax, Vector2 pivot) GetPresetAnchorsAndPivot(Preset p)
+    {
+        switch (p)
+        {
+            // ===== 9宫 =====
+            case Preset.TopLeft: return (new Vector2(0, 1), new Vector2(0, 1), new Vector2(0, 1));
+            case Preset.TopCenter: return (new Vector2(0.5f, 1), new Vector2(0.5f, 1), new Vector2(0.5f, 1));
+            case Preset.TopRight: return (new Vector2(1, 1), new Vector2(1, 1), new Vector2(1, 1));
+
+            case Preset.MiddleLeft: return (new Vector2(0, 0.5f), new Vector2(0, 0.5f), new Vector2(0, 0.5f));
+            case Preset.MiddleCenter: return (new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
+            case Preset.MiddleRight: return (new Vector2(1, 0.5f), new Vector2(1, 0.5f), new Vector2(1, 0.5f));
+
+            case Preset.BottomLeft: return (new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0));
+            case Preset.BottomCenter: return (new Vector2(0.5f, 0), new Vector2(0.5f, 0), new Vector2(0.5f, 0));
+            case Preset.BottomRight: return (new Vector2(1, 0), new Vector2(1, 0), new Vector2(1, 0));
+
+            // ===== 横向拉伸（Y 锚固定，上中下）=====
+            case Preset.StretchTop: return (new Vector2(0, 1), new Vector2(1, 1), new Vector2(0.5f, 1));
+            case Preset.StretchMiddle: return (new Vector2(0, 0.5f), new Vector2(1, 0.5f), new Vector2(0.5f, 0.5f));
+            case Preset.StretchBottom: return (new Vector2(0, 0), new Vector2(1, 0), new Vector2(0.5f, 0));
+
+            // ===== 纵向拉伸（X 锚固定，左中右）=====
+            case Preset.StretchLeft: return (new Vector2(0, 0), new Vector2(0, 1), new Vector2(0, 0.5f));
+            case Preset.StretchCenter: return (new Vector2(0.5f, 0), new Vector2(0.5f, 1), new Vector2(0.5f, 0.5f));
+            case Preset.StretchRight: return (new Vector2(1, 0), new Vector2(1, 1), new Vector2(1, 0.5f));
+
+            // ===== 全拉伸 =====
+            case Preset.StretchAll: return (new Vector2(0, 0), new Vector2(1, 1), new Vector2(0.5f, 0.5f));
+        }
+
+        // 兜底
+        return (new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
+    }
+}
+
+

@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b23f08d2ae4cba14087c1ed36193d82b, type: 3}
+  m_Name: "\u559D\u9152"
+  m_EditorClassIdentifier: 
+  mBehaviorSource:
+    behaviorName: Behavior
+    behaviorDescription: 
+    mTaskData:
+      types: []
+      parentIndex: 
+      startIndex: 
+      variableStartIndex: 
+      JSONSerialization: '{"EntryTask":{"Type":"BehaviorDesigner.Runtime.Tasks.EntryTask","NodeData":{"Offset":"(188.096268,-246.82489)"},"ID":0,"Name":"Entry","Instant":true},"RootTask":{"Type":"BehaviorDesigner.Runtime.Tasks.Parallel","NodeData":{"Offset":"(-1.81822014,126.818161)"},"ID":1,"Name":"Parallel","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(-190,150)"},"ID":2,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"GetNearestItem","NodeData":{"Offset":"(-161.903748,163.17511)"},"ID":3,"Name":"\u83b7\u53d6\u5730\u56fe\u6700\u8fd1\u7684\u7269\u4f53","Instant":true,"SharedIntcharacterId":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"CharacterId","IsShared":true,"Int32mValue":-2147483648},"SharedIntListitems":{"Type":"SharedIntList","Name":null,"List`1mValue":[1003,1006,1007,1008,1160,1161]},"SharedIntresult":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"resultItem","IsShared":true,"Int32mValue":-2147483648}},{"Type":"BehaviorDesigner.Runtime.Tasks.Selector","NodeData":{"Offset":"(-21.9037476,303.1751)"},"ID":4,"Name":"Selector","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"CharacterLinkMapItem","NodeData":{"Offset":"(-130,150)"},"ID":5,"Name":"\u89d2\u8272\u94fe\u63a5\u5730\u56fe\u7269\u4f53","Instant":true,"SharedIntcharacterId":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"CharacterId","IsShared":true,"Int32mValue":-2147483648},"SharedIntlinkId":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"resultItem","IsShared":true,"Int32mValue":-2147483648}},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(170,140)"},"ID":6,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"GetNearestItem","NodeData":{"Offset":"(-120,170)"},"ID":7,"Name":"\u83b7\u53d6\u5730\u56fe\u6700\u8fd1\u7684\u7269\u4f53","Instant":true,"SharedIntcharacterId":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"CharacterId","IsShared":true,"Int32mValue":-2147483648},"SharedIntListitems":{"Type":"SharedIntList","Name":null,"List`1mValue":[1003,1006,1007,1008,1160,1161]},"SharedIntresult":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"resultItem","IsShared":true,"Int32mValue":-2147483648}},{"Type":"CharacterLinkMapItem","NodeData":{"Offset":"(80,180)"},"ID":8,"Name":"\u89d2\u8272\u94fe\u63a5\u5730\u56fe\u7269\u4f53","Instant":true,"SharedIntcharacterId":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"CharacterId","IsShared":true,"Int32mValue":-2147483648},"SharedIntlinkId":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"resultItem","IsShared":true,"Int32mValue":-2147483648}}]}]},{"Type":"SetCharacterAnimation","NodeData":{"Offset":"(101.096252,181.17511)"},"ID":9,"Name":"\u8bbe\u7f6e\u89d2\u8272\u52a8\u753b","Instant":true,"SharedIntcharacterId":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"CharacterId","IsShared":true,"Int32mValue":-2147483648},"AnimationParameter[]animationParameters":[{"Type":"AnimationParameter","Value":{"Stringparameter":"Set","ParameterTypeparameterType":"BOOL","SharedBoolboolValue":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"SharedIntintValue":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":null,"Int32mValue":-2147483648},"SharedFloatfloatValue":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":0}}}]}]},{"Type":"BehaviorDesigner.Runtime.Tasks.Sequence","NodeData":{"Offset":"(180.909,171.363632)"},"ID":10,"Name":"Sequence","Instant":true,"AbortTypeabortType":"None","Children":[{"Type":"TempCharacterShowEmote","NodeData":{"Offset":"(-100.000061,180)"},"ID":11,"Name":"\u4e34\u65f6\u89d2\u8272\u5c55\u793a\u8868\u60c5","Instant":true,"SharedIntcharacterId":{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"CharacterId","IsShared":true,"Int32mValue":-2147483648},"int2showTime":{"Int32x":2000,"Int32y":4000}},{"Type":"BehaviorDesigner.Runtime.Tasks.Wait","NodeData":{"Offset":"(109.999939,180)"},"ID":12,"Name":"Wait","Instant":true,"SharedFloatwaitTime":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":1},"SharedBoolrandomWait":{"Type":"BehaviorDesigner.Runtime.SharedBool","Name":null,"BooleanmValue":true},"SharedFloatrandomWaitMin":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":2},"SharedFloatrandomWaitMax":{"Type":"BehaviorDesigner.Runtime.SharedFloat","Name":null,"SinglemValue":4}}]}]},"Variables":[{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"CharacterId","IsShared":true,"Int32mValue":-2147483648},{"Type":"SharedInt3List","Name":"\u95f2\u901b\u5750\u6807\u683c\u5b50","IsShared":true,"List`1mValue":[]},{"Type":"SharedInt3","Name":"\u95f2\u901b\u76ee\u6807","IsShared":true,"int3mValue":{"Int32x":-2147483648,"Int32y":-2147483648,"Int32z":-2147483648}},{"Type":"BehaviorDesigner.Runtime.SharedInt","Name":"resultItem","IsShared":true,"Int32mValue":-2147483648}]}'
+      fieldSerializationData:
+        typeName: []
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
+        unityObjects: []
+        byteData: 
+        byteDataArray: 
+      Version: 1.7.10

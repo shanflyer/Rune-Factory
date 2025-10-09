@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Unity.Mathematics;
-using UnityEngine;
+
 public class ShopManager : Singleton<ShopManager>
 {
     Dictionary<int2, ShopList> _shopListDic = new Dictionary<int2, ShopList>();
@@ -11,8 +10,7 @@ public class ShopManager : Singleton<ShopManager>
     {
         base.Init();
         InitShop();
-        GameActionManager.instance.AddListener<TryVisitShop>(TryVisitShop);
-        GameActionManager.instance.AddListener<OpenShopItem>(OpenShopItem);
+        GameActionManager.instance.AddListener<TryVisitShop>(TryVisitShop); 
         GameActionManager.instance.AddListener<RefreshShopLevel>(RefreshShopLevel);
     }
     void RefreshShopLevel(RefreshShopLevel refreshShopLevel)
@@ -26,13 +24,7 @@ public class ShopManager : Singleton<ShopManager>
             }
         }
     }
-    void OpenShopItem(OpenShopItem openShopItem) 
-    { 
-        if(shopDic.TryGetValue(openShopItem.shopId,out var shop))
-        {
-            shop.OpenShopItem(openShopItem.itemId);  
-        }
-    }
+  
     public int2 GetShopMapItem(int shopId)
     {
         if(shopDic.TryGetValue(shopId,out var shop))
@@ -52,16 +44,7 @@ public class ShopManager : Singleton<ShopManager>
             shopList.bindCharacters.AddRange(shopListSaveData.binders);
         }
     }
-    public void InitShop(ShopSaveData shopSaveData)
-    {
-        if (shopDic.TryGetValue(shopSaveData.shopId, out var shop))
-        {
-           for(int i = 0; i < shopSaveData.openItems.Count; i++)
-            {
-                shop.OpenShopItem(shopSaveData.openItems[i], false);
-            }
-        }
-    }
+ 
     async void InitShop()
     {
         shopListDic.Clear();
@@ -143,17 +126,7 @@ public class Shop:IReferenceData
     private MyDic<int, ShopItemData> openShopItems = new MyDic<int, ShopItemData>();
     private List<int> bindCharacters = new List<int>();
 
-    public bool OpenShopItem(int itemId,bool saveData=true)
-    {
-        if (shopItemDatas.TryGetValue(itemId,out var shopItemData))
-        {
-            openShopItems.Add(itemId, shopItemData);
-            shopItemDatas.Remove(itemId);
-            GameDataSaveManager.instance.UserGameSaveDataList.nowSaveData.SetShopSaveData(this);
-            return true;
-        }
-        return false;
-    }
+    
     int friendLevel = 1;
     public async void RefreshOpenItem(bool show = false)
     {

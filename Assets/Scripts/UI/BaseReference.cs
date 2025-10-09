@@ -15,7 +15,9 @@ public class BaseReference : MonoBehaviour
     public Canvas canvas;
     [SerializeField]
     public GraphicRaycaster raycaster;
-    public bool show; 
+    public bool show;
+    [HideInInspector]
+    public int index;
     public virtual bool changeInputModel { get=>true; }
     public virtual void SetPanelUISerializeObj()
     {

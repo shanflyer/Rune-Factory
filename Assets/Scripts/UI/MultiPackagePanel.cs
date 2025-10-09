@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using TMPro;
-using Unity.Entities.UniversalDelegates;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
@@ -260,7 +259,7 @@ public class MultiPackagePanel : GamePanel<PackageList>
         }
     }
 
-    private async void SelectPackageItem(Item item, bool selected = true)
+    private async void SelectPackageItem(Item item,int index, bool selected = true)
     {
         if (selected)
         {
@@ -282,7 +281,7 @@ public class MultiPackagePanel : GamePanel<PackageList>
                 ItemIcon.enabled = true;
                 ItemIcon.SetNativeSize();
                 ItemName.SetADDText("+ ",itemData.itemName," +");
-                Type.SetSWText(itemData.GetInfo());
+                Type.SetSWText(itemData.type.ToString());
                 Info.SetSWText(itemData.GetInfo());
                 Property.text = itemData.GetProperty();
                 Price.text = itemData.sellPrice.ToString();

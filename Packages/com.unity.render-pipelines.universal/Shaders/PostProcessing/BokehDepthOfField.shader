@@ -239,10 +239,13 @@ Shader "Hidden/Universal Render Pipeline/BokehDepthOfField"
  
         half centerY=input.texcoord1.y;
 
-        half4 objDepthColor=SAMPLE_TEXTURE2D(_ObjDepthTex,sampler_ObjDepthTex, uv);
+        half4 objDepthColor=SAMPLE_TEXTURE2D(_ObjDepthTex,sampler_ObjDepthTex, uv); 
         half4 characterDepthColor=SAMPLE_TEXTURE2D(_CharacterDepthTex,sampler_CharacterDepthTex, uv);
-        int stepCharacter=step(objDepthColor.r+objDepthColor.g+objDepthColor.b,0);
+         
+        int stepCharacter=1-step(0.01,objDepthColor.r+objDepthColor.g+objDepthColor.b);
         half4 myDepthColor=stepCharacter*characterDepthColor+(1-stepCharacter)*objDepthColor;
+
+         //return float4(stepCharacter.xxx,1);
 
         int stepV=1-step(characterDepthColor.r+characterDepthColor.g+characterDepthColor.b,0);
         stepV+=1-step(objDepthColor.r,0);
@@ -263,6 +266,7 @@ Shader "Hidden/Universal Render Pipeline/BokehDepthOfField"
         #if defined(UNITY_COLORSPACE_GAMMA)
             outColor = GetLinearToSRGB(outColor);
         #endif
+        //return half4(myDepthColor.xxx,1); 
 
         switch(testShowType){
             case 0:
