@@ -21,6 +21,9 @@ dependencyResolutionManagement {
         maven {
             url "https://unity3ddist.jfrog.io/artifactory/unity-mediation-mvn-prod-local/" // Assets/Editor/MediationAdapterDependencies.xml:6
         }
+        maven {
+            url "https://repo.maven.apache.org/maven2" // Packages/com.taptap.sdk.core/Mobile/Editor/NativeDependencies.xml:6, Packages/com.taptap.sdk.login/Mobile/Editor/NativeDependencies.xml:6
+        }
         mavenLocal()
 // Android Resolver Repos End
         flatDir {
