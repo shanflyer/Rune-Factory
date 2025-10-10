@@ -135,15 +135,15 @@ public class ShopPanel : GamePanel<ShopList>
     {
         switch (selectShopItemData.type)
         {
-            case ShopItemType.µÀ¾ß:
+            case ShopItemType.é“å…·:
                await ItemManager.instance.BuyActionAsync(selectShopItemData, buyCount);
                 break;
 
-            case ShopItemType.¶¯Îï:
+            case ShopItemType.åŠ¨ç‰©:
                 BuyAnimal();
                 break;
 
-            case ShopItemType.¼Ò¾ß:
+            case ShopItemType.å®¶å…·:
                 HomeEquipManager.instance.BuyAction(selectShopItemData);
                 break;
         }
@@ -155,7 +155,7 @@ public class ShopPanel : GamePanel<ShopList>
         {
             TwoSelectData twoSelectData = new TwoSelectData
             {
-                notice = "¶ÓÎéÈËÊı³¬¹ı4£¬²»ÄÜ¹ºÂò¶¯Îï"
+                notice = "é˜Ÿä¼äººæ•°è¶…è¿‡4ï¼Œä¸èƒ½è´­ä¹°åŠ¨ç‰©"
             };
 
             UIManager.instance.ShowGamePanel<TwoSelectPanel, TwoSelectData>(twoSelectData);
@@ -167,7 +167,7 @@ public class ShopPanel : GamePanel<ShopList>
         if (itemData != null)
         {
             int trueCost = (int)(itemData.shopPrice * selectShopItemData.priceValue * 0.01f) * buyCount;
-            PayManager.instance.PayAction("¹ºÂò", $"{string.Format(LanguageManage.SwitchStr("¹ºÂò{0}¸ö"), buyCount)}+ {LanguageManage.SwitchStr(itemData.itemName)} +", trueCost, selectShopItemData.payType, async (bool result) =>
+            PayManager.instance.PayAction("è´­ä¹°", $"{string.Format(LanguageManage.SwitchStr("è´­ä¹°{0}ä¸ª"), buyCount)}+ {LanguageManage.SwitchStr(itemData.itemName)} +", trueCost, selectShopItemData.payType, async (bool result) =>
             {
                 if (!result)
                 {
@@ -194,7 +194,7 @@ public class ShopPanel : GamePanel<ShopList>
                     GameActionManager.instance.QueueAction(joinTeam);
                 }
 
-                InformationController.instance.AddInformation(string.Format(LanguageManage.SwitchStr("³É¹¦¹ºÂò{0}¸ö+ {1} +"),buyCount, LanguageManage.SwitchStr(itemData.itemName)));
+                InformationController.instance.AddInformation(string.Format(LanguageManage.SwitchStr("æˆåŠŸè´­ä¹°{0}ä¸ª+ {1} +"),buyCount, LanguageManage.SwitchStr(itemData.itemName)));
                 if (selectShopItemData.buyAction != 0)
                 {
                     var GameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(selectShopItemData.buyAction);

@@ -80,7 +80,15 @@ public class PayManager : Singleton<PayManager>
                 }
                 else
                 {
-                    TryCreatGold();
+                    if (!GameDataManager.instance.GlobalData.hideStore)
+                    {
+                        TryCreatGold();
+                    }
+                    else
+                    { 
+                        InformationController.instance.AddInformation("金币不足");
+                    }
+                 
                 }
                 break;
 
@@ -93,7 +101,15 @@ public class PayManager : Singleton<PayManager>
                 }
                 else
                 {
-                    TryCreatMoney();
+                    if (!GameDataManager.instance.GlobalData.hideStore)
+                    {
+                        TryCreatMoney();
+                    }
+                    else
+                    { 
+                        InformationController.instance.AddInformation("钻石不足");
+                    }
+                    
                 }
                 break;
         }

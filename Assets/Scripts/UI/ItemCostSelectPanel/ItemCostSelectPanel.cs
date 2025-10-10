@@ -103,14 +103,14 @@ public class ItemCostSelectPanel : GamePanel<ItemCostEventData>
     {
         switch (itemCostEventData.payType)
         {
-            case PayType.½ð±Ò:
+            case PayType.é‡‘å¸:
                 MoneyImage0.enabled = true;
                 MoneyImage1.enabled = false;
                 moneyCountText.text = $"{itemCostEventData.costValue}/{PayManager.instance.NowGold}";
                 moneyCountText.color = itemCostEventData.costValue > PayManager.instance.NowGold ? Color.red : Color.green;
                 break;
 
-            case PayType.×êÊ¯:
+            case PayType.é’»çŸ³:
                 MoneyImage1.enabled = true;
                 MoneyImage0.enabled = false;
                 moneyCountText.text = $"{itemCostEventData.costValue}/{PayManager.instance.NowDiamond}";

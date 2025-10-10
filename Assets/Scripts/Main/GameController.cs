@@ -276,12 +276,13 @@ if (result.Success)
     }
     private void Awake()
     {
-        CloudServices.OnUserChange += OnUserChange;
-        CloudServices.OnSavedDataChange += OnSavedDataChange;
-        CloudServices.OnSynchronizeComplete += OnSynchronizeComplete;
-        //Unity.Collections.NativeLeakDetection.Mode = NativeLeakDetectionMode.EnabledWithStackTrace;
-
-        var gameDataManager = GameDataManager.instance;
+        if (!GameDataManager.instance.GlobalData.localSave)
+        {
+            CloudServices.OnUserChange += OnUserChange;
+            CloudServices.OnSavedDataChange += OnSavedDataChange;
+            CloudServices.OnSynchronizeComplete += OnSynchronizeComplete;
+        }
+       
         startGameCompleted = false;
         Screen.SetResolution(Screen.width, Screen.height, true);
         instance = this;
@@ -303,19 +304,22 @@ if (result.Success)
     // Start is called beforee the first frame update
     void Start()
     {
-        //Debug.Log($"Application.platform:{Application.platform}");
-        CloudServices.Synchronize();
-        BillingServices.InitializeStore();
- /*
-#if UNITY_EDITOR
+        if (!GameDataManager.instance.GlobalData.localSave)
+        {
+            CloudServices.Synchronize(); 
+        }
+        else
+        {
+            GameDataSaveManager.instance.LoadCloudData();
+            StartGame();
+            startGameCompleted = true;
+        }
 
-        GameDataSaveManager.instance.InitUserSaveData("Test");
-        StartGame();
-#else
- Debug.Log($"云存档初始化11");
-            CloudServices.Synchronize();
-            BillingServices.InitializeStore();
-#endif*/
+        if (GameDataManager.instance.GlobalData.hideStore)
+        {
+            BillingServices.InitializeStore(); 
+        }
+      
         CloudRemoteConfig cloudRemoteConfig = CloudRemoteConfig.instance;
     }
 

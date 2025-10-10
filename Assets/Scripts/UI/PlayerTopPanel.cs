@@ -116,7 +116,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         GameActionManager.instance.AddListener<SaveGuideFilmIndexAction>(SaveGuideFilmIndexAction);
         UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
 
-        if (GameController.instance.startPlay || GameGuideManager.instance.IsEndGuide())
+        if (!GameDataManager.instance.GlobalData.hideStore&&(GameController.instance.startPlay || GameGuideManager.instance.IsEndGuide()))
         {
             GoldAdd_Image.enabled = CrystalAdd_Image.enabled = true;
             goldAdd.enabled = crystalAdd.enabled = true;
@@ -130,7 +130,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
 
     private void SaveGuideFilmIndexAction(SaveGuideFilmIndexAction SaveGuideFilmIndexAction)
     {
-        if (GameController.instance.startPlay || GameGuideManager.instance.IsEndGuide())
+        if (!GameDataManager.instance.GlobalData.hideStore&&(GameController.instance.startPlay || GameGuideManager.instance.IsEndGuide()))
         {
             GoldAdd_Image.enabled = CrystalAdd_Image.enabled = true;
             goldAdd.enabled = crystalAdd.enabled = true;

@@ -297,6 +297,7 @@
     <Compile Include="Assets\Scripts\Fishing\FishController.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\IsSleeping.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetPitch.cs" />
+    <Compile Include="Assets\Scripts\Data\MyofflineSaveData\OfflineSave.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\MovePosition.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\AddRelativeForce.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Bone2D.cs" />
@@ -991,6 +992,7 @@
     <Compile Include="Assets\Scripts\UI\WorldPanel\FightMapItemReference.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Physics2D\Raycast.cs" />
     <Compile Include="Assets\Scripts\Data\SkillData.cs" />
+    <Compile Include="Assets\Scripts\Data\MyofflineSaveData\MyOfflineSaveData.cs" />
     <Compile Include="Assets\Scripts\UI\Item\ItemInfoPanel.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\SetCharacterFixDirection.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetAngularDamping.cs" />
@@ -2252,11 +2254,11 @@
     <Reference Include="Unity.ScriptableBuildPipeline">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Collections">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Collections.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.InternalAPIEditorBridge.001">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.InternalAPIEditorBridge.001.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Collections">
+      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Addressables">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Addressables.dll</HintPath>

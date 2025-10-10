@@ -57,7 +57,7 @@ public class MapAreaEditor : MonoBehaviour
         }
         gameObject.name = text.SetSWText(SpecialNpcBehaviorArea.Name);
         transform.position = GameCommon.GetZeroMapPos(SpecialNpcBehaviorArea.pos);
-        this.behaviorAreaType = BehaviorAreaType.特殊;
+        this.behaviorAreaType = BehaviorAreaType.鐗规畩;
         direction = SpecialNpcBehaviorArea.fixedDirection;
         areaLinkData = SpecialNpcBehaviorArea.tempCreatId;
     }
@@ -92,7 +92,7 @@ public class MapAreaEditor : MonoBehaviour
 
     public SpecialNpcBehaviorArea GetSpecialData()
     {
-        if (behaviorAreaType != BehaviorAreaType.特殊)
+        if (behaviorAreaType != BehaviorAreaType.鐗规畩)
         {
             return null;
         }
@@ -120,7 +120,7 @@ public class MapAreaEditor : MonoBehaviour
     }
     public NpcBehaviorArea GetAreaData()
     {
-        if (behaviorAreaType == BehaviorAreaType.特殊)
+        if (behaviorAreaType == BehaviorAreaType.鐗规畩)
         {
             return null;
         }
@@ -168,16 +168,16 @@ public class MapAreaEditor : MonoBehaviour
             OldbehaviorAreaType = behaviorAreaType;
             switch (behaviorAreaType)
             {
-                case BehaviorAreaType.创建:
+                case BehaviorAreaType.鍒涘缓:
                     tilemap.color = Color.white;
                     break;
-                case BehaviorAreaType.聚集:
+                case BehaviorAreaType.鑱氶泦:
                     tilemap.color = Color.blue;
                     break;
-                case BehaviorAreaType.消失:
+                case BehaviorAreaType.娑堝け:
                     tilemap.color = Color.red;
                     break;
-                case BehaviorAreaType.特殊:
+                case BehaviorAreaType.鐗规畩:
                     tilemap.color = new Color(1, 1, 0);
                     break;
             }

@@ -65,8 +65,8 @@ public class MiniPackagePanel : GamePanel<PackageList>
         if (packageSetData && packageSetData.canLevelUp)
         {
             int cost = packageSetData.levelUpCost * selectPackageData.caseCount;
-            string notice = string.Format(LanguageManage.SwitchStr("ÍØÕ¹{0}¿Õ¼ä?"), packageSetData.packageName);
-            PayManager.instance.PayAction("¿Õ¼äÍØÕ¹", notice, cost, PayType.½ð±Ò, (bool result) =>
+            string notice = string.Format(LanguageManage.SwitchStr("æ‹“å±•{0}ç©ºé—´?"), packageSetData.packageName);
+            PayManager.instance.PayAction("ç©ºé—´æ‹“å±•", notice, cost, PayType.é‡‘å¸, (bool result) =>
             {
                 if (result)
                 {

@@ -58,14 +58,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             return null;
         }
     } 
-    public void NewPlayerData()
-    {
-        UserGameSaveDataList.nowSaveData = new UserGameSaveData();
-    }
-    public bool HaveSaveFileData(int id)
-    {
-        return UserGameSaveData.fields.ContainsKey(id);
-    }
+ 
     public async Task InitLoadSaveData()
     {
         if (loadDataIsNotNull && CharacterManager.instance.controllerCharacter == null)
@@ -223,14 +216,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         }
       
     }
-  
-    public bool IsZeroGameSave
-    {
-        get
-        {
-            return string.IsNullOrEmpty(UserGameSaveData.saveTime);
-        }
-    }
+
     public void SaveSpecialItem(int2 key,int instanceId)
     {
         if (UserGameSaveData != null)
@@ -264,109 +250,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     }
     public bool LoadDataSuccess { get; private set; }
      
-    public void InitUserSaveData(string userName, string clundDataStr = null)
-    {
-        userGameSaveDataList = LoadUserGameSaveData(userName, clundDataStr);
-    }
-
-    private UserGameSaveDataList LoadUserGameSaveData(string userName, string clundDataStr = null)
-    {
-        string saveDataPath = $"{DataPath.gameSaveDataPath}{"/"}{userName}";
-        if (File.Exists(saveDataPath))
-        {
-           
-            string dataStr = File.ReadAllText(saveDataPath);
-            UserGameSaveDataList userGameSaveDataList = null;
-            try
-            {
-                userGameSaveDataList = JsonConvert.DeserializeObject<UserGameSaveDataList>(dataStr);
-            }
-            catch
-            {
-                dataStr = DecryptDES(dataStr);
-                userGameSaveDataList = JsonConvert.DeserializeObject<UserGameSaveDataList>(dataStr);
-            }
-            //
-            userGameSaveDataList.nowSaveData.Init();
-            userGameSaveDataList.nowSaveData.index = -1;
-            for (int i = 0; i < userGameSaveDataList.userGameSaveDatas.Count; i++)
-            {
-                userGameSaveDataList.userGameSaveDatas[i].Init();
-                userGameSaveDataList.userGameSaveDatas[i].index = i;
-            }
-            if (string.IsNullOrEmpty(clundDataStr))
-            {
-                return userGameSaveDataList;
-            }
-            UserGameSaveDataList userGameSaveDataList2 = null;
-            try
-            {
-                userGameSaveDataList2 = JsonConvert.DeserializeObject<UserGameSaveDataList>(clundDataStr);
-            }
-            catch
-            {
-                clundDataStr = DecryptDES(clundDataStr);
-                userGameSaveDataList2 = JsonConvert.DeserializeObject<UserGameSaveDataList>(clundDataStr);
-            }
-            //
-            userGameSaveDataList2.nowSaveData.Init();
-            userGameSaveDataList2.nowSaveData.index = -1;
-            for (int i = 0; i < userGameSaveDataList2.userGameSaveDatas.Count; i++)
-            {
-                userGameSaveDataList2.userGameSaveDatas[i].Init();
-                userGameSaveDataList2.userGameSaveDatas[i].index = i;
-            }
-
-            DateTime t0 = Convert.ToDateTime(userGameSaveDataList.nowSaveData.saveTime);
-            DateTime t2 = Convert.ToDateTime(userGameSaveDataList2.nowSaveData.saveTime);
-            if (t2 >= t0)
-            {
-                return userGameSaveDataList2;
-            }
-            else
-            {
-                return userGameSaveDataList;
-            }
-
-
-        }
-        else
-        {
-            if (string.IsNullOrEmpty(clundDataStr))
-            {
-                UserGameSaveDataList userGameSaveDataList = new UserGameSaveDataList();
-                userGameSaveDataList.nowSaveData = UserGameSaveData.CreatSaveData(-1);
-                userGameSaveDataList.userGameSaveDatas = new List<UserGameSaveData>
-                {
-                UserGameSaveData.CreatSaveData(0),UserGameSaveData.CreatSaveData(1),UserGameSaveData.CreatSaveData(2)
-                 };
-                return userGameSaveDataList;
-            }
-            else
-            {
-                UserGameSaveDataList userGameSaveDataList2 = null;
-                try
-                {
-                    userGameSaveDataList2 = JsonConvert.DeserializeObject<UserGameSaveDataList>(clundDataStr);
-                }
-                catch
-                {
-                    clundDataStr = DecryptDES(clundDataStr);
-                    userGameSaveDataList2 = JsonConvert.DeserializeObject<UserGameSaveDataList>(clundDataStr);
-                }
-                //
-                userGameSaveDataList2.nowSaveData.Init();
-                userGameSaveDataList2.nowSaveData.index = -1;
-                for (int i = 0; i < userGameSaveDataList2.userGameSaveDatas.Count; i++)
-                {
-                    userGameSaveDataList2.userGameSaveDatas[i].Init();
-                    userGameSaveDataList2.userGameSaveDatas[i].index = i;
-                }
-                return userGameSaveDataList2;
-            }
-
-        }
-    }
+   
 
     public bool loadDataIsNotNull => loadGameSaveData != null && loadGameSaveData.dateData.season != Season.Default;
     public CharacterSaveData GetCharacterSaveData(int dataId)
@@ -489,7 +373,15 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     public void RefreshUserCommonSaveData(int diamond)
     {
         UserGameSaveDataList.commonSaveData.diamond = diamond;
-        CloudServices.SetInt("diamond", userGameSaveDataList.commonSaveData.diamond);
+        if (GameDataManager.instance.GlobalData.localSave)
+        {
+            OfflineSave.instance.SetInt("diamond", userGameSaveDataList.commonSaveData.diamond);
+        }
+        else
+        {
+            CloudServices.SetInt("diamond", userGameSaveDataList.commonSaveData.diamond);
+        }
+       
     }
     
     public bool SetFishSaveData(int fish,int length,int place)
@@ -627,20 +519,15 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         }
 
         SaveCloudData(selectSaveIndex);
-        CloudServices.Synchronize();
-        /*
-
-#if UNITY_EDITOR 
-        string strs = JsonConvert.SerializeObject(userGameSaveDataList, JsonSerializerSettings);
-        if (GameDataManager.instance.GlobalData.Encrypt)
+        if (GameDataManager.instance.GlobalData.localSave)
         {
-            strs = EncryptDES(strs);
-        } 
-        string saveDataPath = $"{DataPath.gameSaveDataPath}{"/"}{userName}";
-        File.WriteAllText(saveDataPath, strs);
-#elif UNITY_ANDROID || UNITY_IOS
-      SaveCloudData(selectSaveIndex);
-#endif */
+            OfflineSave.instance.SaveData();
+        }
+        else
+        {
+            CloudServices.Synchronize();
+        }
+      
         return true;
     }
 
@@ -681,77 +568,18 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
 
         return false;
     }
-
-    private static string Mykey = "i1jI0Ooz";
-    private static byte[] Keys = { 0x00, 0x34, 0x56, 0x78, 0x90, 0xAB, 0xCD, 0xEF };
-
-    public static string EncryptDES(string encryptString)
-    {
-        return EncryptDES(encryptString, Mykey);
-    }
-
-    public static string DecryptDES(string decryptString)
-    {
-        return DecryptDES(decryptString, Mykey);
-    }
-
-    /// <summary>
-    /// DES加密字符串
-    /// </summary>
-    /// <param name="encryptString">待加密的字符串</param>
-    /// <returns>加密成功返回加密后的字符串，失败返回源串</returns>
-    public static string EncryptDES(string encryptString, string encryptKey)
-    {
-        try
-        {
-            byte[] rgbKey = Encoding.UTF8.GetBytes(encryptKey.Substring(0, 8));
-            byte[] rgbIV = Keys;
-            byte[] inputByteArray = Encoding.UTF8.GetBytes(encryptString);
-            DESCryptoServiceProvider dCSP = new DESCryptoServiceProvider();
-            MemoryStream mStream = new MemoryStream();
-            CryptoStream cStream = new CryptoStream(mStream, dCSP.CreateEncryptor(rgbKey, rgbIV), CryptoStreamMode.Write);
-            cStream.Write(inputByteArray, 0, inputByteArray.Length);
-            cStream.FlushFinalBlock();
-            cStream.Close();
-            return Convert.ToBase64String(mStream.ToArray());
-        }
-        catch
-        {
-            return encryptString;
-        }
-    }
-
-    /// <summary>
-    /// DES解密字符串
-    /// </summary>
-    /// <param name="decryptString">待解密的字符串</param>
-    /// <returns>解密成功返回解密后的字符串，失败返源串</returns>
-    public static string DecryptDES(string decryptString, string decryptKey)
-    {
-        try
-        {
-            byte[] rgbKey = Encoding.UTF8.GetBytes(decryptKey);
-            byte[] rgbIV = Keys;
-            byte[] inputByteArray = Convert.FromBase64String(decryptString);
-            DESCryptoServiceProvider DCSP = new DESCryptoServiceProvider();
-            MemoryStream mStream = new MemoryStream();
-            CryptoStream cStream = new CryptoStream(mStream, DCSP.CreateDecryptor(rgbKey, rgbIV), CryptoStreamMode.Write);
-            cStream.Write(inputByteArray, 0, inputByteArray.Length);
-            cStream.FlushFinalBlock();
-            cStream.Close();
-            return Encoding.UTF8.GetString(mStream.ToArray());
-        }
-        catch
-        {
-            Debug.Log("catch");
-            return decryptString;
-        }
-    }
-
-
+ 
     void SaveCloudData(int index=-1)
     {
-        CloudServices.SetInt("diamond", userGameSaveDataList.commonSaveData.diamond);
+        if (GameDataManager.instance.GlobalData.localSave)
+        {
+            OfflineSave.instance.SetInt("diamond", userGameSaveDataList.commonSaveData.diamond);
+        }
+        else
+        {
+            CloudServices.SetInt("diamond", userGameSaveDataList.commonSaveData.diamond);
+        }
+       
         if (index < 0)
         {
             SetCloudData(userGameSaveDataList.nowSaveData, "auto_");
@@ -768,24 +596,46 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         {
             var field = UserGameSaveDataIntFields[i];
             var key = GameCommon.BlendString(keyStr, field.Name);
-            CloudServices.RemoveKey(key);
+            if (GameDataManager.instance.GlobalData.localSave)
+            {
+                OfflineSave.instance.RemoveKey(key);
+            }
+            else
+            {
+                CloudServices.RemoveKey(key); 
+            }
+           
         }
 
         for (var i = 0; i < UserGameSaveDataStringFields.Count; i++)
         {
             var field = UserGameSaveDataStringFields[i];
             var key = GameCommon.BlendString(keyStr, field.Name);
-            CloudServices.RemoveKey(key);
+            if (GameDataManager.instance.GlobalData.localSave)
+            {
+                OfflineSave.instance.RemoveKey(key);
+            }
+            else
+            {
+                CloudServices.RemoveKey(key); 
+            }
         }
 
         for (var i = 0; i < UserGameSaveDataJsonFields.Count; i++)
         {
             var field = UserGameSaveDataJsonFields[i];
             var key = GameCommon.BlendString(keyStr, field.Name);
-            CloudServices.RemoveKey(key);
-        }
-        //CloudServices.RemoveKey(GameCommon.BlendString(keyStr, "specialMapItemList"));
+            if (GameDataManager.instance.GlobalData.localSave)
+            {
+                OfflineSave.instance.RemoveKey(key);
+            }
+            else
+            {
+                CloudServices.RemoveKey(key); 
+            }
+        } 
     }
+    
     void SetCloudData(UserGameSaveData nowSaveData, string keyStr)
     {
         for (int i = 0; i < UserGameSaveDataIntFields.Count; i++)
@@ -793,30 +643,69 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             var field = UserGameSaveDataIntFields[i];
             int value = (int)field.GetValue(nowSaveData);
             string key = GameCommon.BlendString(keyStr, field.Name);
-            CloudServices.SetInt(key, value);
+            if (GameDataManager.instance.GlobalData.localSave)
+            {
+                OfflineSave.instance.SetInt(key, value);
+            }
+            else
+            {
+                CloudServices.SetInt(key, value);
+            }
+          
         }
         for (int i = 0; i < UserGameSaveDataStringFields.Count; i++)
         {
             var field = UserGameSaveDataStringFields[i];
             string value = (string)field.GetValue(nowSaveData);
             string key = GameCommon.BlendString(keyStr, field.Name);
-            CloudServices.SetString(key, value);
+            if (GameDataManager.instance.GlobalData.localSave)
+            {
+                OfflineSave.instance.SetString(key, value);
+            }
+            else
+            {
+                CloudServices.SetString(key, value);
+            }
+            
         }
+        
+        var settings = new JsonSerializerSettings
+        {
+            // 不序列化“默认值”（值类型的 default，比如 0/false；或带 [DefaultValue] 指定的值）
+            DefaultValueHandling = DefaultValueHandling.Ignore,
+            // 不序列化 null（引用类型的默认值是 null，通常一起关掉）
+            NullValueHandling = NullValueHandling.Ignore,
+        };
         for (int i = 0; i < UserGameSaveDataJsonFields.Count; i++)
         {
             var field = UserGameSaveDataJsonFields[i];
             var obj = field.GetValue(nowSaveData);
-            var objStr = JsonConvert.SerializeObject(obj);
+            var objStr = JsonConvert.SerializeObject(obj,settings);
             string key = GameCommon.BlendString(keyStr, field.Name);
-            CloudServices.SetString(key, objStr);
-        }
-        //CloudServices.RemoveKey(GameCommon.BlendString(keyStr, "specialMapItemList"));
+            if (GameDataManager.instance.GlobalData.localSave)
+            {
+                OfflineSave.instance.SetString(key, objStr);
+            }
+            else
+            {
+                CloudServices.SetString(key, objStr);
+            }
+           
+        } 
     }
     public void LoadCloudData()
     {
         LoadDataSuccess = true;
         userGameSaveDataList = new UserGameSaveDataList();
-        int diamond = CloudServices.GetInt("diamond");
+        int diamond = 0;
+        if (GameDataManager.instance.GlobalData.localSave)
+        {
+            diamond=OfflineSave.instance.GetInt("diamond");
+        }
+        else
+        {
+            diamond = CloudServices.GetInt("diamond");
+        } 
         userGameSaveDataList.commonSaveData = new CommonSaveData
         {
             diamond = diamond
@@ -850,28 +739,51 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         userGameSaveDataList.userGameSaveDatas.Add(nowSaveData2);
 
         UserGameSaveData LoadUserData(string key)
-        {
-           // CloudServices.RemoveKey(GameCommon.BlendString(key, "specialMapItemList"));
+        { 
             UserGameSaveData userData = new UserGameSaveData();
             for(int i = 0; i < UserGameSaveDataIntFields.Count; i++)
             {
                 var field = UserGameSaveDataIntFields[i];
                 string fieldKey = $"{key}{field.Name}";
-                int value= CloudServices.GetInt(fieldKey);
+                int value = 0;
+                if (GameDataManager.instance.GlobalData.localSave)
+                {
+                    value = OfflineSave.instance.GetInt(fieldKey);
+                }
+                else
+                {
+                    value= CloudServices.GetInt(fieldKey);
+                } 
                 field.SetValue(userData, value);
             }
             for(int i = 0; i < UserGameSaveDataStringFields.Count; i++)
             {
                 var field = UserGameSaveDataStringFields[i];
                 string fieldKey = $"{key}{field.Name}";
-                string value = CloudServices.GetString(fieldKey);
+                string value = null;
+                if (GameDataManager.instance.GlobalData.localSave)
+                {
+                    value = OfflineSave.instance.GetString(fieldKey);
+                }
+                else
+                {
+                    value = CloudServices.GetString(fieldKey);
+                } 
                 field.SetValue(userData, value);
             }
             for(int i = 0; i < UserGameSaveDataJsonFields.Count; i++)
             {
                 var field = UserGameSaveDataJsonFields[i];
                 string fieldKey = $"{key}{field.Name}";
-                string value = CloudServices.GetString(fieldKey);
+                string value = null;
+                if (GameDataManager.instance.GlobalData.localSave)
+                {
+                    value = OfflineSave.instance.GetString(fieldKey);
+                }
+                else
+                {
+                    value = CloudServices.GetString(fieldKey);
+                } 
                 if (!string.IsNullOrEmpty(value))
                 {
                     try
@@ -898,5 +810,5 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             !string.IsNullOrEmpty(userGameSaveDataList.userGameSaveDatas[1].saveTime) || !string.IsNullOrEmpty(userGameSaveDataList.userGameSaveDatas[2].saveTime);
     }
 
-    
 }
+

@@ -16,6 +16,9 @@ public class GameGlobalData :ScriptableObject, IGameData
     public bool Encrypt;
     [Header("调试")]
     public bool debug;
+
+    [Header("本地存档")] public bool localSave;
+    [Header("商店")] public bool hideStore;
     public string GetKey()
     {
         return "";

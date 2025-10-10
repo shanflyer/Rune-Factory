@@ -63,7 +63,7 @@ public class GoldCreatPanel : GamePanel<IReferenceData>
         List<MoneyCreatData> MoneyCreatDatas = new List<MoneyCreatData>();
         for(int i = 0; i < datas.Count; i++)
         {
-            if (datas[i].getPayType == PayType.½ð±Ò)
+            if (datas[i].getPayType == PayType.é‡‘å¸)
             {
                 MoneyCreatDatas.Add(datas[i]);
             }
