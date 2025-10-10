@@ -118,13 +118,13 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
 
         if (GameController.instance.startPlay || GameGuideManager.instance.IsEndGuide())
         {
-            GoldAdd_Image.enabled = CrystalAdd_Image.enabled = true;
-            goldAdd.enabled = crystalAdd.enabled = true;
+            GoldAdd_Image.enabled = true;
+            goldAdd.enabled = true;
         }
         else
         {
-            GoldAdd_Image.enabled = CrystalAdd_Image.enabled = false;
-            goldAdd.enabled = crystalAdd.enabled = false;
+            GoldAdd_Image.enabled = false;
+            goldAdd.enabled = false;
         }
     }
 
@@ -132,13 +132,13 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
     {
         if (GameController.instance.startPlay || GameGuideManager.instance.IsEndGuide())
         {
-            GoldAdd_Image.enabled = CrystalAdd_Image.enabled = true;
-            goldAdd.enabled = crystalAdd.enabled = true;
+            GoldAdd_Image.enabled = true;
+            goldAdd.enabled = true;
         }
         else
         {
-            GoldAdd_Image.enabled = CrystalAdd_Image.enabled = false;
-            goldAdd.enabled = crystalAdd.enabled = false;
+            GoldAdd_Image.enabled = false;
+            goldAdd.enabled = false;
         }
     }
     private void LateUpdate()

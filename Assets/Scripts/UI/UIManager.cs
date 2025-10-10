@@ -466,6 +466,7 @@ public class UIManager : Singleton<UIManager>
             gamePanel.transform.localPosition = Vector3.zero;
         }
         gamePanel.Show(layer);
+        gamePanel.gameObject.SetActive(true);
         await gamePanel.InitData(dataKey);
       
         return gamePanel;
@@ -517,6 +518,7 @@ public class UIManager : Singleton<UIManager>
         }
 
         gamePanel.Show(layer);
+        gamePanel.gameObject.SetActive(true);
         gamePanel.InitData(dataKey);
 
         return gamePanel;
