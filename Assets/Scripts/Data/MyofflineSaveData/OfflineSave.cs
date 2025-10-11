@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class OfflineSave:Singleton<OfflineSave>
 {
-    private MyOfflineSaveData myOfflineSaveData;
+    private MyOfflineSaveData myOfflineSaveData=new MyOfflineSaveData();
     public string UserName => userName;
     private string userName = "Waring";
     public override void Init()
@@ -170,17 +170,25 @@ public class OfflineSave:Singleton<OfflineSave>
     }
 
     public void SetString(string key, string value)
-    {
+    { 
         myOfflineSaveData.SetString(key, value);
     }
 
     public int GetInt(string key)
-    {
+    { 
+        if (myOfflineSaveData == null)
+        {
+            return 0;
+        }
         return myOfflineSaveData.GetInt(key); 
     }
 
     public string GetString(string key)
     {
+        if (myOfflineSaveData == null)
+        {
+            return null;
+        }
         return myOfflineSaveData.GetString(key);
     }
 

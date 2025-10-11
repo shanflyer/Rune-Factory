@@ -54,22 +54,9 @@ public class ZeroPanel : GamePanel<IReferenceData>
     {
         try
         {
-            // 定义授权范围
-            List<string> scopes = new List<string>
-            {
-                TapTapLogin.TAP_LOGIN_SCOPE_PUBLIC_PROFILE
-            };
-            // 发起 Tap 登录
-            var userInfo = await TapTapLogin.Instance.LoginWithScopes(scopes.ToArray());
-            Debug.Log($"登录成功，当前用户 ID：{userInfo.unionId}");
+            GameSDKManager.instance.LoginThenComplianceAsync();
             
-            TapStart.transform.localScale = Vector3.zero;
-            start.transform.localScale=Vector3.one;
-            TapTapAccount taptapAccount = await TapTapLogin.Instance.GetCurrentTapAccount();
-            AccessToken accessToken = taptapAccount.accessToken;
-            string openId = taptapAccount.openId;
-            OfflineSave.instance.SetUserName(openId);
-            GameController.instance.AfterLoginAction();
+            
         }
         catch (TaskCanceledException)
         {   TapStart.transform.localScale=Vector3.one;
