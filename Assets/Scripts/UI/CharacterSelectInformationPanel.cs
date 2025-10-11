@@ -74,7 +74,7 @@ public class CharacterSelectInformationPanel : GamePanel<SelectCharacterData>
             assetName = "ZeroStory"
         }, true);
         GameDataSaveManager.instance.InitPlayerData(data.name, data.gender, data.brithSeason, data.brithDay);
-
+        GameSDKManager.instance.TryCreateCloudSave();
         var types = new List<Type>
         {
             typeof(CharacterSelectInformationPanel),

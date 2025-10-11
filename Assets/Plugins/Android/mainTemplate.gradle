@@ -8,6 +8,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.0+' // Assets/Plugins/VoxelBusters/EssentialKit/Essentials/Editor/CrossPlatformEssentialKitDependencies.xml:9
     implementation 'androidx.appcompat:appcompat-resources:1.5.0+' // Assets/Plugins/VoxelBusters/EssentialKit/Essentials/Editor/CrossPlatformEssentialKitDependencies.xml:11
     implementation 'androidx.core:core:1.7.0+' // Assets/Plugins/VoxelBusters/EssentialKit/Essentials/Editor/CrossPlatformEssentialKitDependencies.xml:6
+    implementation 'com.taptap.sdk:tap-cloudsave-unity:4.8.2' // Packages/com.taptap.sdk.cloudsave/Mobile/Editor/NativeDependencies.xml:7
     implementation 'com.taptap.sdk:tap-compliance:4.8.2' // Packages/com.taptap.sdk.compliance/Mobile/Editor/NativeDependencies.xml:7
     implementation 'com.taptap.sdk:tap-core-unity:4.8.2' // Packages/com.taptap.sdk.core/Mobile/Editor/NativeDependencies.xml:7
     implementation 'com.taptap.sdk:tap-login-unity:4.8.2' // Packages/com.taptap.sdk.login/Mobile/Editor/NativeDependencies.xml:7
@@ -19,7 +20,7 @@ dependencies {
 
 // Android Resolver Exclusions Start
 android {
-  packaging {
+  packagingOptions {
       exclude ('/lib/armeabi/*' + '*')
       exclude ('/lib/armeabi-v7a/*' + '*')
       exclude ('/lib/mips/*' + '*')

@@ -9,32 +9,26 @@ using UnityEngine;
 public class OfflineSave:Singleton<OfflineSave>
 {
     private MyOfflineSaveData myOfflineSaveData;
-
+    public string UserName => userName;
     private string userName = "Waring";
     public override void Init()
     {
         base.Init(); 
     }
-
+    public string saveFilePath=>Path.Combine(DataPath.gameSaveDataPath, userName); 
     public void SetUserName(string userName)
     {
-        this.userName = userName;
-        LoadData();
+        this.userName = userName; 
     }
     public void RemoveKey(string key)
     {
         myOfflineSaveData.RemoveKey(key);
     }
-    public void SaveData(JsonSerializerSettings jsonSettings = null)
+
+    public void UpdateSaveFileData(string json)
     {
-        string json = JsonConvert.SerializeObject(myOfflineSaveData);
-        if (GameDataManager.instance.GlobalData.Encrypt)
-        {
-            json = EncryptDES(json);
-        }
-        string path = $"{DataPath.gameSaveDataPath}{"/"}{userName}"; 
-        
- 
+        string path = saveFilePath;
+         
         // 4) 原子写入：先写临时文件，再替换
         string tmp = path + ".tmp";
         var utf8NoBom = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
@@ -58,6 +52,7 @@ public class OfflineSave:Singleton<OfflineSave>
             {
                 File.Move(tmp, path);
             }
+            GameSDKManager.instance.UpdateSaveData();
         }
         catch (Exception e)
         {
@@ -66,16 +61,22 @@ public class OfflineSave:Singleton<OfflineSave>
             try { if (File.Exists(tmp)) File.Delete(tmp); } catch {}
             throw;
         }
+    }
+    public void SaveData(JsonSerializerSettings jsonSettings = null)
+    {
+        string json = JsonConvert.SerializeObject(myOfflineSaveData);
+        if (GameDataManager.instance.GlobalData.Encrypt)
+        {
+            json = EncryptDES(json);
+        }
 
-        // 5) 可选：写一个轻量索引到 PlayerPrefs（最近档名/版本等）
-       // PlayerPrefs.SetString("last_save_user", userName);
-       // PlayerPrefs.Save();
+        UpdateSaveFileData(json); 
     }
  
   
     public void LoadData()
     {
-        string saveDataPath = $"{DataPath.gameSaveDataPath}{"/"}{userName}";
+        string saveDataPath = saveFilePath;
         if (File.Exists(saveDataPath))
         { 
             string dataStr = File.ReadAllText(saveDataPath);
