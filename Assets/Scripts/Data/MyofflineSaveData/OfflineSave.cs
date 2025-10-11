@@ -13,7 +13,12 @@ public class OfflineSave:Singleton<OfflineSave>
     private string userName = "Waring";
     public override void Init()
     {
-        base.Init();
+        base.Init(); 
+    }
+
+    public void SetUserName(string userName)
+    {
+        this.userName = userName;
         LoadData();
     }
     public void RemoveKey(string key)

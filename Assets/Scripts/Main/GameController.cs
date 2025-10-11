@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MyGame;
@@ -7,6 +8,11 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using VoxelBusters.CoreLibrary;
 using VoxelBusters.EssentialKit;
+using TapSDK.Core;
+using TapSDK.Login;  
+using TapSDK.Update;
+using TapSDK.Compliance;
+using System.Threading.Tasks;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -162,6 +168,7 @@ public class GameController : MonoBehaviour
     public int2 ZeroCoordinate => zeroCoordinate;
 
     private bool loadMap;
+ 
     private void OnApplicationQuit()
     {
         if (loadMap) GameDataSaveManager.instance.TryAutoSaveData();
@@ -172,6 +179,8 @@ public class GameController : MonoBehaviour
         {
             SingletonType.instance.ClearAll();
         }
+        
+        TapTapLogin.Instance.Logout();
         
         instance = null;
     }
@@ -269,19 +278,17 @@ if (result.Success)
         */
 
     }
-
-    public void AddCrystal()
-    {
-        
-    }
+ 
     private void Awake()
-    {
+    {   
+        GameSDKManager.instance.InitSDK();
+      
         if (!GameDataManager.instance.GlobalData.localSave)
         {
             CloudServices.OnUserChange += OnUserChange;
             CloudServices.OnSavedDataChange += OnSavedDataChange;
             CloudServices.OnSynchronizeComplete += OnSynchronizeComplete;
-        }
+        } 
        
         startGameCompleted = false;
         Screen.SetResolution(Screen.width, Screen.height, true);
@@ -300,9 +307,28 @@ if (result.Success)
         }
         FilmController.instance.SetParent(filmParent);
         UIManager.instance.SetParent(UIParent); 
+        
+        var audio = transform.Find("Audio");
+        AudioController.instance.SetAudioSource(audio.gameObject);
+        GameRuntimeObjManager.instance.CreatParent<RuntimeObjType>(transform);
+        LanguageManage.instance.SystemLanguageMatch(SetLanguage ? SetSystemLanguage : MyLanguage.NULL);
+        UIManager.instance.ShowGamePanel<ZeroPanel>();
+        ZeroSetCloudGlobal();
     }
     // Start is called beforee the first frame update
-    void Start()
+   async void Start()
+    { 
+        if (!GameDataManager.instance.GlobalData.hideStore)
+        {
+            BillingServices.InitializeStore(); 
+        }
+      
+        CloudRemoteConfig cloudRemoteConfig = CloudRemoteConfig.instance;
+    }
+  
+
+
+    public void AfterLoginAction()
     {
         if (!GameDataManager.instance.GlobalData.localSave)
         {
@@ -314,15 +340,7 @@ if (result.Success)
             StartGame();
             startGameCompleted = true;
         }
-
-        if (GameDataManager.instance.GlobalData.hideStore)
-        {
-            BillingServices.InitializeStore(); 
-        }
-      
-        CloudRemoteConfig cloudRemoteConfig = CloudRemoteConfig.instance;
     }
-
     void StartGame()
     {
         environmentManger = EnvironmentManger.instance;
@@ -347,18 +365,14 @@ if (result.Success)
 
         GameTimerController.instance.DelayAction(100, () => { GameTimeManager.instance.SetTime(12, 0); });
 
-        var audio = transform.Find("Audio");
-        AudioController.instance.SetAudioSource(audio.gameObject);
-        GameRuntimeObjManager.instance.CreatParent<RuntimeObjType>(transform);
-        LanguageManage.instance.SystemLanguageMatch(SetLanguage ? SetSystemLanguage : MyLanguage.NULL);
-        UIManager.instance.ShowGamePanel<ZeroPanel>();
+     
          
         SwitchInputMap switchInputMap = new SwitchInputMap
         {
             UI = true
         };
         GameActionManager.instance.QueueAction(switchInputMap, true);
-        ZeroSetCloudGlobal();
+      
         loadMap = true;
     }
     void ZeroSetCloudGlobal()

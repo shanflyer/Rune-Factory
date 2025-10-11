@@ -66,7 +66,7 @@ public class MyTalkPanel : GamePanel<IReferenceData>
     async void ShareAction()
     {
         ShareSheet shareSheet = ShareSheet.CreateInstance();
-        shareSheet.AddText(LanguageManage.SwitchStr("ÕâÊÇÒ»¸öÓÐÈ¤µÄÓÎÏ·£¬·ÖÏí¸ø´ó¼Ò"));
+        shareSheet.AddText(LanguageManage.SwitchStr("ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½È¤ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"));
         shareSheet.AddImage(texture2D);
         string sharedURL =await CloudRemoteConfig.instance.GetConfig("SharedURL");
         shareSheet.AddURL(URLString.URLWithPath(sharedURL));

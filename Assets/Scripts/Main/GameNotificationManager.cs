@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 public class GameNotificationManager : Singleton<GameNotificationManager>
 {
@@ -8,11 +9,11 @@ public class GameNotificationManager : Singleton<GameNotificationManager>
         base.Init();
     }
 
-    public async void DisplayTips(string title, string notice)
+    public async void DisplayTips(string title, string notice,Action CloseAction=null)
     {
         await UIManager.instance.ShowGamePanel<TipsPanel>(layer: 100);
         TipsPanel tipsPanel = await UIManager.instance.GetGamePanel<TipsPanel>();
-        tipsPanel.InitTipsData(title, notice);
+        tipsPanel.InitTipsData(title, notice, CloseAction);
     }
 
     bool showItemResultInfo = false;

@@ -1,6 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 
+public struct ShowZeroStart : GameAction
+{
+    public bool show;
+    public SetValue setValue { get; set; }
+    public SetResult setResult { get; set; }
+
+    public void Clear()
+    { 
+    }
+
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+        SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        this.setResult = setResult;
+        this.setValue = setValue;
+        GameActionManager.instance.QueueAction(this, immediately);
+    }
+}
 public struct ShowItemResult : GameAction
 {
     public int item;

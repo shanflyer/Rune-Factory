@@ -424,6 +424,9 @@
     <Reference Include="nunit.framework">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\PackageCache\com.unity.ext.nunit@031a54704bff\net40\unity-custom\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="zxing.unity">
+      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\PackageCache\com.taptap.sdk.login@ac06d6c66f9a\Plugins\zxing.unity.dll</HintPath>
+    </Reference>
     <Reference Include="System.IO.Hashing">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\PackageCache\com.unity.collections@d49facba0036\Unity.Collections.Tests\System.IO.Hashing\System.IO.Hashing.dll</HintPath>
     </Reference>
@@ -447,9 +450,6 @@
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Assets\DLL\Excel\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
-    <Reference Include="zxing.unity">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\PackageCache\com.taptap.sdk.login@ac06d6c66f9a\Plugins\zxing.unity.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
       <HintPath>D:\Unity\6000.1.0f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
@@ -838,6 +838,9 @@
     <Reference Include="Unity.Cinemachine.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Cinemachine.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="TapSDK.Compliance.Standalone.Runtime">
+      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.Compliance.Standalone.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.ShaderGraph.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.ShaderGraph.Editor.dll</HintPath>
     </Reference>
@@ -961,6 +964,9 @@
     <Reference Include="Unity.2D.Common.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.2D.Common.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="TapSDK.Update.Runtime">
+      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.Update.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Recorder">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Recorder.dll</HintPath>
     </Reference>
@@ -994,17 +1000,23 @@
     <Reference Include="TapSDK.Login.Runtime">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.Login.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="TapSDK.Compliance">
+      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.Compliance.dll</HintPath>
+    </Reference>
+    <Reference Include="TapSDK.Update.Mobile.Editor">
+      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.Update.Mobile.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Cinemachine">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Cinemachine.dll</HintPath>
     </Reference>
     <Reference Include="Unity.ScriptableBuildPipeline">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Collections">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Collections.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.InternalAPIEditorBridge.001">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.InternalAPIEditorBridge.001.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Collections">
+      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Addressables">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Addressables.dll</HintPath>
@@ -1042,6 +1054,9 @@
     <Reference Include="Unity.Services.Authentication">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Services.Authentication.dll</HintPath>
     </Reference>
+    <Reference Include="TapSDK.Compliance.Standalone.Editor">
+      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.Compliance.Standalone.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.MemoryProfiler.Editor.MemoryProfilerModule">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.MemoryProfiler.Editor.MemoryProfilerModule.dll</HintPath>
     </Reference>
@@ -1050,6 +1065,9 @@
     </Reference>
     <Reference Include="Unity.Localization.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Localization.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Purchasing.Stores">
+      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\UnityEngine.Purchasing.Stores.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Burst.Editor.dll</HintPath>
@@ -1066,14 +1084,14 @@
     <Reference Include="Unity.Burst">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Burst.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Purchasing.Stores">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\UnityEngine.Purchasing.Stores.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Entities.UI">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Entities.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Entities">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="TapSDK.Compliance.Mobile.Editor">
+      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.Compliance.Mobile.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Rendering.LightTransport.Runtime">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Rendering.LightTransport.Runtime.dll</HintPath>
@@ -1150,10 +1168,6 @@
       <Project>{779a36b7-481c-1e89-a02e-98edaef7d168}</Project>
       <Name>Unity.RenderPipelines.Universal.Editor</Name>
     </ProjectReference>
-    <ProjectReference Include="Heureka.Upgrade.csproj">
-      <Project>{2f4bb9be-8cd4-a996-ab98-2b2bd20df2e5}</Project>
-      <Name>Heureka.Upgrade</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.2D.Animation.Runtime.csproj">
       <Project>{88b6687a-316f-0235-d527-3bdd069d8858}</Project>
       <Name>Unity.2D.Animation.Runtime</Name>
@@ -1161,10 +1175,6 @@
     <ProjectReference Include="VoxelBusters.EssentialKit.Editor.Build.iOSModule.csproj">
       <Project>{1a6b6b08-a126-6a64-8a6d-629b957d45ba}</Project>
       <Name>VoxelBusters.EssentialKit.Editor.Build.iOSModule</Name>
-    </ProjectReference>
-    <ProjectReference Include="HeurekaGames.AssetHunterPRO.Editor.csproj">
-      <Project>{bb28b1b3-61b5-0d4d-416c-58c5de8e6576}</Project>
-      <Name>HeurekaGames.AssetHunterPRO.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="VoxelBusters.EssentialKit.Demo.csproj">
       <Project>{4099085f-ae1f-642d-ec16-4ce9026dd9ad}</Project>
@@ -1269,10 +1279,6 @@
     <ProjectReference Include="Unity.2D.Animation.Editor.csproj">
       <Project>{c7270e9b-46ba-041b-6b6c-ea1a7dae914a}</Project>
       <Name>Unity.2D.Animation.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="HeurekaGames.Utils.csproj">
-      <Project>{0634ee74-d9df-7b60-e10a-dc63c819f71c}</Project>
-      <Name>HeurekaGames.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="KinoBloom.Runtime.csproj">
       <Project>{b537d6af-6950-a649-5836-8152f4adae12}</Project>

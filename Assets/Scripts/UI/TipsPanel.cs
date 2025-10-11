@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,8 @@ public class TipsPanel : GamePanel<IReferenceData>
 
     [SerializeField]
     private Button CloseButton;
+    
+    private Action CloseAction;
 
     // Use this for initialization
     public override void SetPanelUISerializeObj()
@@ -25,9 +28,17 @@ public class TipsPanel : GamePanel<IReferenceData>
         CloseButton.onClick.AddListener(Close);
     }
 
-    public void InitTipsData(string title, string Notice)
+    public override void Close()
+    {
+        base.Close();
+        CloseAction?.Invoke();
+        CloseAction = null;
+    }
+
+    public void InitTipsData(string title, string Notice,Action CloseAction=null)
     {
         TitleText.SetSWText(title);
         NoticeText.SetSWText(Notice);
+        this.CloseAction = CloseAction;
     }
 }
