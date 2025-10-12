@@ -135,7 +135,7 @@ public class ZeroPanel : GamePanel<IReferenceData>
     public override async Task InitData(string dataKay)
     {
         selectPanel.localScale = Vector3.zero;
-        start.transform.localScale = Vector3.one;
+       // start.transform.localScale = Vector3.one;
         PlayZeroBGM();
         
         
@@ -147,40 +147,41 @@ public class ZeroPanel : GamePanel<IReferenceData>
         {
             
         }
-        
-        TapTapAccount account = null;
-        try
-        {
-            // 检查本地是否已存在 account 信息
-            account = await TapTapLogin.Instance.GetCurrentTapAccount();
-        }
-        catch (Exception e)
-        {
-            Debug.Log("本地无有效用户信息");
-        }
+        /*
+    TapTapAccount account = null;
+    try
+    {
+        // 检查本地是否已存在 account 信息
+        account = await TapTapLogin.Instance.GetCurrentTapAccount();
+    }
+    catch (Exception e)
+    {
+        Debug.Log("本地无有效用户信息");
+    }
 
-        if (account == null)
+
+    if (account == null)
+    {
+        TapStart.transform.localScale=Vector3.one;
+        start.transform.localScale = Vector3.zero;
+    }
+    else
+    {
+        // 如果当前还未通过合规认证检查，开始认证
+        if (!GameSDKManager.instance.hasCheckedCompliance)
         {
-            TapStart.transform.localScale=Vector3.one;
-            start.transform.localScale = Vector3.zero;
+            // 开始合规认证检查
+            StartCheckCompliance();
         }
         else
         {
-            // 如果当前还未通过合规认证检查，开始认证
-            if (!GameSDKManager.instance.hasCheckedCompliance)
-            {
-                // 开始合规认证检查
-                StartCheckCompliance();
-            }
-            else
-            {
-                string openId = account.openId;
-                TapStart.transform.localScale = Vector3.zero;
-                start.transform.localScale = Vector3.one;
-                OfflineSave.instance.SetUserName(openId);
-                GameController.instance.AfterLoginAction();
-            }
+            string openId = account.openId;
+            TapStart.transform.localScale = Vector3.zero;
+            start.transform.localScale = Vector3.one;
+            OfflineSave.instance.SetUserName(openId);
+            GameController.instance.AfterLoginAction();
         }
+    }*/
          
         
         base.InitData(dataKay);
@@ -203,11 +204,11 @@ public class ZeroPanel : GamePanel<IReferenceData>
     {
         if (showZeroStart.show)
         {
-            var   account = await TapTapLogin.Instance.GetCurrentTapAccount();
-            string openId = account.openId;
+           // var   account = await TapTapLogin.Instance.GetCurrentTapAccount();
+          //  string openId = account.openId;
             TapStart.transform.localScale = Vector3.zero;
             start.transform.localScale = Vector3.one;
-            OfflineSave.instance.SetUserName(openId);
+           // OfflineSave.instance.SetUserName(openId);
             GameController.instance.AfterLoginAction();
         }
         else
@@ -217,34 +218,5 @@ public class ZeroPanel : GamePanel<IReferenceData>
         }
     }
     
-    /// <summary>
-    /// 开启合规认证检查
-    /// </summary>
-    public async void StartCheckCompliance()
-    {
-        // 获取当前已登录用户的 account 信息
-        TapTapAccount account = null;
-        try
-        {
-            account = await TapTapLogin.Instance.GetCurrentTapAccount();
-        }
-        catch (Exception exception)
-        {
-            Debug.Log($"获取用户信息出现异常：{exception}");
-        }
-        if (account == null)
-        {
-            // 无法获取用户信息时，登出并显示登录按钮
-            TapTapLogin.Instance.Logout();
-            TapStart.transform.localScale=Vector3.one;
-            start.transform.localScale = Vector3.zero;
-            // TODO: 显示登录按钮
-            return;
-        }
-
-        // 使用当前 Tap 用户的 unionid 作为用户标识进行合规认证检查
-        string userIdentifier = account.unionId;
-        GameSDKManager.instance.StartCheckCompliance(userIdentifier);
-         
-    }
+     
 }

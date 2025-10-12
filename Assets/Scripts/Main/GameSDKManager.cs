@@ -151,20 +151,25 @@ public class GameSDKManager : Singleton<GameSDKManager>, ITapCloudSaveCallback
         if (archiveUuid == null) CreateCloudSave();
     }
 
+    private ArchiveMetadata metadata=>new ArchiveMetadata(
+        archiveName: OfflineSave.instance.UserName,
+        archiveSummary: GameDataSaveManager.instance.UserGameSaveData.saveTime,
+        archiveExtra: $"schema=0",
+        archivePlaytime: 0
+    );
+    
     public async void CreateCloudSave()
     {
         try
         {
-            EnsureReadyOrThrow();
-
-            var metadata = new ArchiveMetadata(
-                archiveName: OfflineSave.instance.UserName,
-                archiveSummary: "",
-                archiveExtra: "",
-                archivePlaytime: 0
-            );
+            
+            EnsureReadyOrThrow(); 
 
             string archiveFilePath = OfflineSave.instance.saveFilePath;
+            if (!File.Exists(archiveFilePath))
+            {
+                OfflineSave.instance.SaveData(UpdateCloudData:false);
+            }
 
             ArchiveData archive = await TapTapCloudSave.CreateArchive(metadata, archiveFilePath, null);
 
@@ -191,12 +196,7 @@ public class GameSDKManager : Singleton<GameSDKManager>, ITapCloudSaveCallback
         {
             EnsureReadyOrThrow();
 
-            var metadata = new ArchiveMetadata(
-                archiveName: OfflineSave.instance.UserName,
-                archiveSummary: "",
-                archiveExtra: "",
-                archivePlaytime: 0
-            );
+          
 
             string archiveFilePath = OfflineSave.instance.saveFilePath;
 
@@ -204,7 +204,7 @@ public class GameSDKManager : Singleton<GameSDKManager>, ITapCloudSaveCallback
             Debug.Log($"[CloudSave] Update ok. uuid={updated.Uuid}, fileId={updated.FileId}");
         }
         catch (TapException ex)
-        {
+        { 
             Debug.LogError($"[CloudSave] Update failed: code={ex.Code}, msg={ex.Message}");
             HandleCloudSaveKnownErrors(ex.Code);
         }
@@ -241,7 +241,7 @@ public class GameSDKManager : Singleton<GameSDKManager>, ITapCloudSaveCallback
                 byte[] data = await TapTapCloudSave.GetArchiveData(archiveUuid, archiveFileId);
                 string text = Encoding.UTF8.GetString(data);
 
-                OfflineSave.instance.UpdateSaveFileData(text);
+                OfflineSave.instance.UpdateSaveFileData(text,false);
                 OfflineSave.instance.LoadData();
 
                 GameActionManager.instance.QueueAction(new ShowZeroStart { show = true });

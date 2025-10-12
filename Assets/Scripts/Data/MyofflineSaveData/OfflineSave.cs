@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -18,14 +19,30 @@ public class OfflineSave:Singleton<OfflineSave>
     public string saveFilePath=>Path.Combine(DataPath.gameSaveDataPath, userName); 
     public void SetUserName(string userName)
     {
-        this.userName = userName; 
+       
+        this.userName = SanitizeFileName(userName); 
+    }
+    string SanitizeFileName(string raw, int maxLen = 64)
+    {
+        if (string.IsNullOrEmpty(raw)) raw = "player";
+        // 把空白换成下划线
+        raw = Regex.Replace(raw, @"\s+", "_");
+        // 只保留 A-Z a-z 0-9 _ -
+        string s = Regex.Replace(raw, @"[^A-Za-z0-9_-]", "_");
+        // 折叠多余下划线
+        s = Regex.Replace(s, @"_+", "_");
+        // 去两端的下划线/短横线
+        s = Regex.Replace(s, @"^[_-]+|[_-]+$", "");
+        if (string.IsNullOrEmpty(s)) s = "player";
+        if (s.Length > maxLen) s = s.Substring(0, maxLen);
+        return s;
     }
     public void RemoveKey(string key)
     {
         myOfflineSaveData.RemoveKey(key);
     }
 
-    public void UpdateSaveFileData(string json)
+    public void UpdateSaveFileData(string json,bool UpdateCloudData=true)
     {
         string path = saveFilePath;
          
@@ -52,7 +69,8 @@ public class OfflineSave:Singleton<OfflineSave>
             {
                 File.Move(tmp, path);
             }
-            GameSDKManager.instance.UpdateSaveData();
+            if(UpdateCloudData)
+                GameSDKManager.instance.UpdateSaveData();
         }
         catch (Exception e)
         {
@@ -62,7 +80,7 @@ public class OfflineSave:Singleton<OfflineSave>
             throw;
         }
     }
-    public void SaveData(JsonSerializerSettings jsonSettings = null)
+    public void SaveData(JsonSerializerSettings jsonSettings = null,bool UpdateCloudData=true)
     {
         string json = JsonConvert.SerializeObject(myOfflineSaveData);
         if (GameDataManager.instance.GlobalData.Encrypt)
@@ -70,7 +88,7 @@ public class OfflineSave:Singleton<OfflineSave>
             json = EncryptDES(json);
         }
 
-        UpdateSaveFileData(json); 
+        UpdateSaveFileData(json,UpdateCloudData); 
     }
  
   
