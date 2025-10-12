@@ -27,6 +27,8 @@ public class ZeroPanel : GamePanel<IReferenceData>
 
     [SerializeField]
     private Button newButton, loadButton;
+    [SerializeField]
+    private Toggle Privacy;
 
     public override void SetPanelUISerializeObj()
     {
@@ -48,6 +50,10 @@ public class ZeroPanel : GamePanel<IReferenceData>
         newButton.onClick.AddListener(StartGame);
         loadButton.onClick.AddListener(LoadDataPanel);
         TapStart.onClick.AddListener(TapStartAction);
+        Privacy.onValueChanged.AddListener((value) =>
+        {
+            TapStart.interactable = value;
+        });
     }
 
     async void TapStartAction()
