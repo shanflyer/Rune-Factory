@@ -101,6 +101,7 @@ public class PastureManager : Singleton<PastureManager>
 
             };
             GameActionManager.instance.QueueAction(talk);
+            UIManager.instance.CloseGamePanel<TeamPanel>();
             return true;
         }
         return false;
@@ -252,6 +253,21 @@ public class PastureManager : Singleton<PastureManager>
             }
             else
             {
+                pasture.animals.Add(SetAnimalToPasture.animalId);
+                animal.pasture = pasture.instanceId;
+                var refreshPasture = new RefreshPasture
+                {
+                    instanceId = pasture.instanceId
+                };
+                GameActionManager.instance.QueueAction(refreshPasture, true);
+                SetAnimalToPasture.setResult(true);
+
+
+                var leaveTeam = new LeaveTeam
+                {
+                    teamCharacterId = animal.instanceId
+                };
+                GameActionManager.instance.QueueAction(leaveTeam, true);
                 if (SetAnimalToPasture.refreshPos)
                 {
                     int2 nextCoordinate = MapCellController.instance.GetRandomRoomCell(pasture.linkRoom);
@@ -266,14 +282,7 @@ public class PastureManager : Singleton<PastureManager>
                     }
                 }
 
-                pasture.animals.Add(SetAnimalToPasture.animalId);
-                animal.pasture = pasture.instanceId;
-                RefreshPasture refreshPasture = new RefreshPasture
-                {
-                    instanceId = pasture.instanceId
-                };
-                GameActionManager.instance.QueueAction(refreshPasture);
-                SetAnimalToPasture.setResult(true);
+             
 
                 InformationController.instance.AddInformation($"+{LanguageManage.SwitchStr(animal.name)}+{LanguageManage.SwitchStr("已经分配到对应牧场")}", PromptShow: true);
             }

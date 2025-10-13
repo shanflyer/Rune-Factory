@@ -1,5 +1,5 @@
-﻿using BehaviorDesigner.Runtime;
-using System;
+﻿using System;
+using BehaviorDesigner.Runtime;
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
@@ -73,7 +73,7 @@ public class GameManager : Singleton<GameManager>
     }
 
     public async void ShowObjTips(string info, Transform parent)
-    {
+    { 
        await UIManager.instance.ShowGamePanel<MapObjTipsPanel>(info, parent: parent);
     }
 
