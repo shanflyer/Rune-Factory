@@ -271,6 +271,7 @@ namespace TMPro
             }
             m_IsTextBackingStringDirty = false;
             m_text = value;
+            if (!enabled) originalText = value;
             m_inputSource = TextInputSources.TextString;
             m_havePropertiesChanged = true;
             SetVerticesDirty();

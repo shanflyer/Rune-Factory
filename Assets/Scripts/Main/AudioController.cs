@@ -839,9 +839,8 @@ public class AudioController : Singleton<AudioController>
                     IEnumerator LerpAudio(List<float> startWeightsLocal)
                     {
                         float timeValue = 0;
-                        while (timeValue < 1)
-                        {
-                            if (!childMixer.IsValid()) yield break;
+                        while (timeValue < 1 && childMixer.IsValid())
+                        { 
 
                             for (var i = 0; i < startWeightsLocal.Count; i++)
                             {
@@ -911,10 +910,8 @@ public class AudioController : Singleton<AudioController>
                         IEnumerator LerpAudio()
                         {
                             float timeValue = 0;
-                            while (timeValue < 1)
-                            {
-                                if (!childMixer.IsValid()) yield break;
-
+                            while (timeValue < 1 && childMixer.IsValid())
+                            { 
                                 timeValue += Time.deltaTime;
                                 for (int i = 0; i < audioClips.Count; i++)
                                 {
@@ -945,9 +942,8 @@ public class AudioController : Singleton<AudioController>
                     IEnumerator LerpAudio()
                     {
                         float timeValue = 0;
-                        while (timeValue < 1)
-                        {
-                            if (!childMixer.IsValid()) yield break;
+                        while (timeValue < 1 && childMixer.IsValid())
+                        { 
 
                             timeValue += Time.deltaTime;
                             for (int i = 0; i < audioClips.Count; i++)

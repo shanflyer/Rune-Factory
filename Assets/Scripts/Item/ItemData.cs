@@ -1,13 +1,11 @@
-﻿
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 using UnityEngine;
-[System.Serializable]
+#if UNITY_EDITOR
+#endif
+
+[Serializable]
 public enum ItemType
 {
     Default=-1,
@@ -50,6 +48,7 @@ public class ItemData : ScriptableObject, IGameData
     public int2 range;
     public int otherType;
     public int typeValue;
+    public List<int> manufacture;
     public bool isFresh;
     public bool itemValue;
     public int equipLevel;

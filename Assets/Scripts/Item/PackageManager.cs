@@ -72,11 +72,20 @@ public class PackageManager : Singleton<PackageManager>
         GameActionManager.instance.QueueAction(itemUseAction, true);
     }
 
-    public async void ShowAllPlayerPackage(SelectAction<Item> selectItemAction, string actionName)
+    public async void ShowAllPlayerPackage(SelectAction<Item> selectItemAction, string actionName,
+        int ManufactureId)
     {
         PackageList packageList = new PackageList
         {
-            packageDatas = new List<PackageData>()
+            packageDatas = new List<PackageData>(),
+            itemMatchData = new ItemMatchData
+            {
+                itemMatchType = ItemMatchType.Manufacture,
+                matchValues = new HashSet<int>
+                {
+                    ManufactureId
+                }
+            }
         };
         for (int i = 0; i < playerPackages.Count; i++)
         {
@@ -1776,7 +1785,10 @@ public struct PackageList : IReferenceData
 
 public enum ItemMatchType
 {
-    Null = 0, ItemType = 1, IsFresh = 2
+    Null = 0,
+    ItemType = 1,
+    IsFresh = 2,
+    Manufacture = 3
 }
 
 public struct ItemMatchData
@@ -1784,7 +1796,7 @@ public struct ItemMatchData
     public ItemMatchType itemMatchType;
     public HashSet<int> matchValues;
 
-    public bool MatchAction(Item item)
+    public async Task<bool> MatchAction(Item item)
     {
         if (matchValues == null || matchValues.Count == 0)
         {
@@ -1797,6 +1809,17 @@ public struct ItemMatchData
 
             case ItemMatchType.IsFresh:
                 return matchValues.Contains(item.isFresh ? 1 : 0);
+            case ItemMatchType.Manufacture:
+                var match = false;
+                var itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
+                foreach (var matchValue in matchValues)
+                    if (itemData.manufacture.Contains(matchValue))
+                    {
+                        match = true;
+                        break;
+                    }
+
+                return match;
         }
         return true;
     }

@@ -86,7 +86,7 @@ public class ManufactureManager : Singleton<ManufactureManager>
         {
             manufature = setManufature.manufature
         };
-        GameActionManager.instance.QueueAction(refreshManufature);
+        GameActionManager.instance.QueueAction(refreshManufature, true);
 
         GameDataSaveManager.instance.UserGameSaveData.SetManufature(setManufature.manufature);
     }
@@ -130,7 +130,7 @@ public class ManufactureManager : Singleton<ManufactureManager>
             {
                 manufature = manufature
             };
-            GameActionManager.instance.QueueAction(refreshManufature);
+            GameActionManager.instance.QueueAction(refreshManufature, true);
 
             GameDataSaveManager.instance.UserGameSaveData.SetManufature(manufature);
         }
