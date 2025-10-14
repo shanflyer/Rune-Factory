@@ -377,6 +377,10 @@ if (result.Success)
         SingletonType.instance.LateUpdate();
     }
 
+    private void FixedUpdate()
+    {
+        SingletonType.instance.FixedUpdate();
+    }
 
     private void Update()
     {

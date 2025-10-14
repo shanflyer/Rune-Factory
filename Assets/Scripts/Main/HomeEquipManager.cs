@@ -383,7 +383,8 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         if (characterHomeEquipCountData.TryGetValue(CharacterManager.instance.controllerCharacter.instanceId, out var equipCountData) &&
             equipCountData.TryGetValue(selectShopItemData.item, out var count))
         {
-            GameManager.instance.ShowTwoSelectAction("家具", $"已经拥有{count}个{itemData.itemName},是否确定购买", BuyHomeEquip, null);
+            GameManager.instance.ShowTwoSelectAction("家具",
+                LanguageManage.SwitchFormatStr("已经拥有{0}个{1},是否确定购买", count, itemData.itemName), BuyHomeEquip, null);
         }
         else
         {
