@@ -91,7 +91,7 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
             icon.sprite = itemData.icon;
             icon.color = (data.Item.instanceId != -1) ? Color.white : new Color(1, 1, 1, 0.3f);
             icon.enabled = true;
-            icon.SetNativeSize();
+            // icon.SetNativeSize();
             count.text = data.Item.count.ToString();
             count.enabled = data.Item.count > 0;
             toggle.enabled = true;

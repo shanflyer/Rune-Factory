@@ -1683,6 +1683,8 @@ public class PackageManager : Singleton<PackageManager>
                             index--;
                         }
                     }
+
+                    if (nowCount <= 0) packageItemIndexDatas.Remove(itemDataId);
                     RefreshSelectItem();
                     return true;
                 }
@@ -1700,13 +1702,18 @@ public class PackageManager : Singleton<PackageManager>
                 if (nowCount > 0)
                 {
                     packageItemCounts[items[index].dataId] = nowCount;
+                    var indexDatas = packageItemIndexDatas[items[index].dataId];
+                    indexDatas.RemoveAt(index);
                 }
                 else
                 {
                     packageItemCounts.Remove(items[index].dataId);
+                    packageItemIndexDatas.Remove(items[index].dataId);
                 }
+
+                nullItems.Enqueue(index);
+                items[index] = default(Item);
                 RefreshSelectItem();
-                items[index] = default(Item); 
             }
         }
 
@@ -1798,7 +1805,7 @@ public struct ItemMatchData
 
     public async Task<bool> MatchAction(Item item)
     {
-        if (matchValues == null || matchValues.Count == 0)
+        if (matchValues == null || matchValues.Count == 0 || item.dataId == 0)
         {
             return true;
         }

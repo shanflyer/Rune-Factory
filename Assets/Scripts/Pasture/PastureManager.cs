@@ -183,6 +183,8 @@ public class PastureManager : Singleton<PastureManager>
                         {
                             tryUpPastureLevel.setResult(true);
                         }
+
+                        UIManager.instance.CloseGamePanel<OperateButtonPanel>();
                         return;
                     }
                     else
@@ -493,6 +495,8 @@ public class PastureManager : Singleton<PastureManager>
                         tryCreatPasture.setResult(false);
                     }
                 }
+
+                UIManager.instance.CloseGamePanel<OperateButtonPanel>();
             }
             void SetValue(int instanceId)
             {

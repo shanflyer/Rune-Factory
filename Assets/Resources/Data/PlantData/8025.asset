@@ -17,42 +17,42 @@ MonoBehaviour:
   seed: 1125
   fruit: 1025
   fruitCount: 6
-  pickTimes: 2
+  pickTimes: 6
   cycleStage: 3
   mapItem: 8025
   openLevel: 9
   goodSeason: 04000000
   badSeason: 02000000
   icon: {fileID: -1237795198, guid: 9791060f00594594ab14708ac6079198, type: 3}
-  GrowthStageStr: "\u840C\u82BD,96,0|\u5C0F\u82D7,96,0|\u5927\u82D7,96,1|\u7ED3\u679C,96,2|\u6210\u719F,96,2|\u5149\u6746,48,0"
+  GrowthStageStr: "\u840C\u82BD,72,0|\u5C0F\u82D7,72,0|\u5927\u82D7,72,1|\u7ED3\u679C,72,2|\u6210\u719F,72,2|\u5149\u6746,72,0"
   growthStages:
   - stageName: "\u840C\u82BD"
     stage: 0
-    growthHour: 96
+    growthHour: 72
     productValue: 0
     stageObj: 0
   - stageName: "\u5C0F\u82D7"
     stage: 1
-    growthHour: 96
+    growthHour: 72
     productValue: 0
     stageObj: 1
   - stageName: "\u5927\u82D7"
     stage: 2
-    growthHour: 96
+    growthHour: 72
     productValue: 1
     stageObj: 2
   - stageName: "\u7ED3\u679C"
     stage: 3
-    growthHour: 96
+    growthHour: 72
     productValue: 2
     stageObj: 3
   - stageName: "\u6210\u719F"
     stage: 4
-    growthHour: 96
+    growthHour: 72
     productValue: 2
     stageObj: 4
   - stageName: "\u5149\u6746"
     stage: 5
-    growthHour: 48
+    growthHour: 72
     productValue: 0
     stageObj: 5

@@ -37,7 +37,7 @@ public class StoreProductReference : UIObjReference<AppStoreProductData>
         text.text = LanguageManage.SwitchStr(t.showName);
         count.text = t.getDiamond.ToString();
         image.sprite = t.icon;
-        image.SetNativeSize();
+        // image.SetNativeSize();
         particle.localScale = Vector3.one;
         price.text = AppStoreManager.instance.GetProductPriceStr(t.ProductName);
         return base.InitData(t, SelectAction, toggleGroup);

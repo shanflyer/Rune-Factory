@@ -87,7 +87,7 @@ public class ItemData : ScriptableObject, IGameData
             case ItemType.防具:
                 if (attributeType != AttributeType.无)
                 {
-                    string str = LanguageManage.SwitchStr(info, "\n<color=green>red", attributeType, " ", "属性防御", "</color>");
+                    var str = LanguageManage.SwitchStr(info, "\n<color=red>", attributeType, " ", "属性防御", "</color>");
                     return str;
                 }
                 else
