@@ -617,23 +617,17 @@
     <Reference Include="nunit.framework">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\PackageCache\com.unity.ext.nunit@031a54704bff\net40\unity-custom\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Google.PackageManagerResolver">
-      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Assets\OtherPackage\ExternalDependencyManager\Editor\1.2.183\Google.PackageManagerResolver.dll</HintPath>
-    </Reference>
     <Reference Include="Google.IOSResolver">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Assets\OtherPackage\ExternalDependencyManager\Editor\1.2.183\Google.IOSResolver.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.PackageManagerResolver">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Assets\OtherPackage\ExternalDependencyManager\Editor\1.2.183\Google.PackageManagerResolver.dll</HintPath>
     </Reference>
     <Reference Include="Google.VersionHandler">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Assets\OtherPackage\ExternalDependencyManager\Editor\Google.VersionHandler.dll</HintPath>
     </Reference>
-    <Reference Include="Google.VersionHandlerImpl">
-      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Assets\OtherPackage\ExternalDependencyManager\Editor\1.2.183\Google.VersionHandlerImpl.dll</HintPath>
-    </Reference>
     <Reference Include="System.IO.Hashing">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\PackageCache\com.unity.collections@d49facba0036\Unity.Collections.Tests\System.IO.Hashing\System.IO.Hashing.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.JarResolver">
-      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Assets\OtherPackage\ExternalDependencyManager\Editor\1.2.183\Google.JarResolver.dll</HintPath>
     </Reference>
     <Reference Include="EPPlus">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Assets\DLL\Excel\EPPlus.dll</HintPath>
@@ -650,8 +644,14 @@
     <Reference Include="Mono.Cecil">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\PackageCache\com.unity.nuget.mono-cecil@d78732e851eb\Mono.Cecil.dll</HintPath>
     </Reference>
+    <Reference Include="Google.JarResolver">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Assets\OtherPackage\ExternalDependencyManager\Editor\1.2.183\Google.JarResolver.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\PackageCache\com.unity.collections@d49facba0036\Unity.Collections.Tests\System.Runtime.CompilerServices.Unsafe\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.VersionHandlerImpl">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Assets\OtherPackage\ExternalDependencyManager\Editor\1.2.183\Google.VersionHandlerImpl.dll</HintPath>
     </Reference>
     <Reference Include="TexturePackerImporter">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Assets\OtherPackage\codeandweb.com\Editor\TexturePackerImporter.dll</HintPath>
@@ -1106,11 +1106,11 @@
     <Reference Include="Unity.Splines.Editor">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\Unity.Splines.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Serialization.Editor">
-      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\Unity.Serialization.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.Purchasing.SecurityStub">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\UnityEngine.Purchasing.SecurityStub.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Serialization.Editor">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\Unity.Serialization.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Collections.Editor">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\Unity.Collections.Editor.dll</HintPath>
@@ -1163,14 +1163,14 @@
     <Reference Include="Unity.Rider.Editor">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.Purchasing.Codeless">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\UnityEngine.Purchasing.Codeless.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Transforms.Hybrid">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\Unity.Transforms.Hybrid.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Common.Editor">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\Unity.2D.Common.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Purchasing.Codeless">
-      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\UnityEngine.Purchasing.Codeless.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Recorder">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\Unity.Recorder.dll</HintPath>
@@ -1205,11 +1205,11 @@
     <Reference Include="Unity.Cinemachine">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\Unity.Cinemachine.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.InternalAPIEditorBridge.001">
-      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\Unity.InternalAPIEditorBridge.001.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.ScriptableBuildPipeline">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.InternalAPIEditorBridge.001">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\Unity.InternalAPIEditorBridge.001.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Collections">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\Unity.Collections.dll</HintPath>
