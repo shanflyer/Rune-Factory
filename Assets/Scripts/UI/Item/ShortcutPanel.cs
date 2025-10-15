@@ -1,6 +1,8 @@
+using System;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 
 public struct ShortcutItem : IReferenceData
 {
@@ -45,7 +47,7 @@ public struct ShortcutItem : IReferenceData
 
     public static explicit operator ShortcutItem(Object v)
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     public static bool operator ==(ShortcutItem item0, ShortcutItem item1)
@@ -86,6 +88,8 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
     [SerializeField]
     private Button useButton, unEquipButton;
 
+    [SerializeField] private Toggle Toggle;
+    [SerializeField] private Transform Node;
     public override void OnEnable()
     {
         base.OnEnable(); 
@@ -97,12 +101,18 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
          
     }
 
+    public void ChangeLayer(int layer)
+    {
+        canvas.sortingOrder = layer;
+    }
+
     protected override void Awake()
     {
         base.Awake();
         itemList = new DisplayList<ShortcutItemReference, ShortcutItem>(ShortcutItemReference, itemParent);
         bagButton.onClick.AddListener( () =>
         {
+            
             if (UIManager.instance.GamePanelIsShow<WarehousePanel>())
             {
                 UIManager.instance.CloseGamePanel<WarehousePanel>();
@@ -128,9 +138,12 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
                 };
                 GameActionManager.instance.QueueAction(openPackage, true);
             }
+
+            ChangeLayer(5);
         });
         useButton.onClick.AddListener(UseItemAction);
         unEquipButton.onClick.AddListener(UnEquipAction);
+        Toggle.onValueChanged.AddListener(value => Node.gameObject.SetActive(value));
     }
     void UseItemAction()
     {
