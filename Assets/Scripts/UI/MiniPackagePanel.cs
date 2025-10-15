@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using TMPro; 
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -203,7 +203,7 @@ public class MiniPackagePanel : GamePanel<PackageList>
                 for (int i = 0; i < selectPackageData.items.Count; i++)
                 {
                     var item = selectPackageData.items[i];
-                    item.locked = !packageList.itemMatchData.MatchAction(item);
+                    item.locked = !await packageList.itemMatchData.MatchAction(item);
                     items.Add(item);
                 }
             }

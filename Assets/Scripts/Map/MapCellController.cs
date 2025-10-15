@@ -97,7 +97,7 @@ public class RuntimeMapRoom
         playerForwardTriggerCells.Dispose();
         playerForwardTriggerIndexes.Dispose();
 
-        mapGroundIndexDatas.Dispose();
+        mapGroundIndexDatas.Dispose(); 
     }
 
     public int id;
@@ -202,7 +202,7 @@ public partial class MapCellController : Singleton<MapCellController>
     //private Dictionary<int3, HashSet<int>> characterCells = new Dictionary<int3, HashSet<int>>();
 
     public const int characterRange = 5;
-
+    public NativeList<ChangeBarrier> changeBarriers;
     public void TransTempMap(ref int mapId)
     {
         if (tempMaps.TryGetValue(mapId, out var tempMap)) mapId = tempMap;
@@ -1000,11 +1000,14 @@ public partial class MapCellController : Singleton<MapCellController>
         if (tempMaps.TryGetValue((int)mapId, out var trueMap)) mapId = (uint)trueMap;
         uint index = GetCoordinateIndex(x, y,startCoordinate,endCoordinate);
         index = index +mapId* 1000_000;
+        changeBarriers.Add(new ChangeBarrier { index = index, add = true });
+
+        /*
         mapObjBarriers.TryGetValue(index, out var count);
         count++;
-        mapObjBarriers[index] = count; 
+        mapObjBarriers[index] = count; */
     }
-
+    
   
 
     public void RemoveBarrier(uint mapId, int2 coordinate, int2 startCoordinate, int2 endCoordinate)
@@ -1012,14 +1015,35 @@ public partial class MapCellController : Singleton<MapCellController>
         if (tempMaps.TryGetValue((int)mapId, out var trueMap)) mapId = (uint)trueMap;
         uint index = GetCoordinateIndex(coordinate.x,coordinate.y,startCoordinate,endCoordinate);
         index = index + mapId * 1000_000;
-        mapObjBarriers.TryGetValue(index, out var count); 
+        changeBarriers.Add(new ChangeBarrier { index = index, add = false });
+        /*
+        mapObjBarriers.TryGetValue(index, out var count);
         count--;
         if (count <= 0)
             mapObjBarriers.Remove(index);
         else
-            mapObjBarriers[index] = count;
+            mapObjBarriers[index] = count;*/
     }
 
+    public void ChangeMapBarrierAction()
+    {
+        for (var i = 0; i < changeBarriers.Length; i++)
+        {
+            var changeBarrier = changeBarriers[i];
+            mapObjBarriers.TryGetValue(changeBarrier.index, out var count);
+            if (changeBarrier.add)
+                count++;
+            else
+                count--;
+
+            if (count <= 0)
+                mapObjBarriers.Remove(changeBarrier.index);
+            else
+                mapObjBarriers[changeBarrier.index] = count;
+        }
+
+        changeBarriers.Clear();
+    }
 
     public void InitMapData(int roomId, MapRoomData mapRoomData, int3 coordinate)
     { 
@@ -1610,6 +1634,7 @@ public partial class MapCellController : Singleton<MapCellController>
          
         mapLinkCellSet = new NativeParallelMultiHashMap<int2, MapLinkCell>(2048, Allocator.Persistent);
         mapLinkSet = new NativeHashMap<int3, MapLinkCell>(2048, Allocator.Persistent);
+        changeBarriers = new NativeList<ChangeBarrier>(512, Allocator.Persistent);
     }
  
     public bool CheckTryMoveTarget(int2 startCoordinate, int2 targetCoordinate, int mapInstace)
@@ -1777,6 +1802,7 @@ public partial class MapCellController : Singleton<MapCellController>
         mapObjBarriers.Dispose();
         mapLinkCellSet.Dispose(); 
         mapLinkSet.Dispose();
+        changeBarriers.Dispose();
     }
 }
 

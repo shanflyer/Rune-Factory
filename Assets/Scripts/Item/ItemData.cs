@@ -1,13 +1,11 @@
-﻿
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 using UnityEngine;
-[System.Serializable]
+#if UNITY_EDITOR
+#endif
+
+[Serializable]
 public enum ItemType
 {
     Default=-1,
@@ -50,6 +48,7 @@ public class ItemData : ScriptableObject, IGameData
     public int2 range;
     public int otherType;
     public int typeValue;
+    public List<int> manufacture;
     public bool isFresh;
     public bool itemValue;
     public int equipLevel;
@@ -88,7 +87,7 @@ public class ItemData : ScriptableObject, IGameData
             case ItemType.防具:
                 if (attributeType != AttributeType.无)
                 {
-                    string str = LanguageManage.SwitchStr(info, "\n<color=green>red", attributeType, " ", "属性防御", "</color>");
+                    var str = LanguageManage.SwitchStr(info, "\n<color=red>", attributeType, " ", "属性防御", "</color>");
                     return str;
                 }
                 else

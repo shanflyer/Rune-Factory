@@ -885,13 +885,17 @@ public class ManufacturePanel : GamePanel<Manufature>
     private async void CreatProduct()
     {
         manufature.waitTime = 0;
-       await OutItemBoxReference.InitData(new Item { dataId = manufature.product.x, count = manufature.product.y, instanceId = 1 }, null, FormulaItemBoxGroup);
-        outEffect.Play();
         SetManufature setManufature = new SetManufature
         {
             manufature = manufature
         };
         GameActionManager.instance.QueueAction(setManufature, true);
+
+
+        await OutItemBoxReference.InitData(
+            new Item { dataId = manufature.product.x, count = manufature.product.y, instanceId = 1 }, null,
+            FormulaItemBoxGroup);
+        outEffect.Play();
         creatButtonName.SetSWText(LanguageManage.SwitchStr("取出"));
         CreatButton.interactable = true;
     }
@@ -971,7 +975,9 @@ public class ManufacturePanel : GamePanel<Manufature>
                 fixedPos = pos,
             };
             GameActionManager.instance.QueueAction(setFixedCamera);
-        } 
+        }
+
+        ClearInfo();
     }
 
     public override void Close()
@@ -1070,7 +1076,8 @@ public class ManufacturePanel : GamePanel<Manufature>
         selectActionButton.onClick.RemoveAllListeners();
         selectActionButton.onClick.AddListener(() =>
         {
-            PackageManager.instance.ShowAllPlayerPackage(SetFormulaItem, LanguageManage.SwitchStr("选择"));
+            PackageManager.instance.ShowAllPlayerPackage(SetFormulaItem, LanguageManage.SwitchStr("选择"),
+                manufactureData.id);
         });
 
         Item defaultItem = default(Item);
@@ -1079,6 +1086,18 @@ public class ManufacturePanel : GamePanel<Manufature>
         // DisplayItem(SelectItemBoxRefrence, true);
         SelectItemBoxRefrence.SelectDefault();
         RefreshRPCostAndOut();
+        ClearInfo();
+    }
+
+    private void ClearInfo()
+    {
+        InfoItemValueImage.transform.parent.gameObject.SetActive(false);
+        selectItemName.enabled = false;
+        ItemType.enabled = false;
+        itemInfo.enabled = false;
+        itemProperty.enabled = false;
+        moneyValue.enabled = false;
+        ItemIcon.enabled = false;
     }
     private async void DisplayItem(ItemBoxReference itemBoxReference, bool selected = true)
     {
@@ -1098,10 +1117,12 @@ public class ManufacturePanel : GamePanel<Manufature>
                 InfoItemValueImage.transform.parent.gameObject.SetActive(false);
 
                 selectActionButtonName.SetSWText(LanguageManage.SwitchStr("放入"));
+                selectActionButton.transform.localScale = Vector3.one;
                 selectActionButton.onClick.RemoveAllListeners();
                 selectActionButton.onClick.AddListener(() =>
                 {
-                    PackageManager.instance.ShowAllPlayerPackage(SetFormulaItem, LanguageManage.SwitchStr("选择"));
+                    PackageManager.instance.ShowAllPlayerPackage(SetFormulaItem, LanguageManage.SwitchStr("选择"),
+                        manufactureData.id);
                 });
             }
             else
@@ -1110,7 +1131,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
                 if (itemData != null)
                 {
-                    selectItemName.SetSWText(itemData.GetInfo());
+                    selectItemName.SetSWText(itemData.itemName);
                     ItemType.SetSWText(itemData.type.ToString());
                     itemInfo.SetSWText(itemData.GetInfo());
                     itemProperty.SetSWText(itemData.GetProperty());
@@ -1164,7 +1185,8 @@ public class ManufacturePanel : GamePanel<Manufature>
                         selectActionButton.onClick.RemoveAllListeners();
                         selectActionButton.onClick.AddListener(() =>
                         {
-                            PackageManager.instance.ShowAllPlayerPackage(SetFormulaItem, LanguageManage.SwitchStr("选择"));
+                            PackageManager.instance.ShowAllPlayerPackage(SetFormulaItem, LanguageManage.SwitchStr("选择"),
+                                manufactureData.id);
                         });
                     }
                     else
@@ -1181,6 +1203,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         {
             SelectItemBoxRefrence = null;
             InformationObj.transform.localScale = Vector3.zero;
+            ClearInfo();
         }
     }
 }

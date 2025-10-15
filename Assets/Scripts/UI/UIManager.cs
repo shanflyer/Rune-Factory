@@ -16,7 +16,7 @@ public class UIManager : Singleton<UIManager>
     {
         { typeof(CharacterResponsePanel)},
         {typeof(ItemCostSelectPanel) },
-        {typeof(CostSelectPanel) }
+        typeof(CostSelectPanel)
     };
     public static bool IsPluralUI(Type type)
     {
@@ -425,6 +425,8 @@ public class UIManager : Singleton<UIManager>
             var gamePanelObj = await GameSourceManager.instance.GetPrefab(path); 
             var async = GameObject.InstantiateAsync(gamePanelObj, parent == null ? canvasParent : parent);
             await async;
+            
+            
 
             if (!Application.isPlaying||SingletonType.Cleared)
             {
@@ -448,11 +450,21 @@ public class UIManager : Singleton<UIManager>
             {
                 gamePanel = (BaseReference)gamePanelComponent;
             }
+
+            if (parent != null)
+            {
+                var allT = parent.GetComponentsInChildren(type, true);
+                for (var i = 0; i < allT.Length; i++)
+                {
+                    var oldT = allT[i];
+                    if (oldT != gamePanel) GameObject.Destroy(oldT.gameObject);
+                }
+            }
             if (!IsPluralUI(type))
             {
                 if(gamePanels.TryGetValue(type,out var _panel))
                 {
-                    if (_panel != gamePanel)
+                    if (_panel != null && _panel != gamePanel)
                     {
                         _panel.Close();
                     }
@@ -466,6 +478,7 @@ public class UIManager : Singleton<UIManager>
             gamePanel.transform.localPosition = Vector3.zero;
         }
         gamePanel.Show(layer);
+        gamePanel.gameObject.SetActive(true);
         await gamePanel.InitData(dataKey);
       
         return gamePanel;
@@ -503,7 +516,7 @@ public class UIManager : Singleton<UIManager>
             if (!IsPluralUI(type))
             {
                 if (gamePanels.TryGetValue(type, out var _panel))
-                    if (_panel != gamePanel)
+                    if (_panel != null && _panel != gamePanel)
                         _panel.Close();
 
                 gamePanels[type] = gamePanel;
@@ -517,6 +530,7 @@ public class UIManager : Singleton<UIManager>
         }
 
         gamePanel.Show(layer);
+        gamePanel.gameObject.SetActive(true);
         gamePanel.InitData(dataKey);
 
         return gamePanel;

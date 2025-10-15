@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 public class Singleton<T> where T : Singleton<T>
@@ -28,8 +24,11 @@ public class Singleton<T> where T : Singleton<T>
                         }
                         if (_instance.NeedLateUpdate)
                         {
-                            SingletonType.instance.AddUpdateAction(_instance.LateUpdate);
+                            SingletonType.instance.AddLateUpdateAction(_instance.LateUpdate);
                         }
+
+                        if (_instance.NeedFixedUpdate)
+                            SingletonType.instance.AddFixedUpdateAction(_instance.FixedUpdate);
                     }
                 }
             }
@@ -52,9 +51,15 @@ public class Singleton<T> where T : Singleton<T>
     {
         get;
     }
+
+    public virtual bool NeedFixedUpdate { get; }
     public virtual bool NeedLateUpdate
     {
         get;
+    }
+
+    protected virtual void FixedUpdate()
+    {
     }
     protected virtual void Update()
     {
@@ -78,6 +83,8 @@ public class Singleton<T> where T : Singleton<T>
         {
             SingletonType.instance.RemoveLateUpdateAction(_instance.LateUpdate);
         }
+
+        if (NeedFixedUpdate) SingletonType.instance.RemoveFixedUpdateAction(_instance.FixedUpdate);
         _instance = null;
     } 
 }
@@ -86,6 +93,7 @@ public class SingletonType : Singleton<SingletonType>
 {
     public HashSet<SingletonClear> TypeClears = new HashSet<SingletonClear>();
     public List<Action> singleUpdates = new List<Action>();
+    public List<Action> singleFixedUpdates = new();
     public List<Action> singleLateUpdates = new List<Action>();
     public override void Init()
     {
@@ -98,6 +106,16 @@ public class SingletonType : Singleton<SingletonType>
         {
             singleUpdates.Add(action);
         }
+    }
+
+    public void AddFixedUpdateAction(Action action)
+    {
+        if (!singleFixedUpdates.Contains(action)) singleFixedUpdates.Add(action);
+    }
+
+    public void RemoveFixedUpdateAction(Action action)
+    {
+        if (singleFixedUpdates.Contains(action)) singleFixedUpdates.Remove(action);
     }
     public void RemoveUpdateAction(Action action)
     {
@@ -155,6 +173,11 @@ public class SingletonType : Singleton<SingletonType>
         {
             singleUpdates[i].Invoke();
         }
+    }
+
+    public new void FixedUpdate()
+    {
+        for (var i = 0; i < singleFixedUpdates.Count; i++) singleFixedUpdates[i].Invoke();
     }
     public new void LateUpdate()
     {

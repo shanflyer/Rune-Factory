@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using VoxelBusters.CoreLibrary;
@@ -16,6 +17,8 @@ public class MyTalkPanel : GamePanel<IReferenceData>
     Button CloseBtn;
     [SerializeField]
     Transform mask;
+
+    [SerializeField] private TextMeshProUGUI Help0Price, Help1Price, Help2Price;
     protected override void Awake()
     {
         base.Awake();
@@ -66,7 +69,7 @@ public class MyTalkPanel : GamePanel<IReferenceData>
     async void ShareAction()
     {
         ShareSheet shareSheet = ShareSheet.CreateInstance();
-        shareSheet.AddText(LanguageManage.SwitchStr("这是一个有趣的游戏，分享给大家"));
+        shareSheet.AddText(LanguageManage.SwitchStr("杩欐槸涓�涓湁瓒ｇ殑娓告垙锛屽垎浜粰澶у"));
         shareSheet.AddImage(texture2D);
         string sharedURL =await CloudRemoteConfig.instance.GetConfig("SharedURL");
         shareSheet.AddURL(URLString.URLWithPath(sharedURL));
@@ -96,11 +99,17 @@ public class MyTalkPanel : GamePanel<IReferenceData>
     public override void InitReferenceData(IReferenceData v)
     {
         mask.gameObject.SetActive(false);
+        Help0Price.text = AppStoreManager.instance.GetProductPriceStr("help0");
+        Help1Price.text = AppStoreManager.instance.GetProductPriceStr("help1");
+        Help2Price.text = AppStoreManager.instance.GetProductPriceStr("help2");
         base.InitReferenceData(v);
     }
     public override Task InitData(string dataKey)
     {
         mask.gameObject.SetActive(false);
+        Help0Price.text = AppStoreManager.instance.GetProductPriceStr("help0");
+        Help1Price.text = AppStoreManager.instance.GetProductPriceStr("help1");
+        Help2Price.text = AppStoreManager.instance.GetProductPriceStr("help2");
         return base.InitData(dataKey);
     }
 }

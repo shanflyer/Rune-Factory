@@ -513,6 +513,26 @@ public static class GameCommon
 
         return new int4(_minX, _minY, _maxX, _maxY);
     }
+
+    public static List<int2> GridToCells(List<int> grid, int4 value)
+    {
+        var gridCount = grid.Count / 4;
+
+        var cells = new HashSet<int2>();
+        for (var i = 0; i < gridCount; i++)
+        {
+            var minX = grid[i * 4] - value.x;
+            var minY = grid[i * 4 + 1] - value.y;
+
+            var maxX = grid[i * 4 + 2] + value.z;
+            var maxY = grid[i * 4 + 3] + value.w;
+            for (var x = minX; x <= maxX; x++)
+            for (var y = minY; y <= maxY; y++)
+                cells.Add(new int2(x, y));
+        }
+
+        return cells.ToList();
+    }
     public static List<int2> GridToCells(List<int> grid)
     {
         int gridCount = grid.Count / 4;

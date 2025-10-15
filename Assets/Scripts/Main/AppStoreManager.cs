@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Unity.Entities.UniversalDelegates;
 using UnityEngine;
 using VoxelBusters.CoreLibrary;
 using VoxelBusters.EssentialKit;
@@ -70,6 +69,12 @@ public class AppStoreManager : MonoBehaviour
     
 #endif
 
+    }
+
+    public string GetProductPriceStr(string produceName)
+    {
+        var product = BillingServices.GetProductWithId(produceName);
+        return product.Price.LocalizedText;
     }
     public void BuyProduct(string ProductName)
     {

@@ -1,7 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI; 
+using UnityEngine.UI;
 
 public class TeamPanel : GamePanel<CharacterInformationDataList>
 {
@@ -84,9 +83,9 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
                 };
                 bool temp = character is TempCharacter;
                 await GameEventManager.instance.AddGameEvent(eventId, new List<EventReferenceData>
-            {
+                {
                     eventReferenceData,targetReferenceData,NextTalkReferenceData
-            });
+                });
 
             }
             
@@ -98,7 +97,7 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
         {
             if (animal.pasture == 0)
             {
-                GameManager.instance.ShowTwoSelectAction("移除队伍", "该动物没有分配牧场，移除后将消失，是否确定移除？", () =>
+                GameManager.instance.ShowTwoSelectAction("绉婚櫎闃熶紞", "璇ュ姩鐗╂病鏈夊垎閰嶇墽鍦猴紝绉婚櫎鍚庡皢娑堝け锛屾槸鍚︾‘瀹氱Щ闄わ紵", () =>
                 {
                     LeaveTeam leaveTeam = new LeaveTeam
                     {
@@ -114,7 +113,7 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
                     teamCharacterId = SelectCharacterId,
                 };
                 GameActionManager.instance.QueueAction(leaveTeam);
-                InformationController.instance.AddInformation(LanguageManage.SwitchStr("动物已经回到牧场"), true, true);
+                InformationController.instance.AddInformation(LanguageManage.SwitchStr("鍔ㄧ墿宸茬粡鍥炲埌鐗у満"), true, true);
             } 
         }
         else

@@ -167,7 +167,7 @@ public class WorldMapController : MonoBehaviour
        
         //if (GameController.instance == null||GameController.instance.startPlay)
         {
-            GameTimeManager.instance.StartTimeRun();
+            GameTimeManager.instance.runTime = true;
 
             // if (GameController.instance.startPlay)
             {

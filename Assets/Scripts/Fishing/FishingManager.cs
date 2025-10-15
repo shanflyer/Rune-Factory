@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
-using UnityEngine.TextCore.Text;
 
 public class FishingManager : Singleton<FishingManager>
 {
@@ -102,8 +101,11 @@ public class FishingManager : Singleton<FishingManager>
                         ItemResultInfo itemResultInfo = new ItemResultInfo
                         {
                             icon = itemData.icon,
-                            info0 = $"获得了一条  <color=green>{randomResult.y}</color>cm<color=#02B8E3> {itemData.itemName} </color>!",
-                            info1 = newRecord ? $"<color=red> 新记录！ </color>" : ""
+                            info0 =
+                                $"{LanguageManage.instance.SwitchString("获得了一条")}  <color=green>{randomResult.y}</color>cm<color=#02B8E3> {LanguageManage.instance.SwitchString(itemData.itemName)} </color>!",
+                            info1 = newRecord
+                                ? $"<color=red> {LanguageManage.instance.SwitchString("新记录！")} </color>"
+                                : ""
                         };
                         GameNotificationManager.instance.ShowItemResultInfo(itemResultInfo);
                         //await  UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);

@@ -1,5 +1,4 @@
-﻿using BehaviorDesigner.Runtime.Tasks.Unity.UnityAnimator;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -49,7 +48,7 @@ public class FormulaReference : UIObjReference<FormulaReferenceData>
     {
         await base.InitData(t, SelectAction, toggleGroup);
         toggle.group = toggleGroup;
-        ItemData productData = data.formulaData.ProductItem;
+        var productData = data.formulaData.ProductItem;
 
         if (data.open)
         {

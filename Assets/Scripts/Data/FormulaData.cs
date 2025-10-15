@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
+[Serializable]
 public enum FormulaType
 {
     铸造 = 0,缝纫 = 1,书写=2,劈砍=3,纺线=4,织布=5,制革=6, 粉磨 = 10, 徒手 = 11,蒸煮 = 12,烘烤 = 13,酿造 = 14,搅拌=15
@@ -18,22 +19,25 @@ public class FormulaData : ScriptableObject, IGameData, IReferenceData
     private int Product;
     public int PowerCost;
     public int produceTime;
+    private ItemData _ProductItem;
+    private List<ItemData> _StuffItems;
+    public ItemData ProductItem => GameDataManager.instance.GetData<ItemData>(Product.ToString());
 
-    public ItemData ProductItem { get; private set; }
-    public List<ItemData> StuffItems { get; private set; }
+    public List<ItemData> StuffItems
+    {
+        get
+        {
+            var _StuffItems = new List<ItemData>();
+            for (var i = 0; i < Stuffs.Count; i++)
+                _StuffItems.Add(GameDataManager.instance.GetData<ItemData>(Stuffs[i].ToString()));
+            return _StuffItems;
+        }
+    }
     public string GetKey()
     {
         return id.ToString();
     }
-    public async void Init()
-    {
-        ProductItem = await GameDataManager.instance.GetAsyncData<ItemData>(Product);
-        StuffItems = new List<ItemData>();
-        for(int i = 0; i < Stuffs.Count; i++)
-        {
-            StuffItems.Add(await GameDataManager.instance.GetAsyncData<ItemData>(Stuffs[i]));
-        }
-    }
+    
     public override string ToString()
     {
         return id.ToString();

@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using TMPro; 
+using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 public class PasturePanel : GamePanel<MyListInt>
@@ -45,7 +42,7 @@ public class PasturePanel : GamePanel<MyListInt>
             {
                 animalId = animalId,
                 pastureId = selectPasture.instanceId,
-                refreshPos=!TeamManager.instance.playerTeam.CheckCharacter(animalId),
+                refreshPos = true,
                 setResult=SetAnimalToPastureResult
             };
             GameActionManager.instance.QueueAction(setAnimalToPasture);
@@ -71,11 +68,7 @@ public class PasturePanel : GamePanel<MyListInt>
     {
         if (result)
         { 
-            LeaveTeam leaveTeam = new LeaveTeam
-            {
-                teamCharacterId = animalId
-            };
-            GameActionManager.instance.QueueAction(leaveTeam);
+            
             animalList.intList.Remove(animalId);
             RefreshAnimalList(); 
         } 
@@ -120,7 +113,7 @@ public class PasturePanel : GamePanel<MyListInt>
                 productCaseText.text = $"{productCount}/{productCase}";
 
                 animalCaseText.text = $"{pasture.animals.Count}/{pasture.animalCase}";
-                SetButton.interactable = pasture.animals.Count< pasture.animalCase;
+                SetButton.gameObject.SetActive(pasture.animals.Count < pasture.animalCase);
             }
             else
             {
@@ -129,13 +122,13 @@ public class PasturePanel : GamePanel<MyListInt>
                 waterCaseText.text= "--/--";
                 productCaseText.text = "--/--";
                 animalCaseText.text = "--/--";
-                SetButton.interactable = false;
+                SetButton.gameObject.SetActive(false);
             }
          
         }
         else if(selectPasture==pasture)
         {
-            SetButton.interactable = false;
+            SetButton.gameObject.SetActive(false);
         }
        
 

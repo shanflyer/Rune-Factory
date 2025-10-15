@@ -789,7 +789,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         HashSet<int2> oldTriggers = new HashSet<int2>();
 
         bool newItem = false;
-        var triggerCells = GameCommon.GridToCells(mapItemData.triggerGrids);
+        var triggerCells = GameCommon.GridToCells(mapItemData.colliderGrids, new int4(1, 1, 1, 1));
         if (runtimeMapItems.TryGetValue(TrySetMapItem.mapItemInstanceId, out var runtimeMapItem))
         {
             if (runtimeMapItem.mapInstanceId == TrySetMapItem.mapItemInstanceId
