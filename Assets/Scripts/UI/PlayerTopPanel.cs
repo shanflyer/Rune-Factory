@@ -7,6 +7,8 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
 {
     public override bool changeInputModel => false;
 
+    [SerializeField] private Transform LeftNode, RightNode;
+    [SerializeField] private Toggle LeftToggle, RightToggle;
     [SerializeField]
     private TextMeshProUGUI goldValue, crystalValue;
 
@@ -82,7 +84,8 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
     protected override async void Awake()
     {
         base.Awake();
-       
+        LeftToggle.onValueChanged.AddListener(arg0 => LeftNode.gameObject.SetActive(arg0));
+        RightToggle.onValueChanged.AddListener(arg0 => RightNode.gameObject.SetActive(arg0));
         playerButton.onClick.AddListener(async () =>
         {
             var characterInformation = CharacterManager.instance.controllerCharacter.GetInformation();
