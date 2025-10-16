@@ -29,7 +29,7 @@ public class StoreProductPanel : GamePanel<IReferenceData>
     {
         base.Close();
         storeProductList.ClearSelect();
-        GameActionManager.instance.RemoveListener<PayEndAction>(PayEndAction);
+        GameActionManager.instance.RemoveListener<PayEndAction>(PayEndAction); 
         gameObject.SetActive(false);
     }
     public override void SetPanelUISerializeObj()

@@ -324,6 +324,67 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1222423211}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1316087733
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1316087735}
+  - component: {fileID: 1316087734}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!320 &1316087734
+PlayableDirector:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1316087733}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_PlayableAsset: {fileID: 11400000, guid: 4e290bfbefeea444cadd924fb8aae45f, type: 2}
+  m_InitialState: 0
+  m_WrapMode: 2
+  m_DirectorUpdateMode: 1
+  m_InitialTime: 0
+  m_SceneBindings:
+  - key: {fileID: -2566740283610245834, guid: 7192cca2692523f4281469f78ef3b7c6, type: 2}
+    value: {fileID: 1532694217}
+  - key: {fileID: 6955723146702748722, guid: 7192cca2692523f4281469f78ef3b7c6, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -2566740283610245834, guid: 98626640921114e439c8fdcbf526f7d5, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -2566740283610245834, guid: bae418a8da949424dbe38207b42b5986, type: 2}
+    value: {fileID: 0}
+  - key: {fileID: -2566740283610245834, guid: 4e290bfbefeea444cadd924fb8aae45f, type: 2}
+    value: {fileID: 1532694217}
+  - key: {fileID: -8577873059365243095, guid: 4e290bfbefeea444cadd924fb8aae45f, type: 2}
+    value: {fileID: 0}
+  m_ExposedReferences:
+    m_References: []
+--- !u!4 &1316087735
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1316087733}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.000061035156, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1408282190
 GameObject:
   m_ObjectHideFlags: 0
@@ -448,7 +509,7 @@ MonoBehaviour:
   _NoiseSet0: {x: 1, y: -0.5, z: 2, w: 0.8}
   _NoiseSet1: {x: 0.2, y: 1, z: 6, w: 1}
   SetLanguage: 0
-  SetSystemLanguage: 1
+  SetSystemLanguage: 0
   testPlayerItems: []
   worldName: "\u6D4B\u8BD5"
   characterId: 0
@@ -464,7 +525,7 @@ MonoBehaviour:
   timeValue: 0
   testObj: {fileID: 0}
   autoChangeLanguage: 0
-  myLanguage: 1
+  myLanguage: 0
   tempCount: 0
   tempCharacters: []
 --- !u!114 &1532694215
@@ -530,7 +591,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6735ef6dba254fd4b9ab04ca59d93baa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  autoChangeLanguage: 1
+  autoChangeLanguage: 0
 --- !u!1 &1660989405
 GameObject:
   m_ObjectHideFlags: 0
@@ -944,3 +1005,4 @@ SceneRoots:
   - {fileID: 1744625375467159069}
   - {fileID: 1660989406}
   - {fileID: 472757880}
+  - {fileID: 1316087735}

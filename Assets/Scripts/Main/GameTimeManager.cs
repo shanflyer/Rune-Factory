@@ -79,32 +79,31 @@ public class GameTimeManager : Singleton<GameTimeManager>
 
         public Season Season
         {
-            get
-            {
-                return season;
-            }
+            get => season;
             set
             {
-                season = value; 
+                season = value;
                 InitSeasonData();
             }
         }
 
         private Season season;
         private float seasonValue;
- 
+
         private float dayValue;
 
-        public int day 
+        public int day
         {
             get => _day;
             set
             {
                 _day = value;
-                dayValue = (((int)season-1) * 30+_day)/120.0f;
+                dayValue = (((int)season - 1) * 30 + _day) / 120.0f;
             }
         }
+
         private int _day = 1;
+
         public int hour
         {
             get => _hour;
@@ -117,13 +116,15 @@ public class GameTimeManager : Singleton<GameTimeManager>
                     {
                         CreateWeather();
                     }
+
                     WeatherManager.instance.RefreshWeather(value);
                     GameActionManager.instance.QueueAction(new NewHour());
-                    WorldMapObjManager.instance.RefreshMapAudio(); 
+                    WorldMapObjManager.instance.RefreshMapAudio();
                     if (_hour == 8) NPCManager.instance.TryWakeUp(true);
                 }
             }
         }
+
         private int _hour;
 
         public int minute
@@ -152,10 +153,17 @@ public class GameTimeManager : Singleton<GameTimeManager>
         private EnvironmentData overrideDawnEnvironmentData, overrideDuskEnvironmentData;
         private bool overrideEnvironment;
 
-        private EnvironmentData DayEnvironmentData => overrideEnvironment ? overrideDayEnvironmentData : dayEnvironmentData;
-        private EnvironmentData NightEnvironmentData => overrideEnvironment ? overrideNightEnvironmentData : nightEnvironmentData;
-        private EnvironmentData DawnEnvironmentData => overrideEnvironment ? overrideDawnEnvironmentData : dawnEnvironmentData;
-        private EnvironmentData DuskEnvironmentData => overrideEnvironment ? overrideDuskEnvironmentData : duskEnvironmentData;
+        private EnvironmentData DayEnvironmentData =>
+            overrideEnvironment ? overrideDayEnvironmentData : dayEnvironmentData;
+
+        private EnvironmentData NightEnvironmentData =>
+            overrideEnvironment ? overrideNightEnvironmentData : nightEnvironmentData;
+
+        private EnvironmentData DawnEnvironmentData =>
+            overrideEnvironment ? overrideDawnEnvironmentData : dawnEnvironmentData;
+
+        private EnvironmentData DuskEnvironmentData =>
+            overrideEnvironment ? overrideDuskEnvironmentData : duskEnvironmentData;
 
         /// <summary>
         /// 白天时间
@@ -166,15 +174,19 @@ public class GameTimeManager : Singleton<GameTimeManager>
         /// 黎明时间
         /// </summary>
         private int dawnStart, dawnEnd;
+
         public bool night { get; private set; }
+
         /// <summary>
         /// 黄昏时间
         /// </summary>
         private int duskStart, duskEnd;
 
         private int totalSunMinute, totalMoonMinute;
-        private int totalMinute = 1440;// 24 * 60;
-                                       //private bool night = false;
+
+        private int totalMinute = 1440; // 24 * 60;
+
+        //private bool night = false;
         private float timeValue;
 
         public float TimeValue => timeValue;
@@ -191,30 +203,37 @@ public class GameTimeManager : Singleton<GameTimeManager>
                 float moonOffSet = (30 - day) / 15.0f;
                 Shader.SetGlobalFloat("_moonOffSet", moonOffSet);
             }
+
             this.day = day;
             TimeInit();
             UpDataGameTimeAction();
         }
+
         public void SetTime(int hour, int minute)
         {
             if (GameDataManager.instance.GlobalData.debug)
                 Debug.Log($"hour:{hour}--minute:{minute}");
-         
+
             if (hour >= 0)
                 this.hour = hour;
             if (minute >= 0)
                 this.minute = minute;
-             
+
             TimeInit();
             UpDataGameTimeAction();
         }
+
         public async void SetMapOverrideEnvironment(string dayEnvironmentDataName,
             string duskEnvironmentDataName, string dawnEnvironmentDataName, string nightEnvironmentDataName)
         {
-            overrideDawnEnvironmentData = await GameDataManager.instance.GetAsyncData<EnvironmentData>(dawnEnvironmentDataName);
-            overrideDuskEnvironmentData = await GameDataManager.instance.GetAsyncData<EnvironmentData>(duskEnvironmentDataName);
-            overrideDayEnvironmentData = await GameDataManager.instance.GetAsyncData<EnvironmentData>(dayEnvironmentDataName);
-            overrideNightEnvironmentData = await GameDataManager.instance.GetAsyncData<EnvironmentData>(nightEnvironmentDataName);
+            overrideDawnEnvironmentData =
+                await GameDataManager.instance.GetAsyncData<EnvironmentData>(dawnEnvironmentDataName);
+            overrideDuskEnvironmentData =
+                await GameDataManager.instance.GetAsyncData<EnvironmentData>(duskEnvironmentDataName);
+            overrideDayEnvironmentData =
+                await GameDataManager.instance.GetAsyncData<EnvironmentData>(dayEnvironmentDataName);
+            overrideNightEnvironmentData =
+                await GameDataManager.instance.GetAsyncData<EnvironmentData>(nightEnvironmentDataName);
             overrideEnvironment = true;
             SetLightValue();
         }
@@ -239,10 +258,14 @@ public class GameTimeManager : Singleton<GameTimeManager>
             totalSunMinute = dayEnd - dayStart;
             totalMoonMinute = 22 * 60 - dayEnd + dayStart;
 
-            dawnEnvironmentData = await GameDataManager.instance.GetAsyncData<EnvironmentData>(SeasonData.dawnEnvironmentDataName);
-            duskEnvironmentData = await GameDataManager.instance.GetAsyncData<EnvironmentData>(SeasonData.duskEnvironmentDataName);
-            dayEnvironmentData = await GameDataManager.instance.GetAsyncData<EnvironmentData>(SeasonData.dayEnvironmentDataName);
-            nightEnvironmentData = await GameDataManager.instance.GetAsyncData<EnvironmentData>(SeasonData.nightEnvironmentDataName);
+            dawnEnvironmentData =
+                await GameDataManager.instance.GetAsyncData<EnvironmentData>(SeasonData.dawnEnvironmentDataName);
+            duskEnvironmentData =
+                await GameDataManager.instance.GetAsyncData<EnvironmentData>(SeasonData.duskEnvironmentDataName);
+            dayEnvironmentData =
+                await GameDataManager.instance.GetAsyncData<EnvironmentData>(SeasonData.dayEnvironmentDataName);
+            nightEnvironmentData =
+                await GameDataManager.instance.GetAsyncData<EnvironmentData>(SeasonData.nightEnvironmentDataName);
             SetLightValue();
             if (waitCreatWeather)
             {
@@ -267,10 +290,10 @@ public class GameTimeManager : Singleton<GameTimeManager>
                 environmentLightData.cloudColor = DawnEnvironmentData.CloudColor.Evaluate(lightValue);
                 environmentLightData.skyTopColor = DawnEnvironmentData.SkyTopColor.Evaluate(lightValue);
                 environmentLightData.skyBottomColor = DawnEnvironmentData.SkyBottomColor.Evaluate(lightValue);
-                environmentLightData.globalColor = DawnEnvironmentData.GlobalColor.Evaluate(lightValue); 
+                environmentLightData.globalColor = DawnEnvironmentData.GlobalColor.Evaluate(lightValue);
                 environmentLightData.color = DawnEnvironmentData.Color.Evaluate(lightValue);
                 environmentLightData.direction = new Vector3(DawnEnvironmentData.directionXValue.Evaluate(lightValue),
-                              DawnEnvironmentData.directionYValue.Evaluate(lightValue), 0); 
+                    DawnEnvironmentData.directionYValue.Evaluate(lightValue), 0);
                 environmentLightData.shadowValue = DawnEnvironmentData.shadowValue.Evaluate(lightValue);
 
                 environmentLightData.skyHalfValue = DawnEnvironmentData.SkyHalfValue.Evaluate(lightValue);
@@ -310,7 +333,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                         globalColor = DayEnvironmentData.GlobalColor.Evaluate(sunValue),
                         color = DayEnvironmentData.Color.Evaluate(sunValue),
                         direction = new Vector3(DayEnvironmentData.directionXValue.Evaluate(sunValue),
-                        DayEnvironmentData.directionYValue.Evaluate(sunValue), 0),
+                            DayEnvironmentData.directionYValue.Evaluate(sunValue), 0),
                         shadowValue = DayEnvironmentData.shadowValue.Evaluate(sunValue),
 
                         skyHalfValue = DayEnvironmentData.SkyHalfValue.Evaluate(sunValue),
@@ -320,7 +343,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                         sunColor = sunColor,
                         sunScale = DayEnvironmentData.sunScaleValue.Evaluate(sunValue),
                         sunPos = new Vector2(DayEnvironmentData.sunXValue.Evaluate(sunValue),
-                          DayEnvironmentData.sunYValue.Evaluate(sunValue)),
+                            DayEnvironmentData.sunYValue.Evaluate(sunValue)),
                         sunValue = 1,
                         flareColor = DayEnvironmentData.flareColor.Evaluate(sunValue)
                     }
@@ -341,10 +364,10 @@ public class GameTimeManager : Singleton<GameTimeManager>
                 {
                     environmentLightData = new EnvironmentLightData
                     {
-                        globalColor = DuskEnvironmentData.GlobalColor.Evaluate(lightValue), 
+                        globalColor = DuskEnvironmentData.GlobalColor.Evaluate(lightValue),
                         color = DuskEnvironmentData.Color.Evaluate(lightValue),
                         direction = new Vector3(DuskEnvironmentData.directionXValue.Evaluate(lightValue),
-                                   DuskEnvironmentData.directionYValue.Evaluate(lightValue), 0), 
+                            DuskEnvironmentData.directionYValue.Evaluate(lightValue), 0),
                         shadowValue = DuskEnvironmentData.shadowValue.Evaluate(lightValue),
 
                         skyHalfValue = DuskEnvironmentData.SkyHalfValue.Evaluate(lightValue),
@@ -354,7 +377,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                         sunColor = sunColor,
                         sunScale = DuskEnvironmentData.sunScaleValue.Evaluate(lightValue),
                         sunPos = new Vector2(DuskEnvironmentData.sunXValue.Evaluate(lightValue),
-                          DuskEnvironmentData.sunYValue.Evaluate(lightValue)),
+                            DuskEnvironmentData.sunYValue.Evaluate(lightValue)),
                         sunValue = 1,
                         flareColor = DuskEnvironmentData.flareColor.Evaluate(lightValue)
                     }
@@ -378,7 +401,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                         globalColor = NightEnvironmentData.GlobalColor.Evaluate(lightValue),
                         color = NightEnvironmentData.Color.Evaluate(lightValue),
                         direction = new Vector3(NightEnvironmentData.directionXValue.Evaluate(lightValue),
-                                   NightEnvironmentData.directionYValue.Evaluate(lightValue), 0),
+                            NightEnvironmentData.directionYValue.Evaluate(lightValue), 0),
                         shadowValue = NightEnvironmentData.shadowValue.Evaluate(lightValue),
 
                         skyHalfValue = NightEnvironmentData.SkyHalfValue.Evaluate(lightValue),
@@ -388,7 +411,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                         sunColor = sunColor,
                         sunScale = NightEnvironmentData.sunScaleValue.Evaluate(lightValue),
                         sunPos = new Vector2(NightEnvironmentData.sunXValue.Evaluate(lightValue),
-                          NightEnvironmentData.sunYValue.Evaluate(lightValue)),
+                            NightEnvironmentData.sunYValue.Evaluate(lightValue)),
                         sunValue = 0,
                         flareColor = NightEnvironmentData.flareColor.Evaluate(lightValue)
                     }
@@ -398,7 +421,8 @@ public class GameTimeManager : Singleton<GameTimeManager>
             else
             {
                 night = true;
-                float lightValue = (float)(totalMoonMinute - (dawnStart - nowMinute) + mySecond * 0.05f) / totalMoonMinute;
+                var lightValue = (totalMoonMinute - (dawnStart - nowMinute) + mySecond * 0.05f) /
+                                 totalMoonMinute;
 
                 Color sunColor = NightEnvironmentData.sunColor.Evaluate(lightValue);
                 float a = sunColor.a;
@@ -412,7 +436,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                         globalColor = NightEnvironmentData.GlobalColor.Evaluate(lightValue),
                         color = NightEnvironmentData.Color.Evaluate(lightValue),
                         direction = new Vector3(NightEnvironmentData.directionXValue.Evaluate(lightValue),
-                                   NightEnvironmentData.directionYValue.Evaluate(lightValue), 0),
+                            NightEnvironmentData.directionYValue.Evaluate(lightValue), 0),
                         shadowValue = NightEnvironmentData.shadowValue.Evaluate(lightValue),
 
                         skyHalfValue = NightEnvironmentData.SkyHalfValue.Evaluate(lightValue),
@@ -422,7 +446,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                         sunColor = sunColor,
                         sunScale = NightEnvironmentData.sunScaleValue.Evaluate(lightValue),
                         sunPos = new Vector2(NightEnvironmentData.sunXValue.Evaluate(lightValue),
-                          NightEnvironmentData.sunYValue.Evaluate(lightValue)),
+                            NightEnvironmentData.sunYValue.Evaluate(lightValue)),
                         sunValue = 0,
                         flareColor = NightEnvironmentData.flareColor.Evaluate(lightValue)
                     }
@@ -432,6 +456,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
         }
 
         bool waitCreatWeather = false;
+
         async void CreateWeather()
         {
             if (SeasonData.season == Season.Default)
@@ -443,12 +468,14 @@ public class GameTimeManager : Singleton<GameTimeManager>
             {
                 waitCreatWeather = false;
             }
+
             CreatWeather creatWeather = new CreatWeather();
-            if (GameDataSaveManager.instance.UserGameSaveData.nowWeathers.Count==0)
+            if (GameDataSaveManager.instance.UserGameSaveData.nowWeathers.Count == 0)
             {
                 creatWeather.nowWeathers = await SetSeasonWeather(true);
             }
-            creatWeather.nextWeather= await SetSeasonWeather(false);
+
+            creatWeather.nextWeather = await SetSeasonWeather(false);
 
             GameActionManager.instance.QueueAction(creatWeather);
 
@@ -469,11 +496,14 @@ public class GameTimeManager : Singleton<GameTimeManager>
                     {
                         seasonValue = dayValue + 0.0083f;
                     }
-                    GrowModelData growModelData = await GameDataManager.instance.GetAsyncData<GrowModelData>(SeasonData.WeatherCurveId);
+
+                    var growModelData =
+                        await GameDataManager.instance.GetAsyncData<GrowModelData>(SeasonData.WeatherCurveId);
                     float timeValue0 = seasonValue - (int)seasonValue;
                     float value0 = growModelData.curve.Evaluate(timeValue0);
 
-                    GrowModelData growModelData1 = await GameDataManager.instance.GetAsyncData<GrowModelData>(SeasonData.WeatherCurveId1);
+                    var growModelData1 =
+                        await GameDataManager.instance.GetAsyncData<GrowModelData>(SeasonData.WeatherCurveId1);
                     float value1 = growModelData1.curve.Evaluate(timeValue);
 
                     int randomId = (int)value0 * 10 + (int)value1;
@@ -481,10 +511,11 @@ public class GameTimeManager : Singleton<GameTimeManager>
 
                     weaterDatas.Add(weatherId);
                 }
+
                 return weaterDatas;
             }
         }
-         
+
 
         public GameTime()
         {
@@ -555,6 +586,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                 hour += minute / 60;
                 minute = minute % 60;
             }
+
             if (hour >= 24)
             {
                 dayRefresh = true;
@@ -572,6 +604,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                     Shader.SetGlobalFloat("_moonOffSet", moonOffSet);
                 }
             }
+
             if (day > 30)
             {
                 int seasonId = (int)Season;
@@ -584,18 +617,20 @@ public class GameTimeManager : Singleton<GameTimeManager>
                     year++;
                     seasonId = 1;
                 }
+
                 Season = (Season)seasonId;
                 day = 1;
                 float moonOffSet = day / 15.0f;
                 Shader.SetGlobalFloat("_moonOffSet", moonOffSet);
 
-                LanguageManage.instance.GameTimeToString(year, season, day); 
+                LanguageManage.instance.GameTimeToString(year, season, day);
             }
+
             int x = day % 6;
             week = (Week)x;
             SetLightValue();
 
-            
+
 
             if (dayRefresh)
             {
@@ -603,24 +638,27 @@ public class GameTimeManager : Singleton<GameTimeManager>
             }
 
             int nowYearHour = ((int)season * 30 - 30 + day - 1) * 24 + hour;
-            seasonValue = (nowYearHour / totalYearHour)*4.0f;
+            seasonValue = nowYearHour / totalYearHour * 4.0f;
             Shader.SetGlobalFloat("_SeasonValue", SeasonValue);
             instance.UpdateSnowHideMonos();
         }
+
         const float totalYearHour = (4 * 30) * 24;
 
         float fixedSeason = -1;
         public float SeasonValue => fixedSeason < 0 ? seasonValue : fixedSeason;
+
         public void SetFixedSeason(SetFixedSeason SetFixedSeason)
         {
             fixedSeason = SetFixedSeason.season;
             int nowYearHour = ((int)season * 30 - 30 + day - 1) * 24 + hour;
-            seasonValue = nowYearHour / totalYearHour*4;
+            seasonValue = nowYearHour / totalYearHour * 4;
             Shader.SetGlobalFloat("_SeasonValue", SeasonValue);
             EnvironmentManger.instance.ChangeWeatherDisplayType(SetFixedSeason.weatherDisplayType);
             WorldMapObjManager.instance.RefreshMapAudio();
             instance.UpdateSnowHideMonos();
         }
+
         private void UpDataGameTimeAction()
         {
             updateGame.year = year;
@@ -636,10 +674,18 @@ public class GameTimeManager : Singleton<GameTimeManager>
 
         public int minuteTime => (((year * 4 + (int)season) * 30 + day) * 24 + hour) * 60 + minute;
     }
+
     private GameTime nowGameTime;
     public int timeRunScale = 1;
 
-    public bool runTime = true;
+    public override bool NeedFixedUpdate => true;
+
+    public bool runTime
+    {
+        get;
+        set;
+    }
+
 #if UNITY_EDITOR
 
 #endif
@@ -667,18 +713,26 @@ public class GameTimeManager : Singleton<GameTimeManager>
         {
             if (night)
             {
-              float value=1.0f-math.abs(Day - 15) / 15.0f;
+                var value = 1.0f - math.abs(Day - 15) / 15.0f;
                 return math.lerp(0.6f, 1.2f, value);
             }
+
             return 1;
         }
     }
+
     public bool night => nowGameTime.night;
     public float timeValue => nowGameTime.TimeValue;
     public float SeasonValue => nowGameTime.SeasonValue;
-    public string NowGameTime => LanguageManage.instance.GameTimeToString(nowGameTime.year,nowGameTime.Season,nowGameTime.day);
-    public int2 nowHourMinute=> new int2(nowGameTime.hour, nowGameTime.minute);
-    public GameTimeKey nowGameTimeKey => new GameTimeKey(nowGameTime.hour, nowGameTime.minute, nowGameTime.hour, nowGameTime.minute);
+
+    public string NowGameTime =>
+        LanguageManage.instance.GameTimeToString(nowGameTime.year, nowGameTime.Season, nowGameTime.day);
+
+    public int2 nowHourMinute => new(nowGameTime.hour, nowGameTime.minute);
+
+    public GameTimeKey nowGameTimeKey =>
+        new(nowGameTime.hour, nowGameTime.minute, nowGameTime.hour, nowGameTime.minute);
+
     public int Year => nowGameTime.year;
     public Season Season => nowGameTime.Season;
     public Week Week => nowGameTime.week;
@@ -688,12 +742,13 @@ public class GameTimeManager : Singleton<GameTimeManager>
     {
         get
         {
-            int d_year = Year-1;
+            var d_year = Year - 1;
             int d_season = (int)Season - (int)Season.春;
             int d_day = Day - 5;
-            return (d_year*4+d_season)*30+d_day;
+            return (d_year * 4 + d_season) * 30 + d_day;
         }
     }
+
     public int Hour
     {
         get
@@ -702,6 +757,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             {
                 return nowGameTime.hour;
             }
+
             return 0;
         }
     }
@@ -714,6 +770,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             {
                 return nowGameTime.minute;
             }
+
             return 0;
         }
     }
@@ -727,6 +784,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             nowGameTime.SetTime(hour, minute);
         }
     }
+
     public void SetDate(int day)
     {
         if (nowGameTime != null)
@@ -734,16 +792,18 @@ public class GameTimeManager : Singleton<GameTimeManager>
             nowGameTime.SetDate(day);
         }
     }
+
     public void SetSeasonValue(float seasonValue)
     {
         int index = (int)math.floor(seasonValue);
         float dValue = seasonValue - index;
         index = index >= 4 ? 0 : index;
-        nowGameTime.Season = (Season)(index+1);
+        nowGameTime.Season = (Season)(index + 1);
         SetDate((int)math.ceil(dValue * 30));
 
         GameActionManager.instance.QueueAction(new NewDay());
     }
+
     private Dictionary<int, GameDate> gameDates = new Dictionary<int, GameDate>();
 
     public List<GameDate> GetGameDataForSeason(Season season)
@@ -757,6 +817,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                 results.Add(gameDate);
             }
         }
+
         return results;
     }
 
@@ -781,23 +842,23 @@ public class GameTimeManager : Singleton<GameTimeManager>
         // CreatData();
     }
 
-   void SetFixedTime(SetFixedTime setFixedTime)
+    private void SetFixedTime(SetFixedTime setFixedTime)
     {
         nowGameTime.SetDate(setFixedTime.date);
         nowGameTime.SetTime(setFixedTime.hour, 0);
     }
+
     void TimeRun(TimeRun TimeRun)
     {
         runTime = TimeRun.run;
-        if (runTime)
-        {
-            StartTimeRun();
-        }
+         
     }
+
     void SetFixedSeason(SetFixedSeason SetFixedSeason)
     {
         nowGameTime.SetFixedSeason(SetFixedSeason);
     }
+
     private void CheckGameTimeDate(CheckGameTimeDate checkGameTimeDate)
     {
         bool result = false;
@@ -819,6 +880,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
                 }
             }
         }
+
         if (checkGameTimeDate.setResult != null)
         {
             checkGameTimeDate.setResult(result);
@@ -827,7 +889,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
 
     private void PlayerSleep(PlayerSleep playerSleep)
     {
-       
+
         int characterId = playerSleep.characterId;
         if (characterId == 0) characterId = CharacterManager.instance.controllerCharacter.instanceId;
         bool isController = CharacterManager.instance.controllerCharacter.instanceId == characterId;
@@ -839,9 +901,9 @@ public class GameTimeManager : Singleton<GameTimeManager>
         {
             npc.SetSleep(nowGameTime.hour);
         }
-        
+
         var character = CharacterManager.instance.GetCharacter(characterId);
-        CharacterManager.instance.RefreshSleep(character); 
+        CharacterManager.instance.RefreshSleep(character);
 
         if (isController)
         {
@@ -852,40 +914,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             LerpGameTime(playerSleep.targetHour, playerSleep.targetMinute,
                 GameCommon.sleepCostTime, true, () => { character.WakeUp(sleepHour); });
         }
-        else
-        {
-            /*
-            int year = nowGameTime.year;
-            int season = (int)nowGameTime.Season;
-            int day = nowGameTime.day;
-            int hour = playerSleep.targetHour;
-            if (hour < nowGameTime.hour)
-            {
-                day++;
-                if (day > 30)
-                {
-                    day = 1;
-                    season++;
-                    if (season > 4)
-                    {
-                        season = 1;
-                        year++;
-                    }
-                }
-            }
-            int minute = playerSleep.targetMinute;
-            GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
 
-            void UpdateGameTime(UpdateGameTime updateGameTime)
-            {
-                if (GameCommon.CompareGameTime(updateGameTime.year, updateGameTime.season, updateGameTime.day,
-                    updateGameTime.hour, updateGameTime.minute, year, season, day, hour, minute))
-                {
-                    WakeUp();
-                    GameActionManager.instance.RemoveListener<UpdateGameTime>(UpdateGameTime);
-                }
-            }*/
-        }
     }
 
     private void ClearOverrideEnvironment(ClearOverrideEnvironment clearOverrideEnvironment)
@@ -906,12 +935,12 @@ public class GameTimeManager : Singleton<GameTimeManager>
         {
             nowGameTime = new GameTime
             {
-                Season = Season.春, 
-                day=5
+                Season = Season.春,
+                day = 5
             };
             nowGameTime.SetTime(6, 0);
             // StartTimeRun();
-        } 
+        }
     }
 
     public string GameTimeToString()
@@ -945,12 +974,13 @@ public class GameTimeManager : Singleton<GameTimeManager>
         {
             return;
         }
+
         //gameDates=new List<GameDate>();
         for (int i = 1; i <= 120; i++)
         {
             int seasonId = (i - 1) / 30 + 1;
             int date = i - (seasonId - 1) * 30;
-            Season season = (Season)seasonId;  
+            var season = (Season)seasonId;
             GameDate gameDate = new GameDate(season, date);
             gameDates.Add(gameDate.Key, gameDate);
         }
@@ -958,22 +988,8 @@ public class GameTimeManager : Singleton<GameTimeManager>
     }
 
     private IEnumerator TimeRunIEnumerator;
-
-    public void StartTimeRun()
-    {
-        StopTimeRun();
-        TimeRunIEnumerator = TimeRun();
-        GameObjectCurveController.instance.StartIEnumerator(TimeRunIEnumerator);
-    }
-
-    public void StopTimeRun()
-    {
-        if (TimeRunIEnumerator != null)
-        {
-            GameObjectCurveController.instance.StopIEnumerator(TimeRunIEnumerator);
-        }
-    }
-
+ 
+    
     public void InitSaveDate(GameDateSaveData dateData)
     {
         nowGameTime.year = dateData.year;
@@ -995,27 +1011,30 @@ public class GameTimeManager : Singleton<GameTimeManager>
         }
     }
 
-    private void LerpGameTime(int targetHour, int targetMinute, float costTime, bool endRun = false, Action endAction = null)
+    private void LerpGameTime(int targetHour, int targetMinute, float costTime, bool endRun = false,
+        Action endAction = null)
     {
-        StopTimeRun();
+        runTime = false;
         var lerpTimeIEnumerator = LerpTime(targetHour, targetMinute, costTime, endRun, endAction);
         GameObjectCurveController.instance.StartIEnumerator(lerpTimeIEnumerator);
     }
 
     private void LerpGameTime(LerpGameTime lerpGameTime)
     {
-        StopTimeRun();
+        runTime = false;
         var lerpTimeIEnumerator = LerpTime(lerpGameTime.targetHour, lerpGameTime.targetMinute, lerpGameTime.totalTime);
         GameObjectCurveController.instance.StartIEnumerator(lerpTimeIEnumerator);
     }
 
-    private IEnumerator LerpTime(int targetHour, int targetMinue, float totalTime, bool endRun = false, Action endAction = null)
+    private IEnumerator LerpTime(int targetHour, int targetMinue, float totalTime, bool endRun = false,
+        Action endAction = null)
     {
         int startValue = (Hour * 60 + Minute) * 20;
         if (targetHour < Hour)
         {
             targetHour += 24;
         }
+
         int endValue = (targetHour * 60 + targetMinue) * 20;
         int addValue = (int)math.round((endValue - startValue) / totalTime * Time.fixedDeltaTime);
         float timeValue = 0;
@@ -1028,32 +1047,30 @@ public class GameTimeManager : Singleton<GameTimeManager>
 
             yield return new WaitForFixedUpdate();
         }
+
         if (endRun)
         {
-            StartTimeRun();
+            runTime = true;
         }
+
         if (endAction != null)
         {
             endAction.Invoke();
         }
     }
 
-    private IEnumerator TimeRun()
+    protected override void FixedUpdate()
     {
-        var  waitFixedUpdate=new WaitForFixedUpdate(); 
-        bool timeRun = false;
-        while (true)
+        base.FixedUpdate();
+        if (runTime)
         {
-            for(int i = 0; i < timeRunScale; i++)
+            for (var i = 0; i < timeRunScale; i++)
             {
-                if (timeRun)
-                {
-                    nowGameTime.TimeRun();
-                }
-                timeRun = !timeRun;
-            } 
-            //timeDisplayAction.UpdataTime();
-            yield return waitFixedUpdate;
+                nowGameTime.TimeRun();
+            }
         }
     }
+ 
 }
+
+  

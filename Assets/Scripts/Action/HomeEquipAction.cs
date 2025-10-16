@@ -29,8 +29,11 @@ public struct CreatHomeEquip : GameAction
     {
         this.setResult = setResult;
         this.setValue = setValue;
+        if (source != int.MinValue) characterId = source;
+
+        if (target != 0 && target != int.MinValue) equipDataId = target;
         GameActionManager.instance.QueueAction(this, immediately);
-    }
+    } 
 }
 
 public struct RemoveHomeEquip : GameAction

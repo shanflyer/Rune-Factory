@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic; 
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class CalendarPanel : GamePanel<IReferenceData>
 {
@@ -55,7 +54,7 @@ public class CalendarPanel : GamePanel<IReferenceData>
         BookPaper.gameObject.SetActive(false);
         year = GameTimeManager.instance.Year;
         season = GameTimeManager.instance.Season;
-        GameTimeManager.instance.StopTimeRun();
+        GameTimeManager.instance.runTime = false;
         CreatSeason(season);
         if (year <= 1 && season == Season.春)
         {

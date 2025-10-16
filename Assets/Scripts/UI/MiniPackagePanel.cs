@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using TMPro; 
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -65,8 +65,8 @@ public class MiniPackagePanel : GamePanel<PackageList>
         if (packageSetData && packageSetData.canLevelUp)
         {
             int cost = packageSetData.levelUpCost * selectPackageData.caseCount;
-            string notice = string.Format(LanguageManage.SwitchStr("æ‹“å±•{0}ç©ºé—´?"), packageSetData.packageName);
-            PayManager.instance.PayAction("ç©ºé—´æ‹“å±•", notice, cost, PayType.é‡‘å¸, (bool result) =>
+            string notice = string.Format(LanguageManage.SwitchStr("ÍØÕ¹{0}¿Õ¼ä?"), packageSetData.packageName);
+            PayManager.instance.PayAction("¿Õ¼äÍØÕ¹", notice, cost, PayType.½ð±Ò, (bool result) =>
             {
                 if (result)
                 {
@@ -203,7 +203,7 @@ public class MiniPackagePanel : GamePanel<PackageList>
                 for (int i = 0; i < selectPackageData.items.Count; i++)
                 {
                     var item = selectPackageData.items[i];
-                    item.locked = !packageList.itemMatchData.MatchAction(item);
+                    item.locked = !await packageList.itemMatchData.MatchAction(item);
                     items.Add(item);
                 }
             }

@@ -402,7 +402,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 if (nowSellItem != null)
                 {
                     int itemDataId = runtimeStoreCounter.itemData!=null? runtimeStoreCounter.itemData.id:0;
-                    
+                    nowSellItem.SetDefaultOffset(storeCounterData.offset);
                     nowSellItem.InitReferenceData(new Item
                     {
                         dataId = itemDataId,
@@ -414,8 +414,8 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 Transform transform = nowSellItem.transform;
                 transform.gameObject.SetActive(true);
                 transform.SetParent(displayStoreCounter.transform, false);
-                transform.localPosition = storeCounterData.offset;
-                nowSellItem.SetDefaultOffset(storeCounterData.offset);
+                // transform.localPosition = storeCounterData.offset;
+                // 
             }
             else
             {

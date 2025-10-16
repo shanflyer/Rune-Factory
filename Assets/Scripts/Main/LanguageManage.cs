@@ -206,6 +206,19 @@ public class LanguageManage : Singleton<LanguageManage>
         }
 
     }
+
+    public static string SwitchFormatStr(object source, params object[] args)
+    {
+        source = SwitchStr(source.ToString());
+
+        if (args != null)
+            for (var i = 0; i < args.Length; i++)
+                args[i] = SwitchStr(args[i].ToString());
+
+        if (args != null) return string.Format(source.ToString(), args);
+
+        return source.ToString();
+    }
     public static float GetLineSpacing()
     {
         return nowLineSpacing;

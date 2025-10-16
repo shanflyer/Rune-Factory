@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
- 
 
 public class AllItemPanel : GamePanel<IReferenceData>
 { 
@@ -147,7 +146,7 @@ public class AllItemPanel : GamePanel<IReferenceData>
                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
                 ItemIcon.sprite = itemData.icon;
                 ItemIcon.enabled = true;
-                ItemIcon.SetNativeSize();
+                //ItemIcon.SetNativeSize();
                 ItemName.SetADDText($"+ ",itemData.itemName," +");
                 Type.SetSWText(itemData.type.ToString());
                 Info.SetSWText(itemData.GetInfo());
