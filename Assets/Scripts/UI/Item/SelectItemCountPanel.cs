@@ -104,7 +104,7 @@ public class SelectItemCountPanel :GamePanel<SelectItemData>
 
         if (string.IsNullOrEmpty(selectItemData.leftName))
         {
-            leftName.text = "取消";
+            leftName.text = "鍙栨秷";
         }
         else
         {
@@ -112,7 +112,7 @@ public class SelectItemCountPanel :GamePanel<SelectItemData>
         }
         if (string.IsNullOrEmpty(selectItemData.rightName))
         {
-            rightName.text = "出售";
+            rightName.text = "鍑哄敭";
         }
         else
         {

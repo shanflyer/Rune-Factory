@@ -115,9 +115,11 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
             return;
         }
 
+        var characterId = creatHomeEquip.characterId;
+        if (characterId == 0) characterId = CharacterManager.instance.controllerCharacter.instanceId;
         HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(creatHomeEquip.equipDataId);
         int instanceId = creatHomeEquip.instanceId == 0 ? MyInstance.instance.Uid : creatHomeEquip.instanceId;
-        HomeEquip homeEquip = new HomeEquip(instanceId, instanceId, creatHomeEquip.characterId, homeEquipmentData);
+        var homeEquip = new HomeEquip(instanceId, instanceId, characterId, homeEquipmentData);
       
         if (creatHomeEquip.instanceId == 0)
         {
