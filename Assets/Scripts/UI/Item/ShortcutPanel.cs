@@ -143,7 +143,15 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
         });
         useButton.onClick.AddListener(UseItemAction);
         unEquipButton.onClick.AddListener(UnEquipAction);
-        Toggle.onValueChanged.AddListener(value => Node.gameObject.SetActive(value));
+        Toggle.onValueChanged.AddListener(value =>
+        {
+            Node.gameObject.SetActive(value);
+            var refreshShortcut = new RefreshShortcut
+            {
+                packageId = CharacterManager.instance.controllerCharacter.characterPackage
+            };
+            GameActionManager.instance.QueueAction(refreshShortcut);
+        });
     }
     void UseItemAction()
     {
