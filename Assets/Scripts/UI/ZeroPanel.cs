@@ -52,10 +52,26 @@ public class ZeroPanel : GamePanel<IReferenceData>
         TapStart.onClick.AddListener(TapStartAction);
         Privacy.onValueChanged.AddListener((value) =>
         {
+            if (value)
+            {
+                GameSDKManager.instance.InitSDK(); 
+            }
+            else
+            {
+                GameManager.instance.ShowTwoSelectAction($"<link=\"privacy\"><u><color=#00ff00>隐私政策</color></u></link>","请同意隐私政策，只有同意才能继续游戏，不同意游戏将退出", () =>
+                {
+                    TapStart.interactable = true;
+                    Privacy.SetIsOnWithoutNotify(true);
+                    GameSDKManager.instance.InitSDK(); 
+                },()=>{GameController.RestartNow();});
+               
+            }
+                
             TapStart.interactable = value;
         });
+        TapStart.interactable = false;
     }
-
+    
     async void TapStartAction()
     {
         try
@@ -140,6 +156,7 @@ public class ZeroPanel : GamePanel<IReferenceData>
 
     public override async Task InitData(string dataKay)
     {
+        TapStart.interactable = false;
         selectPanel.localScale = Vector3.zero;
        // start.transform.localScale = Vector3.one;
         PlayZeroBGM();
@@ -147,7 +164,7 @@ public class ZeroPanel : GamePanel<IReferenceData>
         
         try
         {
-            TapTapUpdate.CheckForceUpdate();
+           
         }
         catch (Exception e)
         {

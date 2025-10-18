@@ -7,15 +7,6 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
-    "com.singularitygroup.hotreload": {
-      "version": "file:com.singularitygroup.hotreload",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {
-        "com.unity.ugui": "1.0.0",
-        "com.unity.modules.unitywebrequest": "1.0.0"
-      }
-    },
     "com.taptap.sdk.cloudsave": {
       "version": "4.8.2",
       "depth": 0,
@@ -271,6 +262,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.mobile.android-logcat": {
+      "version": "1.4.6",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.nuget.mono-cecil": {
       "version": "1.11.5",
       "depth": 1,
@@ -292,19 +290,6 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
-    "com.unity.purchasing": {
-      "version": "4.12.2",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.ugui": "1.0.0",
-        "com.unity.services.core": "1.12.5",
-        "com.unity.modules.androidjni": "1.0.0",
-        "com.unity.modules.jsonserialize": "1.0.0",
-        "com.unity.modules.unitywebrequest": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
-    },
     "com.unity.recorder": {
       "version": "5.1.2",
       "depth": 0,
@@ -313,30 +298,6 @@
         "com.unity.timeline": "1.8.7",
         "com.unity.collections": "1.2.4",
         "com.unity.bindings.openimageio": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.remote-config": {
-      "version": "4.1.1",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "3.0.2",
-        "com.unity.remote-config-runtime": "4.0.2",
-        "com.unity.modules.unitywebrequest": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.remote-config-runtime": {
-      "version": "4.0.2",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.services.core": "1.12.5",
-        "com.unity.nuget.newtonsoft-json": "3.0.2",
-        "com.unity.modules.unityanalytics": "1.0.0",
-        "com.unity.modules.unitywebrequest": "1.0.0",
-        "com.unity.services.authentication": "2.7.4"
       },
       "url": "https://packages.unity.com"
     },
@@ -407,29 +368,6 @@
       "dependencies": {
         "com.unity.burst": "1.7.2",
         "com.unity.collections": "2.4.2"
-      },
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.services.authentication": {
-      "version": "3.4.1",
-      "depth": 2,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.ugui": "1.0.0",
-        "com.unity.services.core": "1.14.0",
-        "com.unity.nuget.newtonsoft-json": "3.2.1",
-        "com.unity.modules.unitywebrequest": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.services.core": {
-      "version": "1.14.0",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.modules.androidjni": "1.0.0",
-        "com.unity.nuget.newtonsoft-json": "3.2.1",
-        "com.unity.modules.unitywebrequest": "1.0.0"
       },
       "url": "https://packages.unity.com"
     },

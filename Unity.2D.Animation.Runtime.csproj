@@ -47,12 +47,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Packages\com.unity.2d.animation\Runtime\SpriteLib\SpriteLibraryAsset.cs" />
+    <Compile Include="Packages\com.unity.2d.animation\Runtime\BatchedDeformation\BaseDeformationSystem.cs" />
+    <Compile Include="Packages\com.unity.2d.animation\Runtime\SpriteLib\SpriteLibrarySourceAsset.cs" />
     <Compile Include="Packages\com.unity.2d.animation\Runtime\SkeletonAsset.cs" />
     <Compile Include="Packages\com.unity.2d.animation\Runtime\NativeCustomSlice.cs" />
+    <Compile Include="Packages\com.unity.2d.animation\Runtime\BatchedDeformation\CpuDeformationSystem.cs" />
+    <Compile Include="Packages\com.unity.2d.animation\Runtime\UpdateOrder.cs" />
     <Compile Include="Packages\com.unity.2d.animation\Runtime\BatchedDeformation\GpuDeformationSystem.cs" />
+    <Compile Include="Packages\com.unity.2d.animation\Runtime\SpriteLib\SpriteLibrary.cs" />
     <Compile Include="Packages\com.unity.2d.animation\Runtime\Bone.cs" />
+    <Compile Include="Packages\com.unity.2d.animation\Runtime\BatchedDeformation\DeformationManagerUpdater.cs" />
     <Compile Include="Packages\com.unity.2d.animation\Runtime\SpriteSkinHelpers.cs" />
     <Compile Include="Packages\com.unity.2d.animation\Runtime\BatchedDeformation\UpdateBoundsJob.cs" />
+    <Compile Include="Packages\com.unity.2d.animation\Runtime\BatchedDeformation\TransformAccessJob.cs" />
     <Compile Include="Packages\com.unity.2d.animation\Runtime\BatchedDeformation\DeformationJobs.cs" />
     <Compile Include="Packages\com.unity.2d.animation\Runtime\SpriteLib\SpriteLibraryData.cs" />
     <Compile Include="Packages\com.unity.2d.animation\Runtime\SpriteLib\SpriteResolverEditor.cs" />
@@ -60,22 +67,15 @@
     <Compile Include="Packages\com.unity.2d.animation\Runtime\SpriteLib\SpriteLibraryUtility.cs" />
     <Compile Include="Packages\com.unity.2d.animation\Runtime\BufferManager.cs" />
     <Compile Include="Packages\com.unity.2d.animation\Runtime\SpriteLib\ISpriteLibraryLabel.cs" />
+    <Compile Include="Packages\com.unity.2d.animation\Runtime\AssemblyInfo.cs" />
+    <Compile Include="Packages\com.unity.2d.animation\Runtime\IconUtility.cs" />
     <Compile Include="Packages\com.unity.2d.animation\Runtime\SpriteLib\SpriteResolver.cs" />
     <Compile Include="Packages\com.unity.2d.animation\Runtime\NativeArrayHelper.cs" />
     <Compile Include="Packages\com.unity.2d.animation\Runtime\SpriteSkinUtility.cs" />
     <Compile Include="Packages\com.unity.2d.animation\Runtime\SpriteLib\ISpriteLibraryCategory.cs" />
-    <Compile Include="Packages\com.unity.2d.animation\Runtime\MeshUtilities.cs" />
-    <Compile Include="Packages\com.unity.2d.animation\Runtime\BatchedDeformation\BaseDeformationSystem.cs" />
-    <Compile Include="Packages\com.unity.2d.animation\Runtime\SpriteLib\SpriteLibrarySourceAsset.cs" />
-    <Compile Include="Packages\com.unity.2d.animation\Runtime\BatchedDeformation\CpuDeformationSystem.cs" />
-    <Compile Include="Packages\com.unity.2d.animation\Runtime\UpdateOrder.cs" />
-    <Compile Include="Packages\com.unity.2d.animation\Runtime\SpriteLib\SpriteLibrary.cs" />
-    <Compile Include="Packages\com.unity.2d.animation\Runtime\BatchedDeformation\DeformationManagerUpdater.cs" />
-    <Compile Include="Packages\com.unity.2d.animation\Runtime\BatchedDeformation\TransformAccessJob.cs" />
-    <Compile Include="Packages\com.unity.2d.animation\Runtime\AssemblyInfo.cs" />
-    <Compile Include="Packages\com.unity.2d.animation\Runtime\IconUtility.cs" />
     <Compile Include="Packages\com.unity.2d.animation\Runtime\SpriteSkin.cs" />
     <Compile Include="Packages\com.unity.2d.animation\Runtime\SpriteSkinContainer.cs" />
+    <Compile Include="Packages\com.unity.2d.animation\Runtime\MeshUtilities.cs" />
     <None Include="Packages\com.unity.2d.animation\Runtime\Unity.2D.Animation.Runtime.asmdef" />
     <Reference Include="UnityEngine">
       <HintPath>D:\Unity\6000.1.0f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>

@@ -1,8 +1,5 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Unity.Services.Authentication;
-using Unity.Services.Core;
-using Unity.Services.RemoteConfig;
+using System.Threading.Tasks; 
 using UnityEngine;
 
 public class CloudRemoteConfig:Singleton<CloudRemoteConfig>
@@ -16,8 +13,8 @@ public class CloudRemoteConfig:Singleton<CloudRemoteConfig>
             await InitializeRemoteConfigAsync();
         }
 
-        RemoteConfigService.Instance.FetchCompleted += ApplyRemoteSettings;
-        RemoteConfigService.Instance.FetchConfigs(new userAttributes(), new appAttributes()); 
+    //    RemoteConfigService.Instance.FetchCompleted += ApplyRemoteSettings;
+   //     RemoteConfigService.Instance.FetchConfigs(new userAttributes(), new appAttributes()); 
        
     }
 
@@ -31,24 +28,20 @@ public class CloudRemoteConfig:Singleton<CloudRemoteConfig>
     async Task InitializeRemoteConfigAsync()
     {
         // initialize handlers for unity game services
-        await UnityServices.InitializeAsync();
+   //     await UnityServices.InitializeAsync();
 
         // remote config requires authentication for managing environment information
-        if (!AuthenticationService.Instance.IsSignedIn)
+    //    if (!AuthenticationService.Instance.IsSignedIn)
         {
-            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+     //       await AuthenticationService.Instance.SignInAnonymouslyAsync();
         }
     }
  
-    void ApplyRemoteSettings(ConfigResponse configResponse)
-    { 
-        if (GameDataManager.instance.GlobalData.debug)
-            Debug.Log("RemoteConfigService.Instance.appConfig fetched: " + RemoteConfigService.Instance.appConfig.config.ToString());
-    }
+   
     public async Task<bool> GetConfigBool(string key)
     {
-        var obj = RemoteConfigService.Instance.appConfig.config.GetValue(key);
-        if (obj == null)
+      //  var obj = RemoteConfigService.Instance.appConfig.config.GetValue(key);
+      //  if (obj == null)
         {
             var data = await GameDataManager.instance.GetAsyncData<DefaultConfigData>(key);
             if (data != null)
@@ -56,12 +49,12 @@ public class CloudRemoteConfig:Singleton<CloudRemoteConfig>
                 return bool.Parse(data.value);
             }
         }
-        return (bool)obj;
+      return false;
     }
     public async Task<string> GetConfig(string key)
     {
-       var obj=  RemoteConfigService.Instance.appConfig.config.GetValue(key);
-        if (obj == null)
+     //  var obj=  RemoteConfigService.Instance.appConfig.config.GetValue(key);
+      //  if (obj == null)
         {
             var data =await GameDataManager.instance.GetAsyncData<DefaultConfigData>(key);
             if (data != null)
@@ -69,6 +62,6 @@ public class CloudRemoteConfig:Singleton<CloudRemoteConfig>
                 return data.value;
             }
         }
-        return (string)obj;
+        return "";
     }
 }

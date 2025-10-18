@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-
+ 
 public class GameController : MonoBehaviour
 {
     [SerializeField]
@@ -278,10 +278,86 @@ if (result.Success)
         */
 
     }
- 
+   // 彻底重启（杀进程 + AlarmManager 重新拉起）
+    public static void RestartNow()
+    {
+#if UNITY_ANDROID && !UNITY_EDITOR
+        try
+        {
+            using (var unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+            using (var activity   = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity"))
+            using (var pm         = activity.Call<AndroidJavaObject>("getPackageManager"))
+            using (var launchIntent = pm.Call<AndroidJavaObject>("getLaunchIntentForPackage", Application.identifier))
+            {
+                // 关键：直接先起新实例（不用等闹钟）
+                const int FLAG_ACTIVITY_NEW_TASK  = 0x10000000;
+                const int FLAG_ACTIVITY_CLEAR_TASK= 0x00008000;
+                launchIntent.Call<AndroidJavaObject>("addFlags", FLAG_ACTIVITY_NEW_TASK);
+                launchIntent.Call<AndroidJavaObject>("addFlags", FLAG_ACTIVITY_CLEAR_TASK);
+
+                // 有些机型需要在 UI 线程拉起
+                activity.Call("runOnUiThread", new AndroidJavaRunnable(() =>
+                {
+                    activity.Call("startActivity", launchIntent);
+                }));
+
+                // —— 兜底：再挂一个精确闹钟（万一上述被拦）
+                int FLAG_IMMUTABLE      = 0x04000000; // Android 12+
+                int FLAG_UPDATE_CURRENT = 0x00000008;
+
+                using (var pendingIntentClass = new AndroidJavaClass("android.app.PendingIntent"))
+                using (var pendingIntent = pendingIntentClass.CallStatic<AndroidJavaObject>(
+                    "getActivity", activity, 0, launchIntent, FLAG_IMMUTABLE | FLAG_UPDATE_CURRENT))
+                using (var alarmService = activity.Call<AndroidJavaObject>("getSystemService", "alarm"))
+                using (var systemClock  = new AndroidJavaClass("android.os.SystemClock"))
+                using (var alarmMgrCls  = new AndroidJavaClass("android.app.AlarmManager"))
+                {
+                    long triggerAt = systemClock.CallStatic<long>("elapsedRealtime") + 800L; // 稍长一点更稳
+                    int ELAPSED_REALTIME_WAKEUP = alarmMgrCls.GetStatic<int>("ELAPSED_REALTIME_WAKEUP");
+
+                    // 优先用 setExactAndAllowWhileIdle（23+），否则回落 setExact
+                    bool usedAllowWhileIdle = false;
+                    try
+                    {
+                        alarmService.Call("setExactAndAllowWhileIdle", ELAPSED_REALTIME_WAKEUP, triggerAt, pendingIntent);
+                        usedAllowWhileIdle = true;
+                    }
+                    catch { /* API<23 会抛 */ }
+
+                    if (!usedAllowWhileIdle)
+                    {
+                        alarmService.Call("setExact", ELAPSED_REALTIME_WAKEUP, triggerAt, pendingIntent);
+                    }
+                }
+
+                // 结束当前 Task 并移除最近任务
+                try { activity.Call("finishAffinity"); } catch {}
+                try { activity.Call("finishAndRemoveTask"); } catch {}
+            }
+        }
+        catch { /* 忽略 */ }
+
+        // 最后杀进程，确保是全新实例（给前面的 startActivity/闹钟预留几十毫秒）
+        try { System.Threading.Thread.Sleep(120); } catch {}
+        try { AndroidJavaClass proc = new AndroidJavaClass("android.os.Process");
+              int pid = proc.CallStatic<int>("myPid");
+              proc.CallStatic("killProcess", pid); } catch {}
+        try { System.Environment.Exit(0); } catch {}
+#else
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+#endif
+    }
+
+  
+     
+
     private void Awake()
-    {   
-        GameSDKManager.instance.InitSDK();
+    {
+        
+#if ENABLE_INPUT_SYSTEM && UNITY_INPUT_SYSTEM_EXISTS
+        
+#endif
+       // GameSDKManager.instance.InitSDK();
       
         if (!GameDataManager.instance.GlobalData.localSave)
         {

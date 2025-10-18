@@ -59,16 +59,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Extras\Helpers\DefaultSaveServiceProvider.cs" />
-    <Compile Include="Assets\Plugins\DebugLog\Scripts\DebugLogEntry.cs" />
-    <Compile Include="Assets\Plugins\VoxelBusters\EssentialKit\Scripts\Essentials\BillingServices\UnityIapServicesInterface.cs" />
-    <Compile Include="Assets\Plugins\VoxelBusters\EssentialKit\Scripts\Essentials\DatePicker\TMP_DatePicker.cs" />
-    <Compile Include="Assets\Plugins\DebugLog\Scripts\DebugLogItem.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\EssentialKit\Scripts\Essentials\DatePicker\TMP_DatePickerInputField.cs" />
     <Compile Include="Assets\Plugins\DebugLog\Scripts\DebugLogManager.cs" />
     <Compile Include="Assets\Plugins\DebugLog\Scripts\DebugsOnScrollListener.cs" />
     <Compile Include="Assets\Plugins\DebugLog\Scripts\DebugLogPopup.cs" />
     <Compile Include="Assets\Plugins\DebugLog\Scripts\DebugLogConsole.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Extras\Helpers\DefaultLocalisationServiceProvider.cs" />
+    <Compile Include="Assets\Plugins\DebugLog\Scripts\DebugLogEntry.cs" />
+    <Compile Include="Assets\Plugins\VoxelBusters\EssentialKit\Scripts\Essentials\BillingServices\UnityIapServicesInterface.cs" />
+    <Compile Include="Assets\Plugins\VoxelBusters\EssentialKit\Scripts\Essentials\DatePicker\TMP_DatePicker.cs" />
+    <Compile Include="Assets\Plugins\DebugLog\Scripts\DebugLogItem.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\EssentialKit\Scripts\Essentials\BillingServices\IAPManager.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Extras\Helpers\DefaultJsonServiceProvider.cs" />
     <Compile Include="Assets\Plugins\DebugLog\Scripts\DebugLogRecycledListView.cs" />
@@ -835,17 +835,11 @@
     <Reference Include="Unity.ShaderGraph.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.ShaderGraph.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Purchasing.Common">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Purchasing.Common.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.MemoryProfiler.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.MemoryProfiler.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Services.Authentication.PlayerAccounts">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Services.Authentication.PlayerAccounts.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.RemoteConfig.Editor">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.RemoteConfig.Editor.dll</HintPath>
+    <Reference Include="Unity.Mobile.AndroidLogcat.Editor">
+      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Mobile.AndroidLogcat.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Bindings.OpenImageIO.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Bindings.OpenImageIO.Editor.dll</HintPath>
@@ -859,12 +853,6 @@
     <Reference Include="TapSDK.Core.Runtime">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.Core.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Services.RemoteConfig">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Services.RemoteConfig.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Services.Authentication.Editor.Shared">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Services.Authentication.Editor.Shared.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.InternalAPIEngineBridge.001">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.InternalAPIEngineBridge.001.dll</HintPath>
     </Reference>
@@ -874,11 +862,11 @@
     <Reference Include="Unity.2D.Tilemap.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.2D.Tilemap.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="TapSDK.Core.Mobile.Editor">
+      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.Core.Mobile.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Splines.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Splines.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Purchasing.SecurityStub">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\UnityEngine.Purchasing.SecurityStub.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Serialization.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Serialization.Editor.dll</HintPath>
@@ -906,15 +894,6 @@
     </Reference>
     <Reference Include="Unity.Entities.Build">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Entities.Build.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Purchasing.SecurityCore">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\UnityEngine.Purchasing.SecurityCore.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Services.Core.Analytics">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Services.Core.Analytics.dll</HintPath>
-    </Reference>
-    <Reference Include="TapSDK.Core.Mobile.Editor">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.Core.Mobile.Editor.dll</HintPath>
     </Reference>
     <Reference Include="TapSDK.CloudSave.Runtime">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.CloudSave.Runtime.dll</HintPath>
@@ -952,9 +931,6 @@
     <Reference Include="Unity.Rider.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Purchasing.Codeless">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\UnityEngine.Purchasing.Codeless.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Transforms.Hybrid">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Transforms.Hybrid.dll</HintPath>
     </Reference>
@@ -967,26 +943,14 @@
     <Reference Include="Unity.Recorder">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Recorder.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Purchasing">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\UnityEngine.Purchasing.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.ResourceManager">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.ResourceManager.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.RemoteConfig.Editor.Core">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.RemoteConfig.Editor.Core.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Entities.UI.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Entities.UI.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEditor.Purchasing">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\UnityEditor.Purchasing.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.MemoryProfiler">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.MemoryProfiler.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Services.Core.Components">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Services.Core.Components.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Splines">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Splines.dll</HintPath>
@@ -1054,29 +1018,17 @@
     <Reference Include="Unity.2D.Common.Runtime">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.2D.Common.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Services.Authentication">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Services.Authentication.dll</HintPath>
-    </Reference>
     <Reference Include="TapSDK.Compliance.Standalone.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.Compliance.Standalone.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.MemoryProfiler.Editor.MemoryProfilerModule">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.MemoryProfiler.Editor.MemoryProfilerModule.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Services.Core.Environments">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Services.Core.Environments.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Localization.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Localization.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Purchasing.Stores">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\UnityEngine.Purchasing.Stores.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Burst.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Burst.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Services.Core">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Services.Core.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Entities.Hybrid.HybridComponents">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Entities.Hybrid.HybridComponents.dll</HintPath>
@@ -1226,10 +1178,6 @@
     <ProjectReference Include="VoxelBusters.CoreLibrary.Parser.csproj">
       <Project>{ee4dfbfb-d20c-7460-4c6a-fe6fc1be5618}</Project>
       <Name>VoxelBusters.CoreLibrary.Parser</Name>
-    </ProjectReference>
-    <ProjectReference Include="SingularityGroup.HotReload.Runtime.Public.csproj">
-      <Project>{a5200258-f5b0-39eb-ff65-037302ca3b45}</Project>
-      <Name>SingularityGroup.HotReload.Runtime.Public</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipeline.Universal.ShaderLibrary.csproj">
       <Project>{4213aafc-986e-7eea-6f61-dce8ef9738ec}</Project>

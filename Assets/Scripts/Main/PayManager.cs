@@ -1,5 +1,4 @@
-﻿ using UnityEngine;
-using UnityEngine.Purchasing;
+﻿ using UnityEngine; 
 
 public class PayManager : Singleton<PayManager>
 {

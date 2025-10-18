@@ -46,30 +46,30 @@
     <Analyzer Include="D:\Unity\6000.1.0f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeProxy.cs" />
+    <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeAndroidJavaObjectWrapper.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeRectF.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeByteBuffer.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeErrorInfo.cs" />
+    <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeObject.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeJSONObject.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\JNIUtility.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeViewGroup.cs" />
-    <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\Utility.cs" />
-    <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeInteger.cs" />
-    <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativePointF.cs" />
-    <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeList.cs" />
-    <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeFloat.cs" />
-    <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeParcel.cs" />
-    <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeProxy.cs" />
-    <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeAndroidJavaObjectWrapper.cs" />
-    <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeObject.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeDate.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeArrayBuffer.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeContext.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativePoint.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeRect.cs" />
+    <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\Utility.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeActivity.cs" />
+    <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeInteger.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeException.cs" />
+    <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativePointF.cs" />
+    <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeList.cs" />
+    <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeFloat.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeErrorInfoExtensions.cs" />
     <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeUnityPluginUtility.cs" />
+    <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\Common\NativeParcel.cs" />
     <None Include="Assets\Plugins\VoxelBusters\CoreLibrary\Runtime\NativePlugins\Android\VoxelBusters.CoreLibrary.NativePlugins.AndroidModule.asmdef" />
     <Reference Include="UnityEngine">
       <HintPath>D:\Unity\6000.1.0f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>

@@ -46,27 +46,27 @@
     <Analyzer Include="D:\Unity\6000.1.0f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\WrapperWindowFixture.cs" />
     <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\Canvas\RootCanvasTests.cs" />
     <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\RectMask2D\RectMask2DCulling.cs" />
     <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\CanvasRenderer\ParentCanvasIsSane.cs" />
     <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\Canvas\CanvasWidthAssertionErrorWithRectTransform.cs" />
+    <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\RectMask2D\RectTransformPosition.cs" />
+    <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\EventSystem\EventTriggerRemoveDuringExecution.cs" />
     <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\EventSystem\InputModuleTests.cs" />
+    <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\Canvas\CanvasElementsMaintainValidPositionsWhenCameraOrthoSizeIsZero.cs" />
+    <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\TestBehaviourBase.cs" />
     <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\Dropdown\DropdownOptionsListDrawer.cs" />
     <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\InputField\ContentValidation.cs" />
     <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\InputField\CharacterLimitValidation.cs" />
+    <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\EventSystem\InterceptedEventsPreviewTests.cs" />
     <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\UnityEvent\UnityEventInvoke.cs" />
+    <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\Slider\SliderRectReferences.cs" />
     <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\CanvasRenderer\ChangingHierarchyOfCanvasRenderer.cs" />
     <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\Canvas\UISystemProfilerAddMarkerWithNullObjectDoesNotCrash.cs" />
     <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\Canvas\AssertionFailureOnOutputVertexCount.cs" />
     <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\UI\PropertyDrawers\PropertyDrawerTests.cs" />
     <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\Text\FontCreatedByScript.cs" />
-    <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\WrapperWindowFixture.cs" />
-    <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\RectMask2D\RectTransformPosition.cs" />
-    <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\EventSystem\EventTriggerRemoveDuringExecution.cs" />
-    <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\Canvas\CanvasElementsMaintainValidPositionsWhenCameraOrthoSizeIsZero.cs" />
-    <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\TestBehaviourBase.cs" />
-    <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\EventSystem\InterceptedEventsPreviewTests.cs" />
-    <Compile Include="Packages\com.unity.ugui\Tests\Editor\UGUI\Slider\SliderRectReferences.cs" />
     <None Include="Packages\com.unity.ugui\Tests\Editor\UGUI\UnityEditor.UI.EditorTests.asmdef" />
     <Reference Include="UnityEngine">
       <HintPath>D:\Unity\6000.1.0f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>

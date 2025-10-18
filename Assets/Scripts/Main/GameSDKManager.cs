@@ -8,7 +8,7 @@ using TapSDK.Core;
 using TapSDK.Login;
 using TapSDK.Compliance;
 using TapSDK.CloudSave;
-
+using TapSDK.Update;
 using UnityEngine;
 
 public class GameSDKManager : Singleton<GameSDKManager>, ITapCloudSaveCallback
@@ -52,7 +52,7 @@ public class GameSDKManager : Singleton<GameSDKManager>, ITapCloudSaveCallback
 
         TapTapCompliance.RegisterComplianceCallback(ComplianceCallback);
         TapTapCloudSave.RegisterCloudSaveCallback(this);
-
+        
         hasInit = true;
     }
 
@@ -90,6 +90,7 @@ public class GameSDKManager : Singleton<GameSDKManager>, ITapCloudSaveCallback
         {
             case 500: // 通过
                 hasCheckedCompliance = true;
+                TapTapUpdate.CheckForceUpdate(); 
                 // 合规通过 → 拉云档或进入游戏
                 DownSaveData();
                 break;

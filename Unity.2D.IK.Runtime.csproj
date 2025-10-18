@@ -46,24 +46,24 @@
     <Analyzer Include="D:\Unity\6000.1.0f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\AssemblyInfo.cs" />
+    <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\IKUtility.cs" />
     <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\LimbSolver2D.cs" />
+    <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\Solver2DMenuAttribute.cs" />
+    <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\Solvers\Limb.cs" />
+    <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\IconUtility.cs" />
+    <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\IKManager2DEditorData.cs" />
     <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\Culling\BaseCullingStrategy.cs" />
     <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\IKManager2D.cs" />
     <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\IKChain2D.cs" />
     <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\Culling\CullingManager.cs" />
     <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\Solvers\CCD2D.cs" />
+    <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\FabrikSolver2D.cs" />
     <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\Culling\SpriteSkinVisibilityCullingStrategy.cs" />
     <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\Solvers\FABRIK2D.cs" />
-    <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\Culling\AlwaysUpdateCullingStrategy.cs" />
-    <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\AssemblyInfo.cs" />
-    <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\IKUtility.cs" />
-    <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\Solver2DMenuAttribute.cs" />
-    <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\Solvers\Limb.cs" />
-    <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\IconUtility.cs" />
-    <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\IKManager2DEditorData.cs" />
-    <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\FabrikSolver2D.cs" />
     <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\Solver2D.cs" />
     <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\CCDSolver2D.cs" />
+    <Compile Include="Packages\com.unity.2d.animation\IK\Runtime\Culling\AlwaysUpdateCullingStrategy.cs" />
     <None Include="Packages\com.unity.2d.animation\IK\Runtime\Unity.2D.IK.Runtime.asmdef" />
     <Reference Include="UnityEngine">
       <HintPath>D:\Unity\6000.1.0f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>

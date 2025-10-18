@@ -58,71 +58,125 @@
     <Analyzer Include="D:\MyGame\Rune Factory\RuneFactory\Library\PackageCache\com.unity.entities@e581b903be8e\Unity.Entities\SourceGenerators\Unity.Entities.Analyzer.CodeFixes.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Smoothing\SimpleSmoother.cs" />
+    <Compile Include="Assets\Editor\Common\SpriteRendererEditor.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Data\Otri.cs" />
+    <Compile Include="Assets\Effect\ProFlares\Editor\FlareEditorHelper.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Data\BadTriangle.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\IkCCD2DEditor.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\IkUtils.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\BadTriQueue.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\CurveUtility.cs" />
     <Compile Include="Assets\Editor\Map\MapEditor.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\VertexAnimation\TransformTracker.cs" />
+    <Compile Include="Assets\OtherPackage\Behavior Designer\Editor\BehaviorTreeInspector.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\SpriteMeshEditor.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\IO\FileWriter.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\WeightEditor.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Data\Triangle.cs" />
     <Compile Include="Assets\Editor\Common\MeshRendererEditor.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Log\SimpleLogItem.cs" />
     <Compile Include="Assets\Effect\ProFlares\Editor\ProFlareBatchInspector.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\AnimationWindowExtra\AnimationWindowImpl_51_52_53_54_55.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\IO\IGeometryFormat.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Editor\Object Drawers\StackedConditionalDrawer.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Primitives.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\OnionSkin\MaterialCache.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\IkLimb2DEditor.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\RectHandles.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\OnionSkin\OnionLayerManager.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\OnionSkin\ObjectPool.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Carver.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\NewLocation.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Gizmos.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\SliceEditor.cs" />
+    <Compile Include="Assets\OtherPackage\codeandweb.com\Editor\UIImageSetSizeAndPivot.cs" />
     <Compile Include="Assets\Effect\ProFlares\Editor\FlareJson.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\BlendShapeFrameEditor.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\SerializedCache.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Geometry\BoundingBox.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\TimeLine\IDopeElement.cs" />
     <Compile Include="Assets\Effect\ProFlares\Editor\ProFlareExporter.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\BoneUtils.cs" />
     <Compile Include="Assets\Editor\Common\CommonItem.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Algorithm\Dwyer.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\IO\DataReader.cs" />
     <Compile Include="Assets\Editor\Map\WorldMapEditor.cs" />
+    <Compile Include="Assets\Editor\Map\EditorCoordinate.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\SelectionRectTool.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\SpriteMeshPostprocessor.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\PoseManagerEditor.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Smoothing\ISmoother.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\VertexManipulator\RectManipulator\IRectManipulable.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Ik2DEditor.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Data\Segment.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Geometry\Edge.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\TimeLine\TimeArea.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\EditorExtra.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\AnimationWindowExtra\AnimationWindowImpl_56.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\VertexManipulator\RectManipulator\RectManipulatorData.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\TriangleLocator.cs" />
+    <Compile Include="Assets\Editor\Common\CommonObjData.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Editor\ExternalBehaviorTreeInspector.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\BlendShapeFrame.cs" />
+    <Compile Include="Assets\Editor\Tool\SourceTool.cs" />
     <Compile Include="Assets\Editor\Map\MapItemEditor.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Bone2DEditor.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Exporter\Exporter.cs" />
     <Compile Include="Assets\Editor\Tool\SpriteSkinToSkinnedMeshExporter.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\MaskCreator.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Exporter\Exporter.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\TimeLine\TickHandler.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Editor\Object Drawers\FloatSliderDrawer.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\TimeLine\TimeLine.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\IO\IMeshFormat.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\AnimationBaker.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\AnimationWindowExtra\AnimationWindowImpl_2017_1.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Quality.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\VertexAnimation\VertexSelection.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Sampler.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\TextureEditorWindow.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Tools\CuthillMcKee.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Tools\VoronoiRegion.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\VertexManipulator\VertexManipulator.cs" />
+    <Compile Include="Assets\OtherPackage\Behavior Designer\Editor\Object Drawers\StackedActionDrawer.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Geometry\ISegment.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\VertexManipulator\RectManipulator\IRectManipulatorData.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\AnimationWindowExtra\AnimationWindowExtra.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\MeshToolEditor.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Tools\RegionIterator.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\IO\FileReader.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\VertexManipulator\RectManipulator\RectManipulatorParams.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\BlendShape.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\BlendShapeEditor.cs" />
     <Compile Include="Assets\OtherPackage\SerializableDictionary\Example\Editor\UserSerializableDictionaryPropertyDrawers.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\PoseUtils.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\VertexAnimation\BakedMesh.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Tools\BoundedVoronoi.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\IO\InputTriangle.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\IO\TriangleFormat.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\EditorUpdater.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Node.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\OnionSkin\OnionLayer_56.cs" />
     <Compile Include="Assets\Editor\Character\CharacterEditor.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\IkGroupEditor.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\EditorEventHandler.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\TimeLine\ZoomableArea.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Tools\Voronoi.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\IndexedEdge.cs" />
+    <Compile Include="Assets\Editor\Common\PartialCommonToolEditor.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\ContextMenu.cs" />
     <Compile Include="Assets\Effect\ProFlares\Editor\ProFlareInspector.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Algorithm\Incremental.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Geometry\Point.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Tools\AdjacencyMatrix.cs" />
+    <Compile Include="Assets\Editor\Tool\PsbNormalAtlasGenerator.cs" />
     <Compile Include="Assets\OtherPackage\SerializableDictionary\Editor\SerializableDictionaryPropertyDrawer.cs" />
     <Compile Include="Assets\Editor\ExcelRead\ExcelDataEditor.cs" />
     <Compile Include="Assets\Editor\Tool\UIEditor.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\AnimationWindowExtra\IAnimationWindowImpl.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\HandlesExtra.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Tools\QualityMeasure.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\BoneWeight.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\BindInfo.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Behavior.cs" />
     <Compile Include="Assets\OtherPackage\codeandweb.com\Editor\SpritesheetImporter.cs" />
@@ -131,108 +185,55 @@
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\VertexAnimation\SpriteMeshInstanceTracker.cs" />
     <Compile Include="Assets\Editor\Tool\PolyColliderToMesh.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Geometry\InputGeometry.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Geometry\ITriangle.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Geometry\RegionPointer.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\VertexManipulator\IVertexManipulator.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Tools\IVoronoi.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\SpriteMeshUtils.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\EditorGUIExtra.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\OnionSkin\OnionSkinWindow.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\SpriteMeshInstanceEditor.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\OnionSkin\OnionLayer.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Mesh.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\ToolsExtra.cs" />
-    <Compile Include="Assets\Editor\Common\ExportAssetBundles.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\IO\DebugWriter.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\AnimationFixer\AnimationFixer.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\SpriteMeshData.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Geometry\EdgeEnumerator.cs" />
-    <Compile Include="Assets\Editor\Map\MapTextureCreate.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\ScriptableObjectUtility.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\VertexManipulator\IVertexManipulable.cs" />
-    <Compile Include="Assets\Editor\Common\UnityEditorWindowController.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Smoothing\SimpleSmoother.cs" />
-    <Compile Include="Assets\Editor\Common\SpriteRendererEditor.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Data\Otri.cs" />
-    <Compile Include="Assets\Effect\ProFlares\Editor\FlareEditorHelper.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\IkCCD2DEditor.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\IkUtils.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\CurveUtility.cs" />
-    <Compile Include="Assets\OtherPackage\Behavior Designer\Editor\BehaviorTreeInspector.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\IO\FileWriter.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Data\Triangle.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Log\SimpleLogItem.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\AnimationWindowExtra\AnimationWindowImpl_51_52_53_54_55.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\IkLimb2DEditor.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\RectHandles.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\OnionSkin\ObjectPool.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Gizmos.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\SliceEditor.cs" />
-    <Compile Include="Assets\OtherPackage\codeandweb.com\Editor\UIImageSetSizeAndPivot.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\BoneUtils.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Algorithm\Dwyer.cs" />
-    <Compile Include="Assets\Editor\Map\EditorCoordinate.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\VertexManipulator\RectManipulator\IRectManipulable.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Ik2DEditor.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Data\Segment.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\TimeLine\TimeArea.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\TriangleLocator.cs" />
-    <Compile Include="Assets\Editor\Common\CommonObjData.cs" />
-    <Compile Include="Assets\Editor\Tool\SourceTool.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\TimeLine\TickHandler.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\AnimationWindowExtra\AnimationWindowImpl_2017_1.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Quality.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Sampler.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Tools\VoronoiRegion.cs" />
-    <Compile Include="Assets\OtherPackage\Behavior Designer\Editor\Object Drawers\StackedActionDrawer.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Geometry\ISegment.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\AnimationWindowExtra\AnimationWindowExtra.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Tools\RegionIterator.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\IO\FileReader.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\BlendShape.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\BlendShapeEditor.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\VertexAnimation\BakedMesh.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Tools\BoundedVoronoi.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\EditorUpdater.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Node.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\OnionSkin\OnionLayer_56.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Tools\Voronoi.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\IndexedEdge.cs" />
-    <Compile Include="Assets\Editor\Common\PartialCommonToolEditor.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\ContextMenu.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Geometry\Point.cs" />
-    <Compile Include="Assets\Editor\Tool\PsbNormalAtlasGenerator.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\AnimationWindowExtra\IAnimationWindowImpl.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Tools\QualityMeasure.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\BoneWeight.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Algorithm\SweepLine.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Log\ILog.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Geometry\ITriangle.cs" />
     <Compile Include="Assets\Editor\Tool\PSBToAnima2DConverter.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Geometry\RegionPointer.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\SpriteMeshCache.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Enums.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\BbwPlugin.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\VertexManipulator\IVertexManipulator.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Tools\IVoronoi.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Algorithm\ITriangulator.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\SpriteMeshAnimationEditor.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\SpriteMeshUtils.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Data\Vertex.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Data\Osub.cs" />
     <Compile Include="Assets\Editor\Common\CommonToolEditor.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\TimeLine\TickStyle.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\EditorGUIExtra.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Log\SimpleLog.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Editor\Object Drawers\IntSliderDrawer.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\OnionSkin\OnionSkinWindow.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\SpriteMeshInstanceEditor.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\InspectorEditor.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\OnionSkin\OnionLayer.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Mesh.cs" />
     <Compile Include="Assets\Effect\ProFlares\Editor\ProFlareAtlasInspector.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Data\BadSubseg.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Log\ILogItem.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Hole.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\ToolsExtra.cs" />
+    <Compile Include="Assets\Editor\Common\ExportAssetBundles.cs" />
+    <Compile Include="Assets\Editor\SensorUsageScannerWindow.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\IO\DebugWriter.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\SpriteMeshEditorWindow.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\AnimationFixer\AnimationFixer.cs" />
     <Compile Include="Assets\Effect\JMO Assets\Cartoon FX Easy Editor\Editor\CFXEasyEditor.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Edge.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\SpriteMeshData.cs" />
     <Compile Include="Assets\Editor\Common\MyEditor.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Tools\Statistic.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\WindowEditorTool.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Geometry\EdgeEnumerator.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\VertexManipulator\RectManipulator\RectManipulator.cs" />
+    <Compile Include="Assets\Editor\Map\MapTextureCreate.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\ScriptableObjectUtility.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Tools\QuadTree.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\AnimationWindowExtra\AnimationWindowImpl_50.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\VertexManipulator\IVertexManipulable.cs" />
+    <Compile Include="Assets\Editor\Common\UnityEditorWindowController.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\TimeLine\BlendShapeFrameDopeElement.cs" />
     <None Include="Assets\Editor\BlendTex.shader" />
     <None Include="Assets\OtherPackage\codeandweb.com\Editor\SettingsTexturePackerImporter.txt" />
@@ -1075,17 +1076,11 @@
     <Reference Include="Unity.ShaderGraph.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.ShaderGraph.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Purchasing.Common">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Purchasing.Common.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.MemoryProfiler.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.MemoryProfiler.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Services.Authentication.PlayerAccounts">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Services.Authentication.PlayerAccounts.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.RemoteConfig.Editor">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.RemoteConfig.Editor.dll</HintPath>
+    <Reference Include="Unity.Mobile.AndroidLogcat.Editor">
+      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Mobile.AndroidLogcat.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Bindings.OpenImageIO.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Bindings.OpenImageIO.Editor.dll</HintPath>
@@ -1099,12 +1094,6 @@
     <Reference Include="TapSDK.Core.Runtime">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.Core.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Services.RemoteConfig">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Services.RemoteConfig.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Services.Authentication.Editor.Shared">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Services.Authentication.Editor.Shared.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.InternalAPIEngineBridge.001">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.InternalAPIEngineBridge.001.dll</HintPath>
     </Reference>
@@ -1114,11 +1103,11 @@
     <Reference Include="Unity.2D.Tilemap.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.2D.Tilemap.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="TapSDK.Core.Mobile.Editor">
+      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.Core.Mobile.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Splines.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Splines.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Purchasing.SecurityStub">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\UnityEngine.Purchasing.SecurityStub.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Serialization.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Serialization.Editor.dll</HintPath>
@@ -1146,15 +1135,6 @@
     </Reference>
     <Reference Include="Unity.Entities.Build">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Entities.Build.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Purchasing.SecurityCore">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\UnityEngine.Purchasing.SecurityCore.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Services.Core.Analytics">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Services.Core.Analytics.dll</HintPath>
-    </Reference>
-    <Reference Include="TapSDK.Core.Mobile.Editor">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.Core.Mobile.Editor.dll</HintPath>
     </Reference>
     <Reference Include="TapSDK.CloudSave.Runtime">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.CloudSave.Runtime.dll</HintPath>
@@ -1192,9 +1172,6 @@
     <Reference Include="Unity.Rider.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Purchasing.Codeless">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\UnityEngine.Purchasing.Codeless.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Transforms.Hybrid">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Transforms.Hybrid.dll</HintPath>
     </Reference>
@@ -1207,26 +1184,14 @@
     <Reference Include="Unity.Recorder">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Recorder.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Purchasing">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\UnityEngine.Purchasing.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.ResourceManager">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.ResourceManager.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.RemoteConfig.Editor.Core">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.RemoteConfig.Editor.Core.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Entities.UI.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Entities.UI.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEditor.Purchasing">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\UnityEditor.Purchasing.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.MemoryProfiler">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.MemoryProfiler.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Services.Core.Components">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Services.Core.Components.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Splines">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Splines.dll</HintPath>
@@ -1294,29 +1259,17 @@
     <Reference Include="Unity.2D.Common.Runtime">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.2D.Common.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Services.Authentication">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Services.Authentication.dll</HintPath>
-    </Reference>
     <Reference Include="TapSDK.Compliance.Standalone.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.Compliance.Standalone.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.MemoryProfiler.Editor.MemoryProfilerModule">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.MemoryProfiler.Editor.MemoryProfilerModule.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Services.Core.Environments">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Services.Core.Environments.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Localization.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Localization.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Purchasing.Stores">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\UnityEngine.Purchasing.Stores.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Burst.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Burst.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Services.Core">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Services.Core.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Entities.Hybrid.HybridComponents">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Entities.Hybrid.HybridComponents.dll</HintPath>
@@ -1474,10 +1427,6 @@
     <ProjectReference Include="VoxelBusters.CoreLibrary.Parser.csproj">
       <Project>{ee4dfbfb-d20c-7460-4c6a-fe6fc1be5618}</Project>
       <Name>VoxelBusters.CoreLibrary.Parser</Name>
-    </ProjectReference>
-    <ProjectReference Include="SingularityGroup.HotReload.Runtime.Public.csproj">
-      <Project>{a5200258-f5b0-39eb-ff65-037302ca3b45}</Project>
-      <Name>SingularityGroup.HotReload.Runtime.Public</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipeline.Universal.ShaderLibrary.csproj">
       <Project>{4213aafc-986e-7eea-6f61-dce8ef9738ec}</Project>
