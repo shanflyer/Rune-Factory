@@ -1,9 +1,7 @@
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using VoxelBusters.CoreLibrary;
-using VoxelBusters.EssentialKit;
+using UnityEngine.UI; 
 
 public class MyTalkPanel : GamePanel<IReferenceData>
 {
@@ -24,7 +22,7 @@ public class MyTalkPanel : GamePanel<IReferenceData>
         base.Awake();
         Rate.onClick.AddListener(() =>
         {
-            RateMyApp.AskForReviewNow(skipConfirmation: false);
+           // RateMyApp.AskForReviewNow(skipConfirmation: false);
         });
         Share.onClick.AddListener(ShareAction);
 
@@ -32,18 +30,15 @@ public class MyTalkPanel : GamePanel<IReferenceData>
 
         Help0.onClick.AddListener(() =>
         {
-            mask.gameObject.SetActive(true);
-            AppStoreManager.instance.BuyProduct("help0");
+            mask.gameObject.SetActive(true); 
         });
         Help1.onClick.AddListener(() =>
         {
-            mask.gameObject.SetActive(true);
-            AppStoreManager.instance.BuyProduct("help1");
+            mask.gameObject.SetActive(true); 
         });
         Help2.onClick.AddListener(() =>
         {
-            mask.gameObject.SetActive(true);
-            AppStoreManager.instance.BuyProduct("help2");
+            mask.gameObject.SetActive(true); 
         });
         about.onClick.AddListener(() =>
         {
@@ -67,16 +62,7 @@ public class MyTalkPanel : GamePanel<IReferenceData>
         GameActionManager.instance.AddListener<PayEndAction>(PayEndAction);
     }
     async void ShareAction()
-    {
-        ShareSheet shareSheet = ShareSheet.CreateInstance();
-        shareSheet.AddText(LanguageManage.SwitchStr("这是一个有趣的游戏，分享给大家"));
-        shareSheet.AddImage(texture2D);
-        string sharedURL =await CloudRemoteConfig.instance.GetConfig("SharedURL");
-        shareSheet.AddURL(URLString.URLWithPath(sharedURL));
-        shareSheet.SetCompletionCallback((result, error) => {
-            Debug.Log("Share Sheet was closed. Result code: " + result.ResultCode);
-        });
-        shareSheet.Show();
+    { 
     }
     public override void SetPanelUISerializeObj()
     {
@@ -99,17 +85,13 @@ public class MyTalkPanel : GamePanel<IReferenceData>
     public override void InitReferenceData(IReferenceData v)
     {
         mask.gameObject.SetActive(false);
-        Help0Price.text = AppStoreManager.instance.GetProductPriceStr("help0");
-        Help1Price.text = AppStoreManager.instance.GetProductPriceStr("help1");
-        Help2Price.text = AppStoreManager.instance.GetProductPriceStr("help2");
+       
         base.InitReferenceData(v);
     }
     public override Task InitData(string dataKey)
     {
         mask.gameObject.SetActive(false);
-        Help0Price.text = AppStoreManager.instance.GetProductPriceStr("help0");
-        Help1Price.text = AppStoreManager.instance.GetProductPriceStr("help1");
-        Help2Price.text = AppStoreManager.instance.GetProductPriceStr("help2");
+       
         return base.InitData(dataKey);
     }
 }

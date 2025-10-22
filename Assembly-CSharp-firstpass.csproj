@@ -58,24 +58,13 @@
     <Analyzer Include="D:\MyGame\Rune Factory\RuneFactory\Library\PackageCache\com.unity.entities@e581b903be8e\Unity.Entities\SourceGenerators\Unity.Entities.Analyzer.CodeFixes.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Extras\Helpers\DefaultSaveServiceProvider.cs" />
-    <Compile Include="Assets\Plugins\VoxelBusters\EssentialKit\Scripts\Essentials\DatePicker\TMP_DatePickerInputField.cs" />
+    <Compile Include="Assets\Plugins\DebugLog\Scripts\DebugLogEntry.cs" />
+    <Compile Include="Assets\Plugins\DebugLog\Scripts\DebugLogItem.cs" />
     <Compile Include="Assets\Plugins\DebugLog\Scripts\DebugLogManager.cs" />
     <Compile Include="Assets\Plugins\DebugLog\Scripts\DebugsOnScrollListener.cs" />
     <Compile Include="Assets\Plugins\DebugLog\Scripts\DebugLogPopup.cs" />
     <Compile Include="Assets\Plugins\DebugLog\Scripts\DebugLogConsole.cs" />
-    <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Extras\Helpers\DefaultLocalisationServiceProvider.cs" />
-    <Compile Include="Assets\Plugins\DebugLog\Scripts\DebugLogEntry.cs" />
-    <Compile Include="Assets\Plugins\VoxelBusters\EssentialKit\Scripts\Essentials\BillingServices\UnityIapServicesInterface.cs" />
-    <Compile Include="Assets\Plugins\VoxelBusters\EssentialKit\Scripts\Essentials\DatePicker\TMP_DatePicker.cs" />
-    <Compile Include="Assets\Plugins\DebugLog\Scripts\DebugLogItem.cs" />
-    <Compile Include="Assets\Plugins\VoxelBusters\EssentialKit\Scripts\Essentials\BillingServices\IAPManager.cs" />
-    <Compile Include="Assets\Plugins\VoxelBusters\CoreLibrary\Extras\Helpers\DefaultJsonServiceProvider.cs" />
     <Compile Include="Assets\Plugins\DebugLog\Scripts\DebugLogRecycledListView.cs" />
-    <Compile Include="Assets\Plugins\VoxelBusters\EssentialKit\Scripts\Essentials\BillingServices\UnityIAPUtility.cs" />
-    <None Include="Assets\Plugins\VoxelBusters\EssentialKit\package.json" />
-    <None Include="Assets\Plugins\VoxelBusters\CoreLibrary\package.json" />
-    <None Include="Assets\Plugins\VoxelBusters\link.xml" />
     <Reference Include="UnityEngine">
       <HintPath>D:\Unity\6000.1.0f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
@@ -415,9 +404,6 @@
     <Reference Include="nunit.framework">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\PackageCache\com.unity.ext.nunit@031a54704bff\net40\unity-custom\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="zxing.unity">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\PackageCache\com.taptap.sdk.login@ac06d6c66f9a\Plugins\zxing.unity.dll</HintPath>
-    </Reference>
     <Reference Include="System.IO.Hashing">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\PackageCache\com.unity.collections@d49facba0036\Unity.Collections.Tests\System.IO.Hashing\System.IO.Hashing.dll</HintPath>
     </Reference>
@@ -441,6 +427,9 @@
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Assets\DLL\Excel\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.unity">
+      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\PackageCache\com.taptap.sdk.login@ac06d6c66f9a\Plugins\zxing.unity.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
       <HintPath>D:\Unity\6000.1.0f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
@@ -856,9 +845,6 @@
     <Reference Include="Unity.InternalAPIEngineBridge.001">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.InternalAPIEngineBridge.001.dll</HintPath>
     </Reference>
-    <Reference Include="TapSDK.CloudSave.Mobile.Editor">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.CloudSave.Mobile.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.2D.Tilemap.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.2D.Tilemap.Editor.dll</HintPath>
     </Reference>
@@ -873,6 +859,9 @@
     </Reference>
     <Reference Include="TapSDK.Login.Standalone.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.Login.Standalone.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="TapSDK.CloudSave.Mobile.Editor">
+      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.CloudSave.Mobile.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Collections.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Collections.Editor.dll</HintPath>
@@ -970,17 +959,17 @@
     <Reference Include="Unity.Cinemachine">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Cinemachine.dll</HintPath>
     </Reference>
-    <Reference Include="TapSDK.CloudSave.Standalone.Runtime">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.CloudSave.Standalone.Runtime.dll</HintPath>
+    <Reference Include="Unity.ScriptableBuildPipeline">
+      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.dll</HintPath>
     </Reference>
     <Reference Include="Unity.InternalAPIEditorBridge.001">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.InternalAPIEditorBridge.001.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.ScriptableBuildPipeline">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Collections">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="TapSDK.CloudSave.Standalone.Runtime">
+      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.CloudSave.Standalone.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Addressables">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Addressables.dll</HintPath>
@@ -1018,11 +1007,11 @@
     <Reference Include="Unity.2D.Common.Runtime">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.2D.Common.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="TapSDK.Compliance.Standalone.Editor">
-      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.Compliance.Standalone.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.MemoryProfiler.Editor.MemoryProfilerModule">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.MemoryProfiler.Editor.MemoryProfilerModule.dll</HintPath>
+    </Reference>
+    <Reference Include="TapSDK.Compliance.Standalone.Editor">
+      <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\TapSDK.Compliance.Standalone.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Localization.Editor">
       <HintPath>D:\MyGame\Rune Factory\RuneFactory\Library\ScriptAssemblies\Unity.Localization.Editor.dll</HintPath>
@@ -1059,21 +1048,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="VoxelBusters.EssentialKit.iOSModule.csproj">
-      <Project>{ce2754d9-c2c5-a677-9c1a-0ee5de5b3d49}</Project>
-      <Name>VoxelBusters.EssentialKit.iOSModule</Name>
-    </ProjectReference>
-    <ProjectReference Include="VoxelBusters.EssentialKit.AndroidModule.csproj">
-      <Project>{598aeb04-2e75-adb5-5d8a-c79e675c48fe}</Project>
-      <Name>VoxelBusters.EssentialKit.AndroidModule</Name>
-    </ProjectReference>
     <ProjectReference Include="PsdPlugin.csproj">
       <Project>{18f8b18e-b8b1-1189-1412-fb38b1a3d145}</Project>
       <Name>PsdPlugin</Name>
-    </ProjectReference>
-    <ProjectReference Include="VoxelBusters.CoreLibrary.NativePlugins.iOSModule.csproj">
-      <Project>{d0cf0187-7225-1ee8-4900-8fb48af2f9b3}</Project>
-      <Name>VoxelBusters.CoreLibrary.NativePlugins.iOSModule</Name>
     </ProjectReference>
     <ProjectReference Include="CFXRRuntime.csproj">
       <Project>{00d60fb5-a797-32fe-f28b-6a85a2e63a19}</Project>
@@ -1127,14 +1104,6 @@
       <Project>{88b6687a-316f-0235-d527-3bdd069d8858}</Project>
       <Name>Unity.2D.Animation.Runtime</Name>
     </ProjectReference>
-    <ProjectReference Include="VoxelBusters.EssentialKit.Editor.Build.iOSModule.csproj">
-      <Project>{1a6b6b08-a126-6a64-8a6d-629b957d45ba}</Project>
-      <Name>VoxelBusters.EssentialKit.Editor.Build.iOSModule</Name>
-    </ProjectReference>
-    <ProjectReference Include="VoxelBusters.EssentialKit.Demo.csproj">
-      <Project>{4099085f-ae1f-642d-ec16-4ce9026dd9ad}</Project>
-      <Name>VoxelBusters.EssentialKit.Demo</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.TextMeshPro.csproj">
       <Project>{0086e26e-2dc2-9a5a-8b66-cc820cb28206}</Project>
       <Name>Unity.TextMeshPro</Name>
@@ -1155,17 +1124,9 @@
       <Project>{a77626b7-611a-0dc5-0f14-037b81a8fdcf}</Project>
       <Name>Unity.RenderPipelines.Core.Runtime</Name>
     </ProjectReference>
-    <ProjectReference Include="VoxelBusters.CoreLibrary.Editor.NativePlugins.csproj">
-      <Project>{186159f4-9672-d07d-49dc-cb3b0ac7a450}</Project>
-      <Name>VoxelBusters.CoreLibrary.Editor.NativePlugins</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Universal.2D.Runtime.csproj">
       <Project>{a76398f2-32c8-6434-9021-89235d6b2e89}</Project>
       <Name>Unity.RenderPipelines.Universal.2D.Runtime</Name>
-    </ProjectReference>
-    <ProjectReference Include="VoxelBusters.CoreLibrary.NativePlugins.AndroidModule.csproj">
-      <Project>{698b2dac-c209-305a-87ef-4bbbb9d2f095}</Project>
-      <Name>VoxelBusters.CoreLibrary.NativePlugins.AndroidModule</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.InputSystem.ForUI.csproj">
       <Project>{fb1baf05-46d8-955c-f215-cb0c2d36e956}</Project>
@@ -1175,25 +1136,13 @@
       <Project>{5aa0d076-e8de-ae3f-b79d-dde41e891e2f}</Project>
       <Name>UnityEditor.UI</Name>
     </ProjectReference>
-    <ProjectReference Include="VoxelBusters.CoreLibrary.Parser.csproj">
-      <Project>{ee4dfbfb-d20c-7460-4c6a-fe6fc1be5618}</Project>
-      <Name>VoxelBusters.CoreLibrary.Parser</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.RenderPipeline.Universal.ShaderLibrary.csproj">
       <Project>{4213aafc-986e-7eea-6f61-dce8ef9738ec}</Project>
       <Name>Unity.RenderPipeline.Universal.ShaderLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="VoxelBusters.CoreLibrary.csproj">
-      <Project>{53a0b9b9-9ce4-839e-0273-d84a6c326057}</Project>
-      <Name>VoxelBusters.CoreLibrary</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Universal.Shaders.csproj">
       <Project>{50b04fc9-b263-3ed2-ff0a-85c050f2afeb}</Project>
       <Name>Unity.RenderPipelines.Universal.Shaders</Name>
-    </ProjectReference>
-    <ProjectReference Include="VoxelBusters.EssentialKit.csproj">
-      <Project>{f8578753-e32d-719a-a562-3b7416de2832}</Project>
-      <Name>VoxelBusters.EssentialKit</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Core.Runtime.Shared.csproj">
       <Project>{7e3d2d31-8b92-40dd-3e7f-50aef2942087}</Project>
@@ -1215,10 +1164,6 @@
       <Project>{575d09b8-621d-2741-1fe3-a451e8883ba0}</Project>
       <Name>UnityEngine.UI</Name>
     </ProjectReference>
-    <ProjectReference Include="VoxelBusters.EssentialKit.Editor.csproj">
-      <Project>{40f75b65-c301-3d10-5351-5b1029b43aac}</Project>
-      <Name>VoxelBusters.EssentialKit.Editor</Name>
-    </ProjectReference>
     <ProjectReference Include="TextMeshProEffect.Editor.csproj">
       <Project>{6648acb9-23c7-67c1-6bd9-364db2028c8d}</Project>
       <Name>TextMeshProEffect.Editor</Name>
@@ -1235,21 +1180,9 @@
       <Project>{b537d6af-6950-a649-5836-8152f4adae12}</Project>
       <Name>KinoBloom.Runtime</Name>
     </ProjectReference>
-    <ProjectReference Include="VoxelBusters.CoreLibrary.Editor.csproj">
-      <Project>{95c583ce-8183-843d-789a-ed5e66b07fcb}</Project>
-      <Name>VoxelBusters.CoreLibrary.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="VoxelBusters.CoreLibrary.NativePlugins.csproj">
-      <Project>{ca7fa2a5-e3f8-cde9-9794-42e1d18ec594}</Project>
-      <Name>VoxelBusters.CoreLibrary.NativePlugins</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.2D.Tilemap.Extras.Editor.csproj">
       <Project>{ab242a69-52de-4c26-eddf-d6271c8c7e9e}</Project>
       <Name>Unity.2D.Tilemap.Extras.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="VoxelBusters.EssentialKit.SimulatorModule.csproj">
-      <Project>{abf4e0d0-9099-1a15-962c-8f2777e23c36}</Project>
-      <Name>VoxelBusters.EssentialKit.SimulatorModule</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Mathematics.csproj">
       <Project>{e95b5227-8caf-2a11-d63f-9e7fc34aecc7}</Project>
@@ -1258,10 +1191,6 @@
     <ProjectReference Include="Unity.RenderPipelines.Core.Editor.csproj">
       <Project>{3e6bb285-66df-d24d-2213-893ebd18f77e}</Project>
       <Name>Unity.RenderPipelines.Core.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="VoxelBusters.CoreLibrary.Editor.Experimental.csproj">
-      <Project>{3fc94521-00ba-3bc2-d5cf-3a280f6faca1}</Project>
-      <Name>VoxelBusters.CoreLibrary.Editor.Experimental</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.PlayableGraphVisualizer.Editor.csproj">
       <Project>{87bda108-53e9-4d98-6105-0fbac917c720}</Project>

@@ -39,7 +39,7 @@ public class StoreProductReference : UIObjReference<AppStoreProductData>
         image.sprite = t.icon;
         // image.SetNativeSize();
         particle.localScale = Vector3.one;
-        price.text = AppStoreManager.instance.GetProductPriceStr(t.ProductName);
+       // price.text = AppStoreManager.instance.GetProductPriceStr(t.ProductName);
         return base.InitData(t, SelectAction, toggleGroup);
     }
     public override void InitChildObjData()

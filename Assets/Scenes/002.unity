@@ -442,9 +442,6 @@ GameObject:
   - component: {fileID: 1532694215}
   - component: {fileID: 1532694216}
   - component: {fileID: 1532694217}
-  - component: {fileID: 1532694218}
-  - component: {fileID: 1532694219}
-  - component: {fileID: 1532694220}
   m_Layer: 0
   m_Name: GameController
   m_TagString: GameController
@@ -485,7 +482,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startBGM: {fileID: 8300000, guid: 7907b6536d50e9c4c9fffd49050d273d, type: 3}
-  startPlay: 1
+  startPlay: 0
   noGuide: 0
   testMap: 0
   testCoordinate:
@@ -581,55 +578,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1532694218
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1532694209}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6735ef6dba254fd4b9ab04ca59d93baa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  autoChangeLanguage: 0
---- !u!114 &1532694219
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1532694209}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c9682ab4acf04241be63656ffc0c9b9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1532694220
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1532694209}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99c5cf6231194e1b818151b27e854acc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  disableAutoRotation: 1
-  fixedOrientation: 1
-  legacyRecheckInterval: 2.5
-  allowTouchscreen: 1
-  allowGamepad: 0
-  showOverlay: 0
-  overlayRefreshSec: 1
-  overlayFontSize: 11
-  overlayWidthRatio: 0.5
-  overlayBgAlpha: 0.45
-  overlayX: 10
-  overlayY: 10
 --- !u!1 &1660989405
 GameObject:
   m_ObjectHideFlags: 0

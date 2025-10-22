@@ -7,8 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Unity.Mathematics;
-using UnityEngine;
-using VoxelBusters.EssentialKit;
+using UnityEngine; 
 
 public class GameDataSaveManager : Singleton<GameDataSaveManager>
 {
@@ -379,7 +378,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         }
         else
         {
-            CloudServices.SetInt("diamond", userGameSaveDataList.commonSaveData.diamond);
+            //CloudServices.SetInt("diamond", userGameSaveDataList.commonSaveData.diamond);
         }
        
     }
@@ -525,7 +524,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         }
         else
         {
-            CloudServices.Synchronize();
+            //CloudServices.Synchronize();
         }
       
         return true;
@@ -577,7 +576,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         }
         else
         {
-            CloudServices.SetInt("diamond", userGameSaveDataList.commonSaveData.diamond);
+           // CloudServices.SetInt("diamond", userGameSaveDataList.commonSaveData.diamond);
         }
        
         if (index < 0)
@@ -602,7 +601,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             }
             else
             {
-                CloudServices.RemoveKey(key); 
+               // CloudServices.RemoveKey(key); 
             }
            
         }
@@ -617,7 +616,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             }
             else
             {
-                CloudServices.RemoveKey(key); 
+              //  CloudServices.RemoveKey(key); 
             }
         }
 
@@ -631,7 +630,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             }
             else
             {
-                CloudServices.RemoveKey(key); 
+             //   CloudServices.RemoveKey(key); 
             }
         } 
     }
@@ -649,7 +648,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             }
             else
             {
-                CloudServices.SetInt(key, value);
+              //  CloudServices.SetInt(key, value);
             }
           
         }
@@ -664,7 +663,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             }
             else
             {
-                CloudServices.SetString(key, value);
+              //  CloudServices.SetString(key, value);
             }
             
         }
@@ -688,7 +687,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             }
             else
             {
-                CloudServices.SetString(key, objStr);
+              //  CloudServices.SetString(key, objStr);
             }
            
         } 
@@ -704,7 +703,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         }
         else
         {
-            diamond = CloudServices.GetInt("diamond");
+          //  diamond = CloudServices.GetInt("diamond");
         } 
         userGameSaveDataList.commonSaveData = new CommonSaveData
         {
@@ -752,7 +751,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                 }
                 else
                 {
-                    value= CloudServices.GetInt(fieldKey);
+                  //  value= CloudServices.GetInt(fieldKey);
                 } 
                 field.SetValue(userData, value);
             }
@@ -767,7 +766,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                 }
                 else
                 {
-                    value = CloudServices.GetString(fieldKey);
+                 //   value = CloudServices.GetString(fieldKey);
                 } 
                 field.SetValue(userData, value);
             }
@@ -782,7 +781,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                 }
                 else
                 {
-                    value = CloudServices.GetString(fieldKey);
+                  //  value = CloudServices.GetString(fieldKey);
                 } 
                 if (!string.IsNullOrEmpty(value))
                 {

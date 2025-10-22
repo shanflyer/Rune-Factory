@@ -5,9 +5,7 @@ using MyGame;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
-using VoxelBusters.CoreLibrary;
-using VoxelBusters.EssentialKit;
+using UnityEngine.UI; 
 using TapSDK.Core;
 using TapSDK.Login;  
 using TapSDK.Update;
@@ -186,98 +184,13 @@ public class GameController : MonoBehaviour
     }
 
  
-    private void OnSavedDataChange(CloudServicesSavedDataChangeResult arg)
-    {
-        switch (arg.ChangeReason)
-        {
-            case CloudSavedDataChangeReasonCode.ServerChange:
-                break;
-            case CloudSavedDataChangeReasonCode.InitialSyncChange:
-                break;
-            case CloudSavedDataChangeReasonCode.QuotaViolationChange:
-                break;
-            case CloudSavedDataChangeReasonCode.AccountChange:
-                break;
-        }
-        if (GameDataSaveManager.instance.LoadDataSuccess)
-        {
-            hideSave = true;
-          //  GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr($"云存档数据发生变化！--ChangeReason:{arg.ChangeReason}"), Application.Quit, Application.Quit);
-         //   Debug.Log($"云存档数据发生变化！--ChangeReason:{arg.ChangeReason}");
-        }
-       
-    }
+   
 
     string nowUserId;
     public bool hideSave { get; private set; }
-    private void OnUserChange(CloudServicesUserChangeResult result, Error error)
-    {
-       // Debug.Log($"云存档OnUserChange！--result.User.UserId:{result.User.UserId}");
-        if (string.IsNullOrEmpty(nowUserId))
-        {
-            nowUserId = result.User.UserId;
-        }
-        else
-        {
-            if (result.User.UserId != nowUserId)
-            {
-                hideSave = true;
-                GameManager.instance.ShowTwoSelectAction("用户改变", LanguageManage.SwitchStr("云存档用户发生变化，请退出游戏重新进入"), Application.Quit, Application.Quit);
-            } 
-        }
-       
-    }
+    
     bool startGameCompleted = false;
-    private void OnSynchronizeComplete(CloudServicesSynchronizeResult result)
-    {
-       // if (GameDataManager.instance.GlobalData.debug)
-            Debug.Log($"云存档OnSynchronizeComplete:{result.Success}");
-        // var gameDataSaveManager= GameDataSaveManager.instance;
-
-        if (result.Success)
-        {
-            if (!startGameCompleted)
-            { 
-                GameDataSaveManager.instance.LoadCloudData();
-                StartGame();
-                startGameCompleted = true;
-            }
-           
-        }
-        else if (Application.internetReachability == NetworkReachability.NotReachable)
-        {
-            hideSave = true;
-            GameManager.instance.ShowTwoSelectAction("NetError", LanguageManage.SwitchStr("没有网络连接无法同步存档，请退出重试"), Application.Quit, Application.Quit);
-        }
-        else
-        {
-            hideSave = true;
-            GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr("云存档加载错误"), Application.Quit, Application.Quit);
-        }
-        /*
-#if UNITY_EDITOR
-        GameDataSaveManager.instance.LoadCloudData();
-        StartGame();
-#else
-if (result.Success)
-        {
-            GameDataSaveManager.instance.LoadCloudData();
-            StartGame();
-        }
-        else if (Application.internetReachability == NetworkReachability.NotReachable)
-        {
-            hideSave = true;
-            GameManager.instance.ShowTwoSelectAction("NetError", LanguageManage.SwitchStr("没有网络连接无法同步存档，请退出重试"), Application.Quit, Application.Quit);
-        }
-        else
-        {
-            hideSave = true;
-            GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr("云存档加载错误"), Application.Quit, Application.Quit);
-        }
-#endif
-        */
-
-    }
+    
    // 彻底重启（杀进程 + AlarmManager 重新拉起）
     public static void RestartNow()
     {
@@ -359,12 +272,7 @@ if (result.Success)
 #endif
        // GameSDKManager.instance.InitSDK();
       
-        if (!GameDataManager.instance.GlobalData.localSave)
-        {
-            CloudServices.OnUserChange += OnUserChange;
-            CloudServices.OnSavedDataChange += OnSavedDataChange;
-            CloudServices.OnSynchronizeComplete += OnSynchronizeComplete;
-        } 
+       
        
         startGameCompleted = false;
         Screen.SetResolution(Screen.width, Screen.height, true);
@@ -394,12 +302,9 @@ if (result.Success)
     // Start is called beforee the first frame update
    async void Start()
     { 
-        if (!GameDataManager.instance.GlobalData.hideStore)
-        {
-            BillingServices.InitializeStore(); 
-        }
+       
       
-        CloudRemoteConfig cloudRemoteConfig = CloudRemoteConfig.instance;
+        //CloudRemoteConfig cloudRemoteConfig = CloudRemoteConfig.instance;
     }
   
 
@@ -408,7 +313,7 @@ if (result.Success)
     {
         if (!GameDataManager.instance.GlobalData.localSave)
         {
-            CloudServices.Synchronize(); 
+           //CloudServices.Synchronize(); 
         }
         else
         {
