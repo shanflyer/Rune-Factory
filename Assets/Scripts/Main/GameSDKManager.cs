@@ -14,8 +14,8 @@ using UnityEngine;
 public class GameSDKManager : Singleton<GameSDKManager>, ITapCloudSaveCallback
 {
     // —— Tap 配置 ——（替换成你的）
-    private readonly string clientId    = "ulio9wxa6ssgnoyfjx";
-    private readonly string clientToken = "2iblbUrSDZ80hrl0ImKykJuJF3UXZkSliWEOMr9J";
+    private readonly string clientId    = "egnipuxvuxfwykoisu";
+    private readonly string clientToken = "wjNbrqaa34f0OkmSNJuSsOGYV0v5eh4Cndk7jAVw";
 
     private bool hasInit = false;
     public  bool hasCheckedCompliance { get; private set; }
