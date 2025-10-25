@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,8 +9,7 @@ public class MainPanel : GamePanel<IReferenceData>
     private Toggle Toggle;
     [SerializeField]
     private Transform List;
-    [SerializeField]
-    Button InfoButton;
+    [SerializeField] private Button InfoButton, Instagram;
     [SerializeField]
     Button TeamButton, HomeEquipmentButton,MyTalk;
     public override void SetPanelUISerializeObj()
@@ -50,9 +47,36 @@ public class MainPanel : GamePanel<IReferenceData>
             TeamButton.gameObject.SetActive(false);
         }
     }
+
+    private const string InstagramUser = "shanflyingmountain";
+    private const string InstagramWeb = "https://www.instagram.com/" + InstagramUser + "/";
     protected override void Awake()
     {
         base.Awake();
+        Instagram.onClick.AddListener(() =>
+        {
+#if UNITY_ANDROID
+        // Android 打开 App，否则打开网页
+        string appUri = "instagram://user?username=" + InstagramUser;
+        try
+        {
+            Application.OpenURL(appUri);
+        }
+        catch
+        {
+            Application.OpenURL(InstagramWeb);
+        }
+#elif UNITY_IOS
+            // iOS 打开 App，否则网页
+            var appUri = "instagram://user?username=" + InstagramUser;
+            if (Application.CanStreamedLevelBeLoaded(appUri))
+                Application.OpenURL(appUri);
+            else
+                Application.OpenURL(InstagramWeb);
+#else
+        Application.OpenURL(InstagramWeb);
+#endif
+        });
         InfoButton.onClick.AddListener(async () =>
         {
            await UIManager.instance.ShowGamePanel<BookPanel>();
