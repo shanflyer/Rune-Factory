@@ -19,7 +19,7 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
         int width = Screen.width;
         int heigh = Screen.height;
         volumeLevel = PlayerPrefs.GetInt("VolumeLevel", 1);
-        depthFieldValue= PlayerPrefs.GetFloat("DepthField", 1);
+        DepthFieldValue = PlayerPrefs.GetFloat("DepthField", 1);
 
         screenMat.SetFloat("_CycleSize", width > heigh ? width : heigh);
         GameActionManager.instance.AddListener<LerpScreenCycleValue>(LerpScreenCycleValue);
