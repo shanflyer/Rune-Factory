@@ -48,7 +48,7 @@ public class MainPanel : GamePanel<IReferenceData>
         }
     }
 
-    private const string InstagramUser = "shanflyingmountain";
+    private const string InstagramUser = "shanflyer";
     private const string InstagramWeb = "https://www.instagram.com/" + InstagramUser + "/";
     protected override void Awake()
     {
