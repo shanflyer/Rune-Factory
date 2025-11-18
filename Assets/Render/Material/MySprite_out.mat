@@ -12,12 +12,12 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - SKINNED_SPRITE
+  m_InvalidKeywords:
   - BACKBLEND
   - DAMPBLEND
-  - SKINNED_SPRITE
-  - SNOWBLEND
-  m_InvalidKeywords:
   - NATIVEPOS_ON
+  - SNOWBLEND
   - _BACKBLEND_ON
   - _DampBlend
   - _SNOWBLEND_ON
@@ -36,6 +36,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DepthTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FlowerTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -84,6 +88,8 @@ Material:
     - _EdgeWaveOffset: 0
     - _EdgeWaveSpeed: 0
     - _EnableExternalAlpha: 0
+    - _FeatureFlags: 18
+    - _FlowerStep: 0
     - _GrassBlend: 0
     - _HideNormal: 0
     - _LightBlend: 1
@@ -115,6 +121,10 @@ Material:
     - WaveScale0: {r: 1, g: 1, b: 0, a: 0}
     - WaveScale1: {r: 1, g: 1, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _FixedColor: {r: 1, g: 1, b: 1, a: 0}
+    - _FlowerRemap: {r: 0, g: 0, b: 0, a: 0}
+    - _MirrorBlend: {r: 1, g: 1, b: 1, a: 1}
+    - _ObjectWorldPos: {r: 0, g: 0, b: 0, a: 0}
     - _PlantAutumnColor0: {r: 0, g: 0, b: 0, a: 1}
     - _PlantAutumnColor1: {r: 1, g: 1, b: 1, a: 1}
     - _PlantSpringColor: {r: 0, g: 0, b: 0, a: 1}

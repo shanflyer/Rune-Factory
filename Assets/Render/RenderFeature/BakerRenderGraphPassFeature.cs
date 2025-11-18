@@ -40,104 +40,116 @@ namespace UnityEngine.Rendering.Universal.Internal
                     m_ShaderTagIdList.Add(new ShaderTagId("UniversalForwardOnly"));
                     m_ShaderTagIdList.Add(new ShaderTagId("LightweightForward"));
                 }
-                m_RenderStateBlock = new RenderStateBlock(RenderStateMask.Nothing);
-                if (settings.overrideDepthState)
-                {
-                    SetDepthState(settings.enableWrite, settings.depthCompareFunction);
-                }
-                if (settings.overrideStencilState)
-                {
-                    SetStencilState(settings.stencilStateData.stencilReference, settings.stencilStateData.stencilCompareFunction,
-                        settings.stencilStateData.passOperation, settings.stencilStateData.failOperation, settings.stencilStateData.zFailOperation);
-                }
+
+                m_RenderStateBlock = new RenderStateBlock(RenderStateMask.Nothing); 
                 renderPassEvent = settings.renderPassEvent;
             }
 
             internal class PassData
             {
                 internal RendererListHandle rendererList;
-                internal ClearFlag clearFlag;
-                internal Color clearColor;
                 internal Material material;
                 internal int passId;
-                internal TextureHandle outTexHandle;
+
+                internal TextureHandle source;
+                // internal TextureHandle outTexHandle;
             }
 
-            private static void ExecutePass(PassData data, RasterGraphContext context)
-            {
-                context.cmd.ClearRenderTarget(data.clearFlag == ClearFlag.Depth || data.clearFlag == ClearFlag.All, data.clearFlag == ClearFlag.Color || data.clearFlag == ClearFlag.All, data.clearColor);
-                context.cmd.DrawRendererList(data.rendererList); 
-            }
-            private static void OutExecutePass(PassData data, RasterGraphContext context)
-            {
-                data.material.mainTexture = data.outTexHandle;  
-                context.cmd.DrawProcedural(Matrix4x4.identity, data.material, 0, MeshTopology.Triangles, 3);
-            }
+
             private int BlitTextureID = Shader.PropertyToID("DestTexture");
 
-            public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
+            private void AddPass(RenderGraph renderGraph, ContextContainer contextContainer, bool isOpaque,
+                TextureHandle targetTex, TextureHandle depthTex, bool setGlobal)
             {
-                // This adds a raster render pass to the graph, specifying the name and the data type that will be passed to the ExecutePass function.
-                using (var builder = renderGraph.AddRasterRenderPass<PassData>($"{passName}/destination", out var passData))
+                var passName = isOpaque ? $"{this.passName}_Opaque" : $"{this.passName}_Transparent";
+                using (var builder = renderGraph.AddRasterRenderPass(passName, out PassData passData))
                 {
-                    UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
-                    UniversalRenderingData renderingData = frameData.Get<UniversalRenderingData>();
-                    UniversalLightData lightData = frameData.Get<UniversalLightData>();
-                    UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
+                    var resourceData = contextContainer.Get<UniversalResourceData>();
+                    var renderingData = contextContainer.Get<UniversalRenderingData>();
+                    var lightData = contextContainer.Get<UniversalLightData>();
+                    var cameraData = contextContainer.Get<UniversalCameraData>();
 
-                    passData.clearFlag = settings.clearFlag;
-                    passData.clearColor = settings.clearColor;
-                  
-
-                  
-
-                    SortingCriteria sortingCriteria = settings.opaque ? cameraData.defaultOpaqueSortFlags : SortingCriteria.CommonTransparent;
-                    DrawingSettings drawSettings = RenderingUtils.CreateDrawingSettings(m_ShaderTagIdList, renderingData, cameraData, lightData, sortingCriteria);
+                    var sortingCriteria = isOpaque
+                        ? cameraData.defaultOpaqueSortFlags
+                        : SortingCriteria.CommonTransparent;
+                    var drawSettings = RenderingUtils.CreateDrawingSettings(m_ShaderTagIdList,
+                        renderingData, cameraData, lightData, sortingCriteria);
                     drawSettings.overrideMaterial = settings.overrideMat;
                     var sortSettings = drawSettings.sortingSettings;
                     GetTransparencySortingMode(cameraData.camera, ref sortSettings);
                     drawSettings.sortingSettings = sortSettings;
-                    var filteringSettings = new FilteringSettings(settings.opaque ? RenderQueueRange.opaque : RenderQueueRange.transparent, settings.layerMask);
+                    var filteringSettings = new FilteringSettings(
+                        isOpaque ? RenderQueueRange.opaque : RenderQueueRange.transparent,
+                        settings.layerMask);
 
-                    RenderingUtils.CreateRendererListWithRenderStateBlock(renderGraph, ref renderingData.cullResults, drawSettings, filteringSettings, m_RenderStateBlock, ref passData.rendererList);
-                     
+                    RenderingUtils.CreateRendererListWithRenderStateBlock(renderGraph,
+                        ref renderingData.cullResults, drawSettings, filteringSettings, m_RenderStateBlock,
+                        ref passData.rendererList);
+
                     builder.UseRendererList(passData.rendererList);
-                    builder.UseTexture(resourceData.cameraColor);
+                    builder.SetRenderAttachment(targetTex, 0);
+                    if (depthTex.IsValid()) builder.SetRenderAttachmentDepth(depthTex);
 
-                    RenderTextureDescriptor desc = cameraData.cameraTargetDescriptor; 
-
-                    var targetDesc = renderGraph.GetTextureDesc(resourceData.cameraColor);
-                    targetDesc.name = settings.afterRenderMaterial != null ? $"{passName}_destination" : settings.textureName;
-                    targetDesc.clearBuffer = settings.clearFlag == ClearFlag.Color || settings.clearFlag == ClearFlag.All;
-                    targetDesc.clearColor=settings.clearColor;
-                    targetDesc.width= (int)(settings.blitScale * desc.width);
-                    targetDesc.height= (int)(settings.blitScale * desc.height);
-
-                    TextureHandle destination = renderGraph.CreateTexture(targetDesc);
-                     
-                   
-                    builder.SetRenderAttachment(destination, 0);
-                    builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture, AccessFlags.Write);
-                    builder.SetRenderFunc((PassData data, RasterGraphContext context) => ExecutePass(data, context));
-                    if (settings.afterRenderMaterial == null)
+                    builder.SetRenderFunc((PassData passData, RasterGraphContext context) =>
                     {
-                        builder.SetGlobalTextureAfterPass(destination, BlitTextureID);
-                    }
-                    else
+                        context.cmd.DrawRendererList(passData.rendererList);
+                    });
+                    if (setGlobal) builder.SetGlobalTextureAfterPass(targetTex, BlitTextureID);
+                }
+            }
+            public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
+            {
+                BlitTextureID = Shader.PropertyToID(settings.textureName);
+                var blit = settings.afterRenderMaterial != null;
+                var destination = TextureHandle.nullHandle;
+                var cameraData = frameData.Get<UniversalCameraData>();
+                var resourceData = frameData.Get<UniversalResourceData>();
+                var desc = cameraData.cameraTargetDescriptor;
+                var targetDesc = renderGraph.GetTextureDesc(resourceData.cameraColor);
+                if (blit || !settings.blitToCameraTarget)
+                {
+                    var colorDesc = new TextureDesc((int)(settings.blitScale * desc.width),
+                        (int)(settings.blitScale * desc.height))
                     {
-                        var customData = frameData.GetOrCreate<MyCustomData>();
-                        customData.textureToTransfer = destination;
-                    }
-                   
+                        clearColor = settings.clearColor,
+                        clearBuffer = settings.clearFlag == ClearFlag.Color ||
+                                      settings.clearFlag == ClearFlag.All,
+                        format = targetDesc.colorFormat,
+                        msaaSamples = targetDesc.msaaSamples,
+                        name = $"{passName}_destination",
+                        bindTextureMS = false
+                    };
+                    destination = renderGraph.CreateTexture(colorDesc);
+                }
+                else
+                {
+                    destination = resourceData.activeColorTexture;
                 }
 
-                if (settings.afterRenderMaterial != null)
+                var depthTexture = settings.needDepth ? resourceData.cameraDepth : TextureHandle.nullHandle;
+                var singleBlit = !blit && !settings.blitToCameraTarget;
+                switch (settings.objectType)
                 {
+                    case ObjectType.Opaque:
+                        AddPass(renderGraph, frameData, true, destination, depthTexture, singleBlit);
+                        break;
+                    case ObjectType.Transparent:
+                        AddPass(renderGraph, frameData, false, destination, depthTexture, singleBlit);
+                        break;
+                    case ObjectType.All:
+                        AddPass(renderGraph, frameData, true, destination, depthTexture, false);
+                        AddPass(renderGraph, frameData, false, destination, depthTexture, singleBlit);
+                        break;
+                }
+
+                if (blit)
+                {
+                    var customData = frameData.GetOrCreate<MyCustomData>();
+                    customData.textureToTransfer = destination;
                     RecordRenderGraphBlit(renderGraph, frameData);
                 }
             }
 
-           
 
             private void RecordRenderGraphBlit(RenderGraph renderGraph, ContextContainer frameData)
             {
@@ -154,22 +166,17 @@ namespace UnityEngine.Rendering.Universal.Internal
                     {
                         targetDesc.name = settings.textureName;
                     }
-                   
-                    targetDesc.clearBuffer = settings.clearFlag == ClearFlag.Color || settings.clearFlag == ClearFlag.All;
+
+                    targetDesc.clearBuffer =
+                        settings.clearFlag == ClearFlag.Color || settings.clearFlag == ClearFlag.All;
                     targetDesc.clearColor = settings.clearColor;
                     targetDesc.width = (int)(settings.blitScale * desc.width);
                     targetDesc.height = (int)(settings.blitScale * desc.height);
 
-                    TextureHandle outTexHandle = settings.blitToCameraTarget ? resourceData.activeColorTexture : renderGraph.CreateTexture(targetDesc);
+                    var outTexHandle = settings.blitToCameraTarget
+                        ? resourceData.cameraColor
+                        : renderGraph.CreateTexture(targetDesc);
 
-                    /*
-                    RenderTextureDescriptor desc = cameraData.cameraTargetDescriptor;
-                    desc.width = (int)(settings.blitScale * desc.width);
-                    desc.height = (int)(settings.blitScale * desc.height);
-                    desc.colorFormat = RenderTextureFormat.Default;
-                    desc.depthStencilFormat = Experimental.Rendering.GraphicsFormat.None;
-                    TextureHandle outTexHandle =settings.blitToCameraTarget?resourceData.activeColorTexture: UniversalRenderer.CreateRenderGraphTexture(renderGraph, desc, settings.textureName,
-                    false);*/
                     var customData = frameData.Get<MyCustomData>();
 
                     passData.material = settings.afterRenderMaterial;
@@ -177,15 +184,22 @@ namespace UnityEngine.Rendering.Universal.Internal
 
                     builder.UseTexture(customData.textureToTransfer);
                     builder.SetRenderAttachment(outTexHandle, 0);
-                    builder.SetRenderAttachmentDepth(resourceData.activeDepthTexture, AccessFlags.Write);
-                    passData.outTexHandle = customData.textureToTransfer;
+                    passData.source = customData.textureToTransfer;
 
-                    builder.SetRenderFunc((PassData data, RasterGraphContext context) => OutExecutePass(data, context));
+                    builder.SetRenderFunc((PassData data, RasterGraphContext context) =>
+                    {
+                        Blitter.BlitTexture(
+                            context.cmd,
+                            data.source, // 源：TextureHandle
+                            new Vector4(1, 1, 0, 0), // scaleBias
+                            data.material,
+                            data.passId
+                        );
+                    });
                     if (!settings.blitToCameraTarget)
                     {
                         builder.SetGlobalTextureAfterPass(outTexHandle, BlitTextureID);
                     }
-                    
                 }
             }
 
@@ -215,29 +229,17 @@ namespace UnityEngine.Rendering.Universal.Internal
                 }
             }
 
-            public void SetDepthState(bool writeEnabled, CompareFunction function = CompareFunction.Less)
-            {
-                m_RenderStateBlock.mask |= RenderStateMask.Depth;
-                m_RenderStateBlock.depthState = new DepthState(writeEnabled, function);
-            }
-
-            private void SetStencilState(int reference, CompareFunction compareFunction, StencilOp passOp, StencilOp failOp, StencilOp zFailOp)
-            {
-                StencilState stencilState = StencilState.defaultValue;
-                stencilState.enabled = true;
-                stencilState.SetCompareFunction(compareFunction);
-                stencilState.SetPassOperation(passOp);
-                stencilState.SetFailOperation(failOp);
-                stencilState.SetZFailOperation(zFailOp);
-
-                m_RenderStateBlock.mask |= RenderStateMask.Stencil;
-                m_RenderStateBlock.stencilReference = reference;
-                m_RenderStateBlock.stencilState = stencilState;
-            }
-
+         
             public override void OnCameraCleanup(CommandBuffer cmd)
             {
             }
+        }
+
+        public enum ObjectType
+        {
+            Opaque,
+            Transparent,
+            All
         }
 
         [Serializable]
@@ -246,14 +248,8 @@ namespace UnityEngine.Rendering.Universal.Internal
             public TransparencySortMode m_transparencySortMode;
             public Vector3 m_transparencySortAxis = new Vector3(0, 0, 1);
 
-            public bool overrideDepthState = false;
-            public CompareFunction depthCompareFunction = CompareFunction.LessEqual;
-            public bool enableWrite = true;
-
-            public bool overrideStencilState;
-            public StencilStateData stencilStateData = new StencilStateData();
-
-            public bool opaque = false;
+            public bool needDepth;
+            public ObjectType objectType;
             public RenderPassEvent renderPassEvent = RenderPassEvent.AfterRenderingSkybox;
             public LayerMask layerMask = -1;
             public Material overrideMat;
@@ -285,12 +281,13 @@ namespace UnityEngine.Rendering.Universal.Internal
         // This method is called when setting up the renderer once per-camera.
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
-            if (Application.isPlaying&& GameVolumeManager.instance.volumeLevel < VolumeLevel)
+            if (Application.isPlaying && GameVolumeManager.instance.volumeLevel < VolumeLevel)
             {
                 return;
             }
-           // if (InitCheckCamera(renderingData.cameraData.camera))
-                renderer.EnqueuePass(m_ScriptablePass);
+
+            // if (InitCheckCamera(renderingData.cameraData.camera))
+            renderer.EnqueuePass(m_ScriptablePass);
         }
     }
 }

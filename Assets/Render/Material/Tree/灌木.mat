@@ -11,13 +11,13 @@ Material:
   m_Shader: {fileID: 4800000, guid: d4053574458c62242a70fd1300243b57, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
+  m_ValidKeywords: []
+  m_InvalidKeywords:
   - DAMPBLEND
   - MOVE
+  - NATIVEPOS_ON
   - SEASONCOLORBLEND
   - SNOWBLEND
-  m_InvalidKeywords:
-  - NATIVEPOS_ON
   - _BACKBLEND_ON
   - _DampBlend
   - _PLANTAUTUMNBLEND_ON
@@ -155,6 +155,7 @@ Material:
     - _EdgeWaveOffset: 0
     - _EdgeWaveSpeed: 0
     - _EnableExternalAlpha: 0
+    - _FeatureFlags: 30
     - _FlowerStep: 0
     - _GlossMapScale: 1
     - _Glossiness: 0
@@ -213,6 +214,7 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
     - _FixedColor: {r: 1, g: 1, b: 1, a: 0}
     - _FlowerRemap: {r: 0, g: 0, b: 0, a: 0}
+    - _MirrorBlend: {r: 1, g: 1, b: 1, a: 1}
     - _NoiseSet0: {r: 0.6, g: 0.8, b: 6, a: 0.25}
     - _NoiseSet1: {r: 0.5, g: 1, b: 10, a: 0.3}
     - _ObjectWorldPos: {r: 0, g: 0, b: 0, a: 0}

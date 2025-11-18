@@ -11,14 +11,14 @@ Material:
   m_Shader: {fileID: 4800000, guid: d4053574458c62242a70fd1300243b57, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
+  m_ValidKeywords: []
+  m_InvalidKeywords:
   - BACKBLEND
   - DAMPBLEND
+  - NATIVEPOS_ON
   - SHADOWSTEP
   - SNOWBLEND
   - WATER
-  m_InvalidKeywords:
-  - NATIVEPOS_ON
   - _BACKBLEND_ON
   - _DAMPBLEND_ON
   - _DampBlend
@@ -116,6 +116,7 @@ Material:
     - _EdgeWaveSpeed: 1
     - _EnableExternalAlpha: 0
     - _Fail: 0
+    - _FeatureFlags: 83
     - _FlowerStep: 0
     - _GrassBlend: 0
     - _HideNormal: 0

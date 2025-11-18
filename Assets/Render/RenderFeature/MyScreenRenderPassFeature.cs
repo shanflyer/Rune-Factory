@@ -1,4 +1,3 @@
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.RenderGraphModule;
@@ -6,119 +5,93 @@ using UnityEngine.Rendering.Universal;
 
 public class MyScreenRenderPassFeature : ScriptableRendererFeature
 {
-    public RenderPassEvent renderPassEvent;
+    public RenderPassEvent renderPassEvent = RenderPassEvent.AfterRenderingTransparents;
     public Material material;
-    public string blitName;
-    public float scale = 1;
-    public bool blitTexture = false;
-    public int2 VolumeLevel;
+
     class MyScreenRenderPass : ScriptableRenderPass
     {
-        private string tagName="Test";
-        private Material material;
-        private bool blitTexture = false;
-        private string blitName;
-        public float scale = 1;
-        public MyScreenRenderPass(Material material, string blitName, string tagName,float scale,bool blitTexture, RenderPassEvent renderPassEvent)
+        private readonly string tagName = "MyScreenPass";
+        private readonly Material material;
+
+        public MyScreenRenderPass(Material mat, RenderPassEvent evt, string tagName)
         {
-            this.renderPassEvent = renderPassEvent;
-            this.blitName = blitName;
-            this.material = material;
+            material = mat;
+            renderPassEvent = evt;
             this.tagName = tagName;
-            this.scale = scale;
-            this.blitTexture = blitTexture;
         }
+
         private class PassData
         {
-            internal TextureHandle source;
-            internal Material material;
-            internal TextureHandle outTexHandle;
+            public TextureHandle source;
+            public Material material;
         }
-         
-        static void ExecutePass(PassData data, RasterGraphContext context)
-        {
-            if(data.material == null)
-            {
-                Blitter.BlitTexture(context.cmd, data.source, new Vector4(1, 1, 0, 0), 0.0f, false);
-            }
-            else
-            {
-                data.material.mainTexture = data.source;
-                context.cmd.DrawProcedural(Matrix4x4.identity, data.material, 0, MeshTopology.Triangles, 3, 1);
-            } 
-        }
-         
+
         public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
         {
-           
-            if (material == null && !blitTexture)
-            {
+            if (material == null)
                 return;
-            }
-            UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
-            UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
 
+            var resources = frameData.Get<UniversalResourceData>();
 
-            var targetDesc = renderGraph.GetTextureDesc(resourceData.cameraColor);
-            targetDesc.name = blitTexture ? blitName : $"{tagName}_TempScreenTex";
-            targetDesc.clearBuffer = false;
+            // 1. 创建一个和 cameraColor 一样的临时 RT
+            var desc = renderGraph.GetTextureDesc(resources.cameraColor);
+            desc.name = $"{tagName}_Temp";
+            desc.clearBuffer = false;
+            var temp = renderGraph.CreateTexture(desc);
 
-            TextureHandle outTexHandle = renderGraph.CreateTexture(targetDesc);
-            using (var builder = renderGraph.AddRasterRenderPass<PassData>(blitTexture ?tagName:$"{tagName}/Copy", out var passData))
+            // ---------- Pass1：cameraColor -> temp（纯复制，不加材质） ----------
+            using (var builder = renderGraph.AddRasterRenderPass<PassData>($"{tagName}/Copy", out var passData))
             {
-                passData.source = resourceData.activeColorTexture;
-                if (blitTexture)
-                {
-                    passData.material = material;
-                }
-                else
-                {
-                    passData.material = null;
-                }
+                passData.source = resources.activeColorTexture;
+                passData.material = null;
 
-                builder.UseTexture(resourceData.activeColorTexture);
-                builder.SetRenderAttachment(outTexHandle, 0);
+                builder.UseTexture(passData.source); // 读 camera
+                builder.SetRenderAttachment(temp, 0); // 写 temp
                 builder.AllowPassCulling(false);
-                builder.SetRenderFunc((PassData data, RasterGraphContext context) => ExecutePass(data, context));
 
-                int BlitTextureID = Shader.PropertyToID(blitName);
-                if (blitTexture)
-                    builder.SetGlobalTextureAfterPass(outTexHandle, BlitTextureID);
-            }
-            
-            if (!blitTexture)
-            {
-                using (var builder = renderGraph.AddRasterRenderPass<PassData>($"{tagName}/blit", out var passData))
+                builder.SetRenderFunc(static (PassData data, RasterGraphContext ctx) =>
                 {
-                    passData.source = outTexHandle;
-                    passData.material = material;
-                    builder.UseTexture(outTexHandle); // 输入依赖 
-                    builder.SetRenderAttachment(resourceData.activeColorTexture, 0);
-                    builder.AllowPassCulling(false);
-                    builder.SetRenderFunc((PassData data, RasterGraphContext context) => ExecutePass(data, context)); 
-                }
+                    Blitter.BlitTexture(
+                        ctx.cmd,
+                        data.source,
+                        new Vector4(1, 1, 0, 0),
+                        0.0f,
+                        false);
+                });
             }
-        }
-         
-        public override void OnCameraCleanup(CommandBuffer cmd)
-        {
+
+            // ---------- Pass2：temp -> activeColor（用你的材质） ----------
+            using (var builder = renderGraph.AddRasterRenderPass<PassData>($"{tagName}/Effect", out var passData))
+            {
+                passData.source = temp;
+                passData.material = material;
+
+                builder.UseTexture(passData.source); // 读 temp
+                builder.SetRenderAttachment(resources.activeColorTexture, 0); // 写回 cameraColor
+                builder.AllowPassCulling(false);
+                builder.SetRenderFunc(static (PassData data, RasterGraphContext ctx) =>
+                {
+                    Blitter.BlitTexture(
+                        ctx.cmd,
+                        data.source,
+                        new Vector4(1, 1, 0, 0),
+                        data.material,
+                        0);
+                });
+            }
         }
     }
 
-    MyScreenRenderPass m_ScriptablePass;
+    private MyScreenRenderPass m_Pass;
 
-    /// <inheritdoc/>
     public override void Create()
     {
-        m_ScriptablePass = new MyScreenRenderPass(material,blitName,name,scale,blitTexture,renderPassEvent); 
+        m_Pass = new MyScreenRenderPass(material, renderPassEvent, name);
     }
-     
+
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
-        int level = !Application.isPlaying ?3:GameVolumeManager.instance.volumeLevel; 
-        if (level >= VolumeLevel.x && level <= VolumeLevel.y
-           // &&InitCheckCamera(renderingData.cameraData.camera)
-            )
-            renderer.EnqueuePass(m_ScriptablePass);
+        // 先别加任何 volume 条件，确保能跑起来
+        renderer.EnqueuePass(m_Pass);
     }
 }

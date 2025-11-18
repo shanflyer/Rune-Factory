@@ -11,10 +11,10 @@ Material:
   m_Shader: {fileID: 4800000, guid: d4053574458c62242a70fd1300243b57, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
+  m_ValidKeywords: []
+  m_InvalidKeywords:
   - DAMPBLEND
   - SHADOWSTEP
-  m_InvalidKeywords:
   - _DAMPBLEND_ON
   - _PLANTAUTUMNBLEND_ON
   - _SHADOWSTEP_ON
@@ -34,6 +34,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DepthTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FlowerTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -101,7 +105,10 @@ Material:
     - _EdgeWaveSpeed: 0
     - _EnableExternalAlpha: 0
     - _Fail: 0
+    - _FeatureFlags: 66
+    - _FlowerStep: 0
     - _GrassBlend: 0
+    - _HideNormal: 0
     - _HighLighStep: 0
     - _HighLightNoise: 50
     - _LightBlend: 1
@@ -159,8 +166,12 @@ Material:
     - _BlendColor: {r: 0, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _DampColor: {r: 0.6247775, g: 0.9379376, b: 0.9811321, a: 1}
+    - _FixedColor: {r: 1, g: 1, b: 1, a: 0}
+    - _FlowerRemap: {r: 0, g: 0, b: 0, a: 0}
     - _ForceColor: {r: 0, g: 0, b: 0, a: 0}
     - _HightLightColor: {r: 0.008406067, g: 0.47284126, b: 0.53588676, a: 1}
+    - _MirrorBlend: {r: 1, g: 1, b: 1, a: 1}
+    - _ObjectWorldPos: {r: 0, g: 0, b: 0, a: 0}
     - _PlantAutumnColor0: {r: 0.8301887, g: 0.7307685, b: 0.14489143, a: 1}
     - _PlantAutumnColor1: {r: 0.6509434, g: 0.39813322, b: 0.11974903, a: 1}
     - _PlantSpringColor: {r: 0.605976, g: 1, b: 0.3820755, a: 1}

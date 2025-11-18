@@ -11,14 +11,14 @@ Material:
   m_Shader: {fileID: 4800000, guid: d4053574458c62242a70fd1300243b57, type: 3}
   m_Parent: {fileID: 2100000, guid: f9fc84a00948a9d41bcd3063d5182247, type: 2}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
+  m_ValidKeywords: []
+  m_InvalidKeywords:
   - DAMPBLEND
   - MOVE
+  - NATIVEPOS_ON
   - SEASONCOLORBLEND
   - SNOWBLEND
   - WATER
-  m_InvalidKeywords:
-  - NATIVEPOS_ON
   - _DAMPBLEND_ON
   - _DampBlend
   - _PLANTAUTUMNBLEND_ON
@@ -37,6 +37,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _BackBlend: 0
+    - _FeatureFlags: 30
     - _GrassBlend: 0
     - _Water: 1
     m_Colors: []

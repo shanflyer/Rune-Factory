@@ -2,7 +2,7 @@ Shader "MyLight/DirectionLightMul"
 {
     Properties
     {
-        _MainTex("Diffuse", 2D) = "white" {}
+     
       // _TestDir("_TestDir",vector)=(0,0,0,0)
 
     }
@@ -26,10 +26,10 @@ Shader "MyLight/DirectionLightMul"
             half4 _GlobalColor;
             CBUFFER_START(UnityPerMaterial)     
             half3 _TestDir;
-            CBUFFER_END 
+            CBUFFER_END
 
-            TEXTURE2D(_MainTex);
-            SAMPLER(sampler_MainTex); 
+        TEXTURE2D(_BlitTexture);
+        SAMPLER(sampler_BlitTexture); 
             TEXTURE2D(_Normalmap);
             SAMPLER(sampler_Normalmap);
         ENDHLSL
@@ -75,8 +75,8 @@ Shader "MyLight/DirectionLightMul"
 
 
             half4 frag (v2f i) : SV_Target
-            { 
-                half4 col =SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex,i.uv);  
+            {
+                half4 col = SAMPLE_TEXTURE2D(_BlitTexture, sampler_BlitTexture, i.uv);  
                 
                  half4 normal_col =SAMPLE_TEXTURE2D(_Normalmap, sampler_Normalmap,i.uv);
                 half3 normalUnpacked = UnpackNormalRGBNoScale(normal_col);

@@ -4,7 +4,7 @@ Shader "MySprite-Lit-Default"
     {
         [HideInInspector] _FeatureFlags ("Feature Flags", Int) = 0
 
-
+        _Color("Color", Color) = (1,1,1,1)
         _FixedColor("FixedColor",color)=(1,1,1,0)
         _MainTex("Diffuse", 2D) = "white" {}
         _MoveMask("_MoveMask", 2D) = "black" {}
@@ -105,6 +105,7 @@ Shader "MySprite-Lit-Default"
         Blend SrcAlpha OneMinusSrcAlpha
         Cull Off
         ZWrite on
+        ZTest LEqual
 
         HLSLINCLUDE
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
@@ -174,6 +175,7 @@ Shader "MySprite-Lit-Default"
 
             int NativePos;
             float4 _FlowerRemap;
+            float4 _Color;
 
             half3 _PlantSpringColor1;
             half3 _PlantSpringColor;
@@ -222,7 +224,8 @@ Shader "MySprite-Lit-Default"
         #define FEAT_SNOWBLEND     (1u<<4) // 第4位：雪地
         #define FEAT_GRASSBLEND     (1u<<5) // 第5位：草地
         #define FEAT_SHADOWSTEP     (1u<<6) // 第6位：接受影子
-        #define FEAT_FLOWERSTEP    (1u<<7) // 第7位：花 
+        #define FEAT_FLOWERSTEP    (1u<<7) // 第7位：花
+        #define FEAT_SIMPLE    (1u<<8) // 第7位：花 
 
         float My_SimpleNoise_float(float2 uv, float scale)
         {
@@ -230,10 +233,10 @@ Shader "MySprite-Lit-Default"
             return col.r;
         }
 
-        float3 WaterFragment(float2 uv, float2 fixedScreenUV, float2 screenUV, float4 _MainTexColor)
+        float4 WaterFragment(float2 uv, float2 fixedScreenUV, float2 screenUV, float4 _MainTexColor,
+                             out float waterStepMask)
         {
             float2 mirrorUV = screenUV;
-
             float3 _WaterMask = SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, uv.xy).xyz;
             //水域范围
             float stepMask = step(0.06, _WaterMask.r);
@@ -257,10 +260,10 @@ Shader "MySprite-Lit-Default"
             float2 waveValue0 = float2(cos(angle0), sin(angle0)) * _WaveSpeed0;
 
             float2 _WaveT0 = (_TimeParameters.x.xx) * waveValue0;
-
             float2 _TilingAndOffset0 = fixedScreenUV * WaveScale0 + _WaveT0;
             float4 _WaveCol0 = SAMPLE_TEXTURE2D(_WaterNormalMap, sampler_WaterNormalMap, _TilingAndOffset0);
             _WaveCol0.rgb = UnpackNormal(_WaveCol0);
+
             //波纹2
             float angle1 = radians(_WaveAngle1);
             float2 waveValue1 = float2(cos(angle1), sin(angle1)) * _WaveSpeed1;
@@ -291,6 +294,7 @@ Shader "MySprite-Lit-Default"
             float _WaterMask1 = step(_WaterHigh, _WaterMask.r);
             float _WaterMask2 = step(_WaterHigh + EdgeValue, _WaterMask.r);
             stepMask *= _WaterMask1;
+            waterStepMask = stepMask;
 
             float _EdgeMaskValue = _WaterMask.r;
             Unity_Remap_float(_EdgeMaskValue, float2(_WaterHigh, _WaterHigh + EdgeValue), float2(0, 1), _EdgeMaskValue);
@@ -331,7 +335,7 @@ Shader "MySprite-Lit-Default"
 
             outWater = outWater * (1 - MirrorValue) + MirrorTexColor * MirrorValue;
             outWater = stepMask * outWater + _MainTexColor.xyz * (1 - stepMask);
-            return outWater;
+            return float4(outWater.xyz, stepMask);
         }
 
         float3 DampColor(float3 col, float2 uv, float2 objUV)
@@ -560,6 +564,31 @@ Shader "MySprite-Lit-Default"
             result.xyz = shadowColor * result.xyz * shadow.r + result.xyz * (1 - shadow.r);
             return result;
         }
+
+        float4 ShadowColor(float4 result, float2 ScrennUv, float2 uv)
+        {
+            float globalValue = (_GlobalColor.x + _GlobalColor.y + _GlobalColor.z) / 3;
+
+            half4 shadow = SAMPLE_TEXTURE2D(_ShadowTex, sampler_ShadowTex, ScrennUv);
+
+            half3 shadowColor = GlobalColor.xyz * GlobalColor.a * 0.5 * shadow.r;
+
+            float4 moveValue = _MoveMask.Sample(sampler_MainTex, uv);
+
+            int moveAStep = 1 - step(moveValue.a, 0);
+            int moveYStep = 1 - step(moveValue.y, 0);
+            int moveZStep = 1 - step(moveValue.z, 0);
+            int moveXStep = 1 - step(moveValue.x, 0);
+            //return moveYStep.xxxx;
+            int moveStep = moveYStep + (1 - moveAStep) + moveXStep + moveZStep;
+            moveStep = clamp(moveStep, 0, 1);
+            moveStep = (1 - _HideNormal) * moveStep + _HideNormal;
+
+
+            result.xyz = shadowColor * result.xyz * moveStep + result.xyz * (1 - shadow.r * moveStep);
+            // result.xyz *= globalValue;
+            return result;
+        }
         ENDHLSL
 
 
@@ -593,9 +622,8 @@ Shader "MySprite-Lit-Default"
             {
                 float4 positionCS : SV_POSITION;
                 half4 color : COLOR;
-                float4 uvAndCameraUV : TEXCOORD0;
-
-
+                float2 uv : TEXCOORD0;
+                float4 fixScreenUV:TEXCOORD7;
                 float4 fullWorldPos : TEXCOORD5;
                 float4 worldScreenPos: TEXCOORD6;
                 float3 normal:NORMAL;
@@ -612,6 +640,7 @@ Shader "MySprite-Lit-Default"
                 float4 outColor:SV_Target0;
                 float4 normalColor:SV_Target1;
                 float4 depthColor:SV_Target2;
+                float4 waterStepMask:SV_Target3;
             };
 
             #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/NormalsRenderingShared.hlsl"
@@ -628,11 +657,18 @@ Shader "MySprite-Lit-Default"
 
                 attributes.positionOS = UnityFlipSprite(attributes.positionOS, unity_SpriteProps.xy);
 
+                [branch] if ((_FeatureFlags & FEAT_SIMPLE) != 0u)
+                {
+                    o.positionCS = TransformObjectToHClip(attributes.positionOS);
+                    o.color = attributes.color * _Color * unity_SpriteColor;
+                    o.uv = attributes.uv.xy;
+                    return o;
+                }
                 float3 worldOS = objWroldPos;
-                worldOS.z = ObjPos.z + objWroldPos.y;
+                worldOS.z += ObjPos.z + ObjPos.y;
                 o.positionCS = TransformWorldToHClip(worldOS);
-                //o.positionCS = TransformObjectToHClip(attributes.positionOS);
 
+                o.color = attributes.color * unity_SpriteColor;
                 float stepPosZ = 1 - step(50, ObjPos.z);
 
                 float3 _objSortPos = ObjPos;
@@ -658,15 +694,14 @@ Shader "MySprite-Lit-Default"
 
 
                 half3 cameraOffsetPos = _WorldSpaceCameraPos.xyz - unity_ObjectToWorld._m03_m13_m23;
-                half3 pos = objWroldPos + cameraOffsetPos;
+                half3 pos = worldOS.xyz + cameraOffsetPos;
 
                 half4 carmeraPos = TransformWorldToHClip(pos);
-                float4 fixScreenUV = ComputeScreenPos(carmeraPos);
-                fixScreenUV.xy = fixScreenUV.xy / fixScreenUV.w;
 
-                o.uvAndCameraUV = float4(attributes.uv.xy, fixScreenUV.xy);
+                o.fixScreenUV = ComputeScreenPos(carmeraPos);
 
-                o.color = attributes.color * unity_SpriteColor;
+
+                o.uv = attributes.uv.xy;
 
 
                 o.normalWS = -GetViewForwardDir();
@@ -681,6 +716,8 @@ Shader "MySprite-Lit-Default"
                 float dotX = dot(normalize(xAxis), float3(1, 0, 0));
                 int stepX = step(0, dotX);
                 o.tangentWS.x = o.tangentWS.x * stepX - (1 - stepX) * o.tangentWS.x;
+
+
                 return o;
             }
 
@@ -696,12 +733,13 @@ Shader "MySprite-Lit-Default"
                 float2 screenUV = i.lightingUV.xy / i.lightingUV.w;
                 screenUV = UnityStereoTransformScreenSpaceTex(screenUV);
 
-                float4 mainTex = _MainTex.Sample(sampler_MainTex, i.uvAndCameraUV.xy);
-                float4 DepthTex = _DepthTex.Sample(sampler_MainTex, i.uvAndCameraUV.xy);
+                float4 mainTex = _MainTex.Sample(sampler_MainTex, i.uv.xy);
+                float a = mainTex.a;
+                float4 DepthTex = _DepthTex.Sample(sampler_MainTex, i.uv.xy);
                 float clipA = 1 - step(DepthTex.a, 0.01);
 
                 DepthTex.xyz *= clipA;
-                half4 _NormalColor = _NormalMap.Sample(sampler_MainTex, i.uvAndCameraUV.xy);
+                half4 _NormalColor = _NormalMap.Sample(sampler_MainTex, i.uv.xy);
 
                 half depthStep_R = 1 - step(abs(DepthTex.r - 0.5), 0.01);
                 half depthStep_G = 1 - step(abs(DepthTex.g - 0.5), 0.01);
@@ -739,14 +777,14 @@ Shader "MySprite-Lit-Default"
                 //clip(mainTex.a);
 
                 // mainTex.xyz=otherStep.xxx;
-                clip(mainTex.a - 0.3);
+                clip(a - 0.5);
 
                 return mainTex;
             }
 
             half4 DefaultNormal(Varyings i)
             {
-                float2 uv = i.uvAndCameraUV.xy;
+                float2 uv = i.uv.xy;
                 float2 lightingUV = i.lightingUV.xy / i.lightingUV.w;
                 lightingUV = UnityStereoTransformScreenSpaceTex(lightingUV);
 
@@ -789,13 +827,24 @@ Shader "MySprite-Lit-Default"
                 // result.z-=i.positionCS.y; 
                 result = result * i.color;
                 // normalTS=WaterFragment(i.uv,i.screenUV,normalTS);
-                clip(mainTex.a - 0.3);
+
                 return result;
             }
 
-            half4 DefaultColor(Varyings i)
+            half4 DefaultColor(Varyings i, out float waterStepMask)
             {
-                float2 uv = i.uvAndCameraUV.xy;
+                float2 uv = i.uv.xy;
+                [branch] if ((_FeatureFlags & FEAT_SIMPLE) != 0u)
+                {
+                    half4 main = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
+
+                    main.xyz = i.color.xyz;
+                    main.a *= i.color.a;
+
+                    return main;
+                }
+
+
                 float2 lightingUV = i.lightingUV.xy / i.lightingUV.w;
                 lightingUV = UnityStereoTransformScreenSpaceTex(lightingUV);
 
@@ -871,9 +920,10 @@ Shader "MySprite-Lit-Default"
                 main.xyz = waterColor.xyz;
                 [branch] if ((_FeatureFlags & FEAT_WATER) != 0u)
                 {
-                    float2 fixScreenUV = i.uvAndCameraUV.zw;
+                    float2 fixScreenUV = i.fixScreenUV.xy / i.fixScreenUV.w;
                     fixScreenUV = UnityStereoTransformScreenSpaceTex(fixScreenUV);
-                    waterColor = WaterFragment(uv, fixScreenUV, lightingUV, main);
+                    float4 outWaterColor = WaterFragment(uv, fixScreenUV, lightingUV, main, waterStepMask);
+                    waterColor = outWaterColor.xyz;
                 }
 
                 [branch] if ((_FeatureFlags & FEAT_GRASSBLEND) != 0u)
@@ -882,21 +932,26 @@ Shader "MySprite-Lit-Default"
                 }
 
 
-                half4 lightCol = SAMPLE_TEXTURE2D(_LightingTex, sampler_LightingTex, lightingUV);
-                lightCol.xyz *= 4;
+                //  half4 lightCol = SAMPLE_TEXTURE2D(_LightingTex, sampler_LightingTex, lightingUV);
+                //  lightCol.xyz *= 4;
 
 
-                result.xyz = waterColor.xyz * lightCol.xyz;
-                result.xyz = _LightBlend * result.xyz + (1 - _LightBlend) * waterColor.xyz;
+                // result.xyz = waterColor.xyz * lightCol.xyz;
+                // result.xyz = _LightBlend * result.xyz + (1 - _LightBlend) * waterColor.xyz;
+                // result.a = main.a;
+
+                result.xyz = waterColor.xyz;
+
                 result.a = main.a;
+
 
                 [branch] if ((_FeatureFlags & FEAT_SHADOWSTEP) != 0u)
                 {
-                    result = ShadowColor(result, lightCol.xyz, lightingUV, uv);
+                    result = ShadowColor(result, lightingUV, uv);
                 }
 
                 result.xyz = result.xyz * (1 - _FixedColor.a) + _FixedColor.xyz * _FixedColor.a;
-                clip(result.a - 0.3);
+                clip(main.a - 0.1);
                 return result;
             }
 
@@ -904,7 +959,9 @@ Shader "MySprite-Lit-Default"
             OutData CombinedShapeLightFragment(Varyings i) : SV_Target
             {
                 OutData OutData;
-                OutData.outColor = DefaultColor(i);
+                float waterStepMask = 0;
+                OutData.outColor = DefaultColor(i, waterStepMask);
+                OutData.waterStepMask = float4(waterStepMask.xxx, OutData.outColor.a);
                 OutData.normalColor = DefaultNormal(i);
                 OutData.depthColor = DefaultObjDepth(i);
                 return OutData;
@@ -913,138 +970,6 @@ Shader "MySprite-Lit-Default"
         }
 
 
-        Pass
-        {
-            Tags
-            {
-                "LightMode" = "NormalsRendering"
-            }
-
-            HLSLPROGRAM
-            #pragma vertex NormalsRenderingVertex
-            #pragma fragment NormalsRenderingFragment
-
-            #pragma multi_compile _ SKINNED_SPRITE
-
-            struct Attributes
-            {
-                float3 positionOS : POSITION;
-                float3 normalOS : NORMAL;
-                float4 color : COLOR;
-                float2 uv : TEXCOORD0;
-                float4 tangent : TANGENT;
-                UNITY_SKINNED_VERTEX_INPUTS
-                UNITY_VERTEX_INPUT_INSTANCE_ID
-            };
-
-            struct Varyings
-            {
-                float4 positionCS : SV_POSITION;
-                half4 color : COLOR;
-                float2 uv : TEXCOORD0;
-                half3 normalWS : TEXCOORD1;
-                half3 tangentWS : TEXCOORD2;
-                half3 bitangentWS : TEXCOORD3;
-                float4 lightingUV : TEXCOORD4;
-                //float  flip  : TEXCOORD5;  
-                UNITY_VERTEX_OUTPUT_STEREO
-            };
-
-
-            Varyings DefaultVert(Attributes attributes)
-            {
-                Varyings o = (Varyings)0;
-                UNITY_SETUP_INSTANCE_ID(attributes);
-                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
-                UNITY_SKINNED_VERTEX_COMPUTE(attributes);
-
-                attributes.positionOS = UnityFlipSprite(attributes.positionOS, unity_SpriteProps.xy);
-                o.positionCS = TransformObjectToHClip(attributes.positionOS);
-
-                o.uv = attributes.uv;
-                o.color = attributes.color;
-                o.normalWS = -GetViewForwardDir();
-                o.tangentWS = attributes.tangent.xyz;
-
-
-                o.bitangentWS = cross(o.normalWS, o.tangentWS) * attributes.tangent.w;
-                o.lightingUV = ComputeScreenPos(o.positionCS);
-
-                float3 xAxis = unity_ObjectToWorld._m00_m10_m20;
-                // 归一化并计算与世界 X 轴的点积
-                float dotX = dot(normalize(xAxis), float3(1, 0, 0));
-                int stepX = step(0, dotX);
-                o.tangentWS.x = o.tangentWS.x * stepX - (1 - stepX) * o.tangentWS.x;
-
-                return o;
-            }
-
-
-            Varyings NormalsRenderingVertex(Attributes attributes)
-            {
-                return DefaultVert(attributes);
-            }
-
-            #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/NormalsRenderingShared.hlsl"
-
-
-            half4 DefaultFrag(Varyings i) : SV_Target
-            {
-                float2 uv = i.uv;
-                float2 lightingUV = i.lightingUV.xy / i.lightingUV.w;
-                lightingUV = UnityStereoTransformScreenSpaceTex(lightingUV);
-
-                float s_w = 0;
-                [branch] if ((_FeatureFlags & FEAT_SNOWBLEND) != 0u)
-                {
-                    Unity_Remap_float(_SeasonValue, float2(2.95, 3.05), float2(0, 1), s_w);
-                    s_w = clamp(s_w, 0, 1);
-
-                    float s_w1 = 0;
-                    Unity_Remap_float(_SeasonValue, float2(0.1, 0), float2(0, 1), s_w1);
-                    s_w1 = clamp(s_w1, 0, 1);
-                    s_w += s_w1;
-                }
-
-
-                [branch] if ((_FeatureFlags & FEAT_MOVE) != 0u)
-                {
-                    float2 offset;
-                    uv = MoveUV(uv, lightingUV, 1 - s_w, offset);
-                }
-
-                half4 mainTex = _MainTex.Sample(sampler_MainTex, uv);
-                half4 _NormalColor = _NormalMap.Sample(sampler_MainTex, uv);
-                // _NormalColor.b=1-_NormalColor.b;
-                [branch] if ((_FeatureFlags & FEAT_SNOWBLEND) != 0u)
-                {
-                    mainTex = SnowColor(mainTex, uv, s_w);
-                }
-
-
-                half3 normalTS = _NormalColor.xyz;
-                half4 result = half4(1, 1, 1, 1);
-                normalTS = UnpackNormal(_NormalColor);
-
-                //return float4(i.tangentWS.xyz,1);
-                result = NormalsRenderingShared(mainTex, normalTS, i.tangentWS.xyz, i.bitangentWS.xyz, i.normalWS.xyz);
-                result.x = unity_SpriteProps.x * result.x + (1 - unity_SpriteProps.x) * (1 - result.x);
-                result.z = 0;
-
-                // result.z-=i.positionCS.y; 
-                result = result * i.color;
-
-                clip(result.a - 0.5);
-
-                return result;
-            }
-
-            half4 NormalsRenderingFragment(Varyings i) : SV_Target
-            {
-                return DefaultFrag(i);
-            }
-            ENDHLSL
-        }
 
         Pass
         {
@@ -1126,7 +1051,7 @@ Shader "MySprite-Lit-Default"
         {
             Tags
             {
-                "LightMode" = "CharacterDepth"
+                "LightMode" = "CharacterDepth" 
             }
             HLSLPROGRAM
             #pragma vertex UnlitVertex
@@ -1208,143 +1133,17 @@ Shader "MySprite-Lit-Default"
                 mainTex.z += ObjDepthTex.z;
                 mainTex.a = mainTex.a * (1 - stepDepthOne) + DepthTex.a * stepDepthOne;
 
-                clip(mainTex.a - 0.5);
+                // mainTex.xyz=half3(0,0,ObjDepthTex.z); 
 
-
-                return mainTex;
-            }
-            ENDHLSL
-        }
-
-        Pass
-        {
-            Tags
-            {
-                "LightMode" = "ObjDepth"
-            }
-            HLSLPROGRAM
-            #pragma vertex UnlitVertex
-            #pragma fragment UnlitFragment
-            #pragma multi_compile _ SKINNED_SPRITE
-
-            struct Attributes
-            {
-                float3 positionOS : POSITION;
-                float2 uv : TEXCOORD0;
-                UNITY_SKINNED_VERTEX_INPUTS
-                UNITY_VERTEX_INPUT_INSTANCE_ID
-            };
-
-            struct Varyings
-            {
-                float4 positionCS : SV_POSITION;
-                float2 uv : TEXCOORD0;
-                float4 screenUV : TEXCOORD1;
-                float4 worldScreenPos : TEXCOORD3;
-                UNITY_VERTEX_OUTPUT_STEREO
-            };
-
-
-            Varyings UnlitVertex(Attributes attributes)
-            {
-                Varyings o = (Varyings)0;
-
-                float3 ObjPos = unity_ObjectToWorld._m03_m13_m23;
-                float3 objWroldPos = TransformObjectToWorld(attributes.positionOS);
-                UNITY_SETUP_INSTANCE_ID(attributes);
-                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
-                UNITY_SKINNED_VERTEX_COMPUTE(attributes);
-
-                attributes.positionOS = UnityFlipSprite(attributes.positionOS, unity_SpriteProps.xy);
-                o.positionCS = TransformObjectToHClip(attributes.positionOS);
-
-
-                o.uv = attributes.uv;
-
-
-                float stepPosZ = 1 - step(50, ObjPos.z);
-
-                float3 _objSortPos = ObjPos;
-                float offsetPosZ = step(ObjPos.z, -10);
-                _objSortPos.y += _objSortPos.z * offsetPosZ;
-
-
-                float4 worldClip = TransformWorldToHClip(_objSortPos);
-
-
-                float high = stepPosZ * (objWroldPos.y - ObjPos.y) * 0.5;
-                float positionCSY = o.positionCS.y;
-                //stepPosZ+=stepFixed;  
-
-                stepPosZ = clamp(stepPosZ, 0, 1);
-                worldClip.y = (1 - stepPosZ) * positionCSY + stepPosZ * worldClip.y;
-                // worldClip.y
-                o.worldScreenPos = ComputeScreenPos(worldClip);
-                o.screenUV = ComputeScreenPos(o.positionCS);
-                o.worldScreenPos.z = clamp(high, 0, 1);
-
-                return o;
-            }
-
-            float4 UnlitFragment(Varyings i) : SV_Target
-            {
-                //return float4(i.color.zzz,1);
-                float2 worldScreenPos = i.worldScreenPos.xy / i.worldScreenPos.w;
-                worldScreenPos = UnityStereoTransformScreenSpaceTex(worldScreenPos);
-                float2 screenUV = i.screenUV.xy / i.screenUV.w;
-                screenUV = UnityStereoTransformScreenSpaceTex(screenUV);
-
-                float4 mainTex = _MainTex.Sample(sampler_MainTex, i.uv);
-                float4 DepthTex = _DepthTex.Sample(sampler_MainTex, i.uv);
-                float clipA = 1 - step(DepthTex.a, 0.01);
-
-                DepthTex.xyz *= clipA;
-                half4 _NormalColor = _NormalMap.Sample(sampler_MainTex, i.uv);
-
-                half depthStep_R = 1 - step(abs(DepthTex.r - 0.5), 0.01);
-                half depthStep_G = 1 - step(abs(DepthTex.g - 0.5), 0.01);
-                half depthStep_B = 1 - step(abs(DepthTex.b - 0.5), 0.01);
-                half depthStep_ZeroB = 1 - step(DepthTex.b, 0);
-                half stepDepthOne = step(1, DepthTex.b);
-                depthStep_ZeroB *= (1 - stepDepthOne);
-
-                int clearColor = 1 - step(DepthTex.b, 0) * step(DepthTex.r, 0) * step(DepthTex.g, 0);
-
-                half otherStep = depthStep_R * depthStep_G + depthStep_B;
-
-                otherStep = clamp(otherStep, 0, 1) * depthStep_ZeroB;
-
-
-                half depthValue = (DepthTex.r - 0.5) * (1 - otherStep) + (DepthTex.r + DepthTex.b - 1) * (1 -
-                    stepDepthOne) * otherStep;
-                half offset = depthValue * 512 * 4 / _ScreenParams.y;
-
-                half depth = worldScreenPos.y + offset * clearColor;
-                half setpHigh = depthStep_G;
-
-
-                // return float4(i.worldScreenPos.zzz, 1);
-                half high = i.worldScreenPos.z * (1 - setpHigh) + DepthTex.g * 2 * setpHigh;
-
-                mainTex.xyz = half3(depth, high, _NormalColor.g * 0.5 + stepDepthOne) * (1 - _Character);
-
-
-                half absUv = length(screenUV - worldScreenPos.xy);
-                int stepMul = step(absUv, 0.001) * _Character;
-
-                mainTex.a = (mainTex.a * (1 - stepDepthOne) + DepthTex.a * stepDepthOne) * (1 - stepMul);
-                mainTex.a = clamp(mainTex.a, 0, 1);
-
-                //return mainTex.aaaa;
-                //clip(mainTex.a);
 
                 // mainTex.xyz=otherStep.xxx;
-                clip(mainTex.a - 0.1);
+
 
                 return mainTex;
             }
             ENDHLSL
         }
+
 
         Pass
         {
@@ -1471,7 +1270,6 @@ Shader "MySprite-Lit-Default"
                 float2 lightingUV = i.lightingUV.xy / i.lightingUV.w;
                 lightingUV = UnityStereoTransformScreenSpaceTex(lightingUV);
                 float3 result = WaterFragment(i.uv, lightingUV);
-
                 return float4(result.xyz, 1);
             }
             ENDHLSL
@@ -1522,7 +1320,7 @@ Shader "MySprite-Lit-Default"
                 half4 mainTex = _MainTex.Sample(sampler_MainTex, i.uv);
                 float4 moveValue = _MoveMask.Sample(sampler_MainTex, i.uv);
                 moveValue.a = mainTex.a;
-                clip(moveValue.a - 0.5);
+                //moveValue.xyz=moveValue.ggg;
                 return moveValue;
             }
             ENDHLSL
@@ -1532,7 +1330,7 @@ Shader "MySprite-Lit-Default"
         {
             Tags
             {
-                "LightMode" = "GroundFoot" "Queue"="Transparent"
+                "LightMode" = "GroundFoot"
             }
 
             HLSLPROGRAM
