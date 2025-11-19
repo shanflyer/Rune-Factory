@@ -13,9 +13,9 @@ Shader "MySprite-Lit-Default"
         _FlowerRemap("_FlowerRemap",vector)=(0,0,0,0)
 
         _ZWrite("ZWrite", Float) = 0
-        _ObjectWorldPos("_ObjectWorldPos",vector)=(0,0,0,0)
-        [Toggle]_Character("Character",int)=0
+        _ObjectWorldPos("_ObjectWorldPos",vector)=(0,0,0,0) 
         [Toggle]_HideNormal("HideNormal",int)=0
+        [Toggle]_ZOffset("_ZOffset",int)=1
 
         _WaterNormalMap("WaterNormalMap", 2D) = "bump" {}
         _NormalMap("Normal Map", 2D) = "bump" {}
@@ -167,6 +167,7 @@ Shader "MySprite-Lit-Default"
         float4 _NoiseSet1;
         float _WindValue;
         CBUFFER_START(UnityPerMaterial)
+            int _ZOffset;
             int _Character;
             int _Damp;
             int _HideNormal;
@@ -225,7 +226,8 @@ Shader "MySprite-Lit-Default"
         #define FEAT_GRASSBLEND     (1u<<5) // 第5位：草地
         #define FEAT_SHADOWSTEP     (1u<<6) // 第6位：接受影子
         #define FEAT_FLOWERSTEP    (1u<<7) // 第7位：花
-        #define FEAT_SIMPLE    (1u<<8) // 第7位：花 
+        #define FEAT_SIMPLE    (1u<<8) // 第7位：花
+        #define FEAT_CHARACTER    (1u<<9) // 第8位：角色 
 
         float My_SimpleNoise_float(float2 uv, float scale)
         {
@@ -233,8 +235,7 @@ Shader "MySprite-Lit-Default"
             return col.r;
         }
 
-        float4 WaterFragment(float2 uv, float2 fixedScreenUV, float2 screenUV, float4 _MainTexColor,
-                             out float waterStepMask)
+        float4 WaterFragment(float2 uv, float2 fixedScreenUV, float2 screenUV, float4 _MainTexColor)
         {
             float2 mirrorUV = screenUV;
             float3 _WaterMask = SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, uv.xy).xyz;
@@ -294,7 +295,6 @@ Shader "MySprite-Lit-Default"
             float _WaterMask1 = step(_WaterHigh, _WaterMask.r);
             float _WaterMask2 = step(_WaterHigh + EdgeValue, _WaterMask.r);
             stepMask *= _WaterMask1;
-            waterStepMask = stepMask;
 
             float _EdgeMaskValue = _WaterMask.r;
             Unity_Remap_float(_EdgeMaskValue, float2(_WaterHigh, _WaterHigh + EdgeValue), float2(0, 1), _EdgeMaskValue);
@@ -651,22 +651,28 @@ Shader "MySprite-Lit-Default"
 
                 float3 ObjPos = unity_ObjectToWorld._m03_m13_m23;
                 float3 objWroldPos = TransformObjectToWorld(attributes.positionOS);
+                float3 worldOS = objWroldPos;
                 UNITY_SETUP_INSTANCE_ID(attributes);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
                 UNITY_SKINNED_VERTEX_COMPUTE(attributes);
 
-                attributes.positionOS = UnityFlipSprite(attributes.positionOS, unity_SpriteProps.xy);
+                [branch] if ((_FeatureFlags & FEAT_CHARACTER) != 0u)
+                {
+                    o.positionCS = TransformObjectToHClip(attributes.positionOS);
+                }
+                else
+                {
+                    worldOS.z += (ObjPos.z + ObjPos.y) * _ZOffset;
+                    o.positionCS = TransformWorldToHClip(worldOS);
+                }
+
 
                 [branch] if ((_FeatureFlags & FEAT_SIMPLE) != 0u)
                 {
-                    o.positionCS = TransformObjectToHClip(attributes.positionOS);
                     o.color = attributes.color * _Color * unity_SpriteColor;
                     o.uv = attributes.uv.xy;
                     return o;
                 }
-                float3 worldOS = objWroldPos;
-                worldOS.z += ObjPos.z + ObjPos.y;
-                o.positionCS = TransformWorldToHClip(worldOS);
 
                 o.color = attributes.color * unity_SpriteColor;
                 float stepPosZ = 1 - step(50, ObjPos.z);
@@ -728,57 +734,58 @@ Shader "MySprite-Lit-Default"
 
             float4 DefaultObjDepth(Varyings i)
             {
-                float2 worldScreenPos = i.worldScreenPos.xy / i.worldScreenPos.w;
-                worldScreenPos = UnityStereoTransformScreenSpaceTex(worldScreenPos);
-                float2 screenUV = i.lightingUV.xy / i.lightingUV.w;
-                screenUV = UnityStereoTransformScreenSpaceTex(screenUV);
-
                 float4 mainTex = _MainTex.Sample(sampler_MainTex, i.uv.xy);
                 float a = mainTex.a;
-                float4 DepthTex = _DepthTex.Sample(sampler_MainTex, i.uv.xy);
-                float clipA = 1 - step(DepthTex.a, 0.01);
+                [branch] if ((_FeatureFlags & FEAT_CHARACTER) != 0u)
+                {
+                    mainTex.xyz = 0;
+                }
+                else
+                {
+                    float2 worldScreenPos = i.worldScreenPos.xy / i.worldScreenPos.w;
+                    worldScreenPos = UnityStereoTransformScreenSpaceTex(worldScreenPos);
+                    // float2 screenUV = i.lightingUV.xy / i.lightingUV.w;
+                    // screenUV = UnityStereoTransformScreenSpaceTex(screenUV);
 
-                DepthTex.xyz *= clipA;
-                half4 _NormalColor = _NormalMap.Sample(sampler_MainTex, i.uv.xy);
+                    float4 DepthTex = _DepthTex.Sample(sampler_MainTex, i.uv.xy);
+                    float clipA = 1 - step(DepthTex.a, 0.01);
 
-                half depthStep_R = 1 - step(abs(DepthTex.r - 0.5), 0.01);
-                half depthStep_G = 1 - step(abs(DepthTex.g - 0.5), 0.01);
-                half depthStep_B = 1 - step(abs(DepthTex.b - 0.5), 0.01);
-                half depthStep_ZeroB = 1 - step(DepthTex.b, 0);
-                half stepDepthOne = step(1, DepthTex.b);
-                depthStep_ZeroB *= (1 - stepDepthOne);
+                    DepthTex.xyz *= clipA;
+                    half4 _NormalColor = _NormalMap.Sample(sampler_MainTex, i.uv.xy);
 
-                int clearColor = 1 - step(DepthTex.b, 0) * step(DepthTex.r, 0) * step(DepthTex.g, 0);
+                    half depthStep_R = 1 - step(abs(DepthTex.r - 0.5), 0.01);
+                    half depthStep_G = 1 - step(abs(DepthTex.g - 0.5), 0.01);
+                    half depthStep_B = 1 - step(abs(DepthTex.b - 0.5), 0.01);
+                    half depthStep_ZeroB = 1 - step(DepthTex.b, 0);
+                    half stepDepthOne = step(1, DepthTex.b);
+                    depthStep_ZeroB *= (1 - stepDepthOne);
 
-                half otherStep = depthStep_R * depthStep_G + depthStep_B;
+                    int clearColor = 1 - step(DepthTex.b, 0) * step(DepthTex.r, 0) * step(DepthTex.g, 0);
 
-                otherStep = clamp(otherStep, 0, 1) * depthStep_ZeroB;
+                    half otherStep = depthStep_R * depthStep_G + depthStep_B;
+
+                    otherStep = clamp(otherStep, 0, 1) * depthStep_ZeroB;
 
 
-                half depthValue = (DepthTex.r - 0.5) * (1 - otherStep) + (DepthTex.r + DepthTex.b - 1) * (1 -
-                    stepDepthOne) * otherStep;
-                half offset = depthValue * 512 * 4 / _ScreenParams.y;
+                    half depthValue = (DepthTex.r - 0.5) * (1 - otherStep) + (DepthTex.r + DepthTex.b - 1) * (1 -
+                        stepDepthOne) * otherStep;
+                    half offset = depthValue * 512 * 4 / _ScreenParams.y;
 
-                half depth = worldScreenPos.y + offset * clearColor;
-                half setpHigh = depthStep_G;
+                    half depth = worldScreenPos.y + offset * clearColor;
+                    half setpHigh = depthStep_G;
 
-                // return float4(i.worldScreenPos.zzz, 1);
-                half high = i.worldScreenPos.z * (1 - setpHigh) + DepthTex.g * 2 * setpHigh;
+                    // return float4(i.worldScreenPos.zzz, 1);
+                    half high = i.worldScreenPos.z * (1 - setpHigh) + DepthTex.g * 2 * setpHigh;
 
-                mainTex.xyz = half3(depth, high, _NormalColor.g * 0.5 + stepDepthOne) * (1 - _Character);
 
-                half absUv = length(screenUV - worldScreenPos.xy);
-                int stepMul = step(absUv, 0.001) * _Character;
+                    mainTex.xyz = half3(depth, high, _NormalColor.g * 0.5 + stepDepthOne);
 
-                mainTex.a = (mainTex.a * (1 - stepDepthOne) + DepthTex.a * stepDepthOne) * (1 - stepMul);
-                mainTex.a = clamp(mainTex.a, 0, 1);
+                    mainTex.a = (mainTex.a * (1 - stepDepthOne) + DepthTex.a * stepDepthOne);
+                    mainTex.a = clamp(mainTex.a, 0, 1);
+                }
 
-                //return mainTex.aaaa;
-                //clip(mainTex.a);
 
-                // mainTex.xyz=otherStep.xxx;
                 clip(a - 0.5);
-
                 return mainTex;
             }
 
@@ -834,6 +841,7 @@ Shader "MySprite-Lit-Default"
             half4 DefaultColor(Varyings i, out float waterStepMask)
             {
                 float2 uv = i.uv.xy;
+                waterStepMask = 0;
                 [branch] if ((_FeatureFlags & FEAT_SIMPLE) != 0u)
                 {
                     half4 main = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
@@ -922,8 +930,9 @@ Shader "MySprite-Lit-Default"
                 {
                     float2 fixScreenUV = i.fixScreenUV.xy / i.fixScreenUV.w;
                     fixScreenUV = UnityStereoTransformScreenSpaceTex(fixScreenUV);
-                    float4 outWaterColor = WaterFragment(uv, fixScreenUV, lightingUV, main, waterStepMask);
+                    float4 outWaterColor = WaterFragment(uv, fixScreenUV, lightingUV, main);
                     waterColor = outWaterColor.xyz;
+                    waterStepMask = outWaterColor.w;
                 }
 
                 [branch] if ((_FeatureFlags & FEAT_GRASSBLEND) != 0u)
@@ -1051,7 +1060,7 @@ Shader "MySprite-Lit-Default"
         {
             Tags
             {
-                "LightMode" = "CharacterDepth" 
+                "LightMode" = "CharacterDepth"
             }
             HLSLPROGRAM
             #pragma vertex UnlitVertex

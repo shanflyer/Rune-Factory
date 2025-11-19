@@ -34,6 +34,7 @@ public class MapItemInstanceEditor : MonoBehaviour
     private void InitPos()
     {
         Vector3 pos = GameCommon.GetMapPos(mapItem.coordinate);
+        if (itemData.zOffset) pos.z = pos.y;
         transform.localPosition = pos;
         oldPos = pos;
     }

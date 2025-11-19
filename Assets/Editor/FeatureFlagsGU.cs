@@ -16,7 +16,8 @@ public enum FeatureFlags : uint
     GRASSBLEND = 1u << 5,
     SHADOWSTEP = 1u << 6,
     FLOWERSTEP = 1u << 7,
-    SIMAPLE = 1u << 8
+    SIMAPLE = 1u << 8,
+    CHARACTER = 1u << 9
 }
 
 public sealed class FeatureFlagsGUI : ShaderGUI

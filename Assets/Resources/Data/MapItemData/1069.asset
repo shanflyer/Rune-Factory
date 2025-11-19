@@ -15,10 +15,13 @@ MonoBehaviour:
   id: 1069
   itemName: "\u58C1\u7089"
   objName: "\u58C1\u7089"
+  zOffset: 1
   itemObj: {fileID: 708995378427064123, guid: 599265ffba92db448817240dd1b22b33, type: 3}
   colliderGrids: fdffffff000000000300000002000000
   triggerGrids: feffffffffffffff0200000000000000
   playerTriggerGrids: fcffffff000000000400000000000000fcffffff01000000feffffff01000000fdffffffffffffff03000000fffffffffdffffff02000000feffffff020000000200000001000000040000000100000002000000020000000300000002000000
+  isPlayerForwardTrigger: 0
+  maskObj: 
   playerTriggerEvent: 0
   operateIds: 
   creatAction: {fileID: 0}
@@ -26,7 +29,7 @@ MonoBehaviour:
   defaultEnter: 0
   displayTips: 0
   playerOperateInfo: 
-  offsetLinkPos: {x: 0, y: 0}
-  leftLinkPos: {x: 0, y: 0}
-  rightLinkPos: {x: 0, y: 0}
+  offsetLinkPos: {x: 0, y: 0, z: 0}
+  leftLinkPos: {x: 0, y: 0, z: 0}
+  rightLinkPos: {x: 0, y: 0, z: 0}
   linkDirection: 0

@@ -14,6 +14,7 @@ public class MapItemData : ScriptableObject, IGameData
     public int id;
     public string itemName;
     public string objName;
+    public bool zOffset;
 
     public GameObject itemObj;
 
