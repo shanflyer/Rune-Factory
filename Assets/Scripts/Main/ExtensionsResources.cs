@@ -1,24 +1,24 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using System.IO;
 using UnityEngine.Networking;
 using Object = UnityEngine.Object;
 
 public  static class ExtensionsResources  
 {
     public static ResourceRequestAwaiter GetAwaiter(this ResourceRequest request) => new ResourceRequestAwaiter(request);
-    public static async Task<T> LoadResourceAsync<T>(string path)where T : UnityEngine.Object
+
+    public static async Task<T> LoadResourceAsync<T>(string path) where T : Object
     {
         var gres = Resources.LoadAsync(path);
         await gres;
         return gres.asset as T;
     }
-    public static T LoadResource<T>(string path) where T : UnityEngine.Object
+
+    public static T LoadResource<T>(string path) where T : Object
     {
         return Resources.Load<T>(path); 
     }
@@ -37,6 +37,7 @@ public  static class ExtensionsResources
         }
         return default(T);
     }
+ 
  
     public static List<T> LoadAllIGameData<T>(string path) where T: IGameData
     {
@@ -60,9 +61,9 @@ public  static class ExtensionsResources
        
         return ts;
     }
- 
-    
-    public static T[] LoadAllResource<T>(string path) where T : UnityEngine.Object
+
+
+    public static T[] LoadAllResource<T>(string path) where T : Object
     {
         var gres = Resources.LoadAll<T>(path); 
         return gres;
@@ -79,13 +80,13 @@ public  static class ExtensionsResources
         await gres;
         return gres.asset;
     }
-   
-    public static async Task<UnityEngine.Object[]> LoadAsyncBundle(string url)
+
+    public static async Task<Object[]> LoadAsyncBundle(string url)
     {
 
         string path = Path.Combine(Application.streamingAssetsPath, url);
 
-        var uri = new System.Uri(path);
+        var uri = new Uri(path);
 
         var getRequest = UnityWebRequestAssetBundle.GetAssetBundle(uri.AbsoluteUri);
         await getRequest.SendWebRequest();

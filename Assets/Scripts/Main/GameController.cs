@@ -298,7 +298,8 @@ if (result.Success)
             }
         }
         FilmController.instance.SetParent(filmParent);
-        UIManager.instance.SetParent(UIParent); 
+        UIManager.instance.SetParent(UIParent);
+        var addressableRemoteManager = AddressableRemoteManager.instance;
     }
     // Start is called beforee the first frame update
     void Start()

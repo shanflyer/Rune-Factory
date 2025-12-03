@@ -13,8 +13,11 @@ public class CharacterData : ScriptableObject, IGameData
     public string headName;
 
 
-    public SpriteResourceRenference head => Resources.Load<SpriteResourceRenference>(headName);
-    public CharacterRuntimeObj obj => Resources.Load<CharacterRuntimeObj>(objName);
+    public SpriteResourceRenference head =>
+        AddressableRemoteManager.instance.LoadAddressable<SpriteResourceRenference>(headName);
+
+    public CharacterRuntimeObj obj =>
+        AddressableRemoteManager.instance.LoadAddressablePrefab<CharacterRuntimeObj>(objName);
     public Sprite icon => Resources.Load<Sprite>(iconName);
     public int profession;
     public int level;

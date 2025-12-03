@@ -15,9 +15,9 @@ MonoBehaviour:
   m_DefaultGroup: c92f51b119d138a44903dc7f0dedec01
   m_currentHash:
     serializedVersion: 2
-    Hash: a8a1a88b03c70ce7c6ab100ae6dbafeb
+    Hash: 00000000000000000000000000000000
   m_OptimizeCatalogSize: 0
-  m_BuildRemoteCatalog: 0
+  m_BuildRemoteCatalog: 1
   m_CatalogRequestsTimeout: 0
   m_DisableCatalogUpdateOnStart: 0
   m_InternalIdNamingMode: 0
@@ -50,10 +50,10 @@ MonoBehaviour:
   m_CheckForContentUpdateRestrictionsOption: 0
   m_MonoScriptBundleCustomNaming: 
   m_RemoteCatalogBuildPath:
-    m_Id: 
+    m_Id: 8d531a3280b0c4d4e8cdbb573031c7db
   m_RemoteCatalogLoadPath:
-    m_Id: 
-  m_ContentStateBuildPathProfileVariableName: 
+    m_Id: 701c023006b109a42a73fd7f59497ccd
+  m_ContentStateBuildPathProfileVariableName: <default settings path>
   m_CustomContentStateBuildPath: 
   m_ContentStateBuildPath: 
   m_BuildAddressablesWithPlayerBuild: 0
@@ -76,6 +76,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 06919e4b6f30784438c4105454f0c39c, type: 2}
   - {fileID: 11400000, guid: bc1fcd5c9d4831d41ae2a568c5594623, type: 2}
   - {fileID: 11400000, guid: 1f236a4d12f03184aace76524731f414, type: 2}
+  - {fileID: 11400000, guid: 5a3a76109c0e587438f5e556429a5c39, type: 2}
   - {fileID: 11400000, guid: ad6f3f83fee2832468cf91f3c362202d, type: 2}
   - {fileID: 11400000, guid: b455925e33ac6e04b895ee69af24030e, type: 2}
   - {fileID: 11400000, guid: e64ae30e10c3d9845bf77d66fe0a6c44, type: 2}
@@ -83,6 +84,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f188ceee9680e754b9008c520079ed2a, type: 2}
   - {fileID: 11400000, guid: 2a8057dd8b0dc40429c86936346f1639, type: 2}
   - {fileID: 11400000, guid: a0d25443371ab704b83417ced3b61471, type: 2}
+  - {fileID: 11400000, guid: 89487df20e8269f4ea51a7f6e918f483, type: 2}
   - {fileID: 11400000, guid: 10565c664301bdd4f90c6be503631654, type: 2}
   - {fileID: 11400000, guid: 125637f79816c9e49bfedc8d4920742b, type: 2}
   - {fileID: 11400000, guid: ddb7cd70fd8550e4c9d33855d4b0be99, type: 2}
@@ -109,7 +111,7 @@ MonoBehaviour:
       m_ProfileName: Default
       m_Values:
       - m_Id: 701c023006b109a42a73fd7f59497ccd
-        m_Value: <undefined>
+        m_Value: 'http://223.6.252.223/ServerData/[BuildTarget]'
       - m_Id: 8d531a3280b0c4d4e8cdbb573031c7db
         m_Value: 'ServerData/[BuildTarget]'
       - m_Id: b34dfb5d65c1cfd42bb964c66d41a4a8
@@ -173,6 +175,8 @@ MonoBehaviour:
     - Locale-ur
     - Locale-da
     - Locale-fi
+    - Animal
+    - Character
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 7966e9eea9a1d0a4c8f078cb8f0f4193, type: 2}

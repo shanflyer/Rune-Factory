@@ -172,5 +172,6 @@ public class RuntimeObj
     public string runtimeObjType;
     public string key;
     public bool use;
+    public bool addressLoad;
     public Action dispose;
 }
