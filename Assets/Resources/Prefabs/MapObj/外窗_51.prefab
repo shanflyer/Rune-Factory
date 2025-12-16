@@ -176,6 +176,7 @@ GameObject:
   m_Component:
   - component: {fileID: 172943503253177587}
   - component: {fileID: 818932551370887446}
+  - component: {fileID: 8875240117237452474}
   m_Layer: 0
   m_Name: "\u5916\u7A97_50"
   m_TagString: Untagged
@@ -253,6 +254,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &8875240117237452474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 897713978771231928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 421e7d29e339100448b28790e3d53915, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 0}
 --- !u!1 &3520067051985427408
 GameObject:
   m_ObjectHideFlags: 0
@@ -602,7 +616,7 @@ Transform:
   m_GameObject: {fileID: 4249600039227076232}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0050001144, y: 0.07099991, z: 0}
+  m_LocalPosition: {x: -0.0050001144, y: 0.07099991, z: -0.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

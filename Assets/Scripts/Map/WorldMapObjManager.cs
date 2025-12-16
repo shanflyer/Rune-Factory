@@ -298,9 +298,8 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         {
            // Debug.Log($"CreatRuntimeObj:{mapItemData.itemName}");
             var mapItemRuntime =await GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.MAPITEM.ToString(), mapItemData.id.ToString(), mapItemData.itemObj.transform, instanceId);
-
-            if (mapItemData.zOffset) pos.z = pos.y;
             mapItemRuntime.obj.transform.localPosition = pos;
+
             DisplayStoreCounter displayStoreCounter = new DisplayStoreCounter
             {
                 display = true,
@@ -938,10 +937,7 @@ public class MapItemRuntimeObj
     public void SetCoordinate(int2 coordinate)
     {
         this.coordinate = coordinate;
-        Vector3 pos = GameCommon.GetMapPos(coordinate);
-        if (mapItemData.zOffset) pos.z = pos.y;
-
-        transform.position = pos;
+        transform.position = GameCommon.GetMapPos(coordinate);
     }
 
     public void ResetColor()
