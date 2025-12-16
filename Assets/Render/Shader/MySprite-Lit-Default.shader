@@ -104,7 +104,7 @@ Shader "MySprite-Lit-Default"
 
         Blend SrcAlpha OneMinusSrcAlpha
         Cull Off
-        ZWrite on
+        ZWrite off
         ZTest LEqual
 
         HLSLINCLUDE

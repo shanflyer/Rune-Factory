@@ -810,9 +810,6 @@
     <Reference Include="Unity.2D.Common.Editor">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\Unity.2D.Common.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.2D.Sprite.Editor">
-      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.TestRunner">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\UnityEngine.TestRunner.dll</HintPath>
     </Reference>
@@ -832,6 +829,10 @@
     <ProjectReference Include="Unity.2D.Animation.Runtime.csproj">
       <Project>{2e3fa7a3-9a26-f170-fe65-270a3af7077b}</Project>
       <Name>Unity.2D.Animation.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.2D.Sprite.Editor.csproj">
+      <Project>{b8aa56b3-dc0b-6ba0-0216-e937192f0124}</Project>
+      <Name>Unity.2D.Sprite.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="UnityEditor.UI.csproj">
       <Project>{bb6fa161-a48d-25ef-0a76-abb832cf8c94}</Project>

@@ -1318,6 +1318,7 @@
     <None Include="Assets\Effect\ProFlares\Presets\Basic\Flares\BlueStarFlare.txt" />
     <None Include="Assets\OtherPackage\Anima2D\Examples\Shaders\VisibleOutsideMask.shader" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\SharpGlow.txt" />
+    <None Include="Packages\com.unity.2d.sprite\package.json" />
     <None Include="Assets\Effect\ProFlares\ProFlares_WhatsNew.txt" />
     <None Include="Assets\OtherPackage\Hovl Studio\HSFiles\Shaders\Add_CenterGlow.shader" />
     <None Include="Assets\OtherPackage\Anima2D\Examples\Shaders\VisibleInsideMask.shader" />
@@ -2186,9 +2187,6 @@
     <Reference Include="Unity.Settings.Editor">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\Unity.Settings.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.2D.Sprite.Editor">
-      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Recorder.Editor">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\Unity.Recorder.Editor.dll</HintPath>
     </Reference>
@@ -2423,6 +2421,10 @@
     <ProjectReference Include="Unity.RenderPipelines.Universal.Runtime.csproj">
       <Project>{a718a664-0d4c-c33a-1bc7-98c20c8bf76d}</Project>
       <Name>Unity.RenderPipelines.Universal.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.2D.Sprite.Editor.csproj">
+      <Project>{b8aa56b3-dc0b-6ba0-0216-e937192f0124}</Project>
+      <Name>Unity.2D.Sprite.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.2D.Psdimporter.Editor.csproj">
       <Project>{c1aa39b6-61c6-854f-f185-7c4112c21327}</Project>

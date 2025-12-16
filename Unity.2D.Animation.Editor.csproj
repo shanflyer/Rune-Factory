@@ -1117,9 +1117,6 @@
     <Reference Include="Unity.2D.Common.Runtime">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\Unity.2D.Common.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.2D.Sprite.Editor">
-      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Burst">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy\Library\ScriptAssemblies\Unity.Burst.dll</HintPath>
     </Reference>
@@ -1137,6 +1134,10 @@
     <ProjectReference Include="Unity.2D.Animation.Runtime.csproj">
       <Project>{2e3fa7a3-9a26-f170-fe65-270a3af7077b}</Project>
       <Name>Unity.2D.Animation.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.2D.Sprite.Editor.csproj">
+      <Project>{b8aa56b3-dc0b-6ba0-0216-e937192f0124}</Project>
+      <Name>Unity.2D.Sprite.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.Mathematics.csproj">
       <Project>{10fbc19e-6b20-564b-d46c-b58bd46c8ad9}</Project>
