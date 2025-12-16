@@ -99,7 +99,7 @@ Shader "MySprite-Lit-Default"
     {
         Tags
         {
-            "Queue"="Geometry" "RenderType"="Opaque"
+            "Queue"="Transparent"
         }
 
         Blend SrcAlpha OneMinusSrcAlpha
@@ -662,7 +662,7 @@ Shader "MySprite-Lit-Default"
                 }
                 else
                 {
-                    worldOS.z += (ObjPos.z + ObjPos.y) * _ZOffset;
+                    // worldOS.z += (ObjPos.z + ObjPos.y) * _ZOffset;
                     o.positionCS = TransformWorldToHClip(worldOS);
                 }
 

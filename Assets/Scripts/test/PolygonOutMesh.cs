@@ -36,7 +36,7 @@ public class PologonOutMeshEditor : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        if (GUILayout.Button("Éú³ÉMesh"))
+        if (GUILayout.Button("ç”ŸæˆMesh"))
         {
             polygonOutMesh.CreatMesh();
         }

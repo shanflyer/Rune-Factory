@@ -238,7 +238,7 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
 
     public void SetPosition(Vector3 pos)
     {
-        pos.z = pos.y;
+        //pos.z = pos.y;
         transform.position = pos;
     }
 
