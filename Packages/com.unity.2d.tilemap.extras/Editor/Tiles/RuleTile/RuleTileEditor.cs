@@ -87,7 +87,7 @@ namespace UnityEditor
             public static readonly GUIContent defaultSprite = EditorGUIUtility.TrTextContent("Default Sprite"
                 , "The default Sprite set when creating a new Rule.");
             public static readonly GUIContent layerOrder = EditorGUIUtility.TrTextContent("layerOrder"
-               , "ÏÔÊ¾Ë³Ğò");
+               , "æ˜¾ç¤ºé¡ºåº");
             public static readonly GUIContent defaultGameObject = EditorGUIUtility.TrTextContent("Default GameObject"
                 , "The default GameObject set when creating a new Rule.");
             public static readonly GUIContent defaultCollider = EditorGUIUtility.TrTextContent("Default Collider"
@@ -110,9 +110,9 @@ namespace UnityEditor
                 , "The GameObject for the Tile which fits this Rule.");
 
             public static readonly GUIContent tilingRulesTileBase = EditorGUIUtility.TrTextContent("TileBase"
-                , "Rule Æ¥ÅäµÄ TileBase");
+                , "Rule åŒ¹é…çš„ TileBase");
             public static readonly GUIContent tilingRulesType = EditorGUIUtility.TrTextContent("RulesType"
-                , "Ìõ¼şÀàĞÍ");
+                , "æ¡ä»¶ç±»å‹");
 
             public static readonly GUIContent tilingRulesCollider = EditorGUIUtility.TrTextContent("Collider"
                 , "The Collider Type for the Tile which fits this Rule");
@@ -125,9 +125,9 @@ namespace UnityEditor
                 , "The randomized transform given to the Tile when placing it.");
 
             public static readonly GUIContent tilingRulesRow = EditorGUIUtility.TrTextContent("Row"
-               , "ĞòÁĞĞĞÊı.");
+               , "åºåˆ—è¡Œæ•°.");
             public static readonly GUIContent tilingRulesCol = EditorGUIUtility.TrTextContent("Col"
-                , "ĞòÁĞÁĞÊı.");
+                , "åºåˆ—åˆ—æ•°.");
 
             public static readonly GUIContent tilingRulesRandomSize = EditorGUIUtility.TrTextContent("Size"
                 , "The number of Sprites to randomize from.");
