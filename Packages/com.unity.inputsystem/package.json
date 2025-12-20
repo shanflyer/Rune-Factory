@@ -1,8 +1,8 @@
 {
   "name": "com.unity.inputsystem",
   "displayName": "Input System",
-  "version": "1.14.0",
-  "unity": "2021.3",
+  "version": "1.17.0",
+  "unity": "2022.3",
   "description": "A new input system which can be used as a more extensible and customizable alternative to Unity's classic input system in UnityEngine.Input.",
   "keywords": [
     "input",
@@ -18,16 +18,16 @@
     "com.unity.modules.uielements": "1.0.0"
   },
   "_upm": {
-    "changelog": "### Fixed\n- Fixed an issue where all action maps were enabled initially for project wide actions, which overrode the PlayerInput action map configuration. [ISXB-920](https://issuetracker.unity3d.com/product/unity/issues/guid/ISXB-920)\n- Fixed an issue where ButtonStates are not fully updated when switching SingleUnifiedPointer. [ISXB-1356](https://issuetracker.unity3d.com/product/unity/issues/guid/ISXB-1356)\n- Fixed errors when pasting composite parts into non-composites. [ISXB-757](https://issuetracker.unity3d.com/product/unity/issues/guid/ISXB-757)\n\n### Changed\n- Changed enum value `Key.IMESelected` to obsolete which was not a real key. Please use the ButtonControl `imeSelected`.\n\n### Added\n- Added support of F13-F24 keys. [UUM-44328](https://issuetracker.unity3d.com/product/unity/issues/guid/UUM-44328)"
+    "changelog": "### Changed\n- Project-Wide Input Actions support can no longer be compiled out (removed the `UNITY_INPUT_SYSTEM_PROJECT_WIDE_ACTIONS` define). (ISX-2397)\n- Removed code that had to do with Unity versions older than Unity 2022.3 LTS. (ISX-2396)\n- Auto-save on focus lost can no longer be compiled out (ISX-2397)\n- Deprecated the `USE_IMGUI_EDITOR_FOR_ASSETS` feature option (ISX-2397)\n\n### Fixed\n- An issue where a UITK MouseEvent was triggered when changing from Scene View to Game View in the Editor has been fixed. [ISXB-1671](https://issuetracker.unity3d.com/product/unity/issues/guid/ISXB-1671)\n- Fix documentation error in file AndroidGameController.cs mentioning a wrong controller. [DOCATT-9806]\n- Deferred auto-registration of processors, interactions and composite binding types referenced by `InputActionAsset`\n  to only happen once when an unresolved type reference is found in an action definition. This avoids reflective\n  type loading from assemblies for all cases where the Input System is not extended. (ISXB-1766)."
   },
   "upmCi": {
-    "footprint": "502fede172521cf7f3e4563d5c450673c67aebd9"
+    "footprint": "3aab59c91ae0c66639b6489ad5351d474c19f1e9"
   },
-  "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.inputsystem@1.14/manual/index.html",
+  "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.inputsystem@1.17/manual/index.html",
   "repository": {
     "url": "https://github.com/Unity-Technologies/InputSystem.git",
     "type": "git",
-    "revision": "5ac6cb14e03a4e4e5faf7bd8fbd915105ae3ff55"
+    "revision": "672e42ce4f76a7086fb09e24d5236e5f71336bd6"
   },
   "samples": [
     {
@@ -92,7 +92,7 @@
     },
     {
       "displayName": "UI vs. Game Input",
-      "description": "An example that shows how to deal with ambiguities that may arrise when overlaying interactive UI elements on top of a game scene.",
+      "description": "An example that shows how to deal with ambiguities that may arise when overlaying interactive UI elements on top of a game scene.",
       "path": "Samples~/UIvsGameInput"
     },
     {
@@ -106,5 +106,5 @@
       "path": "Samples~/Visualizers"
     }
   ],
-  "_fingerprint": "7fe8299111a78212d8968229ab41a82e4991ba25"
+  "_fingerprint": "02433b2481abc5c0063956fdc211f3d8c777447f"
 }

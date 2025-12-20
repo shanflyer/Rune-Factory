@@ -2,9 +2,7 @@
     "name": "Unity.InputSystem",
     "rootNamespace": "",
     "references": [
-        "Unity.ugui",
-        "UnityEditor.UI",
-        "UnityEngine.UI"
+        "Unity.ugui"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -35,11 +33,6 @@
             "define": "DISABLE_BUILTIN_INPUT_SYSTEM_WINDOWSMR"
         },
         {
-            "name": "com.unity.modules.vr",
-            "expression": "1.0.0",
-            "define": "UNITY_INPUT_SYSTEM_ENABLE_VR"
-        },
-        {
             "name": "com.unity.modules.xr",
             "expression": "1.0.0",
             "define": "UNITY_INPUT_SYSTEM_ENABLE_XR"
@@ -58,31 +51,6 @@
             "name": "com.unity.ugui",
             "expression": "1.0.0",
             "define": "UNITY_INPUT_SYSTEM_ENABLE_UI"
-        },
-        {
-            "name": "Unity",
-            "expression": "[2021.3.11,2022.1)",
-            "define": "HAS_SET_LOCAL_POSITION_AND_ROTATION"
-        },
-        {
-            "name": "Unity",
-            "expression": "[2022.1.19,2022.2)",
-            "define": "HAS_SET_LOCAL_POSITION_AND_ROTATION"
-        },
-        {
-            "name": "Unity",
-            "expression": "2022.2",
-            "define": "HAS_SET_LOCAL_POSITION_AND_ROTATION"
-        },
-        {
-            "name": "Unity",
-            "expression": "2022.3",
-            "define": "UNITY_INPUT_SYSTEM_PROJECT_WIDE_ACTIONS"
-        },
-        {
-            "name": "Unity",
-            "expression": "1",
-            "define": "UNITY_INPUT_SYSTEM_INPUT_ACTIONS_EDITOR_AUTO_SAVE_ON_FOCUS_LOST"
         },
         {
             "name": "Unity",
@@ -106,6 +74,11 @@
         },
         {
             "name": "Unity",
+            "expression": "[2022.3.69,2023.0.0]",
+            "define": "UNITY_INPUT_SYSTEM_SENDPOINTERHOVERTOPARENT"
+        },
+        {
+            "name": "Unity",
             "expression": "6000.0.15",
             "define": "UNITY_INPUT_SYSTEM_SENDPOINTERHOVERTOPARENT"
         },
@@ -113,7 +86,17 @@
             "name": "com.unity.modules.unityanalytics",
             "expression": "1",
             "define": "UNITY_INPUT_SYSTEM_ENABLE_ANALYTICS"
-        }
+        },
+        {
+            "name": "Unity",
+            "expression": "6000.3.0a6",
+            "define": "UNITY_INPUT_SYSTEM_PLATFORM_POLLING_FREQUENCY"
+        },
+	{
+	    "name": "Unity",
+            "expression": "6000.4.0a4",
+            "define": "UNITY_INPUTSYSTEM_SUPPORTS_MOUSE_SCRIPT_EVENTS"
+	}
     ],
     "noEngineReferences": false
 }

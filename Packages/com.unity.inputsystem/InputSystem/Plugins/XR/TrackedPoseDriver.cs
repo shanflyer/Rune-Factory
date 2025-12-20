@@ -18,6 +18,7 @@ namespace UnityEngine.InputSystem.XR
     /// </remarks>
     [Serializable]
     [AddComponentMenu("XR/Tracked Pose Driver (Input System)")]
+    [HelpURL(InputSystem.kDocUrl + "/manual/TrackedInputDevices.html#tracked-pose-driver")]
     public class TrackedPoseDriver : MonoBehaviour, ISerializationCallbackReceiver
     {
         /// <summary>
@@ -417,12 +418,6 @@ namespace UnityEngine.InputSystem.XR
         /// </summary>
         protected virtual void Awake()
         {
-#if UNITY_INPUT_SYSTEM_ENABLE_VR && ENABLE_VR
-            if (HasStereoCamera(out var cameraComponent))
-            {
-                UnityEngine.XR.XRDevice.DisableAutoXRCameraTracking(cameraComponent, true);
-            }
-#endif
         }
 
         /// <summary>
@@ -431,6 +426,7 @@ namespace UnityEngine.InputSystem.XR
         protected void OnEnable()
         {
             InputSystem.onAfterUpdate += UpdateCallback;
+            InputSystem.onDeviceChange += OnDeviceChanged;
             BindActions();
 
             // Read current input values when becoming enabled,
@@ -445,6 +441,7 @@ namespace UnityEngine.InputSystem.XR
         {
             UnbindActions();
             InputSystem.onAfterUpdate -= UpdateCallback;
+            InputSystem.onDeviceChange -= OnDeviceChanged;
         }
 
         /// <summary>
@@ -452,12 +449,6 @@ namespace UnityEngine.InputSystem.XR
         /// </summary>
         protected virtual void OnDestroy()
         {
-#if UNITY_INPUT_SYSTEM_ENABLE_VR && ENABLE_VR
-            if (HasStereoCamera(out var cameraComponent))
-            {
-                UnityEngine.XR.XRDevice.DisableAutoXRCameraTracking(cameraComponent, false);
-            }
-#endif
         }
 
         /// <summary>
@@ -483,7 +474,7 @@ namespace UnityEngine.InputSystem.XR
                 else
                     m_CurrentRotation = transform.localRotation;
 
-                ReadTrackingState(hasResolvedPositionInputControl, hasResolvedRotationInputControl);
+                ReadTrackingState();
 
                 m_IsFirstUpdate = false;
             }
@@ -494,7 +485,40 @@ namespace UnityEngine.InputSystem.XR
                 OnUpdate();
         }
 
-        void ReadTrackingState(bool hasResolvedPositionInputControl, bool hasResolvedRotationInputControl)
+        void OnDeviceChanged(InputDevice inputDevice, InputDeviceChange inputDeviceChange)
+        {
+            if (m_IsFirstUpdate)
+                return;
+            ReadTrackingStateWithoutTrackingAction();
+        }
+
+        /// <summary>
+        /// React to changes of devices to stop the tracking of position / rotation or both if a device is removed, starts the tracking if
+        /// a device is added.
+        /// </summary>
+        void ReadTrackingStateWithoutTrackingAction()
+        {
+            var trackingStateAction = m_TrackingStateInput.action;
+            if (trackingStateAction != null && trackingStateAction.m_BindingsCount != 0)
+                return;
+
+            var hasResolvedPositionInputControl = HasResolvedControl(m_PositionInput.action);
+            var hasResolvedRotationInputControl = HasResolvedControl(m_RotationInput.action);
+
+            // Treat an Input Action Reference with no reference the same as
+            // an enabled Input Action with no authored bindings, and allow driving the Transform pose.
+            // Check if we have transform and rotation controls to drive the pose.
+            if (hasResolvedPositionInputControl && hasResolvedRotationInputControl)
+                m_CurrentTrackingState = TrackingStates.Position | TrackingStates.Rotation;
+            else if (hasResolvedPositionInputControl)
+                m_CurrentTrackingState = TrackingStates.Position;
+            else if (hasResolvedRotationInputControl)
+                m_CurrentTrackingState = TrackingStates.Rotation;
+            else
+                m_CurrentTrackingState = TrackingStates.None;
+        }
+
+        void ReadTrackingState()
         {
             var trackingStateAction = m_TrackingStateInput.action;
             if (trackingStateAction != null && !trackingStateAction.enabled)
@@ -503,29 +527,16 @@ namespace UnityEngine.InputSystem.XR
                 m_CurrentTrackingState = TrackingStates.None;
                 return;
             }
-
-            if (trackingStateAction == null || trackingStateAction.m_BindingsCount == 0)
-            {
-                // Treat an Input Action Reference with no reference the same as
-                // an enabled Input Action with no authored bindings, and allow driving the Transform pose.
-                // Check if we have transform and rotation controls to drive the pose.
-                if (hasResolvedPositionInputControl && hasResolvedRotationInputControl)
-                    m_CurrentTrackingState = TrackingStates.Position | TrackingStates.Rotation;
-                else if (hasResolvedPositionInputControl)
-                    m_CurrentTrackingState = TrackingStates.Position;
-                else if (hasResolvedRotationInputControl)
-                    m_CurrentTrackingState = TrackingStates.Rotation;
-                else
-                    m_CurrentTrackingState = TrackingStates.None;
-            }
-            else if (HasResolvedControl(trackingStateAction))
+            if (HasResolvedControl(trackingStateAction))
             {
                 // Retain the current value if there is no resolved binding.
                 // Since the field initializes to allowing position and rotation,
                 // this allows for driving the Transform pose always when the device
                 // doesn't support reporting the tracking state.
                 m_CurrentTrackingState = (TrackingStates)trackingStateAction.ReadValue<int>();
+                return;
             }
+            ReadTrackingStateWithoutTrackingAction();
         }
 
         /// <summary>
@@ -576,32 +587,27 @@ namespace UnityEngine.InputSystem.XR
             var positionValid = m_IgnoreTrackingState || (m_CurrentTrackingState & TrackingStates.Position) != 0;
             var rotationValid = m_IgnoreTrackingState || (m_CurrentTrackingState & TrackingStates.Rotation) != 0;
 
-#if HAS_SET_LOCAL_POSITION_AND_ROTATION
-            if (m_TrackingType == TrackingType.RotationAndPosition && rotationValid && positionValid)
+            switch (m_TrackingType)
             {
-                transform.SetLocalPositionAndRotation(newPosition, newRotation);
-                return;
-            }
-#endif
+                case TrackingType.RotationAndPosition:
+                    if (rotationValid && positionValid)
+                        transform.SetLocalPositionAndRotation(newPosition, newRotation);
+                    else if (rotationValid)
+                        transform.localRotation = newRotation;
+                    else if (positionValid)
+                        transform.localPosition = newPosition;
+                    break;
 
-            if (rotationValid &&
-                (m_TrackingType == TrackingType.RotationAndPosition ||
-                 m_TrackingType == TrackingType.RotationOnly))
-            {
-                transform.localRotation = newRotation;
-            }
+                case TrackingType.PositionOnly:
+                    if (positionValid)
+                        transform.localPosition = newPosition;
+                    break;
 
-            if (positionValid &&
-                (m_TrackingType == TrackingType.RotationAndPosition ||
-                 m_TrackingType == TrackingType.PositionOnly))
-            {
-                transform.localPosition = newPosition;
+                case TrackingType.RotationOnly:
+                    if (rotationValid)
+                        transform.localRotation = newRotation;
+                    break;
             }
-        }
-
-        bool HasStereoCamera(out Camera cameraComponent)
-        {
-            return TryGetComponent(out cameraComponent) && cameraComponent.stereoEnabled;
         }
 
         // Evaluates whether the given action has at least one resolved control and may generate input.

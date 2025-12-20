@@ -11,7 +11,6 @@
                     <uie:ToolbarSearchField focusable="true" name="search-actions-text-field" class="search-field" style="display: none;" />
                 </ui:VisualElement>
                 <ui:VisualElement name="save-asset-toolbar-container" style="flex-direction: row; justify-content: flex-end;">
-                    <uie:ToolbarButton text="Save NameData" display-tooltip-when-elided="true" name="save-NameData-toolbar-button" style="align-items: auto;" />
                     <uie:ToolbarButton text="Save Asset" display-tooltip-when-elided="true" name="save-asset-toolbar-button" style="align-items: auto;" />
                     <uie:ToolbarToggle focusable="false" label="Auto-Save" name="auto-save-toolbar-toggle" style="width: 69px;" />
                 </ui:VisualElement>
@@ -29,7 +28,7 @@
                     </ui:VisualElement>
                     <ui:VisualElement name="rclick-area-to-add-new-action-map" style="flex-direction: column; flex-grow: 1;" />
                 </ui:VisualElement>
-                <ui:TwoPaneSplitView name="actions-and-properties-split-view" fixed-pane-index="1" fixed-pane-initial-dimension="320" view-data-key="actions-editor-splitter-2" style="height: auto; min-width: 450px;">
+                <ui:TwoPaneSplitView name="actions-and-properties-split-view" fixed-pane-index="1" fixed-pane-initial-dimension="320" style="height: auto; min-width: 450px;" view-data-key="actions-editor-splitter-2">
                     <ui:VisualElement name="actions-container" class="body-panel-container">
                         <ui:VisualElement name="header" class="body-panel-header" style="justify-content: space-between;">
                             <ui:Label text="Actions" display-tooltip-when-elided="true" name="actions-label" />

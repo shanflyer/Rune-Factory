@@ -1364,7 +1364,7 @@ namespace UnityEngine.InputSystem
         /// The unit is Hertz. A value of 120, for example, means that devices are sampled 120 times
         /// per second.
         ///
-        /// The default polling frequency is 60 Hz.
+        /// The default polling frequency is at least 60 Hz or what is suitable for the target device.
         ///
         /// For devices that are polled, the frequency setting will directly translate to changes in the
         /// <see cref="InputEvent.time"/> patterns. At 60 Hz, for example, timestamps for a specific,
@@ -3014,17 +3014,10 @@ namespace UnityEngine.InputSystem
 
         #region Actions
 
-#if UNITY_INPUT_SYSTEM_PROJECT_WIDE_ACTIONS
-        // EnteredEditMode  Occurs during the next update of the Editor application if it is in edit mode and was previously in play mode.
-        // ExitingEditMode  Occurs when exiting edit mode, before the Editor is in play mode.
-        // EnteredPlayMode  Occurs during the next update of the Editor application if it is in play mode and was previously in edit mode.
-        // ExitingPlayMode  Occurs when exiting play mode, before the Editor is in edit mode.
-        //
-        // Using the EnteredEditMode / EnteredPlayMode states to transition the actions' enabled
-        // state ensures that the they are active in all of these MonoBehavior methods:
-        //
-        //      Awake() /  Start() / OnEnable() / OnDisable() / OnDestroy()
-        //
+
+        // This is called from InitializeInEditor() and InitializeInPlayer() to make sure
+        // project-wide actions are all active in they are active in all of these MonoBehavior methods:
+        // Awake() /  Start() / OnEnable() / OnDisable() / OnDestroy()
         private static void EnableActions()
         {
 #if UNITY_EDITOR
@@ -3139,7 +3132,6 @@ namespace UnityEngine.InputSystem
             remove => s_Manager.onActionsChange -= value;
         }
 
-#endif // UNITY_INPUT_SYSTEM_PROJECT_WIDE_ACTIONS
 
         /// <summary>
         /// Event that is signalled when the state of enabled actions in the system changes or
@@ -3408,7 +3400,6 @@ namespace UnityEngine.InputSystem
 
         #endregion
 
-
         /// <summary>
         /// The current version of the input system package.
         /// </summary>
@@ -3586,12 +3577,10 @@ namespace UnityEngine.InputSystem
                     s_Manager.ApplySettings();
                 }
 
-                #if UNITY_INPUT_SYSTEM_PROJECT_WIDE_ACTIONS
                 // See if we have a saved actions object
                 var savedActions = ProjectWideActionsBuildProvider.actionsToIncludeInPlayerBuild;
                 if (savedActions != null)
                     s_Manager.actions = savedActions;
-                #endif // UNITY_INPUT_SYSTEM_PROJECT_WIDE_ACTIONS
 
                 InputEditorUserSettings.Load();
 
@@ -3599,8 +3588,7 @@ namespace UnityEngine.InputSystem
             }
 
             Debug.Assert(settings != null);
-            Debug.Assert(EditorUtility.InstanceIDToObject(settings.GetInstanceID()) != null,
-                "InputSettings has lost its native object");
+            Debug.Assert(HasNativeObject(settings), "InputSettings has lost its native object");
 
             // If native backends for new input system aren't enabled, ask user whether we should
             // enable them (requires restart). We only ask once per session and don't ask when
@@ -3618,7 +3606,7 @@ namespace UnityEngine.InputSystem
         {
             if (!s_SystemObject.newInputBackendsCheckedAsEnabled &&
                 !EditorPlayerSettingHelpers.newSystemBackendsEnabled &&
-                !s_Manager.m_Runtime.isInBatchMode)
+                !Application.isBatchMode)
             {
                 const string dialogText = "This project is using the new input system package but the native platform backends for the new input system are not enabled in the player settings. " +
                     "This means that no input from native devices will come through." +
@@ -3651,9 +3639,7 @@ namespace UnityEngine.InputSystem
                 case PlayModeStateChange.EnteredPlayMode:
                     s_SystemObject.enterPlayModeTime = InputRuntime.s_Instance.currentTime;
                     s_Manager.SyncAllDevicesAfterEnteringPlayMode();
-#if UNITY_INPUT_SYSTEM_PROJECT_WIDE_ACTIONS
-                    EnableActions();
-#endif // UNITY_INPUT_SYSTEM_PROJECT_WIDE_ACTIONS
+
                     break;
 
                 case PlayModeStateChange.ExitingPlayMode:
@@ -3664,9 +3650,7 @@ namespace UnityEngine.InputSystem
                 ////REVIEW: is there any other cleanup work we want to before? should we automatically nuke
                 ////        InputDevices that have been created with AddDevice<> during play mode?
                 case PlayModeStateChange.EnteredEditMode:
-#if UNITY_INPUT_SYSTEM_PROJECT_WIDE_ACTIONS
                     DisableActions(false);
-#endif
 
                     // Nuke all InputUsers.
                     InputUser.ResetGlobals();
@@ -3675,7 +3659,7 @@ namespace UnityEngine.InputSystem
                     InputActionState.DestroyAllActionMapStates();
 
                     // Clear the Action reference from all InputActionReference objects
-                    InputActionReference.ResetCachedAction();
+                    InputActionReference.InvalidateAll();
 
                     // Restore settings.
                     if (!string.IsNullOrEmpty(s_SystemObject.settings))
@@ -3705,6 +3689,16 @@ namespace UnityEngine.InputSystem
             }
         }
 
+        // We have this function to hide away instanceId -> entityId migration that happened in Unity 6.3
+        public static bool HasNativeObject(Object obj)
+        {
+#if UNITY_6000_3_OR_NEWER
+            return EditorUtility.EntityIdToObject(obj.GetEntityId()) != null;
+#else
+            return EditorUtility.InstanceIDToObject(obj.GetInstanceID()) != null;
+#endif
+        }
+
         private static void OnProjectChange()
         {
             ////TODO: use dirty count to find whether settings have actually changed
@@ -3716,7 +3710,7 @@ namespace UnityEngine.InputSystem
             // temporary settings object.
             // NOTE: We access m_Settings directly here to make sure we're not running into asserts
             //       from the settings getter checking it has a valid object.
-            if (EditorUtility.InstanceIDToObject(s_Manager.m_Settings.GetInstanceID()) == null)
+            if (!HasNativeObject(s_Manager.m_Settings))
             {
                 var newSettings = ScriptableObject.CreateInstance<InputSettings>();
                 newSettings.hideFlags = HideFlags.HideAndDontSave;
@@ -3768,10 +3762,8 @@ namespace UnityEngine.InputSystem
                 SetUpRemoting();
 #endif
 
-#if UNITY_INPUT_SYSTEM_PROJECT_WIDE_ACTIONS // && !UNITY_INCLUDE_TESTS
             // This is the point where we initialise project-wide actions for the Player
             EnableActions();
-#endif
         }
 
 #endif // UNITY_EDITOR
@@ -3822,7 +3814,7 @@ namespace UnityEngine.InputSystem
             WebGL.WebGLSupport.Initialize();
             #endif
 
-            #if UNITY_EDITOR || UNITY_STANDALONE_OSX || UNITY_STANDALONE_WIN || UNITY_WSA
+            #if UNITY_EDITOR || UNITY_STANDALONE_OSX || UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX || UNITY_WSA
             Switch.SwitchSupportHID.Initialize();
             #endif
 
@@ -3859,14 +3851,12 @@ namespace UnityEngine.InputSystem
         {
             k_InputResetMarker.Begin();
 
-#if UNITY_INPUT_SYSTEM_PROJECT_WIDE_ACTIONS
             // Note that in a test setup we might enter reset with project-wide actions already enabled but the
             // reset itself has pushed the action system state on the state stack. To avoid action state memory
             // problems we disable actions here and also request asset to be marked dirty and reimported.
             DisableActions(triggerSetupChanged: true);
             if (s_Manager != null)
                 s_Manager.actions = null;
-#endif // UNITY_INPUT_SYSTEM_PROJECT_WIDE_ACTIONS
 
             // Some devices keep globals. Get rid of them by pretending the devices
             // are removed.
@@ -3878,7 +3868,7 @@ namespace UnityEngine.InputSystem
                 s_Manager.UninstallGlobals();
             }
 
-            // Create temporary settings. In the tests, this is all we need. But outside of tests,d
+            // Create temporary settings. In the tests, this is all we need. But outside of tests,
             // this should get replaced with an actual InputSettings asset.
             var settings = ScriptableObject.CreateInstance<InputSettings>();
             settings.hideFlags = HideFlags.HideAndDontSave;
@@ -3911,11 +3901,8 @@ namespace UnityEngine.InputSystem
             InputUser.ResetGlobals();
             EnhancedTouchSupport.Reset();
 
-            // This is the point where we initialise project-wide actions for the Editor, Editor Tests and Player Tests.
-            // Note this is too early for editor ! actions is not setup yet.
-            #if UNITY_INPUT_SYSTEM_PROJECT_WIDE_ACTIONS
+            // This is the point where we initialise project-wide actions for the Editor Play-mode, Editor Tests and Player Tests.
             EnableActions();
-            #endif
 
             k_InputResetMarker.End();
         }
@@ -3924,7 +3911,8 @@ namespace UnityEngine.InputSystem
         /// Destroy the current setup of the input system.
         /// </summary>
         /// <remarks>
-        /// NOTE: This also de-allocates data we're keeping in unmanaged memory!
+        /// > [!NOTE]
+        /// > This also de-allocates data we're keeping in unmanaged memory!
         /// </remarks>
         private static void Destroy()
         {
