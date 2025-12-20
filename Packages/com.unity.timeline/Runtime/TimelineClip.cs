@@ -174,13 +174,16 @@ namespace UnityEngine.Timeline
             get { return m_Start; }
             set
             {
-                UpdateDirty(value, m_Start);
                 var newValue = Math.Max(SanitizeTimeValue(value, m_Start), 0);
-                if (m_ParentTrack != null && m_Start != newValue)
+                if (Math.Abs(m_Start - newValue) > double.Epsilon)
                 {
-                    m_ParentTrack.OnClipMove();
+                    UpdateDirty(m_Start, newValue);
+                    m_Start = newValue;
+                    if (m_ParentTrack != null)
+                    {
+                        m_ParentTrack.OnClipMove(asset as ITimelineClipAsset);
+                    }
                 }
-                m_Start = newValue;
             }
         }
 
@@ -192,8 +195,14 @@ namespace UnityEngine.Timeline
             get { return m_Duration; }
             set
             {
-                UpdateDirty(m_Duration, value);
-                m_Duration = Math.Max(SanitizeTimeValue(value, m_Duration), double.Epsilon);
+                var newValue = Math.Max(SanitizeTimeValue(value, m_Duration), double.Epsilon);
+                if (Math.Abs(m_Duration - newValue) > double.Epsilon)
+                {
+                    UpdateDirty(m_Duration, newValue);
+                    m_Duration = newValue;
+                    if (clipCaps.HasAny(ClipCaps.Blending) && m_ParentTrack != null)
+                        m_ParentTrack.blendsValid = false;
+                }
             }
         }
 
@@ -545,7 +554,7 @@ namespace UnityEngine.Timeline
         /// Given a time, returns the weight from the mix out
         /// </summary>
         /// <param name="time">Time (relative to the timeline)</param>
-        /// <returns></returns>
+        /// <returns>The weight from the mix out</returns>
         public float EvaluateMixOut(double time)
         {
             if (!clipCaps.HasAny(ClipCaps.Blending))
@@ -564,7 +573,7 @@ namespace UnityEngine.Timeline
         /// Given a time, returns the weight from the mix in
         /// </summary>
         /// <param name="time">Time (relative to the timeline)</param>
-        /// <returns></returns>
+        /// <returns>The weight from the mix in</returns>
         public float EvaluateMixIn(double time)
         {
             if (!clipCaps.HasAny(ClipCaps.Blending))
@@ -643,7 +652,6 @@ namespace UnityEngine.Timeline
         {
             get
             {
-                if (overideClip != null) return overideClip;
                 if (m_Asset == null)
                     return null;
 
@@ -652,24 +660,6 @@ namespace UnityEngine.Timeline
             }
         }
 
-        public AnimationClip assetClip
-        {
-            get
-            {
-                if (m_Asset == null)
-                    return null;
-
-                var playableAsset = m_Asset as AnimationPlayableAsset;
-                return playableAsset != null ? playableAsset.clip : null;
-            }
-        }
-
-        public void ClearOverride()
-        {
-            overideClip = null;
-        }
-
-        public AnimationClip overideClip;
         static double SanitizeTimeValue(double value, double defaultValue)
         {
             if (double.IsInfinity(value) || double.IsNaN(value))
@@ -820,20 +810,18 @@ namespace UnityEngine.Timeline
         /// <summary>
         /// Creates an AnimationClip to store animated properties for the attached PlayableAsset.
         /// </summary>
-        /// <remarks>
-        /// If curves already exists for this clip, this method produces no result regardless of the
-        /// value specified for curvesClipName.
-        /// </remarks>
-        /// <remarks>
-        /// When used from the editor, this method attempts to save the created curves clip to the TimelineAsset.
-        /// The TimelineAsset must already exist in the AssetDatabase to save the curves clip. If the TimelineAsset
-        /// does not exist, the curves clip is still created but it is not saved.
-        /// </remarks>
         /// <param name="curvesClipName">
         /// The name of the AnimationClip to create.
         /// This method does not ensure unique names. If you want a unique clip name, you must provide one.
         /// See ObjectNames.GetUniqueName for information on a method that creates unique names.
         /// </param>
+        /// <remarks>
+        /// If curves already exists for this clip, this method produces no result regardless of the
+        /// value specified for curvesClipName.
+        /// When used from the editor, this method attempts to save the created curves clip to the TimelineAsset.
+        /// The TimelineAsset must already exist in the AssetDatabase to save the curves clip. If the TimelineAsset
+        /// does not exist, the curves clip is still created but it is not saved.
+        /// </remarks>
         public void CreateCurves(string curvesClipName)
         {
             if (m_AnimationCurves != null)
@@ -864,10 +852,10 @@ namespace UnityEngine.Timeline
         /// <summary>
         /// Outputs a more readable representation of the timeline clip as a string
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A more readable representation of the timeline clip as a string</returns>
         public override string ToString()
         {
-            return UnityString.Format("{0} ({1:F2}, {2:F2}):{3:F2} | {4}", displayName, start, end, clipIn, GetParentTrack());
+            return String.Format("{0} ({1:F2}, {2:F2}):{3:F2} | {4}", displayName, start, end, clipIn, GetParentTrack());
         }
 
         /// <summary>

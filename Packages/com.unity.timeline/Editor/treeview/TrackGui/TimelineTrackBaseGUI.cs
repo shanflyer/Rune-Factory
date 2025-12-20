@@ -1,6 +1,15 @@
-using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using UnityEngine.Timeline;
+
+#if UNITY_6000_3_OR_NEWER
+using TreeViewController = UnityEditor.IMGUI.Controls.TreeViewController<UnityEngine.Timeline.ObjectId>;
+using TreeViewItem = UnityEditor.IMGUI.Controls.TreeViewItem<UnityEngine.Timeline.ObjectId>;
+#elif UNITY_6000_2_OR_NEWER
+using TreeViewController = UnityEditor.IMGUI.Controls.TreeViewController<int>;
+using TreeViewItem = UnityEditor.IMGUI.Controls.TreeViewItem<int>;
+#else
+using UnityEditor.IMGUI.Controls;
+#endif
 
 namespace UnityEditor.Timeline
 {
@@ -64,7 +73,7 @@ namespace UnityEditor.Timeline
         public abstract void Draw(Rect headerRect, Rect contentRect, WindowState state);
         public abstract void OnGraphRebuilt(); // callback when the corresponding graph is rebuilt. This can happen, but not have the GUI rebuilt.
 
-        protected TimelineTrackBaseGUI(int id, int depth, TreeViewItem parent, string displayName, TrackAsset trackAsset, TreeViewController tv, TimelineTreeViewGUI tvgui)
+        protected TimelineTrackBaseGUI(ObjectId id, int depth, TreeViewItem parent, string displayName, TrackAsset trackAsset, TreeViewController tv, TimelineTreeViewGUI tvgui)
             : base(id, depth, parent, displayName)
         {
             m_Drawer = TrackDrawer.CreateInstance(trackAsset);

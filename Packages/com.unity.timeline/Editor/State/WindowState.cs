@@ -370,7 +370,7 @@ namespace UnityEditor.Timeline
 
         public List<PlayableDirector> previewedDirectors { get; private set; }
 
-        public void OnDestroy()
+        public void OnDestroy(bool clearHierarchy = true)
         {
             if (!ignorePreview)
                 Stop();
@@ -381,7 +381,8 @@ namespace UnityEditor.Timeline
             if (m_OnEndFrameUpdates != null)
                 m_OnEndFrameUpdates.Clear();
 
-            m_SequenceHierarchy.Clear();
+            if (clearHierarchy)
+                m_SequenceHierarchy.Clear();
             windowOnGuiStarted = null;
         }
 
@@ -827,7 +828,7 @@ namespace UnityEditor.Timeline
             if (k_TimeCodeTextFieldId == GUIUtility.keyboardControl)
                 return true;
 
-            return editSequence.asset.flattenedTracks.Count(t => t.GetInstanceID() == GUIUtility.keyboardControl) != 0;
+            return editSequence.asset.flattenedTracks.Count(t => t.GetObjectId().GetHashCode() == GUIUtility.keyboardControl) != 0;
         }
 
         public float TimeToTimeAreaPixel(double t) // TimeToTimeAreaPixel

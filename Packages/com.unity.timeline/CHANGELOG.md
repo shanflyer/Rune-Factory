@@ -2,6 +2,41 @@
 
 All notable changes to this package will be documented in this file. The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 
+## [1.8.10] - 2025-12-05
+
+### Fixed
+
+- Fix compilation error for version 2023.2 of the editor (TB-352)
+- Fixed an issue where it was possible for 2 clips to have a micro overlap that was not detected as a blend, resulting in both clips playing at the same time with a weight of one. (TB-345)
+
+## [1.8.9] - 2025-07-30
+
+### Added
+
+- Added profiler markers for Timeline graph creation and evaluation. (ATL-2108)
+
+### Fixed
+
+- Fix custom implementation of AnimationTrack not being able to record and not having access to AnimationTrack actions through the context menu. (TB-333)
+- Fix an issue where custom Tracks and Clips Editors code is marked as unused in Rider even when they are associated with a specific Clip or Track Asset. (TB-334)
+- Fix and issue where a clip Inspector with an embedded playable asset inspector can leak when selection changes with 2 inspector windows opened. (TB-324)
+- Fix Editing Track label while Track is selected makes text lose the white color. (TB-336)
+- Maximizing and Restoring the Timeline Window will now keep editing the previous Timeline (TB-289)
+- Added a warning when trying to add a custom track whose class name would not match the file name. (TB-329)
+- Fixed an issue where timeline duration incorrectly included tracks muted via hierarchy. (TB-326)
+
+## [1.8.8] - 2025-01-16
+
+### Fixed
+
+- Fixed bug where the first property, when it is a collection of objects, of a TrackAsset would not be properly displayed in the inspector.
+- TimelineAsset.EditorSettings.SetStandardFrameRate would incorrectly throw an ArgumentException if given a valid StandardFrameRates, this has been corrected.
+- Clip blends will now be computed when using the API to add clips to tracks - IN-66759
+- Improved performance when evaluating Timeline Playables with a large number of clip based Animation Tracks (TB-259)
+- Updated the Gameplay Sequence sample to show materials when using the Universal and HD Render Pipelines.
+
+## [1.8.8] - 2024-08-30
+
 ## [1.8.7] - 2024-05-24
 
 ### Added
