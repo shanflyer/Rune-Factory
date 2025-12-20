@@ -11,9 +11,9 @@ namespace UnityEditor.U2D.Animation
 
         static SpriteLibraryAssetDragAndDrop()
         {
-            DragAndDrop.AddDropHandler(HandleDropInspector);
+            DragAndDrop.AddDropHandlerV2(HandleDropInspector);
             DragAndDrop.AddDropHandler(HandleDropHierarchy);
-            DragAndDrop.AddDropHandler(HandleDropScene);
+            DragAndDrop.AddDropHandlerV2(HandleDropScene);
         }
 
         static DragAndDropVisualMode HandleDropInspector(Object[] targets, bool perform)
