@@ -308,6 +308,12 @@ namespace UnityEngine.UI
             m_VertsDirty = true;
             CanvasUpdateRegistry.RegisterCanvasElementForGraphicRebuild(this);
 
+#if PACKAGE_POLYSPATIAL
+            // [AVPB-860] When vertices are dirtied, mark the component itself 
+            // dirty as well so that ObjectDispatcher picks it up
+            MarkDirty();
+#endif
+
             if (m_OnDirtyVertsCallback != null)
                 m_OnDirtyVertsCallback();
         }
@@ -759,12 +765,9 @@ namespace UnityEngine.UI
                 return s_Mesh;
             }
         }
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         [Obsolete("Use OnPopulateMesh instead.", true)]
-        protected virtual void OnFillVBO(List<UIVertex> vbo)
-        {
-        }
+        protected virtual void OnFillVBO(System.Collections.Generic.List<UIVertex> vbo) {}
 
         [Obsolete("Use OnPopulateMesh(VertexHelper vh) instead.", false)]
         /// <summary>
@@ -826,32 +829,21 @@ namespace UnityEngine.UI
         /// </summary>
         public virtual void OnRebuildRequested()
         {
-            try
+            // when rebuild is requested we need to rebuild all the graphics /
+            // and associated components... The correct way to do this is by
+            // calling OnValidate... Because MB's don't have a common base class
+            // we do this via reflection. It's nasty and ugly... Editor only.
+            m_SkipLayoutUpdate = true;
+            var mbs = gameObject.GetComponents<MonoBehaviour>();
+            foreach (var mb in mbs)
             {
-                // when rebuild is requested we need to rebuild all the graphics /
-                // and associated components... The correct way to do this is by
-                // calling OnValidate... Because MB's don't have a common base class
-                // we do this via reflection. It's nasty and ugly... Editor only.
-                m_SkipLayoutUpdate = true;
-                var mbs = gameObject.GetComponents<MonoBehaviour>();
-                foreach (var mb in mbs)
-                {
-                    if (mb == null)
-                        continue;
-                    var methodInfo = mb.GetType().GetMethod("OnValidate",
-                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-                    if (methodInfo != null)
-                        methodInfo.Invoke(mb, null);
-                }
-
-                m_SkipLayoutUpdate = false;
+                if (mb == null)
+                    continue;
+                var methodInfo = mb.GetType().GetMethod("OnValidate", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                if (methodInfo != null)
+                    methodInfo.Invoke(mb, null);
             }
-            catch (Exception e)
-            {
-                // Console.WriteLine(e);
-                //  throw;
-            }
-           
+            m_SkipLayoutUpdate = false;
         }
 
         protected override void Reset()
@@ -879,7 +871,16 @@ namespace UnityEngine.UI
         /// <param name="sp">Screen point being tested</param>
         /// <param name="eventCamera">Camera that is being used for the testing.</param>
         /// <returns>True if the provided point is a valid location for GraphicRaycaster raycasts.</returns>
-        public virtual bool Raycast(Vector2 sp, Camera eventCamera)
+        public virtual bool Raycast(Vector2 sp, Camera eventCamera) => Raycast(sp, eventCamera, false);
+
+        /// <summary>
+        /// When a GraphicRaycaster raycasts into the scene, it first filters the elements based on their RectTransform rect, then uses this Raycast function to determine which elements are hit.
+        /// </summary>
+        /// <param name="sp">Screen point being tested.</param>
+        /// <param name="eventCamera">Camera used for testing.</param>
+        /// <param name="ignoreMasks">If true, masks are ignored and do not prevent raycasts. </param>
+        /// <returns>True if the provided point is a valid location for GraphicRaycaster raycasts.</returns>
+        protected bool Raycast(Vector2 sp, Camera eventCamera, bool ignoreMasks)
         {
             if (!isActiveAndEnabled)
                 return false;
@@ -889,49 +890,81 @@ namespace UnityEngine.UI
 
             bool ignoreParentGroups = false;
             bool continueTraversal = true;
+            bool isParent = false;
 
             while (t != null)
             {
+                bool raycastValid = true;
+                bool hasMask = false;
+                bool maskableGraphicRaycastValid = true;
+
                 t.GetComponents(components);
                 for (var i = 0; i < components.Count; i++)
                 {
-                    var canvas = components[i] as Canvas;
+                    var component = components[i];
+                    var canvas = component as Canvas;
                     if (canvas != null && canvas.overrideSorting)
                         continueTraversal = false;
 
-                    var filter = components[i] as ICanvasRaycastFilter;
-
+                    var filter = component as ICanvasRaycastFilter;  // Image, Mask, RectMask2D, CanvasGroup
                     if (filter == null)
                         continue;
 
-                    var raycastValid = true;
+                    if (ignoreMasks && component is Mask or RectMask2D)
+                        continue;
 
-                    var group = components[i] as CanvasGroup;
-                    if (group != null)
+                    if (component is CanvasGroup group)
                     {
                         if (!group.enabled)
                             continue;
 
-                        if (ignoreParentGroups == false && group.ignoreParentGroups)
+                        if (ignoreParentGroups == false)
                         {
-                            ignoreParentGroups = true;
+                            if (group.ignoreParentGroups)
+                                ignoreParentGroups = true;
+    
                             raycastValid = filter.IsRaycastLocationValid(sp, eventCamera);
+                            if (!raycastValid)
+                                break;
                         }
-                        else if (!ignoreParentGroups)
-                            raycastValid = filter.IsRaycastLocationValid(sp, eventCamera);
                     }
                     else
                     {
-                        raycastValid = filter.IsRaycastLocationValid(sp, eventCamera);
-                    }
+                        if (isParent && component is Graphic graphic && !graphic.raycastTarget)
+                            continue;
 
-                    if (!raycastValid)
-                    {
-                        ListPool<Component>.Release(components);
-                        return false;
+                        hasMask |= component is Mask;
+
+                        raycastValid = filter.IsRaycastLocationValid(sp, eventCamera);
+
+                        // Try to early-out if the raycast is not valid
+                        if (!raycastValid)
+                        {
+                            // Cache the raycast result for parent MaskableGraphics and continue processing components
+                            // unless we already found a Mask and are not ignoring masks
+                            if (isParent && component is MaskableGraphic)
+                            {
+                                maskableGraphicRaycastValid = raycastValid;
+                                if (ignoreMasks || !hasMask)
+                                {
+                                    raycastValid = true;
+                                    continue;
+                                }
+                            }
+
+                            break;
+                        }
                     }
                 }
+
+                if (!raycastValid || (hasMask && !maskableGraphicRaycastValid))
+                {
+                    ListPool<Component>.Release(components);
+                    return false;
+                }
+
                 t = continueTraversal ? t.parent : null;
+                isParent = true;
             }
             ListPool<Component>.Release(components);
             return true;

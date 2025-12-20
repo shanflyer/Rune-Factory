@@ -537,13 +537,11 @@ namespace TMPro
             }
 
             if (m_CaptionText)
-            { 
+            {
                 if (data != null && data.text != null)
                     m_CaptionText.text = data.text;
                 else
                     m_CaptionText.text = "";
-
-                m_CaptionText.InitOther();
             }
 
             if (m_CaptionImage)
@@ -778,10 +776,6 @@ namespace TMPro
         /// </summary>
         public void Show()
         {
-            if (tag != "Untagged" && setStringAction != null)
-            {
-                setStringAction(tag);
-            }
             if (m_Coroutine != null)
             {
                 StopCoroutine(m_Coroutine);

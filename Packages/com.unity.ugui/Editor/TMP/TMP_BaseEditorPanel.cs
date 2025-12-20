@@ -41,6 +41,7 @@ namespace TMPro.EditorUtilities
 
         static readonly GUIContent k_SpacingOptionsLabel = new GUIContent("Spacing Options (em)", "Spacing adjustments between different elements of the text. Values are in font units where a value of 1 equals 1/100em.");
         static readonly GUIContent k_CharacterSpacingLabel = new GUIContent("Character");
+        static readonly GUIContent k_CharacterHorizontalScaleLabel = new GUIContent("Character Horizontal Scale", "The horizontal scale of the characters. Value = 1.0 is normal. Values > 1.0 or < 1.0 respectively increases or decreases the horizontal scale or width of the characters.");
         static readonly GUIContent k_WordSpacingLabel = new GUIContent("Word");
         static readonly GUIContent k_LineSpacingLabel = new GUIContent("Line");
         static readonly GUIContent k_ParagraphSpacingLabel = new GUIContent("Paragraph");
@@ -73,12 +74,15 @@ namespace TMPro.EditorUtilities
         static readonly GUIContent k_TopLabel = new GUIContent("Top");
         static readonly GUIContent k_RightLabel = new GUIContent("Right");
         static readonly GUIContent k_BottomLabel = new GUIContent("Bottom");
+        static readonly GUIContent[] k_MarginLabels = { k_LeftLabel, k_TopLabel, k_RightLabel, k_BottomLabel };
 
         protected static readonly GUIContent k_ExtraSettingsLabel = new GUIContent("Extra Settings");
         protected static string[] k_UiStateLabel = new string[] { "<i>(Click to collapse)</i> ", "<i>(Click to expand)</i> " };
 
         static Dictionary<int, TMP_Style> k_AvailableStyles = new Dictionary<int, TMP_Style>();
         protected Dictionary<int, int> m_TextStyleIndexLookup = new Dictionary<int, int>();
+
+        const float kPaddingBetweenMarginFields = 5f;
 
         protected struct Foldout
         {
@@ -129,6 +133,7 @@ namespace TMPro.EditorUtilities
         protected SerializedProperty m_CharWidthMaxAdjProp;
 
         protected SerializedProperty m_CharacterSpacingProp;
+        private protected SerializedProperty m_CharacterHorizontalScaleProp;
         protected SerializedProperty m_WordSpacingProp;
         protected SerializedProperty m_LineSpacingProp;
         protected SerializedProperty m_ParagraphSpacingProp;
@@ -213,6 +218,7 @@ namespace TMPro.EditorUtilities
             m_OverrideHtmlColorProp = serializedObject.FindProperty("m_overrideHtmlColors");
 
             m_CharacterSpacingProp = serializedObject.FindProperty("m_characterSpacing");
+            m_CharacterHorizontalScaleProp = serializedObject.FindProperty("m_characterHorizontalScale");
             m_WordSpacingProp = serializedObject.FindProperty("m_wordSpacing");
             m_LineSpacingProp = serializedObject.FindProperty("m_lineSpacing");
             m_ParagraphSpacingProp = serializedObject.FindProperty("m_paragraphSpacing");
@@ -275,7 +281,7 @@ namespace TMPro.EditorUtilities
             // Get Styles from Style Sheet
             if (TMP_Settings.instance != null)
                 m_StyleNames = GetStyleNames();
-            
+
             // Get list of font features for the primary font asset assigned to the text component
             // FontEngine.LoadFontFace(m_TextComponent.font.SourceFont_EditorRef);
             // OTL_Table gposTable = UnityEngine.TextCore.LowLevel.FontEngine.GetOpenTypeLayoutTable(OTL_TableType.GPOS);
@@ -995,6 +1001,8 @@ namespace TMPro.EditorUtilities
             EditorGUIUtility.labelWidth = currentLabelWidth;
             EditorGUI.indentLevel = oldIndent;
 
+            EditorGUILayout.PropertyField(m_CharacterHorizontalScaleProp, k_CharacterHorizontalScaleLabel, GUILayout.MaxWidth(EditorGUIUtility.labelWidth + 50f));
+
             if (EditorGUI.EndChangeCheck())
             {
                 m_HavePropertiesChanged = true;
@@ -1126,25 +1134,7 @@ namespace TMPro.EditorUtilities
 
         protected void DrawMargins()
         {
-            EditorGUI.BeginChangeCheck();
             DrawMarginProperty(m_MarginProp, k_MarginsLabel);
-            if (EditorGUI.EndChangeCheck())
-            {
-                // Value range check on margins to make sure they are not excessive.
-                Vector4 margins = m_MarginProp.vector4Value;
-                Rect textContainerSize = m_RectTransform.rect;
-
-                margins.x = Mathf.Clamp(margins.x, -textContainerSize.width, textContainerSize.width);
-                margins.z = Mathf.Clamp(margins.z, -textContainerSize.width, textContainerSize.width);
-
-                margins.y = Mathf.Clamp(margins.y, -textContainerSize.height, textContainerSize.height);
-                margins.w = Mathf.Clamp(margins.w, -textContainerSize.height, textContainerSize.height);
-
-                m_MarginProp.vector4Value = margins;
-
-                m_HavePropertiesChanged = true;
-            }
-
             EditorGUILayout.Space();
         }
 
@@ -1266,7 +1256,7 @@ namespace TMPro.EditorUtilities
             for (int i = 0; i < featureCount; i++)
             {
                 SerializedProperty activeFeatureProperty = m_FontFeaturesActiveProp.GetArrayElementAtIndex(i);
-                
+
                 for (int j = 0; j < k_FontFeatures.Length; j++)
                 {
                     if (activeFeatureProperty.intValue == k_FontFeatures[j].TagToInt())
@@ -1278,15 +1268,15 @@ namespace TMPro.EditorUtilities
             }
 
             EditorGUI.BeginChangeCheck();
-            
+
             int mask = EditorGUILayout.MaskField(k_FontFeaturesLabel, srcMask, k_FontFeatures);
-            
+
             if (EditorGUI.EndChangeCheck())
             {
                 m_FontFeaturesActiveProp.ClearArray();
 
                 int writeIndex = 0;
-                
+
                 for (int i = 0; i < k_FontFeatures.Length; i++)
                 {
                     int bit = 0x1 << i;
@@ -1301,7 +1291,7 @@ namespace TMPro.EditorUtilities
                 }
 
                 m_HavePropertiesChanged = true;
-            }   
+            }
         }
 
         protected void DrawPadding()
@@ -1410,49 +1400,70 @@ namespace TMPro.EditorUtilities
         // DRAW MARGIN PROPERTY
         protected void DrawMarginProperty(SerializedProperty property, GUIContent label)
         {
-            Rect rect = EditorGUILayout.GetControlRect(false, 2 * 18);
+            Rect rect = EditorGUILayout.GetControlRect(false, 2 * EditorGUIUtility.singleLineHeight);
+            rect.y += 2;
 
-            EditorGUI.BeginProperty(rect, label, property);
-
-            Rect pos0 = new Rect(rect.x, rect.y + 2, rect.width - 15, 18);
-
-            float width = rect.width + 3;
+            Rect pos0 = rect;
             pos0.width = EditorGUIUtility.labelWidth;
-            EditorGUI.PrefixLabel(pos0, label);
 
-            Vector4 margins = property.vector4Value;
+            // BeginProperty ensures that the property works correctly with prefabs
+            EditorGUI.BeginProperty(pos0, label, property);
 
-            float widthB = width - EditorGUIUtility.labelWidth;
-            float fieldWidth = widthB / 4;
-            pos0.width = Mathf.Max(fieldWidth - 5, 45f);
+            int controlId = GUIUtility.GetControlID(FocusType.Keyboard, pos0);
+            pos0 = EditorGUI.PrefixLabel(pos0, controlId, label);
 
-            // Labels
-            pos0.x = EditorGUIUtility.labelWidth + 15;
-            margins.x = DrawMarginField(pos0, "Left", margins.x);
+            float width = rect.xMax + kPaddingBetweenMarginFields - pos0.xMin;
+            float fieldWidth = width / 4f;
+            pos0.width = Mathf.Max(fieldWidth - kPaddingBetweenMarginFields, 45f);
 
-            pos0.x += fieldWidth;
-            margins.y = DrawMarginField(pos0, "Top", margins.y);
-
-            pos0.x += fieldWidth;
-            margins.z = DrawMarginField(pos0, "Right", margins.z);
-
-            pos0.x += fieldWidth;
-            margins.w = DrawMarginField(pos0, "Bottom", margins.w);
-
-            property.vector4Value = margins;
+            // Draw each margin component by iterating the serialized sub-properties
+            var subProperty = property.Copy();
+            for (int i = 0; i < 4; i++)
+            {
+                // The first Next() needs to enter the children
+                subProperty.Next(i == 0);
+                // The X (i==0) and Z (i==2) components are horizontal
+                var axis = i % 2 == 0 ? RectTransform.Axis.Horizontal : RectTransform.Axis.Vertical;
+                DrawMarginField(pos0, k_MarginLabels[i], subProperty, axis);
+                pos0.x += fieldWidth;
+            }
 
             EditorGUI.EndProperty();
         }
 
-        float DrawMarginField(Rect position, string label, float value)
+        bool DrawMarginField(Rect position, GUIContent label, SerializedProperty prop, RectTransform.Axis axis)
         {
-            int controlId = GUIUtility.GetControlID(FocusType.Keyboard, position);
-            EditorGUI.PrefixLabel(position, controlId, new GUIContent(label));
+            // BeginProperty ensures that each margin field works correctly with prefabs
+            EditorGUI.BeginProperty(position, label, prop);
 
-            Rect dragZone = new Rect(position.x, position.y, position.width, position.height);
+            int controlId = GUIUtility.GetControlID(FocusType.Keyboard, position);
+            position.yMax -= EditorGUIUtility.singleLineHeight;
+            EditorGUI.PrefixLabel(position, controlId, label);
+
+            Rect dragZone = position;
             position.y += EditorGUIUtility.singleLineHeight;
 
-            return EditorGUI.DoFloatField(EditorGUI.s_RecycledEditor, position, dragZone, controlId, value, EditorGUI.kFloatFieldFormatString, EditorStyles.numberField, true);
+            EditorGUI.BeginChangeCheck();
+            // Do not update the property value directly. Cache the new
+            // value and update the property if there was a change.
+            var newValue = EditorGUI.DoFloatField(EditorGUI.s_RecycledEditor, position, dragZone, controlId, prop.floatValue, EditorGUI.kFloatFieldFormatString, EditorStyles.numberField, true);
+            bool hasChanged = EditorGUI.EndChangeCheck();
+            if (hasChanged)
+            {
+                // Loop through all selected objects and calculate their minimum width/height.
+                float size = float.MaxValue;
+                foreach (TMP_Text target in serializedObject.targetObjects)
+                {
+                    var rect = target.rectTransform.rect;
+                    size = Mathf.Min(size, axis == RectTransform.Axis.Horizontal ? rect.width : rect.height);
+                }
+                // Clamp the new value to be within the size.
+                prop.floatValue = Mathf.Clamp(newValue, -size, size);
+                m_HavePropertiesChanged = true;
+            }
+            EditorGUI.EndProperty();
+
+            return hasChanged;
         }
 
         protected void DrawPropertySlider(GUIContent label, SerializedProperty property)
@@ -1467,6 +1478,5 @@ namespace TMPro.EditorUtilities
 
         // Special Handling of Undo / Redo Events.
         protected abstract void OnUndoRedo();
-
     }
 }

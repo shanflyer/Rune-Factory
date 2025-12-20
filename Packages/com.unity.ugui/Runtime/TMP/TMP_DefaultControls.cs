@@ -348,9 +348,6 @@ namespace TMPro
             dropdown.captionText = labelText;
             dropdown.itemText = itemLabelText;
 
-            dropdown.captionText.InitOther();
-            dropdown.itemText.InitOther();
-
             // Setting default Item list.
             itemLabelText.text = "Option A";
             dropdown.options.Add(new TMP_Dropdown.OptionData {text = "Option A" });

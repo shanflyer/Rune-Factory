@@ -955,15 +955,15 @@ namespace UnityEngine.UI
 
         internal SecondarySpriteTexture [] secondaryTextures => m_SecondaryTextures; // Internal for testing only
 
-        static void ClearArray(SecondarySpriteTexture[] array)
+        static void ClearArray(ref SecondarySpriteTexture[] array)
         {
-            Array.Resize(ref array, 0);
+            array = Array.Empty<SecondarySpriteTexture>();
         }
 
         bool CheckSecondaryTexturesChanged(Sprite sprite)
         {
             var changed = CheckSecondaryTexturesChanged(sprite, ref s_TempNewSecondaryTextures);
-            ClearArray(s_TempNewSecondaryTextures);
+            ClearArray(ref s_TempNewSecondaryTextures);
             return changed;
         }
 
@@ -999,7 +999,7 @@ namespace UnityEngine.UI
             }
             else
             {
-                ClearArray(newSecondaryTextures);
+                ClearArray(ref newSecondaryTextures);
             }
 
             // If the list of secondary textures has not changed then return
@@ -1037,7 +1037,7 @@ namespace UnityEngine.UI
                 }
             }
 
-            ClearArray(s_TempNewSecondaryTextures);
+            ClearArray(ref s_TempNewSecondaryTextures);
         }
 
         /// <summary>
@@ -1139,7 +1139,7 @@ namespace UnityEngine.UI
             // Calculate the drawing offset based on the difference between the two pivots.
             var drawOffset = (rectPivot - spritePivot) * drawingSize;
 
-            Color32 color32 = color;
+            var color32 = color;
             vh.Clear();
             if (colorGradient)
             {
@@ -2067,7 +2067,6 @@ namespace UnityEngine.UI
             base.OnValidate();
             m_PixelsPerUnitMultiplier = Mathf.Max(0.01f, m_PixelsPerUnitMultiplier);
         }
-
 #endif
     }
 }

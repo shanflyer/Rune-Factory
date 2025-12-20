@@ -69,17 +69,18 @@ namespace UnityEngine.UI
             // For most platforms, if the main display is not the same resolution as the system then we will have to scale the mouse position. (case 1141732)
             var display = Display.main;
 #if ENABLE_INPUT_SYSTEM && PACKAGE_INPUTSYSTEM
-            if (displayIndex >= Display.displays.Length)
-                displayIndex = 0;
-
             // With the new input system, passed positions are always relative to a surface and scaled accordingly to the rendering resolution.
-            display = Display.displays[displayIndex];
-            // So, if not in fullscreen, assume UaaL multi-view multi-screen multi-touch scenario, where the position is already in the correct scaled coordinates for the displayIndex
+
+            // If not in fullscreen, assume UaaL multi-view multi-screen multi-touch scenario, where the position is already in the correct scaled coordinates for the displayIndex
             if (!Screen.fullScreen)
             {
                 return new Vector3(position.x, position.y, displayIndex);
             }
+
             // Otherwise, in full screen, we add some padding if rendering and system resolution differs, as for other platforms' main display. (So behavior is unchanged for Android main display, untested for non-main displays)
+            if (displayIndex >= Display.displays.Length)
+                displayIndex = 0; // use position relative to first display if displayIndex is out of bounds
+            display = Display.displays[displayIndex];
 #endif
             if (display.renderingWidth != display.systemWidth || display.renderingHeight != display.systemHeight)
             {
@@ -132,7 +133,7 @@ namespace UnityEngine.UI
 
                     // fix for UUM-63551: Use the display index provided to this method.  Display.RelativeMouseAt( ) no longer works starting with 2021 LTS and new input system
                     // as the Pointer position is reported in Window coordinates rather than relative to the primary window as Display.RelativeMouseAt( ) expects.
-#if ENABLE_INPUT_SYSTEM && PACKAGE_INPUTSYSTEM && (UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX || UNITY_ANDROID)
+#if ENABLE_INPUT_SYSTEM && PACKAGE_INPUTSYSTEM && (UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX || UNITY_ANDROID || UNITY_EMBEDDED_LINUX || UNITY_QNX)
                     var relativePos = new Vector3(adjustedPosition.x, adjustedPosition.y, displayIndex);
 #else
                     var relativePos = Display.RelativeMouseAt(adjustedPosition);
@@ -144,7 +145,7 @@ namespace UnityEngine.UI
                 }
 
                 // We are using the main display.
-#if ENABLE_INPUT_SYSTEM && PACKAGE_INPUTSYSTEM && UNITY_ANDROID
+#if ENABLE_INPUT_SYSTEM && PACKAGE_INPUTSYSTEM && (UNITY_ANDROID || UNITY_EMBEDDED_LINUX || UNITY_QNX)
                 // On Android, in all cases, it is a surface associated to a given displayIndex, so we need to use the display index
                 return new Vector3(position.x, position.y, displayIndex);
 #else
@@ -155,7 +156,7 @@ namespace UnityEngine.UI
 
             // fix for UUM-63551: Use the display index provided to this method.  Display.RelativeMouseAt( ) no longer works starting with 2021 LTS and new input system
             // as the Pointer position is reported in Window coordinates rather than relative to the primary window as Display.RelativeMouseAt( ) expects.
-#if ENABLE_INPUT_SYSTEM && PACKAGE_INPUTSYSTEM && (UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX || UNITY_ANDROID)
+#if ENABLE_INPUT_SYSTEM && PACKAGE_INPUTSYSTEM && (UNITY_STANDALONE_WIN || UNITY_STANDALONE_LINUX || UNITY_ANDROID || UNITY_EMBEDDED_LINUX || UNITY_QNX)
             return new Vector3(position.x, position.y, displayIndex);
 #else
             return Display.RelativeMouseAt(position);
