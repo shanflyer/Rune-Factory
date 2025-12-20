@@ -20,6 +20,8 @@ namespace UnityEngine.Rendering.Universal.Internal
 
         bool m_IsOpaque;
 
+        TransparencySortMode transparencySortMode;
+        Vector3 transparencySortAxis;
 #if URP_COMPATIBILITY_MODE
         /// <summary>
         /// Used to indicate if the active target of the pass is the back buffer
@@ -93,10 +95,15 @@ namespace UnityEngine.Rendering.Universal.Internal
             profilingSampler = ProfilingSampler.Get(profileId);
         }
 
-        internal void Init(bool opaque, RenderPassEvent evt, RenderQueueRange renderQueueRange, LayerMask layerMask, StencilState stencilState, int stencilReference, ShaderTagId[] shaderTagIds = null)
+        internal void Init(bool opaque, RenderPassEvent evt, RenderQueueRange renderQueueRange, LayerMask layerMask,
+            StencilState stencilState, int stencilReference, ShaderTagId[] shaderTagIds = null)
         {
             if (shaderTagIds == null)
-                shaderTagIds = new ShaderTagId[] { new ShaderTagId("SRPDefaultUnlit"), new ShaderTagId("UniversalForward"), new ShaderTagId("UniversalForwardOnly") };
+                shaderTagIds = new ShaderTagId[]
+                {
+                    new ShaderTagId("SRPDefaultUnlit"), new ShaderTagId("UniversalForward"),
+                    new ShaderTagId("UniversalForwardOnly")
+                };
 
             foreach (ShaderTagId sid in shaderTagIds)
                 m_ShaderTagIdList.Add(sid);
@@ -141,6 +148,7 @@ namespace UnityEngine.Rendering.Universal.Internal
                 ExecutePass(CommandBufferHelpers.GetRasterCommandBuffer(renderingData.commandBuffer), m_PassData, m_PassData.rendererList, m_PassData.objectsWithErrorRendererList, m_PassData.cameraData.IsCameraProjectionMatrixFlipped());
             }
         }
+#endif
         private void GetTransparencySortingMode(Camera camera, ref SortingSettings sortingSettings)
         {
             var mode = transparencySortMode;
@@ -429,8 +437,8 @@ namespace UnityEngine.Rendering.Universal.Internal
         /// <param name="layerMask">The layer mask to use for creating filtering settings that control what objects get rendered.</param>
         /// <param name="stencilState">The stencil settings to use with this poss.</param>
         /// <param name="stencilReference">The stencil reference value to use with this pass.</param>
-        public DrawObjectsWithRenderingLayersPass(URPProfileId profilerTag, bool opaque, RenderPassEvent evt, RenderQueueRange renderQueueRange, LayerMask layerMask, StencilState stencilState, int stencilReference) :
-            base(profilerTag, opaque, evt, renderQueueRange, layerMask, stencilState, stencilReference)
+        public DrawObjectsWithRenderingLayersPass(URPProfileId profilerTag, bool opaque, RenderPassEvent evt, RenderQueueRange renderQueueRange, LayerMask layerMask, StencilState stencilState, int stencilReference, Vector3 transparencySortAxis, TransparencySortMode transparencySortMode = TransparencySortMode.Default) :
+            base(profilerTag, opaque, evt, renderQueueRange, layerMask, stencilState, stencilReference,transparencySortAxis,transparencySortMode)
         {
 #if URP_COMPATIBILITY_MODE
             m_ColorTargetIndentifiers = new RTHandle[2];
