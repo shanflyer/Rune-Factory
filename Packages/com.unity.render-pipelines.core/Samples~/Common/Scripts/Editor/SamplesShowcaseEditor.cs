@@ -17,7 +17,7 @@ using UnityEditor.Inspector.GraphicsSettingsInspectors;
 public class SamplesShowcaseEditor : Editor
 {
     private static readonly string UXMLPath = "SamplesSelectionUXML";
-    public static readonly string[] supportedExtensions = {".shadergraph", ".vfx", ".cs", ".hlsl", ".shader", ".asset",".mat",".fbx",".prefab", ".png"};
+    public static readonly string[] supportedExtensions = {".shadergraph", ".vfx", ".cs", ".hlsl", ".shader", ".asset",".mat",".fbx",".prefab", ".png", ".compute"};
 
     SerializedProperty currentIndex;
     Color headlineColor;
@@ -300,7 +300,7 @@ public class SamplesShowcaseEditor : Editor
         parsedText = parsedText.Replace("</link>", "</color></link>");
 
         // Titles
-        parsedText = parsedText.Replace("<h1>", "<b><size=16>");
+        parsedText = parsedText.Replace("<h1>", "<b><size=2em>");
         parsedText = parsedText.Replace("</h1>", "</b></size>");
 
         // Code
@@ -310,7 +310,7 @@ public class SamplesShowcaseEditor : Editor
         // Add tab spacing to lists
         parsedText = Regex.Replace(parsedText, "•.*?(?:<br>|$)", "<margin=1em>$0</margin>");
 
-        // Remove ingore tags
+        // Remove ignore tags
         parsedText = Regex.Replace(parsedText, @"<\/?ignore>", "");
 
         // Register link callbacks

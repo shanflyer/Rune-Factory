@@ -38,12 +38,14 @@ namespace UnityEngine.Rendering
         public NativeList<LODGroupCullingData> lodGroupCullingData { get { return m_LODGroupDataPool.lodGroupCullingData; } }
         public int instanceDataBufferVersion { get { return m_InstanceDataBuffer.version; } }
         public int instanceDataBufferLayoutVersion { get { return m_InstanceDataBuffer.layoutVersion; } }
-        public int crossfadedRendererCount { get { return m_LODGroupDataPool.crossfadedRendererCount; } }
         public SphericalHarmonicsL2 cachedAmbientProbe { get { return m_CachedAmbientProbe; } }
 
         public bool hasBoundingSpheres { get { return m_InstanceDataSystem.hasBoundingSpheres; } }
+        public int cameraCount { get { return m_InstanceDataSystem.cameraCount; } }
         public CPUInstanceData.ReadOnly instanceData { get { return m_InstanceDataSystem.instanceData; } }
         public CPUSharedInstanceData.ReadOnly sharedInstanceData { get { return m_InstanceDataSystem.sharedInstanceData; } }
+
+        public CPUPerCameraInstanceData perCameraInstanceData { get { return m_InstanceDataSystem.perCameraInstanceData; } }
         public GPUInstanceDataBuffer.ReadOnly instanceDataBuffer { get { return m_InstanceDataBuffer.AsReadOnly(); } }
         public NativeArray<InstanceHandle> aliveInstances { get { return m_InstanceDataSystem.aliveInstances; } }
 
@@ -114,7 +116,7 @@ namespace UnityEngine.Rendering
 
         public void Dispose()
         {
-            NativeArray<int>.ReadOnly rendererGroupIDs = m_InstanceDataSystem.sharedInstanceData.rendererGroupIDs;
+            NativeArray<EntityId>.ReadOnly rendererGroupIDs = m_InstanceDataSystem.sharedInstanceData.rendererGroupIDs;
 
             if (rendererGroupIDs.Length > 0)
                 m_GPUDrivenProcessor.DisableGPUDrivenRendering(rendererGroupIDs);
@@ -209,7 +211,7 @@ namespace UnityEngine.Rendering
             Profiler.EndSample();
         }
 
-        public void DestroyLODGroups(NativeArray<int> destroyed)
+        public void DestroyLODGroups(NativeArray<EntityId> destroyed)
         {
             if (destroyed.Length == 0)
                 return;
@@ -217,7 +219,7 @@ namespace UnityEngine.Rendering
             m_LODGroupDataPool.FreeLODGroupData(destroyed);
         }
 
-        public void UpdateLODGroups(NativeArray<int> changedID)
+        public void UpdateLODGroups(NativeArray<EntityId> changedID)
         {
             if (changedID.Length == 0)
                 return;
@@ -237,7 +239,7 @@ namespace UnityEngine.Rendering
             return m_InstanceDataSystem.ScheduleUpdateInstanceDataJob(instances, rendererData, m_LODGroupDataPool.lodGroupDataHash);
         }
 
-        public void FreeRendererGroupInstances(NativeArray<int> rendererGroupsID)
+        public void FreeRendererGroupInstances(NativeArray<EntityId> rendererGroupsID)
         {
             m_InstanceDataSystem.FreeRendererGroupInstances(rendererGroupsID);
         }
@@ -247,22 +249,22 @@ namespace UnityEngine.Rendering
             m_InstanceDataSystem.FreeInstances(instances);
         }
 
-        public JobHandle ScheduleQueryRendererGroupInstancesJob(NativeArray<int> rendererGroupIDs, NativeArray<InstanceHandle> instances)
+        public JobHandle ScheduleQueryRendererGroupInstancesJob(NativeArray<EntityId> rendererGroupIDs, NativeArray<InstanceHandle> instances)
         {
             return m_InstanceDataSystem.ScheduleQueryRendererGroupInstancesJob(rendererGroupIDs, instances);
         }
 
-        public JobHandle ScheduleQueryRendererGroupInstancesJob(NativeArray<int> rendererGroupIDs, NativeList<InstanceHandle> instances)
+        public JobHandle ScheduleQueryRendererGroupInstancesJob(NativeArray<EntityId> rendererGroupIDs, NativeList<InstanceHandle> instances)
         {
             return m_InstanceDataSystem.ScheduleQueryRendererGroupInstancesJob(rendererGroupIDs, instances);
         }
 
-        public JobHandle ScheduleQueryRendererGroupInstancesJob(NativeArray<int> rendererGroupIDs, NativeArray<int> instancesOffset, NativeArray<int> instancesCount, NativeList<InstanceHandle> instances)
+        public JobHandle ScheduleQueryRendererGroupInstancesJob(NativeArray<EntityId> rendererGroupIDs, NativeArray<int> instancesOffset, NativeArray<int> instancesCount, NativeList<InstanceHandle> instances)
         {
             return m_InstanceDataSystem.ScheduleQueryRendererGroupInstancesJob(rendererGroupIDs, instancesOffset, instancesCount, instances);
         }
 
-        public JobHandle ScheduleQueryMeshInstancesJob(NativeArray<int> sortedMeshIDs, NativeList<InstanceHandle> instances)
+        public JobHandle ScheduleQueryMeshInstancesJob(NativeArray<EntityId> sortedMeshIDs, NativeList<InstanceHandle> instances)
         {
             return m_InstanceDataSystem.ScheduleQuerySortedMeshInstancesJob(sortedMeshIDs, instances);
         }
@@ -333,7 +335,7 @@ namespace UnityEngine.Rendering
             ChangeInstanceBufferVersion();
         }
 
-        public void TransformLODGroups(NativeArray<int> lodGroupsID)
+        public void TransformLODGroups(NativeArray<EntityId> lodGroupsID)
         {
             if (lodGroupsID.Length == 0)
                 return;
@@ -351,9 +353,9 @@ namespace UnityEngine.Rendering
             return m_InstanceDataSystem.ScheduleCollectInstancesLODGroupAndMasksJob(instances, lodGroupAndMasks);
         }
 
-        public InstanceHandle GetRendererInstanceHandle(int rendererID)
+        public InstanceHandle GetRendererInstanceHandle(EntityId rendererID)
         {
-            var rendererIDs = new NativeArray<int>(1, Allocator.TempJob);
+            var rendererIDs = new NativeArray<EntityId>(1, Allocator.TempJob);
             var instances = new NativeArray<InstanceHandle>(1, Allocator.TempJob);
 
             rendererIDs[0] = rendererID;
@@ -384,6 +386,16 @@ namespace UnityEngine.Rendering
             m_OcclusionCullingCommon.UpdateFrame();
             if (m_DebugStats != null)
                 m_OcclusionCullingCommon.UpdateOccluderStats(m_DebugStats);
+        }
+
+        public void FreePerCameraInstanceData(NativeArray<EntityId> cameraIDs)
+        {
+            m_InstanceDataSystem.DeallocatePerCameraInstanceData(cameraIDs);
+        }
+
+        public void UpdateCameras(NativeArray<EntityId> cameraIDs)
+        {
+            m_InstanceDataSystem.AllocatePerCameraInstanceData(cameraIDs);
         }
 
 #if UNITY_EDITOR

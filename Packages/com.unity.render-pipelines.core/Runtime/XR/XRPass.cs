@@ -24,6 +24,8 @@ namespace UnityEngine.Experimental.Rendering
         internal int cullingPassId;
         internal bool copyDepth;
         internal bool hasMotionVectorPass;
+        internal bool spaceWarpRightHandedNDC;
+        internal bool isLastCameraPass;
 
 #if ENABLE_VR && ENABLE_XR_MODULE
         internal UnityEngine.XR.XRDisplaySubsystem.XRRenderPass xrSdkRenderPass;
@@ -40,6 +42,7 @@ namespace UnityEngine.Experimental.Rendering
     {
         readonly List<XRView> m_Views;
         readonly XROcclusionMesh m_OcclusionMesh;
+        readonly XRVisibleMesh m_VisibleMesh;
 
         /// <summary>
         /// Parameterless constructor.
@@ -49,6 +52,8 @@ namespace UnityEngine.Experimental.Rendering
         {
             m_Views = new List<XRView>(2);
             m_OcclusionMesh = new XROcclusionMesh(this);
+            m_VisibleMesh = new XRVisibleMesh(this);
+            isLastCameraPass = true;    // default to last camera pass when creating from default constructor
         }
 
         /// <summary>
@@ -68,6 +73,7 @@ namespace UnityEngine.Experimental.Rendering
         /// </summary>
         virtual public void Release()
         {
+            m_VisibleMesh.Dispose();
             GenericPool<XRPass>.Release(this);
         }
 
@@ -106,17 +112,30 @@ namespace UnityEngine.Experimental.Rendering
         public bool hasMotionVectorPass { get; private set; }
 
         /// <summary>
+        /// Reports which NDC convention the render pipeline should use when calculating motion vectors.
+        /// if <c>true</c>, motion vector data must use the right-handed NDC space. If <c>false</c> motion vector data 
+        /// must use the left-handed NDC space.
+        /// </summary>
+        /// <remarks>
+        /// The render pipeline must write motion vector data to the <see cref="UnityEngine.XR.XRDisplaySubsystem.XRRenderPass.motionVectorRenderTarget"/>.
+        ///
+        /// > [!NOTE]
+        /// > The OpenXR specification doesn't specify which coordinate space convention to use for the
+        /// > motion vector data. Unity only supports SpaceWarp when using the Vulkan graphics API, which uses the right-handed convention for normalized device coordinates, but
+        /// > devices still can choose either convention for motion data when the
+        /// > application is using the Vulkan graphics API.
+        /// </remarks>
+        public bool spaceWarpRightHandedNDC { get; private set; }
+
+        /// <summary>
         /// If true, is the first pass of a xr camera
         /// </summary>
         public bool isFirstCameraPass => multipassId == 0;
 
         /// <summary>
         /// If true, is the last pass of a xr camera
-        /// Multipass last pass: pass ID == 1, viewCount == 1
-        /// Singlepass last pass: pass ID == 0, viewCount ==2
-        /// Emptypass(non-XR) last pass: pass ID == 0, viewCount == 0
         /// </summary>
-        public bool isLastCameraPass => (multipassId == 1 && viewCount <= 1) || (multipassId == 0 && viewCount > 1) || (multipassId == 0 && viewCount == 0) /* ViewCount 0 handles the empty pass*/;
+        public bool isLastCameraPass { get; private set; }
 
         /// <summary>
         /// Index of the pass inside the frame.
@@ -285,6 +304,16 @@ namespace UnityEngine.Experimental.Rendering
         }
 
         /// <summary>
+        /// Returns the visible mesh for a given view.
+        /// </summary>
+        /// <param name="viewIndex">Index of XRView to retrieve the data from. </param>
+        /// <returns> XR visible mesh for the specified XRView. </returns>
+        public Mesh GetVisibleMesh(int viewIndex = 0)
+        {
+            return m_Views[viewIndex].visibleMesh;
+        }
+
+        /// <summary>
         /// Returns the destination slice index (for texture array) for a given view.
         /// </summary>
         /// <param name="viewIndex"> Index of XRView to retrieve the data from. </param>
@@ -373,6 +402,11 @@ namespace UnityEngine.Experimental.Rendering
         public bool hasValidOcclusionMesh { get => m_OcclusionMesh.hasValidOcclusionMesh; }
 
         /// <summary>
+        /// Returns true if the pass was setup with expected mesh and enabled by settings.
+        /// </summary>
+        public bool hasValidVisibleMesh { get => m_VisibleMesh.hasValidVisibleMesh && XRSystem.GetUseVisibilityMesh(); }
+
+        /// <summary>
         /// Generate commands to render the occlusion mesh for this pass.
         /// In single-pass mode : the meshes for all views are combined into one mesh,
         /// where the corresponding view index is encoded into each vertex. The keyword
@@ -382,7 +416,7 @@ namespace UnityEngine.Experimental.Rendering
         /// <param name="renderIntoTexture">Set to true when rendering into a render texture. Used for handling Unity yflip.</param>
         public void RenderOcclusionMesh(CommandBuffer cmd, bool renderIntoTexture = false)
         {
-            if(occlusionMeshScale > 0)
+            if (occlusionMeshScale > 0)
                 m_OcclusionMesh.RenderOcclusionMesh(cmd, occlusionMeshScale, renderIntoTexture);
         }
 
@@ -398,6 +432,44 @@ namespace UnityEngine.Experimental.Rendering
         {
             if (occlusionMeshScale > 0)
                 m_OcclusionMesh.RenderOcclusionMesh(cmd.m_WrappedCommandBuffer, occlusionMeshScale, renderIntoTexture);
+        }
+
+        /// <summary>
+        /// Generate commands to render the visible mesh for this pass using a custom material and set of material property block.
+        /// In single-pass mode : the meshes for all views are combined into one mesh,
+        /// where the corresponding view index is encoded into each vertex.
+        /// </summary>
+        /// <param name="cmd">RasterCommandBuffer to modify</param>
+        /// <param name="occlusionMeshScale">Occlusion Mesh scale</param>
+        /// <param name="material">Material that the visibility mesh will render.</param>
+        /// <param name="materialBlock">Material block with all the shader parameters that need to be set.</param>
+        /// <param name="shaderPass">Material shader pass to render, set 0 by default.</param>
+        /// <param name="renderIntoTexture">Set to true when rendering into a render texture. Used for handling Unity yflip.</param>
+        public void RenderVisibleMeshCustomMaterial(RasterCommandBuffer cmd, float occlusionMeshScale,
+            Material material, MaterialPropertyBlock materialBlock, int shaderPass, bool renderIntoTexture = false)
+        {
+            if (occlusionMeshScale > 0)
+                m_VisibleMesh.RenderVisibleMeshCustomMaterial(cmd.m_WrappedCommandBuffer, occlusionMeshScale, material, materialBlock, shaderPass, renderIntoTexture);
+
+        }
+
+        /// <summary>
+        /// Generate commands to render the visible mesh for this pass using a custom material and set of material property block.
+        /// In single-pass mode : the meshes for all views are combined into one mesh,
+        /// where the corresponding view index is encoded into each vertex.
+        /// </summary>
+        /// <param name="cmd">RasterCommandBuffer to modify</param>
+        /// <param name="occlusionMeshScale">Occlusion Mesh scale</param>
+        /// <param name="material">Material that the visibility mesh will render.</param>
+        /// <param name="materialBlock">Material block with all the shader parameters that need to be set.</param>
+        /// <param name="shaderPass">Material shader pass to render, set 0 by default.</param>
+        /// <param name="renderIntoTexture">Set to true when rendering into a render texture. Used for handling Unity yflip.</param>
+        public void RenderVisibleMeshCustomMaterial(CommandBuffer cmd, float occlusionMeshScale,
+            Material material, MaterialPropertyBlock materialBlock, int shaderPass = 0, bool renderIntoTexture = false)
+        {
+            if (occlusionMeshScale > 0)
+                m_VisibleMesh.RenderVisibleMeshCustomMaterial(cmd, occlusionMeshScale, material, materialBlock, shaderPass, renderIntoTexture);
+
         }
 
         /// <summary>
@@ -461,6 +533,7 @@ namespace UnityEngine.Experimental.Rendering
         internal void UpdateCombinedOcclusionMesh()
         {
             m_OcclusionMesh.UpdateCombinedMesh();
+            m_VisibleMesh.UpdateCombinedMesh();
         }
 
         /// <summary>
@@ -480,9 +553,11 @@ namespace UnityEngine.Experimental.Rendering
             motionVectorRenderTarget = new RenderTargetIdentifier(createInfo.motionVectorRenderTarget, 0, CubemapFace.Unknown, -1);
             motionVectorRenderTargetDesc = createInfo.motionVectorRenderTargetDesc;
             hasMotionVectorPass = createInfo.hasMotionVectorPass;
+            spaceWarpRightHandedNDC = createInfo.spaceWarpRightHandedNDC;
             m_OcclusionMesh.SetMaterial(createInfo.occlusionMeshMaterial);
             occlusionMeshScale = createInfo.occlusionMeshScale;
             foveatedRenderingInfo = createInfo.foveatedRenderingInfo;
+            isLastCameraPass = createInfo.isLastCameraPass;
         }
 
         internal void AddView(XRView xrView)

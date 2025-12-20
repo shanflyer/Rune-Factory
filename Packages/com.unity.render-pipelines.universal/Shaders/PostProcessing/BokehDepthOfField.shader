@@ -410,8 +410,6 @@ Shader "Hidden/Universal Render Pipeline/BokehDepthOfField"
                 #pragma fragment FragComposite
                 #pragma target 3.5
                 #pragma multi_compile_fragment _ _ENABLE_ALPHA_OUTPUT
-
-                
             ENDHLSL
         }
     }

@@ -1,35 +1,52 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using Unity.Collections.LowLevel.Unsafe;
-using UnityEngine.Rendering;
-using System.Collections.Generic;
 using Unity.Collections;
+using UnityEngine.Experimental.Rendering;
 
 namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
 {
     // Per pass info on inputs to the pass
     [DebuggerDisplay("PassInputData: Res({resource.index})")]
-    internal struct PassInputData
+    internal readonly struct PassInputData
     {
-        public ResourceHandle resource;
+        public readonly ResourceHandle resource;
+
+        public PassInputData(in ResourceHandle resource)
+        {
+            this.resource = resource;
+        }
     }
 
     // Per pass info on outputs to the pass
     [DebuggerDisplay("PassOutputData: Res({resource.index})")]
-    internal struct PassOutputData
+    internal readonly struct PassOutputData
     {
-        public ResourceHandle resource;
+        public readonly ResourceHandle resource;
+
+        public PassOutputData(in ResourceHandle resource)
+        {
+            this.resource = resource;
+        }
     }
 
     // Per pass fragment (attachment) info
     [DebuggerDisplay("PassFragmentData: Res({resource.index}):{accessFlags}")]
-    internal struct PassFragmentData
+    internal readonly struct PassFragmentData
     {
-        public ResourceHandle resource;
-        public AccessFlags accessFlags;
-        public int mipLevel;
-        public int depthSlice;
+        public readonly ResourceHandle resource;
+        public readonly AccessFlags accessFlags;
+        public readonly int mipLevel;
+        public readonly int depthSlice;
+
+        public PassFragmentData(in ResourceHandle handle, AccessFlags flags, int mipLevel, int depthSlice)
+        {
+            resource = handle;
+            accessFlags = flags;
+            this.mipLevel = mipLevel;
+            this.depthSlice = depthSlice;
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override int GetHashCode()
@@ -55,11 +72,18 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
 
     // Per pass random write texture info
     [DebuggerDisplay("PassRandomWriteData: Res({resource.index}):{index}:{preserveCounterValue}")]
-    internal struct PassRandomWriteData
+    internal readonly struct PassRandomWriteData
     {
-        public ResourceHandle resource;
-        public int index;
-        public bool preserveCounterValue;
+        public readonly ResourceHandle resource;
+        public readonly int index;
+        public readonly bool preserveCounterValue;
+
+        public PassRandomWriteData(in ResourceHandle resource, int index, bool preserveCounterValue)
+        {
+            this.resource = resource;
+            this.index = index;
+            this.preserveCounterValue = preserveCounterValue;
+        }
 
         public override int GetHashCode()
         {
@@ -85,6 +109,7 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
         public int passId; // Index of self in the passData list, can we calculate this somehow in c#? would use offsetof in c++
         public RenderGraphPassType type;
         public bool hasFoveatedRasterization;
+        public ExtendedFeatureFlags extendedFeatureFlags;
         public int tag; // Arbitrary per node int used by various graph analysis tools
 
         public ShadingRateFragmentSize shadingRateFragmentSize;
@@ -103,6 +128,8 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
         public int numFragments;
         public int firstFragmentInput; //base+offset in CompilerContextData.fragmentData (use the Fragment inputs iterator to iterate this more easily)
         public int numFragmentInputs;
+        public int firstSampledOnlyRaster; //base+offset in CompilerContextData.sampledData (use the Sampled iterator to iterate this more easily)
+        public int numSampledOnlyRaster;
         public int firstRandomAccessResource; //base+offset in CompilerContextData.randomWriteData (use the Fragment inputs iterator to iterate this more easily)
         public int numRandomAccessResources;
         public int firstCreate; //base+offset in CompilerContextData.createData (use the InputNodes iterator to iterate this more easily)
@@ -116,7 +143,8 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
         public int fragmentInfoVolumeDepth;
         public int fragmentInfoSamples;
 
-        public int waitOnGraphicsFencePassId; // -1 if no fence wait is needed, otherwise the passId to wait on
+        public int waitOnGraphicsFencePassId; // -1 if no fence wait is needed, otherwise the highest/latest passId executed on the opposite (async compute or gfx) queue to wait on
+        public int awaitingMyGraphicsFencePassId; // -1 if no pass is awaiting the fence generated by this pass, otherwise the lowest/earliest passId executed on the opposite queue waiting for this pass to be completed
 
         public bool asyncCompute;
         public bool hasSideEffects;
@@ -138,6 +166,7 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
             asyncCompute = pass.enableAsyncCompute;
             hasSideEffects = !pass.allowPassCulling;
             hasFoveatedRasterization = pass.enableFoveatedRasterization;
+            extendedFeatureFlags = pass.extendedFeatureFlags;
             mergeState = PassMergeState.None;
             nativePassIndex = -1;
             nativeSubPassIndex = -1;
@@ -152,6 +181,8 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
             numOutputs = 0;
             firstFragment = 0;
             numFragments = 0;
+            firstSampledOnlyRaster = 0;
+            numSampledOnlyRaster = 0;
             firstRandomAccessResource = 0;
             numRandomAccessResources = 0;
             firstFragmentInput = 0;
@@ -170,6 +201,7 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
 
             insertGraphicsFence = false;
             waitOnGraphicsFencePassId = -1;
+            awaitingMyGraphicsFencePassId = -1;
 
             hasShadingRateStates = pass.hasShadingRateStates;
             shadingRateFragmentSize = pass.shadingRateFragmentSize;
@@ -186,7 +218,7 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
             asyncCompute = pass.enableAsyncCompute;
             hasSideEffects = !pass.allowPassCulling;
             hasFoveatedRasterization = pass.enableFoveatedRasterization;
-
+            extendedFeatureFlags = pass.extendedFeatureFlags;
             mergeState = PassMergeState.None;
             nativePassIndex = -1;
             nativeSubPassIndex = -1;
@@ -203,6 +235,8 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
             numFragments = 0;
             firstFragmentInput = 0;
             numFragmentInputs = 0;
+            firstSampledOnlyRaster = 0;
+            numSampledOnlyRaster = 0;
             firstRandomAccessResource = 0;
             numRandomAccessResources = 0;
             firstCreate = 0;
@@ -219,6 +253,7 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
 
             insertGraphicsFence = false;
             waitOnGraphicsFencePassId = -1;
+            awaitingMyGraphicsFencePassId = -1;
 
             hasShadingRateStates = pass.hasShadingRateStates;
             shadingRateFragmentSize = pass.shadingRateFragmentSize;
@@ -235,14 +270,21 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
         public readonly ReadOnlySpan<PassInputData> Inputs(CompilerContextData ctx)
             => ctx.inputData.MakeReadOnlySpan(firstInput, numInputs);
 
+        // RenderAttachments - MRT colors and depth
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly ReadOnlySpan<PassFragmentData> Fragments(CompilerContextData ctx)
             => ctx.fragmentData.MakeReadOnlySpan(firstFragment, numFragments);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public PassFragmentData ShadingRateImage(CompilerContextData ctx)
+        public readonly ReadOnlySpan<ResourceHandle> SampledTexturesIfRaster(CompilerContextData ctx)
+            => ctx.sampledData.MakeReadOnlySpan(firstSampledOnlyRaster, numSampledOnlyRaster);
+
+        // ShadingRateImageAttachment
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public readonly PassFragmentData ShadingRateImage(CompilerContextData ctx)
             => ctx.fragmentData[shadingRateImageIndex];
 
+        // RenderInputAttachments
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly ReadOnlySpan<PassFragmentData> FragmentInputs(CompilerContextData ctx)
             => ctx.fragmentData.MakeReadOnlySpan(firstFragmentInput, numFragmentInputs);
@@ -253,31 +295,57 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
 
         // Loop over this pass's random write textures returned as PassFragmentData
         public ReadOnlySpan<PassRandomWriteData> RandomWriteTextures(CompilerContextData ctx)
-         => ctx.randomAccessResourceData.MakeReadOnlySpan(firstRandomAccessResource, numRandomAccessResources);
+            => ctx.randomAccessResourceData.MakeReadOnlySpan(firstRandomAccessResource, numRandomAccessResources);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly ReadOnlySpan<ResourceHandle> LastUsedResources(CompilerContextData ctx)
             => ctx.destroyData.MakeReadOnlySpan(firstDestroy, numDestroyed);
 
-        private void SetupAndValidateFragmentInfo(ResourceHandle h, CompilerContextData ctx)
+        private bool TrySetupAndValidateFragmentInfo(in ResourceHandle h, CompilerContextData ctx, out string errorMessage)
         {
+            errorMessage = null;
+
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
-            if (h.type != RenderGraphResourceType.Texture) new Exception("Only textures can be used as a fragment attachment.");
+            if (h.type != RenderGraphResourceType.Texture)
+            {
+                errorMessage = RenderGraph.RenderGraphExceptionMessages.k_NonTextureAsAttachmentError;
+                return false;
+            }
 #endif
 
             ref readonly var resInfo = ref ctx.UnversionedResourceData(h);
 
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
-            if (resInfo.width == 0 || resInfo.height == 0 || resInfo.msaaSamples == 0) throw new Exception("GetRenderTargetInfo returned invalid results.");
+            if (resInfo.width == 0 || resInfo.height == 0 || resInfo.msaaSamples == 0)
+            {
+                errorMessage = RenderGraph.RenderGraphExceptionMessages.k_InvalidGetRenderTargetInfoResultsError;
+                return false;
+            }
 #endif
-            if (fragmentInfoValid)
+            if (RenderGraph.enableValidityChecks && fragmentInfoValid)
             {
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
                 if (fragmentInfoWidth != resInfo.width ||
                     fragmentInfoHeight != resInfo.height ||
-                    fragmentInfoVolumeDepth != resInfo.volumeDepth ||
-                    fragmentInfoSamples != resInfo.msaaSamples)
-                    throw new Exception("Mismatch in Fragment dimensions");
+                    fragmentInfoVolumeDepth != resInfo.volumeDepth)
+                {
+                    var name = resInfo.GetName(ctx, h);
+                    if (string.IsNullOrEmpty(name))
+                        name = "unnamed fragment";
+
+                    errorMessage = RenderGraph.RenderGraphExceptionMessages.MismatchInDimensions(name, fragmentInfoWidth, fragmentInfoHeight, fragmentInfoVolumeDepth, resInfo);
+                    return false;
+                }
+
+                if (fragmentInfoSamples != resInfo.msaaSamples && !extendedFeatureFlags.HasFlag(ExtendedFeatureFlags.MultisampledShaderResolve))
+                {
+                    var name = resInfo.GetName(ctx, h);
+                    if (string.IsNullOrEmpty(name))
+                        name = "unnamed fragment";
+
+                    errorMessage = RenderGraph.RenderGraphExceptionMessages.MismatchInMSAASamlpes(name, fragmentInfoSamples, resInfo.msaaSamples);
+                    return false;
+                }
 #endif
             }
             else
@@ -288,20 +356,21 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
                 fragmentInfoVolumeDepth = resInfo.volumeDepth;
                 fragmentInfoValid = true;
             }
+            return true;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void AddFragment(ResourceHandle h, CompilerContextData ctx)
+        internal void TryAddFragment(in ResourceHandle h, CompilerContextData ctx, out string errorMessage)
         {
-            SetupAndValidateFragmentInfo(h, ctx);
-            numFragments++;
+            if (TrySetupAndValidateFragmentInfo(h, ctx, out errorMessage))
+                numFragments++;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void AddFragmentInput(ResourceHandle h, CompilerContextData ctx)
+        internal void TryAddFragmentInput(in ResourceHandle h, CompilerContextData ctx, out string errorMessage)
         {
-            SetupAndValidateFragmentInfo(h, ctx);
-            numFragmentInputs++;
+            if (TrySetupAndValidateFragmentInfo(h, ctx, out errorMessage))
+                numFragmentInputs++;
         }
 
         internal void AddRandomAccessResource()
@@ -312,7 +381,7 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void AddFirstUse(ResourceHandle h, CompilerContextData ctx)
+        internal void AddFirstUse(in ResourceHandle h, CompilerContextData ctx)
         {
             // Already registered? Skip it
             foreach (ref readonly var res in FirstUsedResources(ctx))
@@ -330,13 +399,13 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
                 firstCreate = addedIndex;
             }
 
-            Debug.Assert(addedIndex == firstCreate + numCreated, "you can only incrementally set-up the Creation lists for all passes, AddCreation is called in an arbitrary non-incremental way");
+            Debug.Assert(addedIndex == firstCreate + numCreated, RenderGraph.RenderGraphExceptionMessages.k_NonIncrementalCreationCall);
 
             numCreated++;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void AddLastUse(ResourceHandle h, CompilerContextData ctx)
+        internal void AddLastUse(in ResourceHandle h, CompilerContextData ctx)
         {
             // Already registered? Skip it
             foreach (ref readonly var res in LastUsedResources(ctx))
@@ -354,7 +423,7 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
                 firstDestroy = addedIndex;
             }
 
-            Debug.Assert(addedIndex == firstDestroy + numDestroyed, "you can only incrementally set-up the Destruction lists for all passes, AddCreation is called in an arbitrary non-incremental way");
+            Debug.Assert(addedIndex == firstDestroy + numDestroyed, RenderGraph.RenderGraphExceptionMessages.k_NonIncrementalDestructionCall);
             numDestroyed++;
         }
 
@@ -362,7 +431,7 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
         // As it is ambiguous if this is an input our output version, the version is ignored
         // This checks use of both MRT attachment as well as input attachment
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal readonly bool IsUsedAsFragment(ResourceHandle h, CompilerContextData ctx)
+        internal readonly bool IsUsedAsFragment(in ResourceHandle h, CompilerContextData ctx)
         {
             //Only textures can be used as a fragment attachment.
             if (h.type != RenderGraphResourceType.Texture) return false;
@@ -388,18 +457,57 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
 
             return false;
         }
+
+        internal void DisconnectFromResources(CompilerContextData ctx, Stack<ResourceHandle> unusedVersionedResourceIdCullingStack = null, int type = 0)
+        {
+            // If the culled pass was supposed to generate the latest version of a given resource,
+            // we need to decrement the latestVersionNumber of this resource
+            // because its last version will never be created due to its producer being culled
+            foreach (ref readonly var output in Outputs(ctx))
+            {
+                ref readonly var outputResource = ref output.resource;
+                bool isOutputLastVersion = (outputResource.version == ctx.UnversionedResourceData(outputResource).latestVersionNumber);
+
+                if (isOutputLastVersion)
+                    ctx.UnversionedResourceData(outputResource).latestVersionNumber--;
+            }
+
+            // Notifying the versioned resources that this pass is no longer reading them
+            foreach (ref readonly var input in Inputs(ctx))
+            {
+                ref readonly var inputResource = ref input.resource;
+                ref var inputVersionedDataResource = ref ctx.resources[inputResource];
+                inputVersionedDataResource.RemoveReadingPass(ctx, inputResource, passId);
+
+                // If a resource of the same type is not used anymore, adding it to the stack
+                if (unusedVersionedResourceIdCullingStack != null && inputResource.iType == type && inputVersionedDataResource.written && inputVersionedDataResource.numReaders == 0)
+                {
+                    unusedVersionedResourceIdCullingStack.Push(inputResource);
+                }
+            }
+        }
     }
 
     // Data per attachment of a native renderpass
     [DebuggerDisplay("Res({handle.index}) : {loadAction} : {storeAction} : {memoryless}")]
-    internal struct NativePassAttachment
+    internal readonly struct NativePassAttachment
     {
-        public ResourceHandle handle;
-        public UnityEngine.Rendering.RenderBufferLoadAction loadAction;
-        public UnityEngine.Rendering.RenderBufferStoreAction storeAction;
-        public bool memoryless;
-        public int mipLevel;
-        public int depthSlice;
+        public readonly ResourceHandle handle;
+        public readonly RenderBufferLoadAction loadAction;
+        public readonly RenderBufferStoreAction storeAction;
+        public readonly bool memoryless;
+        public readonly int mipLevel;
+        public readonly int depthSlice;
+
+        public NativePassAttachment(in ResourceHandle handle, RenderBufferLoadAction loadAction, RenderBufferStoreAction storeAction, bool memoryless, int mipLevel, int depthSlice)
+        {
+            this.handle = handle;
+            this.loadAction = loadAction;
+            this.storeAction = storeAction;
+            this.memoryless = memoryless;
+            this.mipLevel = mipLevel;
+            this.depthSlice = depthSlice;
+        }
     }
 
     internal enum LoadReason
@@ -415,7 +523,7 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
     }
 
     [DebuggerDisplay("{reason} : {passId}")]
-    internal struct LoadAudit
+    internal readonly struct LoadAudit
     {
         public static readonly string[] LoadReasonMessages = {
             "Invalid reason",
@@ -426,8 +534,8 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
             "The pass indicated it will rewrite the full resource contents. Existing contents are not loaded or cleared.",
         };
 
-        public LoadReason reason;
-        public int passId;
+        public readonly LoadReason reason;
+        public readonly int passId;
 
         public LoadAudit(LoadReason setReason, int setPassId = -1)
         {
@@ -455,7 +563,7 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
     }
 
     [DebuggerDisplay("{reason} : {passId} / MSAA {msaaReason} : {msaaPassId}")]
-    internal struct StoreAudit
+    internal readonly struct StoreAudit
     {
         public static readonly string[] StoreReasonMessages = {
             "Invalid reason",
@@ -467,10 +575,10 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
             "The resource is a single sample resource, there is no multi-sample data to handle.",
         };
 
-        public StoreReason reason;
-        public int passId;
-        public StoreReason msaaReason;
-        public int msaaPassId;
+        public readonly StoreReason reason;
+        public readonly int passId;
+        public readonly StoreReason msaaReason;
+        public readonly int msaaPassId;
 
         public StoreAudit(StoreReason setReason, int setPassId = -1, StoreReason setMsaaReason = StoreReason.NoMSAABuffer, int setMsaaPassId = -1)
         {
@@ -491,6 +599,7 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
         NotOptimized, // Optimize never ran on this pass
         TargetSizeMismatch, // Target Sizes or msaa samples don't match
         NextPassReadsTexture, // The next pass reads data written by this pass as a texture
+        NextPassTargetsTexture, // The next pass targets the texture that this pass is reading
         NonRasterPass, // The next pass is a non-raster pass
         DifferentDepthTextures, // The next pass uses a different depth texture (and we only allow one in a whole NRP)
         AttachmentLimitReached, // Adding the next pass would have used more attachments than allowed
@@ -499,6 +608,8 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
         FRStateMismatch, // One pass is using foveated rendering and the other not
         DifferentShadingRateImages, // The next pass uses a different shading rate image (and we only allow one in a whole NRP)
         DifferentShadingRateStates, // The next pass uses different shading rate states (and we only allow one set in a whole NRP)
+        MultisampledShaderResolveMustBeLastPass, // The current pass has MultisampledShaderResolve specified and so must be the last pass
+        ExtendedFeatureFlagsIncompatible, // Handles the case where flags added via SetExtendedFeatureFlags are not compatible
         PassMergingDisabled, // Wasn't merged because pass merging is disabled
         Merged, // I actually got merged
 
@@ -506,10 +617,10 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
     }
 
     [DebuggerDisplay("{reason} : {breakPass}")]
-    internal struct PassBreakAudit
+    internal readonly struct PassBreakAudit
     {
-        public PassBreakReason reason;
-        public int breakPass;
+        public readonly PassBreakReason reason;
+        public readonly int breakPass;
 
         public PassBreakAudit(PassBreakReason reason, int breakPass)
         {
@@ -526,6 +637,7 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
             "The native render pass optimizer never ran on this pass. Pass is standalone and not merged.",
             "The render target sizes of the next pass do not match.",
             "The next pass reads data output by this pass as a regular texture.",
+            "The next pass uses a texture sampled in this pass as a render target.",
             "The next pass is not a raster render pass.",
             "The next pass uses a different depth buffer. All passes in the native render pass need to use the same depth buffer.",
             $"The limit of {FixedAttachmentArray<PassFragmentData>.MaxAttachments} native pass attachments would be exceeded when merging with the next pass.",
@@ -534,6 +646,8 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
             "The next pass uses a different foveated rendering state",
             "The next pass uses a different shading rate image",
             "The next pass uses a different shading rate rendering state",
+            "The current merged pass uses multisampled shader resolve and so can't have any more passes merged into it.",
+            "Extended feature flags are incompatible",
             "Pass merging is disabled so this pass was not merged",
             "The next pass got merged into this pass.",
         };
@@ -566,6 +680,7 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
         public bool hasFoveatedRasterization;
         public bool hasShadingRateImage => shadingRateImageIndex >= 0;
         public bool hasShadingRateStates;
+        public ExtendedFeatureFlags extendedFeatureFlags;
 
         public ShadingRateFragmentSize shadingRateFragmentSize;
         public ShadingRateCombiner primitiveShadingRateCombiner;
@@ -576,7 +691,7 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
             firstGraphPass = pass.passId;
             lastGraphPass = pass.passId;
             numGraphPasses = 1;
-            firstNativeSubPass = -1;// Set up during compile
+            firstNativeSubPass = -1; // Set up during compile
             numNativeSubPasses = 0;
 
             fragments = new FixedAttachmentArray<PassFragmentData>();
@@ -588,6 +703,7 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
             samples = pass.fragmentInfoSamples;
             hasDepth = pass.fragmentInfoHasDepth;
             hasFoveatedRasterization = pass.hasFoveatedRasterization;
+            extendedFeatureFlags = pass.extendedFeatureFlags;
 
             loadAudit = new FixedAttachmentArray<LoadAudit>();
             storeAudit = new FixedAttachmentArray<StoreAudit>();
@@ -628,7 +744,7 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
             // We should not be calling this method if native pass doesn't have depth.
             if (hasDepth == false)
             {
-                throw new Exception("SubPassFlag for merging can not be determined if native pass doesn't have a depth attachment");
+                throw new Exception(RenderGraph.RenderGraphExceptionMessages.k_CannotDetermineSubPassFlagNoDepth);
             }
 
             // Only do this for mobile using Vulkan.
@@ -665,15 +781,16 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly ReadOnlySpan<PassData> GraphPasses(CompilerContextData ctx)
+        public readonly ReadOnlySpan<PassData> GraphPasses(CompilerContextData ctx, out NativeArray<PassData> actualPasses)
         {
             // When there's no pass being culled, we can directly return a Span of the Native List
             if (lastGraphPass - firstGraphPass + 1 == numGraphPasses)
             {
+                actualPasses = default;
                 return ctx.passData.MakeReadOnlySpan(firstGraphPass, numGraphPasses);
             }
 
-            var actualPasses =
+            actualPasses =
                 new NativeArray<PassData>(numGraphPasses, Allocator.Temp,
                     NativeArrayOptions.UninitializedMemory);
 
@@ -692,16 +809,32 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public readonly void GetGraphPassNames(CompilerContextData ctx, DynamicArray<Name> dest)
         {
-            foreach (ref readonly var pass in GraphPasses(ctx))
+            var span = GraphPasses(ctx, out var actualPasses);
+            foreach (ref readonly var pass in span)
             {
                 dest.Add(pass.GetName(ctx));
             }
+
+            if (actualPasses.IsCreated)
+                actualPasses.Dispose();
+        }
+
+        static bool CanMergeMSAASamples(ref NativePassData nativePass, ref PassData passToMerge)
+        {
+            return (nativePass.samples == passToMerge.fragmentInfoSamples) ||
+                   (passToMerge.fragmentInfoSamples == 1 && passToMerge.extendedFeatureFlags.HasFlag(ExtendedFeatureFlags.MultisampledShaderResolve));
+        }
+
+        static bool AreExtendedFeatureFlagsCompatible(ExtendedFeatureFlags flags0, ExtendedFeatureFlags flags1)
+        {
+            // Which of the newly added flags are incompatible?
+            return true;
         }
 
         // This function does not modify the current render graph state, it only evaluates and returns the correct PassBreakAudit
         public static PassBreakAudit CanMerge(CompilerContextData contextData, int activeNativePassId, int passIdToMerge)
         {
-            ref readonly var passToMerge = ref contextData.passData.ElementAt(passIdToMerge);
+            ref var passToMerge = ref contextData.passData.ElementAt(passIdToMerge);
 
             // Non raster passes (low level, compute,...) will break the native pass chain
             // as they may need to do SetRendertarget or non-fragment work
@@ -710,7 +843,7 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
                 return new PassBreakAudit(PassBreakReason.NonRasterPass, passIdToMerge);
             }
 
-            ref readonly var nativePass = ref contextData.nativePassData.ElementAt(activeNativePassId);
+            ref var nativePass = ref contextData.nativePassData.ElementAt(activeNativePassId);
 
             // If a pass has no fragment attachments a lot of the tests can be skipped
             // You could argue that a raster pass with no fragments is not allowed but why not?
@@ -726,7 +859,7 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
                 if (nativePass.width != passToMerge.fragmentInfoWidth ||
                     nativePass.height != passToMerge.fragmentInfoHeight ||
                     nativePass.volumeDepth != passToMerge.fragmentInfoVolumeDepth ||
-                    nativePass.samples != passToMerge.fragmentInfoSamples)
+                    !CanMergeMSAASamples(ref nativePass, ref passToMerge))
                 {
                     return new PassBreakAudit(PassBreakReason.TargetSizeMismatch, passIdToMerge);
                 }
@@ -746,6 +879,11 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
                 if (nativePass.hasFoveatedRasterization != passToMerge.hasFoveatedRasterization)
                 {
                     return new PassBreakAudit(PassBreakReason.FRStateMismatch, passIdToMerge);
+                }
+
+                if (!AreExtendedFeatureFlagsCompatible(nativePass.extendedFeatureFlags, passToMerge.extendedFeatureFlags))
+                {
+                    return new PassBreakAudit(PassBreakReason.ExtendedFeatureFlagsIncompatible, passIdToMerge);
                 }
 
                 // Different shading rate images; only allow one per NRP
@@ -779,20 +917,30 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
                         return new PassBreakAudit(PassBreakReason.DifferentShadingRateStates, passIdToMerge);
                     }
                 }
+
+                // If we have MSAA shader resolve set we must be the last subpass, so we can't merge anything else.
+                if (nativePass.extendedFeatureFlags.HasFlag(ExtendedFeatureFlags.MultisampledShaderResolve))
+                {
+                    return new PassBreakAudit(PassBreakReason.MultisampledShaderResolveMustBeLastPass, passIdToMerge);
+                }
             }
 
-            // Check the non-fragment inputs of this pass, if they are generated by the current open native pass we can't merge
+            // Check the non-fragment textures of this pass, if they are generated by the current open native pass we can't merge
             // as we need to commit the pixels to the texture
-            foreach (ref readonly var input in passToMerge.Inputs(contextData))
+            foreach (ref readonly var sampledTexture in passToMerge.SampledTexturesIfRaster(contextData))
             {
-                var inputResource = input.resource;
-                var writingPassId = contextData.resources[inputResource].writePassId;
-                // Is the writing pass enclosed in the current native renderpass
-                if (writingPassId >= nativePass.firstGraphPass && writingPassId < nativePass.lastGraphPass + 1)
+                ref readonly var sampledDataVersioned = ref contextData.VersionedResourceData(sampledTexture);
+
+                // If the writing pass is culled, we don't need to break the native pass merge
+                // because the texture won't actually be written to, so there's no read-after-write conflict
+                bool isWritingPassCulled = contextData.passData[sampledDataVersioned.writePassId].culled;
+                if (!isWritingPassCulled)
                 {
-                    // If it's not used as a fragment, it's used as some sort of texture read of load so we need so sync it out
-                    if (!passToMerge.IsUsedAsFragment(inputResource, contextData))
+                    bool isWrittenInCurrNativePass = sampledDataVersioned.written && (sampledDataVersioned.writePassId >= nativePass.firstGraphPass && sampledDataVersioned.writePassId < nativePass.lastGraphPass + 1);
+                    if (isWrittenInCurrNativePass)
                     {
+                        // It's used as some sort of texture read or load so we need to break the current native render pass
+                        // as we can't sample and write to it in the same native render pass
                         return new PassBreakAudit(PassBreakReason.NextPassReadsTexture, passIdToMerge);
                     }
                 }
@@ -804,34 +952,63 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
             // We can't have more than the maximum amount of attachments in a given native renderpass
             int currAvailableAttachmentSlots = FixedAttachmentArray<PassFragmentData>.MaxAttachments - nativePass.fragments.size;
 
-            foreach (ref readonly var fragment in passToMerge.Fragments(contextData))
+            // Early exit: only build the HashSet and check if we actually have fragments to check against it
+            if (passToMerge.numFragments > 0)
             {
-                bool alreadyAttached = false;
-
-                for (int i = 0; i < nativePass.fragments.size; ++i)
+                // Temporary cache of sampled textures in current Native Render Pass for conflict detection against fragments
+                using (HashSetPool<int>.Get(out var tempSampledTextures))
                 {
-                    if (PassFragmentData.SameSubResource(nativePass.fragments[i], fragment))
+                    var graphPasses = nativePass.GraphPasses(contextData, out var actualPasses);
+                    foreach (ref readonly var graphPass in graphPasses)
                     {
-                        alreadyAttached = true;
-                        break;
+                        if (graphPass.numSampledOnlyRaster > 0) // Skip passes with no sampled textures
+                        {
+                            foreach (ref readonly var earlierInput in graphPass.SampledTexturesIfRaster(contextData))
+                            {
+                                tempSampledTextures.Add(earlierInput.index);
+                            }
+                        }
                     }
-                }
 
-                // This fragment is not attached to the native renderpass yet, we will need to attach it
-                if (!alreadyAttached)
-                {
-                    // We already reached the maximum amount of attachments in this renderpass
-                    // We can't add any new attachment, just start a new renderpass
-                    if (currAvailableAttachmentSlots == 0)
+                    if (actualPasses.IsCreated)
+                        actualPasses.Dispose();
+
+                    foreach (ref readonly var fragment in passToMerge.Fragments(contextData))
                     {
-                        return new PassBreakAudit(PassBreakReason.AttachmentLimitReached, passIdToMerge);
+                        bool alreadyAttached = false;
+
+                        for (int i = 0; i < nativePass.fragments.size; ++i)
+                        {
+                            if (PassFragmentData.SameSubResource(nativePass.fragments[i], fragment))
+                            {
+                                alreadyAttached = true;
+                                break;
+                            }
+                        }
+
+                        // This fragment is not attached to the native renderpass yet, we will need to attach it
+                        if (!alreadyAttached)
+                        {
+                            // We already reached the maximum amount of attachments in this renderpass
+                            // We can't add any new attachment, just start a new renderpass
+                            if (currAvailableAttachmentSlots == 0)
+                            {
+                                return new PassBreakAudit(PassBreakReason.AttachmentLimitReached, passIdToMerge);
+                            }
+                            else
+                            {
+                                attachmentsToTryAdding.Add(fragment);
+                                currAvailableAttachmentSlots--;
+                            }
+                        }
+
+                        // Check if this fragment is already sampled in the native renderpass as a standard texture
+                        // Before looking in the HashSet check if there is any sampled texture
+                        if (tempSampledTextures.Contains(fragment.resource.index))
+                            return new PassBreakAudit(PassBreakReason.NextPassTargetsTexture, passIdToMerge);
+
                     }
-                    else
-                    {
-                        attachmentsToTryAdding.Add(fragment);
-                        currAvailableAttachmentSlots--;
-                    }
-                }
+                } // Close the using block for HashSetPool
             }
 
             foreach (ref readonly var fragmentInput in passToMerge.FragmentInputs(contextData))
@@ -864,8 +1041,16 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
                 }
             }
 
-            bool canMergeNativeSubPass = CanMergeNativeSubPass(contextData, nativePass, passToMerge);
-            if (!canMergeNativeSubPass && nativePass.numGraphPasses + 1 > NativePassCompiler.k_MaxSubpass)
+            // Determines if the pixel storage limit is reached after adding the new 'pass to merge' attachments to the current native render pass.
+            if (TotalAttachmentsSizeExceedPixelStorageLimit(contextData, ref nativePass, ref attachmentsToTryAdding))
+            {
+                return new PassBreakAudit(PassBreakReason.AttachmentLimitReached, passIdToMerge);
+            }
+
+            // We check first if we are at risk of having too many subpasses,
+            // only then we do the costlier subpass merging check, short circuiting it whenever possible
+            bool canAddAnExtraSubpass = (nativePass.numGraphPasses < NativePassCompiler.k_MaxSubpass);
+            if (!canAddAnExtraSubpass && !CanMergeNativeSubPass(contextData, ref nativePass, ref passToMerge))
             {
                 return new PassBreakAudit(PassBreakReason.SubPassLimitReached, passIdToMerge);
             }
@@ -874,9 +1059,38 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
             return new PassBreakAudit(PassBreakReason.Merged, passIdToMerge);
         }
 
+        static bool TotalAttachmentsSizeExceedPixelStorageLimit(CompilerContextData contextData, ref NativePassData nativePass, ref FixedAttachmentArray<PassFragmentData> attachmentsToTryAdding)
+        {
+            // TODO: We are currently only checking for iOS GPU Family 1 to 3 since the storage size is much more restricted (16 bytes for Family 1 and 32 for Family 2 & 3).
+            // This is temporary. Later on, we should check all iOS GPU Families but also Android (Vulkan) to avoid the same potential restrictions.
+            if (Application.platform == RuntimePlatform.IPhonePlayer && SystemInfo.maxTiledPixelStorageSize <= 32)
+            {
+                int totalSize = 0;
+
+                // Iterate over current attachments
+                for (int i = 0; i < nativePass.fragments.size; ++i)
+                {
+                    ref readonly var unvResource = ref contextData.UnversionedResourceData(nativePass.fragments[i].resource);
+                    totalSize += SystemInfo.GetTiledRenderTargetStorageSize(unvResource.graphicsFormat, unvResource.msaaSamples);
+                }
+
+                // Iterate over new attachments to add
+                for (int i = 0; i < attachmentsToTryAdding.size; ++i)
+                {
+                    ref readonly var unvResource = ref contextData.UnversionedResourceData(attachmentsToTryAdding[i].resource);
+                    totalSize += SystemInfo.GetTiledRenderTargetStorageSize(unvResource.graphicsFormat, unvResource.msaaSamples);
+                }
+
+                return totalSize > SystemInfo.maxTiledPixelStorageSize;
+            }
+            
+            return false;
+        }
+
         // This function follows the structure of TryMergeNativeSubPass but only tests if the new native subpass can be
         // merged with the last one, allowing for early returns. It does not modify the state
-        static bool CanMergeNativeSubPass(CompilerContextData contextData, NativePassData nativePass, PassData passToMerge)
+        // ref for nativePass is used for performance reasons. The method should not modify nativePass.
+        static bool CanMergeNativeSubPass(CompilerContextData contextData, ref NativePassData nativePass, ref PassData passToMerge)
         {
             // We have no output attachments, this is an "empty" raster pass doing only non-rendering command so skip it.
             if (passToMerge.numFragments == 0 && passToMerge.numFragmentInputs == 0)
@@ -884,103 +1098,101 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
                 return true;
             }
 
+            // Nothing to merge with
             if (nativePass.numNativeSubPasses == 0)
             {
-                return false; // nothing to merge with
+                return false;
             }
 
-            ref readonly var fragmentList = ref nativePass.fragments;
-            ref readonly var lastPass = ref contextData.nativeSubPassData.ElementAt(nativePass.firstNativeSubPass +
+            ref var lastPass = ref contextData.nativeSubPassData.ElementAt(nativePass.firstNativeSubPass +
                 nativePass.numNativeSubPasses - 1);
 
-            // NOTE: Not all graph subpasses get an actual native pass:
-            // - There could be passes that do only non-raster ops (like setglobal) and have no attachments. They don't get a native pass
-            // - Renderpasses that use exactly the same rendertargets at the previous pass use the same native pass. This is because
-            //   nextSubpass is expensive on some platforms (even if its' essentially a no-op as it's using the same attachments).
+            bool currRenderGraphPassHasDepth = passToMerge.fragmentInfoHasDepth;
+
+            // If any output attachments, they must match existing ones in the subpass
+            // Doing an early return if the count differs
+            int colorOffset = currRenderGraphPassHasDepth ? -1 : 0;
+            int colorOutputsLength = passToMerge.numFragments + colorOffset;
+            if (colorOutputsLength != lastPass.colorOutputs.Length)
+            {
+                return false;
+            }
+
+            // If any input attachments, they must match existing ones in the subpass
+            // Doing an early return if the count differs
+            int inputsLength = passToMerge.numFragmentInputs;
+            if (inputsLength != lastPass.inputs.Length)
+            {
+                return false;
+            }
+
             SubPassFlags flags = SubPassFlags.None;
 
             // If depth ends up being bound only because of merging
-            if (!passToMerge.fragmentInfoHasDepth && nativePass.hasDepth)
+            if (!currRenderGraphPassHasDepth && nativePass.hasDepth)
             {
                 // Set SubPassFlags to best match the pass we are trying to merge with
                 flags = nativePass.GetSubPassFlagForMerging();
             }
 
+            ref readonly var fragmentList = ref nativePass.fragments;
+
             // MRT attachments
+            int fragmentIdx = 0;
+            foreach (ref readonly var graphPassFragment in passToMerge.Fragments(contextData))
             {
-                int fragmentIdx = 0;
-                int colorOffset = (passToMerge.fragmentInfoHasDepth) ? -1 : 0;
-                int colorOutputsLength = passToMerge.numFragments + colorOffset;
-
-                if (colorOutputsLength != lastPass.colorOutputs.Length)
+                // Check if we're handling the depth attachment
+                if (currRenderGraphPassHasDepth && fragmentIdx == 0)
                 {
-                    return false;
+                    flags = (graphPassFragment.accessFlags.HasFlag(AccessFlags.Write))
+                        ? SubPassFlags.None
+                        : SubPassFlags.ReadOnlyDepth;
                 }
-
-                foreach (ref readonly var graphPassFragment in passToMerge.Fragments(contextData))
+                // It's a color attachment
+                else
                 {
-                    // Check if we're handling the depth attachment
-                    if (passToMerge.fragmentInfoHasDepth && fragmentIdx == 0)
-                    {
-                        flags = (graphPassFragment.accessFlags.HasFlag(AccessFlags.Write))
-                            ? SubPassFlags.None
-                            : SubPassFlags.ReadOnlyDepth;
-                    }
-                    // It's a color attachment
-                    else
-                    {
-                        // Find the index of this subpass's attachment in the native renderpass attachment list
-                        int colorAttachmentIdx = -1;
-                        for (int fragmentId = 0; fragmentId < fragmentList.size; ++fragmentId)
-                        {
-                            if (PassFragmentData.SameSubResource(fragmentList[fragmentId], graphPassFragment))
-                            {
-                                colorAttachmentIdx = fragmentId;
-                                break;
-                            }
-                        }
-
-                        if (colorAttachmentIdx < 0 || colorAttachmentIdx != lastPass.colorOutputs[fragmentIdx + colorOffset])
-                        {
-                            return false;
-                        }
-                    }
-
-                    fragmentIdx++;
-                }
-            }
-
-            // FB-fetch attachments
-            {
-                int inputIndex = 0;
-                int inputsLength = passToMerge.numFragmentInputs;
-
-                if (inputsLength != lastPass.inputs.Length)
-                {
-                    return false;
-                }
-
-                foreach (ref readonly var graphFragmentInput in passToMerge.FragmentInputs(contextData))
-                {
-                    // Find the index of this subpass's attachment in the native renderpass attachment list
-                    int inputAttachmentIdx = -1;
+                    // Find the index of this subpass attachment in the native renderpass attachment list
+                    int colorAttachmentIdx = -1;
                     for (int fragmentId = 0; fragmentId < fragmentList.size; ++fragmentId)
                     {
-                        if (PassFragmentData.SameSubResource(fragmentList[fragmentId], graphFragmentInput))
+                        if (PassFragmentData.SameSubResource(fragmentList[fragmentId], graphPassFragment))
                         {
-                            inputAttachmentIdx = fragmentId;
+                            colorAttachmentIdx = fragmentId;
                             break;
                         }
                     }
 
-                    // need to keep this - same comment as above
-                    if (inputAttachmentIdx < 0 || inputAttachmentIdx != lastPass.inputs[inputIndex])
+                    if (colorAttachmentIdx < 0 || colorAttachmentIdx != lastPass.colorOutputs[fragmentIdx + colorOffset])
                     {
                         return false;
                     }
-
-                    inputIndex++;
                 }
+
+                fragmentIdx++;
+            }
+
+
+            // FB-fetch attachments
+            int inputIndex = 0;
+            foreach (ref readonly var graphFragmentInput in passToMerge.FragmentInputs(contextData))
+            {
+                // Find the index of this subpass attachment in the native renderpass attachment list
+                int inputAttachmentIdx = -1;
+                for (int fragmentId = 0; fragmentId < fragmentList.size; ++fragmentId)
+                {
+                    if (PassFragmentData.SameSubResource(fragmentList[fragmentId], graphFragmentInput))
+                    {
+                        inputAttachmentIdx = fragmentId;
+                        break;
+                    }
+                }
+
+                if (inputAttachmentIdx < 0 || inputAttachmentIdx != lastPass.inputs[inputIndex])
+                {
+                    return false;
+                }
+
+                inputIndex++;
             }
 
             // last check for flags
@@ -991,10 +1203,10 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
         // Modifies the state
         public static void TryMergeNativeSubPass(CompilerContextData contextData, ref NativePassData nativePass, ref PassData passToMerge)
         {
-            ref readonly var fragmentList = ref nativePass.fragments;
+            ref var fragmentList = ref nativePass.fragments;
 
             // Only done once per native pass (on creation), should stay -1 if no fragments
-            if (nativePass is { numNativeSubPasses: 0, fragments: { size: > 0 } })
+            if (nativePass.numNativeSubPasses == 0 && nativePass.fragments.size > 0)
             {
                 nativePass.firstNativeSubPass = contextData.nativeSubPassData.Length;
             }
@@ -1101,8 +1313,7 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
                     nativePass.numNativeSubPasses - 1)))
             {
                 contextData.nativeSubPassData.Add(desc);
-                int idx = contextData.nativeSubPassData.LastIndex();
-                Debug.Assert(idx == nativePass.firstNativeSubPass + nativePass.numNativeSubPasses);
+                Debug.Assert(contextData.nativeSubPassData.LastIndex() == nativePass.firstNativeSubPass + nativePass.numNativeSubPasses);
 
                 nativePass.numNativeSubPasses++;
                 passToMerge.beginNativeSubpass = true;
@@ -1115,89 +1326,64 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
             passToMerge.nativeSubPassIndex = nativePass.numNativeSubPasses - 1;
         }
 
-        // In the case where we add a new graph pass with depth to a native pass that didn't have it, we need to update
-        // inputs in all the previous native subpasses of the native pass
-        static void UpdateNativeSubPassesAttachments(CompilerContextData contextData, ref NativePassData nativePass)
+        // Call this function while merging a graph pass and you need to add the depth attachment used by this graph pass
+        // Make sure to call it before adding the rest of the graph pass attachments and its generated subpass
+        void AddDepthAttachmentFirstDuringMerge(CompilerContextData contextData, in PassFragmentData depthAttachment)
         {
-            int lastVisitedNativeSubpassIdx = -1;
-            ref readonly var fragmentList = ref nativePass.fragments;
+            // Native pass can only have a single depth attachment
+            Debug.Assert(!hasDepth);
 
-            var countPasses = nativePass.lastGraphPass - nativePass.firstGraphPass + 1;
+            fragments.Add(depthAttachment);
+            hasDepth = true;
 
-            // Do not iterate over the last graph pass as it is the one we are currently adding
-            for (var graphPassIdx = 0; graphPassIdx < countPasses - 1; ++graphPassIdx)
+            var size = fragments.size;
+
+            // If depth is the only attachment of the native pass, we are done
+            if (size == 1) return;
+
+            // size > 1
+            // In this case, we are adding depth attachment to a native pass with other existing attachments
+            int prevDepthIdx = size - 1;
+
+            // Depth must always been the first attachment, so we switch the previous first one with the recently added depth attachment
+            (fragments[0], fragments[prevDepthIdx]) = (fragments[prevDepthIdx], fragments[0]);
+
+            var depthFlag = GetSubPassFlagForMerging();
+
+            // We also need to increment the attachment indices of all the previous subpasses of this native pass.
+            // Otherwise the existing subpasses will point to the wrong attachments with depth being set as the first one
+            for (var nativeSubPassIndex = firstNativeSubPass; nativeSubPassIndex < firstNativeSubPass + numNativeSubPasses; nativeSubPassIndex++)
             {
-                // We only check the first graph pass of each existing native subpass - if other graph passes
-                // have been merged into a native subpass, it's because they had the same attachments.
-                ref readonly var currGraphPass =
-                    ref contextData.passData.ElementAt(nativePass.firstGraphPass + graphPassIdx);
-
-                // Already updated this native subpass
-                if (currGraphPass.nativeSubPassIndex + nativePass.firstNativeSubPass == lastVisitedNativeSubpassIdx)
-                {
-                    continue;
-                }
-
-                // Shouldn't be necessary since we only check the first graph pass of each existing native subpass
-                // But let's be safe and check anyway if the pass has been culled or not.
-                if (currGraphPass.culled)
-                {
-                    continue;
-                }
-
-                lastVisitedNativeSubpassIdx = currGraphPass.nativeSubPassIndex + nativePass.firstNativeSubPass;
-                ref var nativeSubPassDescriptor =
-                    ref contextData.nativeSubPassData.ElementAt(lastVisitedNativeSubpassIdx);
+                ref var subPassDesc = ref contextData.nativeSubPassData.ElementAt(nativeSubPassIndex);
 
                 // If depth ends up being bound only because of merging
-                if (!currGraphPass.fragmentInfoHasDepth && nativePass.hasDepth)
+                // Set SubPassFlags to best match the pass we are trying to merge with
+                subPassDesc.flags |= depthFlag;
+
+                // Updating subpass color outputs
+                for (int i = 0; i < subPassDesc.colorOutputs.Length; i++)
                 {
-                    // Set SubPassFlags to best match the pass we are trying to merge with
-                    nativeSubPassDescriptor.flags = nativePass.GetSubPassFlagForMerging();
-                }
-
-                // MRT attachments
-                {
-                    int fragmentIdx = 0;
-                    int colorOffset = (currGraphPass.fragmentInfoHasDepth) ? -1 : 0;
-
-                    nativeSubPassDescriptor.colorOutputs =
-                        new AttachmentIndexArray(currGraphPass.numFragments + colorOffset);
-
-                    foreach (ref readonly var graphPassFragment in currGraphPass.Fragments(contextData))
+                    if (subPassDesc.colorOutputs[i] == 0)
                     {
-                        // Check if we're handling the depth attachment
-                        if (currGraphPass.fragmentInfoHasDepth && fragmentIdx == 0)
-                        {
-                            nativeSubPassDescriptor.flags = (graphPassFragment.accessFlags.HasFlag(AccessFlags.Write))
-                                ? SubPassFlags.None
-                                : SubPassFlags.ReadOnlyDepth;
-                        }
-                        // It's a color attachment
-                        else
-                        {
-                            // Find the index of this subpass's attachment in the native renderpass attachment list
-                            int colorAttachmentIdx = -1;
-                            for (int fragmentId = 0; fragmentId < fragmentList.size; ++fragmentId)
-                            {
-                                if (fragmentList[fragmentId].resource.index == graphPassFragment.resource.index)
-                                {
-                                    colorAttachmentIdx = fragmentId;
-                                    break;
-                                }
-                            }
-
-                            Debug.Assert(colorAttachmentIdx >=
-                                         0); // If this is not the case it means we are using an attachment in a sub pass that is not part of the native pass !?!? clear bug
-
-                            // Set up the color indexes
-                            nativeSubPassDescriptor.colorOutputs[fragmentIdx + colorOffset] = colorAttachmentIdx;
-                        }
-
-                        fragmentIdx++;
+                        subPassDesc.colorOutputs[i] = prevDepthIdx;
                     }
                 }
 
+                // Updating subpass color inputs (framebuffer fetch)
+                for (int i = 0; i < subPassDesc.inputs.Length; i++)
+                {
+                    if (subPassDesc.inputs[i] == 0)
+                    {
+                        subPassDesc.inputs[i] = prevDepthIdx;
+                    }
+                }
+            }
+
+            // We also need to update the shading rate image SRI index (used for VRS)
+            // This is unlikely to happen because the SRI is always added last, after color and input attachments
+            if (hasShadingRateImage && shadingRateImageIndex == 0)
+            {
+                shadingRateImageIndex = prevDepthIdx;
             }
         }
 
@@ -1220,18 +1406,16 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
             nativePass.numGraphPasses++;
             nativePass.lastGraphPass = passIdToMerge;
 
-            // Depth needs special handling if the native pass doesn't have depth and merges with a pass that does
+            // Shader resolve needs special handling as we can merge it into a native pass that doesn't have it, it should be the last pass
+            // but non fragment passes might get merged in after it and as those don't actually generate subpasses that should be fine.
+            if (passToMerge.extendedFeatureFlags.HasFlag(ExtendedFeatureFlags.MultisampledShaderResolve))
+                nativePass.extendedFeatureFlags |= ExtendedFeatureFlags.MultisampledShaderResolve;
+
+            // Depth needs special handling if the native pass doesn't have depth and merges with a graph pass that does
             // as we require the depth attachment to be at index 0
             if (!nativePass.hasDepth && passToMerge.fragmentInfoHasDepth)
             {
-                nativePass.hasDepth = true;
-                nativePass.fragments.Add(contextData.fragmentData[passToMerge.firstFragment]);
-                var size = nativePass.fragments.size;
-                if (size > 1)
-                    (nativePass.fragments[0], nativePass.fragments[size-1]) = (nativePass.fragments[size-1], nativePass.fragments[0]);
-
-                // Must update indices from Native subPasses created before
-                UpdateNativeSubPassesAttachments(contextData, ref nativePass);
+                nativePass.AddDepthAttachmentFirstDuringMerge(contextData, contextData.fragmentData[passToMerge.firstFragment]);
             }
 
             // Update versions and flags of existing attachments and
@@ -1243,24 +1427,25 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
                 for (int i = 0; i < nativePass.fragments.size; ++i)
                 {
                     ref var existingAttach = ref nativePass.fragments[i];
-                    if (PassFragmentData.SameSubResource(existingAttach, newAttach))
-                    {
-                        var newAttachAccessFlags = newAttach.accessFlags;
-                        // If the existing attachment accessFlag has Discard flag, remove Read flag from newAttach flags, as the content has not to be Loaded
-                        if (existingAttach.accessFlags.HasFlag(AccessFlags.Discard))
-                            newAttachAccessFlags = newAttachAccessFlags & ~AccessFlags.Read;
+                    if (!PassFragmentData.SameSubResource(existingAttach, newAttach))
+                        continue;
 
-                        existingAttach.accessFlags |= newAttachAccessFlags;
+                    var newAttachAccessFlags = newAttach.accessFlags;
+                    // If the existing attachment accessFlag has Discard flag, remove Read flag from newAttach flags, as the content has not to be Loaded
+                    if (existingAttach.accessFlags.HasFlag(AccessFlags.Discard))
+                        newAttachAccessFlags &= ~AccessFlags.Read;
 
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
-                        if (existingAttach.resource.version > newAttach.resource.version)
-                            throw new Exception("Adding an older version while a higher version is already registered with the pass.");
+                    if (existingAttach.resource.version > newAttach.resource.version)
+                        throw new Exception(RenderGraph.RenderGraphExceptionMessages.k_AddingOlderAttachmentVersion);
 #endif
-                        var prevAttachRes = existingAttach.resource;
-                        existingAttach.resource = new ResourceHandle(prevAttachRes, newAttach.resource.version);
-                        alreadyAttached = true;
-                        break;
-                    }
+                    existingAttach = new PassFragmentData(
+                        new ResourceHandle(existingAttach.resource, newAttach.resource.version),
+                        existingAttach.accessFlags | newAttachAccessFlags,
+                        existingAttach.mipLevel,
+                        existingAttach.depthSlice);
+                    alreadyAttached = true;
+                    break;
                 }
 
                 if (!alreadyAttached)
@@ -1276,24 +1461,26 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
                 for (int i = 0; i < nativePass.fragments.size; ++i)
                 {
                     ref var existingAttach = ref nativePass.fragments[i];
-                    if (PassFragmentData.SameSubResource(existingAttach, newAttach))
-                    {
-                        var newAttachAccessFlags = newAttach.accessFlags;
-                        // If the existing attachment accessFlag has Discard flag, remove Read flag from newAttach flags, as the content has not to be Loaded
-                        if (existingAttach.accessFlags.HasFlag(AccessFlags.Discard))
-                            newAttachAccessFlags = newAttachAccessFlags & ~AccessFlags.Read;
+                    if (!PassFragmentData.SameSubResource(existingAttach, newAttach))
+                        continue;
 
-                        existingAttach.accessFlags |= newAttachAccessFlags;
+                    var newAttachAccessFlags = newAttach.accessFlags;
+                    // If the existing attachment accessFlag has Discard flag, remove Read flag from newAttach flags, as the content has not to be Loaded
+                    if (existingAttach.accessFlags.HasFlag(AccessFlags.Discard))
+                        newAttachAccessFlags &= ~AccessFlags.Read;
 
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
-                        if (existingAttach.resource.version > newAttach.resource.version)
-                            throw new Exception("Adding an older version while a higher version is already registered with the pass.");
+                    if (existingAttach.resource.version > newAttach.resource.version)
+                        throw new Exception(RenderGraph.RenderGraphExceptionMessages.k_AddingOlderAttachmentVersion);
 #endif
-                        var prevAttachRes = existingAttach.resource;
-                        existingAttach.resource = new ResourceHandle(prevAttachRes, newAttach.resource.version);
-                        alreadyAttached = true;
-                        break;
-                    }
+
+                    existingAttach = new PassFragmentData(
+                        new ResourceHandle(existingAttach.resource, newAttach.resource.version),
+                        existingAttach.accessFlags | newAttachAccessFlags,
+                        existingAttach.mipLevel,
+                        existingAttach.depthSlice);
+                    alreadyAttached = true;
+                    break;
                 }
 
                 if (!alreadyAttached)
@@ -1323,7 +1510,7 @@ namespace UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler
                 {
                     var indexPass = nativePass.firstGraphPass + i;
 
-                    // This pass was culled and should not be considere
+                    // This pass was culled and should not be considered
                     if (contextData.passData.ElementAt(indexPass).culled)
                     {
                         contextData.passData.ElementAt(indexPass).mergeState = PassMergeState.None;

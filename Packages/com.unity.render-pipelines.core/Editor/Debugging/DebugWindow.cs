@@ -30,7 +30,7 @@ namespace UnityEditor.Rendering
             get => Mathf.Max(0, DebugManager.instance.PanelIndex(selectedPanelDisplayName));
             set
             {
-                var displayName = DebugManager.instance.PanelDiplayName(value);
+                var displayName = DebugManager.instance.PanelDisplayName(value);
                 if (!string.IsNullOrEmpty(displayName))
                     selectedPanelDisplayName = displayName;
             }
@@ -132,6 +132,7 @@ namespace UnityEditor.Rendering
         {
             var window = GetWindow<DebugWindow>();
             window.titleContent = Styles.windowTitle;
+            window.minSize = new Vector2(800f, 300f);
         }
 
         [MenuItem("Window/Analysis/Rendering Debugger", validate = true)]
@@ -262,6 +263,32 @@ namespace UnityEditor.Rendering
                 UpdateWidgetStates(panel);
         }
 
+        DebugState GetOrCreateDebugStateForValueField(DebugUI.Widget widget)
+        {
+            // Skip runtime & readonly only items
+            if (widget.isInactiveInEditor)
+                return null;
+
+            if (widget is not DebugUI.IValueField valueField)
+                return null;
+
+            string queryPath = widget.queryPath;
+            if (!m_WidgetStates.TryGetValue(queryPath, out var state) || state == null)
+            {
+                var widgetType = widget.GetType();
+                if (s_WidgetStateMap.TryGetValue(widgetType, out Type stateType))
+                {
+                    Assert.IsNotNull(stateType);
+                    state = (DebugState)CreateInstance(stateType);
+                    state.queryPath = queryPath;
+                    state.SetValue(valueField.GetValue(), valueField);
+                    m_WidgetStates[queryPath] = state;
+                }
+            }
+
+            return state;
+        }
+
         void UpdateWidgetStates(DebugUI.IContainer container)
         {
             // Skip runtime only containers, we won't draw them so no need to serialize them either
@@ -273,26 +300,10 @@ namespace UnityEditor.Rendering
             {
                 // Skip non-serializable widgets but still traverse them in case one of their
                 // children needs serialization support
-                if (widget is DebugUI.IValueField valueField)
-                {
-                    // Skip runtime & readonly only items
-                    if (widget.isInactiveInEditor)
-                        return;
+                var state = GetOrCreateDebugStateForValueField(widget);
 
-                    string guid = widget.queryPath;
-                    if (!m_WidgetStates.TryGetValue(guid, out var state) || state == null)
-                    {
-                        var widgetType = widget.GetType();
-                        if (s_WidgetStateMap.TryGetValue(widgetType, out Type stateType))
-                        {
-                            Assert.IsNotNull(stateType);
-                            var inst = (DebugState)CreateInstance(stateType);
-                            inst.queryPath = guid;
-                            inst.SetValue(valueField.GetValue(), valueField);
-                            m_WidgetStates[guid] = inst;
-                        }
-                    }
-                }
+                if (state != null)
+                    continue;
 
                 // Recurse if the widget is a container
                 if (widget is DebugUI.IContainer containerField)
@@ -302,22 +313,27 @@ namespace UnityEditor.Rendering
 
         public void ApplyStates(bool forceApplyAll = false)
         {
+            // If we are in playmode, and the runtime UI is shown, avoid that the editor UI
+            // applies the data of the internal debug states, as they are not kept in sync
+            if (Application.isPlaying && DebugManager.instance.displayRuntimeUI)
+                return;
+
             if (!forceApplyAll && DebugState.m_CurrentDirtyState != null)
             {
                 ApplyState(DebugState.m_CurrentDirtyState.queryPath, DebugState.m_CurrentDirtyState);
-                DebugState.m_CurrentDirtyState = null;
-                return;
             }
-
-            foreach (var state in m_WidgetStates)
-                ApplyState(state.Key, state.Value);
+            else
+            {
+                foreach (var state in m_WidgetStates)
+                    ApplyState(state.Key, state.Value);
+            }
 
             DebugState.m_CurrentDirtyState = null;
         }
 
         void ApplyState(string queryPath, DebugState state)
         {
-            if (!(DebugManager.instance.GetItem(queryPath) is DebugUI.IValueField widget))
+            if (state == null || !(DebugManager.instance.GetItem(queryPath) is DebugUI.IValueField widget))
                 return;
 
             widget.SetValue(state.GetValue());
@@ -372,6 +388,8 @@ namespace UnityEditor.Rendering
                 UpdateWidgetStates();
                 ApplyStates();
                 m_IsDirty = false;
+
+                Repaint();
             }
         }
 
@@ -391,16 +409,6 @@ namespace UnityEditor.Rendering
                 EditorGUILayout.HelpBox("No debug item found.", MessageType.Info);
                 return;
             }
-
-            // Background color
-            var wrect = position;
-            wrect.x = 0;
-            wrect.y = 0;
-            var oldColor = GUI.color;
-            GUI.color = s_Styles.skinBackgroundColor;
-            GUI.DrawTexture(wrect, EditorGUIUtility.whiteTexture);
-            GUI.color = oldColor;
-
 
             GUILayout.BeginHorizontal(EditorStyles.toolbar);
             GUILayout.FlexibleSpace();
@@ -496,8 +504,14 @@ namespace UnityEditor.Rendering
 
                         using (var scrollScope = new EditorGUILayout.ScrollViewScope(m_ContentScroll))
                         {
+                            const float scrollViewTopMargin = 4f;
+                            GUILayout.Space(scrollViewTopMargin);
+                            
                             TraverseContainerGUI(selectedPanel);
                             m_ContentScroll = scrollScope.scrollPosition;
+                            
+                            const float scrollViewBottomMargin = 10f;
+                            GUILayout.Space(scrollViewBottomMargin);
                         }
                     }
 
@@ -523,7 +537,7 @@ namespace UnityEditor.Rendering
                             if (dragging)
                             {
                                 splitterPos += Event.current.delta.x;
-                                splitterPos = Mathf.Clamp(splitterPos, minSideBarWidth, Screen.width - minContentWidth);
+                                splitterPos = Mathf.Clamp(splitterPos, minSideBarWidth, position.width - minContentWidth);
                                 Repaint();
                             }
                             break;
@@ -549,17 +563,25 @@ namespace UnityEditor.Rendering
                 Debug.LogError($"Widget {widget.GetType()} query path is null");
                 return;
             }
-            // State will be null for stateless widget
-            m_WidgetStates.TryGetValue(widget.queryPath, out DebugState state);
-
-            GUILayout.Space(4);
 
             if (!s_WidgetDrawerMap.TryGetValue(widget.GetType(), out DebugUIDrawer drawer))
             {
-                EditorGUILayout.LabelField("Drawer not found (" + widget.GetType() + ").");
+                foreach (var pair in s_WidgetDrawerMap)
+                {
+                    if (pair.Key.IsAssignableFrom(widget.GetType()))
+                    {
+                        drawer = pair.Value;
+                        break;
+                    }
+                }
             }
+
+            if (drawer == null)
+                EditorGUILayout.LabelField("Drawer not found (" + widget.GetType() + ").");
             else
             {
+                var state = GetOrCreateDebugStateForValueField(widget);
+
                 drawer.Begin(widget, state);
 
                 if (drawer.OnGUI(widget, state))
@@ -608,8 +630,6 @@ namespace UnityEditor.Rendering
             public readonly GUIStyle sectionScrollView = "PreferencesSectionBox";
             public readonly GUIStyle sectionElement = new GUIStyle("PreferencesSection");
             public readonly GUIStyle selected = "OL SelectedRow";
-            public readonly GUIStyle sectionHeader = new GUIStyle(EditorStyles.largeLabel);
-            public readonly Color skinBackgroundColor;
 
             public static GUIStyle centeredLeft = new GUIStyle(EditorStyles.label) { alignment = TextAnchor.MiddleLeft };
             public static GUIStyle centeredLeftAlternate = new GUIStyle(EditorStyles.label) { alignment = TextAnchor.MiddleLeft };
@@ -619,15 +639,10 @@ namespace UnityEditor.Rendering
 
             public Styles()
             {
-                Color textColorDarkSkin = new Color32(210, 210, 210, 255);
-                Color textColorLightSkin = new Color32(102, 102, 102, 255);
-                Color backgroundColorDarkSkin = new Color32(38, 38, 38, 128);
-                Color backgroundColorLightSkin = new Color32(128, 128, 128, 96);
-
                 centeredLeftAlternate.normal.background = CoreEditorUtils.CreateColoredTexture2D(
                     EditorGUIUtility.isProSkin
                         ? new Color(63 / 255.0f, 63 / 255.0f, 63 / 255.0f, 255 / 255.0f)
-                        : new Color(202 / 255.0f, 202 / 255.0f, 202 / 255.0f, 255 / 255.0f),
+                        : new Color(211 / 255.0f, 211 / 255.0f, 211 / 255.0f, 211 / 255.0f),
                     "centeredLeftAlternate Background");
 
                 sectionScrollView = new GUIStyle(sectionScrollView);
@@ -635,19 +650,12 @@ namespace UnityEditor.Rendering
 
                 sectionElement.alignment = TextAnchor.MiddleLeft;
 
-                sectionHeader.fontStyle = FontStyle.Bold;
-                sectionHeader.fontSize = 18;
-                sectionHeader.margin.top = 10;
-                sectionHeader.margin.left += 1;
-                sectionHeader.normal.textColor = EditorGUIUtility.isProSkin ? textColorDarkSkin : textColorLightSkin;
-                skinBackgroundColor = EditorGUIUtility.isProSkin ? backgroundColorDarkSkin : backgroundColorLightSkin;
-
                 labelWithZeroValueStyle.normal.textColor = Color.gray;
 
                 // Make sure that textures are unloaded on domain reloads.
                 void OnBeforeAssemblyReload()
                 {
-                    UnityEngine.Object.DestroyImmediate(centeredLeftAlternate.normal.background);
+                    DestroyImmediate(centeredLeftAlternate.normal.background);
                     AssemblyReloadEvents.beforeAssemblyReload -= OnBeforeAssemblyReload;
                 }
 

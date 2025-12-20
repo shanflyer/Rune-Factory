@@ -10,7 +10,7 @@
     --pass-block-color--highlight: white;
     --pass-block-text-color--highlight: var(--unity-colors-default-text-hover);
     --pass-block-color--culled: rgb(30, 30, 30);
-    --grid-line-color: var(--unity-colors-app_toolbar_button-background-hover);
+    --grid-line-color: #d6d6d6;
     --grid-line-color--hover: white;
     --resource-helper-line-color: #b0b0b0;
     --resource-helper-line-color--hover: white;
@@ -19,18 +19,8 @@
     --side-panel-background-color: #cbcbcb;
     --side-panel-item-border-color: #666666;
     --side-panel-secondary-text-color: #707070;
-}
-
-#capture-button {
-    background-image: url("../Icons/RenderGraphViewer/Refresh@2x.png");
-}
-
-#capture-button:hover {
-    background-color: #BBBBBB;
-}
-
-#capture-button:active {
-    background-color: #656565;
+    --load-action-border-color: #555555;
+    --store-action-border-color: #555555;
 }
 
 .resource-icon--imported {
@@ -47,6 +37,10 @@
 
 .resource-icon--texture {
     background-image: url("../Icons/RenderGraphViewer/Texture@2x.png");
+}
+
+.resource-icon--memoryless-texture {
+    background-image: url("../Icons/RenderGraphViewer/MemorylessTexture@2x.png");
 }
 
 .resource-icon--buffer {
@@ -81,4 +75,32 @@
 
 .custom-foldout-arrow > Toggle > VisualElement:hover #unity-checkmark {
     -unity-background-image-tint-color: grey;
+}
+
+.load-action-load {
+    color: #9deb24;
+}
+
+.load-action-clear {
+    color: cornflowerblue;
+}
+
+.load-action-dont-care {
+    color: lightslategray;
+}
+
+.store-action-store {
+    color: darkred;
+}
+
+.store-action-resolve {
+    color: lightseagreen;
+}
+
+.store-action-store-resolve {
+    color: lightsalmon;
+}
+
+.store-action-dont-care {
+    color: lightslategray;
 }

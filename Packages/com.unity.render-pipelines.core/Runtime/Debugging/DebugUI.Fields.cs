@@ -85,7 +85,9 @@ namespace UnityEngine.Rendering
             /// <param name="value">Input value.</param>
             public virtual void SetValue(T value)
             {
-                Assert.IsNotNull(setter);
+                if (setter == null)
+                    return;
+
                 var v = ValidateValue(value);
 
                 if (v == null || !v.Equals(getter()))
@@ -524,6 +526,62 @@ namespace UnityEngine.Rendering
             /// Callback to obtain the elemtents of the pop up
             /// </summary>
             public Func<IEnumerable<Object>> getObjects { get; set; }
+        }
+
+        /// <summary>
+        /// A dropdown that contains a list of cameras
+        /// </summary>
+        public class CameraSelector : ObjectPopupField
+        {
+            /// <summary>
+            /// A dropdown that contains a list of cameras
+            /// </summary>
+            public CameraSelector()
+            {
+                displayName = "Camera";
+                getObjects = () => cameras;
+            }
+
+            private Camera[] m_CamerasArray;
+            private List<Camera> m_Cameras = new List<Camera>();
+
+            IEnumerable<Camera> cameras
+            {
+                get
+                {
+                    m_Cameras.Clear();
+
+#if UNITY_EDITOR
+                    if (UnityEditor.SceneView.lastActiveSceneView != null)
+                    {
+                        var sceneCamera = UnityEditor.SceneView.lastActiveSceneView.camera;
+                        if (sceneCamera != null)
+                            m_Cameras.Add(sceneCamera);
+                    }
+#endif
+
+                    if (m_CamerasArray == null || m_CamerasArray.Length != Camera.allCamerasCount)
+                    {
+                        m_CamerasArray = new Camera[Camera.allCamerasCount];
+                    }
+
+                    Camera.GetAllCameras(m_CamerasArray);
+
+                    foreach (var camera in m_CamerasArray)
+                    {
+                        if (camera == null)
+                            continue;
+
+                        if (camera.cameraType != CameraType.Preview && camera.cameraType != CameraType.Reflection)
+                        {
+                            if (camera.TryGetComponent<IAdditionalData>(out _))
+                                m_Cameras.Add(camera);
+                        }
+                    }
+
+                    return m_Cameras;
+                }
+            }
         }
 
         /// <summary>

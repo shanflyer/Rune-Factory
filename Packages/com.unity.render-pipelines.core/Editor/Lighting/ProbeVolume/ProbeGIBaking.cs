@@ -268,15 +268,15 @@ namespace UnityEngine.Rendering
         }
     }
 
-    class BakingBatch
+    class BakingBatch : IDisposable
     {
         public Dictionary<int, HashSet<string>> cellIndex2SceneReferences = new ();
         public List<BakingCell> cells = new ();
         // Used to retrieve probe data from it's position in order to fix seams
-        public Dictionary<int, int> positionToIndex = new ();
+        public NativeHashMap<int, int> positionToIndex;
         // Allow to get a mapping to subdiv level with the unique positions. It stores the minimum subdiv level found for a given position.
         // Can be probably done cleaner.
-        public Dictionary<int, int> uniqueBrickSubdiv = new ();
+        public NativeHashMap<int, int> uniqueBrickSubdiv;
         // Mapping for explicit invalidation, whether it comes from the auto finding of occluders or from the touch up volumes
         // TODO: This is not used yet. Will soon.
         public Dictionary<Vector3, bool> invalidatedPositions = new ();
@@ -301,11 +301,24 @@ namespace UnityEngine.Rendering
 
         private BakingBatch() { }
 
-        public BakingBatch(Vector3Int cellCount)
+        public BakingBatch(Vector3Int cellCount, ProbeReferenceVolume refVolume)
         {
-            maxBrickCount = cellCount * ProbeReferenceVolume.CellSize(ProbeReferenceVolume.instance.GetMaxSubdivision());
-            inverseScale = ProbeBrickPool.kBrickCellCount / ProbeReferenceVolume.instance.MinBrickSize();
-            offset = ProbeReferenceVolume.instance.ProbeOffset();
+            maxBrickCount = cellCount * ProbeReferenceVolume.CellSize(refVolume.GetMaxSubdivision());
+            inverseScale = ProbeBrickPool.kBrickCellCount / refVolume.MinBrickSize();
+            offset = refVolume.ProbeOffset();
+            
+            // Initialize NativeHashMaps with reasonable initial capacity
+            // Using a larger capacity to reduce allocations during baking
+            positionToIndex = new NativeHashMap<int, int>(100000, Allocator.Persistent);
+            uniqueBrickSubdiv = new NativeHashMap<int, int>(100000, Allocator.Persistent);
+        }
+        
+        public void Dispose()
+        {
+            if (positionToIndex.IsCreated)
+                positionToIndex.Dispose();
+            if (uniqueBrickSubdiv.IsCreated)
+                uniqueBrickSubdiv.Dispose();
         }
 
         public int GetProbePositionHash(Vector3 position)
@@ -443,6 +456,7 @@ namespace UnityEngine.Rendering
             public int reflectionProbeCount;
 
             public NativeArray<int> positionRemap;
+            public NativeArray<Vector3> originalPositions;
             public NativeArray<Vector3> sortedPositions;
 
             // Workers
@@ -452,6 +466,9 @@ namespace UnityEngine.Rendering
             public LightingBaker lightingJob;
             public RenderingLayerBaker layerMaskJob;
             public int cellIndex;
+
+            public Thread fixSeamsThread;
+            public bool doneFixingSeams;
 
             // Progress reporting
             public BakingStep step;
@@ -466,6 +483,7 @@ namespace UnityEngine.Rendering
                 reflectionProbeCount = requests.Count;
 
                 jobs = CreateBakingJobs(bakingSet, requests.Count != 0);
+                originalPositions = probePositions.ToArray(Allocator.Persistent);
                 SortPositions(probePositions, requests);
 
                 virtualOffsetJob = virtualOffsetOverride ?? new DefaultVirtualOffset();
@@ -625,6 +643,7 @@ namespace UnityEngine.Rendering
                     job.Dispose();
 
                 positionRemap.Dispose();
+                originalPositions.Dispose();
                 sortedPositions.Dispose();
 
                 skyOcclusionJob.encodedDirections.Dispose();
@@ -641,7 +660,12 @@ namespace UnityEngine.Rendering
 
         static bool m_IsInit = false;
         static BakingBatch m_BakingBatch;
-        static ProbeVolumeBakingSet m_BakingSet = null;
+        static ProbeVolumeBakingSetWeakReference m_BakingSetReference = new();
+        static ProbeVolumeBakingSet m_BakingSet
+        {
+            get => m_BakingSetReference.Get();
+            set => m_BakingSetReference.Set(value);
+        }
         static TouchupVolumeWithBoundsList s_AdjustmentVolumes;
 
         static Bounds globalBounds = new Bounds();
@@ -883,6 +907,7 @@ namespace UnityEngine.Rendering
             SkyOcclusion,
             RenderingLayerMask,
             Integration,
+            FixSeams,
             FinalizeCells,
 
             Last = FinalizeCells + 1
@@ -915,7 +940,7 @@ namespace UnityEngine.Rendering
                 bool canceledByUser = false;
                 // Note: this could be executed in the baking delegate to be non blocking
                 using (new BakingSetupProfiling(BakingSetupProfiling.Stages.PlaceProbes))
-                    positions = RunPlacement(ref canceledByUser);
+                    positions = RunPlacement(m_ProfileInfo, ProbeReferenceVolume.instance, ref canceledByUser);
 
                 if (positions.Length == 0 || canceledByUser)
                 {
@@ -938,8 +963,11 @@ namespace UnityEngine.Rendering
 
         static bool InitializeBake()
         {
-            if (ProbeVolumeLightingTab.instance?.PrepareAPVBake() == false) return false;
-            if (!ProbeReferenceVolume.instance.isInitialized || !ProbeReferenceVolume.instance.enabledBySRP) return false;
+            if (ProbeVolumeLightingTab.instance?.PrepareAPVBake(ProbeReferenceVolume.instance) == false)
+                return false;
+
+            if (!ProbeReferenceVolume.instance.isInitialized || !ProbeReferenceVolume.instance.enabledBySRP)
+                return false;
 
             using var scope = new BakingSetupProfiling(BakingSetupProfiling.Stages.PrepareWorldSubdivision);
 
@@ -954,13 +982,16 @@ namespace UnityEngine.Rendering
                 }
             }
 
-            if (ProbeReferenceVolume.instance.perSceneDataList.Count == 0) return false;
+            if (ProbeReferenceVolume.instance.perSceneDataList.Count == 0)
+                return false;
 
             var sceneDataList = GetPerSceneDataList();
-            if (sceneDataList.Count == 0) return false;
+            if (sceneDataList.Count == 0)
+                return false;
 
             var pvList = GetProbeVolumeList();
-            if (pvList.Count == 0) return false; // We have no probe volumes.
+            if (pvList.Count == 0)
+                return false; // We have no probe volumes.
 
             CachePVHashes(pvList);
 
@@ -1057,6 +1088,39 @@ namespace UnityEngine.Rendering
                 }
             }
 
+            if (s_BakeData.step == BakingStep.FixSeams)
+            {
+                // Start fixing seams in the background
+                if (s_BakeData.fixSeamsThread == null)
+                {
+                    s_BakeData.doneFixingSeams = false;
+                    s_BakeData.fixSeamsThread = new Thread(() =>
+                    {
+                        FixSeams(
+                            s_BakeData.positionRemap,
+                            s_BakeData.originalPositions,
+                            s_BakeData.lightingJob.irradiance,
+                            s_BakeData.lightingJob.validity,
+                            s_BakeData.lightingJob.occlusion,
+                            s_BakeData.skyOcclusionJob.occlusion,
+                            s_BakeData.layerMaskJob.renderingLayerMasks);
+
+                        s_BakeData.doneFixingSeams = true;
+                    });
+                    s_BakeData.fixSeamsThread.Start();
+                }
+                // Wait until fixing seams is done
+                else
+                {
+                    if (s_BakeData.doneFixingSeams)
+                    {
+                        s_BakeData.fixSeamsThread.Join();
+                        s_BakeData.fixSeamsThread = null;
+                        s_BakeData.step++;
+                    }
+                }
+            }
+
             if (s_BakeData.step == BakingStep.FinalizeCells)
             {
                 FinalizeCell(s_BakeData.cellIndex++, s_BakeData.positionRemap,
@@ -1096,6 +1160,21 @@ namespace UnityEngine.Rendering
                 FinalizeBake();
                 done = true;
             }
+        }
+
+        // Required by native side.
+        [Scripting.Preserve]
+        static bool CurrentSceneHasBakedData()
+        {
+            if (!ProbeReferenceVolume.instance.isInitialized || !ProbeReferenceVolume.instance.enabledBySRP)
+                return false;
+
+            string sceneGUID = SceneManager.GetActiveScene().GetGUID();
+            ProbeReferenceVolume.instance.TryGetPerSceneData(sceneGUID, out var sceneData);
+            if (sceneData == null || sceneData.bakingSet == null)
+                return false;
+
+            return sceneData.bakingSet.HasBeenBaked();
         }
 
         static void FinalizeBake(bool cleanup = true)
@@ -1138,12 +1217,20 @@ namespace UnityEngine.Rendering
                 LightingBaker.cancel = false;
             }
 
+            if (s_BakeData.fixSeamsThread != null)
+            {
+                LightingBaker.cancel = true;
+                s_BakeData.fixSeamsThread.Join();
+                LightingBaker.cancel = false;
+            }
+
             CleanBakeData();
         }
 
         static void CleanBakeData()
         {
             s_BakeData.Dispose();
+            m_BakingBatch?.Dispose();
             m_BakingBatch = null;
             s_AdjustmentVolumes = null;
 
@@ -1227,13 +1314,22 @@ namespace UnityEngine.Rendering
             }
         }
 
-        static void FixSeams(NativeArray<int> positionRemap, NativeArray<Vector3> positions, NativeArray<SphericalHarmonicsL2> sh, NativeArray<float> validity, NativeArray<uint> renderingLayerMasks)
+        internal static void FixSeams(
+            NativeArray<int> positionRemap,
+            NativeArray<Vector3> positions,
+            NativeArray<SphericalHarmonicsL2> sh,
+            NativeArray<float> validity,
+            NativeArray<Vector4> probeOcclusion,
+            NativeArray<Vector4> skyOcclusion,
+            NativeArray<uint> renderingLayerMasks)
         {
             // Seams are caused are caused by probes on the boundary between two subdivision levels
             // The idea is to find first them and do a kind of dilation to smooth the values on the boundary
             // the dilation process consits in doing a trilinear sample of the higher subdivision brick and override the lower subdiv with that
             // We have to mark the probes on the boundary as valid otherwise leak reduction at runtime will interfere with this method
 
+            bool doProbeOcclusion = probeOcclusion.IsCreated && probeOcclusion.Length > 0;
+            bool doSkyOcclusion = skyOcclusion.IsCreated && skyOcclusion.Length > 0;
 
             // Use an indirection structure to ensure mem usage stays reasonable
             VoxelToBrickCache cache = new VoxelToBrickCache();
@@ -1326,7 +1422,9 @@ namespace UnityEngine.Rendering
                     if (bakedRenderingLayerMasks) probeRenderingLayerMask = renderingLayerMasks[i];
 
                     float weightSum = 0.0f;
-                    SphericalHarmonicsL2 trilinear = default;
+                    SphericalHarmonicsL2 shTrilinear = default;
+                    Vector4 probeOcclusionTrilinear = Vector4.zero;
+                    Vector4 skyOcclusionTrilinear = Vector4.zero;
                     for (int o = 0; o < 8; o++)
                     {
                         Vector3Int offset = GetSampleOffset(o);
@@ -1349,24 +1447,44 @@ namespace UnityEngine.Rendering
                             }
 
                             // Do the lerp in compressed format to match result on GPU
-                            var sample = sh[positionRemap[index]];
-                            BakingCell.CompressSH(ref sample, 1.0f, false);
+                            var shSample = sh[positionRemap[index]];
+                            BakingCell.CompressSH(ref shSample, 1.0f, false);
 
                             float trilinearW =
                                 ((offset.x == 1) ? fract.x : 1.0f - fract.x) *
                                 ((offset.y == 1) ? fract.y : 1.0f - fract.y) *
                                 ((offset.z == 1) ? fract.z : 1.0f - fract.z);
 
-                            trilinear += sample * trilinearW;
+                            shTrilinear += shSample * trilinearW;
+
+                            if (doProbeOcclusion)
+                                probeOcclusionTrilinear += probeOcclusion[positionRemap[index]] * trilinearW;
+
+                            if (doSkyOcclusion)
+                                skyOcclusionTrilinear += skyOcclusion[positionRemap[index]] * trilinearW;
+
                             weightSum += trilinearW;
                         }
                     }
 
                     if (weightSum != 0.0f)
                     {
-                        trilinear *= 1.0f / weightSum;
-                        BakingCell.DecompressSH(ref trilinear);
-                        sh[i] = trilinear;
+                        shTrilinear *= 1.0f / weightSum;
+                        BakingCell.DecompressSH(ref shTrilinear);
+                        sh[i] = shTrilinear;
+
+                        if (doProbeOcclusion)
+                        {
+                            probeOcclusionTrilinear *= 1.0f / weightSum;
+                            probeOcclusion[i] = probeOcclusionTrilinear;
+                        }
+
+                        if (doSkyOcclusion)
+                        {
+                            skyOcclusionTrilinear *= 1.0f / weightSum;
+                            skyOcclusion[i] = skyOcclusionTrilinear;
+                        }
+
                         validity[i] = k_MinValidityForLeaking;
                     }
                 }
@@ -1389,6 +1507,15 @@ namespace UnityEngine.Rendering
             // Use the globalBounds we just computed, as the one in probeRefVolume doesn't include scenes that have never been baked
             probeRefVolume.globalBounds = globalBounds;
 
+            // Validate baking cells size before any state modifications
+            var bakingCellsArray = m_BakedCells.Values.ToArray();
+            var chunkSizeInProbes = ProbeBrickPool.GetChunkSizeInProbeCount();
+            var hasVirtualOffsets = m_BakingSet.settings.virtualOffsetSettings.useVirtualOffset;
+            var hasRenderingLayers = m_BakingSet.useRenderingLayers;
+            
+            if (!ValidateBakingCellsSize(bakingCellsArray, chunkSizeInProbes, hasVirtualOffsets, hasRenderingLayers))
+                return; // Early exit if validation fails
+
             PrepareCellsForWriting(isBakingSceneSubset);
 
             m_BakingSet.chunkSizeInBricks = ProbeBrickPool.GetChunkSizeInBrickCount();
@@ -1399,9 +1526,13 @@ namespace UnityEngine.Rendering
 
             m_BakingSet.scenarios.TryAdd(m_BakingSet.lightingScenario, new ProbeVolumeBakingSet.PerScenarioDataInfo());
 
-            // Convert baking cells to runtime cells
+            // Attempt to convert baking cells to runtime cells
+            bool succeededWritingBakingCells;
             using (new BakingCompleteProfiling(BakingCompleteProfiling.Stages.WriteBakedData))
-                WriteBakingCells(m_BakedCells.Values.ToArray());
+                succeededWritingBakingCells = WriteBakingCells(m_BakedCells.Values.ToArray());
+
+            if (!succeededWritingBakingCells)
+                return;
 
             // Reset internal structures depending on current bake.
             Debug.Assert(probeRefVolume.EnsureCurrentBakingSet(m_BakingSet));
@@ -1413,11 +1544,14 @@ namespace UnityEngine.Rendering
             if (m_BakingSet.hasDilation)
             {
                 // This subsequent block needs to happen AFTER we call WriteBakingCells.
-                // Otherwise in cases where we change the spacing between probes, we end up loading cells with a certain layout in ForceSHBand
+                // Otherwise, in cases where we change the spacing between probes, we end up loading cells with a certain layout in ForceSHBand
                 // And then we unload cells using the wrong layout in PerformDilation (after WriteBakingCells updates the baking set object) which leads to a broken internal state.
 
                 // Don't use Disk streaming to avoid having to wait for it when doing dilation.
                 probeRefVolume.ForceNoDiskStreaming(true);
+                // Increase the memory budget to make sure we can fit the current cell and all its neighbors when doing dilation.
+                var prevMemoryBudget = probeRefVolume.memoryBudget;
+                probeRefVolume.ForceMemoryBudget(ProbeVolumeTextureMemoryBudget.MemoryBudgetHigh);
                 // Force maximum sh bands to perform baking, we need to store what sh bands was selected from the settings as we need to restore it after.
                 var prevSHBands = probeRefVolume.shBands;
                 probeRefVolume.ForceSHBand(ProbeVolumeSHBands.SphericalHarmonicsL2);
@@ -1428,8 +1562,9 @@ namespace UnityEngine.Rendering
                 using (new BakingCompleteProfiling(BakingCompleteProfiling.Stages.PerformDilation))
                     PerformDilation();
 
-                // Need to restore the original state
+                // Restore the original state.
                 probeRefVolume.ForceNoDiskStreaming(false);
+                probeRefVolume.ForceMemoryBudget(prevMemoryBudget);
                 probeRefVolume.ForceSHBand(prevSHBands);
             }
             else
@@ -1441,6 +1576,7 @@ namespace UnityEngine.Rendering
             }
 
             // Mark stuff as up to date
+            m_BakingBatch?.Dispose();
             m_BakingBatch = null;
             foreach (var probeVolume in GetProbeVolumeList())
                 probeVolume.OnBakeCompleted();

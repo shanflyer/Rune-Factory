@@ -8,6 +8,7 @@ namespace UnityEngine.Rendering.RenderGraphModule
     /// Use this struct to set up a new Render Pass.
     /// </summary>
     [MovedFrom(true, "UnityEngine.Experimental.Rendering.RenderGraphModule", "UnityEngine.Rendering.RenderGraphModule")]
+    [Obsolete("RenderGraphBuilder is deprecated, use IComputeRenderGraphBuilder/IRasterRenderGraphBuilder/IUnsafeRenderGraphBuilder instead.")]
     public struct RenderGraphBuilder : IDisposable
     {
         RenderGraphPass m_RenderPass;
@@ -131,7 +132,7 @@ namespace UnityEngine.Rendering.RenderGraphModule
         /// <returns>A new transient TextureHandle.</returns>
         public TextureHandle CreateTransientTexture(in TextureHandle texture)
         {
-            var desc = m_Resources.GetTextureResourceDesc(texture.handle);
+            ref readonly var desc = ref m_Resources.GetTextureResourceDesc(texture.handle);
             var result = m_Resources.CreateTexture(desc, m_RenderPass.index);
             m_RenderPass.AddTransientResource(result.handle);
             return result;
@@ -220,7 +221,7 @@ namespace UnityEngine.Rendering.RenderGraphModule
         /// <returns>A new transient GraphicsBufferHandle.</returns>
         public BufferHandle CreateTransientBuffer(in BufferHandle graphicsbuffer)
         {
-            var desc = m_Resources.GetBufferResourceDesc(graphicsbuffer.handle);
+            ref readonly var desc = ref m_Resources.GetBufferResourceDesc(graphicsbuffer.handle);
             var result = m_Resources.CreateBuffer(desc, m_RenderPass.index);
             m_RenderPass.AddTransientResource(result.handle);
             return result;
@@ -315,6 +316,7 @@ namespace UnityEngine.Rendering.RenderGraphModule
             if (m_Disposed)
                 return;
 
+            m_RenderGraph.RenderGraphState = RenderGraphState.RecordingGraph;
             m_RenderGraph.OnPassAdded(m_RenderPass);
             m_Disposed = true;
         }

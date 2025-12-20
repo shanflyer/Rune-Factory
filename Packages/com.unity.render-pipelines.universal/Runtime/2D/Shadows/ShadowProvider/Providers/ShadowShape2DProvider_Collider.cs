@@ -91,7 +91,7 @@ namespace UnityEngine.Rendering.Universal
 
             // Fetch collider space.
             var attachedBody = collider.attachedRigidbody;
-            var colliderSpace = attachedBody ? attachedBody.transform.localToWorldMatrix : Matrix4x4.identity;
+            var colliderSpace = attachedBody ? attachedBody.localToWorldMatrix : Matrix4x4.identity;
 
             // If the shape hash has changed, grab a new potential visible geometry group.
             var shapeHash = collider.GetShapeHash();
@@ -342,6 +342,13 @@ namespace UnityEngine.Rendering.Universal
             visibleShapeIndices.Dispose();
         }
 
+        void Initialize()
+        {
+            m_ShadowStateHash = default;
+            m_ShadowCombinedShapeMinMaxBounds = default;
+            m_LastColliderSpace = Matrix4x4.identity;
+        }
+
         //============================================================================================================
         //                                                  Public
         //============================================================================================================
@@ -349,9 +356,7 @@ namespace UnityEngine.Rendering.Universal
 
         public override void OnPersistantDataCreated(Component sourceComponent, ShadowShape2D persistantShadowShapeData)
         {
-            m_ShadowStateHash = default;
-            m_ShadowCombinedShapeMinMaxBounds = default;
-            m_LastColliderSpace = Matrix4x4.identity;
+            Initialize();
         }
 
         public override void OnBeforeRender(Component sourceComponent, Bounds worldCullingBounds, ShadowShape2D persistantShadowShape)
@@ -359,6 +364,12 @@ namespace UnityEngine.Rendering.Universal
             Collider2D collider = (Collider2D)sourceComponent;
             CalculateShadows(collider, persistantShadowShape, worldCullingBounds);
         }
+
+        public override void Enabled(Component sourceComponent, ShadowShape2D persistantShadowShape)
+        {
+            Initialize();
+        }
+
     }
 }
 #endif

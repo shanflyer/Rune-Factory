@@ -8,7 +8,7 @@ namespace UnityEngine.Rendering
     [CoreRPHelpURL("probevolumes-adjustment-volume-component-reference", "com.unity.render-pipelines.high-definition")]
     [ExecuteAlways]
     [AddComponentMenu("Rendering/Probe Adjustment Volume")]
-    public class ProbeAdjustmentVolume : MonoBehaviour, ISerializationCallbackReceiver
+    public partial class ProbeAdjustmentVolume : MonoBehaviour, ISerializationCallbackReceiver
     {
         /// <summary>The type of shape that an adjustment volume can take. </summary>
         public enum Shape
@@ -227,16 +227,9 @@ namespace UnityEngine.Rendering
                 return Vector3.zero;
             return (transform.rotation * Quaternion.Euler(virtualOffsetRotation) * Vector3.forward) * virtualOffsetDistance;
         }
-
-        void OnDrawGizmos()
-        {
-            Gizmos.DrawIcon(transform.position, ProbeVolume.s_gizmosLocationPath + "ProbeTouchupVolume.png", true);
-        }
 #endif
 
-
         // Migration related stuff
-
         enum Version
         {
             Initial,
@@ -247,31 +240,6 @@ namespace UnityEngine.Rendering
 
         [SerializeField]
         Version version = Version.Count;
-
-        /// <summary>Whether to invalidate all probes falling within this volume.</summary>
-        [Obsolete("Use mode")]
-        public bool invalidateProbes = false;
-        /// <summary>Whether to use a custom threshold for dilation for probes falling withing this volume.</summary>
-        [Obsolete("Use mode")]
-        public bool overrideDilationThreshold = false;
-
-        void Awake()
-        {
-            if (version == Version.Count)
-                return;
-
-            if (version == Version.Initial)
-            {
-#pragma warning disable 618 // Type or member is obsolete
-                if (invalidateProbes)
-                    mode = Mode.InvalidateProbes;
-                else if (overrideDilationThreshold)
-                    mode = Mode.OverrideValidityThreshold;
-#pragma warning restore 618
-
-                version++;
-            }
-        }
 
         // This piece of code is needed because some objects could have been created before existence of Version enum
         /// <summary>OnBeforeSerialize needed to handle migration before the versioning system was in place.</summary>
@@ -286,6 +254,18 @@ namespace UnityEngine.Rendering
         {
             if (version == Version.Count) // deserializing and object without version
                 version = Version.Initial; // reset to run the migration
+
+            if (version < Version.Mode)
+            {
+#pragma warning disable 618 // Type or member is obsolete
+                if (invalidateProbes)
+                    mode = Mode.InvalidateProbes;
+                else if (overrideDilationThreshold)
+                    mode = Mode.OverrideValidityThreshold;
+#pragma warning restore 618
+
+                version = Version.Mode;
+            }
         }
     }
 }

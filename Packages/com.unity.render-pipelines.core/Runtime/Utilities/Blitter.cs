@@ -5,6 +5,7 @@ using UnityEngine.Assertions;
 using System.Text.RegularExpressions;
 using UnityEngine.Rendering.RenderGraphModule.Util;
 using UnityEngine.Rendering.RenderGraphModule;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -42,18 +43,25 @@ namespace UnityEngine.Rendering
 
         static LocalKeyword s_DecodeHdrKeyword;
 
+        static LocalKeyword s_ResolveDepthMSAA2X;
+        static LocalKeyword s_ResolveDepthMSAA4X;
+        static LocalKeyword s_ResolveDepthMSAA8X;
+
         static class BlitShaderIDs
         {
             public static readonly int _BlitTexture = Shader.PropertyToID("_BlitTexture");
             public static readonly int _BlitCubeTexture = Shader.PropertyToID("_BlitCubeTexture");
             public static readonly int _BlitScaleBias = Shader.PropertyToID("_BlitScaleBias");
             public static readonly int _BlitScaleBiasRt = Shader.PropertyToID("_BlitScaleBiasRt");
+            public static readonly int _SourceResolution = Shader.PropertyToID("_SourceResolution");
             public static readonly int _BlitMipLevel = Shader.PropertyToID("_BlitMipLevel");
             public static readonly int _BlitTexArraySlice = Shader.PropertyToID("_BlitTexArraySlice");
             public static readonly int _BlitTextureSize = Shader.PropertyToID("_BlitTextureSize");
             public static readonly int _BlitPaddingSize = Shader.PropertyToID("_BlitPaddingSize");
             public static readonly int _BlitDecodeInstructions = Shader.PropertyToID("_BlitDecodeInstructions");
             public static readonly int _InputDepth = Shader.PropertyToID("_InputDepthTexture");
+            public static readonly int _InputDepthXR = Shader.PropertyToID("_InputDepthTextureXR");
+            public static readonly int _InputDepthXRMS = Shader.PropertyToID("_InputDepthTextureXR_MS");
         }
 
         // This enum needs to be in sync with the shader pass names and indices of the Blit.shader in every pipeline.
@@ -89,6 +97,7 @@ namespace UnityEngine.Rendering
         {
             ColorOnly = 0,
             ColorAndDepth = 1,
+            DepthOnly = 2,
         }
 
         // This maps the requested shader indices to actual existing shader indices. When running in a build, it's possible
@@ -160,10 +169,15 @@ namespace UnityEngine.Rendering
 
             s_DecodeHdrKeyword = new LocalKeyword(blitPS, "BLIT_DECODE_HDR");
 
+            s_ResolveDepthMSAA2X = new(s_BlitColorAndDepth.shader, "_MSAA_2X");
+            s_ResolveDepthMSAA4X = new(s_BlitColorAndDepth.shader, "_MSAA_4X");
+            s_ResolveDepthMSAA8X = new(s_BlitColorAndDepth.shader, "_MSAA_8X");
+
             // With texture array enabled, we still need the normal blit version for other systems like atlas
             if (TextureXR.useTexArray)
             {
                 s_Blit.EnableKeyword("DISABLE_TEXTURE2D_X_ARRAY");
+                s_BlitColorAndDepth.EnableKeyword("DISABLE_TEXTURE2D_X_ARRAY");
                 s_BlitTexArray = CoreUtils.CreateEngineMaterial(blitPS);
                 s_BlitTexArraySingleSlice = CoreUtils.CreateEngineMaterial(blitPS);
                 s_BlitTexArraySingleSlice.EnableKeyword("BLIT_SINGLE_SLICE");
@@ -341,10 +355,9 @@ namespace UnityEngine.Rendering
 
         internal static bool CanCopyMSAA()
         {
-            //Temporary disable most msaa copies as we fix UUM-67324 which is a bit more involved due to the internal work required
-            GraphicsDeviceType deviceType = SystemInfo.graphicsDeviceType;
-            if (deviceType != GraphicsDeviceType.Metal || deviceType != GraphicsDeviceType.Vulkan)
+            if (SystemInfo.graphicsDeviceType == GraphicsDeviceType.PlayStation4)
             {
+                // Will be done later, see: UUM-97281
                 return false;
             }
 
@@ -354,10 +367,33 @@ namespace UnityEngine.Rendering
             return s_Copy.passCount == 2;
         }
 
+        internal static bool CanCopyMSAA(bool srcBindTextureMS)
+        {
+            // Real native renderpass platforms
+            // TODO: Expose this through systeminfo
+            bool hasRenderPass =
+                SystemInfo.graphicsDeviceType == GraphicsDeviceType.Metal
+                || SystemInfo.graphicsDeviceType == GraphicsDeviceType.Vulkan
+                || SystemInfo.graphicsDeviceType == GraphicsDeviceType.Direct3D12;
+
+            if (SystemInfo.supportsMultisampleAutoResolve &&
+                !hasRenderPass && !srcBindTextureMS)
+            {
+                // If we have autoresolve it means msaa rendertextures render as MSAA but  magically resolve in the driver when accessed as a texture, the MSAA surface is fully hidden inside the GFX device
+                // this is contrary to most platforms where the resolve magic on reading happens in the engine layer (and thus allocates proper multi sampled and resolve surfaces the engine can access)
+                // So in the cases of auto resolving, and a renderpass framebuffer fetch emulation layer we can't correctly access the individual unresolved msaa samples and thus don't allow this case here
+                // Note: In practice the above check mostly triggers on GLES.
+                return false;
+            }
+
+            return CanCopyMSAA();
+        }
+
         /// <summary>
         /// Copies a texture to another texture using framebuffer fetch.
         /// </summary>
         /// <param name="cmd">Command Buffer used for rendering.</param>
+        /// <param name="isMSAA">Use the MSAA variant of the copy shader (otherwise single sample is used).</param>
         /// <param name="force2DForXR">Disable the special handling when XR is active where the source and destination are considered array
         /// textures with a slice for each eye. Setting this to true will consider source and destination as regular 2D textures. When XR is
         /// disabled, textures are always 2D so forcing them to 2D has no impact.</param>
@@ -478,8 +514,9 @@ namespace UnityEngine.Rendering
         /// </example>
         public static void BlitTexture(CommandBuffer cmd, RTHandle source, Vector4 scaleBias, float mipLevel, bool bilinear)
         {
+            var dimension = (source.rt != null) ? source.rt.dimension : TextureXR.dimension;
             s_PropertyBlock.SetFloat(BlitShaderIDs._BlitMipLevel, mipLevel);
-            BlitTexture(cmd, source, scaleBias, GetBlitMaterial(TextureXR.dimension), s_BlitShaderPassIndicesMap[bilinear ? 1 : 0]);
+            BlitTexture(cmd, source, scaleBias, GetBlitMaterial(dimension), s_BlitShaderPassIndicesMap[bilinear ? 1 : 0]);
         }
 
         /// <summary>
@@ -514,6 +551,7 @@ namespace UnityEngine.Rendering
         /// Blitter.BlitTexture2D(cmd, source, new Vector4(1, 0.5, 0, 0.5), 4, false);
         /// ]]></code>
         /// </example>
+        
         public static void BlitTexture2D(RasterCommandBuffer cmd, RTHandle source, Vector4 scaleBias, float mipLevel, bool bilinear)
         {
             BlitTexture2D(cmd.m_WrappedCommandBuffer, source, scaleBias, mipLevel, bilinear);
@@ -653,6 +691,43 @@ namespace UnityEngine.Rendering
         }
 
         /// <summary>
+        /// Adds in a <see cref="CommandBuffer"/> a command to blit an XR compatible depth texture into
+        /// the currently bound depth render target.
+        /// </summary>
+        /// <remarks>
+        /// This function is meant for textures and render targets which depend on XR output modes by proper handling, when
+        /// necessary, of left / right eye data copying. This generally corresponds to textures which represent full screen
+        /// data that may differ between eyes.
+        ///
+        /// The <c>scaleBias</c> parameter controls the rectangle of pixels in the source texture to copy by manipulating
+        /// the source texture coordinates. The X and Y coordinates store the scaling factor to apply to these texture
+        /// coordinates, while the Z and W coordinates store the texture coordinate offsets. The operation will always
+        /// write to the full destination render target rectangle.
+        /// </remarks>
+        /// <param name="cmd">Command Buffer used for recording the action.</param>
+        /// <param name="sourceDepth">Source depth render texture to copy from.</param>
+        /// <param name="scaleBias">Scale and bias for sampling the source texture.</param>
+        /// <param name="mipLevel">Mip level of the source texture to copy from.</param>
+        public static void BlitDepth(CommandBuffer cmd, RenderTexture sourceDepth, Vector4 scaleBias, float mipLevel)
+        {
+            s_PropertyBlock.SetFloat(BlitShaderIDs._BlitMipLevel, mipLevel);
+            s_PropertyBlock.SetVector(BlitShaderIDs._BlitScaleBias, scaleBias);
+            s_PropertyBlock.SetVector(BlitShaderIDs._SourceResolution, new Vector2(sourceDepth.width, sourceDepth.height));
+
+            // Setup MSAA keywords
+            cmd.SetKeyword(s_BlitColorAndDepth, s_ResolveDepthMSAA2X, sourceDepth.antiAliasing == 2);
+            cmd.SetKeyword(s_BlitColorAndDepth, s_ResolveDepthMSAA4X, sourceDepth.antiAliasing == 4);
+            cmd.SetKeyword(s_BlitColorAndDepth, s_ResolveDepthMSAA8X, sourceDepth.antiAliasing == 8);
+
+            if (sourceDepth.antiAliasing > 1)
+                s_PropertyBlock.SetTexture(BlitShaderIDs._InputDepthXRMS, sourceDepth, RenderTextureSubElement.Depth);
+            else
+                s_PropertyBlock.SetTexture(BlitShaderIDs._InputDepthXR, sourceDepth, RenderTextureSubElement.Depth);
+
+            DrawTriangle(cmd, s_BlitColorAndDepth, s_BlitColorAndDepthShaderPassIndicesMap[2]);
+        }
+
+        /// <summary>
         /// Adds in a <see cref="RasterCommandBuffer"/> a command to copy a texture identified by its <see cref="RTHandle"/> into
         /// the currently bound render target's color buffer, using a user material and specific shader pass.
         /// </summary>
@@ -684,6 +759,42 @@ namespace UnityEngine.Rendering
         /// ]]></code>
         /// </example>
         public static void BlitTexture(RasterCommandBuffer cmd, RTHandle source, Vector4 scaleBias, Material material, int pass)
+        {
+            BlitTexture(cmd.m_WrappedCommandBuffer, source, scaleBias, material, pass);
+        }
+
+        /// <summary>
+        /// Adds in a <see cref="UnsafeCommandBuffer"/> a command to copy a texture identified by its <see cref="RTHandle"/> into
+        /// the currently bound render target's color buffer, using a user material and specific shader pass.
+        /// </summary>
+        /// <remarks>
+        /// The <c>source</c> texture will be bound to the "_BlitTexture" shader property.
+        /// The <c>scaleBias</c> parameter controls the rectangle of pixels in the source texture to copy by manipulating
+        /// the source texture coordinates. The X and Y coordinates store the scaling factor to apply to these texture
+        /// coordinates, while the Z and W coordinates store the texture coordinate offsets. The operation will always
+        /// write to the full destination render target rectangle.
+        /// </remarks>
+        /// <param name="cmd">Command Buffer used for recording the action.</param>
+        /// <param name="source">RTHandle of the source texture to copy from.</param>
+        /// <param name="scaleBias">Scale and bias for sampling the source texture.</param>
+        /// <param name="material">The material to use for writing to the destination target.</param>
+        /// <param name="pass">The index of the pass to use in the material's shader.</param>
+        /// <example>
+        /// <code lang="cs"><![CDATA[
+        /// // Copy the bottom left quadrant of the source texture to the render target using the first
+        /// // pass of a custom material, scaling to the destination render target's full rectangle.
+        /// // Configure the scale value to 0.5 because a quadrant has half the width and half the
+        /// // height of the texture, and the bias to 0 because the texture coordinate origin is at
+        /// // the bottom left.
+        /// Blitter.BlitTexture(cmd, source, new Vector4(0.5, 0.5, 0, 0), blitMaterial, 0);
+        ///
+        /// // Copy the top half of the source texture mip level 4 to the render target using the
+        /// // second pass of a custom material, scaling to the destination render target's full
+        /// // rectangle.
+        /// Blitter.BlitTexture(cmd, source, new Vector4(1, 0.5, 0, 0.5), blitMaterial, 1);
+        /// ]]></code>
+        /// </example>
+        public static void BlitTexture(UnsafeCommandBuffer cmd, RTHandle source, Vector4 scaleBias, Material material, int pass)
         {
             BlitTexture(cmd.m_WrappedCommandBuffer, source, scaleBias, material, pass);
         }
@@ -962,7 +1073,7 @@ namespace UnityEngine.Rendering
         /// RTHandle source = renderGraph.CreateTexture(texDesc);
         /// // Do a full copy of the texture's first mip level to a destination render target
         /// // scaling with bilinear filtering to the destination render target's full rect.
-        /// Blitter.BlitCameraTexture(cmd, source, destination, 0, true);
+        /// Blitter.BlitCameraTexture2D(cmd, source, destination, 0, true);
         /// ]]></code>
         /// </example>
         public static void BlitCameraTexture2D(CommandBuffer cmd, RTHandle source, RTHandle destination, float mipLevel = 0.0f, bool bilinear = false)
@@ -1020,7 +1131,7 @@ namespace UnityEngine.Rendering
         /// Adds in a <see cref="CommandBuffer"/> a command to copy a camera related texture identified by
         /// its <see cref="RTHandle"/> into a destination render target, using a user material, specific shader pass and specific load / store actions.
         /// </summary>
-        /// <remarks>
+		/// <remarks>
         /// Camera related textures are created with the <see cref="RenderGraphModule.RenderGraph.CreateTexture"/>
         /// method using <see cref="RenderGraphModule.TextureDesc.TextureDesc(Vector2,bool,bool)"/> or
         /// <see cref="RenderGraphModule.TextureDesc.TextureDesc(ScaleFunc,bool,bool)"/> to
@@ -1034,6 +1145,7 @@ namespace UnityEngine.Rendering
         /// <param name="cmd">Command Buffer used for recording the action.</param>
         /// <param name="source">RTHandle of the source texture to copy from.</param>
         /// <param name="destination">RTHandle of the destination render target to copy to.</param>
+        /// <param name="scaleBias">Scale and bias used to sample the input RTHandle.</param>
         /// <param name="loadAction">Load action to perform on the destination render target prior to the copying.</param>
         /// <param name="storeAction">Store action to perform on the destination render target after the copying.</param>
         /// <param name="material">The material to use for writing to the destination target.</param>
@@ -1049,12 +1161,29 @@ namespace UnityEngine.Rendering
         /// Blitter.BlitCameraTexture(cmd, source, dest, RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store, blitMaterial, 0);
         /// ]]></code>
         /// </example>
+        public static void BlitCameraTexture(CommandBuffer cmd, RTHandle source, RTHandle destination, Vector4 scaleBias, RenderBufferLoadAction loadAction, RenderBufferStoreAction storeAction, Material material, int pass)
+        {
+            // Will set the correct camera viewport as well.
+            CoreUtils.SetRenderTarget(cmd, destination, loadAction, storeAction, ClearFlag.None, Color.clear);
+            BlitTexture(cmd, source, scaleBias, material, pass);
+        }
+
+        /// <summary>
+        /// Blit a RTHandle to another RTHandle.
+        /// This will properly account for partial usage (in term of resolution) of the texture for the current viewport.
+        /// This overloads allows the user to override the default blit shader
+        /// </summary>
+        /// <param name="cmd">Command Buffer used for rendering.</param>
+        /// <param name="source">Source RTHandle.</param>
+        /// <param name="destination">Destination RTHandle.</param>
+        /// <param name="loadAction">Load action to perform on the destination render target prior to the copying.</param>
+        /// <param name="storeAction">Store action to perform on the destination render target after the copying.</param>
+        /// <param name="material">The material to use for writing to the destination target.</param>
+        /// <param name="pass">The index of the pass to use in the material's shader.</param>
         public static void BlitCameraTexture(CommandBuffer cmd, RTHandle source, RTHandle destination, RenderBufferLoadAction loadAction, RenderBufferStoreAction storeAction, Material material, int pass)
         {
             Vector2 viewportScale = source.useScaling ? new Vector2(source.rtHandleProperties.rtHandleScale.x, source.rtHandleProperties.rtHandleScale.y) : Vector2.one;
-            // Will set the correct camera viewport as well.
-            CoreUtils.SetRenderTarget(cmd, destination, loadAction, storeAction, ClearFlag.None, Color.clear);
-            BlitTexture(cmd, source, viewportScale, material, pass);
+            BlitCameraTexture(cmd, source, destination, viewportScale, loadAction, storeAction, material, pass);
         }
 
         /// <summary>

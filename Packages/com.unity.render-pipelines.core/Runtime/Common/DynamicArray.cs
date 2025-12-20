@@ -228,7 +228,7 @@ namespace UnityEngine.Rendering
         /// <returns>The zero-based index of the first occurrence of an element that matches the conditions defined by match, if found; otherwise, -1.</returns>
         public int FindIndex(int startIndex, int count, Predicate<T> match)
         {
-            for (int i = startIndex; i < size; ++i)
+            for (int i = startIndex; i < size && count > 0; ++i, --count)
             {
                 if (match(m_Array[i]))
                 {
@@ -236,6 +236,16 @@ namespace UnityEngine.Rendering
                 }
             }
             return -1;
+        }
+
+        /// <summary>
+        /// Searches for an element that matches the conditions defined by the specified predicate, and returns the zero-based index of the first occurrence within the range of elements in the DynamicArray.
+        /// </summary>
+        /// <param name="match">The Predicate delegate that defines the conditions of the element to search for.</param>
+        /// <returns>The zero-based index of the first occurrence of an element that matches the conditions defined by match, if found; otherwise, -1.</returns>
+        public int FindIndex(Predicate<T> match)
+        {
+            return FindIndex(0, size, match);
         }
 
         /// <summary>
@@ -365,7 +375,7 @@ namespace UnityEngine.Rendering
         /// </summary>
         /// <param name="array">Input DynamicArray.</param>
         /// <returns>The internal array.</returns>
-        [Obsolete("This is deprecated because it returns an incorrect value. It may returns an array with elements beyond the size. Please use Span/ReadOnly if you want safe raw access to the DynamicArray memory.",false)]
+        [Obsolete("This is deprecated because it returns an incorrect value. It may returns an array with elements beyond the size. Please use Span/ReadOnly if you want safe raw access to the DynamicArray memory. #from(2023.2)")]
         public static implicit operator T[](DynamicArray<T> array) => array.m_Array;
 
         /// <summary>
@@ -685,8 +695,7 @@ namespace UnityEngine.Rendering
             }
         }
 
-        // C# SUCKS
-        // Had to copy paste because it's apparently impossible to pass a sort delegate where T is Comparable<T>, otherwise some boxing happens and allocates...
+        // A copy/paste because it's apparently impossible to pass a sort delegate where T is Comparable<T>, otherwise some boxing happens and allocates...
         // So two identical versions of the function, one with delegate but no Comparable and the other with just the comparable.
         static int Partition<T>(Span<T> data, int left, int right, DynamicArray<T>.SortComparer comparer) where T : new()
         {

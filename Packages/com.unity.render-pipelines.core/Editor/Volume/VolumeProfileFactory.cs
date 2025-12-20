@@ -12,14 +12,14 @@ namespace UnityEditor.Rendering
     /// </summary>
     public static class VolumeProfileFactory
     {
-        [MenuItem("Assets/Create/Rendering/Volume Profile", priority = 201)]
+        [MenuItem("Assets/Create/Rendering/Volume Profile", priority = 10)]
         static void CreateVolumeProfile()
         {
             ProjectWindowUtil.StartNameEditingIfProjectWindowExists(
                 0,
                 ScriptableObject.CreateInstance<CreateVolumeProfileAction>(),
                 "New Volume Profile.asset",
-                null,
+                CoreUtils.GetIconForType<VolumeProfile>(),
                 null
             );
         }
@@ -40,7 +40,7 @@ namespace UnityEditor.Rendering
                 assetCreator.GetInstanceID(),
                 assetCreator,
                 fullPath,
-                null,
+                CoreUtils.GetIconForType<VolumeProfile>(),
                 null);
         }
 

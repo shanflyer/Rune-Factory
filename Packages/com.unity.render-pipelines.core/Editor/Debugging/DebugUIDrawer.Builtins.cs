@@ -292,14 +292,40 @@ namespace UnityEditor.Rendering
             rect = EditorGUI.PrefixLabel(rect, label);
 
             var elements = field.getObjects();
-            if (elements?.Any() ?? false)
+            var count = elements != null ? elements.Count() : -1;
+            if (count > 0) // Check if elements are not null and have any items
             {
-                var elementsArrayNames = elements.Select(e => e.name).ToArray();
-                var elementsArrayIndices = Enumerable.Range(0, elementsArrayNames.Length).ToArray();
-                var selectedIndex = selectedValue != null ? Array.IndexOf(elementsArrayNames, selectedValue.name) : 0;
-                var newSelectedIndex = EditorGUI.IntPopup(rect, selectedIndex, elementsArrayNames, elementsArrayIndices);
+                // Initialize arrays for names and indices, with +1 for the "None" option
+                string[] elementsArrayNames = new string[count + 1];  // +1 for the "None" option
+                int[] elementsArrayIndices = new int[elementsArrayNames.Length];  // Same size as elementsArrayNames
+
+                // Add the "None" option at the beginning
+                elementsArrayNames[0] = "None";
+                elementsArrayIndices[0] = 0; // "None" corresponds to index 0
+
+                // Populate the rest of the arrays with the element names and indices
+                int index = 1;
+                foreach (var element in elements)
+                {
+                    elementsArrayNames[index] = element.name;
+                    elementsArrayIndices[index] = index;  // Set the index to match the element's position
+                    index++;
+                }
+
+                // Determine the selected index
+                int selectedIndex = selectedValue != null
+                    ? Array.IndexOf(elementsArrayNames, selectedValue.name)
+                    : 0;
+
+                // Show the dropdown and get the new selected index
+                int newSelectedIndex = EditorGUI.IntPopup(rect, selectedIndex, elementsArrayNames, elementsArrayIndices);
+
+                // If the selected index changed, update selectedValue
                 if (selectedIndex != newSelectedIndex)
-                    selectedValue = elements.ElementAt(newSelectedIndex);
+                {
+                    // If "None" is selected, set selectedValue to null
+                    selectedValue = newSelectedIndex == 0 ? null : elements.ElementAt(newSelectedIndex - 1);
+                }
             }
             else
             {
@@ -451,6 +477,8 @@ namespace UnityEditor.Rendering
         /// <param name="state">Debug State associated with the Debug Item.</param>
         public override void Begin(DebugUI.Widget widget, DebugState state)
         {
+            CoreEditorUtils.DrawSplitter();
+            
             var w = Cast<DebugUI.Foldout>(widget);
             var s = Cast<DebugStateBool>(state);
 
@@ -458,7 +486,7 @@ namespace UnityEditor.Rendering
 
             Action<GenericMenu> fillContextMenuAction = null;
 
-            if (w.contextMenuItems != null)
+            if (w.contextMenuItems is { Count: > 0 })
             {
                 fillContextMenuAction = menu =>
                 {
@@ -469,8 +497,8 @@ namespace UnityEditor.Rendering
                 };
             }
 
-            bool previousValue = (bool)w.GetValue();
-            bool value = CoreEditorUtils.DrawHeaderFoldout(title, previousValue, isTitleHeader: w.isHeader, customMenuContextAction: fillContextMenuAction);
+            bool previousValue = w.GetValue();
+            bool value = CoreEditorUtils.DrawHeaderFoldout(title, previousValue, isTitleHeader: w.isHeader, customMenuContextAction: fillContextMenuAction, documentationURL: w.documentationUrl);
             if (previousValue != value)
                 Apply(w, s, value);
 
@@ -827,7 +855,7 @@ namespace UnityEditor.Rendering
 
                     bool isAlternate = r % 2 == 0;
 
-                    EditorGUI.LabelField(rowRect, GUIContent.none, EditorGUIUtility.TrTextContent(row.displayName),isAlternate ? DebugWindow.Styles.centeredLeft : DebugWindow.Styles.centeredLeftAlternate);
+                    EditorGUI.LabelField(rowRect, GUIContent.none, EditorGUIUtility.TrTextContent(row.displayName), isAlternate ? DebugWindow.Styles.centeredLeft : DebugWindow.Styles.centeredLeftAlternate);
                     rowRect.xMin -= 2;
                     rowRect.xMax += 2;
 

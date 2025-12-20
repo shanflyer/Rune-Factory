@@ -122,7 +122,8 @@ namespace UnityEngine.Rendering.Universal
         [MenuItem("Assets/Create/Rendering/URP Universal Renderer", priority = CoreUtils.Sections.section3 + CoreUtils.Priorities.assetsCreateRenderingMenuPriority + 2)]
         static void CreateUniversalRendererData()
         {
-            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, CreateInstance<CreateUniversalRendererAsset>(), "New Custom Universal Renderer Data.asset", null, null);
+            var icon = CoreUtils.GetIconForType<ScriptableRendererData>();
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, CreateInstance<CreateUniversalRendererAsset>(), "New Custom Universal Renderer Data.asset", icon, null);
         }
 
 #endif
@@ -132,11 +133,9 @@ namespace UnityEngine.Rendering.Universal
         /// </summary>
         public PostProcessData postProcessData = null;
 
-        [SerializeField] TransparencySortMode m_transparencySortMode;
-        [SerializeField] Vector3 m_transparencySortAxis = new Vector3(0, 0, 1);
-
-        const int k_LatestAssetVersion = 2;
+        const int k_LatestAssetVersion = 3;
         [SerializeField] int m_AssetVersion = 0;
+        [SerializeField] LayerMask m_PrepassLayerMask = -1;
         [SerializeField] LayerMask m_OpaqueLayerMask = -1;
         [SerializeField] LayerMask m_TransparentLayerMask = -1;
         [SerializeField] StencilStateData m_DefaultStencilState = new StencilStateData() { passOperation = StencilOp.Replace }; // This default state is compatible with deferred renderer.
@@ -167,6 +166,19 @@ namespace UnityEngine.Rendering.Universal
         }
 
         /// <summary>
+        /// Use this to configure how to filter prepass objects.
+        /// </summary>
+        public LayerMask prepassLayerMask
+        {
+            get => m_PrepassLayerMask;
+            set
+            {
+                SetDirty();
+                m_PrepassLayerMask = value;
+            }
+        }
+
+        /// <summary>
         /// Use this to configure how to filter opaque objects.
         /// </summary>
         public LayerMask opaqueLayerMask
@@ -178,24 +190,7 @@ namespace UnityEngine.Rendering.Universal
                 m_OpaqueLayerMask = value;
             }
         }
-        public TransparencySortMode transparencySortMode
-        {
-            get => m_transparencySortMode;
-            set
-            {
-                SetDirty();
-                m_transparencySortMode = value;
-            }
-        }
-        public Vector3 transparencySortAxis
-        {
-            get => m_transparencySortAxis;
-            set
-            {
-                SetDirty();
-                m_transparencySortAxis = value;
-            }
-        }
+
         /// <summary>
         /// Use this to configure how to filter transparent objects.
         /// </summary>
@@ -364,7 +359,7 @@ namespace UnityEngine.Rendering.Universal
         /// </summary>
         public bool usesClusterLightLoop => m_RenderingMode == RenderingMode.ForwardPlus ||
                                             m_RenderingMode == RenderingMode.DeferredPlus;
-        
+
         internal override bool stripShadowsOffVariants
         {
             get => m_StripShadowsOffVariants;
@@ -419,6 +414,10 @@ namespace UnityEngine.Rendering.Universal
                 m_CopyDepthMode = CopyDepthMode.AfterOpaques;
             }
 
+            if (m_AssetVersion <= 2)
+            {
+                m_PrepassLayerMask = m_OpaqueLayerMask;
+            }
 
             m_AssetVersion = k_LatestAssetVersion;
         }

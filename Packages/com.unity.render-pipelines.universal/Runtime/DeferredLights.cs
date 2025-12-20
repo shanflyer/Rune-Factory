@@ -219,10 +219,6 @@ namespace UnityEngine.Rendering.Universal.Internal
         internal GraphicsFormat[] GbufferFormats { get; set; }
         internal RTHandle DepthAttachmentHandle { get; set; }
 
-        // Render Graph only.
-        // True if GBuffer pass has previously been recorded this frame. If false, GBuffers might not contain valid data.
-        internal bool IsGBufferValid { get; set; }
-
         // Visible lights indices rendered using stencil volumes.
         NativeArray<ushort> m_stencilVisLights;
         // Offset of each type of lights in m_stencilVisLights.
@@ -337,20 +333,9 @@ namespace UnityEngine.Rendering.Universal.Internal
 
             Camera camera = cameraData.camera;
 
-#if ENABLE_VR && ENABLE_XR_MODULE
-            // Use eye texture's scaled width and height as screen params when XR is enabled
-            if (cameraData.xr.enabled)
-            {
-                this.RenderWidth  = camera.allowDynamicResolution ? cameraData.xr.renderTargetScaledWidth : cameraTargetSizeCopy.x;
-                this.RenderHeight = camera.allowDynamicResolution ? cameraData.xr.renderTargetScaledHeight : cameraTargetSizeCopy.y;
-            }
-            else
-#endif
-            {
-                // Support for dynamic resolution.
-                this.RenderWidth = camera.allowDynamicResolution ? Mathf.CeilToInt(ScalableBufferManager.widthScaleFactor * cameraTargetSizeCopy.x) : cameraTargetSizeCopy.x;
-                this.RenderHeight = camera.allowDynamicResolution ? Mathf.CeilToInt(ScalableBufferManager.heightScaleFactor * cameraTargetSizeCopy.y) : cameraTargetSizeCopy.y;
-            }
+            // Support for dynamic resolution.
+            this.RenderWidth = camera.allowDynamicResolution ? Mathf.CeilToInt(ScalableBufferManager.widthScaleFactor * cameraTargetSizeCopy.x) : cameraTargetSizeCopy.x;
+            this.RenderHeight = camera.allowDynamicResolution ? Mathf.CeilToInt(ScalableBufferManager.heightScaleFactor * cameraTargetSizeCopy.y) : cameraTargetSizeCopy.y;
 
             if (!m_UseDeferredPlus)
             {
@@ -429,10 +414,6 @@ namespace UnityEngine.Rendering.Universal.Internal
                     }
                 }
             }
-            // Once the mixed lighting mode has been discovered, we know how many MRTs we need for the gbuffer.
-            // Subtractive mixed lighting requires shadowMask output, which is actually used to store unity_ProbesOcclusion values.
-
-            CreateGbufferResources();
         }
 
         // In cases when custom pass is injected between GBuffer and Deferred passes we need to fallback
@@ -491,6 +472,39 @@ namespace UnityEngine.Rendering.Universal.Internal
                     this.GbufferAttachments[i] = this.GbufferRTHandles[i];
                     this.GbufferFormats[i] = this.GetGBufferFormat(i);
                 }
+            }
+        }
+
+        internal void CreateGbufferResourcesRenderGraph(RenderGraph renderGraph, UniversalResourceData resourceData)
+        {
+            int gbufferSliceCount = GBufferSliceCount;
+            if (GbufferTextureHandles == null || GbufferTextureHandles.Length != gbufferSliceCount)
+            {
+                GbufferFormats = new GraphicsFormat[gbufferSliceCount];
+                GbufferTextureHandles = new TextureHandle[gbufferSliceCount];
+            }
+
+            bool useCameraRenderingLayersTexture = UseRenderingLayers && !UseLightLayers;
+            Debug.Assert(resourceData.cameraColor.IsValid(), "Deferred Renderer assumes that the intermediate (color) texture is available.");
+
+            for (int i = 0; i < gbufferSliceCount; ++i)
+            {
+                GbufferFormats[i] = GetGBufferFormat(i);
+
+                if (i == GBufferNormalSmoothnessIndex && HasNormalPrepass)
+                    GbufferTextureHandles[i] = resourceData.cameraNormalsTexture;
+                else if (i == GBufferRenderingLayers && useCameraRenderingLayersTexture)
+                    GbufferTextureHandles[i] = resourceData.renderingLayersTexture;
+                else if (i != GBufferLightingIndex)
+                {
+                    var gbufferSlice = resourceData.cameraColor.GetDescriptor(renderGraph);
+                    gbufferSlice.format = GetGBufferFormat(i);
+                    gbufferSlice.name = k_GBufferNames[i];
+                    gbufferSlice.clearBuffer = true;
+                    GbufferTextureHandles[i] = renderGraph.CreateTexture(gbufferSlice);
+                }
+                else
+                    GbufferTextureHandles[i] = resourceData.cameraColor;
             }
         }
 
@@ -565,7 +579,6 @@ namespace UnityEngine.Rendering.Universal.Internal
         internal void Setup(AdditionalLightsShadowCasterPass additionalLightsShadowCasterPass)
         {
             m_AdditionalLightsShadowCasterPass = additionalLightsShadowCasterPass;
-            IsGBufferValid = false;
         }
 
         public void OnCameraCleanup(CommandBuffer cmd)
@@ -665,10 +678,10 @@ namespace UnityEngine.Rendering.Universal.Internal
             if (!UseFramebufferFetch)
             {
                 Material deferredMaterial = m_UseDeferredPlus ? m_ClusterDeferredMaterial : m_StencilDeferredMaterial;
-                for (int i = 0; i < GbufferTextureHandles.Length; i++)
+                for (int i = 0; i < GbufferRTHandles.Length; i++)
                 {
                     if (i != GBufferLightingIndex)
-                        deferredMaterial.SetTexture(k_GBufferShaderPropertyIDs[i], GbufferTextureHandles[i]);
+                        deferredMaterial.SetTexture(k_GBufferShaderPropertyIDs[i], GbufferRTHandles[i]);
                 }
             }
 
