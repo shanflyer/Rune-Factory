@@ -423,95 +423,6 @@ namespace UnityEditor.U2D.Sprites
         }
     }
 
-    [Serializable]
-    struct EditCapabilityUndoData
-    {
-        public EditCapability data;
-        public EditCapability originalData;
-    }
-
-    [Serializable]
-    class EditCapabilityUndoObject : ScriptableObject
-    {
-        [SerializeField]
-        EditCapabilityUndoData m_Data;
-
-        [SerializeField]
-        int m_Version = 0;
-        int m_CurrentVersion = 0;
-
-        public static EditCapabilityUndoObject CreateInstance(EditCapability data)
-        {
-            var undoObject = CreateInstance<EditCapabilityUndoObject>();
-            undoObject.hideFlags = HideFlags.HideAndDontSave;
-            undoObject.Init(data);
-            return undoObject;
-        }
-
-        public void Init(EditCapability data)
-        {
-            m_Data = new EditCapabilityUndoData()
-            {
-                data = data,
-                originalData = data
-            };
-        }
-
-        public string SaveData()
-        {
-            return JsonUtility.ToJson(m_Data);
-        }
-
-        public bool LoadData(string data)
-        {
-            try
-            {
-                var previous = JsonUtility.FromJson<EditCapabilityUndoData>(data);
-                m_Data.data = previous.data;
-                return true;
-            }
-            catch (Exception)
-            {
-                // nothing to do here.
-            }
-
-            return false;
-
-        }
-
-        public void RegisterUndo(IUndoSystem undoSystem, EditCapability data, string undoMessage)
-        {
-            if (!data.Equals(m_Data))
-            {
-                undoSystem.RegisterCompleteObjectUndo(this, undoMessage);
-                m_Data.data = data;
-                m_CurrentVersion++;
-                m_Version = m_CurrentVersion;
-            }
-        }
-
-        public void SetData(EditCapability data)
-        {
-            m_Data.data = data;
-        }
-
-        public EditCapability data => m_Data.data;
-        public EditCapability originalData => m_Data.originalData;
-
-        public bool VersionChanged(bool resetVersion)
-        {
-            bool returnValue = m_CurrentVersion != m_Version;
-            if (resetVersion)
-                m_CurrentVersion = m_Version;
-            return returnValue;
-        }
-
-        public void Dispose()
-        {
-            UnityEditor.Undo.ClearUndo(this);
-        }
-    }
-
     internal abstract partial class SpriteFrameModuleBase : SpriteEditorModuleModeSupportBase
     {
         [Serializable]
@@ -529,7 +440,6 @@ namespace UnityEditor.U2D.Sprites
         string m_ModuleName;
         protected EditCapabilityUndoObject m_CurrentEditEditCapability;
         protected event Action m_OnUndoCallback;
-        bool m_Undoing = false;
 
         internal enum PivotUnitMode
         {
@@ -580,11 +490,12 @@ namespace UnityEditor.U2D.Sprites
         {
             if (m_CurrentEditEditCapability != null)
             {
-                undoSystem.ClearUndo(m_CurrentEditEditCapability);
-                ScriptableObject.DestroyImmediate(m_CurrentEditEditCapability);
+                UndoObject.Dispose(m_CurrentEditEditCapability);
+                m_CurrentEditEditCapability = null;
             }
             var capability = m_FrameEditCapability?.GetEditCapability() ??EditCapability.defaultCapability;
-            m_CurrentEditEditCapability = EditCapabilityUndoObject.CreateInstance(capability);
+            m_CurrentEditEditCapability = UndoObject.Create<EditCapabilityUndoObject, EditCapability>(capability, undoSystem);
+            m_CurrentEditEditCapability.originalData = capability;
         }
 
         void OnTextureDataProviderChanged(ITextureDataProvider obj)
@@ -648,10 +559,7 @@ namespace UnityEditor.U2D.Sprites
         {
             var data = m_CurrentEditEditCapability.data;
             data.SetCapability(arg1, arg2);
-            if (!m_Undoing)
-                m_CurrentEditEditCapability.RegisterUndo(undoSystem, data, "Change Edit Capability");
-            else
-                m_CurrentEditEditCapability.SetData(data);
+            m_CurrentEditEditCapability.SetData(data, "Change Edit Capability");
             spriteEditor.RequestRepaint();
             PopulateSpriteFrameInspectorField();
         }
@@ -764,7 +672,7 @@ namespace UnityEditor.U2D.Sprites
             get
             {
                 return pivotUnitMode == PivotUnitMode.Pixels
-                    ? ConvertFromNormalizedToRectSpace(selectedSpritePivot, selectedSpriteRect_Rect)
+                    ? SpritePivotUtility.ConvertFromNormalizedToRectSpace(selectedSpritePivot, selectedSpriteRect_Rect)
                     : selectedSpritePivot;
             }
         }
@@ -901,9 +809,9 @@ namespace UnityEditor.U2D.Sprites
             outPivot.y = Mathf.Round(pivot.y / unitsPerPixelY) * unitsPerPixelY;
         }
 
-        private void UndoCallback()
+        protected virtual void UndoCallback()
         {
-            m_Undoing = true;
+            UndoObject.BeginUndo();
             if(m_RectsCache.VersionChanged(true))
                 NotifyOnSpriteRectChanged();
             if (m_CurrentEditEditCapability.VersionChanged(true))
@@ -913,7 +821,7 @@ namespace UnityEditor.U2D.Sprites
             }
 
             UIUndoCallback();
-            m_Undoing = false;
+            UndoObject.EndUndo();
         }
 
         protected static Rect ClampSpriteRect(Rect rect, float maxX, float maxY)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -68,6 +69,11 @@ namespace UnityEditor.U2D.Sprites
             spriteEditor.SetPreviewTexture(texture, width, height);
         }
 
+        public void GetPreviewTexture(out Texture2D texture, out int width, out int height)
+        {
+            spriteEditor.GetPreviewTexture(out texture, out width, out height);
+        }
+
         public virtual void ResetZoomAndScroll()
         {
             spriteEditor.ResetZoomAndScroll();
@@ -97,6 +103,15 @@ namespace UnityEditor.U2D.Sprites
             set => spriteEditor.mipLevel = value;
         }
 
+        public virtual T GetOverlay<T>(string overlayId) where T : Overlays.Overlay
+        {
+            return spriteEditor.GetOverlay<T>(overlayId);
+        }
+
+        public void SetScenePreviewCallback(Action<GameObject[]> callback)
+        {
+            spriteEditor.SetScenePreviewCallback(callback);
+        }
         #endregion
     }
 }

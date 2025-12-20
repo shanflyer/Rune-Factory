@@ -7,7 +7,7 @@ namespace UnityEditor.U2D.Sprites
     internal class SpriteFrameCapabilityWindow : EditorWindow
     {
         static long s_LastClosedTime;
-        static string s_WarningText = "Editing data from {0} will be deprecated. Unlocking fields for editing is temporary. This will be removed in a future version.";
+        static string s_WarningText = "Editing data from {0} is deprecated. Unlocking fields for editing is temporarily available for now, but this option may be removed in a future version.";
         Action<EEditCapability, bool> m_OnCapabilityChangedCallback;
         Action<Action, bool> m_OnUndoRedoPerformedCallback;
         EditCapabilityUndoObject m_Capability;

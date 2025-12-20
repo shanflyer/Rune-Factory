@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Text;
 using UnityTexture2D = UnityEngine.Texture2D;
 using UnityEditor.ShortcutManagement;
+using UnityEditor.U2D.Sprites.Overlay;
+using UnityEditor.U2D.Sprites.SpriteFrameEditor;
 using Object = UnityEngine.Object;
 
 namespace UnityEditor.U2D.Sprites
@@ -22,8 +24,10 @@ namespace UnityEditor.U2D.Sprites
 
         private bool[] m_AlphaPixelCache;
         SpriteFrameModuleContext m_SpriteFrameModuleContext;
+        SpriteFrameModeOverlay m_ModeOverlay;
         public event Action onModuleDeactivated = () => { };
-        SpriteEditorModeBase m_CurrentMode = null;
+        ISpriteEditorModuleMode m_CurrentModuleMode = null;
+        SpriteFrameModeUndoObject m_ModeChangeUndoObject;
 
         private StringBuilder m_SpriteNameStringBuilder;
         bool m_SpriteRectValidated = false;
@@ -36,6 +40,7 @@ namespace UnityEditor.U2D.Sprites
             set => m_PotentialRects = value;
         }
         internal static Func<string, string, string, string, string, int> onShowComplexDialog = EditorUtility.DisplayDialogComplex;
+        internal static Func<string, string, string, string, bool> onShowDialog = EditorUtility.DisplayDialog;
         public SpriteFrameModule(ISpriteEditor sw, IEventSystem es, IUndoSystem us, IAssetDatabase ad) :
             base("Sprite Editor", sw, es, us, ad)
         {}
@@ -45,32 +50,35 @@ namespace UnityEditor.U2D.Sprites
             base.SetModuleModes(modes);
             foreach (var mode in this.modes)
             {
-                mode.RegisterOnModeRequestActivate(OnModuleExtensionActivate);
+                mode.onModeRequestActivate += OnModuleModeRequestActivate;
             }
         }
 
-        void OnModuleExtensionActivate(SpriteEditorModeBase activatingMode)
+        public void OnModuleModeRequestActivate(ISpriteEditorModuleMode activatingModuleMode)
         {
-            m_CurrentMode?.DeactivateMode();
-            m_CurrentMode = activatingMode;
-            var activated = m_CurrentMode?.ActivateMode();
+            if (activatingModuleMode == null)
+                activatingModuleMode = GetDefaultMode();
+            if (activatingModuleMode == m_CurrentModuleMode)
+                return;
+            var oldMode = m_CurrentModuleMode;
+            m_CurrentModuleMode?.DeactivateMode();
+            m_CurrentModuleMode = activatingModuleMode;
+            var activated = m_CurrentModuleMode?.ActivateMode();
             // Mode did not activate
             if(activated.HasValue && !activated.Value)
             {
-                m_CurrentMode = null;
+                m_CurrentModuleMode?.DeactivateMode();
+                m_CurrentModuleMode = oldMode;
+                //Reactivate old mode
+                m_CurrentModuleMode?.ActivateMode();
             }
-
-            bool modeNull = m_CurrentMode == null;
-            if (modeNull)
-            {
-                spriteEditor.spriteRects = m_RectsCache.GetSpriteRects();
-            }
-            EnableInspector(modeNull);
         }
 
         public override bool ApplyRevert(bool apply)
         {
             var returnValue = base.ApplyRevert(apply);
+            if (!apply)
+                ClearTextureOverride();
             var dataProviderApplied = new HashSet<Type>();
             dataProviderApplied.Add(typeof(ISpriteEditorDataProvider));
             foreach(var mode in modes)
@@ -80,6 +88,35 @@ namespace UnityEditor.U2D.Sprites
             if(apply)
                 m_SourceOverrideCallback?.Invoke(spriteAssetPath);
             return returnValue;
+        }
+
+        public void OnModeActivate(SpriteFrameModeToolStripBase arg2)
+        {
+            if (!UndoObject.undoing)
+            {
+                if (m_ModeChangeUndoObject == null)
+                {
+                    m_ModeChangeUndoObject = UndoObject.Create<SpriteFrameModeUndoObject, EquatableType>(arg2.GetType(), undoSystem);
+                }
+                else
+                {
+                    m_ModeChangeUndoObject.SetData(arg2.GetType(), "Change Mode");
+                }
+            }
+        }
+
+        protected override void UndoCallback()
+        {
+            base.UndoCallback();
+            UndoObject.BeginUndo();
+            if (m_ModeChangeUndoObject != null && m_ModeChangeUndoObject.VersionChanged(true))
+            {
+                var modeToolStrip = m_ModeOverlay.GetSpriteFrameModeToolStrip(m_ModeChangeUndoObject.data);
+                m_ModeOverlay.OnOverlayToggleCallback(modeToolStrip);
+                var moduleMode = GetModeByType(modeToolStrip.GetSpriteFrameModeType());
+                moduleMode?.RequestModeToActivate();
+            }
+            UndoObject.EndUndo();
         }
 
         class SpriteFrameModuleContext : IShortcutContext
@@ -115,6 +152,14 @@ namespace UnityEditor.U2D.Sprites
         public override void OnModuleActivate()
         {
             base.OnModuleActivate();
+            m_ModeOverlay = spriteEditor.GetOverlay<SpriteFrameModeOverlay>(SpriteFrameModeOverlay.k_OverlayId);
+            if (m_ModeOverlay != null)
+            {
+                m_ModeOverlay.Activate(this);
+                var defaultMode = GetDefaultMode();
+                OnModuleModeRequestActivate(defaultMode);
+                m_ModeOverlay.OnOverlayToggleCallback(GetDefaultToolStrip());
+            }
             m_SpriteRectValidated = false;
             spriteEditor.enableMouseMoveEvent = true;
             m_SpriteFrameModuleContext = new SpriteFrameModuleContext(this);
@@ -125,6 +170,30 @@ namespace UnityEditor.U2D.Sprites
             SignalModuleActivate();
         }
 
+        SpriteFrameModeToolStripBase GetDefaultToolStrip()
+        {
+            return m_ModeOverlay.GetSpriteFrameModeToolStrip(typeof(SpriteFrameEditorModeToggle));
+        }
+
+        ISpriteEditorModuleMode GetDefaultMode()
+        {
+            var defaultModeToggleStrip = GetDefaultToolStrip();
+            var moduleModeType = defaultModeToggleStrip.GetSpriteFrameModeType();
+            return GetModeByType(moduleModeType);
+        }
+
+        ISpriteEditorModuleMode GetModeByType(Type t)
+        {
+            foreach (var mode in modes)
+            {
+                if (mode.GetType() == t)
+                {
+                    return mode;
+                }
+            }
+            return null;
+        }
+
         void ValidateSpriteRects()
         {
             if (m_TextureDataProvider != null && !m_SpriteRectValidated)
@@ -132,8 +201,12 @@ namespace UnityEditor.U2D.Sprites
                 m_SpriteRectValidated = true;
                 int width, height;
                 m_TextureDataProvider.GetTextureActualWidthAndHeight(out width, out height);
+                HashSet<GUID> spriteIDs = new HashSet<GUID>();
+                var emptyGuid = new GUID();
+                List<SpriteRect> updatedSpriteRectID = new List<SpriteRect>();
                 for (int i = 0; i < m_RectsCache.spriteRects.Count; ++i)
                 {
+                    // Validate rect is still within the bounds of the texture
                     var s = m_RectsCache.spriteRects[i];
                     if(s.rect.x < 0 || s.rect.y < 0 || s.rect.xMax > width || s.rect.yMax > height)
                     {
@@ -151,6 +224,24 @@ namespace UnityEditor.U2D.Sprites
                                 break;
                         }
                     }
+
+                    // Validate sprite id uniqueness
+                    var spriteId = s.spriteID;
+                    if (spriteId == emptyGuid || spriteIDs.Contains(spriteId))
+                    {
+                        if (onShowDialog("Invalid Sprite ID", $"Sprite Rect {s.name} has an invalid ID.\nSprite with invalid ID can result in Sprite reference breakage.", "Reassign ID", "Keep"))
+                        {
+                            updatedSpriteRectID.Add(s);
+                        }
+                    }
+                    spriteIDs.Add(spriteId);
+                }
+                for(int i = 0; i < updatedSpriteRectID.Count; ++i)
+                {
+                    m_RectsCache.Remove(updatedSpriteRectID[i]);
+                    updatedSpriteRectID[i].spriteID = GUID.Generate();
+                    m_RectsCache.Add(updatedSpriteRectID[i], true);
+                    SetDataModified();
                 }
             }
         }
@@ -158,22 +249,26 @@ namespace UnityEditor.U2D.Sprites
         public override void OnModuleDeactivate()
         {
             base.OnModuleDeactivate();
+            m_CurrentModuleMode?.DeactivateMode();
+            m_CurrentModuleMode = null;
+            m_ModeOverlay?.Deactivate();
+            m_ModeOverlay = null;
             EditorApplication.delayCall -= ValidateSpriteRects;
             m_SpriteRectValidated = true;
             ShortcutIntegration.instance.contextManager.DeregisterToolContext(m_SpriteFrameModuleContext);
             m_PotentialRects = null;
             m_AlphaPixelCache = null;
-            m_CurrentMode?.DeactivateMode();
-            m_CurrentMode = null;
             UnregisterDataChangeCallback(OnTextureDataProviderDataChanged);
             CleanUpDataDataProviderOverride();
             foreach (var mode in modes)
             {
-                mode.UnregisterOnModeRequestActivate(OnModuleExtensionActivate);
+                mode.onModeRequestActivate -= OnModuleModeRequestActivate;
             }
             if(m_TextureToSlice != null)
                 Object.DestroyImmediate(m_TextureToSlice);
             modes.Clear();
+            UndoObject.Dispose(m_ModeChangeUndoObject);
+            m_ModeChangeUndoObject = null;
             onModuleDeactivated();
         }
 
@@ -191,7 +286,8 @@ namespace UnityEditor.U2D.Sprites
 
         public override bool CanBeActivated()
         {
-            return GetSpriteImportMode(spriteEditor.GetDataProvider<ISpriteEditorDataProvider>()) != SpriteImportMode.Polygon;
+            var mode = GetSpriteImportMode(spriteEditor.GetDataProvider<ISpriteEditorDataProvider>());
+            return mode != SpriteImportMode.Polygon && mode != SpriteImportMode.None;
         }
 
         private string GenerateSpriteNameWithIndex(int startIndex)
@@ -222,7 +318,7 @@ namespace UnityEditor.U2D.Sprites
             return Path.GetFileNameWithoutExtension(spriteAssetPath);
         }
 
-        public void DoAutomaticSlicing(int minimumSpriteSize, int alignment, Vector2 pivot, AutoSlicingMethod slicingMethod)
+        public void DoAutomaticSlicing(int minimumSpriteSize, int alignment, Vector2 pivot, Vector2 pivotPixels, PivotUnitMode pivotUnitMode, AutoSlicingMethod slicingMethod)
         {
             m_RectsCache.RegisterUndo(undoSystem, "Automatic Slicing");
 
@@ -238,7 +334,12 @@ namespace UnityEditor.U2D.Sprites
             int originalCount = m_RectsCache.spriteRects.Count;
 
             foreach (Rect frame in frames)
-                m_RectsCache.AddSprite(frame, alignment, pivot, slicingMethod, originalCount, ref index, GenerateSpriteNameWithIndex);
+            {
+                var framePivot = pivot;
+                if (pivotUnitMode == PivotUnitMode.Pixels)
+                    framePivot = pivotPixels / frame.size;
+                m_RectsCache.AddSprite(frame, alignment, framePivot, slicingMethod, originalCount, ref index, GenerateSpriteNameWithIndex);
+            }
 
             if (slicingMethod == AutoSlicingMethod.DeleteAll)
                 m_RectsCache.ClearUnusedFileID();
@@ -445,6 +546,11 @@ namespace UnityEditor.U2D.Sprites
             }
 
             return onlyDefaultNames;
+        }
+
+        public List<SpriteRect> GetSpriteRectWorkingData()
+        {
+            return m_RectsCache.GetSpriteRects();
         }
     }
 }

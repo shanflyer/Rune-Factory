@@ -38,11 +38,15 @@ namespace UnityEditor.U2D.Sprites
         [SerializeField]
         public Vector2 gridSpritePadding = new Vector2(0, 0);
         [SerializeField]
-        public Vector2 pivot = Vector2.zero;
+        public Vector2 pivot = new Vector2(0.5f, 0.5f);
+        [SerializeField]
+        public Vector2 pivotPixels = Vector2.zero;
         [SerializeField]
         public int autoSlicingMethod = (int)SpriteFrameModule.AutoSlicingMethod.DeleteAll;
         [SerializeField]
         public int spriteAlignment;
+        [SerializeField]
+        public SpriteFrameModuleBase.PivotUnitMode pivotUnitMode = SpriteFrameModuleBase.PivotUnitMode.Normalized;
         [SerializeField]
         public SlicingType slicingType;
         [SerializeField]
@@ -105,6 +109,7 @@ namespace UnityEditor.U2D.Sprites
 
             public readonly GUIContent methodLabel = EditorGUIUtility.TrTextContent("Method");
             public readonly GUIContent pivotLabel = EditorGUIUtility.TrTextContent("Pivot");
+            public readonly GUIContent pivotUnitMode = EditorGUIUtility.TrTextContent("Pivot Unit Mode");
             public readonly GUIContent typeLabel = EditorGUIUtility.TrTextContent("Type");
             public readonly GUIContent sliceOnImportLabel = EditorGUIUtility.TrTextContent("Slice on Import", "Re-slices sprites from Texture when Texture is imported using slice settings if sliced before");
             public readonly GUIContent sliceButtonLabel = EditorGUIUtility.TrTextContent("Slice");
@@ -121,11 +126,20 @@ namespace UnityEditor.U2D.Sprites
             public readonly GUIContent keepEmptyRectsLabel = EditorGUIUtility.TrTextContent("Keep Empty Rects");
             public readonly GUIContent isAlternateLabel = EditorGUIUtility.TrTextContent("Is Alternate");
 
+            public readonly GUIContent copyLabel = EditorGUIUtility.TrTextContent("Copy");
+            public readonly GUIContent pasteLabel = EditorGUIUtility.TrTextContent("Paste");
+
             public readonly string deleteExistingTitle = L10n.Tr("Potential loss of Sprite data");
             public readonly string deleteExistingMessage = L10n.Tr("The Delete Existing slicing method recreates all Sprites with their default names. Renamed Sprites will lose their data in the process, and references to these Sprites will be lost. \n\nDo you wish you continue?");
             public readonly string yes = L10n.Tr("Yes");
             public readonly string no = L10n.Tr("No");
         }
+
+        private bool isAutomaticAndPixelPivot =>
+            (s_Setting.slicingType == SpriteEditorMenuSetting.SlicingType.Automatic &&
+             s_Setting.pivotUnitMode == SpriteFrameModuleBase.PivotUnitMode.Pixels);
+
+        internal bool sliceOnImport => s_SettingsObject.settings.sliceOnImport;
 
         internal List<Rect> GetPotentialRects()
         {
@@ -190,7 +204,7 @@ namespace UnityEditor.U2D.Sprites
                 m_CustomDataProvider.GetData(SpriteEditorMenuSetting.kSliceOnImportKey, out var sliceOnImportData);
                 if (!String.IsNullOrEmpty(sliceOnImportData))
                 {
-                    if (Boolean.TryParse(sliceOnImportData, out s_Setting.sliceOnImport))
+                    if (Boolean.TryParse(sliceOnImportData, out var sliceOnImportValue))
                     {
                         m_CustomDataProvider.GetData(SpriteEditorMenuSetting.kSliceSettingsKey, out var sliceSettingsData);
                         if (!String.IsNullOrEmpty(sliceSettingsData))
@@ -205,12 +219,13 @@ namespace UnityEditor.U2D.Sprites
                                 Debug.LogError($"Texture ({m_TextureDataProvider.texture.name}) has invalid slice settings serialized: {sliceSettingsData}");
                             }
                         }
+                        s_Setting.sliceOnImport = sliceOnImportValue;
                     }
                 }
             }
 
             buttonRect = GUIUtility.GUIToScreenRect(buttonRect);
-            const float windowHeight = 255f;
+            const float windowHeight = 275f;
             var windowSize = new Vector2(300, windowHeight);
             ShowAsDropDown(buttonRect, windowSize);
 
@@ -290,7 +305,9 @@ namespace UnityEditor.U2D.Sprites
                 s_Setting.sliceOnImport = EditorGUILayout.Toggle(s_Styles.sliceOnImportLabel, s_Setting.sliceOnImport);
                 if (EditorGUI.EndChangeCheck() && m_CustomDataProvider != null)
                 {
+                    var sliceSettingsData = JsonUtility.ToJson(s_Setting);
                     m_CustomDataProvider.SetData(SpriteEditorMenuSetting.kSliceOnImportKey, s_Setting.sliceOnImport.ToString());
+                    m_CustomDataProvider.SetData(SpriteEditorMenuSetting.kSliceSettingsKey, sliceSettingsData);
                     m_SpriteFrameModule.spriteEditor.SetDataModified();
                 }
             }
@@ -563,6 +580,15 @@ namespace UnityEditor.U2D.Sprites
             }
         }
 
+        private void SavePivot(Vector2 pivot, Rect spriteRect)
+        {
+            s_Setting.pivot = s_Setting.pivotUnitMode == SpriteFrameModuleBase.PivotUnitMode.Pixels
+                ? SpritePivotUtility.ConvertFromRectToNormalizedSpace(pivot, spriteRect)
+                : pivot;
+            if (isAutomaticAndPixelPivot)
+                s_Setting.pivotPixels = pivot;
+        }
+
         private void DoPivotGUI()
         {
             EditorGUI.BeginChangeCheck();
@@ -575,7 +601,23 @@ namespace UnityEditor.U2D.Sprites
                 s_Setting.pivot = SpriteEditorUtility.GetPivotValue((SpriteAlignment)alignment, s_Setting.pivot);
             }
 
+            EditorGUI.BeginChangeCheck();
+            var pivotUnitMode = (SpriteFrameModuleBase.PivotUnitMode) EditorGUILayout.EnumPopup(s_Styles.pivotUnitMode, s_Setting.pivotUnitMode);
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RegisterCompleteObjectUndo(s_SettingsObject, "Change Pivot Unit Mode");
+                s_Setting.pivotUnitMode = pivotUnitMode;
+            }
+
+            var cellSize = s_Setting.gridSpriteSize;
+            if (s_Setting.slicingType == SpriteEditorMenuSetting.SlicingType.GridByCellCount)
+                DetermineGridCellSizeWithCellCount(out cellSize);
+            var spriteRect = new Rect(Vector2.zero, cellSize);
             Vector2 pivot = s_Setting.pivot;
+            pivot = pivotUnitMode == SpriteFrameModuleBase.PivotUnitMode.Pixels
+                ? SpritePivotUtility.ConvertFromNormalizedToRectSpace(pivot, spriteRect)
+                : pivot;
+            pivot = isAutomaticAndPixelPivot ? s_Setting.pivotPixels : pivot;
             EditorGUI.BeginChangeCheck();
             using (new EditorGUI.DisabledScope(alignment != (int)SpriteAlignment.Custom))
             {
@@ -584,15 +626,37 @@ namespace UnityEditor.U2D.Sprites
             if (EditorGUI.EndChangeCheck())
             {
                 Undo.RegisterCompleteObjectUndo(s_SettingsObject, "Change custom pivot");
+                SavePivot(pivot, spriteRect);
+            }
 
-                s_Setting.pivot = pivot;
+            var current = UnityEvent.current;
+            if (alignment == (int)SpriteAlignment.Custom
+                && current.type == EventType.MouseDown
+                && current.button == 1
+                && EditorGUILayout.s_LastRect.Contains(current.mousePosition))
+            {
+                GenericMenu menu = new GenericMenu();
+                menu.AddItem(s_Styles.copyLabel, false, () => { Clipboard.vector2Value = pivot;});
+                if (Clipboard.hasVector2)
+                    menu.AddItem(s_Styles.pasteLabel, false, () =>
+                    {
+                        SavePivot(Clipboard.vector2Value, spriteRect);
+                    });
+                else if (Clipboard.hasVector3)
+                    menu.AddItem(s_Styles.pasteLabel, false, () =>
+                    {
+                        SavePivot(Clipboard.vector3Value, spriteRect);
+                    });
+                else
+                    menu.AddDisabledItem(s_Styles.pasteLabel);
+                menu.ShowAsContext();
             }
         }
 
         private void DoAutomaticSlicing()
         {
             // 4 seems to be a pretty nice min size for a automatic sprite slicing. It used to be exposed to the slicing dialog, but it is actually better workflow to slice&crop manually than find a suitable size number
-            m_SpriteFrameModule.DoAutomaticSlicing(4, s_Setting.spriteAlignment, s_Setting.pivot, (SpriteFrameModule.AutoSlicingMethod)s_Setting.autoSlicingMethod);
+            m_SpriteFrameModule.DoAutomaticSlicing(4, s_Setting.spriteAlignment, s_Setting.pivot, s_Setting.pivotPixels, s_Setting.pivotUnitMode, (SpriteFrameModule.AutoSlicingMethod)s_Setting.autoSlicingMethod);
         }
 
         private void DoGridSlicing()

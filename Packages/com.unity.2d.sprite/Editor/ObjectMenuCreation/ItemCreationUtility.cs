@@ -57,32 +57,32 @@ namespace UnityEditor.U2D
             var destName = AssetDatabase.GenerateUniqueAssetPath(Path.Combine(path, name));
             var newObject = Activator.CreateInstance<T>();
             var icon = EditorGUIUtility.IconContent<T>().image as Texture2D;
-            StartNewAssetNameEditing(null, destName, icon, newObject.GetInstanceID());
+            StartNewAssetNameEditing(null, destName, icon, newObject.GetEntityId());
             return Selection.activeObject as T;
         }
 
-        static private void StartNewAssetNameEditing(string source, string dest, Texture2D icon, int instanceId)
+        static private void StartNewAssetNameEditing(string source, string dest, Texture2D icon, int entityId)
         {
             var action = ScriptableObject.CreateInstance<CreateAssetEndNameEditAction>();
-            StartNewAssetNameEditingDelegate(instanceId, action, dest, icon, source);
+            StartNewAssetNameEditingDelegate(entityId, action, dest, icon, source);
         }
 
         internal class CreateAssetEndNameEditAction : ProjectWindowCallback.EndNameEditAction
         {
-            public override void Action(int instanceId, string pathName, string resourceFile)
+            public override void Action(int entityId, string pathName, string resourceFile)
             {
                 var uniqueName = AssetDatabase.GenerateUniqueAssetPath(pathName);
-                if (instanceId == ProjectBrowser.kAssetCreationInstanceID_ForNonExistingAssets && !string.IsNullOrEmpty(resourceFile))
+                if (entityId == ProjectBrowser.kAssetCreationInstanceID_ForNonExistingAssets && !string.IsNullOrEmpty(resourceFile))
                 {
                     AssetDatabase.CopyAsset(resourceFile, uniqueName);
-                    instanceId = AssetDatabase.LoadMainAssetAtPath(uniqueName).GetInstanceID();
+                    entityId = AssetDatabase.LoadMainAssetAtPath(uniqueName).GetEntityId();
                 }
                 else
                 {
-                    var obj = EditorUtility.InstanceIDToObject(instanceId);
+                    var obj = EditorUtility.EntityIdToObject(entityId);
                     AssetDatabase.CreateAsset(obj, uniqueName);
                 }
-                ProjectWindowUtil.FrameObjectInProjectWindow(instanceId);
+                ProjectWindowUtil.FrameObjectInProjectWindow(entityId);
             }
         }
     }

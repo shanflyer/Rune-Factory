@@ -80,7 +80,7 @@ namespace UnityEditor.U2D.Sprites
             var physicsShape = m_Outline[spriteRect.spriteID];
             var physicsShapes = GenerateSpriteRectOutline(spriteRect.rect,
                 Math.Abs(physicsShape.tessellationDetail - (-1f)) < Mathf.Epsilon ? kDefaultPhysicsTessellationDetail : physicsShape.tessellationDetail,
-                (byte) alphaTolerance, m_TextureDataProvider, m_SpriteOutlineToolElement.optimizeOutline);
+                (byte) alphaTolerance, m_TextureDataProvider, m_SpriteOutlineToolElement.optimizeOutline, true);
             m_Outline[spriteRect.spriteID].spriteOutlines = physicsShapes;
             spriteEditorWindow.SetDataModified();
         }

@@ -80,6 +80,7 @@ namespace UnityEditor.U2D.Sprites
         Dictionary<string, string> m_CustomMetadata;
 
         SpriteImportMode m_SpriteImportMode = SpriteImportMode.None;
+        TextureImporterType m_TextureType = TextureImporterType.Default;
         SecondarySpriteTexture[] m_SecondaryTextureDataTransfer;
         SerializedObject m_CachedSerializedObject;
 
@@ -89,6 +90,7 @@ namespace UnityEditor.U2D.Sprites
             if (m_TextureImporter != null)
             {
                 m_SpriteImportMode = m_TextureImporter.spriteImportMode;
+                m_TextureType = m_TextureImporter.textureType;
                 m_CachedSerializedObject = new SerializedObject(m_TextureImporter);
             }
         }
@@ -107,7 +109,7 @@ namespace UnityEditor.U2D.Sprites
 
         public SpriteImportMode spriteImportMode
         {
-            get { return m_SpriteImportMode; }
+            get { return m_TextureType == TextureImporterType.Sprite ? m_SpriteImportMode : SpriteImportMode.None; }
         }
 
         SpriteRect[] ISpriteEditorDataProvider.GetSpriteRects()

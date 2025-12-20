@@ -189,6 +189,11 @@ namespace UnityEditor.U2D.Sprites
         }
 
         /// <summary>
+        /// Remove override textures previously set by OverrideTextures.
+        /// </summary>
+        void ClearOverrideTextures() { }
+
+        /// <summary>
         /// Registers a callback to override the source texture.
         /// </summary>
         /// <param name="action">Callback that will write to the source texture with the path of the source texture.</param>
@@ -239,23 +244,31 @@ namespace UnityEditor.U2D.Sprites
     /// <summary>Data Provider interface that deals with Sprite mesh data.</summary>
     public interface ISpriteMeshDataProvider
     {
-        /// <summary>Returns the list of vertex datas for the corresponding Sprite ID.</summary>
-        /// <param name = "guid" > Sprite ID.</param>
+        /// <summary>
+        /// Returns the list of vertex datas for the corresponding Sprite ID.
+        /// </summary>
+        /// <param name="guid">Sprite ID.</param>
+        /// <returns>Returns the vertices for the given Sprite ID.</returns>
         Vertex2DMetaData[] GetVertices(GUID guid);
         /// <summary>Sets a new list of vertices for the corresponding Sprite ID.</summary>
         /// <param name = "guid" > Sprite ID.</param>
+        /// <param name = "vertices" > The vertices to set for the Sprite ID.</param>
         void SetVertices(GUID guid, Vertex2DMetaData[] vertices);
         /// <summary>Returns the list of mesh index for the corresponding Sprite ID.</summary>
         /// <param name = "guid" > Sprite ID.</param>
+        /// <returns>Returns the indices for the given Sprite ID.</returns>
         int[] GetIndices(GUID guid);
         /// <summary>Sets a new list of indices for the corresponding Sprite ID.</summary>
         /// <param name = "guid" > Sprite ID.</param>
+        /// <param name = "indices" > The indices to set for the Sprite ID.</param>
         void SetIndices(GUID guid, int[] indices);
         /// <summary>Returns the list of mesh edges for the corresponding Sprite ID.</summary>
         /// <param name = "guid" > Sprite ID.</param>
+        /// <returns>Returns the edges for the given Sprite ID.</returns>
         Vector2Int[] GetEdges(GUID guid);
         /// <summary>Sets a new list of edges for the corresponding Sprite ID.</summary>
         /// <param name = "guid" > Sprite ID.</param>
+        /// <param name = "edges" > An array of Vector2Int representing the edges for the Sprite ID.</param>
         void SetEdges(GUID guid, Vector2Int[] edges);
     }
 

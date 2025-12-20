@@ -67,6 +67,8 @@ namespace UnityEditor
         /// <summary>
         /// Constructor to initialize name and fileID.
         /// </summary>
+        /// <param name="name">The name of the Sprite to record.</param>
+        /// <param name="fileId">The GUID of the Sprite to record.</param>
         public SpriteNameFileIdPair(string name, GUID fileId)
         {
             this.name = name;

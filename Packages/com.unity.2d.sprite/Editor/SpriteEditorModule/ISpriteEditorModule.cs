@@ -47,7 +47,7 @@ namespace UnityEditor.U2D.Sprites
     /// </summary>
     internal abstract class SpriteEditorModuleModeSupportBase : SpriteEditorModuleBase
     {
-        List<SpriteEditorModeBase> m_Modes = new();
+        List<ISpriteEditorModuleMode> m_Modes = new();
         event Action m_OnModuleActivate;
         /// <summary>
         /// Modes that the module can be activated as.
@@ -56,21 +56,29 @@ namespace UnityEditor.U2D.Sprites
         public virtual void SetModuleModes(IEnumerable<Type> modes)
         {
             m_Modes.Clear();
+            var modeInterfaceType = typeof(ISpriteEditorModuleMode);
             foreach (var t in modes)
             {
-                var mode = Activator.CreateInstance(t);
-                if (mode is SpriteEditorModeBase moduleMode)
+                if (modeInterfaceType.IsAssignableFrom(t))
                 {
-                    moduleMode.spriteEditor = modeSpriteEditor;
-                    if (moduleMode.CanBeActivated())
+                    try
                     {
-                        m_Modes.Add(moduleMode);
+                        var mode = Activator.CreateInstance(t) as ISpriteEditorModuleMode;
+                        mode.spriteEditor = modeSpriteEditor;
+                        if (mode.CanBeActivated())
+                        {
+                            m_Modes.Add(mode);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
                     }
                 }
             }
         }
 
-        public List<SpriteEditorModeBase> modes => m_Modes;
+        public List<ISpriteEditorModuleMode> modes => m_Modes;
         public virtual ISpriteEditor modeSpriteEditor => spriteEditor;
 
         public void RegisterModuleActivate(Action onActivate)
@@ -82,17 +90,81 @@ namespace UnityEditor.U2D.Sprites
         {
             m_OnModuleActivate -= onActivate;
         }
-        
+
         public void SignalModuleActivate()
         {
             m_OnModuleActivate?.Invoke();
         }
     }
 
+    internal interface  ISpriteEditorModuleMode
+    {
+        /// <summary>
+        /// This is called when a SpriteEditorModeBase is activated as a mode.
+        /// </summary>
+        /// <returns>Return true if the mode is activated</returns>
+        bool ActivateMode();
+
+        /// <summary>
+        /// This is called when SpriteEditorModeBase is deactivated as a mode.
+        /// </summary>
+        void DeactivateMode();
+
+        /// <summary>
+        /// This is called SpriteEditorModeBase is added to a module.
+        /// </summary>
+        /// <param name="module">The module that added this mode</param>
+        void OnAddToModule(SpriteEditorModuleModeSupportBase module);
+
+        /// <summary>
+        /// This is called SpriteEditorModeBase is removed from a module.
+        /// </summary>
+        /// <param name="module">The module that removed this mode</param>
+        void OnRemoveFromModule(SpriteEditorModuleModeSupportBase module);
+
+        /// <summary>
+        /// Register a callback to be called when the mode is activated.
+        /// </summary>
+        /// <param name="onActivate">Callback delegate</param>
+        event Action<ISpriteEditorModuleMode> onModeRequestActivate;
+
+        /// <summary>
+        /// Inform the mode to apply or revert data changes.
+        /// </summary>
+        /// <param name="apply">True when data needs to be apply.</param>
+        /// <param name="dataProviderTypes">List of data provider type that has data applied before. Append to the list if new data type has changed.</param>
+        /// /// <returns>Return true to trigger a reimport.</returns>
+        bool ApplyModeData(bool apply, HashSet<Type> dataProviderTypes);
+
+        /// <summary>The module name to display in Sprite Editor Window.</summary>
+        /// <value>String to represent the name of the module</value>
+        /// <summary>Indicates if the module can be activated with the current ISpriteEditor state.</summary>
+        /// <returns>Return true if the module can be activated.</returns>
+        bool CanBeActivated();
+        /// <summary>Implement this to draw on the Sprite Editor Window.</summary>
+        /// <remarks>Called after Sprite Editor Window draws texture preview of the Asset.Use this to draw gizmos for Sprite data.</remarks>
+        void DoMainGUI();
+        /// <summary>Implement this to create a custom toolbar.</summary>
+        /// <param name = "drawArea" > Area for drawing tool bar.</param>
+        void DoToolbarGUI(Rect drawArea);
+        /// <summary>Implement this to draw widgets in Sprite Editor Window.</summary>
+        /// <remarks>This method is called last to allow drawing of widgets.</remarks>
+        void DoPostGUI();
+        /// <summary>
+        /// Request mode to be activated,
+        /// </summary>
+        void RequestModeToActivate();
+        /// <summary>
+        /// ISpriteEditor context for the mode.
+        /// </summary>
+        ISpriteEditor spriteEditor { set; }
+    }
+
     /// <summary>
     /// Base class for having SpriteEditorModuleBase use as a mode in another SpriteEditorModuleBase
     /// </summary>
-    internal abstract class SpriteEditorModeBase : SpriteEditorModuleBase
+    [Obsolete("Use ISpriteEditorModuleMode instead")]
+    internal abstract class SpriteEditorModeBase : SpriteEditorModuleBase, ISpriteEditorModuleMode
     {
         /// <summary>
         /// This is called when a SpriteEditorModeBase is activated as a mode.
@@ -117,6 +189,18 @@ namespace UnityEditor.U2D.Sprites
         /// <param name="module">The module that removed this mode</param>
         public abstract void OnRemoveFromModule(SpriteEditorModuleModeSupportBase module);
 
+        public event Action<ISpriteEditorModuleMode> onModeRequestActivate
+        {
+            add
+            {
+                Debug.Log($"Not Implemented {value}");
+            }
+            remove
+            {
+                Debug.Log($"Not Implemented {value}");
+            }
+        }
+
         /// <summary>
         /// Register a callback to be called when the mode is activated.
         /// </summary>
@@ -136,6 +220,17 @@ namespace UnityEditor.U2D.Sprites
         /// <param name="dataProviderTypes">List of data provider type that has data applied before. Append to the list if new data type has changed.</param>
         /// /// <returns>Return true to trigger a reimport.</returns>
         public abstract bool ApplyModeData(bool apply, HashSet<Type> dataProviderTypes);
+
+        /// <summary>
+        /// Request Mode to be activated
+        /// </summary>
+        public virtual void RequestModeToActivate()
+        { }
+
+        ISpriteEditor ISpriteEditorModuleMode.spriteEditor
+        {
+            set => spriteEditor = value;
+        }
     }
 
     /// <summary>Interface that defines the functionality available for classes that inherits SpriteEditorModuleBase.</summary>
@@ -166,6 +261,7 @@ namespace UnityEditor.U2D.Sprites
         /// <summary>Indicates that there has been a change of data. In Sprite Editor Window, this enables the 'Apply' and 'Revert' button.</summary>
         void SetDataModified();
         /// <summary>The method will inform current active SpriteEditorModuleBase to apply or revert any data changes.</summary>
+        /// <param name="apply">True if applying. False otherwise.</param>
         void ApplyOrRevertModification(bool apply);
         /// <summary>
         /// Returns a VisualElement for attaching child VisualElement onto the main view of a ISpriteEditor.
@@ -190,6 +286,20 @@ namespace UnityEditor.U2D.Sprites
         /// <param name = "height" > The height dimension to render the preview texture.</param>
         /// <remarks>When the method is called, the editing space's dimensions are set to the width and height values, affecting operations such as Zoom and Pan in the ISpriteEditor view. The preview texture is rendered as the background of the editing space.</remarks>
         void SetPreviewTexture(Texture2D texture, int width, int height);
+
+        /// <summary>
+        /// Get the current preview texture used by the ISpriteEditor
+        /// </summary>
+        /// <param name="texture">The texture that is used.</param>
+        /// <param name="width">The width dimension used render the preview texture.</param>
+        /// <param name="height">The height dimension to render the preview texture.</param>
+        void GetPreviewTexture(out Texture2D texture, out int width, out int height)
+        {
+            texture = null;
+            width = 0;
+            height = 0;
+        }
+
         /// <summary> Resets the zoom and scroll of the Sprite Editor Windows.</summary>
         void ResetZoomAndScroll();
         /// <summary>Current zoom level of the ISpriteEditor view. </summary>
@@ -200,6 +310,23 @@ namespace UnityEditor.U2D.Sprites
         bool showAlpha { get; set; }
         /// <summary>The current Mip Level of the Texture displayed in ISpriteEditor view</summary>
         float mipLevel { get; set; }
+
+        /// <summary>
+        /// Get the Overlay that is registered for the ISpriteEditor.
+        /// </summary>
+        /// <param name="overlayID">String ID that identifies the Overlay.</param>
+        /// <typeparam name="T">The Overlay type.</typeparam>
+        /// <returns>The Overlay that is associated with the ISpriteEditor.</returns>
+        public T GetOverlay<T>(string overlayID) where T : Overlays.Overlay
+        {
+            return null;
+        }
+
+        /// <summary>
+        /// Set a callback method to be called when the ISpriteEditor has GameObjects that needs to be preview in the SceneView.
+        /// </summary>
+        /// <param name="callback">The callback method to be called.</param>
+        public void SetScenePreviewCallback(Action<GameObject[]> callback){}
     }
 
     /// <summary>Use this attribute on a class that inherits from SpriteEditorModuleBase to indicate what data provider it needs.</summary>
@@ -264,7 +391,7 @@ namespace UnityEditor.U2D.Sprites
     /// <summary>
     /// Attribute to indicate the module that this module can be activated as a mode in.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
     internal class SpriteEditorModuleModeAttribute : Attribute
     {
         Type[] m_Types;

@@ -59,7 +59,6 @@ namespace UnityEditor.U2D.Sprites
 
         private const float kInspectorWidth = 330f;
         private const float kInspectorHeight = 170;
-        private const float kPivotFieldPrecision = 0.0001f;
         private float m_Zoom = 1.0f;
         private GizmoMode m_GizmoMode;
 
@@ -329,8 +328,36 @@ namespace UnityEditor.U2D.Sprites
                 }
             });
 
-
             m_CustomPivotElement = m_SelectedFrameInspector.Q("customPivot");
+            m_CustomPivotElement.AddManipulator(new ContextualMenuManipulator((evt) =>
+            {
+                evt.menu.AppendAction("Copy"
+                    , (x) => Clipboard.vector2Value = selectedSpritePivotInCurUnitMode
+                    , DropdownMenuAction.AlwaysEnabled);
+                evt.menu.AppendAction("Paste"
+                    , (x) =>
+                    {
+                        Vector2 newPivot = Vector2.zero;
+                        if (Clipboard.hasVector2)
+                            newPivot = Clipboard.vector2Value;
+                        if (Clipboard.hasVector3)
+                            newPivot = Clipboard.vector3Value;
+                        newPivot = pivotUnitMode == PivotUnitMode.Pixels
+                            ? SpritePivotUtility.ConvertFromRectToNormalizedSpace(newPivot, selectedSpriteRect_Rect)
+                            : newPivot;
+                        SetSpritePivotAndAlignment(newPivot, selectedSpriteAlignment);
+                        m_CustomPivotFieldX.SetValueWithoutNotify(selectedSpritePivotInCurUnitMode.x);
+                        m_CustomPivotFieldY.SetValueWithoutNotify(selectedSpritePivotInCurUnitMode.y);
+                    }, (y) =>
+                    {
+                        if (hasSelected && selectedSpriteAlignment == SpriteAlignment.Custom)
+                        {
+                            if (Clipboard.hasVector3 || Clipboard.hasVector2)
+                                return DropdownMenuAction.Status.Normal;
+                        }
+                        return DropdownMenuAction.Status.Disabled;
+                    });
+            }));
             m_CustomPivotFieldX = m_CustomPivotElement.Q<FloatField>("customPivotX");
             m_CustomPivotFieldX.RegisterValueChangedCallback((evt) =>
             {
@@ -338,7 +365,7 @@ namespace UnityEditor.U2D.Sprites
                 {
                     float newValue = (float)evt.newValue;
                     float pivotX = pivotUnitMode == PivotUnitMode.Pixels
-                        ? ConvertFromRectToNormalizedSpace(new Vector2(newValue, 0.0f), selectedSpriteRect_Rect).x
+                        ? SpritePivotUtility.ConvertFromRectToNormalizedSpace(new Vector2(newValue, 0.0f), selectedSpriteRect_Rect).x
                         : newValue;
 
                     var pivot = selectedSpritePivot;
@@ -354,7 +381,7 @@ namespace UnityEditor.U2D.Sprites
                 {
                     float newValue = (float)evt.newValue;
                     float pivotY = pivotUnitMode == PivotUnitMode.Pixels
-                        ? ConvertFromRectToNormalizedSpace(new Vector2(0.0f, newValue), selectedSpriteRect_Rect).y
+                        ? SpritePivotUtility.ConvertFromRectToNormalizedSpace(new Vector2(0.0f, newValue), selectedSpriteRect_Rect).y
                         : newValue;
 
                     var pivot = selectedSpritePivot;
@@ -380,7 +407,7 @@ namespace UnityEditor.U2D.Sprites
             mainView.Add(m_SelectedFrameInspector);
         }
 
-        protected void EnableInspector(bool value)
+        public void EnableSpriteFrameInspector(bool value)
         {
             m_EnableInspector = value;
             SelectionChange(new SpriteSelectionChangeEvent());
@@ -388,7 +415,6 @@ namespace UnityEditor.U2D.Sprites
 
         private void SelectionChange(SpriteSelectionChangeEvent evt)
         {
-            m_SelectedFrameInspector.style.display = hasSelected && m_EnableInspector ? DisplayStyle.Flex : DisplayStyle.None;
             PopulateSpriteFrameInspectorField();
         }
 
@@ -399,7 +425,7 @@ namespace UnityEditor.U2D.Sprites
 
         protected void PopulateSpriteFrameInspectorField()
         {
-            m_SelectedFrameInspector.style.display = hasSelected ?  DisplayStyle.Flex : DisplayStyle.None;
+            m_SelectedFrameInspector.style.display = hasSelected && m_EnableInspector ? DisplayStyle.Flex : DisplayStyle.None;
             if (!hasSelected)
                 return;
 
@@ -455,22 +481,6 @@ namespace UnityEditor.U2D.Sprites
         private static Vector2 ConvertFromTextureToNormalizedSpace(Vector2 texturePos, Rect rect)
         {
             return new Vector2((texturePos.x - rect.xMin) / rect.width, (texturePos.y - rect.yMin) / rect.height);
-        }
-
-        private static Vector2 ConvertFromNormalizedToRectSpace(Vector2 normalizedPos, Rect rect)
-        {
-            Vector2 rectPos = new Vector2(rect.width * normalizedPos.x, rect.height * normalizedPos.y);
-
-            // This is to combat the lack of precision formating on the UI controls.
-            rectPos.x = Mathf.Round(rectPos.x / kPivotFieldPrecision) * kPivotFieldPrecision;
-            rectPos.y = Mathf.Round(rectPos.y / kPivotFieldPrecision) * kPivotFieldPrecision;
-
-            return rectPos;
-        }
-
-        private static Vector2 ConvertFromRectToNormalizedSpace(Vector2 rectPos, Rect rect)
-        {
-            return new Vector2(rectPos.x / rect.width, rectPos.y / rect.height);
         }
 
         private static Vector2[] GetSnapPointsArray(Rect rect)

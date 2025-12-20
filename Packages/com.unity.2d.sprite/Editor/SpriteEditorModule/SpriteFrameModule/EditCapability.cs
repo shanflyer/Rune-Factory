@@ -7,7 +7,7 @@ namespace UnityEditor.U2D.Sprites
     /// Structure to hold the edit capability of a sprite in Sprite Editor Window.
     /// </summary>
     [Serializable]
-    public struct EditCapability
+    public struct EditCapability : IEquatable<EditCapability>
     {
         /// <summary>
         /// Default editing capability where all capability is allowed.
@@ -54,6 +54,35 @@ namespace UnityEditor.U2D.Sprites
                 m_Capability |= capability;
             else
                 m_Capability &= ~capability;
+        }
+
+        /// <summary>
+        /// Equality operator.
+        /// </summary>
+        /// <param name="other">Value to compare</param>
+        /// <returns>True if equal, false otherwise.</returns>
+        public bool Equals(EditCapability other)
+        {
+            return m_Capability == other.m_Capability;
+        }
+
+        /// <summary>
+        /// Equality operator.
+        /// </summary>
+        /// <param name="obj">Value to compare</param>
+        /// <returns>True if equal, false otherwise.</returns>
+        public override bool Equals(object obj)
+        {
+            return obj is EditCapability other && Equals(other);
+        }
+
+        /// <summary>
+        /// Get the hash code of the capability.
+        /// </summary>
+        /// <returns>Hash value for the data.</returns>
+        public override int GetHashCode()
+        {
+            return (int)m_Capability;
         }
     }
 

@@ -637,6 +637,7 @@ namespace UnityEditor.U2D.Sprites
         private void AddMainUI(VisualElement mainView)
         {
             m_SpriteOutlineToolElement = SpriteOutlineToolOverlayPanel.GenerateFromUXML(alterateLabelText);
+            m_SpriteOutlineToolElement.SetEnabled(!editingDisabled);
             m_SpriteOutlineToolElement.AddStyleSheetPath("Packages/com.unity.2d.sprite/Editor/UI/SpriteEditor/SpriteEditor.uss");
             m_SpriteOutlineToolElement.AddToClassList("moduleWindow");
             m_SpriteOutlineToolElement.AddToClassList("bottomRightFloating");
@@ -856,7 +857,7 @@ namespace UnityEditor.U2D.Sprites
             }
         }
 
-        protected static List<SpriteOutline> GenerateSpriteRectOutline(Rect rect, float detail, byte alphaTolerance, ITextureDataProvider textureProvider, bool useClipper)
+        protected static List<SpriteOutline> GenerateSpriteRectOutline(Rect rect, float detail, byte alphaTolerance, ITextureDataProvider textureProvider, bool useClipper, bool zeroExtrusion = false)
         {
             List<SpriteOutline> outline = new List<SpriteOutline>();
             var texture = textureProvider.GetReadableTexture2D();
@@ -879,7 +880,7 @@ namespace UnityEditor.U2D.Sprites
                 spriteRect.yMin *= scale.y;
                 spriteRect.yMax *= scale.y;
 
-                UnityEditor.Sprites.SpriteUtility.GenerateOutline(texture, spriteRect, detail, alphaTolerance, true, out paths);
+                UnityEditor.Sprites.SpriteUtility.GenerateOutline(texture, spriteRect, detail, alphaTolerance, true, out paths, zeroExtrusion);
                 if (useClipper)
                 {
                         Clipper2D.Solution clipperSolution = new Clipper2D.Solution();

@@ -162,6 +162,12 @@ namespace UnityEditor.U2D.Sprites
             return true;
         }
 
+        public void ClearOverrideTextures()
+        {
+            m_MainTexture = null;
+            m_PreviewTexture = null;
+        }
+
         /// <summary>
         /// Registers a callback to override the source texture.
         /// </summary>
@@ -185,6 +191,18 @@ namespace UnityEditor.U2D.Sprites
         public void UnregisterDataChangeCallback(Action<ITextureDataProvider> action)
         {
             m_OnTextureDataChangeCallback -= action;
+        }
+
+        void ClearTextureOverride()
+        {
+            m_MainTexture = null;
+            m_PreviewTexture = null;
+            var ti = m_OriginalSpriteDataProvider?.GetDataProvider<ITextureDataProvider>();
+            if (ti != null)
+            {
+                ti.GetTextureActualWidthAndHeight(out var width, out var height);
+                spriteEditor.SetPreviewTexture(ti.previewTexture, width, height);
+            }
         }
         #endregion
     }

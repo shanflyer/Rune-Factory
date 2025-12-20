@@ -12,7 +12,26 @@
 #spriteEditorWindowModuleDropDown{
     flex: 0 0 auto;
     width: 120px;
+    border-width: 0px 1px 0px 0px;
+    border-color: var(--unity-colors-toolbar-border);
+    background-color: var(--unity-colors-toolbar-background);
+}
+
+#spriteEditorWindowModuleDropDown > .unity-base-popup-field__input{
     border-width: 0 0 0 0;
+}
+
+#spriteEditorWindowModuleDropDown .unity-base-field__input {
+    background-color: var(--unity-colors-toolbar-background);
+}
+
+#spriteEditorWindowModuleDropDown PopupTextElement {
+    text-overflow: ellipsis;
+    background-color: var(--unity-colors-toolbar-background);
+}
+
+#spriteEditorWindowModuleDropDown .unity-base-popup-field__arrow {
+    background-color: var(--unity-colors-toolbar-background);
 }
 
 /* Module IMGUI Toolbar for backward compatibility*/
@@ -22,6 +41,7 @@
     margin-top : 0;
     border-right-width: 1px;
     border-right-color: var(--unity-colors-toolbar-border);
+    overflow: hidden;
 }
 
 /* Module UI-Toolkit Toolbar */

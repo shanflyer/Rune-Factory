@@ -1,4 +1,5 @@
 using System.IO;
+using UnityEditor.U2D.Sprites.SpriteFrameEditor;
 using UnityEngine;
 
 namespace UnityEditor.U2D.Sprites
@@ -53,11 +54,11 @@ namespace UnityEditor.U2D.Sprites
             }
 
             // Do nothing when extension is activated.
-            if (m_CurrentMode != null)
-            {
-                m_CurrentMode.DoMainGUI();
-                return;
-            }
+            m_CurrentModuleMode?.DoMainGUI();
+        }
+
+        public void DoSpriteFrameMainGUI()
+        {
             base.DoMainGUI();
             DrawSpriteRectGizmos();
             DrawPotentialSpriteRectGizmos();
@@ -101,7 +102,7 @@ namespace UnityEditor.U2D.Sprites
 
         public override void DoToolbarGUI(Rect toolbarRect)
         {
-            using (new EditorGUI.DisabledScope(!containsMultipleSprites || spriteEditor.editingDisabled || m_TextureDataProvider.GetReadableTexture2D() == null || m_CurrentMode != null))
+            using (new EditorGUI.DisabledScope(!containsMultipleSprites || spriteEditor.editingDisabled || m_TextureDataProvider.GetReadableTexture2D() == null || m_CurrentModuleMode?.GetType() != typeof(SpriteFrameEditorMode)))
             {
                 GUIStyle skin = EditorStyles.toolbarPopup;
 
@@ -143,10 +144,13 @@ namespace UnityEditor.U2D.Sprites
 
                 // Edit Capability button
                 drawArea.x += drawArea.width;
-                drawArea.width = skin.CalcSize(new GUIContent(SpriteFrameModuleStyles.instance.capabilityButtonLabel)).x;
+                var expectedSize = skin.CalcSize(new GUIContent("")).x;
+                drawArea.width = expectedSize + drawArea.height;
                 drawArea.x = drawArea.x + toolbarRect.width - drawArea.width;
                 SpriteUtilityWindow.DrawToolBarWidget(ref drawArea, ref toolbarRect, (adjustedDrawArea) =>
                 {
+                    if(adjustedDrawArea.width < expectedSize)
+                        return;
                     if (GUI.Button(adjustedDrawArea, SpriteFrameModuleStyles.instance.capabilityButtonLabel, skin))
                     {
                         if (SpriteFrameCapabilityWindow.ShowAtPosition(adjustedDrawArea, m_CurrentEditEditCapability, Path.GetExtension(spriteAssetPath), OnEditCapabilityChanged, (a, b) =>
@@ -298,12 +302,12 @@ namespace UnityEditor.U2D.Sprites
 
         public override void DoPostGUI()
         {
-            if (m_CurrentMode != null)
-                m_CurrentMode.DoPostGUI();
-            else
-            {
-                base.DoPostGUI();
-            }
+            m_CurrentModuleMode?.DoPostGUI();
+        }
+
+        public void DoSpriteFramePostGUI()
+        {
+            base.DoPostGUI();
         }
     }
 }

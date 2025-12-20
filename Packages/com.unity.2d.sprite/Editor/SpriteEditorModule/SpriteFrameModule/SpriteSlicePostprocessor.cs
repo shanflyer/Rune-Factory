@@ -152,7 +152,13 @@ namespace UnityEditor.U2D.Sprites
             var spriteRects = rectsCache.GetSpriteRects();
             foreach (var frame in frames)
             {
-                var spriteIndex = rectsCache.AddSprite(frame, sliceSettings.spriteAlignment, sliceSettings.pivot, (SpriteFrameModule.AutoSlicingMethod) sliceSettings.autoSlicingMethod, originalCount, ref index, nameGenerate);
+                var pivot = sliceSettings.pivot;
+                if (sliceSettings.pivotUnitMode == SpriteFrameModuleBase.PivotUnitMode.Pixels &&
+                    sliceSettings.slicingType == SpriteEditorMenuSetting.SlicingType.Automatic)
+                {
+                    pivot = sliceSettings.pivotPixels / frame.size;
+                }
+                var spriteIndex = rectsCache.AddSprite(frame, sliceSettings.spriteAlignment, pivot, (SpriteFrameModule.AutoSlicingMethod) sliceSettings.autoSlicingMethod, originalCount, ref index, nameGenerate);
                 if (sliceSettings.slicingType == SpriteEditorMenuSetting.SlicingType.IsometricGrid)
                 {
                     var outlineRect = new OutlineSpriteRect(spriteRects[spriteIndex]);
