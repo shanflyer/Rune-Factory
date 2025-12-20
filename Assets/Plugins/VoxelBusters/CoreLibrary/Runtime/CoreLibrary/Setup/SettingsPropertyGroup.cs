@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace VoxelBusters.CoreLibrary
 {
-    [SerializeField]
+   [System.Serializable]
     public abstract class SettingsPropertyGroup
     {
         #region Fields

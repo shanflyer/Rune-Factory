@@ -66,7 +66,7 @@ public class MyLight : MonoBehaviour
         }
     }
 
-    [SerializeField]
+   // [SerializeField]
     private float intensity
     {
         get
@@ -100,7 +100,7 @@ public class MyLight : MonoBehaviour
          
     }
 
-    [SerializeField]
+   // [SerializeField]
     private Color color
     {
         get

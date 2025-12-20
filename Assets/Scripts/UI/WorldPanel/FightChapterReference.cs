@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[SerializeField]
+//[SerializeField]
 public class FightChapterReference : UIObjReference<UIFightChapterData>
 {
     [SerializeField]
