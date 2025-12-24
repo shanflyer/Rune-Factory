@@ -61,7 +61,7 @@ MonoBehaviour:
     FieldOfView: 60
     OrthographicSize: 11.84
     NearClipPlane: 0.3
-    FarClipPlane: 9000
+    FarClipPlane: 1000
     Dutch: 0
     ModeOverride: 0
     PhysicalProperties:
@@ -166,7 +166,7 @@ MonoBehaviour:
     FieldOfView: 60
     OrthographicSize: 2.84
     NearClipPlane: 0.3
-    FarClipPlane: 9000
+    FarClipPlane: 1000
     Dutch: 0
     ModeOverride: 0
     PhysicalProperties:
@@ -402,10 +402,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2933195013880990433}
-  - component: {fileID: 9108998307209118530}
-  - component: {fileID: 3791203201278250098}
   - component: {fileID: 6777806533533587395}
   - component: {fileID: 4216148719376312314}
+  - component: {fileID: 9108998307209118530}
+  - component: {fileID: 3791203201278250098}
   m_Layer: 0
   m_Name: FollowX
   m_TagString: Untagged
@@ -428,6 +428,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 359356533047798922}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6777806533533587395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4268441121035850149}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a8a05de0ac134f4f9d01bef6b9da077, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4216148719376312314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4268441121035850149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44d70cc20219cd84593f67d248eafe36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Offset: {x: 0, y: 0, z: 0}
+  ApplyAfter: 1
+  PreserveComposition: 0
 --- !u!114 &9108998307209118530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -455,7 +482,7 @@ MonoBehaviour:
     FieldOfView: 60
     OrthographicSize: 2.84
     NearClipPlane: 0.3
-    FarClipPlane: 9000
+    FarClipPlane: 1000
     Dutch: 0
     ModeOverride: 0
     PhysicalProperties:
@@ -502,33 +529,6 @@ MonoBehaviour:
     Time: 0
     Smoothing: 0
     IgnoreY: 0
---- !u!114 &6777806533533587395
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4268441121035850149}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a8a05de0ac134f4f9d01bef6b9da077, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &4216148719376312314
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4268441121035850149}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44d70cc20219cd84593f67d248eafe36, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Offset: {x: 0, y: 0, z: 0}
-  ApplyAfter: 1
-  PreserveComposition: 0
 --- !u!1 &4603653497537497660
 GameObject:
   m_ObjectHideFlags: 0
@@ -601,7 +601,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.3
-  far clip plane: 9000
+  far clip plane: 1000
   field of view: 60
   orthographic: 1
   orthographic size: 2.84
@@ -833,7 +833,7 @@ MonoBehaviour:
     FieldOfView: 60
     OrthographicSize: 2.84
     NearClipPlane: 0.3
-    FarClipPlane: 9000
+    FarClipPlane: 1000
     Dutch: 0
     ModeOverride: 0
     PhysicalProperties:

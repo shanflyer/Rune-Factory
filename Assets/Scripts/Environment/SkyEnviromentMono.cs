@@ -126,7 +126,7 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
         float dt = screenHeight - environmentLerpOffset.x;
         dt *= environmentLerpOffset.y;
         dt = math.clamp(dt, environmentLerpOffset.z, environmentLerpOffset.w);
-        transform.localPosition = new Vector3(0, dt, 2000);
+        transform.localPosition = new Vector3(0, dt, 0);
     }
 
     /*
@@ -240,9 +240,7 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
         float2 offsetValue = (cameraPos - skyBgStartPos) / mapSize;
         offsetValue = math.clamp(offsetValue, 0, 1);
 
-        Vector3 pos = new Vector2(math.lerp(bgOffset.x, bgOffset.z, offsetValue.x),
-            math.lerp(bgOffset.y, bgOffset.w, offsetValue.y));
-        pos.z = -1000;
+        Vector2 pos = new Vector2(math.lerp(bgOffset.x, bgOffset.z, offsetValue.x), math.lerp(bgOffset.y, bgOffset.w, offsetValue.y));
         bg.transform.localPosition = pos;
 
         float cameraOffsetY= math.lerp( cameraOffset.x, cameraOffset.y, offsetValue.y);
