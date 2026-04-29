@@ -9,6 +9,7 @@ using UnityEngine.Playables;
 
 public delegate void SetFootStepAction(SE se, Color color);
 
+[ExecuteAlways]
 public class CharacterRuntimeObj : MonoBehaviour, IGameData
 {
     public new Transform transform
@@ -298,8 +299,15 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
         }
     }
      
+    Camera targetCamera;
     private void LateUpdate()
     { 
+        if (!targetCamera) targetCamera = Camera.main;
+        if (!targetCamera) return;
+
+        // 让Sprite平面与相机屏幕平行（垂直镜头射线）
+        transform.rotation = targetCamera.transform.rotation;
+        
         if (isDisplayFootStep && speed > 0)
         {
             if (waitFootTime <= 0)

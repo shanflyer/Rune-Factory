@@ -199,13 +199,16 @@ MonoBehaviour:
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   m_transparencySortMode: 3
   m_transparencySortAxis: {x: 0, y: 1, z: 1}
-  m_AssetVersion: 2
+  m_AssetVersion: 3
+  m_PrepassLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
   m_OpaqueLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_TransparentLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 4294967295
   m_DefaultStencilState:
     overrideStencilState: 0
     stencilReference: 0
@@ -298,7 +301,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1b057092971392a44a46d2b7e9b263ae, type: 3}
-  m_Name: TrueLightObjectRender
+  m_Name: OutObjectRenderTex
   m_EditorClassIdentifier: 
   m_Active: 1
   VolumeLevel: 0
@@ -307,7 +310,7 @@ MonoBehaviour:
     m_transparencySortAxis: {x: 0, y: 1, z: 1}
     overrideDepthState: 0
     depthCompareFunction: 4
-    enableWrite: 1
+    enableWrite: 0
     overrideStencilState: 0
     stencilStateData:
       overrideStencilState: 0
@@ -322,16 +325,24 @@ MonoBehaviour:
       serializedVersion: 2
       m_Bits: 4294967295
     overrideMat: {fileID: 0}
-    ShaderTags: []
-    blitScale: 1
-    outCameraTarget: 1
+    ShaderTags:
+    - Out_Nor_Depth_Water
+    blitScale: 0.5
+    outCameraTarget: 0
+    bindCameraDepth: 0
     outRenderDatas:
     - outTextureName: _Normalmap
-      outIndex: 1
+      outIndex: 0
+      graphicsFormat: 8
+      msaaSamples: 1
     - outTextureName: _ObjDepthTex
-      outIndex: 2
+      outIndex: 1
+      graphicsFormat: 8
+      msaaSamples: 1
     - outTextureName: _WaterTex
-      outIndex: 3
+      outIndex: 2
+      graphicsFormat: 5
+      msaaSamples: 1
     clearFlag: 0
     clearColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!114 &6637365475024894066

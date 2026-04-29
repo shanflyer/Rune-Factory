@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering.RenderGraphModule;
 
 namespace UnityEngine.Rendering.Universal.Internal
@@ -82,8 +83,13 @@ namespace UnityEngine.Rendering.Universal.Internal
                         drawSettings, filteringSettings, m_RenderStateBlock, ref passData.rendererList);
 
                     builder.UseRendererList(passData.rendererList);
-                    //  builder.UseTexture(resourceData.cameraColor);
-                    builder.SetRenderAttachmentDepth(resourceData.cameraDepth, AccessFlags.ReadWrite);
+                    // Native render passes require all attachments to share the same dimensions.
+                    // When this feature renders to scaled offscreen targets, binding the full-resolution
+                    // camera depth causes a dimension mismatch. In that case we skip the depth attachment.
+                    if (settings.bindCameraDepth)
+                    {
+                        builder.SetRenderAttachmentDepth(resourceData.cameraDepth, AccessFlags.ReadWrite);
+                    }
 
                     if (settings.outCameraTarget) builder.SetRenderAttachment(resourceData.activeColorTexture, 0);
                     var desc = cameraData.cameraTargetDescriptor;
@@ -108,6 +114,16 @@ namespace UnityEngine.Rendering.Universal.Internal
                             targetDesc.clearColor = settings.clearColor;
                             targetDesc.width = (int)(settings.blitScale * desc.width);
                             targetDesc.height = (int)(settings.blitScale * desc.height);
+                            if (outRenderData.graphicsFormat != GraphicsFormat.None)
+                            {
+                                targetDesc.colorFormat = outRenderData.graphicsFormat;
+                            }
+
+                            if (outRenderData.msaaSamples > 0)
+                            {
+                                targetDesc.msaaSamples = outRenderData.msaaSamples;
+                            }
+
                             var outTexHandle = renderGraph.CreateTexture(targetDesc);
                             builder.SetRenderAttachment(outTexHandle, outRenderData.outIndex);
                             var BlitTextureID = Shader.PropertyToID(outRenderData.outTextureName);
@@ -182,6 +198,8 @@ namespace UnityEngine.Rendering.Universal.Internal
         {
             public string outTextureName;
             public int outIndex;
+            public GraphicsFormat graphicsFormat;
+            public MSAASamples msaaSamples;
         }
 
         [Serializable]
@@ -202,9 +220,11 @@ namespace UnityEngine.Rendering.Universal.Internal
             public LayerMask layerMask = -1;
             public Material overrideMat;
             public string[] ShaderTags;
-            public float blitScale = 1;
+            
+            public float blitScale=1;
 
             public bool outCameraTarget;
+            public bool bindCameraDepth;
             public List<OutRenderData> outRenderDatas;
             public ClearFlag clearFlag;
             public Color clearColor = Color.black;

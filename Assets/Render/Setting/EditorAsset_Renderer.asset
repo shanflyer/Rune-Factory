@@ -17,18 +17,8 @@ MonoBehaviour:
   settings:
     m_transparencySortMode: 3
     m_transparencySortAxis: {x: 0, y: 1, z: 1}
-    overrideDepthState: 0
-    depthCompareFunction: 4
-    enableWrite: 0
-    overrideStencilState: 0
-    stencilStateData:
-      overrideStencilState: 0
-      stencilReference: 0
-      stencilCompareFunction: 8
-      passOperation: 0
-      failOperation: 0
-      zFailOperation: 0
-    opaque: 0
+    needDepth: 0
+    objectType: 0
     renderPassEvent: 450
     layerMask:
       serializedVersion: 2
@@ -60,18 +50,8 @@ MonoBehaviour:
   settings:
     m_transparencySortMode: 3
     m_transparencySortAxis: {x: 0, y: 1, z: 1}
-    overrideDepthState: 0
-    depthCompareFunction: 4
-    enableWrite: 1
-    overrideStencilState: 0
-    stencilStateData:
-      overrideStencilState: 0
-      stencilReference: 0
-      stencilCompareFunction: 8
-      passOperation: 0
-      failOperation: 0
-      zFailOperation: 0
-    opaque: 0
+    needDepth: 0
+    objectType: 0
     renderPassEvent: 250
     layerMask:
       serializedVersion: 2
@@ -103,18 +83,8 @@ MonoBehaviour:
   settings:
     m_transparencySortMode: 3
     m_transparencySortAxis: {x: 0, y: 1, z: 1}
-    overrideDepthState: 0
-    depthCompareFunction: 4
-    enableWrite: 0
-    overrideStencilState: 0
-    stencilStateData:
-      overrideStencilState: 0
-      stencilReference: 0
-      stencilCompareFunction: 8
-      passOperation: 0
-      failOperation: 0
-      zFailOperation: 0
-    opaque: 0
+    needDepth: 0
+    objectType: 0
     renderPassEvent: 210
     layerMask:
       serializedVersion: 2
@@ -145,18 +115,8 @@ MonoBehaviour:
   settings:
     m_transparencySortMode: 3
     m_transparencySortAxis: {x: 0, y: 1, z: 1}
-    overrideDepthState: 0
-    depthCompareFunction: 4
-    enableWrite: 0
-    overrideStencilState: 0
-    stencilStateData:
-      overrideStencilState: 0
-      stencilReference: 0
-      stencilCompareFunction: 8
-      passOperation: 0
-      failOperation: 0
-      zFailOperation: 0
-    opaque: 0
+    needDepth: 0
+    objectType: 0
     renderPassEvent: 250
     layerMask:
       serializedVersion: 2
@@ -258,7 +218,10 @@ MonoBehaviour:
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   m_transparencySortMode: 3
   m_transparencySortAxis: {x: 0, y: 1, z: 1}
-  m_AssetVersion: 2
+  m_AssetVersion: 3
+  m_PrepassLayerMask:
+    serializedVersion: 2
+    m_Bits: 520593
   m_OpaqueLayerMask:
     serializedVersion: 2
     m_Bits: 520593
@@ -297,18 +260,8 @@ MonoBehaviour:
   settings:
     m_transparencySortMode: 3
     m_transparencySortAxis: {x: 0, y: 1, z: 1}
-    overrideDepthState: 0
-    depthCompareFunction: 4
-    enableWrite: 1
-    overrideStencilState: 0
-    stencilStateData:
-      overrideStencilState: 0
-      stencilReference: 0
-      stencilCompareFunction: 8
-      passOperation: 0
-      failOperation: 0
-      zFailOperation: 0
-    opaque: 0
+    needDepth: 0
+    objectType: 0
     renderPassEvent: 450
     layerMask:
       serializedVersion: 2
@@ -341,18 +294,8 @@ MonoBehaviour:
   settings:
     m_transparencySortMode: 3
     m_transparencySortAxis: {x: 0, y: 1, z: 1}
-    overrideDepthState: 0
-    depthCompareFunction: 4
-    enableWrite: 1
-    overrideStencilState: 0
-    stencilStateData:
-      overrideStencilState: 0
-      stencilReference: 0
-      stencilCompareFunction: 8
-      passOperation: 0
-      failOperation: 0
-      zFailOperation: 0
-    opaque: 0
+    needDepth: 0
+    objectType: 0
     renderPassEvent: 450
     layerMask:
       serializedVersion: 2
@@ -384,18 +327,8 @@ MonoBehaviour:
   settings:
     m_transparencySortMode: 3
     m_transparencySortAxis: {x: 0, y: 1, z: 1}
-    overrideDepthState: 0
-    depthCompareFunction: 4
-    enableWrite: 1
-    overrideStencilState: 0
-    stencilStateData:
-      overrideStencilState: 0
-      stencilReference: 0
-      stencilCompareFunction: 8
-      passOperation: 0
-      failOperation: 0
-      zFailOperation: 0
-    opaque: 0
+    needDepth: 0
+    objectType: 0
     renderPassEvent: 450
     layerMask:
       serializedVersion: 2
@@ -427,18 +360,8 @@ MonoBehaviour:
   settings:
     m_transparencySortMode: 3
     m_transparencySortAxis: {x: 0, y: 1, z: 1}
-    overrideDepthState: 0
-    depthCompareFunction: 4
-    enableWrite: 0
-    overrideStencilState: 0
-    stencilStateData:
-      overrideStencilState: 0
-      stencilReference: 0
-      stencilCompareFunction: 8
-      passOperation: 0
-      failOperation: 0
-      zFailOperation: 0
-    opaque: 0
+    needDepth: 0
+    objectType: 0
     renderPassEvent: 250
     layerMask:
       serializedVersion: 2
@@ -512,18 +435,8 @@ MonoBehaviour:
   settings:
     m_transparencySortMode: 3
     m_transparencySortAxis: {x: 0, y: 1, z: 1}
-    overrideDepthState: 0
-    depthCompareFunction: 4
-    enableWrite: 0
-    overrideStencilState: 0
-    stencilStateData:
-      overrideStencilState: 0
-      stencilReference: 0
-      stencilCompareFunction: 8
-      passOperation: 0
-      failOperation: 0
-      zFailOperation: 0
-    opaque: 0
+    needDepth: 0
+    objectType: 0
     renderPassEvent: 450
     layerMask:
       serializedVersion: 2

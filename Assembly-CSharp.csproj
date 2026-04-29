@@ -193,14 +193,12 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetAngularDrag.cs" />
     <Compile Include="Assets\Scripts\Environment\GlobalShaderSetMono.cs" />
     <Compile Include="Assets\Scripts\Film\TimeLineManger.cs" />
-    <Compile Include="Assets\Effect\FX Quest\Scripts\EQ_ParticleMoveSample.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\IsKinematic.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Variables\SharedLayerMask.cs" />
     <Compile Include="Assets\Scripts\UI\DateReference.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\GetParticleCount.cs" />
     <Compile Include="Assets\Scripts\UI\SkillActionPanel.cs" />
     <Compile Include="Assets\Scripts\Data\ObjPackageAnimationData.cs" />
-    <Compile Include="Assets\Effect\FX Quest\Scripts\EQ_OrbitCamera.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Vector2\ClampMagnitude.cs" />
     <Compile Include="Assets\Scripts\Environment\SkyEnviromentMono.cs" />
     <Compile Include="Assets\Scripts\UI\PlayerTopPanel.cs" />
@@ -1088,7 +1086,6 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetSlopeLimit.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Actions\PerformInterruption.cs" />
     <Compile Include="Assets\Scripts\Behavior\Common\GameTimePassCheck.cs" />
-    <Compile Include="Assets\Effect\FX Quest\Scripts\EQ_CloudFlow.cs" />
     <Compile Include="Assets\Effect\ProFlares\Demos\DemoScripts\SwitchCameraDemo.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CheckNPCBehaviorState.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Transform\GetParent.cs" />
@@ -1136,10 +1133,10 @@
     <Compile Include="Assets\OtherPackage\SerializableDictionary\SerializableDictionary.cs" />
     <Compile Include="Assets\Scripts\Behavior\Farm\TryGetPlantFruitBeHavior.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Input\GetKey.cs" />
-    <Compile Include="Assets\Scripts\Action\GameActionData.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetIgnoreListenerVolume.cs" />
     <Compile Include="Assets\Scripts\Main\GameCommon.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Physics\Raycast.cs" />
+    <Compile Include="Assets\Scripts\Action\GameActionData.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\CharacterController\SetSlopeLimit.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Actions\SendEvent.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Transform\SetLocalEulerAngles.cs" />
@@ -2269,8 +2266,14 @@
     <Reference Include="Unity.Entities.Build">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Entities.Build.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.ProBuilder.AssetIdRemapUtility">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.ProBuilder.AssetIdRemapUtility.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.MemoryProfiler.Editor.MemoryProfilerModule">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.MemoryProfiler.Editor.MemoryProfilerModule.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.ProBuilder.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Splines">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Splines.dll</HintPath>
@@ -2332,6 +2335,9 @@
     <Reference Include="Unity.Services.Core.Analytics">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Services.Core.Analytics.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.ProBuilder.Editor">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.ProBuilder.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.ResourceManager">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.ResourceManager.dll</HintPath>
     </Reference>
@@ -2343,6 +2349,9 @@
     </Reference>
     <Reference Include="UnityEngine.Purchasing.Stores">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\UnityEngine.Purchasing.Stores.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ProBuilder.AddOns.Editor">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.ProBuilder.AddOns.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Localization">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Localization.dll</HintPath>
@@ -2535,10 +2544,6 @@
       <Project>{4dd5b803-57d5-f27b-176b-9453417a843d}</Project>
       <Name>Unity.RenderPipelines.Universal.Editor</Name>
     </ProjectReference>
-    <ProjectReference Include="Unity.2D.Animation.Editor.csproj">
-      <Project>{90d99031-91a5-ea9f-94f7-a7042d9ff22e}</Project>
-      <Name>Unity.2D.Animation.Editor</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.Timeline.csproj">
       <Project>{b792f547-5fe9-1077-4c6b-3d3c8fe02ba9}</Project>
       <Name>Unity.Timeline</Name>
@@ -2566,6 +2571,10 @@
     <ProjectReference Include="Unity.Mathematics.Editor.csproj">
       <Project>{78dec004-216e-5702-174f-64f87edf3522}</Project>
       <Name>Unity.Mathematics.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Unity.2D.Animation.Editor.csproj">
+      <Project>{90d99031-91a5-ea9f-94f7-a7042d9ff22e}</Project>
+      <Name>Unity.2D.Animation.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.2D.Psdimporter.Editor.csproj">
       <Project>{c9536da7-d672-3f82-f766-b78956a8d0ce}</Project>
