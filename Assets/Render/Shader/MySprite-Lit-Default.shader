@@ -4,6 +4,15 @@
     {
         [HideInInspector] _FeatureFlags ("Feature Flags", Int) = 0
 
+        [Header(Keyword)]
+        [Toggle(_FEATURE_DAMP)] _FEATURE_DAMP("Keyword Damp", Float) = 0
+        [Toggle(_FEATURE_MOVE)] _FEATURE_MOVE("Keyword Move", Float) = 0
+        [Toggle(_FEATURE_SEASON)] _FEATURE_SEASON("Keyword Season", Float) = 0
+        [Toggle(_FEATURE_SNOW)] _FEATURE_SNOW("Keyword Snow", Float) = 0
+        [Toggle(_FEATURE_GRASS)] _FEATURE_GRASS("Keyword Grass", Float) = 0
+        [Toggle(_FEATURE_SHADOW)] _FEATURE_SHADOW("Keyword Shadow", Float) = 0
+        [Toggle(_FEATURE_FLOWER)] _FEATURE_FLOWER("Keyword Flower", Float) = 0
+
         _Color("Color", Color) = (1,1,1,1)
         _FixedColor("FixedColor",color)=(1,1,1,0)
         _MainTex("Diffuse", 2D) = "white" {}
@@ -17,13 +26,10 @@
         [Toggle]_HideNormal("HideNormal",int)=0
         [Toggle]_ZOffset("_ZOffset",int)=1
 
-        _WaterNormalMap("WaterNormalMap", 2D) = "bump" {}
         _NormalMap("Normal Map", 2D) = "bump" {}
-        _WaterMaskTex("WaterMaskTex", 2D) ="black"{}
         _DepthTex("DepthTex", 2D) ="gray"{}
         _WetValue("WetValue",Range(0,1))=0
         _LightBlend("LightBlend",float)=1
-        _MirrorBlend("MirrorBlend",Color)=(1,1,1,1)
 
         [Toggle]_BlendVertexColor("BlendVertexColor",int)=0
 
@@ -48,46 +54,6 @@
 
 
         [Toggle]_Damp("_Damp",int)=0
-
-
-        // 水面颜色
-        [HDR]waterColor("waterColor", Color) = (0,0.5,0.5,0.5)
-        // 初始透明
-        _WaterZero("_WaterZero", Range(0,1)) = 0
-        // 水深映射范围
-        _WaterBottom("_WaterBottom", Range(0,4)) = 1
-        // 水面高度
-        _WaterHigh("_WaterHigh", Range(0,1)) = 0
-        // 波纹亮度补偿
-        waterValue("waterValue", Range(0, 0.4)) = 0.2
-        // 水面噪声缩放
-        waterNoiseScale("waterNoiseScale", Range(0, 300)) = 0
-
-        // 波纹方向角 1
-        _WaveAngle0("_WaveAngle0", Range(-180, 180)) = 0
-        // 波纹速度 1
-        _WaveSpeed0("_WaveSpeed0", Range(0, 0.2)) = 0
-        // 波纹缩放 1
-        WaveScale0("WaveScale0", Vector) = (1, 1, 0, 0)
-
-        // 波纹方向角 2
-        _WaveAngle1("_WaveAngle1", Range(-180, 180)) = 0
-        // 波纹速度 2
-        _WaveSpeed1("_WaveSpeed1", Range(0, 0.2)) = 0
-        // 波纹缩放 2
-        WaveScale1("WaveScale1", Vector) = (1, 1, 0, 0)
-
-
-        // 水边缘颜色
-        [HDR]EdgeColor("EdgeColor", Color) = (0.990566, 0.9765486, 0.9765486, 0)
-        // 边缘宽度
-        EdgeValue("EdgeValue", Range(0, 0.2))=0.1
-        // 边缘速度
-        _EdgeWaveSpeed("EdgeWaveSpeed",Range(0,4))=0
-        // 边缘偏移
-        _EdgeWaveOffset("EdgeWaveOffset",Range(0,0.5))=0
-
-
         [HideInInspector] _RendererColor("RendererColor", Color) = (1,1,1,1)
         [HideInInspector] _AlphaTex("External Alpha", 2D) = "white" {}
         [HideInInspector] _EnableExternalAlpha("Enable External Alpha", Float) = 0
@@ -97,12 +63,12 @@
     {
         Tags
         {
-            "Queue"="Transparent"
+             "RenderType"="Opaque"
         }
 
-        Blend SrcAlpha OneMinusSrcAlpha
+        //Blend SrcAlpha OneMinusSrcAlpha
         Cull Off
-        ZWrite off
+        ZWrite on
         ZTest LEqual
 
         HLSLINCLUDE
@@ -118,8 +84,6 @@
         Texture2D _MoveMask;
         Texture2D _SnowTex;
         Texture2D _FlowerTex;
-        TEXTURE2D(_WaterMaskTex);
-        SAMPLER(sampler_WaterMaskTex);
         TEXTURE2D(_WindNoiseTexture);
         SAMPLER(sampler_WindNoiseTexture);
 
@@ -129,17 +93,11 @@
         TEXTURE2D(_GrassTex);
         SAMPLER(sampler_GrassTex);
 
-        TEXTURE2D(_MirrorTex);
-        SAMPLER(sampler_MirrorTex);
         TEXTURE2D(_ObjDepthTex);
         SAMPLER(sampler_ObjDepthTex);
 
         TEXTURE2D(_ShadowTex);
         SAMPLER(sampler_ShadowTex);
-
-        TEXTURE2D(_WaterNormalMap);
-        SAMPLER(sampler_WaterNormalMap);
-
 
         half4 GlobalColor;
         half2 LightDirection;
@@ -169,7 +127,6 @@
             int _Damp;
             int _HideNormal;
             float4 _FixedColor;
-            float4 _MirrorBlend;
 
             int NativePos;
             float4 _FlowerRemap;
@@ -193,25 +150,6 @@
             float _WindNoiseValue;
             int _MoveSelfUV;
 
-            half4 waterColor;
-            half _WaterZero;
-            half _WaterBottom;
-            half _WaveAngle0;
-            half _WaveSpeed0;
-            half _WaveAngle1;
-            half _WaveSpeed1;
-            half WaveColorValue;
-            half waterNoiseScale;
-            half waterValue;
-            half2 WaveScale0;
-            half2 WaveScale1;
-            half4 EdgeColor;
-            half EdgeValue;
-            half _WaterHigh;
-
-            half _EdgeWaveSpeed;
-            half _EdgeWaveOffset;
-
             uint _FeatureFlags; // 原始功能位配置，仅用于工具同步 keyword。
         CBUFFER_END
 
@@ -223,8 +161,6 @@
         #define FEAT_GRASSBLEND (1u<<5)
         #define FEAT_SHADOWSTEP (1u<<6)
         #define FEAT_FLOWERSTEP (1u<<7)
-        #define FEAT_SIMPLE (1u<<8)
-        #define FEAT_CHARACTER (1u<<9)
 
         struct Attributes
         {
@@ -242,7 +178,6 @@
             float4 positionCS : SV_POSITION;
             half4 color : COLOR;
             float2 uv : TEXCOORD0;
-            float4 fixScreenUV:TEXCOORD7;
             float4 fullWorldPos : TEXCOORD5;
             float4 worldScreenPos: TEXCOORD6;
             float3 normal:NORMAL;
@@ -264,38 +199,33 @@
 
         #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/NormalsRenderingShared.hlsl"
 
+        float3 ApplyYSortToWorldPos(float3 worldPos)
+        {
+            return worldPos;
+        }
+
         Varyings DefaultVertex(Attributes attributes)
         {
             Varyings o = (Varyings)0;
 
-            float3 ObjPos = unity_ObjectToWorld._m03_m13_m23;
-            float3 objectWorldPos = TransformObjectToWorld(attributes.positionOS);
-            float3 worldOS = objectWorldPos;
             UNITY_SETUP_INSTANCE_ID(attributes);
             UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
             UNITY_SKINNED_VERTEX_COMPUTE(attributes);
 
-            #if defined(_FEATURE_CHARACTER)
-            {
-                o.positionCS = TransformObjectToHClip(attributes.positionOS);
-            }
-            #else
-            {
-                o.positionCS = TransformWorldToHClip(worldOS);
-            }
-            #endif
+            float3 ObjPos = unity_ObjectToWorld._m03_m13_m23;
+            float3 objectWorldPos = TransformObjectToWorld(attributes.positionOS);
+            float3 sortedWorldPos = ApplyYSortToWorldPos(objectWorldPos);
+            float3 worldOS = objectWorldPos;
+
+            o.positionCS = TransformWorldToHClip(sortedWorldPos);
 
             o.color = attributes.color * unity_SpriteColor;
-            #if defined(_FEATURE_SIMPLE)
-            {
-                o.color = attributes.color * _Color * unity_SpriteColor;
-            }
-            #endif
             float stepPosZ = 1 - step(50, ObjPos.z);
 
             float3 _objSortPos = ObjPos;
             float offsetPosZ = step(ObjPos.z, -10);
             _objSortPos.y += _objSortPos.z * offsetPosZ;
+            _objSortPos = ApplyYSortToWorldPos(_objSortPos);
             float4 worldClip = TransformWorldToHClip(_objSortPos);
 
             // 带排序 Z 偏移的精灵，复用对象原点来构造稳定的屏幕空间深度代理。
@@ -308,16 +238,10 @@
             o.worldScreenPos.z = clamp(high, 0, 1);
 
             objectWorldPos.y = unity_ObjectToWorld._m13;
-
-            half4 worldPosCs = TransformWorldToHClip(objectWorldPos.xyz);
+            half4 worldPosCs = TransformWorldToHClip(ApplyYSortToWorldPos(objectWorldPos.xyz));
             float4 worldScreenPos = ComputeScreenPos(worldPosCs);
             worldScreenPos.xy = worldScreenPos.xy / worldScreenPos.w;
             o.fullWorldPos = float4(objectWorldPos.xy, worldScreenPos.xy);
-
-            half3 cameraOffsetPos = _WorldSpaceCameraPos.xyz - unity_ObjectToWorld._m03_m13_m23;
-            half3 pos = worldOS.xyz + cameraOffsetPos;
-            half4 cameraClipPos = TransformWorldToHClip(pos);
-            o.fixScreenUV = ComputeScreenPos(cameraClipPos);
 
             o.uv = attributes.uv.xy;
             o.normalWS = -GetViewForwardDir();
@@ -342,12 +266,6 @@
         {
             float4 mainTex = _MainTex.Sample(sampler_MainTex, i.uv.xy);
             float a = mainTex.a;
-            #if defined(_FEATURE_CHARACTER)
-            {
-                mainTex.xyz = 0;
-            }
-            #else
-            {
                 float2 worldScreenPos = i.worldScreenPos.xy / i.worldScreenPos.w;
                 worldScreenPos = UnityStereoTransformScreenSpaceTex(worldScreenPos);
 
@@ -390,8 +308,6 @@
                 mainTex.xyz = half3(depth, high, _NormalColor.g * 0.5 + stepDepthOne);
                 mainTex.a = (mainTex.a * (1 - stepDepthOne) + DepthTex.a * stepDepthOne);
                 mainTex.a = clamp(mainTex.a, 0, 1);
-            }
-            #endif
 
             clip(a - 0.5);
             return mainTex;
@@ -440,81 +356,6 @@
             half4 col = SAMPLE_TEXTURE2D(_WindNoiseTexture, sampler_WindNoiseTexture, uv/scale);
             return col.r;
         }
-
-        float4 WaterFragment(float2 uv, float2 fixedScreenUV, float2 screenUV, float4 mainTexColor)
-        {
-            float2 mirrorUV = screenUV;
-            float waterMask = SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, uv.xy).r;
-            // waterMask.r <= 0.06 时，这个像素直接按非水域处理。
-            float stepMask = step(0.06, waterMask);
-
-            half edgeOffsetValue = _SinTime.w * _EdgeWaveSpeed;
-            edgeOffsetValue = abs(edgeOffsetValue);
-            edgeOffsetValue = clamp(edgeOffsetValue, 0, 1);
-            // waterHigh 是当前时刻的实际水位线，会随着边缘波动做上下偏移。
-            half waterHigh = _WaterHigh + _EdgeWaveOffset * edgeOffsetValue;
-            float angle0 = radians(_WaveAngle0);
-            float2 waveValue0 = float2(cos(angle0), sin(angle0)) * _WaveSpeed0;
-            float angle1 = radians(_WaveAngle1);
-            float2 waveValue1 = float2(cos(angle1), sin(angle1)) * _WaveSpeed1;
-            float2 timeXX = _TimeParameters.x.xx;
-            float2 waveUV0 = fixedScreenUV * WaveScale0 + timeXX * waveValue0;
-            float2 waveUV1 = fixedScreenUV * WaveScale1 + timeXX * waveValue1;
-            half3 wave0 = UnpackNormal(SAMPLE_TEXTURE2D(_WaterNormalMap, sampler_WaterNormalMap, waveUV0));
-            half3 wave1 = UnpackNormal(SAMPLE_TEXTURE2D(_WaterNormalMap, sampler_WaterNormalMap, waveUV1));
-
-            // 两层法线波叠加后，只取 xy 分量：
-            // x/y 越大，边缘亮纹越强，后面镜面 UV 扰动也越明显。
-            float waveBlendCol = saturate(wave0.x + wave0.y + wave1.x + wave1.y) * waterValue;
-            float _waterNoise;
-            Unity_SimpleNoise_float(fixedScreenUV.xy, waterNoiseScale, _waterNoise);
-            // 再乘一层噪声，避免整片水面的亮纹节奏完全同步。
-            waveBlendCol *= _waterNoise;
-
-            // 把 0~1 的原始遮罩 remap 到可调水深范围，后面所有边缘判断都基于这个值。
-            waterMask = lerp(_WaterZero, _WaterBottom, waterMask);
-            waterMask = saturate(waterMask);
-            // waterMask1: 像素是否已经进入主体水域。
-            // waterMask2: 像素是否已经越过边缘带。
-            float waterMask1 = step(waterHigh, waterMask);
-            float waterMask2 = step(waterHigh + EdgeValue, waterMask);
-            // 主体水域之外，整段水面逻辑直接失效。
-            stepMask *= waterMask1;
-
-            // edgeMaskValue 只在 [waterHigh, waterHigh + EdgeValue] 这段边缘带里从 0 线性涨到 1。
-            float edgeMaskValue = saturate((waterMask - waterHigh) / EdgeValue);
-            // 只有落在边缘带里的像素，edge 才会非 0。
-            float edge = (waterMask1 - waterMask2) * edgeMaskValue;
-            float3 endWaveColor = saturate(edge * EdgeColor.xyz * waveBlendCol + waveBlendCol * waterMask1.rrr);
-
-            half sunValue = (_SunColor.x + _SunColor.y + _SunColor.z) / 3;
-            sunValue = max(sunValue, 0.001h);
-
-            float3 baseWaterColor = waterColor.xyz * waterColor.a;
-            baseWaterColor += (1 - waterColor.a) * mainTexColor.xyz;
-            // 主体水色按 remap 后的水深衰减，越深越接近水本身的颜色。
-            baseWaterColor *= waterMask;
-
-            endWaveColor = endWaveColor * _SunColor.xyz / sunValue;
-
-            float3 outWater = saturate(endWaveColor + baseWaterColor);
-            outWater = outWater + waterColor.xyz * waterColor.a;
-
-            // 用当前水色的 RG 去扰动镜像采样坐标，制造反射随波纹摆动的效果。
-            mirrorUV.x += outWater.r * 0.1;
-            mirrorUV.y += outWater.g * 0.04 - 0.02;
-
-            float3 MirrorTexColor = SAMPLE_TEXTURE2D(_MirrorTex, sampler_MirrorTex, mirrorUV).xyz;
-            MirrorTexColor.xyz *= _MirrorBlend.xyz;
-            // 反射图越亮，越倾向用反射色覆盖当前水色。
-            float MirrorValue = (MirrorTexColor.x + MirrorTexColor.y + MirrorTexColor.z) / 3;
-
-            outWater = outWater * (1 - MirrorValue) + MirrorTexColor * MirrorValue;
-            // 非主体水域像素仍然回退到原始主贴图颜色。
-            outWater = stepMask * outWater + mainTexColor.xyz * (1 - stepMask);
-            return float4(outWater.xyz, stepMask);
-        }
-
         float3 DampColor(float3 col, float2 uv, float2 objUV)
         {
             float r = col.r * col.r;
@@ -751,23 +592,20 @@
         {
             Tags
             {
-                "LightMode" = "UniversalForward"
+                "LightMode" = "UniversalForward" "Queue"="Geometry"
             }
 
             HLSLPROGRAM
             #pragma vertex CombinedShapeLightVertex
             #pragma fragment CombinedShapeLightFragment
             #pragma multi_compile _ SKINNED_SPRITE
-            #pragma shader_feature_local _FEATURE_WATER
-            #pragma shader_feature_local _FEATURE_SEASON
+                        #pragma shader_feature_local _FEATURE_SEASON
             #pragma shader_feature_local _FEATURE_SNOW
             #pragma shader_feature_local _FEATURE_MOVE
-            #pragma shader_feature_local _FEATURE_CHARACTER
             #pragma shader_feature_local _FEATURE_DAMP
             #pragma shader_feature_local _FEATURE_GRASS
             #pragma shader_feature_local _FEATURE_SHADOW
             #pragma shader_feature_local _FEATURE_FLOWER
-            #pragma shader_feature_local _FEATURE_SIMPLE
 
             half4 DefaultNormal(Varyings i)
             {
@@ -787,20 +625,10 @@
                 return result;
             }
 
-            half4 DefaultColor(Varyings i, out float waterStepMask)
+            half4 DefaultColor(Varyings i)
             {
                 float2 uv = i.uv.xy;
                 half4 main = 0;
-                waterStepMask = 0;
-                #if defined(_FEATURE_SIMPLE)
-                {
-                    main = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
-                    main.xyz = i.color.xyz;
-                    main.a *= i.color.a;
-
-                    return main;
-                }
-                #endif
 
                 SurfaceInput surface = BuildSurfaceInput(i);
                 float2 lightingUV = surface.lightingUV;
@@ -860,15 +688,8 @@
 
 
                 main.xyz = waterColor.xyz;
-                #if defined(_FEATURE_WATER)
-                {
-                    float2 fixScreenUV = i.fixScreenUV.xy / i.fixScreenUV.w;
-                    fixScreenUV = UnityStereoTransformScreenSpaceTex(fixScreenUV);
-                    float4 outWaterColor = WaterFragment(uv, fixScreenUV, lightingUV, main);
-                    waterColor = outWaterColor.xyz;
-                    waterStepMask = outWaterColor.w;
-                }
-                #endif
+
+
 
                 #if defined(_FEATURE_GRASS)
                 {
@@ -887,15 +708,14 @@
                 #endif
 
                 result.xyz = result.xyz * (1 - _FixedColor.a) + _FixedColor.xyz * _FixedColor.a;
-                clip(main.a - 0.1);
+                clip(main.a - 0.4);
                 return result;
             }
 
 
             half4 CombinedShapeLightFragment(Varyings i) : SV_Target
             {
-                float waterStepMask = 0;
-                return DefaultColor(i, waterStepMask);
+                return DefaultColor(i);
             }
             ENDHLSL
         }
@@ -910,13 +730,10 @@
             #pragma vertex CombinedShapeLightVertex
             #pragma fragment CombinedShapeLightFragment
             #pragma multi_compile _ SKINNED_SPRITE
-            #pragma shader_feature_local _FEATURE_WATER
-            #pragma shader_feature_local _FEATURE_SEASON
+                        #pragma shader_feature_local _FEATURE_SEASON
             #pragma shader_feature_local _FEATURE_SNOW
             #pragma shader_feature_local _FEATURE_MOVE
-            #pragma shader_feature_local _FEATURE_CHARACTER
             #pragma shader_feature_local _FEATURE_GRASS
-            #pragma shader_feature_local _FEATURE_SIMPLE
 
             struct OutData
             {
@@ -942,45 +759,12 @@
 
                 return result;
             }
-
-            float GetAuxWaterStepMask(Varyings i)
-            {
-                #if defined(_FEATURE_SIMPLE)
-                {
-                    return 0;
-                }
-                #endif
-
-                SurfaceInput surface = BuildSurfaceInput(i);
-                float2 uv = surface.uv;
-
-                float waterMask = SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, uv).r;
-                float stepMask = step(0.06, waterMask);
-
-                half edgeOffsetValue = abs(_SinTime.w * _EdgeWaveSpeed);
-                edgeOffsetValue = clamp(edgeOffsetValue, 0, 1);
-                half waterHigh = _WaterHigh + _EdgeWaveOffset * edgeOffsetValue;
-
-                Unity_Remap_float(waterMask, float2(0, 1), float2(_WaterZero, _WaterBottom), waterMask);
-                waterMask = clamp(waterMask, 0, 1);
-
-                float waterMask1 = step(waterHigh, waterMask);
-                stepMask *= waterMask1;
-                return stepMask;
-            }
+            
 
             half GetAuxAlpha(Varyings i)
             {
                 float2 uv = i.uv.xy;
                 half4 main = 0;
-                #if defined(_FEATURE_SIMPLE)
-                {
-                    main = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
-                    main.a *= i.color.a;
-                    clip(main.a - 0.1);
-                    return main.a;
-                }
-                #endif
 
 
                 SurfaceInput surface = BuildSurfaceInput(i);
@@ -1002,7 +786,7 @@
                 }
                 #endif
 
-                clip(main.a - 0.1);
+                clip(main.a - 0.4);
                 return main.a;
             }
 
@@ -1012,11 +796,6 @@
                 OutData outData = (OutData)0;
                 half alpha = GetAuxAlpha(i);
                 float waterStepMask = 0;
-                #if defined(_FEATURE_WATER)
-                {
-                    waterStepMask = GetAuxWaterStepMask(i);
-                }
-                #endif
                 outData.waterStepMask = float4(waterStepMask.xxx, alpha);
                 outData.normalColor = DefaultNormal(i);
                 outData.depthColor = DefaultObjDepth(i);
@@ -1082,6 +861,7 @@
 
                 float2 offset = scaleZ.xx * float2(sin(LightDirection.x), cos(LightDirection.x));
                 worldPos.xy += offset;
+                worldPos = ApplyYSortToWorldPos(worldPos);
 
                 o.positionCS = TransformWorldToHClip(worldPos);
                 #if defined(DEBUG_DISPLAY)
@@ -1132,8 +912,9 @@
             {
                 CharacterDepthVaryings o = (CharacterDepthVaryings)0;
                 attributes.positionOS = UnityFlipSprite(attributes.positionOS, unity_SpriteProps.xy);
-                o.positionCS = TransformObjectToHClip(attributes.positionOS);
                 float3 objectWorldPos = TransformObjectToWorld(attributes.positionOS);
+                float3 sortedWorldPos = ApplyYSortToWorldPos(objectWorldPos);
+                o.positionCS = TransformWorldToHClip(sortedWorldPos);
                 #if defined(DEBUG_DISPLAY)
                 o.positionWS = objectWorldPos;
                 #endif
@@ -1143,6 +924,7 @@
                 float stepPosZ = step(49, ObjPos.z);
 
                 float3 objectSortPos = ObjPos;
+                objectSortPos = ApplyYSortToWorldPos(objectSortPos);
                 float4 worldClip = TransformWorldToHClip(objectSortPos);
                 float high = (1 - stepPosZ) * (objectWorldPos.y - ObjPos.y) * 0.5;
                 float positionCSY = o.positionCS.y;
@@ -1192,129 +974,6 @@
             }
             ENDHLSL
         }
-
-
-        Pass
-        {
-            Name "Water"
-            Tags
-            {
-                "LightMode" = "Water"
-            }
-
-            HLSLPROGRAM
-            #pragma vertex WaterPassVertex
-            #pragma fragment WaterPassFragment
-
-
-            struct WaterAttributes
-            {
-                float3 positionOS : POSITION;
-                float4 color : COLOR;
-                float2 uv : TEXCOORD0;
-            };
-
-            struct WaterVaryings
-            {
-                float4 positionCS : SV_POSITION;
-                half4 color : COLOR;
-                float2 uv : TEXCOORD0;
-                float4 lightingUV : TEXCOORD1;
-                float4 worldPos : TEXCOORD4;
-                float4 fixScreenUV: TEXCOORD3;
-            };
-
-
-            WaterVaryings WaterPassVertex(WaterAttributes v)
-            {
-                WaterVaryings o = (WaterVaryings)0;
-                UNITY_SETUP_INSTANCE_ID(v);
-                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
-                UNITY_SKINNED_VERTEX_COMPUTE(v);
-
-                v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy);
-                o.positionCS = TransformObjectToHClip(v.positionOS);
-                o.worldPos.xyz = unity_ObjectToWorld._m03_m13_m23;
-                o.worldPos.w = o.worldPos.z;
-                o.worldPos.z += o.worldPos.y;
-                o.uv = v.uv;
-                o.lightingUV = ComputeScreenPos(o.positionCS);
-
-
-                half3 pos = TransformObjectToWorld(_WorldSpaceCameraPos.xyz);
-                half4 cameraClipPos = TransformWorldToHClip(pos);
-
-
-                o.fixScreenUV = o.lightingUV - ComputeScreenPos(cameraClipPos);
-
-                o.color = v.color * unity_SpriteColor;
-                return o;
-            }
-
-            float3 WaterPassMaskFragment(float2 uv, float2 screenUV)
-            {
-                float2 mirrorUV = screenUV;
-
-                float3 _WaterMask = SAMPLE_TEXTURE2D(_WaterMaskTex, sampler_WaterMaskTex, uv.xy).xyz;
-                // 水域范围
-                float stepMask = step(0.06, _WaterMask.r);
-
-                half edgeOffsetValue = _SinTime.w * _EdgeWaveSpeed;
-                edgeOffsetValue = abs(edgeOffsetValue);
-                edgeOffsetValue = clamp(edgeOffsetValue, 0, 1);
-                _WaterHigh = _WaterHigh + _EdgeWaveOffset * edgeOffsetValue;
-
-
-                float svalue = _ScreenParams.y / 1920;
-                svalue = floor(svalue);
-                svalue = clamp(svalue, 1, svalue);
-                svalue /= 2;
-                float2 offsetUv = _WorldSpaceCameraPos.xy * svalue * 800 / _ScreenParams.xy;
-                screenUV += offsetUv;
-
-                // 波纹 1
-                float angle0 = radians(_WaveAngle0);
-                float2 waveValue0 = float2(cos(angle0), sin(angle0)) * _WaveSpeed0;
-
-                float2 _WaveT0 = (_TimeParameters.x.xx) * waveValue0;
-                float2 _TilingAndOffset0 = screenUV * WaveScale0 + _WaveT0;
-                float4 _WaveCol0 = SAMPLE_TEXTURE2D(_WaterNormalMap, sampler_WaterNormalMap, _TilingAndOffset0);
-                _WaveCol0.rgb = UnpackNormal(_WaveCol0);
-                // 波纹 2
-                float angle1 = radians(_WaveAngle1);
-                float2 waveValue1 = float2(cos(angle1), sin(angle1)) * _WaveSpeed1;
-                float2 _WaveT2 = (_TimeParameters.x.xx) * waveValue1;
-                float2 _TilingAndOffset1 = screenUV * WaveScale1 + _WaveT2;
-                float4 _WaveCol1 = SAMPLE_TEXTURE2D(_WaterNormalMap, sampler_WaterNormalMap, _TilingAndOffset1);
-                _WaveCol1.rgb = UnpackNormal(_WaveCol1);
-
-
-                float3 _endWave = _WaveCol0.xyz + _WaveCol1.xyz;
-                float waveBlendCol = _endWave[0] + _endWave[1];
-                waveBlendCol = clamp(waveBlendCol, 0, 1);
-                waveBlendCol *= waterValue;
-                float _waterNoise;
-                Unity_SimpleNoise_float(screenUV.xy, waterNoiseScale, _waterNoise);
-                waveBlendCol *= _waterNoise;
-                Unity_Remap_float(_WaterMask.r, float2(0, 1), float2(_WaterZero, _WaterBottom), _WaterMask.r);
-                _WaterMask.r = clamp(_WaterMask.r, 0, 1);
-
-
-                float _WaterMask1 = step(_WaterHigh, _WaterMask.r);
-                float _WaterMask2 = step(_WaterHigh + EdgeValue, _WaterMask.r);
-                stepMask *= _WaterMask1;
-                return stepMask;
-            }
-
-            half4 WaterPassFragment(WaterVaryings i) : SV_Target
-            {
-                float2 lightingUV = i.lightingUV.xy / i.lightingUV.w;
-                lightingUV = UnityStereoTransformScreenSpaceTex(lightingUV);
-                float3 result = WaterPassMaskFragment(i.uv, lightingUV);
-                return float4(result.xyz, 1);
-            }
-            ENDHLSL
-        }
         Pass
         {
             Tags
@@ -1349,7 +1008,8 @@
                 UNITY_SKINNED_VERTEX_COMPUTE(v);
 
                 v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy);
-                o.positionCS = TransformObjectToHClip(v.positionOS);
+                float3 objectWorldPos = TransformObjectToWorld(v.positionOS);
+                o.positionCS = TransformWorldToHClip(ApplyYSortToWorldPos(objectWorldPos));
                 o.uv = v.uv;
 
                 return o;
@@ -1401,7 +1061,8 @@
                 UNITY_SKINNED_VERTEX_COMPUTE(v);
 
                 v.positionOS = UnityFlipSprite(v.positionOS, unity_SpriteProps.xy);
-                o.positionCS = TransformObjectToHClip(v.positionOS);
+                float3 objectWorldPos = TransformObjectToWorld(v.positionOS);
+                o.positionCS = TransformWorldToHClip(ApplyYSortToWorldPos(objectWorldPos));
                 o.uv = v.uv;
                 return o;
             }
@@ -1425,3 +1086,4 @@
     Fallback "Sprites/Default"
     CustomEditor "FeatureFlagsGUI"
 }
+
