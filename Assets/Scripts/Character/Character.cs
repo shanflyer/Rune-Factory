@@ -990,7 +990,7 @@ public partial class Character
     public int2 coordinate => objCoordinate.xy;
     public int mapInstance => objCoordinate.z;
 
-    public Vector2 pos
+    public Vector3 pos
     {
         get
         {

@@ -964,7 +964,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         GameActionManager.instance.QueueAction(setHomeEquipCoordinate,true);
     }
  
-    public bool InitSmoothMove(ref Vector2 direction, Vector2 nowPos, int mapId, float distance, ref int2 target, ref Vector2 targetPos)
+    public bool InitSmoothMove(ref Vector2 direction, Vector3 nowPos, int mapId, float distance, ref int2 target, ref Vector3 targetPos)
     {
         MapCellController.instance.TransTempMap(ref mapId);
         if (direction == Vector2.zero)
@@ -972,18 +972,18 @@ public class WorldMapManager : Singleton<WorldMapManager>
             return false;
         }
 
-        Vector2 checkTargetPos = nowPos + direction * distance;
+        Vector3 checkTargetPos = GameCommon.SetMapPosZ(nowPos + new Vector3(direction.x, direction.y, 0) * distance);
         int2 checkTargetCoordinate = GameCommon.GetMapCoordinateInt(checkTargetPos);
         if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate, mapId))
         {
             Vector2 direction1 = new Vector2(0, direction.y);
-            Vector2 checkTargetPos1 = nowPos + direction1 * distance;
+            Vector3 checkTargetPos1 = GameCommon.SetMapPosZ(nowPos + new Vector3(direction1.x, direction1.y, 0) * distance);
             int2 checkTargetCoordinate1 = GameCommon.GetMapCoordinateInt(checkTargetPos1);
 
             if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate1, mapId))
             {
                 Vector2 direction2 = new Vector2(direction.x, 0);
-                Vector2 checkTargetPos2 = nowPos + direction2 * distance;
+                Vector3 checkTargetPos2 = GameCommon.SetMapPosZ(nowPos + new Vector3(direction2.x, direction2.y, 0) * distance);
                 int2 checkTargetCoordinate2 = GameCommon.GetMapCoordinateInt(checkTargetPos2);
 
                 if (!MapCellController.instance.CheckIsWalk(checkTargetCoordinate2, mapId))
@@ -1188,7 +1188,7 @@ public class RuntimeMapItem : INativeData
     public int linkCharacter;
     public int leftCharacter, rightCharacter;
     public int2 editorKey { get; }
-    public Vector2 pos => GameCommon.GetMapPos(coordinate);
+    public Vector3 pos => GameCommon.GetMapPos(coordinate);
     public RuntimeMapItem(int instanceId, int editorInstanceId, MapItemData mapItemData, int mapInstanceId, int2 coordinate, int2 animationKey)
     {
         this.instanceId = instanceId;

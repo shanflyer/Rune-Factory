@@ -8,20 +8,20 @@ public class CurveMoveData
     public float waitTime;
     public float moveTime;
     public Transform transform;
-    public Vector2 startPos;
-    public Vector2 targetPos;
-    public Vector2 middlePos;
+    public Vector3 startPos;
+    public Vector3 targetPos;
+    public Vector3 middlePos;
     public GameObjectCurveController.CurveEndAction CurveEndAction;
 }
 
 public class GameObjectCurveController : Singleton<GameObjectCurveController>
 {
     private MyUid myUid;
-    public delegate Vector2 GetCurvePos(float timeValue);
+    public delegate Vector3 GetCurvePos(float timeValue);
 
     public delegate void SetCurvePosCurveMoveData(float timeValue, CurveMoveData curveMoveData);
 
-    public delegate void CurveAction(Vector2 pos);
+    public delegate void CurveAction(Vector3 pos);
 
     public delegate void CurveEndAction();
 
@@ -107,14 +107,14 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
     {
         float oneMinusTime = 1 - timeValue;
 
-        Vector2 pos = oneMinusTime * oneMinusTime * curveMoveData.startPos + 2 * timeValue * oneMinusTime * curveMoveData.middlePos
+        Vector3 pos = oneMinusTime * oneMinusTime * curveMoveData.startPos + 2 * timeValue * oneMinusTime * curveMoveData.middlePos
         + timeValue * timeValue * curveMoveData.targetPos;
         curveMoveData.transform.position = pos;
     }
 
     private void SetLinePosCurveMoveDataAction(float timeValue, CurveMoveData curveMoveData)
     {
-        Vector2 pos = curveMoveData.startPos + (curveMoveData.targetPos - curveMoveData.startPos) * timeValue;
+        Vector3 pos = curveMoveData.startPos + (curveMoveData.targetPos - curveMoveData.startPos) * timeValue;
         curveMoveData.transform.position = pos;
     }
 
@@ -197,13 +197,13 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
         }
     }
 
-    public IEnumerator Curve(float speed, Vector2 startPos, Vector2 targetPos, Vector2 middlePos, CurveAction curveAction, CurveEndAction curveEndAction)
+    public IEnumerator Curve(float speed, Vector3 startPos, Vector3 targetPos, Vector3 middlePos, CurveAction curveAction, CurveEndAction curveEndAction)
     {
         IEnumerator enumerator = CurveAddTime(speed, curveAction, (float timeValue) =>
         {
             float oneMinusTime = 1 - timeValue;
 
-            Vector2 pos = oneMinusTime * oneMinusTime * startPos + 2 * timeValue * oneMinusTime * middlePos
+            Vector3 pos = oneMinusTime * oneMinusTime * startPos + 2 * timeValue * oneMinusTime * middlePos
             + timeValue * timeValue * targetPos;
             return pos;
         }, curveEndAction);
@@ -212,12 +212,12 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
         return enumerator;
     }
 
-    public int Line(float speed, Vector2 startPos, Vector2 targetPos, CurveAction curveAction, CurveEndAction curveEndAction)
+    public int Line(float speed, Vector3 startPos, Vector3 targetPos, CurveAction curveAction, CurveEndAction curveEndAction)
     {
         int instanceId = myUid.Uid;
         IEnumerator enumerator = CurveAddTime(speed, curveAction, (float timeValue) =>
         {
-            Vector2 pos = startPos + (targetPos - startPos) * timeValue;
+            Vector3 pos = startPos + (targetPos - startPos) * timeValue;
             return pos;
         }, EnnAction);
 
@@ -275,10 +275,11 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
         while (!character.moveDirection.Equals(float2.zero))
         {
             Vector2 direction = character.moveDirection;
-            Vector2 nowPos = GetObjectPos();
+            Vector3 nowPos = GetObjectPos();
             float speed = character.propertySpeed;
 
-            var targetPos = nowPos + direction * speed * GameCommon.freedomMoveValue * 1.1f * Time.deltaTime; 
+            Vector3 targetPos = nowPos + new Vector3(direction.x, direction.y, 0) * speed * GameCommon.freedomMoveValue * 1.1f * Time.deltaTime;
+            targetPos = GameCommon.SetMapPosZ(targetPos);
             int2 targetCoordinate = GameCommon.GetMapCoordinateInt(targetPos);
             int2 trueTargetCoordinate = MapCellController.instance.GetTrueFreedomTarget(character.coordinate, targetCoordinate, character.mapInstance);
             if (direction != Vector2.zero && trueTargetCoordinate.Equals(character.coordinate))
@@ -314,12 +315,12 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
         while (_continue)
         {
             Vector2 direction = GetMoveDirction();
-            Vector2 nowPos = GetObjectPos();
+            Vector3 nowPos = GetObjectPos();
 
             if (checkWalk)
             {
                 int2 target = int2.zero;
-                Vector2 targetPos = nowPos;
+                Vector3 targetPos = nowPos;
 
                 float distance = CharacterManager.updataMoveSpeed * Time.deltaTime* speed;
 
@@ -335,7 +336,8 @@ public class GameObjectCurveController : Singleton<GameObjectCurveController>
             }
             else
             {
-                Vector2 targetPos = nowPos + direction * CharacterManager.updataMoveSpeed * Time.deltaTime * speed;
+                Vector3 targetPos = nowPos + new Vector3(direction.x, direction.y, 0) * CharacterManager.updataMoveSpeed * Time.deltaTime * speed;
+                targetPos = GameCommon.SetMapPosZ(targetPos);
                 int2 targetCoordinate = GameCommon.GetMapCoordinateInt(targetPos);
                 SetMoveTarge(targetCoordinate, targetPos);
             }

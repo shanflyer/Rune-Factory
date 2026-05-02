@@ -239,8 +239,7 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
 
     public void SetPosition(Vector3 pos)
     {
-         
-        transform.position = pos;
+        transform.position = GameCommon.SetMapPosZ(pos);
     }
 
     public void SetCoordinateAction(int2 coordinate, int mapInstance, int defaultGround)

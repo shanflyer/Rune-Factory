@@ -331,7 +331,7 @@ public class Team
     private HashSet<int> characterInstances = new HashSet<int>();
     public HashSet<int> TeamCharacters => characterInstances;
 
-    private readonly RingQueue<Vector2> teamPositions = new(23);
+    private readonly RingQueue<Vector3> teamPositions = new(23);
     private readonly RingQueue<int2> teamCoordinates = new(23);
  
     public CharacterInformationDataList GetTeamCharacterInfo()
@@ -447,7 +447,7 @@ public class Team
         return Teamers.Count > 0;
     }
 
-    public void AddTeamPos(Vector2 pos, int2 coordinate)
+    public void AddTeamPos(Vector3 pos, int2 coordinate)
     {
         teamPositions.Enqueue(pos);
         teamCoordinates.Enqueue(coordinate);
@@ -517,19 +517,19 @@ public class Teamer
     }
 
      
-    private Vector2 startPos;
+    private Vector3 startPos;
     private float timeValue;
   
     public const float perCellTime = GameCommon.cellSize * 2;
     private float timeSpeed = 1 / perCellTime;
 
-    private Vector2 targetPos;
+    private Vector3 targetPos;
     private int2 targetCoordinate;
 
-    public void SetMoveTarget(Vector2 targetPos, int2 targetCoordinate)
+    public void SetMoveTarget(Vector3 targetPos, int2 targetCoordinate)
     {
         this.targetCoordinate = targetCoordinate;
-        this.targetPos = targetPos;
+        this.targetPos = GameCommon.SetMapPosZ(targetPos);
         timeValue = 0;
         if (CharacterManager.instance.GetRuntimeCharacterObj(character.instanceId, out var characterRuntimeObj))
         {
@@ -563,7 +563,7 @@ public class Teamer
 
             float speed = 1;
             timeValue += Time.deltaTime * speed * timeSpeed;
-            var pos = (targetPos - startPos) * timeValue + startPos;
+            var pos = GameCommon.SetMapPosZ((targetPos - startPos) * timeValue + startPos);
             if (timeValue >= 1)
             {
                 timeValue = 1;

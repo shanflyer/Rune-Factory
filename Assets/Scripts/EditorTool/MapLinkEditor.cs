@@ -95,11 +95,11 @@ public class MapLinkEditor : MonoBehaviour
     void SetLinePointPos()
     {
         startCoordinate = mapLine.center0+ mapInstance0.coordinate;
-        Vector2 _startPos = mapInstance0.GetMapPos(startCoordinate);
-        startPoint.position = new Vector3(_startPos.x, _startPos.y, startPoint.position.z);
+        Vector3 _startPos = mapInstance0.GetMapPos(startCoordinate);
+        startPoint.position = _startPos;
         endCoordinate = mapLine.center1 + mapInstance1.coordinate;
-        Vector2 _endPos = mapInstance1.GetMapPos(endCoordinate);
-        endPoint.position = new Vector3(_endPos.x, _endPos.y, endPoint.position.z);
+        Vector3 _endPos = mapInstance1.GetMapPos(endCoordinate);
+        endPoint.position = _endPos;
 
         mapPos0 = mapInstance0.transform.position;
         mapPos1 = mapInstance1.transform.position;
@@ -218,12 +218,12 @@ public class MapLinkEditor : MonoBehaviour
         else if (startPos != startPoint.position || endPos != endPoint.position)
         {
             int2 startCoordinate = GameCommon.GetMapCoordinateInt(startPoint.position);
-            Vector2 _startPos = GameCommon.GetMapPos(startCoordinate);
-            startPoint.position = new Vector3(_startPos.x, _startPos.y, startPoint.position.z);
+            Vector3 _startPos = GameCommon.GetMapPos(startCoordinate);
+            startPoint.position = _startPos;
 
             int2 endCoordinate = GameCommon.GetMapCoordinateInt(endPoint.position);
-            Vector2 _endPos = GameCommon.GetMapPos(endCoordinate);
-            endPoint.position = new Vector3(_endPos.x, _endPos.y, endPoint.position.z);
+            Vector3 _endPos = GameCommon.GetMapPos(endCoordinate);
+            endPoint.position = _endPos;
 
             startPos = startPoint.position;
             endPos = endPoint.position;

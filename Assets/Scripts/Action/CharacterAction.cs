@@ -185,7 +185,7 @@ public struct TryTeamLeaderMove : GameAction
 {
     public int characterId;
     public int2 targetCoordinate;
-    public Vector2 targetPos;
+    public Vector3 targetPos;
 
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }

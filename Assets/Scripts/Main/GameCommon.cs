@@ -10,9 +10,9 @@ using UnityEngine;
 
 public delegate void Int3Action(int3 value, int action = 0);
 
-public delegate Vector2 GetVector2();
+public delegate Vector3 GetVector2();
 
-public delegate void SetMoveTarge(int2 targetCoordinate, Vector2 targetPos);
+public delegate void SetMoveTarge(int2 targetCoordinate, Vector3 targetPos);
 
 [Serializable]
 public enum AttributeType
@@ -973,28 +973,43 @@ public static class GameCommon
     }
  
 
-    public static Vector2 GetMapPos(int x, int y)
+    public static Vector3 GetMapPos(int x, int y)
     {
-        Vector2 pos = new Vector2(cellWidth * x + cellWidth * 0.5f, cellHigh * y + cellHigh * 0.5f);
+        Vector3 pos = new Vector2(cellWidth * x + cellWidth * 0.5f, cellHigh * y + cellHigh * 0.5f);
+        pos.z = pos.y;
         return pos;
     }
 
-    public static Vector2 GetMapPos(int2 coordinate)
+    public static Vector3 GetMapPos(int2 coordinate)
     {
-        Vector2 pos = new Vector2(cellWidth * coordinate.x + cellWidth * 0.5f, cellHigh * coordinate.y + cellHigh * 0.5f);
+        Vector3 pos = new Vector2(cellWidth * coordinate.x + cellWidth * 0.5f, cellHigh * coordinate.y + cellHigh * 0.5f);
+        pos.z = pos.y;
         return pos;
     }
 
-    public static Vector2 GetMapPos(Vector2Int coordinate)
+    public static Vector3 GetMapPos(Vector2Int coordinate)
     {
-        Vector2 pos = new Vector2(cellWidth * coordinate.x + cellWidth * 0.5f, cellHigh * coordinate.y + cellHigh * 0.5f);
+        Vector3 pos = new Vector2(cellWidth * coordinate.x + cellWidth * 0.5f, cellHigh * coordinate.y + cellHigh * 0.5f);
+        pos.z = pos.y;
         return pos;
     }
 
-    public static Vector2 GetMapPos(Vector2 coordinate)
+    public static Vector3 GetMapPos(Vector2 coordinate)
     {
-        Vector2 pos = new Vector2(cellWidth * coordinate.x + cellWidth * 0.5f, cellHigh * coordinate.y + cellHigh * 0.5f);
+        Vector3 pos = new Vector2(cellWidth * coordinate.x + cellWidth * 0.5f, cellHigh * coordinate.y + cellHigh * 0.5f);
+        pos.z = pos.y;
         return pos;
+    }
+
+    public static Vector3 SetMapPosZ(Vector3 pos)
+    {
+        pos.z = pos.y;
+        return pos;
+    }
+
+    public static Vector3 SetMapPosZ(Vector2 pos)
+    {
+        return new Vector3(pos.x, pos.y, pos.y);
     }
 
     public static Vector2 GetZeroMapPos(Vector2Int coordinate)
@@ -1017,7 +1032,23 @@ public static class GameCommon
         return new Vector2Int(x, y);
     }
 
+    public static Vector2Int GetMapCoordinate(Vector3 pos)
+    {
+        int x = Mathf.FloorToInt(pos.x * oneDividCellWidth);
+        int y = Mathf.FloorToInt(pos.y * oneDividCellHigh);
+
+        return new Vector2Int(x, y);
+    }
+
     public static int2 GetMapCoordinateInt(Vector2 pos)
+    {
+        int x = Mathf.FloorToInt(pos.x * oneDividCellWidth);
+        int y = Mathf.FloorToInt(pos.y * oneDividCellHigh);
+
+        return new int2(x, y);
+    }
+
+    public static int2 GetMapCoordinateInt(Vector3 pos)
     {
         int x = Mathf.FloorToInt(pos.x * oneDividCellWidth);
         int y = Mathf.FloorToInt(pos.y * oneDividCellHigh);

@@ -926,7 +926,7 @@ public class CharacterManager : Singleton<CharacterManager>
             {
                 if (characterRuntimeObj)
                 {
-                    Vector2 pos = GameCommon.GetMapPos(character.coordinate);
+                    Vector3 pos = GameCommon.GetMapPos(character.coordinate);
                     if (GameDataManager.instance.GlobalData.debug)
                     {
                         float dX = math.abs(characterRuntimeObj.transform.position.x - pos.x);
@@ -952,14 +952,11 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    public void SetCharacterObjPos(Character character, Vector2 pos)
+    public void SetCharacterObjPos(Character character, Vector3 pos)
     {
         if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
         {
-            //SetCharacterAnimationSpeed(0, characterRuntimeObj);
-            var transform = characterRuntimeObj.transform;
-            Vector3 targetPos = new Vector3(pos.x, pos.y, transform.position.z);
-           // transform.position = targetPos;
+            Vector3 targetPos = GameCommon.SetMapPosZ(pos);
             SetCharacterAnimationSpeed(1, characterRuntimeObj);
             if (GameDataManager.instance.GlobalData.debug)
             {
@@ -970,8 +967,6 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
             }
             characterRuntimeObj.SetPosition(targetPos);
-           // transform.position = pos;
-           
         }
     }
 
@@ -994,10 +989,9 @@ public class CharacterManager : Singleton<CharacterManager>
                 {
                     SetCharacterAnimationSpeed(1, characterRuntimeObj);
                     var transform = characterRuntimeObj.transform;
-                    Vector3 TranslateValue = new Vector3(moveValue.x, moveValue.y, 0);
-                    transform.Translate(TranslateValue);
-
-                    var nowCoordinate = GameCommon.GetMapCoordinate(transform.position);
+                    Vector3 targetPos = transform.position + new Vector3(moveValue.x, moveValue.y, 0);
+                    characterRuntimeObj.SetPosition(targetPos);
+                    var nowCoordinate = GameCommon.GetMapCoordinate(characterRuntimeObj.transform.position);
                     coordinate = new int2(nowCoordinate.x, nowCoordinate.y);
                 }
             }
@@ -1005,13 +999,12 @@ public class CharacterManager : Singleton<CharacterManager>
         catch { }
     }
 
-    public void SetCharacterObj(Character character, Vector2 pos)
+    public void SetCharacterObj(Character character, Vector3 pos)
     {
         if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
         {
-            //SetCharacterAnimationSpeed(0, characterRuntimeObj);
             var transform = characterRuntimeObj.transform;
-            Vector3 targetPos = new Vector3(pos.x, pos.y, transform.position.z);
+            Vector3 targetPos = GameCommon.SetMapPosZ(pos);
             Vector3 offsetPos = targetPos - transform.position;
 
             IEnumerator LerpPos()
@@ -1037,8 +1030,8 @@ public class CharacterManager : Singleton<CharacterManager>
     /// <param name="EndAction"></param>
     public void CharacterMoveTarget(Character character, int2 targetCoordinate, MoveEndAction EndAction = null, MoveEndAction changeCoordinateAction = null, float overrideSpeed = 0)
     {
-        Vector2 targetPos = GameCommon.GetMapPos(targetCoordinate);
-        Vector2 startPos = GameCommon.GetMapPos(character.coordinate);
+        Vector3 targetPos = GameCommon.GetMapPos(targetCoordinate);
+        Vector3 startPos = GameCommon.GetMapPos(character.coordinate);
         if (characterRuntionObjs.TryGetValue(character, out CharacterRuntimeObj runtimeObj))
         {
             var transform = runtimeObj.transform;
@@ -1063,14 +1056,12 @@ public class CharacterManager : Singleton<CharacterManager>
             Debug.Log($"Waring:{character.name}--noStop");
         }
         character.moveEnumeratorId =
-        GameObjectCurveController.instance.Line(character.nowSpeed, startPos, targetPos, (Vector2 pos) =>
+        GameObjectCurveController.instance.Line(character.nowSpeed, startPos, targetPos, (Vector3 pos) =>
         {
             if (runtimeObj != null&&runtimeObj.gameObject.activeSelf)
             {
                 SetCharacterAnimationSpeed(1, runtimeObj);
-                var transform = runtimeObj.transform;
-                transform.transform.position = pos;
-                //transform.Translate(Vector3.zero);
+                runtimeObj.SetPosition(pos);
             }
         },
             () =>
@@ -1092,8 +1083,8 @@ public class CharacterManager : Singleton<CharacterManager>
         MoveEndAction changeCoordinateAction = null, MoveEndAction failedMoveAction = null)
     {
         var targetCoordinate = pathNodes.Pop();
-        Vector2 targetPos = GameCommon.GetMapPos(targetCoordinate);
-        Vector2 startPos = GameCommon.GetMapPos(character.coordinate);
+        Vector3 targetPos = GameCommon.GetMapPos(targetCoordinate);
+        Vector3 startPos = GameCommon.GetMapPos(character.coordinate);
         if (characterRuntionObjs.TryGetValue(character, out var runtimeObj))
         {
             var transform = runtimeObj.transform;
@@ -1134,7 +1125,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
             
         character.moveEnumeratorId =
-        GameObjectCurveController.instance.Line(lineSpeed, startPos, targetPos, (Vector2 pos) =>
+        GameObjectCurveController.instance.Line(lineSpeed, startPos, targetPos, (Vector3 pos) =>
              {
                  if (runtimeObj != null)
                  {
@@ -1763,12 +1754,11 @@ public class CharacterManager : Singleton<CharacterManager>
             {
                 return controllerTransform.position;
             },
-            (int2 targetCoordinate, Vector2 targetPos) =>
+            (int2 targetCoordinate, Vector3 targetPos) =>
             {
                 if (controllerCharacter.canMove)
                 { 
-                   
-                    ControllerRuntimeObj.SetPosition(new Vector3(targetPos.x, targetPos.y, controllerTransform.position.z)); 
+                    ControllerRuntimeObj.SetPosition(targetPos); 
                     //Debug.Log("SetShaderPlayerPos7");
 
                     if (controllerCharacter.coordinate.x != targetCoordinate.x ||
@@ -1820,10 +1810,11 @@ public class CharacterManager : Singleton<CharacterManager>
 
     private void FreedomMoving(Transform controllerCharacterObj)
     {
-        Vector2 nowPos = controllerCharacterObj.position;
+        Vector3 nowPos = controllerCharacterObj.position;
         Vector2 direcrion = controllerCharacter.moveDirection;
 
-        Vector2 targetPos = nowPos + direcrion * controllerCharacter.propertySpeed * freedomMoveValue * Time.deltaTime;
+        Vector3 targetPos = nowPos + new Vector3(direcrion.x, direcrion.y, 0) * controllerCharacter.propertySpeed * freedomMoveValue * Time.deltaTime;
+        targetPos = GameCommon.SetMapPosZ(targetPos);
         // Debug.Log($"targetPos：{targetPos}");
         int2 targetCoordinate = GameCommon.GetMapCoordinateInt(targetPos);
         /// Debug.Log($"targetCoordinate：{targetCoordinate}");

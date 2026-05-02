@@ -487,7 +487,7 @@ public class MapInstanceEditor : MonoBehaviour
             {
                 var pos = new Vector3Int(x, y);
 
-                Vector2 pos1 = GameCommon.GetMapPos(x, y);
+                Vector3 pos1 = GameCommon.GetMapPos(x, y);
                 var editorCoordinate = Instantiate(this.editorCoordinate, pos1, Quaternion.identity, coordinateDisplayParent.transform);
                 editorCoordinate.SetText($"{x},{y}");
                 coordinateDisplayParent.SetActive(displayCoordinate);

@@ -58,9 +58,9 @@ public class RuntimeObjMoveEvent : Action
         }
         if(taskStatus== TaskStatus.Running)
         {
-            Vector2 startPos = this.startPos.Value;
-            Vector2 targetPos = this.targetPos.Value;
-            Vector2 middlePos = this.middlePos.Value;
+            Vector3 startPos = this.startPos.Value;
+            Vector3 targetPos = this.targetPos.Value;
+            Vector3 middlePos = this.middlePos.Value;
 
             if (coordinatePos)
             {
@@ -82,16 +82,11 @@ public class RuntimeObjMoveEvent : Action
     {
         taskStatus = TaskStatus.Success;
     }
-    void SetObjPos(Vector2 pos)
+    void SetObjPos(Vector3 pos)
     {
-        if (transform != null && transform.gameObject.activeSelf)
+        if (runtimeObjTransform != null && runtimeObjTransform.gameObject.activeSelf)
         { 
-            if(transform!= null)
-            {
-                float z = transform.position.z;
-                transform.position = new Vector3(pos.x, pos.y, z);
-            }
-            
+            runtimeObjTransform.position = GameCommon.SetMapPosZ(pos);
         }
         else
         {
