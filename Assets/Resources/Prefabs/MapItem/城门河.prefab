@@ -699,6 +699,7 @@ Tilemap:
     e33: 1
 --- !u!483693784 &5148982028987332787
 TilemapRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -717,6 +718,8 @@ TilemapRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -738,9 +741,11 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -748,7 +753,6 @@ TilemapRenderer:
   m_SortOrder: 0
   m_Mode: 2
   m_DetectChunkCullingBounds: 0
-  m_MaskInteraction: 0
 --- !u!1 &2385765612607465024
 GameObject:
   m_ObjectHideFlags: 0
@@ -850,7 +854,7 @@ Transform:
   m_GameObject: {fileID: 7789417291815683610}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.039000005, y: -0.42, z: 190}
+  m_LocalPosition: {x: 0.039000005, y: -0.42, z: 390}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -904,7 +908,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 1047905406884586644, guid: c6b38f752d0babf48be05bf8699f7f02,
     type: 2}
-  m_audioClip: {fileID: 8300000, guid: fed1587b1685480489ed90f6cc47f81c, type: 3}
+  m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: fed1587b1685480489ed90f6cc47f81c, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0
