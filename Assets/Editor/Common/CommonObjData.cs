@@ -175,9 +175,11 @@ public class MapItemDataObj : CommonObj
 
     public void ChecckSearch(string key, ObjSearchType objSearchType)
     {
+        search = GetName().Contains(key);
         //throw new System.NotImplementedException();
     }
 
+    bool search = true;
     public bool CheckHide()
     {
         return false;
@@ -212,7 +214,7 @@ public class MapItemDataObj : CommonObj
 
     public bool GetSearch()
     {
-        return true;
+        return search;
     }
 
     public void InitSearch()

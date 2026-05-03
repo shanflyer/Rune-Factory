@@ -49,6 +49,7 @@ namespace UnityEngine.Rendering.Universal.Internal
                 internal Material material;
                 internal int passId;
                 internal TextureHandle outTexHandle;
+                internal bool clearDepth;
             }
 
 
@@ -65,6 +66,7 @@ namespace UnityEngine.Rendering.Universal.Internal
 
                     passData.clearFlag = settings.clearFlag;
                     passData.clearColor = settings.clearColor;
+                    passData.clearDepth = settings.createDepthAttachment;
 
 
                     var sortingCriteria = settings.opaque
@@ -73,9 +75,12 @@ namespace UnityEngine.Rendering.Universal.Internal
                     var drawSettings = RenderingUtils.CreateDrawingSettings(m_ShaderTagIdList, renderingData,
                         cameraData, lightData, sortingCriteria);
                     drawSettings.overrideMaterial = settings.overrideMat;
-                    var sortSettings = drawSettings.sortingSettings;
-                    GetTransparencySortingMode(cameraData.camera, ref sortSettings);
-                    drawSettings.sortingSettings = sortSettings;
+                    if (!settings.opaque)
+                    {
+                        var sortSettings = drawSettings.sortingSettings;
+                        GetTransparencySortingMode(cameraData.camera, ref sortSettings);
+                        drawSettings.sortingSettings = sortSettings;
+                    }
                     var filteringSettings = new FilteringSettings(
                         settings.opaque ? RenderQueueRange.opaque : RenderQueueRange.transparent, settings.layerMask);
 
@@ -83,12 +88,22 @@ namespace UnityEngine.Rendering.Universal.Internal
                         drawSettings, filteringSettings, m_RenderStateBlock, ref passData.rendererList);
 
                     builder.UseRendererList(passData.rendererList);
-                    // Native render passes require all attachments to share the same dimensions.
-                    // When this feature renders to scaled offscreen targets, binding the full-resolution
-                    // camera depth causes a dimension mismatch. In that case we skip the depth attachment.
                     if (settings.bindCameraDepth)
                     {
                         builder.SetRenderAttachmentDepth(resourceData.cameraDepth, AccessFlags.ReadWrite);
+                    }
+                    else if (settings.createDepthAttachment)
+                    {
+                        var depthDesc = renderGraph.GetTextureDesc(resourceData.cameraColor);
+                        depthDesc.name = $"{passName}_Depth";
+                        depthDesc.width = (int)(settings.blitScale * cameraData.cameraTargetDescriptor.width);
+                        depthDesc.height = (int)(settings.blitScale * cameraData.cameraTargetDescriptor.height);
+                        depthDesc.clearBuffer = true;
+                        depthDesc.colorFormat = GraphicsFormat.None;
+                        depthDesc.depthBufferBits = DepthBits.Depth24;
+                        depthDesc.msaaSamples = MSAASamples.None;
+                        var depthHandle = renderGraph.CreateTexture(depthDesc);
+                        builder.SetRenderAttachmentDepth(depthHandle, AccessFlags.ReadWrite);
                     }
 
                     if (settings.outCameraTarget) builder.SetRenderAttachment(resourceData.activeColorTexture, 0);
@@ -134,7 +149,7 @@ namespace UnityEngine.Rendering.Universal.Internal
                     builder.SetRenderFunc((PassData data, RasterGraphContext context) =>
                         {
                             context.cmd.ClearRenderTarget(
-                                data.clearFlag == ClearFlag.Depth || data.clearFlag == ClearFlag.All,
+                                data.clearDepth || data.clearFlag == ClearFlag.Depth || data.clearFlag == ClearFlag.All,
                                 data.clearFlag == ClearFlag.Color || data.clearFlag == ClearFlag.All, data.clearColor);
                             context.cmd.DrawRendererList(data.rendererList);
                         }
@@ -225,6 +240,7 @@ namespace UnityEngine.Rendering.Universal.Internal
 
             public bool outCameraTarget;
             public bool bindCameraDepth;
+            public bool createDepthAttachment;
             public List<OutRenderData> outRenderDatas;
             public ClearFlag clearFlag;
             public Color clearColor = Color.black;

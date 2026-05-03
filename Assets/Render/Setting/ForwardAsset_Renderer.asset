@@ -308,9 +308,9 @@ MonoBehaviour:
   settings:
     m_transparencySortMode: 3
     m_transparencySortAxis: {x: 0, y: 1, z: 1}
-    overrideDepthState: 0
+    overrideDepthState: 1
     depthCompareFunction: 4
-    enableWrite: 0
+    enableWrite: 1
     overrideStencilState: 0
     stencilStateData:
       overrideStencilState: 0
@@ -319,7 +319,7 @@ MonoBehaviour:
       passOperation: 0
       failOperation: 0
       zFailOperation: 0
-    opaque: 0
+    opaque: 1
     renderPassEvent: 250
     layerMask:
       serializedVersion: 2
@@ -330,6 +330,7 @@ MonoBehaviour:
     blitScale: 0.5
     outCameraTarget: 0
     bindCameraDepth: 0
+    createDepthAttachment: 1
     outRenderDatas:
     - outTextureName: _Normalmap
       outIndex: 0

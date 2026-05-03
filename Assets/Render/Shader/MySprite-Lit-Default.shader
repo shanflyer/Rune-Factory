@@ -153,7 +153,6 @@
             uint _FeatureFlags; // 原始功能位配置，仅用于工具同步 keyword。
         CBUFFER_END
 
-        #define FEAT_WATER (1u<<0)
         #define FEAT_DAMPBLEND (1u<<1)
         #define FEAT_MOVE (1u<<2)
         #define FEAT_SEASONCOLORBLEND (1u<<3)

@@ -19,6 +19,8 @@ MonoBehaviour:
   colliderGrids: 
   triggerGrids: f5ffffff390000000a0000004a000000f5ffffff4b0000000200000068000000f9ffffffedffffff15000000fafffffff9fffffffbffffff0a00000038000000fdffffffe9ffffff15000000ecffffff
   playerTriggerGrids: f5ffffff390000000a0000004a000000f5ffffff4b0000000200000068000000f9ffffffedffffff15000000fafffffff9fffffffbffffff0a00000038000000fdffffffe9ffffff15000000ecffffff
+  isPlayerForwardTrigger: 0
+  maskObj: 
   playerTriggerEvent: 0
   operateIds: 100000002800000029000000
   creatAction: {fileID: 0}
@@ -26,7 +28,7 @@ MonoBehaviour:
   defaultEnter: 0
   displayTips: 0
   playerOperateInfo: 
-  offsetLinkPos: {x: 0, y: 0}
-  leftLinkPos: {x: 0, y: 0}
-  rightLinkPos: {x: 0, y: 0}
+  offsetLinkPos: {x: 0, y: 0, z: 0}
+  leftLinkPos: {x: 0, y: 0, z: 0}
+  rightLinkPos: {x: 0, y: 0, z: 0}
   linkDirection: 0

@@ -13,8 +13,10 @@ Material:
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _FEATURE_DAMP
+  - _FEATURE_GRASS
   - _FEATURE_MOVE
   - _FEATURE_SEASON
+  - _FEATURE_SHADOW
   - _FEATURE_SNOW
   m_InvalidKeywords:
   - DAMPBLEND
@@ -42,7 +44,8 @@ Material:
     m_Ints: []
     m_Floats:
     - _BackBlend: 0
-    - _FEATURE_GRASS: 0
+    - _FEATURE_GRASS: 1
+    - _FEATURE_SHADOW: 1
     - _FeatureFlags: 30
     - _GrassBlend: 0
     - _Water: 1

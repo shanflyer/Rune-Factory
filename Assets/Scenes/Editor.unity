@@ -7404,6 +7404,37 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1 &815599368
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 815599369}
+  m_Layer: 0
+  m_Name: ItemParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &815599369
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 815599368}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &833090027
 Mesh:
   m_ObjectHideFlags: 0
@@ -14644,66 +14675,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1285764111}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1296295095
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1296295096}
-  - component: {fileID: 1296295097}
-  m_Layer: 0
-  m_Name: ItemParent
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1296295096
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1296295095}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1296295097
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1296295095}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b528430bdf005d4bb5b74f08c137a1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalDatas:
-  - dataName: _SeasonValue
-    shaderDataType: 1
-    intValue: 0
-    floatValue: 1
-    vectorValue: {x: 0, y: 0, z: 0, w: 0}
-    colorValue: {r: 0, g: 0, b: 0, a: 0}
-  selectable: {fileID: 0}
-  dayValue: 1
-  environmentDataList: {fileID: 11400000, guid: cb02363fdc75c014684d492c548917fc,
-    type: 2}
-  dayName: "\u767D\u5929"
-  nightName: "\u665A\u4E0A"
-  dawnName: "\u9ECE\u660E"
-  duskName: "\u9EC4\u660F"
-  spriteRenderer: {fileID: 0}
 --- !u!43 &1302705872
 Mesh:
   m_ObjectHideFlags: 0
@@ -16026,6 +15997,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1515600458}
   - component: {fileID: 1515600457}
+  - component: {fileID: 1515600459}
   m_Layer: 0
   m_Name: MapEditor
   m_TagString: Untagged
@@ -16063,6 +16035,34 @@ Transform:
   - {fileID: 1853245117}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1515600459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1515600456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b528430bdf005d4bb5b74f08c137a1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalDatas:
+  - dataName: _SeasonValue
+    shaderDataType: 1
+    intValue: 0
+    floatValue: 1
+    vectorValue: {x: 0, y: 0, z: 0, w: 0}
+    colorValue: {r: 0, g: 0, b: 0, a: 0}
+  selectable: {fileID: 0}
+  dayValue: 0.6
+  environmentDataList: {fileID: 11400000, guid: cb02363fdc75c014684d492c548917fc,
+    type: 2}
+  dayName: "\u767D\u5929"
+  nightName: "\u665A\u4E0A"
+  dawnName: "\u9ECE\u660E"
+  duskName: "\u9EC4\u660F"
+  spriteRenderer: {fileID: 0}
 --- !u!1001 &1591643045
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16484,7 +16484,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1623224318
 Transform:
   m_ObjectHideFlags: 0
@@ -40412,5 +40412,5 @@ SceneRoots:
   - {fileID: 1244796022}
   - {fileID: 988664529}
   - {fileID: 4659198623859020036}
-  - {fileID: 1296295096}
   - {fileID: 1063144204}
+  - {fileID: 815599369}
