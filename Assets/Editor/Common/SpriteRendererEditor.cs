@@ -1,48 +1,132 @@
-using System.Collections.Generic;
+using System;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(SpriteRenderer))]
 public class SpriteRendererEditor : Editor
 {
-    private SpriteRenderer spriteRenderer =>target as SpriteRenderer;
-    static string[] layerNames;
-    static Dictionary<string, int> layerIndexs = new Dictionary<string, int>();
+    private static readonly BindingFlags BindingFlagsAll =
+        BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+
+    private Editor builtInEditor;
+
+    private void OnEnable()
+    {
+        CreateBuiltInEditor();
+    }
+
+    private void OnDisable()
+    {
+        if (builtInEditor != null)
+        {
+            DestroyImmediate(builtInEditor);
+            builtInEditor = null;
+        }
+    }
+
     public override void OnInspectorGUI()
     {
-        base.OnInspectorGUI();
-        try
-        {
-            if (layerNames == null || layerNames.Length != SortingLayer.layers.Length)
-            {
-                layerNames = new string[SortingLayer.layers.Length];
-                for (int i = 0; i < SortingLayer.layers.Length; i++)
-                {
-                    layerNames[i] = SortingLayer.layers[i].name;
-                    layerIndexs.Add(layerNames[i], i);
-                }
+        DrawBuiltInInspector();
 
+        EditorGUILayout.Space();
+        using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
+        {
+            DrawHdrColorField();
+        }
+    }
+
+    private void DrawBuiltInInspector()
+    {
+        if (builtInEditor == null)
+        {
+            CreateBuiltInEditor();
+        }
+
+        if (builtInEditor != null)
+        {
+            builtInEditor.OnInspectorGUI();
+        }
+        else
+        {
+            DrawDefaultInspector();
+        }
+    }
+
+    private void CreateBuiltInEditor()
+    {
+        Type editorType = FindBuiltInSpriteRendererEditorType();
+        if (editorType != null)
+        {
+            builtInEditor = CreateEditor(targets, editorType);
+        }
+    }
+
+    private Type FindBuiltInSpriteRendererEditorType()
+    {
+        FieldInfo inspectedTypeField = typeof(CustomEditor).GetField("m_InspectedType", BindingFlagsAll);
+        if (inspectedTypeField == null)
+        {
+            return null;
+        }
+
+        Type customEditorType = GetType();
+        foreach (Type editorType in TypeCache.GetTypesDerivedFrom<Editor>())
+        {
+            if (editorType == null || editorType == customEditorType || editorType.IsAbstract)
+            {
+                continue;
             }
 
-            int layerValue = layerIndexs[spriteRenderer.sortingLayerName];
-            layerValue = EditorGUILayout.Popup("Sorting Layer", layerValue, layerNames);
-
-            SortingLayer layer = SortingLayer.layers[layerValue];
-            spriteRenderer.sortingLayerName = layer.name;
-            spriteRenderer.sortingLayerID = layer.id;
-            spriteRenderer.sortingOrder = EditorGUILayout.IntField("Order in Layer", spriteRenderer.sortingOrder);
-
-            Color color = spriteRenderer.color;
-            color = EditorGUILayout.ColorField(new GUIContent("OverrideColor"), color, false, true, true);
-            spriteRenderer.color = color;
+            foreach (object attribute in editorType.GetCustomAttributes(typeof(CustomEditor), true))
+            {
+                Type inspectedType = inspectedTypeField.GetValue(attribute) as Type;
+                if (inspectedType == typeof(SpriteRenderer))
+                {
+                    return editorType;
+                }
+            }
         }
-        catch { }
 
-        /*
-        InitSpriteTrueUV initSpriteTrueUV;
-        if(!meshRenderer.transform.TryGetComponent<InitSpriteTrueUV>(out initSpriteTrueUV))
+        return null;
+    }
+
+    private void DrawHdrColorField()
+    {
+        SpriteRenderer renderer = target as SpriteRenderer;
+        if (renderer == null)
         {
-            meshRenderer.gameObject.AddComponent<InitSpriteTrueUV>();
-        }*/
+            return;
+        }
+
+        EditorGUI.BeginChangeCheck();
+        EditorGUI.showMixedValue = HasMixedColor(renderer.color);
+        Color color = EditorGUILayout.ColorField(new GUIContent("HDR Color"), renderer.color, false, true, true);
+        EditorGUI.showMixedValue = false;
+        if (EditorGUI.EndChangeCheck())
+        {
+            Undo.RecordObjects(targets, "Change SpriteRenderer HDR Color");
+            foreach (UnityEngine.Object obj in targets)
+            {
+                if (obj is SpriteRenderer item)
+                {
+                    item.color = color;
+                    EditorUtility.SetDirty(item);
+                }
+            }
+        }
+    }
+
+    private bool HasMixedColor(Color first)
+    {
+        foreach (UnityEngine.Object obj in targets)
+        {
+            if (obj is SpriteRenderer item && item.color != first)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
