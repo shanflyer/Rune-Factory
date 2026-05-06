@@ -33,7 +33,10 @@ MonoBehaviour:
   postProcessData: {fileID: 0}
   m_transparencySortMode: 0
   m_transparencySortAxis: {x: 0, y: 0, z: 1}
-  m_AssetVersion: 2
+  m_AssetVersion: 3
+  m_PrepassLayerMask:
+    serializedVersion: 2
+    m_Bits: 32
   m_OpaqueLayerMask:
     serializedVersion: 2
     m_Bits: 32
@@ -55,3 +58,6 @@ MonoBehaviour:
   m_DepthTextureFormat: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
+  m_OverrideCameraScaling: 0
+  m_CameraRenderScale: 0.5
+  m_CameraUpscalingFilter: 2

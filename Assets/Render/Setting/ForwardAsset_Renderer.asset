@@ -224,6 +224,9 @@ MonoBehaviour:
   m_DepthTextureFormat: 0
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 1
+  m_OverrideCameraScaling: 1
+  m_CameraRenderScale: 0.5
+  m_CameraUpscalingFilter: 2
 --- !u!114 &456928630779868892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -327,7 +330,7 @@ MonoBehaviour:
     overrideMat: {fileID: 0}
     ShaderTags:
     - Out_Nor_Depth_Water
-    blitScale: 0.5
+    blitScale: 1
     outCameraTarget: 0
     bindCameraDepth: 0
     createDepthAttachment: 1
