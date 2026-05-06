@@ -235,6 +235,7 @@ namespace UnityEngine.Rendering.Universal
         internal bool isPostProcessPassRenderGraphActive { get => m_PostProcessPassRenderGraph != null; }
 
         internal DeferredLights deferredLights { get => m_DeferredLights; }
+        internal UniversalRendererData rendererDataAsset { get; }
         internal LayerMask prepassLayerMask { get; set; }
         internal LayerMask opaqueLayerMask { get; set; }
         internal LayerMask transparentLayerMask { get; set; }
@@ -249,6 +250,8 @@ namespace UnityEngine.Rendering.Universal
         /// <param name="data">The settings to create the renderer with.</param>
         public UniversalRenderer(UniversalRendererData data) : base(data)
         {
+            rendererDataAsset = data;
+
             // Query and cache runtime platform info first before setting up URP.
             PlatformAutoDetect.Initialize();
 
@@ -1533,21 +1536,17 @@ namespace UnityEngine.Rendering.Universal
 
             bool hasCaptureActions = cameraData.captureActions != null && lastCameraInTheStack;
 
-            // When FXAA or scaling is active, we must perform an additional pass at the end of the frame for the following reasons:
-            // 1. FXAA expects to be the last shader running on the image before it's presented to the screen. Since users are allowed
-            //    to add additional render passes after post processing occurs, we can't run FXAA until all of those passes complete as well.
-            //    The FinalPost pass is guaranteed to execute after user authored passes so FXAA is always run inside of it.
-            // 2. UberPost can only handle upscaling with linear filtering. All other filtering methods require the FinalPost pass.
-            // 3. TAA sharpening using standalone RCAS pass is required. (When upscaling is not enabled).
-            bool applyFinalPostProcessing = anyPostProcessing && lastCameraInTheStack &&
-                ((cameraData.antialiasing == AntialiasingMode.FastApproximateAntialiasing) ||
-                 ((cameraData.imageScalingMode == ImageScalingMode.Upscaling) && (cameraData.upscalingFilter != ImageUpscalingFilter.Linear)) ||
-                 (cameraData.IsTemporalAAEnabled() && cameraData.taaSettings.contrastAdaptiveSharpening > 0.0f)) &&
-                 (DebugHandler == null || (DebugHandler != null && DebugHandler.IsPostProcessingAllowed));
+            // For per-camera render scale, force the final upscale path to run through FinalPost whenever the
+            // selected upscaling filter isn't linear. This keeps stacked cameras on the same point/non-linear
+            // sampling path as the single-camera case instead of falling back to CoreBlit's bilinear path.
+            bool requiresFinalPostProcessing = lastCameraInTheStack && m_PostProcessPasses.isCreated &&
+                (cameraData.imageScalingMode == ImageScalingMode.Upscaling) &&
+                (cameraData.upscalingFilter != ImageUpscalingFilter.Linear) &&
+                (DebugHandler == null || (DebugHandler != null && DebugHandler.IsPostProcessingAllowed));
 
             // When post-processing is enabled we can use the stack to resolve rendering to camera target (screen or RT).
             // However when there are render passes executing after post we avoid resolving to screen so rendering continues (before sRGBConversion etc)
-            bool resolvePostProcessingToCameraTarget = !hasCaptureActions && !hasPassesAfterPostProcessing && !applyFinalPostProcessing;
+            bool resolvePostProcessingToCameraTarget = !hasCaptureActions && !hasPassesAfterPostProcessing && !requiresFinalPostProcessing;
             bool needsColorEncoding = DebugHandler == null || !DebugHandler.HDRDebugViewIsActive(cameraData.resolveFinalTarget);
 
             if (applyPostProcessing)
@@ -1565,14 +1564,14 @@ namespace UnityEngine.Rendering.Universal
                 {
                     // if resolving to screen we need to be able to perform sRGBConversion in post-processing if necessary
                     bool doSRGBEncoding = resolvePostProcessingToCameraTarget && needsColorEncoding;
-                    postProcessPass.Setup(cameraTargetDescriptor, m_ActiveCameraColorAttachment, resolvePostProcessingToCameraTarget, m_ActiveCameraDepthAttachment, colorGradingLut, m_MotionVectorColor, applyFinalPostProcessing, doSRGBEncoding);
+                    postProcessPass.Setup(cameraTargetDescriptor, m_ActiveCameraColorAttachment, resolvePostProcessingToCameraTarget, m_ActiveCameraDepthAttachment, colorGradingLut, m_MotionVectorColor, requiresFinalPostProcessing, doSRGBEncoding);
                     EnqueuePass(postProcessPass);
                 }
 
                 var sourceForFinalPass = m_ActiveCameraColorAttachment;
 
                 // Do FXAA or any other final post-processing effect that might need to run after AA.
-                if (applyFinalPostProcessing)
+                if (requiresFinalPostProcessing)
                 {
                     finalPostProcessPass.SetupFinalPass(sourceForFinalPass, true, needsColorEncoding);
                     EnqueuePass(finalPostProcessPass);
@@ -1587,7 +1586,7 @@ namespace UnityEngine.Rendering.Universal
                 // Also only do final blit if camera is not rendering to RT.
                 bool cameraTargetResolved =
                     // final PP always blit to camera target
-                    applyFinalPostProcessing ||
+                    requiresFinalPostProcessing ||
                     // no final PP but we have PP stack. In that case it blit unless there are render pass after PP
                     (applyPostProcessing && !hasPassesAfterPostProcessing && !hasCaptureActions) ||
                     // offscreen camera rendering to a texture, we don't need a blit pass to resolve to screen

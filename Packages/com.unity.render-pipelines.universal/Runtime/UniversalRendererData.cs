@@ -157,6 +157,9 @@ namespace UnityEngine.Rendering.Universal
         bool m_AccurateGbufferNormals = false;
 
         [SerializeField] IntermediateTextureMode m_IntermediateTextureMode = IntermediateTextureMode.Always;
+        [SerializeField] bool m_OverrideCameraScaling = false;
+        [SerializeField] float m_CameraRenderScale = 1.0f;
+        [SerializeField] UpscalingFilterSelection m_CameraUpscalingFilter = UpscalingFilterSelection.Auto;
 
         /// <inheritdoc/>
         protected override ScriptableRenderer Create()
@@ -363,6 +366,45 @@ namespace UnityEngine.Rendering.Universal
             {
                 SetDirty();
                 m_IntermediateTextureMode = value;
+            }
+        }
+
+        /// <summary>
+        /// When enabled, this renderer overrides the pipeline asset camera render scale and upscaling filter.
+        /// </summary>
+        public bool overrideCameraScaling
+        {
+            get => m_OverrideCameraScaling;
+            set
+            {
+                SetDirty();
+                m_OverrideCameraScaling = value;
+            }
+        }
+
+        /// <summary>
+        /// Render scale applied by this renderer when <see cref="overrideCameraScaling"/> is enabled.
+        /// </summary>
+        public float cameraRenderScale
+        {
+            get => m_CameraRenderScale;
+            set
+            {
+                SetDirty();
+                m_CameraRenderScale = Mathf.Clamp(value, UniversalRenderPipeline.minRenderScale, UniversalRenderPipeline.maxRenderScale);
+            }
+        }
+
+        /// <summary>
+        /// Upscaling filter applied by this renderer when <see cref="overrideCameraScaling"/> is enabled.
+        /// </summary>
+        public UpscalingFilterSelection cameraUpscalingFilter
+        {
+            get => m_CameraUpscalingFilter;
+            set
+            {
+                SetDirty();
+                m_CameraUpscalingFilter = value;
             }
         }
 

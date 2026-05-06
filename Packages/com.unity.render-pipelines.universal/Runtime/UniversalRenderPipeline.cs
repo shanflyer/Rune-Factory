@@ -1370,6 +1370,26 @@ namespace UnityEngine.Rendering.Universal
             cameraData.scaledHeight = Mathf.Max(1, (int) (camera.pixelHeight * cameraData.renderScale));
         }
 
+        static void GetCameraScalingSettings(Camera camera, UniversalAdditionalCameraData additionalCameraData, out float renderScale, out UpscalingFilterSelection upscalingFilter)
+        {
+            var settings = asset;
+            renderScale = settings.renderScale;
+            upscalingFilter = settings.upscalingFilter;
+
+            if (GetRenderer(camera, additionalCameraData) is UniversalRenderer renderer &&
+                renderer.rendererDataAsset != null &&
+                renderer.rendererDataAsset.overrideCameraScaling)
+            {
+                renderScale = renderer.rendererDataAsset.cameraRenderScale;
+                upscalingFilter = renderer.rendererDataAsset.cameraUpscalingFilter;
+
+#if ENABLE_UPSCALER_FRAMEWORK
+                if (upscalingFilter == UpscalingFilterSelection.IUpscaler && settings.upscalingFilter != UpscalingFilterSelection.IUpscaler)
+                    upscalingFilter = UpscalingFilterSelection.Auto;
+#endif
+            }
+        }
+
         static UniversalCameraData CreateCameraData(ContextContainer frameData, Camera camera, UniversalAdditionalCameraData additionalCameraData)
         {
             using var profScope = new ProfilingScope(Profiling.Pipeline.initializeCameraData);
@@ -1502,11 +1522,12 @@ namespace UnityEngine.Rendering.Universal
             // Discard variations lesser than kRenderScaleThreshold.
             // Scale is only enabled for gameview.
             const float kRenderScaleThreshold = 0.05f;
-            bool disableRenderScale = ((Mathf.Abs(1.0f - settings.renderScale) < kRenderScaleThreshold) || isScenePreviewOrReflectionCamera);
-            cameraData.renderScale = disableRenderScale ? 1.0f : settings.renderScale;
+            GetCameraScalingSettings(baseCamera, baseAdditionalCameraData, out float selectedRenderScale, out UpscalingFilterSelection selectedUpscalingFilter);
+            bool disableRenderScale = ((Mathf.Abs(1.0f - selectedRenderScale) < kRenderScaleThreshold) || isScenePreviewOrReflectionCamera);
+            cameraData.renderScale = disableRenderScale ? 1.0f : selectedRenderScale;
 
-            // Convert the upscaling filter selection from the pipeline asset into an image upscaling filter
-            cameraData.upscalingFilter = ResolveUpscalingFilterSelection(new Vector2(cameraData.pixelWidth, cameraData.pixelHeight), cameraData.renderScale, settings.upscalingFilter,
+            // Convert the selected upscaling filter into an image upscaling filter.
+            cameraData.upscalingFilter = ResolveUpscalingFilterSelection(new Vector2(cameraData.pixelWidth, cameraData.pixelHeight), cameraData.renderScale, selectedUpscalingFilter,
 #if URP_COMPATIBILITY_MODE
                 GraphicsSettings.TryGetRenderPipelineSettings<RenderGraphSettings>(out var renderGraphSettings) && !renderGraphSettings.enableRenderCompatibilityMode
 #else

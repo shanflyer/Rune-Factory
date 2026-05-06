@@ -44,6 +44,9 @@ namespace UnityEditor.Rendering.Universal
             public static readonly GUIContent invalidStencilOverride = EditorGUIUtility.TrTextContent("Error: When using the deferred rendering path, the Renderer requires the control over the 4 highest bits of the stencil buffer to store Material types. The current combination of the stencil override options prevents the Renderer from controlling the required bits. Try changing one of the options to Replace.");
             public static readonly GUIContent intermediateTextureMode = EditorGUIUtility.TrTextContent("Intermediate Texture", "Controls when URP renders via an intermediate texture.");
             public static readonly GUIContent deferredPlusIncompatibleWarning = EditorGUIUtility.TrTextContent("Deferred+ is only available with Render Graph. In compatibility mode, Deferred+ falls back to Forward+.");
+            public static readonly GUIContent CameraScalingOverrideLabel = EditorGUIUtility.TrTextContent("Override Camera Scaling", "Override the pipeline asset render scale and upscaling filter for cameras using this renderer.");
+            public static readonly GUIContent CameraRenderScaleLabel = EditorGUIUtility.TrTextContent("Render Scale", "Render this renderer's cameras at a percentage of the camera resolution. Lower values reduce GPU cost but reduce detail.");
+            public static readonly GUIContent CameraUpscalingFilterLabel = EditorGUIUtility.TrTextContent("Upscaling Filter", "How URP scales this renderer's lower-resolution result back to the camera target.");
         }
         SerializedProperty m_transparencySortMode;
         SerializedProperty m_transparencySortAxis;
@@ -63,6 +66,9 @@ namespace UnityEditor.Rendering.Universal
         SerializedProperty m_Shaders;
         SerializedProperty m_ShadowTransparentReceiveProp;
         SerializedProperty m_IntermediateTextureMode;
+        SerializedProperty m_OverrideCameraScaling;
+        SerializedProperty m_CameraRenderScale;
+        SerializedProperty m_CameraUpscalingFilter;
 
         List<string> m_DepthFormatStrings = new List<string>();
 
@@ -86,6 +92,9 @@ namespace UnityEditor.Rendering.Universal
             m_Shaders = serializedObject.FindProperty("shaders");
             m_ShadowTransparentReceiveProp = serializedObject.FindProperty("m_ShadowTransparentReceive");
             m_IntermediateTextureMode = serializedObject.FindProperty("m_IntermediateTextureMode");
+            m_OverrideCameraScaling = serializedObject.FindProperty("m_OverrideCameraScaling");
+            m_CameraRenderScale = serializedObject.FindProperty("m_CameraRenderScale");
+            m_CameraUpscalingFilter = serializedObject.FindProperty("m_CameraUpscalingFilter");
         }
 
         private void PopulateCompatibleDepthFormats(int renderingMode)
@@ -235,6 +244,14 @@ namespace UnityEditor.Rendering.Universal
             m_DepthAttachmentFormat.intValue = (int)GetDepthFormatAt(depthFormatIndex, m_RenderingMode.intValue);
 
             EditorGUILayout.PropertyField(m_DepthTextureFormat, Styles.DepthTextureFormat);
+            EditorGUILayout.PropertyField(m_OverrideCameraScaling, Styles.CameraScalingOverrideLabel);
+            if (m_OverrideCameraScaling.boolValue)
+            {
+                EditorGUI.indentLevel++;
+                EditorGUILayout.Slider(m_CameraRenderScale, UniversalRenderPipeline.minRenderScale, UniversalRenderPipeline.maxRenderScale, Styles.CameraRenderScaleLabel);
+                EditorGUILayout.PropertyField(m_CameraUpscalingFilter, Styles.CameraUpscalingFilterLabel);
+                EditorGUI.indentLevel--;
+            }
 
             EditorGUI.indentLevel--;
 

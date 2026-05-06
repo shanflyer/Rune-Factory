@@ -101,6 +101,17 @@ namespace UnityEngine.Rendering.Universal.Internal
 #endif
         }
 
+        static bool ShouldUseNearestSampling(UniversalCameraData cameraData, RTHandle source)
+        {
+            if (cameraData.imageScalingMode == ImageScalingMode.Upscaling &&
+                cameraData.upscalingFilter == ImageUpscalingFilter.Point)
+            {
+                return true;
+            }
+
+            return source.rt?.filterMode != FilterMode.Bilinear;
+        }
+
         static void SetupHDROutput(ColorGamut hdrDisplayColorGamut, Material material, HDROutputUtils.Operation hdrOperation, Vector4 hdrOutputParameters, bool rendersOverlayUI)
         {
             material.SetVector(ShaderPropertyId.hdrOutputLuminanceParams, hdrOutputParameters);
@@ -189,7 +200,9 @@ namespace UnityEngine.Rendering.Universal.Internal
                 if (resolveToDebugScreen)
                 {
                     // Blit to the debugger texture instead of the camera target
-                    int shaderPassIndex = m_Source.rt?.filterMode == FilterMode.Bilinear ? m_PassData.blitMaterialData.bilinearSamplerPass : m_PassData.blitMaterialData.nearestSamplerPass;
+                    int shaderPassIndex = ShouldUseNearestSampling(cameraData, m_Source)
+                        ? m_PassData.blitMaterialData.nearestSamplerPass
+                        : m_PassData.blitMaterialData.bilinearSamplerPass;
                     Vector2 viewportScale = m_Source.useScaling ? new Vector2(m_Source.rtHandleProperties.rtHandleScale.x, m_Source.rtHandleProperties.rtHandleScale.y) : Vector2.one;
                     Blitter.BlitTexture(cmd, m_Source, viewportScale, m_PassData.blitMaterialData.material, shaderPassIndex);
 
@@ -249,7 +262,9 @@ namespace UnityEngine.Rendering.Universal.Internal
 
             CoreUtils.SetKeyword(data.blitMaterialData.material, ShaderKeywordStrings._ENABLE_ALPHA_OUTPUT, data.enableAlphaOutput);
 
-            int shaderPassIndex = source.rt?.filterMode == FilterMode.Bilinear ? data.blitMaterialData.bilinearSamplerPass : data.blitMaterialData.nearestSamplerPass;
+            int shaderPassIndex = ShouldUseNearestSampling(cameraData, source)
+                ? data.blitMaterialData.nearestSamplerPass
+                : data.blitMaterialData.bilinearSamplerPass;
             Blitter.BlitTexture(cmd, source, scaleBias, data.blitMaterialData.material, shaderPassIndex);
         }
 
@@ -362,7 +377,9 @@ namespace UnityEngine.Rendering.Universal.Internal
                         RTHandle sourceTex = data.source;
                         Vector2 viewportScale = sourceTex.useScaling ? new Vector2(sourceTex.rtHandleProperties.rtHandleScale.x, sourceTex.rtHandleProperties.rtHandleScale.y) : Vector2.one;
 
-                        int shaderPassIndex = sourceTex.rt?.filterMode == FilterMode.Bilinear ? data.blitMaterialData.bilinearSamplerPass : data.blitMaterialData.nearestSamplerPass;
+                        int shaderPassIndex = ShouldUseNearestSampling(data.cameraData, sourceTex)
+                            ? data.blitMaterialData.nearestSamplerPass
+                            : data.blitMaterialData.bilinearSamplerPass;
                         Blitter.BlitTexture(context.cmd, sourceTex, viewportScale, data.blitMaterialData.material, shaderPassIndex);
                     }
                     else

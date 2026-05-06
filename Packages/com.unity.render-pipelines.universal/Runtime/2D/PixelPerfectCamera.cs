@@ -314,6 +314,7 @@ namespace UnityEngine.Rendering.Universal
 #endif
 
         Camera m_Camera;
+        UniversalAdditionalCameraData m_AdditionalCameraData;
         PixelPerfectCameraInternal m_Internal;
         bool m_CinemachineCompatibilityMode;
 
@@ -362,6 +363,7 @@ namespace UnityEngine.Rendering.Universal
         void Awake()
         {
             m_Camera = GetComponent<Camera>();
+            m_AdditionalCameraData = GetComponent<UniversalAdditionalCameraData>();
             m_Internal = new PixelPerfectCameraInternal(this);
 
             // Case 1249076: Initialize internals immediately after the scene is loaded,
@@ -371,13 +373,83 @@ namespace UnityEngine.Rendering.Universal
 
         void UpdateCameraProperties()
         {
-            var rtSize = cameraRTSize;
-            m_Internal.CalculateCameraProperties(rtSize.x, rtSize.y);
+            var outputRTSize = cameraRTSize;
+            var calculationRTSize = GetPixelPerfectCalculationRTSize(outputRTSize);
+            m_Internal.CalculateCameraProperties(calculationRTSize.x, calculationRTSize.y);
 
             if (m_Internal.useOffscreenRT)
-                m_Camera.pixelRect = m_Internal.CalculateFinalBlitPixelRect(rtSize.x, rtSize.y);
+                m_Camera.pixelRect = m_Internal.CalculateFinalBlitPixelRect(outputRTSize.x, outputRTSize.y);
             else
                 m_Camera.rect = new Rect(0.0f, 0.0f, 1.0f, 1.0f);
+        }
+
+        Camera GetBaseCameraForOverlay()
+        {
+            if (m_AdditionalCameraData == null || m_AdditionalCameraData.renderType != CameraRenderType.Overlay)
+                return null;
+
+            foreach (var camera in Camera.allCameras)
+            {
+                if (camera == null || camera == m_Camera)
+                    continue;
+
+                if (!camera.TryGetComponent<UniversalAdditionalCameraData>(out var additionalCameraData))
+                    continue;
+
+                if (additionalCameraData.renderType != CameraRenderType.Base)
+                    continue;
+
+                var stack = additionalCameraData.cameraStack;
+                if (stack != null && stack.Contains(m_Camera))
+                    return camera;
+            }
+
+            return null;
+        }
+
+        float GetRendererRenderScale(Camera sourceCamera)
+        {
+            if (sourceCamera == null || UniversalRenderPipeline.asset == null)
+                return 1.0f;
+
+            if (!sourceCamera.TryGetComponent<UniversalAdditionalCameraData>(out var additionalCameraData))
+                return UniversalRenderPipeline.asset.renderScale;
+
+            var renderScale = UniversalRenderPipeline.asset.renderScale;
+            if (additionalCameraData.scriptableRenderer is UniversalRenderer renderer &&
+                renderer.rendererDataAsset != null &&
+                renderer.rendererDataAsset.overrideCameraScaling)
+            {
+                renderScale = renderer.rendererDataAsset.cameraRenderScale;
+            }
+
+            return Mathf.Max(0.0001f, renderScale);
+        }
+
+        Camera GetPixelPerfectSourceCamera()
+        {
+            var baseCamera = GetBaseCameraForOverlay();
+            if (baseCamera == null)
+                return m_Camera;
+
+            float overlayRenderScale = GetRendererRenderScale(m_Camera);
+            float baseRenderScale = GetRendererRenderScale(baseCamera);
+            if (Mathf.Abs(baseRenderScale - overlayRenderScale) >= 0.05f)
+                return m_Camera;
+
+            return baseCamera;
+        }
+
+        Vector2Int GetPixelPerfectCalculationRTSize(Vector2Int outputRTSize)
+        {
+            float renderScale = GetRendererRenderScale(GetPixelPerfectSourceCamera());
+            if (Mathf.Approximately(renderScale, 1.0f))
+                return outputRTSize;
+
+            return new Vector2Int(
+                Mathf.Max(1, Mathf.RoundToInt(outputRTSize.x * renderScale)),
+                Mathf.Max(1, Mathf.RoundToInt(outputRTSize.y * renderScale))
+            );
         }
 
         void OnBeginCameraRendering(ScriptableRenderContext context, Camera camera)
