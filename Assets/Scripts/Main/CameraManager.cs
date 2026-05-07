@@ -7,11 +7,10 @@ using UnityEngine.Rendering.Universal;
 public class CameraManager : Singleton<CameraManager>
 {
     public Camera mainCamera { get; private set; }
-    public Camera uiCamera { get; private set; }
-    public Camera worldUICamera { get; private set; }
+    public Camera uiCamera { get; private set; } 
     UniversalAdditionalCameraData universalAdditionalCameraData;
     [SerializeField]
-    private PixelPerfectCamera pixelPerfectCamera, UIPixelPerfectCamera,WorldUIPixelPerfectCamera;
+    private PixelPerfectCamera pixelPerfectCamera, UIPixelPerfectCamera;
 
     private CinemachineMixingCamera mixingCamera;
     private CinemachineCamera fixedCamera;
@@ -45,11 +44,7 @@ public class CameraManager : Singleton<CameraManager>
         base.Init();
         hideLayer = LayerMask.NameToLayer("Hide");
         mainCamera = Camera.main;
-        if (mainCamera.transform.childCount > 0)
-        {
-            worldUICamera = mainCamera.transform.GetChild(0).GetComponent<Camera>();
-            WorldUIPixelPerfectCamera = worldUICamera.GetComponent<PixelPerfectCamera>();
-        }
+      
         volume= mainCamera.GetComponent<Volume>();
         volume.sharedProfile.TryGet<DepthOfField>(out DepthOfField);
         RefreshDepthOfField();
@@ -216,13 +211,13 @@ public class CameraManager : Singleton<CameraManager>
 
     private void SetCameraPixelValue(SetCameraPixelValue setCameraPixelValue)
     {
-        WorldUIPixelPerfectCamera.assetsPPU= UIPixelPerfectCamera.assetsPPU = pixelPerfectCamera.assetsPPU = setCameraPixelValue.pixelValue;
+        UIPixelPerfectCamera.assetsPPU = pixelPerfectCamera.assetsPPU = setCameraPixelValue.pixelValue;
         confiner2D.InvalidateLensCache();
     }
 
     private void SetFixedCamera(SetFixedCamera setFixedCamera)
     {
-        WorldUIPixelPerfectCamera.assetsPPU = UIPixelPerfectCamera.assetsPPU = pixelPerfectCamera.assetsPPU = setFixedCamera.pixelValue == 0 ? GameCommon.PixelCameraDefaultValue : setFixedCamera.pixelValue;
+        UIPixelPerfectCamera.assetsPPU = pixelPerfectCamera.assetsPPU = setFixedCamera.pixelValue == 0 ? GameCommon.PixelCameraDefaultValue : setFixedCamera.pixelValue;
         if (setFixedCamera.fixedCamera)
         {
             fixedView = true;

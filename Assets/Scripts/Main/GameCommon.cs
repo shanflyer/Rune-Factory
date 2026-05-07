@@ -334,7 +334,7 @@ public static class GameCommon
     public const int ManufatureWorkingEmote = 72;
     public const int ManufatureWorkendEnote = 14;      
 
-    public const int PixelCameraDefaultValue = 400;
+    public const int PixelCameraDefaultValue = 200;
     public const int setTeamerFunctionId = 4;
     public const int defaultProduct = 1;
     public const int explorCostMinute = 120;
