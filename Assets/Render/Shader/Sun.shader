@@ -26,6 +26,7 @@ Shader "Sun"
         Blend OneMinusDstColor One 
         Cull Off
         ZWrite Off
+        ZTest LEqual
 
         HLSLINCLUDE
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"

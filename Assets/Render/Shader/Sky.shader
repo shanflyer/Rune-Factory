@@ -55,12 +55,11 @@ Shader "Sky"
     }
 
     SubShader
-    {
+    { 
         Tags {"Queue" = "Transparent" "RenderType" = "Transparent" "RenderPipeline" = "UniversalPipeline" }
-
-        Blend SrcAlpha OneMinusSrcAlpha, One OneMinusSrcAlpha
+         Blend One Zero
         Cull Off
-        ZWrite Off
+        ZWrite On
         ZTest LEqual
 
         HLSLINCLUDE
@@ -287,7 +286,7 @@ Shader "Sky"
 
         Pass
         {
-            Tags { "LightMode" = "ObjDepth" "Queue"="Transparent" "RenderType"="Transparent"} 
+            Tags { "LightMode" = "ObjDepth" "Queue"="Geometry" "RenderType"="Opaque"} 
             HLSLPROGRAM 
 
             #pragma vertex UnlitVertex

@@ -216,6 +216,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             var skyPos = skyEnviromentMono.transform.position;
             var skyLocalPos = skyEnviromentMono.transform.localPosition;
             skyLocalPos.z-=skyPos.z;
+            skyLocalPos.z += 5100;
             skyEnviromentMono.transform.localPosition = skyLocalPos;
             skyEnviromentMono.SetBgPos(CameraManager.instance.oldCameraPos);
            // GameObject.DontDestroyOnLoad(skyEnviromentMono.gameObject);
