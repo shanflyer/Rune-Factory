@@ -616,18 +616,13 @@ namespace UnityEngine.Rendering.Universal
                     dirtScaleOffset.w = (1f - dirtScaleOffset.y) * 0.5f;
                 }
 
-                var highQualityFilteringValue = m_Bloom.highQualityFiltering.value;
-
                 uberMaterial.SetVector(ShaderConstants._Bloom_Params, bloomParams);
                 uberMaterial.SetVector(ShaderConstants._LensDirt_Params, dirtScaleOffset);
                 uberMaterial.SetFloat(ShaderConstants._LensDirt_Intensity, dirtIntensity);
                 uberMaterial.SetTexture(ShaderConstants._LensDirt_Texture, dirtTexture);
 
-                // Keyword setup - a bit convoluted as we're trying to save some variants in Uber...
-                if (highQualityFilteringValue)
-                    uberMaterial.EnableKeyword(dirtIntensity > 0f ? ShaderKeywordStrings.BloomHQDirt : ShaderKeywordStrings.BloomHQ);
-                else
-                    uberMaterial.EnableKeyword(dirtIntensity > 0f ? ShaderKeywordStrings.BloomLQDirt : ShaderKeywordStrings.BloomLQ);
+                // Fixed optimized high-quality path: a single LQ bloom composite variant.
+                uberMaterial.EnableKeyword(ShaderKeywordStrings.BloomLQ);
             }
         }
 
@@ -664,19 +659,8 @@ namespace UnityEngine.Rendering.Universal
 
         public Vector2Int CalcBloomResolution(Bloom bloom, in TextureDesc bloomSourceDesc)
         {
-                        // Start at half-res
-            int downres = 1;
-            switch (m_Bloom.downscale.value)
-            {
-                case BloomDownscaleMode.Half:
-                    downres = 1;
-                    break;
-                case BloomDownscaleMode.Quarter:
-                    downres = 2;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            // Fixed optimized high-quality path: always start from half-res.
+            const int downres = 1;
 
             //We should set the limit the downres result to ensure we dont turn 1x1 textures, which should technically be valid
             //into 0x0 textures which will be invalid
@@ -691,7 +675,8 @@ namespace UnityEngine.Rendering.Universal
             // Determine the iteration count
             int maxSize = Mathf.Max(bloomResolution.x, bloomResolution.y);
             int iterations = Mathf.FloorToInt(Mathf.Log(maxSize, 2f) - 1);
-            int mipCount = Mathf.Clamp(iterations, 1, m_Bloom.maxIterations.value);
+            const int kFixedBloomMaxIterations = 4;
+            int mipCount = Mathf.Clamp(iterations, 1, Mathf.Min(m_Bloom.maxIterations.value, kFixedBloomMaxIterations));
             return mipCount;
         }
 
@@ -720,8 +705,8 @@ namespace UnityEngine.Rendering.Universal
                 BloomMaterialParams bloomParams = new BloomMaterialParams();
                 bloomParams.parameters = new Vector4(scatter, clamp, threshold, thresholdKnee);
                 bloomParams.parameters2 = new Vector4(0.5f, kawaseScatter, dualScatter, 0.5f * dualScatter);
-                bloomParams.bloomFilter = m_Bloom.filter.value;
-                bloomParams.highQualityFiltering = m_Bloom.highQualityFiltering.value;
+                bloomParams.bloomFilter = BloomFilterMode.Gaussian;
+                bloomParams.highQualityFiltering = false;
                 bloomParams.enableAlphaOutput = enableAlphaOutput;
 
                 // Setting keywords can be somewhat expensive on low-end platforms.
@@ -783,19 +768,7 @@ namespace UnityEngine.Rendering.Universal
                 }
             }
 
-            switch (m_Bloom.filter.value)
-            {
-                case BloomFilterMode.Dual:
-                    destination = BloomDual(renderGraph, source, mipCount);
-                break;
-                case BloomFilterMode.Kawase:
-                    destination = BloomKawase(renderGraph, source, mipCount);
-                break;
-                case BloomFilterMode.Gaussian: goto default;
-                default:
-                    destination = BloomGaussian(renderGraph, source, mipCount);
-                break;
-            }
+            destination = BloomGaussian(renderGraph, source, mipCount);
         }
 
         TextureHandle BloomGaussian(RenderGraph renderGraph, TextureHandle source, int mipCount)
@@ -2846,18 +2819,10 @@ namespace UnityEngine.Rendering.Universal
                         if(useBloomMip == 0)
                         {
                             // Hierarchical blooms do only the prefilter if there's only 1 mip.
-                            if (bloomMipCount == 1 && m_Bloom.filter != BloomFilterMode.Kawase)
+                            if (bloomMipCount == 1)
                                 bloomMipFlareSource = _BloomMipDown[0];
 
                             // Flare source and Flare target is the same texture. BloomMip[0]
-                            sameBloomInputOutputTex = true;
-                        }
-
-                        // Kawase blur does not use the mip pyramid.
-                        // It is safe to pass the same texture to both input/output.
-                        if (m_Bloom.filter.value == BloomFilterMode.Kawase)
-                        {
-                            bloomMipFlareSource = bloomTexture;
                             sameBloomInputOutputTex = true;
                         }
 

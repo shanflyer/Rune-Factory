@@ -3,7 +3,7 @@ Shader "Hidden/Universal Render Pipeline/UberPost"
     HLSLINCLUDE
         #pragma multi_compile_local_fragment _ _DISTORTION
         #pragma multi_compile_local_fragment _ _CHROMATIC_ABERRATION
-        #pragma multi_compile_local_fragment _ _BLOOM_LQ _BLOOM_HQ _BLOOM_LQ_DIRT _BLOOM_HQ_DIRT
+        #pragma multi_compile_local_fragment _ _BLOOM_LQ
         #pragma multi_compile_local_fragment _ _HDR_GRADING _TONEMAP_ACES _TONEMAP_NEUTRAL
         #pragma multi_compile_local_fragment _ _FILM_GRAIN
         #pragma multi_compile_local_fragment _ _DITHERING
@@ -36,11 +36,8 @@ Shader "Hidden/Universal Render Pipeline/UberPost"
         #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/FoveatedRendering.hlsl"
 
         // Hardcoded dependencies to reduce the number of variants
-        #if _BLOOM_LQ || _BLOOM_HQ || _BLOOM_LQ_DIRT || _BLOOM_HQ_DIRT
+        #if _BLOOM_LQ
             #define BLOOM
-            #if _BLOOM_LQ_DIRT || _BLOOM_HQ_DIRT
-                #define BLOOM_DIRT
-            #endif
         #endif
 
         TEXTURE2D_X(_Bloom_Texture);
@@ -192,11 +189,7 @@ Shader "Hidden/Universal Render Pipeline/UberPost"
                 }
                 #endif
 
-                #if _BLOOM_HQ
-                half3 bloom = SampleTexture2DBicubic(TEXTURE2D_X_ARGS(_Bloom_Texture, sampler_LinearClamp), SCREEN_COORD_REMOVE_SCALEBIAS(uvBloom), _Bloom_Texture_TexelSize.zwxy, (1.0).xx, unity_StereoEyeIndex).xyz;
-                #else
                 half3 bloom = SAMPLE_TEXTURE2D_X(_Bloom_Texture, sampler_LinearClamp, SCREEN_COORD_REMOVE_SCALEBIAS(uvBloom)).xyz;
-                #endif
 
                 #if UNITY_COLORSPACE_GAMMA
                 bloom *= bloom; // γ to linear
@@ -204,18 +197,6 @@ Shader "Hidden/Universal Render Pipeline/UberPost"
 
                 bloom *= BloomIntensity;
                 color += bloom * BloomTint;
-
-                #if defined(BLOOM_DIRT)
-                {
-                    // UVs for the dirt texture should be DistortUV(uv * DirtScale + DirtOffset) but
-                    // considering we use a cover-style scale on the dirt texture the difference
-                    // isn't massive so we chose to save a few ALUs here instead in case lens
-                    // distortion is active.
-                    half3 dirt = SAMPLE_TEXTURE2D(_LensDirt_Texture, sampler_LinearClamp, uvDistorted * LensDirtScale + LensDirtOffset).xyz;
-                    dirt *= LensDirtIntensity;
-                    color += dirt * bloom.xyz;
-                }
-                #endif
 
                 #if _ENABLE_ALPHA_OUTPUT
                 // Bloom should also spread in areas with zero alpha, so we save the image with bloom here to do the mixing at the end of the shader

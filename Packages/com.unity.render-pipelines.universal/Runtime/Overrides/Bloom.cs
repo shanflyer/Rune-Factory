@@ -223,7 +223,7 @@ namespace UnityEngine.Rendering.Universal
         /// Controls the maximum number of iterations in the effect processing sequence.
         /// </summary>
         [Tooltip("The maximum number of iterations in the effect processing sequence."), AdditionalProperty]
-        public ClampedIntParameter maxIterations = new ClampedIntParameter(6, 2, 8);
+        public ClampedIntParameter maxIterations = new ClampedIntParameter(4, 2, 6);
 
         /// <summary>
         /// Specifies a Texture to add smudges or dust to the bloom effect.

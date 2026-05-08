@@ -76,31 +76,7 @@ Shader "Hidden/Universal Render Pipeline/Bloom"
             }
 #endif
 
-        #if _BLOOM_HQ
-            half3 A = SamplePrefilter(uv, float2(-1.0, -1.0));
-            half3 B = SamplePrefilter(uv, float2( 0.0, -1.0));
-            half3 C = SamplePrefilter(uv, float2( 1.0, -1.0));
-            half3 D = SamplePrefilter(uv, float2(-0.5, -0.5));
-            half3 E = SamplePrefilter(uv, float2( 0.5, -0.5));
-            half3 F = SamplePrefilter(uv, float2(-1.0,  0.0));
-            half3 G = SamplePrefilter(uv, float2( 0.0,  0.0));
-            half3 H = SamplePrefilter(uv, float2( 1.0,  0.0));
-            half3 I = SamplePrefilter(uv, float2(-0.5,  0.5));
-            half3 J = SamplePrefilter(uv, float2( 0.5,  0.5));
-            half3 K = SamplePrefilter(uv, float2(-1.0,  1.0));
-            half3 L = SamplePrefilter(uv, float2( 0.0,  1.0));
-            half3 M = SamplePrefilter(uv, float2( 1.0,  1.0));
-
-            half2 div = (1.0 / 4.0) * half2(0.5, 0.125);
-
-            half3 color = (D + E + I + J) * div.x;
-            color += (A + B + G + F) * div.y;
-            color += (B + C + H + G) * div.y;
-            color += (F + G + L + K) * div.y;
-            color += (G + H + M + L) * div.y;
-        #else
             half3 color = SamplePrefilter(uv, float2(0,0));
-        #endif
 
             // User controlled clamp to limit crazy high broken spec
             color = min(ClampMax, color);
@@ -123,20 +99,16 @@ Shader "Hidden/Universal Render Pipeline/Bloom"
             float2 texelSize = _BlitTexture_TexelSize.xy * 2.0;
             float2 uv = UnityStereoTransformScreenSpaceTex(input.texcoord);
 
-            // 9-tap gaussian blur on the downsampled source
-            half3 c0 = DecodeHDR(SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_LinearClamp, ClampUVForBilinear(uv - float2(texelSize.x * 4.0, 0.0), texelSize)));
-            half3 c1 = DecodeHDR(SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_LinearClamp, ClampUVForBilinear(uv - float2(texelSize.x * 3.0, 0.0), texelSize)));
-            half3 c2 = DecodeHDR(SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_LinearClamp, ClampUVForBilinear(uv - float2(texelSize.x * 2.0, 0.0), texelSize)));
-            half3 c3 = DecodeHDR(SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_LinearClamp, ClampUVForBilinear(uv - float2(texelSize.x * 1.0, 0.0), texelSize)));
-            half3 c4 = DecodeHDR(SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_LinearClamp, ClampUVForBilinear(uv                                 , texelSize)));
-            half3 c5 = DecodeHDR(SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_LinearClamp, ClampUVForBilinear(uv + float2(texelSize.x * 1.0, 0.0), texelSize)));
-            half3 c6 = DecodeHDR(SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_LinearClamp, ClampUVForBilinear(uv + float2(texelSize.x * 2.0, 0.0), texelSize)));
-            half3 c7 = DecodeHDR(SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_LinearClamp, ClampUVForBilinear(uv + float2(texelSize.x * 3.0, 0.0), texelSize)));
-            half3 c8 = DecodeHDR(SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_LinearClamp, ClampUVForBilinear(uv + float2(texelSize.x * 4.0, 0.0), texelSize)));
+            // Optimized bilinear 5-tap gaussian on the downsampled source (9-tap equivalent)
+            half3 c0 = DecodeHDR(SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_LinearClamp, uv - float2(texelSize.x * 3.23076923, 0.0)));
+            half3 c1 = DecodeHDR(SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_LinearClamp, uv - float2(texelSize.x * 1.38461538, 0.0)));
+            half3 c2 = DecodeHDR(SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_LinearClamp, uv));
+            half3 c3 = DecodeHDR(SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_LinearClamp, uv + float2(texelSize.x * 1.38461538, 0.0)));
+            half3 c4 = DecodeHDR(SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_LinearClamp, uv + float2(texelSize.x * 3.23076923, 0.0)));
 
-            half3 color = c0 * 0.01621622 + c1 * 0.05405405 + c2 * 0.12162162 + c3 * 0.19459459
-                        + c4 * 0.22702703
-                        + c5 * 0.19459459 + c6 * 0.12162162 + c7 * 0.05405405 + c8 * 0.01621622;
+            half3 color = c0 * 0.07027027 + c1 * 0.31621622
+                        + c2 * 0.22702703
+                        + c3 * 0.31621622 + c4 * 0.07027027;
 
             return EncodeHDR(color);
         }
@@ -165,11 +137,7 @@ Shader "Hidden/Universal Render Pipeline/Bloom"
         {
             half3 highMip = DecodeHDR(SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_LinearClamp, uv));
 
-        #if _BLOOM_HQ
-            half3 lowMip = DecodeHDR(SampleTexture2DBicubic(TEXTURE2D_X_ARGS(_SourceTexLowMip, sampler_LinearClamp), uv, _SourceTexLowMip_TexelSize.zwxy, (1.0).xx, unity_StereoEyeIndex));
-        #else
             half3 lowMip = DecodeHDR(SAMPLE_TEXTURE2D_X(_SourceTexLowMip, sampler_LinearClamp, uv));
-        #endif
 
             return lerp(highMip, lowMip, Scatter);
         }
@@ -258,7 +226,6 @@ Shader "Hidden/Universal Render Pipeline/Bloom"
             HLSLPROGRAM
                 #pragma vertex Vert
                 #pragma fragment FragPrefilter
-                #pragma multi_compile_local_fragment _ _BLOOM_HQ
                 #pragma multi_compile_fragment _ _ENABLE_ALPHA_OUTPUT
             ENDHLSL
         }
@@ -290,7 +257,6 @@ Shader "Hidden/Universal Render Pipeline/Bloom"
             HLSLPROGRAM
                 #pragma vertex Vert
                 #pragma fragment FragUpsample
-                #pragma multi_compile_local_fragment _ _BLOOM_HQ
             ENDHLSL
         }
 
