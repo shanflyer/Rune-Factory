@@ -9,6 +9,7 @@ The effect prefabs under `Assets/Resources/Prefabs/Effect` can be consolidated i
 3. `Project/FX/FX_TwoSided_URP`
 
 This split keeps only genuinely different render paths separated while collapsing repeated transparent particle logic into one core shader.
+`FX_Dissolve_URP` and `FX_Shockwave_URP` have been merged into `FX_SpriteCore_URP` logically, but the files are still kept as compatibility layers until all legacy materials are re-saved away from them.
 
 ## Legacy to new mapping
 

@@ -2,35 +2,41 @@ Shader "Project/FX/FX_Distortion_URP"
 {
     Properties
     {
-        [Enum(DistortOnly,0,DistortOverlay,1)] _EffectMode("Effect Mode", Float) = 0
+        [Header(Base Setup)]
+        [Enum(DistortOnly,0,DistortOverlay,1)] _EffectMode("效果模式", Float) = 0
 
-        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend("Src Blend", Float) = 5
-        [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend("Dst Blend", Float) = 10
-        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlendAlpha("Src Blend Alpha", Float) = 1
-        [Enum(UnityEngine.Rendering.BlendMode)] _DstBlendAlpha("Dst Blend Alpha", Float) = 10
-        [Enum(UnityEngine.Rendering.CullMode)] _Cull("Cull", Float) = 0
-        [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Float) = 4
-        [Toggle] _ZWrite("ZWrite", Float) = 0
+        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend("颜色源混合", Float) = 5
+        [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend("颜色目标混合", Float) = 10
+        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlendAlpha("Alpha源混合", Float) = 1
+        [Enum(UnityEngine.Rendering.BlendMode)] _DstBlendAlpha("Alpha目标混合", Float) = 10
+        [Enum(UnityEngine.Rendering.CullMode)] _Cull("剔除模式", Float) = 0
+        [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("深度测试", Float) = 4
+        [Toggle] _ZWrite("写入深度", Float) = 0
 
-        _MainTex("Overlay Tex", 2D) = "white" {}
-        _Noise("Noise", 2D) = "white" {}
-        _Mask("Mask", 2D) = "white" {}
-        _Flow("Flow", 2D) = "gray" {}
-        _NormalMap("Normal Map", 2D) = "bump" {}
+        [Header(Textures)]
+        _MainTex("叠加纹理", 2D) = "white" {}
+        _Noise("噪声纹理", 2D) = "white" {}
+        _Mask("遮罩纹理", 2D) = "white" {}
+        _Flow("流动扰动纹理", 2D) = "gray" {}
+        _NormalMap("法线扰动纹理", 2D) = "bump" {}
 
-        [HDR] _Color("Color", Color) = (1,1,1,1)
-        _SpeedMainTexUVNoiseZW("Legacy Main/Noise Scroll", Vector) = (0,0,0,0)
-        _DistortionSpeedXYPowerZ("Legacy Distortion Scroll/Power", Vector) = (0,0,0,0)
+        [Header(Color And Legacy)]
+        [HDR] _Color("主颜色", Color) = (1,1,1,1)
+        _SpeedMainTexUVNoiseZW("旧版主图/噪声滚动", Vector) = (0,0,0,0)
+        _DistortionSpeedXYPowerZ("旧版扰动滚动/强度", Vector) = (0,0,0,0)
 
-        _Emission("Emission", Float) = 1
-        _Opacity("Opacity", Range(0,4)) = 1
-        _Distortionpower("Distortion Power", Float) = 0.05
-        _FlowStrength("Flow Strength", Float) = 0.1
-        _UseSoftParticle("Use Soft Particle", Float) = 1
-        _SoftParticleNearFadeDistance("Soft Particle Near Fade", Float) = 0
-        _SoftParticleFarFadeDistance("Soft Particle Far Fade", Float) = 1
-        _Softedges("Soft Edges", Float) = 0
-        _Sideopacitymult("Side Opacity Mult", Float) = 4
+        [Header(Controls)]
+        _Emission("发光强度", Float) = 1
+        _Opacity("整体透明度", Range(0,4)) = 1
+        _Distortionpower("屏幕扭曲强度", Float) = 0.05
+        _FlowStrength("流动附加强度", Float) = 0.1
+        _Softedges("启用边缘柔化", Float) = 0
+        _Sideopacitymult("边缘衰减强度", Float) = 4
+
+        [Header(Soft Particle)]
+        _UseSoftParticle("启用软粒子", Float) = 1
+        _SoftParticleNearFadeDistance("近端淡出距离", Float) = 0
+        _SoftParticleFarFadeDistance("远端淡出距离", Float) = 1
     }
 
     SubShader
@@ -89,6 +95,7 @@ Shader "Project/FX/FX_Distortion_URP"
             TEXTURE2D(_Flow); SAMPLER(sampler_Flow);
             TEXTURE2D(_NormalMap); SAMPLER(sampler_NormalMap);
 
+            // Distortion keeps a dedicated path because it samples scene color.
             FXVaryings vert(FXAttributes input)
             {
                 return FXVertex(input);
@@ -130,6 +137,7 @@ Shader "Project/FX/FX_Distortion_URP"
                 half3 finalRgb = sceneColor;
                 if (_EffectMode > 0.5)
                 {
+                    // Overlay mode adds emissive sprite color on top of distorted scene color.
                     finalRgb += overlay.rgb * noiseSample.rgb * _Color.rgb * input.color.rgb * _Emission;
                 }
 

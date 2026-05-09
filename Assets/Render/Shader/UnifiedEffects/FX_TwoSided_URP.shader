@@ -2,37 +2,44 @@ Shader "Project/FX/FX_TwoSided_URP"
 {
     Properties
     {
-        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend("Src Blend", Float) = 5
-        [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend("Dst Blend", Float) = 10
-        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlendAlpha("Src Blend Alpha", Float) = 1
-        [Enum(UnityEngine.Rendering.BlendMode)] _DstBlendAlpha("Dst Blend Alpha", Float) = 10
-        [Enum(UnityEngine.Rendering.CullMode)] _Cull("Cull", Float) = 0
-        [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Float) = 4
-        [Toggle] _ZWrite("ZWrite", Float) = 0
+        [Header(Base Setup)]
+        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend("颜色源混合", Float) = 5
+        [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend("颜色目标混合", Float) = 10
+        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlendAlpha("Alpha源混合", Float) = 1
+        [Enum(UnityEngine.Rendering.BlendMode)] _DstBlendAlpha("Alpha目标混合", Float) = 10
+        [Enum(UnityEngine.Rendering.CullMode)] _Cull("剔除模式", Float) = 0
+        [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("深度测试", Float) = 4
+        [Toggle] _ZWrite("写入深度", Float) = 0
 
-        _FrontTex("Front Tex", 2D) = "white" {}
-        _BackTex("Back Tex", 2D) = "white" {}
-        _Noise("Noise", 2D) = "white" {}
-        _Mask("Mask", 2D) = "white" {}
+        [Header(Textures)]
+        _FrontTex("正面纹理", 2D) = "white" {}
+        _BackTex("背面纹理", 2D) = "white" {}
+        _Noise("噪声纹理", 2D) = "white" {}
+        _Mask("遮罩纹理", 2D) = "white" {}
 
-        [HDR] _FrontColor("Front Color", Color) = (1,1,1,1)
-        [HDR] _BackColor("Back Color", Color) = (1,1,1,1)
-        [HDR] _FrontFresnelColor("Front Fresnel Color", Color) = (1,1,1,1)
-        [HDR] _BackFresnelColor("Back Fresnel Color", Color) = (1,1,1,1)
+        [Header(Colors)]
+        [HDR] _FrontColor("正面颜色", Color) = (1,1,1,1)
+        [HDR] _BackColor("背面颜色", Color) = (1,1,1,1)
+        [HDR] _FrontFresnelColor("正面边缘光颜色", Color) = (1,1,1,1)
+        [HDR] _BackFresnelColor("背面边缘光颜色", Color) = (1,1,1,1)
 
-        _FrontScroll("Front Scroll XY", Vector) = (0,0,0,0)
-        _BackScroll("Back Scroll XY", Vector) = (0,0,0,0)
-        _NoiseScroll("Noise Scroll XY", Vector) = (0,0,0,0)
+        [Header(UV Scroll)]
+        _FrontScroll("正面滚动 XY", Vector) = (0,0,0,0)
+        _BackScroll("背面滚动 XY", Vector) = (0,0,0,0)
+        _NoiseScroll("噪声滚动 XY", Vector) = (0,0,0,0)
 
-        _Emission("Emission", Float) = 1
-        _Opacity("Opacity", Range(0,4)) = 1
-        _SideOpacity("Side Opacity", Range(0,4)) = 1
-        _FrontFresnelStrength("Front Fresnel Strength", Float) = 0
-        _BackFresnelStrength("Back Fresnel Strength", Float) = 0
-        _FresnelPower("Fresnel Power", Float) = 4
-        _UseSoftParticle("Use Soft Particle", Float) = 1
-        _SoftParticleNearFadeDistance("Soft Particle Near Fade", Float) = 0
-        _SoftParticleFarFadeDistance("Soft Particle Far Fade", Float) = 1
+        [Header(Controls)]
+        _Emission("发光强度", Float) = 1
+        _Opacity("整体透明度", Range(0,4)) = 1
+        _SideOpacity("双面透明度倍率", Range(0,4)) = 1
+        _FrontFresnelStrength("正面边缘光强度", Float) = 0
+        _BackFresnelStrength("背面边缘光强度", Float) = 0
+        _FresnelPower("边缘光锐度", Float) = 4
+
+        [Header(Soft Particle)]
+        _UseSoftParticle("启用软粒子", Float) = 1
+        _SoftParticleNearFadeDistance("近端淡出距离", Float) = 0
+        _SoftParticleFarFadeDistance("远端淡出距离", Float) = 1
     }
 
     SubShader
@@ -92,6 +99,7 @@ Shader "Project/FX/FX_TwoSided_URP"
             TEXTURE2D(_Noise); SAMPLER(sampler_Noise);
             TEXTURE2D(_Mask); SAMPLER(sampler_Mask);
 
+            // Two-sided path stays separate because front and back faces have different textures and colors.
             FXVaryings vert(FXAttributes input)
             {
                 return FXVertex(input);
@@ -105,6 +113,7 @@ Shader "Project/FX/FX_TwoSided_URP"
                 float softFade = FXSoftParticleFade(input.screenPos, _UseSoftParticle, _SoftParticleNearFadeDistance, _SoftParticleFarFadeDistance);
 
                 bool isFront = IS_FRONT_VFACE(facing, true, false);
+                // Front/back branches intentionally keep different texture and color paths.
                 float2 texUV = isFront ? FXScroll(TRANSFORM_TEX(input.uv0.xy, _FrontTex), _FrontScroll.xy) : FXScroll(TRANSFORM_TEX(input.uv0.xy, _BackTex), _BackScroll.xy);
                 half4 texSample = isFront ? SAMPLE_TEXTURE2D(_FrontTex, sampler_FrontTex, texUV) : SAMPLE_TEXTURE2D(_BackTex, sampler_BackTex, texUV);
                 half4 sideColor = isFront ? _FrontColor : _BackColor;

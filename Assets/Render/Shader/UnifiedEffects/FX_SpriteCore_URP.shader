@@ -2,73 +2,82 @@ Shader "Project/FX/FX_SpriteCore_URP"
 {
     Properties
     {
-        [Enum(Simple,0,CenterGlow,1,Trail,2,LinePath,3,Fire,4,Lightning,5,Ice,6,Dissolve,7,SoftNoise,8,MeshDissolve,9,Shockwave,10,Marker,11,RadialPulse,12)] _EffectMode("Effect Mode", Float) = 0
+        [Header(Base Setup)]
+        [Enum(Simple,0,CenterGlow,1,Trail,2,LinePath,3,Fire,4,Lightning,5,Ice,6,Dissolve,7,SoftNoise,8,MeshDissolve,9,Shockwave,10,Marker,11,RadialPulse,12)] _EffectMode("效果模式", Float) = 0
 
-        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend("Src Blend", Float) = 5
-        [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend("Dst Blend", Float) = 10
-        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlendAlpha("Src Blend Alpha", Float) = 1
-        [Enum(UnityEngine.Rendering.BlendMode)] _DstBlendAlpha("Dst Blend Alpha", Float) = 10
-        [Enum(UnityEngine.Rendering.CullMode)] _Cull("Cull", Float) = 0
-        [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("ZTest", Float) = 4
-        [Toggle] _ZWrite("ZWrite", Float) = 0
+        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlend("颜色源混合", Float) = 5
+        [Enum(UnityEngine.Rendering.BlendMode)] _DstBlend("颜色目标混合", Float) = 10
+        [Enum(UnityEngine.Rendering.BlendMode)] _SrcBlendAlpha("Alpha源混合", Float) = 1
+        [Enum(UnityEngine.Rendering.BlendMode)] _DstBlendAlpha("Alpha目标混合", Float) = 10
+        [Enum(UnityEngine.Rendering.CullMode)] _Cull("剔除模式", Float) = 0
+        [Enum(UnityEngine.Rendering.CompareFunction)] _ZTest("深度测试", Float) = 4
+        [Toggle] _ZWrite("写入深度", Float) = 0
 
-        [MainTexture] _MainTex("Main Tex", 2D) = "white" {}
-        _SecondaryTex("Secondary Tex", 2D) = "white" {}
-        _Noise("Noise", 2D) = "white" {}
-        _Mask("Mask", 2D) = "white" {}
-        _Flow("Flow", 2D) = "gray" {}
-        _DissolveTex("Dissolve Tex", 2D) = "white" {}
-        _Tex1("Legacy Tex1", 2D) = "white" {}
-        _Tex2("Legacy Tex2", 2D) = "white" {}
-        _FlowMap("Legacy Flow Map", 2D) = "gray" {}
+        [Header(Textures)]
+        [MainTexture] _MainTex("主纹理", 2D) = "white" {}
+        _SecondaryTex("副纹理", 2D) = "white" {}
+        _Noise("噪声纹理", 2D) = "white" {}
+        _Mask("遮罩纹理", 2D) = "white" {}
+        _Flow("流动扰动纹理", 2D) = "gray" {}
+        _DissolveTex("溶解纹理", 2D) = "white" {}
+        _Tex1("旧版火焰纹理1", 2D) = "white" {}
+        _Tex2("旧版火焰纹理2", 2D) = "white" {}
+        _FlowMap("旧版流向图", 2D) = "gray" {}
 
-        [Toggle(_FX_USE_SECONDARY_TEX)] _UseSecondaryTex("Use Secondary Tex", Float) = 0
-        [Toggle(_FX_USE_DISSOLVE_TEX)] _UseDissolveTex("Use Dissolve Tex", Float) = 0
-        [Toggle(_FX_USE_TEX1_TEX)] _UseTex1Tex("Use Legacy Tex1", Float) = 0
-        [Toggle(_FX_USE_TEX2_TEX)] _UseTex2Tex("Use Legacy Tex2", Float) = 0
-        [Toggle(_FX_USE_FLOWMAP_TEX)] _UseFlowMapTex("Use Flow Map", Float) = 0
+        [Header(Optional Sampling)]
+        [Toggle(_FX_USE_SECONDARY_TEX)] _UseSecondaryTex("启用副纹理采样", Float) = 0
+        [Toggle(_FX_USE_DISSOLVE_TEX)] _UseDissolveTex("启用溶解纹理采样", Float) = 0
+        [Toggle(_FX_USE_TEX1_TEX)] _UseTex1Tex("启用旧版火焰纹理1", Float) = 0
+        [Toggle(_FX_USE_TEX2_TEX)] _UseTex2Tex("启用旧版火焰纹理2", Float) = 0
+        [Toggle(_FX_USE_FLOWMAP_TEX)] _UseFlowMapTex("启用流向图采样", Float) = 0
 
-        [HDR] _Color("Color", Color) = (1,1,1,1)
-        [HDR] _SecondaryColor("Secondary Color", Color) = (1,1,1,1)
-        [HDR] _StartColor("Start Color", Color) = (1,1,1,1)
-        [HDR] _EndColor("End Color", Color) = (1,1,1,1)
-        [HDR] _EdgeColor("Edge Color", Color) = (1,1,1,1)
+        [Header(Colors)]
+        [HDR] _Color("主颜色", Color) = (1,1,1,1)
+        [HDR] _SecondaryColor("副颜色", Color) = (1,1,1,1)
+        [HDR] _StartColor("起始颜色", Color) = (1,1,1,1)
+        [HDR] _EndColor("结束颜色", Color) = (1,1,1,1)
+        [HDR] _EdgeColor("边缘颜色", Color) = (1,1,1,1)
 
-        _MainScroll("Main Scroll XY", Vector) = (0,0,0,0)
-        _SecondaryScroll("Secondary Scroll XY", Vector) = (0,0,0,0)
-        _NoiseScroll("Noise Scroll XY", Vector) = (0,0,0,0)
-        _FlowScroll("Flow Scroll XY", Vector) = (0,0,0,0)
-        _DissolveScroll("Dissolve Scroll XY", Vector) = (0,0,0,0)
+        [Header(UV Scroll)]
+        _MainScroll("主纹理滚动 XY", Vector) = (0,0,0,0)
+        _SecondaryScroll("副纹理滚动 XY", Vector) = (0,0,0,0)
+        _NoiseScroll("噪声滚动 XY", Vector) = (0,0,0,0)
+        _FlowScroll("扰动滚动 XY", Vector) = (0,0,0,0)
+        _DissolveScroll("溶解滚动 XY", Vector) = (0,0,0,0)
 
-        _SpeedMainTexUVNoiseZW("Legacy Main/Noise Scroll", Vector) = (0,0,0,0)
-        _DistortionSpeedXYPowerZ("Legacy Distortion Scroll/Power", Vector) = (0,0,0,0)
-        _SpeedTex1("Legacy Tex1 Scroll", Vector) = (0,0,0,0)
-        _SpeedTex2XYEmission("Legacy Tex2 Scroll/Emission", Vector) = (0,0,1,0)
-        _NoisespeedXYEmissonZPowerW("Legacy Noise Scroll/Emission/Power", Vector) = (0,0,1,1)
+        [Header(Legacy Compatibility)]
+        _SpeedMainTexUVNoiseZW("旧版主图/噪声滚动", Vector) = (0,0,0,0)
+        _DistortionSpeedXYPowerZ("旧版扰动滚动/强度", Vector) = (0,0,0,0)
+        _SpeedTex1("旧版纹理1滚动", Vector) = (0,0,0,0)
+        _SpeedTex2XYEmission("旧版纹理2滚动/发光", Vector) = (0,0,1,0)
+        _NoisespeedXYEmissonZPowerW("旧版噪声滚动/发光/强度", Vector) = (0,0,1,1)
 
-        _Emission("Emission", Float) = 1
-        _Opacity("Opacity", Range(0,4)) = 1
-        _NoisePower("Noise Power", Float) = 1
-        _FlowStrength("Flow Strength", Float) = 0
-        _SecondaryBlend("Secondary Blend", Range(0,1)) = 0
-        _MaskPower("Mask Power", Float) = 1
-        _GradientPower("Gradient Power", Float) = 1
-        _GradientRange("Gradient Range", Float) = 1
-        _CenterGlowStrength("Center Glow Strength", Float) = 0
-        _CenterGlowPower("Center Glow Power", Float) = 2
-        _FresnelStrength("Fresnel Strength", Float) = 0
-        _FresnelPower("Fresnel Power", Float) = 4
-        _LineWidth("Line Width", Range(0.01, 1)) = 0.25
-        _LineSoftness("Line Softness", Range(0.001, 1)) = 0.15
-        _DissolveThreshold("Dissolve Threshold", Range(0,1)) = 0
-        _DissolveSoftness("Dissolve Softness", Range(0.001,1)) = 0.1
-        _DissolveEdgeWidth("Dissolve Edge Width", Range(0.001,1)) = 0.1
-        _InnerRadius("Inner Radius", Range(0,1)) = 0.2
-        _OuterRadius("Outer Radius", Range(0,1)) = 0.8
-        _RingSoftness("Ring Softness", Range(0.001,1)) = 0.1
-        _UseSoftParticle("Use Soft Particle", Float) = 0
-        _SoftParticleNearFadeDistance("Soft Particle Near Fade", Float) = 0
-        _SoftParticleFarFadeDistance("Soft Particle Far Fade", Float) = 1
+        [Header(Controls)]
+        _Emission("发光强度", Float) = 1
+        _Opacity("整体透明度", Range(0,4)) = 1
+        _NoisePower("噪声影响强度", Float) = 1
+        _FlowStrength("流动扰动强度", Float) = 0
+        _SecondaryBlend("主副纹理混合", Range(0,1)) = 0
+        _MaskPower("遮罩影响强度", Float) = 1
+        _GradientPower("渐变强度", Float) = 1
+        _GradientRange("渐变范围", Float) = 1
+        _CenterGlowStrength("中心发光强度", Float) = 0
+        _CenterGlowPower("中心发光收缩", Float) = 2
+        _FresnelStrength("边缘光强度", Float) = 0
+        _FresnelPower("边缘光锐度", Float) = 4
+        _LineWidth("线条宽度", Range(0.01, 1)) = 0.25
+        _LineSoftness("线条软化", Range(0.001, 1)) = 0.15
+        _DissolveThreshold("溶解阈值", Range(0,1)) = 0
+        _DissolveSoftness("溶解软化", Range(0.001,1)) = 0.1
+        _DissolveEdgeWidth("溶解边缘宽度", Range(0.001,1)) = 0.1
+        _InnerRadius("内圈半径", Range(0,1)) = 0.2
+        _OuterRadius("外圈半径", Range(0,1)) = 0.8
+        _RingSoftness("圆环软化", Range(0.001,1)) = 0.1
+
+        [Header(Soft Particle)]
+        _UseSoftParticle("启用软粒子", Float) = 0
+        _SoftParticleNearFadeDistance("近端淡出距离", Float) = 0
+        _SoftParticleFarFadeDistance("远端淡出距离", Float) = 1
     }
 
     SubShader
@@ -171,6 +180,7 @@ Shader "Project/FX/FX_SpriteCore_URP"
             TEXTURE2D(_Tex2); SAMPLER(sampler_Tex2);
             TEXTURE2D(_FlowMap); SAMPLER(sampler_FlowMap);
 
+            // Shared unlit vertex path.
             FXVaryings vert(FXAttributes input)
             {
                 return FXVertex(input);
@@ -203,6 +213,7 @@ Shader "Project/FX/FX_SpriteCore_URP"
                 tex2UV = FXScroll(tex2UV, _SpeedTex2XYEmission.xy);
                 flowMapUV = FXScroll(flowMapUV, float2(_SpeedTex2XYEmission.x, _SpeedTex2XYEmission.y));
 
+                // Keep high frequency paths cheap: only sample extra maps when the active mode needs them.
                 bool useMask = (mode == 1) || (mode == 2) || (mode == 4) || (mode == 6) || (mode >= 10);
                 bool useFlow = (mode == 1) || (mode == 3) || (mode >= 10);
 
@@ -225,31 +236,32 @@ Shader "Project/FX/FX_SpriteCore_URP"
                 half4 mainSample = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, distortedMainUV);
                 half4 noiseSample = SAMPLE_TEXTURE2D(_Noise, sampler_Noise, noiseUV);
                 half4 secondarySample = mainSample;
-#if defined(_FX_USE_SECONDARY_TEX)
+            #if defined(_FX_USE_SECONDARY_TEX)
                 secondarySample = SAMPLE_TEXTURE2D(_SecondaryTex, sampler_SecondaryTex, distortedSecondaryUV);
-#endif
+            #endif
                 half4 dissolveSample = noiseSample;
-#if defined(_FX_USE_DISSOLVE_TEX)
+            #if defined(_FX_USE_DISSOLVE_TEX)
                 dissolveSample = SAMPLE_TEXTURE2D(_DissolveTex, sampler_DissolveTex, dissolveUV);
-#endif
+            #endif
                 half4 tex1Sample = half4(1.0, 1.0, 1.0, 1.0);
-#if defined(_FX_USE_TEX1_TEX)
+            #if defined(_FX_USE_TEX1_TEX)
                 tex1Sample = SAMPLE_TEXTURE2D(_Tex1, sampler_Tex1, tex1UV);
-#endif
+            #endif
                 half4 tex2Sample = half4(1.0, 1.0, 1.0, 1.0);
-#if defined(_FX_USE_TEX2_TEX)
+            #if defined(_FX_USE_TEX2_TEX)
                 tex2Sample = SAMPLE_TEXTURE2D(_Tex2, sampler_Tex2, tex2UV);
-#endif
+            #endif
                 half4 flowMapSample = half4(0.5, 0.5, 0.0, 0.0);
-#if defined(_FX_USE_FLOWMAP_TEX)
+            #if defined(_FX_USE_FLOWMAP_TEX)
                 flowMapSample = SAMPLE_TEXTURE2D(_FlowMap, sampler_FlowMap, flowMapUV);
-#endif
+            #endif
 
                 half4 combined = mainSample;
                 half3 tint = _Color.rgb;
                 half3 extraRgb = 0.0;
                 half alpha = mainSample.a;
 
+                // 0-6: original sprite-family presets.
                 if (mode == 0)
                 {
                     combined.rgb *= lerp(1.0, noiseSample.rgb, saturate(_NoisePower));
@@ -295,6 +307,7 @@ Shader "Project/FX/FX_SpriteCore_URP"
                     combined.rgb += _EdgeColor.rgb * fresnel;
                     alpha *= maskSample.a;
                 }
+                // 7-9: dissolve family merged from FX_Dissolve_URP.
                 else if (mode == 7 || mode == 8 || mode == 9)
                 {
                     float dissolveValue = dissolveSample.r;
@@ -311,6 +324,7 @@ Shader "Project/FX/FX_SpriteCore_URP"
                     extraRgb = _EdgeColor.rgb * saturate(edgeMask);
                     alpha = mainSample.a * noiseSample.a * bodyMask;
                 }
+                // 10-12: radial family merged from FX_Shockwave_URP.
                 else if (mode == 10 || mode == 11 || mode == 12)
                 {
                     half4 shockwaveSample = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, mainUV + (((flowSample.rg * 2.0) - 1.0) * _DistortionSpeedXYPowerZ.z));
@@ -328,6 +342,7 @@ Shader "Project/FX/FX_SpriteCore_URP"
                     alpha = shockwaveSample.a * noiseSample.a * maskSample.a * radialMask;
                 }
 
+                // Legacy sprite family still keeps the lightweight single-noise dissolve gate.
                 if (mode <= 6)
                 {
                     float dissolveSource = noiseSample.r;

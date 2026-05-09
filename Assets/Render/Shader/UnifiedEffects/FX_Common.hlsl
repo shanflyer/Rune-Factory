@@ -5,6 +5,7 @@
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl"
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareOpaqueTexture.hlsl"
 
+// Shared vertex input layout for most project effect shaders.
 struct FXAttributes
 {
     float4 positionOS : POSITION;
@@ -16,6 +17,10 @@ struct FXAttributes
     UNITY_VERTEX_INPUT_INSTANCE_ID
 };
 
+// Common varyings:
+// - uv0/uv1: keep original particle/card UVs
+// - screenPos: used for soft particle fading and distortion sampling
+// - fogFactor: keep compatibility with scene fog
 struct FXVaryings
 {
     float4 positionCS : SV_POSITION;
@@ -30,6 +35,7 @@ struct FXVaryings
     UNITY_VERTEX_OUTPUT_STEREO
 };
 
+// Standard unlit effect vertex transform used by all unified FX shaders.
 FXVaryings FXVertex(FXAttributes input)
 {
     FXVaryings output = (FXVaryings)0;
@@ -51,6 +57,7 @@ FXVaryings FXVertex(FXAttributes input)
     return output;
 }
 
+// Depth based fade for particles intersecting geometry.
 float FXSoftParticleFade(float4 screenPos, float enabled, float nearFade, float farFade)
 {
     if (enabled < 0.5)
@@ -65,11 +72,13 @@ float FXSoftParticleFade(float4 screenPos, float enabled, float nearFade, float 
     return saturate((distanceToScene - nearFade) / fadeRange);
 }
 
+// Time based UV scrolling helper.
 float2 FXScroll(float2 uv, float2 speed)
 {
     return uv + speed * _Time.y;
 }
 
+// Radial center mask for glow / marker style effects.
 float FXCenterMask(float2 uv, float power)
 {
     float2 centered = uv * 2.0 - 1.0;
@@ -77,6 +86,7 @@ float FXCenterMask(float2 uv, float power)
     return pow(radial, max(power, 1e-4));
 }
 
+// Ring mask used by shockwave and circle marker effects.
 float FXRingMask(float2 uv, float innerRadius, float outerRadius, float softness)
 {
     float2 centered = uv * 2.0 - 1.0;
@@ -86,17 +96,20 @@ float FXRingMask(float2 uv, float innerRadius, float outerRadius, float softness
     return saturate(outer * inner);
 }
 
+// Horizontal strip mask for slash / line path style effects.
 float FXLineMask(float2 uv, float width, float softness)
 {
     float distanceToCenter = abs(uv.y - 0.5) * 2.0;
     return 1.0 - smoothstep(width, width + max(softness, 1e-4), distanceToCenter);
 }
 
+// Simple left-to-right gradient ramp.
 float FXGradient(float u, float rangeValue, float power)
 {
     return saturate(pow(saturate(u * max(rangeValue, 1e-4)), max(power, 1e-4)));
 }
 
+// View fresnel helper for ice / rim highlight effects.
 float FXViewFresnel(float3 normalWS, float3 positionWS, float power)
 {
     float3 viewDirWS = SafeNormalize(GetWorldSpaceViewDir(positionWS));
@@ -104,6 +117,7 @@ float FXViewFresnel(float3 normalWS, float3 positionWS, float power)
     return pow(1.0 - ndv, max(power, 1e-4));
 }
 
+// Fog wrapper so every shader calls the same path.
 half3 FXApplyFog(half3 color, half fogFactor)
 {
     return MixFog(color, fogFactor);
