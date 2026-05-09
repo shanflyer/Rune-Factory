@@ -237,7 +237,8 @@ MonoBehaviour:
   - {fileID: -601572069951543656}
   - {fileID: -7016315643003661319}
   - {fileID: 1866510608750819454}
-  m_RendererFeatureMap: b2ca19fba734a3df1f6ec9ea68d759e7b5f4f2674751db9aa886ada949aa533e28eb65e3be3d5b0ddcf656352b565706e8e2fac18bf2f18472f84cb7bba81c5ca490df5d13ce177e98e6bdbf63c9a6f7f913c0c2180aa19e7e38176c822de719
+  - {fileID: 2873249517004619050}
+  m_RendererFeatureMap: b2ca19fba734a3df1f6ec9ea68d759e7b5f4f2674751db9aa886ada949aa533e28eb65e3be3d5b0ddcf656352b565706e8e2fac18bf2f18472f84cb7bba81c5ca490df5d13ce177e98e6bdbf63c9a6f7f913c0c2180aa19e7e38176c822de7192a7d1f6c36d5df27
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -370,6 +371,21 @@ MonoBehaviour:
     blitToCameraTarget: 1
     clearFlag: 0
     clearColor: {r: 0, g: 0, b: 0, a: 1}
+--- !u!114 &2873249517004619050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32041aef97755b6408523d8a811cd232, type: 3}
+  m_Name: MyScreenRenderPassFeature
+  m_EditorClassIdentifier: Assembly-CSharp::MyScreenRenderPassFeature
+  m_Active: 1
+  renderPassEvent: 600
+  material: {fileID: 2100000, guid: da1f5db2cc22d5c41b53fa52ab3bbe6c, type: 2}
 --- !u!114 &4491120486774572712
 MonoBehaviour:
   m_ObjectHideFlags: 0
