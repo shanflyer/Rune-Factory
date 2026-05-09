@@ -8,24 +8,38 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: MagicCircle62dn
-  m_Shader: {fileID: 4800000, guid: 145bae762d8de8f4c8fb1b284128fae7, type: 3}
+  m_Shader: {fileID: 4800000, guid: 9c88eed0d909fe84cbe96a4ffbb37b24, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords:
-  - _USETEXTURECOLOR_ON
+  m_ValidKeywords:
+  - _FX_USE_DISSOLVE_TEX
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
+  m_CustomRenderQueue: 3000
+  stringTagMap:
+    LegacyFXShader: Hovl/Particles/DissolveNoise
+    UnifiedFXRecipe: Dissolve
   disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _DissolveTex:
+        m_Texture: {fileID: 2800000, guid: 0f959780e8aa16d4c87987b30608e3ef, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Dissolvenoise:
         m_Texture: {fileID: 2800000, guid: 0f959780e8aa16d4c87987b30608e3ef, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Flow:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FlowMap:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Main:
@@ -36,8 +50,24 @@ Material:
         m_Texture: {fileID: 2800000, guid: 7260c0f6b4dc08a40b4449a1b4516980, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Mask:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _Noise:
-        m_Texture: {fileID: 2800000, guid: 04a40b50e9e63ed43af8af28f2ba4f86, type: 3}
+        m_Texture: {fileID: 2800000, guid: cd187641b0436e440b62acb6b5bdc628, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SecondaryTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Tex1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Tex2:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TextureNoise:
@@ -54,19 +84,68 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _CenterGlowPower: 2
+    - _CenterGlowStrength: 0
+    - _Cull: 0
     - _Dissolve: 1
+    - _DissolveEdgeWidth: 0.1
+    - _DissolveSoftness: 0.08
+    - _DissolveThreshold: 0.5
+    - _DstBlend: 10
+    - _DstBlendAlpha: 10
+    - _EffectMode: 7
+    - _Emission: 8
+    - _FlowStrength: 0
+    - _FresnelPower: 4
+    - _FresnelStrength: 0
+    - _GradientPower: 1
+    - _GradientRange: 1
+    - _InnerRadius: 0.2
     - _InvFade: 3
+    - _LineSoftness: 0.15
+    - _LineWidth: 0.25
+    - _MaskPower: 1
+    - _NoisePower: 1
     - _Opacity: 1
+    - _OuterRadius: 0.8
+    - _RingSoftness: 0.1
+    - _SecondaryBlend: 0
+    - _SoftParticleFarFadeDistance: 0.33333334
+    - _SoftParticleNearFadeDistance: 0
+    - _SrcBlend: 5
+    - _SrcBlendAlpha: 1
     - _ToggleSwitch0: 1
+    - _UseDissolveTex: 1
+    - _UseFlowMapTex: 0
+    - _UseSecondaryTex: 0
+    - _UseSoftParticle: 1
+    - _UseTex1Tex: 0
+    - _UseTex2Tex: 0
     - _Usedepth: 0
     - _Usetexturecolor: 1
     - _Usetexturedissolve: 0
+    - _ZTest: 4
+    - _ZWrite: 0
     m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _DissolveScroll: {r: 0, g: 0, b: 0, a: 0}
     - _Dissolvecolor: {r: 0.9150943, g: 0.9150943, b: 0.9150943, a: 1}
     - _DissolvespeedXY: {r: 0, g: 0, b: 0, a: 0}
+    - _DistortionSpeedXYPowerZ: {r: 0, g: 0, b: 0, a: 0}
+    - _EdgeColor: {r: 0.9150943, g: 0.9150943, b: 0.9150943, a: 1}
+    - _EndColor: {r: 1, g: 1, b: 1, a: 1}
+    - _FlowScroll: {r: 0, g: 0, b: 0, a: 0}
+    - _MainScroll: {r: 0, g: 0, b: 0, a: 0}
     - _Maincolor: {r: 1, g: 1, b: 1, a: 1}
+    - _NoiseScroll: {r: 0.1, g: 0.03, b: 8, a: 1}
     - _Noisecolor: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 1}
     - _NoisespeedXYEmissonZPowerW: {r: 0.1, g: 0.03, b: 8, a: 1}
+    - _SecondaryColor: {r: 0.1509434, g: 0.1509434, b: 0.1509434, a: 1}
+    - _SecondaryScroll: {r: 0, g: 0, b: 0, a: 0}
+    - _SpeedMainTexUVNoiseZW: {r: 0, g: 0, b: 0, a: 0}
+    - _SpeedTex1: {r: 0, g: 0, b: 0, a: 0}
+    - _SpeedTex2XYEmission: {r: 0, g: 0, b: 1, a: 0}
+    - _StartColor: {r: 1, g: 1, b: 1, a: 1}
     - _TintColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

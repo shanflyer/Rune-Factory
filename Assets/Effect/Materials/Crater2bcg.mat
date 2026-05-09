@@ -21,17 +21,18 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Crater2bcg
-  m_Shader: {fileID: 4800000, guid: 0bd281681fcca54499e31c3e9d7fd809, type: 3}
+  m_Shader: {fileID: 4800000, guid: 9c88eed0d909fe84cbe96a4ffbb37b24, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords:
-  - _SURFACE_TYPE_TRANSPARENT
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
+  m_CustomRenderQueue: 3000
+  stringTagMap:
+    LegacyFXShader: SampleEffectMul
+    UnifiedFXRecipe: Sprite Simple Alpha
   disabledShaderPasses:
   - DepthOnly
   - SHADOWCASTER
@@ -56,11 +57,19 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _DissolveTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Flow:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FlowMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -85,6 +94,18 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SecondaryTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Tex1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Tex2:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -113,36 +134,65 @@ Material:
     - _BlendSnow: 0
     - _BumpScale: 1
     - _CastShadows: 0
+    - _CenterGlowPower: 2
+    - _CenterGlowStrength: 0
     - _Cull: 0
     - _CullMode: 0
     - _Cutoff: 0.5
     - _Depthpower: 1
     - _DetailNormalMapScale: 1
+    - _DissolveEdgeWidth: 0.1
+    - _DissolveSoftness: 0.1
+    - _DissolveThreshold: 0
     - _DstBlend: 10
-    - _Emission: 3
+    - _DstBlendAlpha: 10
+    - _EffectMode: 0
+    - _Emission: 1
+    - _FlowStrength: 0
+    - _FresnelPower: 4
+    - _FresnelStrength: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _GradientPower: 1
+    - _GradientRange: 1
     - _High: 0
     - _HightOffset: 0
+    - _InnerRadius: 0.2
     - _InvFade: 1
+    - _LineSoftness: 0.15
+    - _LineWidth: 0.25
     - _MainTexUspeed: 0
     - _MainTexVspeed: 0
+    - _MaskPower: 1
     - _Metallic: 0
     - _Mode: 0
+    - _NoisePower: 1
     - _NoiseUspeed: 0
     - _NoiseVspeed: 0
     - _OcclusionStrength: 1
     - _Opacity: 1
+    - _OuterRadius: 0.8
     - _Parallax: 0.02
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _RingSoftness: 0.1
+    - _SecondaryBlend: 0
     - _SmoothnessTextureChannel: 0
+    - _SoftParticleFarFadeDistance: 1
+    - _SoftParticleNearFadeDistance: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 5
+    - _SrcBlendAlpha: 1
     - _StepDepthA: 0
     - _Surface: 1
     - _UVSec: 0
+    - _UseDissolveTex: 0
+    - _UseFlowMapTex: 0
+    - _UseSecondaryTex: 0
+    - _UseSoftParticle: 0
+    - _UseTex1Tex: 0
+    - _UseTex2Tex: 0
     - _Usecenterglow: 0
     - _Usedepth: 0
     - _Usedistortion: 1
@@ -151,10 +201,22 @@ Material:
     - _ZWriteControl: 0
     m_Colors:
     - _Color: {r: 3, g: 3, b: 3, a: 1}
+    - _DissolveScroll: {r: 0, g: 0, b: 0, a: 0}
     - _DistortionSpeedXYPowerZ: {r: 0, g: 0, b: 0, a: 0}
+    - _EdgeColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EndColor: {r: 1, g: 1, b: 1, a: 1}
+    - _FlowScroll: {r: 0, g: 0, b: 0, a: 0}
+    - _MainScroll: {r: 0, g: 0, b: 0, a: 0}
+    - _NoiseScroll: {r: 0, g: 0, b: 0, a: 0}
+    - _NoisespeedXYEmissonZPowerW: {r: 0, g: 0, b: 1, a: 1}
+    - _SecondaryColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SecondaryScroll: {r: 0, g: 0, b: 0, a: 0}
     - _SpeedMainTexUVNoiseUV: {r: 0, g: 0, b: 0, a: 0}
     - _SpeedMainTexUVNoiseZW: {r: 0, g: 0, b: 0, a: 0}
+    - _SpeedTex1: {r: 0, g: 0, b: 0, a: 0}
+    - _SpeedTex2XYEmission: {r: 0, g: 0, b: 1, a: 0}
+    - _StartColor: {r: 1, g: 1, b: 1, a: 1}
     - _TintColor: {r: 1, g: 1, b: 1, a: 1}
     - _UVDistortionOpacity: {r: -1, g: 0, b: 1, a: 0.4}
   m_BuildTextureStacks: []

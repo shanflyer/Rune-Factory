@@ -8,25 +8,18 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: magic_line_ADD
-  m_Shader: {fileID: 4800000, guid: 0bd281681fcca54499e31c3e9d7fd809, type: 3}
+  m_Shader: {fileID: 4800000, guid: 9c88eed0d909fe84cbe96a4ffbb37b24, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords:
-  - _
-  - _ALPHABLEND_ON
-  - _CFXR_DITHERED_SHADOWS_OFF
-  - _CFXR_HDR_BOOST
-  - _CFXR_OVERLAYBLEND_RGBA
-  - _CFXR_OVERLAYTEX_OFF
-  - _FADING_ON
-  - _FLIPBOOKBLENDING_OFF
-  - _SURFACE_TYPE_TRANSPARENT
+  m_InvalidKeywords: []
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
+  m_CustomRenderQueue: 3000
+  stringTagMap:
+    LegacyFXShader: SampleEffectMul
+    UnifiedFXRecipe: Sprite Simple Alpha
   disabledShaderPasses:
   - ALWAYS
   - SHADOWCASTER
@@ -59,8 +52,20 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Flow:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _FlowMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: de74cff9f122dc046872f590fed7e96e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Mask:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Noise:
@@ -72,6 +77,18 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SecondColorTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SecondaryTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Tex1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Tex2:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -92,12 +109,17 @@ Material:
     - _CameraFadingEnabled: 0
     - _CameraFarFadeDistance: 2
     - _CameraNearFadeDistance: 1
+    - _CenterGlowPower: 2
+    - _CenterGlowStrength: 0
     - _ColorMode: 0
-    - _Cull: 2
+    - _Cull: 0
     - _Cutoff: 0.5
     - _DirLightScreenAtten: 1
     - _DirectLightingRamp: 1
+    - _DissolveEdgeWidth: 0.1
     - _DissolveSmooth: 0.1
+    - _DissolveSoftness: 0.1
+    - _DissolveThreshold: 0
     - _Distort: 0.1
     - _DistortionBlend: 0.5
     - _DistortionEnabled: 0
@@ -108,23 +130,41 @@ Material:
     - _DstBlend1: 1
     - _DstBlendAlpha: 10
     - _EdgeFadePow: 1
+    - _EffectMode: 0
+    - _Emission: 1
     - _EmissionEnabled: 0
     - _FadeAlongU: 0
     - _FlipbookBlending: 0
     - _FlipbookMode: 0
+    - _FlowStrength: 0
+    - _FresnelPower: 4
+    - _FresnelStrength: 0
+    - _GradientPower: 1
+    - _GradientRange: 1
     - _HdrBoost: 1
     - _HdrMultiply: 8
     - _HightOffset: 0
     - _IndirectLightingMix: 0.5
+    - _InnerRadius: 0.2
     - _InvFade: 3
     - _InvertDissolveTex: 0
     - _LightingEnabled: 0
     - _LightingWorldPosStrength: 0.2
+    - _LineSoftness: 0.15
+    - _LineWidth: 0.25
+    - _MaskPower: 1
     - _Mode: 4
+    - _NoisePower: 1
+    - _Opacity: 1
+    - _OuterRadius: 0.8
     - _QueueOffset: 0
+    - _RingSoftness: 0.1
     - _SecondColorSmooth: 0.2
+    - _SecondaryBlend: 0
     - _ShadowStrength: 1
     - _SingleChannel: 0
+    - _SoftParticleFarFadeDistance: 1
+    - _SoftParticleNearFadeDistance: 0
     - _SoftParticlesEnabled: 0
     - _SoftParticlesFadeDistanceFar: 1
     - _SoftParticlesFadeDistanceNear: 0
@@ -139,17 +179,24 @@ Material:
     - _UseBackLighting: 0
     - _UseDissolve: 0
     - _UseDissolveOffsetUV: 0
+    - _UseDissolveTex: 0
     - _UseEF: 0
     - _UseEmission: 0
     - _UseFB: 0
+    - _UseFlowMapTex: 0
     - _UseFontColor: 0
     - _UseLighting: 0
     - _UseLightingWorldPosOffset: 0
     - _UseNormalMap: 0
     - _UseSP: 1
     - _UseSecondColor: 0
+    - _UseSecondaryTex: 0
+    - _UseSoftParticle: 0
+    - _UseTex1Tex: 0
+    - _UseTex2Tex: 0
     - _UseUV2Distortion: 0
     - _UseUVDistortion: 0
+    - _ZTest: 4
     - _ZWrite: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
@@ -159,11 +206,23 @@ Material:
     - _ColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _DissolveScroll: {r: 0, g: 0, b: 0, a: 0}
     - _DistortScrolling: {r: 0, g: 0, b: 1, a: 1}
+    - _DistortionSpeedXYPowerZ: {r: 0, g: 0, b: 0, a: 0}
+    - _EdgeColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _EndColor: {r: 1, g: 1, b: 1, a: 1}
+    - _FlowScroll: {r: 0, g: 0, b: 0, a: 0}
+    - _MainScroll: {r: 0, g: 0, b: 0, a: 0}
+    - _NoiseScroll: {r: 0, g: 0, b: 0, a: 0}
+    - _NoisespeedXYEmissonZPowerW: {r: 0, g: 0, b: 1, a: 1}
     - _OverlayTex_Scroll: {r: 0.1, g: 0.1, b: 1, a: 1}
+    - _SecondaryColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SecondaryScroll: {r: 0, g: 0, b: 0, a: 0}
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 1}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
     - _SpeedMainTexUVNoiseZW: {r: 0, g: 0, b: 0, a: 0}
+    - _SpeedTex1: {r: 0, g: 0, b: 0, a: 0}
+    - _SpeedTex2XYEmission: {r: 0, g: 0, b: 1, a: 0}
+    - _StartColor: {r: 1, g: 1, b: 1, a: 1}
     - _TintColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
