@@ -117,6 +117,7 @@
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\IkGroupEditor.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\EditorEventHandler.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\TimeLine\ZoomableArea.cs" />
+    <Compile Include="Assets\Editor\Tool\PrefabEffectAssetCopyTool.cs" />
     <Compile Include="Assets\Effect\ProFlares\Editor\ProFlareInspector.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Algorithm\Incremental.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Tools\AdjacencyMatrix.cs" />
@@ -148,6 +149,7 @@
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\IO\DebugWriter.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\AnimationFixer\AnimationFixer.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\SpriteMeshData.cs" />
+    <Compile Include="Assets\Editor\Common\GameActionDataEditor.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Geometry\EdgeEnumerator.cs" />
     <Compile Include="Assets\Editor\Map\MapTextureCreate.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\ScriptableObjectUtility.cs" />
@@ -175,11 +177,13 @@
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Algorithm\Dwyer.cs" />
     <Compile Include="Assets\Editor\Map\EditorCoordinate.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\VertexManipulator\RectManipulator\IRectManipulable.cs" />
+    <Compile Include="Assets\Editor\Tool\FXShaderMigrationTool.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Ik2DEditor.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Data\Segment.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\TimeLine\TimeArea.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\TriangleLocator.cs" />
     <Compile Include="Assets\Editor\Common\CommonObjData.cs" />
+    <Compile Include="Assets\Editor\Common\GameActionDataMigration.cs" />
     <Compile Include="Assets\Editor\Tool\SourceTool.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\TimeLine\TickHandler.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\AnimationWindowExtra\AnimationWindowImpl_2017_1.cs" />
@@ -201,14 +205,17 @@
     <Compile Include="Assets\Editor\Common\TilemapRendererEditor.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Tools\Voronoi.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\IndexedEdge.cs" />
+    <Compile Include="Assets\Editor\Common\GameActionDataUpgradeTool.cs" />
     <Compile Include="Assets\Editor\Common\PartialCommonToolEditor.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\ContextMenu.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Geometry\Point.cs" />
     <Compile Include="Assets\Editor\Tool\PsbNormalAtlasGenerator.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\AnimationWindowExtra\IAnimationWindowImpl.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Tools\QualityMeasure.cs" />
+    <Compile Include="Assets\Editor\Common\GameActionDataValidator.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\BoneWeight.cs" />
     <Compile Include="Assets\Editor\Tool\SyncMySpriteLitKeywordsTool.cs" />
+    <Compile Include="Assets\Editor\Common\GameActionCodeGenerator.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Algorithm\SweepLine.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Log\ILog.cs" />
     <Compile Include="Assets\Editor\Tool\PSBToAnima2DConverter.cs" />

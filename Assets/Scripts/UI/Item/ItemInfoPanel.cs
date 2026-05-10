@@ -102,7 +102,7 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
         switch (v.item.itemType)
         {
            
-            case ItemType.º“æﬂ:
+            case ItemType.ÂÆ∂ÂÖ∑:
                 HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(v.item.dataId);
                 Icon.sprite = homeEquipmentData.icon;
                 Name.SetSWText(homeEquipmentData.equipmentName);
@@ -115,7 +115,7 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
                 Info.SetSWText(homeEquipmentData.info);
                 InfoItemValueBg.localScale = Vector3.zero;
 
-                string roomValueText = "À˘”–µÿ∑Ω";
+                string roomValueText = "ÊâÄÊúâÂú∞Êñπ";
                 List<string> roomList = new List<string>();
                 roomList.Add(roomValueText);
                 if (homeEquipmentData.canSetMaps != null && homeEquipmentData.canSetMaps.Count > 0)
@@ -131,7 +131,7 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
                         }
                     }
                 } 
-                Property.SetADDText("ø…≤º÷√µÿµ„:", roomList.ToArray());
+                Property.SetADDText("ÂèØÂ∏ÉÁΩÆÂú∞ÁÇπ:", roomList.ToArray());
                 break;
             default:
                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(v.item.dataId);

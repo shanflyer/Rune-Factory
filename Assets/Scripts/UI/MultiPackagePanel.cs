@@ -114,8 +114,8 @@ public class MultiPackagePanel : GamePanel<PackageList>
                 {
                     Item item = packageData.items[i];
                     if (packageSetData1.moveItemType == MoveItemType.OnlyGet || !CheckPackageItem(packageSetData1, item.dataId)
-                        || (packageSetData1.packageType == PackageType.œ ªÓ && !item.isFresh) ||
-                        (packageSetData1.packageType == PackageType.∑«œ ªÓ && item.isFresh))
+                        || (packageSetData1.packageType == PackageType.È≤úÊ¥ª && !item.isFresh) ||
+                        (packageSetData1.packageType == PackageType.ÈùûÈ≤úÊ¥ª && item.isFresh))
                     {
                         item.locked = true;
                     }
@@ -151,8 +151,8 @@ public class MultiPackagePanel : GamePanel<PackageList>
                 {
                     Item item = packageData.items[i];
                     if (packageSetData0.moveItemType == MoveItemType.OnlyGet || !CheckPackageItem(packageSetData0, item.dataId)
-                        || (packageSetData0.packageType == PackageType.œ ªÓ && !item.isFresh) ||
-                        (packageSetData0.packageType == PackageType.∑«œ ªÓ && item.isFresh))
+                        || (packageSetData0.packageType == PackageType.È≤úÊ¥ª && !item.isFresh) ||
+                        (packageSetData0.packageType == PackageType.ÈùûÈ≤úÊ¥ª && item.isFresh))
                     {
                         item.locked = true;
                     }
@@ -248,8 +248,8 @@ public class MultiPackagePanel : GamePanel<PackageList>
         if (packageSetData && packageSetData.canLevelUp)
         {
             int cost = packageSetData.levelUpCost * packageCaseCount;
-            string notice = string.Format(LanguageManage.SwitchStr("Õÿ’π{0}ø’º‰?"), packageSetData.packageName);
-            PayManager.instance.PayAction("ø’º‰Õÿ’π", notice, cost, PayType.Ω±“, (bool result) =>
+            string notice = string.Format(LanguageManage.SwitchStr("ÊãìÂ±ï{0}Á©∫Èó¥?"), packageSetData.packageName);
+            PayManager.instance.PayAction("Á©∫Èó¥ÊãìÂ±ï", notice, cost, PayType.ÈáëÂ∏Å, (bool result) =>
             {
                 if (result)
                 {
@@ -433,8 +433,8 @@ public class MultiPackagePanel : GamePanel<PackageList>
             {
                 Item item = packageData0.items[i];
                 if (packageSetData1.moveItemType == MoveItemType.OnlyGet|| !CheckPackageItem(packageSetData1, item.dataId)
-                    || (packageSetData1.packageType == PackageType.œ ªÓ && !item.isFresh)
-                    || (packageSetData1.packageType == PackageType.∑«œ ªÓ && item.isFresh))
+                    || (packageSetData1.packageType == PackageType.È≤úÊ¥ª && !item.isFresh)
+                    || (packageSetData1.packageType == PackageType.ÈùûÈ≤úÊ¥ª && item.isFresh))
                 {
                     item.locked = true;
                 }
@@ -466,8 +466,8 @@ public class MultiPackagePanel : GamePanel<PackageList>
             {
                 Item item = packageData1.items[i];
                 if (packageSetData0.moveItemType == MoveItemType.OnlyGet || !CheckPackageItem(packageSetData0, item.dataId)
-                    || (packageSetData0.packageType == PackageType.œ ªÓ && !item.isFresh)||
-                    (packageSetData0.packageType == PackageType.∑«œ ªÓ && item.isFresh))
+                    || (packageSetData0.packageType == PackageType.È≤úÊ¥ª && !item.isFresh)||
+                    (packageSetData0.packageType == PackageType.ÈùûÈ≤úÊ¥ª && item.isFresh))
                 {
                     item.locked = true;
                 }

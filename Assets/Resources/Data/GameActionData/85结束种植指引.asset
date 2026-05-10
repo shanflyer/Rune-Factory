@@ -23,7 +23,7 @@ MonoBehaviour:
       parameters: []
     - value: 0.6
       parameters: []
-    - value: -1.404
+    - value: 0,0
       parameters: []
     - value: -0.57
       parameters: []
@@ -49,6 +49,10 @@ MonoBehaviour:
         parameters:
         - value: 874
           parameters: []
+        - value: 0
+          parameters: []
+        - value: False
+          parameters: []
       - value: SetCharacterCoordinate
         parameters:
         - value: 0
@@ -57,11 +61,13 @@ MonoBehaviour:
           parameters:
           - value: 41,30
             parameters: []
+        - value: False
+          parameters: []
       - value: DisplayOrHideCharacter
         parameters:
         - value: 0
           parameters: []
-        - value: false
+        - value: False
           parameters: []
   - value: WaitAction
     parameters:
@@ -75,7 +81,7 @@ MonoBehaviour:
           parameters: []
         - value: 0.6
           parameters: []
-        - value: 3.31
+        - value: 0,0
           parameters: []
         - value: 2.46
           parameters: []

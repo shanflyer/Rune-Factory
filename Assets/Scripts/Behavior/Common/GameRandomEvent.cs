@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 public enum RandomType
 {
-    默认,随机区间
+    榛樿,闅忔満鍖洪棿
 }
 
 [TaskCategory("NewGame/Common")]
-[TaskName("随机结果")]
+[TaskName("闅忔満缁撴灉")]
 public class GameRandomEvent : Action
 {
     public RandomType randomType;
