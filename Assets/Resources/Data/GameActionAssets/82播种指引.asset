@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eca02ebc7029983458adbd931cf2ccfe, type: 3}
+  m_Name: "82\u64AD\u79CD\u6307\u5F15"
+  m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
+  id: 82
+  root:
+    rid: 4894396010337927863
+  references:
+    version: 2
+    RefIds:
+    - rid: 4894396010337927863
+      type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
+      data:
+        children:
+        - node:
+            rid: 4894396010337927864
+        - node:
+            rid: 4894396010337927865
+    - rid: 4894396010337927864
+      type: {class: GameGuideActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        guidKey: 6
+    - rid: 4894396010337927865
+      type: {class: OpenPanelActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        dataId: OperateButtonPanel

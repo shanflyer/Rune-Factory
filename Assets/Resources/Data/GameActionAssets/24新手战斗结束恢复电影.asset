@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eca02ebc7029983458adbd931cf2ccfe, type: 3}
+  m_Name: "24\u65B0\u624B\u6218\u6597\u7ED3\u675F\u6062\u590D\u7535\u5F71"
+  m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
+  id: 24
+  root:
+    rid: 4894396010337927809
+  references:
+    version: 2
+    RefIds:
+    - rid: 4894396010337927809
+      type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
+      data:
+        children:
+        - node:
+            rid: 4894396010337927810
+        - node:
+            rid: 4894396010337927811
+        - node:
+            rid: 4894396010337927812
+        - node:
+            rid: 4894396010337927813
+    - rid: 4894396010337927810
+      type: {class: PlayFilmNode, ns: , asm: Assembly-CSharp}
+      data:
+        filmName: "\u89D2\u8272\u9009\u62E9"
+        assetName: 
+    - rid: 4894396010337927811
+      type: {class: WaitActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        children:
+        - node:
+            rid: 4894396010337927814
+        delay: 5000
+    - rid: 4894396010337927812
+      type: {class: LerpGameTimeNode, ns: , asm: Assembly-CSharp}
+      data:
+        totalTime: 20
+    - rid: 4894396010337927813
+      type: {class: WaitActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        children:
+        - node:
+            rid: 4894396010337927815
+        delay: 6000
+    - rid: 4894396010337927814
+      type: {class: PlayFilmNode, ns: , asm: Assembly-CSharp}
+      data:
+        filmName: "\u89D2\u8272\u9009\u62E9"
+        assetName: EndFirstFight
+    - rid: 4894396010337927815
+      type: {class: LerpScreenCycleValueNode, ns: , asm: Assembly-CSharp}
+      data:
+        cyclePos: {x: 0, y: 0}

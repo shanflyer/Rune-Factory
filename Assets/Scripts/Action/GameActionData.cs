@@ -10,6 +10,8 @@ public class GameActionData : ScriptableObject, IGameData
     public string typeName;
     public List<Parameter> _parameters;
 
+    public GameActionData() { }
+
     public GameActionData(GameActionData gameActionData)
     {
         id = gameActionData.id;

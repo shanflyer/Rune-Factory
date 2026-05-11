@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eca02ebc7029983458adbd931cf2ccfe, type: 3}
+  m_Name: "34\u65B0\u624B\u8FDB\u5165\u5546\u5E97"
+  m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
+  id: 34
+  root:
+    rid: 4894396010337927932
+  references:
+    version: 2
+    RefIds:
+    - rid: 4894396010337927932
+      type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
+      data:
+        children:
+        - node:
+            rid: 4894396010337927933
+        - node:
+            rid: 4894396010337927934
+        - node:
+            rid: 4894396010337927935
+    - rid: 4894396010337927933
+      type: {class: AddPackageItemNode, ns: , asm: Assembly-CSharp}
+      data:
+        packageId: 0
+        itemDataId: 1101
+        itemCount: 2
+    - rid: 4894396010337927934
+      type: {class: WaitActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        children:
+        - node:
+            rid: 4894396010337927936
+        delay: 200
+    - rid: 4894396010337927935
+      type: {class: WaitActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        children:
+        - node:
+            rid: 4894396010337927937
+        delay: 200
+    - rid: 4894396010337927936
+      type: {class: LerpScreenCycleValueNode, ns: , asm: Assembly-CSharp}
+      data:
+        cyclePos: {x: 0, y: 0}
+    - rid: 4894396010337927937
+      type: {class: PlayFilmNode, ns: , asm: Assembly-CSharp}
+      data:
+        filmName: "\u7B2C\u4E00\u665A"
+        assetName: "\u7B2C\u4E00\u6B21\u5546\u5E97"

@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eca02ebc7029983458adbd931cf2ccfe, type: 3}
+  m_Name: "99\u6218\u6597\u7ED3\u675F\u56DE\u5BB6\u7535\u5F71"
+  m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
+  id: 99
+  root:
+    rid: 4894396010337927902
+  references:
+    version: 2
+    RefIds:
+    - rid: 4894396010337927902
+      type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
+      data:
+        children:
+        - node:
+            rid: 4894396010337927903
+        - node:
+            rid: 4894396010337927904
+        - node:
+            rid: 4894396010337927905
+        - node:
+            rid: 4894396010337927906
+        - node:
+            rid: 4894396010337927907
+    - rid: 4894396010337927903
+      type: {class: DisplayMapNode, ns: , asm: Assembly-CSharp}
+      data:
+        displayMap: 695
+        actionId: 0
+        fixedDisplay: 0
+    - rid: 4894396010337927904
+      type: {class: SetCharacterCoordinateNode, ns: , asm: Assembly-CSharp}
+      data:
+        characterId: 0
+        fiexedDisplay: 0
+    - rid: 4894396010337927905
+      type: {class: DisplayOrHideCharacterNode, ns: , asm: Assembly-CSharp}
+      data:
+        characterId: 0
+        display: 0
+    - rid: 4894396010337927906
+      type: {class: PlayFilmNode, ns: , asm: Assembly-CSharp}
+      data:
+        filmName: "\u7B2C\u4E00\u665A"
+        assetName: "\u56DE\u5BB6\u5F15\u5BFC"
+    - rid: 4894396010337927907
+      type: {class: SaveGuideFilmIndexActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        id: 12

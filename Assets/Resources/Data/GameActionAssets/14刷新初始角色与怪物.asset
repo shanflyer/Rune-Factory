@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eca02ebc7029983458adbd931cf2ccfe, type: 3}
+  m_Name: "14\u5237\u65B0\u521D\u59CB\u89D2\u8272\u4E0E\u602A\u7269"
+  m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
+  id: 14
+  root:
+    rid: 4894396010337927842
+  references:
+    version: 2
+    RefIds:
+    - rid: 4894396010337927842
+      type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
+      data:
+        children:
+        - node:
+            rid: 4894396010337927843
+        - node:
+            rid: 4894396010337927844
+        - node:
+            rid: 4894396010337927845
+    - rid: 4894396010337927843
+      type: {class: HideFilmNode, ns: , asm: Assembly-CSharp}
+      data:
+        filmName: "\u89D2\u8272\u9009\u62E9"
+        path: Character
+    - rid: 4894396010337927844
+      type: {class: ChapterStepActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        children: []
+    - rid: 4894396010337927845
+      type: {class: SetFilmUINode, ns: , asm: Assembly-CSharp}
+      data:
+        display: 0
