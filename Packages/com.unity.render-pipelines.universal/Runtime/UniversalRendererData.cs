@@ -110,9 +110,9 @@ namespace UnityEngine.Rendering.Universal
     {
 #if UNITY_EDITOR
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1812")]
-        internal class CreateUniversalRendererAsset : EndNameEditAction
+        internal class CreateUniversalRendererAsset : AssetCreationEndAction
         {
-            public override void Action(int instanceId, string pathName, string resourceFile)
+            public override void Action(EntityId entityId, string pathName, string resourceFile)
             {
                 var instance = UniversalRenderPipelineAsset.CreateRendererAsset(pathName, RendererType.UniversalRenderer, false) as UniversalRendererData;
                 Selection.activeObject = instance;
@@ -123,7 +123,7 @@ namespace UnityEngine.Rendering.Universal
         static void CreateUniversalRendererData()
         {
             var icon = CoreUtils.GetIconForType<ScriptableRendererData>();
-            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, CreateInstance<CreateUniversalRendererAsset>(), "New Custom Universal Renderer Data.asset", icon, null);
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(EntityId.None, CreateInstance<CreateUniversalRendererAsset>(), "New Custom Universal Renderer Data.asset", icon, null);
         }
 
 #endif
@@ -133,14 +133,13 @@ namespace UnityEngine.Rendering.Universal
         /// </summary>
         public PostProcessData postProcessData = null;
 
-        [SerializeField] TransparencySortMode m_transparencySortMode;
-        [SerializeField] Vector3 m_transparencySortAxis = new Vector3(0, 0, 1);
-        
         const int k_LatestAssetVersion = 3;
         [SerializeField] int m_AssetVersion = 0;
         [SerializeField] LayerMask m_PrepassLayerMask = -1;
         [SerializeField] LayerMask m_OpaqueLayerMask = -1;
         [SerializeField] LayerMask m_TransparentLayerMask = -1;
+        [SerializeField] TransparencySortMode m_transparencySortMode;
+        [SerializeField] Vector3 m_transparencySortAxis = new Vector3(0, 0, 1);
         [SerializeField] StencilStateData m_DefaultStencilState = new StencilStateData() { passOperation = StencilOp.Replace }; // This default state is compatible with deferred renderer.
         [SerializeField] bool m_ShadowTransparentReceive = true;
         [SerializeField] RenderingMode m_RenderingMode = RenderingMode.Forward;
@@ -196,24 +195,7 @@ namespace UnityEngine.Rendering.Universal
                 m_OpaqueLayerMask = value;
             }
         }
-        public TransparencySortMode transparencySortMode
-        {
-            get => m_transparencySortMode;
-            set
-            {
-                SetDirty();
-                m_transparencySortMode = value;
-            }
-        }
-        public Vector3 transparencySortAxis
-        {
-            get => m_transparencySortAxis;
-            set
-            {
-                SetDirty();
-                m_transparencySortAxis = value;
-            }
-        }
+
         /// <summary>
         /// Use this to configure how to filter transparent objects.
         /// </summary>
@@ -224,6 +206,32 @@ namespace UnityEngine.Rendering.Universal
             {
                 SetDirty();
                 m_TransparentLayerMask = value;
+            }
+        }
+
+        /// <summary>
+        /// Controls transparent object sorting for this renderer.
+        /// </summary>
+        public TransparencySortMode transparencySortMode
+        {
+            get => m_transparencySortMode;
+            set
+            {
+                SetDirty();
+                m_transparencySortMode = value;
+            }
+        }
+
+        /// <summary>
+        /// Custom axis used when transparent sorting mode is set to custom axis.
+        /// </summary>
+        public Vector3 transparencySortAxis
+        {
+            get => m_transparencySortAxis;
+            set
+            {
+                SetDirty();
+                m_transparencySortAxis = value;
             }
         }
 

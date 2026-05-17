@@ -18,18 +18,18 @@ Shader "Hidden/Universal Render Pipeline/BokehDepthOfField"
         TEXTURE2D_X(_DofTexture);
         TEXTURE2D_X(_FullCoCTexture);
         TEXTURE2D(_CharacterDepthTex);
-            SAMPLER(sampler_CharacterDepthTex); 
+        SAMPLER(sampler_CharacterDepthTex);
+        TEXTURE2D(_ObjDepthTex);
+        SAMPLER(sampler_ObjDepthTex);
 
-            TEXTURE2D(_ObjDepthTex);
-            SAMPLER(sampler_ObjDepthTex); 
- 
-        float _BlurOffsetPos;
-        float2 _ReMapValue;
         half4 _SourceSize;
         half4 _DownSampleScaleFactor;
         half4 _CoCParams;
         half4 _BokehKernel[SAMPLE_COUNT];
         half4 _BokehConstants;
+        float _BlurOffsetPos;
+        float2 _ReMapValue;
+        int testShowType;
 
         #define FocusDist       _CoCParams.x
         #define MaxCoC          _CoCParams.y
@@ -235,53 +235,35 @@ Shader "Hidden/Universal Render Pipeline/BokehDepthOfField"
             outColor.a = color.a;
         #endif
 
-        
- 
-        half centerY=input.texcoord1.y;
+            half centerY = uv.y;
+            half4 objDepthColor = SAMPLE_TEXTURE2D(_ObjDepthTex, sampler_ObjDepthTex, uv);
+            half4 characterDepthColor = SAMPLE_TEXTURE2D(_CharacterDepthTex, sampler_CharacterDepthTex, uv);
 
-        half4 objDepthColor=SAMPLE_TEXTURE2D(_ObjDepthTex,sampler_ObjDepthTex, uv); 
-        half4 characterDepthColor=SAMPLE_TEXTURE2D(_CharacterDepthTex,sampler_CharacterDepthTex, uv);
-         
-        int stepCharacter=1-step(0.01,objDepthColor.r+objDepthColor.g+objDepthColor.b);
-        half4 myDepthColor=stepCharacter*characterDepthColor+(1-stepCharacter)*objDepthColor;
+            int stepCharacter = 1 - step(0.01, objDepthColor.r + objDepthColor.g + objDepthColor.b);
+            half4 myDepthColor = stepCharacter * characterDepthColor + (1 - stepCharacter) * objDepthColor;
 
-         //return float4(stepCharacter.xxx,1);
+            float depthBlend = myDepthColor.x;
+            Unity_Remap_float(depthBlend, float2(centerY + _BlurOffsetPos, 1), _ReMapValue.xy, depthBlend);
+            depthBlend = clamp(depthBlend, 0, 1) * step(centerY - _BlurOffsetPos, myDepthColor.x);
 
-        int stepV=1-step(characterDepthColor.r+characterDepthColor.g+characterDepthColor.b,0);
-        stepV+=1-step(objDepthColor.r,0);
-        stepV=clamp(stepV,0,1);
-        //return float4(stepV.xxx,1);
-        //
+            float nearDepthBlend = myDepthColor.x;
+            Unity_Remap_float(nearDepthBlend, float2(centerY - _BlurOffsetPos, 0), _ReMapValue.xy, nearDepthBlend);
+            nearDepthBlend = clamp(nearDepthBlend, 0, 1) * (1 - step(centerY - _BlurOffsetPos, myDepthColor.x));
 
-        float x=myDepthColor.x;
-        Unity_Remap_float(x,float2(centerY+_BlurOffsetPos,1),_ReMapValue.xy,x);
-        x=clamp(x,0,1)*step(centerY-_BlurOffsetPos,myDepthColor.x);
-        float x1=myDepthColor.x;
-        Unity_Remap_float(x1,float2(centerY-_BlurOffsetPos,0),_ReMapValue.xy,x1);
-        x1=clamp(x1,0,1)*(1-step(centerY-_BlurOffsetPos,myDepthColor.x));
-        x+=x1; 
-        //x*=stepV;
-       outColor=outColor*x+color*(1-x); 
+            depthBlend += nearDepthBlend;
+            outColor = outColor * depthBlend + color * (1 - depthBlend);
+
+            switch (testShowType)
+            {
+                case 1:
+                    return half4(objDepthColor.xxx, 1);
+                case 2:
+                    return half4(myDepthColor.xxx, 1);
+            }
 
         #if defined(UNITY_COLORSPACE_GAMMA)
             outColor = GetLinearToSRGB(outColor);
         #endif
-        //return half4(myDepthColor.xxx,1); 
-
-        switch(testShowType){
-            case 0:
-            return outColor;
-            break;
-            case 1:
-            return half4(objDepthColor.xxx,1); 
-            break;
-            case 2:
-            return half4(myDepthColor.xxx,1); 
-            break;
-        }
-
-       
-
             return outColor;
         }
 

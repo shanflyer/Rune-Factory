@@ -73,8 +73,9 @@ namespace UnityEditor.Rendering.Universal
         StencilLODCrossFade = (1L << 50),
         DeferredPlus = (1L << 51),
         ReflectionProbeAtlas = (1L << 52),
+        PointSamplingUpsampling = (1L << 53),
 #if SURFACE_CACHE
-        SurfaceCache = (1L << 53),
+        SurfaceCache = (1L << 54),
 #endif
         All = ~0
     }
@@ -169,7 +170,6 @@ namespace UnityEditor.Rendering.Universal
         {
             private static PlatformBuildTimeDetect s_PlatformInfo;
             internal bool isStandaloneXR { get; private set; }
-            internal bool isHololens { get; private set; }
             internal bool isQuest { get; private set; }
             internal bool isSwitch { get; private set; }
             internal bool isSwitch2 { get; private set; }
@@ -185,7 +185,6 @@ namespace UnityEditor.Rendering.Universal
                 if (buildTargetSettings != null && buildTargetSettings.AssignedSettings != null && buildTargetSettings.AssignedSettings.activeLoaders.Count > 0)
                 {
                     isStandaloneXR = buildTargetGroup == BuildTargetGroup.Standalone;
-                    isHololens = buildTargetGroup == BuildTargetGroup.WSA;
                     isQuest = buildTargetGroup == BuildTargetGroup.Android;
                 }
 #endif
@@ -313,7 +312,7 @@ namespace UnityEditor.Rendering.Universal
                 if (platformBuildTimeDetect.isStandaloneXR)
                     s_StripDebugDisplayShaders = true;
 
-                if (platformBuildTimeDetect.isHololens || platformBuildTimeDetect.isQuest)
+                if (platformBuildTimeDetect.isQuest)
                 {
                     s_KeepOffVariantForAdditionalLights = true;
                     s_UseSoftShadowQualityLevelKeywords = true;
@@ -590,6 +589,9 @@ namespace UnityEditor.Rendering.Universal
             //   HDR 64-bit, RGBA16Float, (urpAsset.supportsHDR && urpAsset.hdrColorBufferPrecision == HDRColorBufferPrecision._64Bits)
             if(urpAsset.allowPostProcessAlphaOutput)
                 urpAssetShaderFeatures |= ShaderFeatures.AlphaOutput;
+
+            if (urpAsset.upscalingFilter == UpscalingFilterSelection.Point)
+                urpAssetShaderFeatures |= ShaderFeatures.PointSamplingUpsampling;
 
             // Check each renderer & renderer feature
             urpAssetShaderFeatures = GetSupportedShaderFeaturesFromRenderers(
@@ -869,7 +871,7 @@ namespace UnityEditor.Rendering.Universal
 
 #if SURFACE_CACHE
                 // Surface Cache GI...
-                SurfaceCacheGlobalIlluminationRendererFeature surfaceCacheFeature = rendererFeature as SurfaceCacheGlobalIlluminationRendererFeature;
+                SurfaceCacheGIRendererFeature surfaceCacheFeature = rendererFeature as SurfaceCacheGIRendererFeature;
                 if(surfaceCacheFeature != null)
                 {
                     shaderFeatures |= ShaderFeatures.SurfaceCache;
@@ -1140,6 +1142,9 @@ namespace UnityEditor.Rendering.Universal
                 spd.stripSSAOSampleCountMedium &= ssaoSettings.Samples != ScreenSpaceAmbientOcclusionSettings.AOSampleOption.Medium;
                 spd.stripSSAOSampleCountHigh   &= ssaoSettings.Samples != ScreenSpaceAmbientOcclusionSettings.AOSampleOption.High;
             }
+
+            // Upscaling
+            spd.stripPointSamplingUpsampling = !IsFeatureEnabled(shaderFeatures, ShaderFeatures.PointSamplingUpsampling);
 
             return spd;
         }

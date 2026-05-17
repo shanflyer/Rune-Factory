@@ -30,7 +30,6 @@ namespace UnityEditor.Rendering.Universal
             BlurOffsetPos = Unpack(o.Find(x => x.BlurOffsetPos));
             ReMapValueX = Unpack(o.Find(x => x.ReMapValueX));
             ReMapValueY = Unpack(o.Find(x => x.ReMapValueY));
-
             m_GaussianStart = Unpack(o.Find(x => x.gaussianStart));
             m_GaussianEnd = Unpack(o.Find(x => x.gaussianEnd));
             m_GaussianMaxRadius = Unpack(o.Find(x => x.gaussianMaxRadius));

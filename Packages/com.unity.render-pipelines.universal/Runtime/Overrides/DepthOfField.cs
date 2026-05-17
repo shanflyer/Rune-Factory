@@ -159,12 +159,16 @@ namespace UnityEngine.Rendering.Universal
         /// </summary>
         [Tooltip("The distance at which the blurring will start.")]
         public MinFloatParameter gaussianStart = new MinFloatParameter(10f, 0f);
+
         [Tooltip("BlurOffsetPos")]
         public MinFloatParameter BlurOffsetPos = new MinFloatParameter(0f, 0f);
+
         [Tooltip("ReMapValueX")]
         public MinFloatParameter ReMapValueX = new MinFloatParameter(0f, 0f);
+
         [Tooltip("ReMapValueY")]
         public MinFloatParameter ReMapValueY = new MinFloatParameter(2f, 0f);
+
         /// <summary>
         /// The distance at which the blurring will reach its maximum radius.
         /// </summary>

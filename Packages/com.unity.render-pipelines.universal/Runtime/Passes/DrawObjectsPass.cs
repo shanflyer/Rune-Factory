@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering.RenderGraphModule;
-using UnityEngine.Profiling;
 
 namespace UnityEngine.Rendering.Universal.Internal
 {
@@ -19,16 +18,8 @@ namespace UnityEngine.Rendering.Universal.Internal
         List<ShaderTagId> m_ShaderTagIdList = new List<ShaderTagId>();
 
         bool m_IsOpaque;
-
         TransparencySortMode transparencySortMode;
         Vector3 transparencySortAxis;
-#if URP_COMPATIBILITY_MODE
-        /// <summary>
-        /// Used to indicate if the active target of the pass is the back buffer
-        /// </summary>
-        [Obsolete(DeprecationMessage.CompatibilityScriptingAPIObsolete + " #from(6000.3)")]
-        public bool m_IsActiveTargetBackBuffer; // TODO: Remove this when we remove non-RG path
-#endif
 
         /// <summary>
         /// Used to indicate whether transparent objects should receive shadows or not.
@@ -36,10 +27,6 @@ namespace UnityEngine.Rendering.Universal.Internal
         public bool m_ShouldTransparentsReceiveShadows;
 
         static readonly int s_DrawObjectPassDataPropID = Shader.PropertyToID("_DrawObjectPassData");
-
-#if URP_COMPATIBILITY_MODE
-        PassData m_PassData;
-#endif
 
         /// <summary>
         /// Creates a new <c>DrawObjectsPass</c> instance.
@@ -57,8 +44,13 @@ namespace UnityEngine.Rendering.Universal.Internal
         /// <seealso cref="RenderQueueRange"/>
         /// <seealso cref="LayerMask"/>
         /// <seealso cref="StencilState"/>
+        public DrawObjectsPass(string profilerTag, ShaderTagId[] shaderTagIds, bool opaque, RenderPassEvent evt, RenderQueueRange renderQueueRange, LayerMask layerMask, StencilState stencilState, int stencilReference)
+            : this(profilerTag, shaderTagIds, opaque, evt, renderQueueRange, layerMask, stencilState, stencilReference, Vector3.forward, TransparencySortMode.Default)
+        {
+        }
+
         public DrawObjectsPass(string profilerTag, ShaderTagId[] shaderTagIds, bool opaque, RenderPassEvent evt, RenderQueueRange renderQueueRange, LayerMask layerMask, StencilState stencilState, int stencilReference,
-             Vector3 transparencySortAxis, TransparencySortMode transparencySortMode = TransparencySortMode.Default)
+            Vector3 transparencySortAxis, TransparencySortMode transparencySortMode = TransparencySortMode.Default)
         {
             this.transparencySortAxis = transparencySortAxis;
             this.transparencySortMode = transparencySortMode;
@@ -81,12 +73,24 @@ namespace UnityEngine.Rendering.Universal.Internal
         /// <seealso cref="RenderQueueRange"/>
         /// <seealso cref="LayerMask"/>
         /// <seealso cref="StencilState"/>
-        public DrawObjectsPass(string profilerTag, bool opaque, RenderPassEvent evt, RenderQueueRange renderQueueRange, LayerMask layerMask, StencilState stencilState, int stencilReference
-            , Vector3 transparencySortAxis, TransparencySortMode transparencySortMode = TransparencySortMode.Default)
-            : this(profilerTag, null, opaque, evt, renderQueueRange, layerMask, stencilState, stencilReference,transparencySortAxis,transparencySortMode)
-        { }
+        public DrawObjectsPass(string profilerTag, bool opaque, RenderPassEvent evt, RenderQueueRange renderQueueRange, LayerMask layerMask, StencilState stencilState, int stencilReference)
+            : this(profilerTag, null, opaque, evt, renderQueueRange, layerMask, stencilState, stencilReference, Vector3.forward, TransparencySortMode.Default)
+        {
+        }
 
-        internal DrawObjectsPass(URPProfileId profileId, bool opaque, RenderPassEvent evt, RenderQueueRange renderQueueRange, LayerMask layerMask, StencilState stencilState, int stencilReference, Vector3 transparencySortAxis, TransparencySortMode transparencySortMode = TransparencySortMode.Default)
+        public DrawObjectsPass(string profilerTag, bool opaque, RenderPassEvent evt, RenderQueueRange renderQueueRange, LayerMask layerMask, StencilState stencilState, int stencilReference,
+            Vector3 transparencySortAxis, TransparencySortMode transparencySortMode = TransparencySortMode.Default)
+            : this(profilerTag, null, opaque, evt, renderQueueRange, layerMask, stencilState, stencilReference, transparencySortAxis, transparencySortMode)
+        {
+        }
+
+        internal DrawObjectsPass(URPProfileId profileId, bool opaque, RenderPassEvent evt, RenderQueueRange renderQueueRange, LayerMask layerMask, StencilState stencilState, int stencilReference)
+            : this(profileId, opaque, evt, renderQueueRange, layerMask, stencilState, stencilReference, Vector3.forward, TransparencySortMode.Default)
+        {
+        }
+
+        internal DrawObjectsPass(URPProfileId profileId, bool opaque, RenderPassEvent evt, RenderQueueRange renderQueueRange, LayerMask layerMask, StencilState stencilState, int stencilReference,
+            Vector3 transparencySortAxis, TransparencySortMode transparencySortMode = TransparencySortMode.Default)
         {
             this.transparencySortAxis = transparencySortAxis;
             this.transparencySortMode = transparencySortMode;
@@ -95,15 +99,10 @@ namespace UnityEngine.Rendering.Universal.Internal
             profilingSampler = ProfilingSampler.Get(profileId);
         }
 
-        internal void Init(bool opaque, RenderPassEvent evt, RenderQueueRange renderQueueRange, LayerMask layerMask,
-            StencilState stencilState, int stencilReference, ShaderTagId[] shaderTagIds = null)
+        internal void Init(bool opaque, RenderPassEvent evt, RenderQueueRange renderQueueRange, LayerMask layerMask, StencilState stencilState, int stencilReference, ShaderTagId[] shaderTagIds = null)
         {
             if (shaderTagIds == null)
-                shaderTagIds = new ShaderTagId[]
-                {
-                    new ShaderTagId("SRPDefaultUnlit"), new ShaderTagId("UniversalForward"),
-                    new ShaderTagId("UniversalForwardOnly")
-                };
+                shaderTagIds = new ShaderTagId[] { new ShaderTagId("SRPDefaultUnlit"), new ShaderTagId("UniversalForward"), new ShaderTagId("UniversalForwardOnly") };
 
             foreach (ShaderTagId sid in shaderTagIds)
                 m_ShaderTagIdList.Add(sid);
@@ -119,59 +118,8 @@ namespace UnityEngine.Rendering.Universal.Internal
                 m_RenderStateBlock.mask = RenderStateMask.Stencil;
                 m_RenderStateBlock.stencilState = stencilState;
             }
-
-#if URP_COMPATIBILITY_MODE
-#pragma warning disable CS0618
-            m_IsActiveTargetBackBuffer = false;
-#pragma warning restore CS0618
-            m_PassData = new PassData();
-#endif
         }
 
-#if URP_COMPATIBILITY_MODE
-        /// <inheritdoc/>
-        [Obsolete(DeprecationMessage.CompatibilityScriptingAPIObsoleteFrom2023_3)]
-        public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
-        {
-            ContextContainer frameData = renderingData.frameData;
-            UniversalRenderingData universalRenderingData = frameData.Get<UniversalRenderingData>();
-            UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
-            UniversalLightData lightData = frameData.Get<UniversalLightData>();
-
-            bool disableZWrite = CanDisableZWrite(cameraData, m_IsOpaque);
-
-            InitPassData(cameraData, ref m_PassData, uint.MaxValue, m_IsActiveTargetBackBuffer);
-            InitRendererLists(universalRenderingData, cameraData, lightData, ref m_PassData, context, default(RenderGraph), false, disableZWrite);
-
-            using (new ProfilingScope(renderingData.commandBuffer, profilingSampler))
-            {
-                ExecutePass(CommandBufferHelpers.GetRasterCommandBuffer(renderingData.commandBuffer), m_PassData, m_PassData.rendererList, m_PassData.objectsWithErrorRendererList, m_PassData.cameraData.IsCameraProjectionMatrixFlipped());
-            }
-        }
-#endif
-        private void GetTransparencySortingMode(Camera camera, ref SortingSettings sortingSettings)
-        {
-            var mode = transparencySortMode;
-
-            if (mode == TransparencySortMode.Default)
-            {
-                mode = camera.orthographic ? TransparencySortMode.Orthographic : TransparencySortMode.Perspective;
-            }
-
-            switch (mode)
-            {
-                case TransparencySortMode.Perspective:
-                    sortingSettings.distanceMetric = DistanceMetric.Perspective;
-                    break;
-                case TransparencySortMode.Orthographic:
-                    sortingSettings.distanceMetric = DistanceMetric.Orthographic;
-                    break;
-                default:
-                    sortingSettings.distanceMetric = DistanceMetric.CustomAxis;
-                    sortingSettings.customAxis = transparencySortAxis;
-                    break;
-            }
-        }
         internal static void ExecutePass(RasterCommandBuffer cmd, PassData data, RendererList rendererList, RendererList objectsWithErrorRendererList, bool yFlip)
         {
             // Global render pass data containing various settings.
@@ -234,7 +182,7 @@ namespace UnityEngine.Rendering.Universal.Internal
             internal bool shouldTransparentsReceiveShadows;
             internal uint batchLayerMask;
             internal bool isActiveTargetBackBuffer;
-			internal RendererListHandle rendererListHdl;
+            internal RendererListHandle rendererListHdl;
             internal RendererListHandle objectsWithErrorRendererListHdl;
             internal DebugRendererLists debugRendererLists;
 
@@ -256,7 +204,29 @@ namespace UnityEngine.Rendering.Universal.Internal
             passData.isActiveTargetBackBuffer = isActiveTargetBackBuffer;
         }
 
-        internal void InitRendererLists(UniversalRenderingData renderingData, UniversalCameraData cameraData, UniversalLightData lightData, ref PassData passData, ScriptableRenderContext context, RenderGraph renderGraph, bool useRenderGraph, bool zWriteOff)
+        private void GetTransparencySortingMode(Camera camera, ref SortingSettings sortingSettings)
+        {
+            var mode = transparencySortMode;
+
+            if (mode == TransparencySortMode.Default)
+                mode = camera.orthographic ? TransparencySortMode.Orthographic : TransparencySortMode.Perspective;
+
+            switch (mode)
+            {
+                case TransparencySortMode.Perspective:
+                    sortingSettings.distanceMetric = DistanceMetric.Perspective;
+                    break;
+                case TransparencySortMode.Orthographic:
+                    sortingSettings.distanceMetric = DistanceMetric.Orthographic;
+                    break;
+                default:
+                    sortingSettings.distanceMetric = DistanceMetric.CustomAxis;
+                    sortingSettings.customAxis = transparencySortAxis;
+                    break;
+            }
+        }
+
+        internal void InitRendererLists(UniversalRenderingData renderingData, UniversalCameraData cameraData, UniversalLightData lightData, ref PassData passData, RenderGraph renderGraph, bool zWriteOff)
         {
             ref Camera camera = ref cameraData.camera;
             var sortFlags = (m_IsOpaque) ? cameraData.defaultOpaqueSortFlags : SortingCriteria.CommonTransparent;
@@ -266,11 +236,11 @@ namespace UnityEngine.Rendering.Universal.Internal
             var filterSettings = m_FilteringSettings;
             filterSettings.batchLayerMask = passData.batchLayerMask;
 #if UNITY_EDITOR
-                // When rendering the preview camera, we want the layer mask to be forced to Everything
-                if (cameraData.isPreviewCamera)
-                {
-                    filterSettings.layerMask = -1;
-                }
+            // When rendering the preview camera, we want the layer mask to be forced to Everything
+            if (cameraData.isPreviewCamera)
+            {
+                filterSettings.layerMask = -1;
+            }
 #endif
             DrawingSettings drawSettings = RenderingUtils.CreateDrawingSettings(m_ShaderTagIdList, renderingData, cameraData, lightData, sortFlags);
             if (!m_IsOpaque)
@@ -279,6 +249,7 @@ namespace UnityEngine.Rendering.Universal.Internal
                 GetTransparencySortingMode(camera, ref sortSettings);
                 drawSettings.sortingSettings = sortSettings;
             }
+
             if (zWriteOff)
             {
                 m_RenderStateBlock.depthState = new DepthState(false, CompareFunction.Equal);
@@ -291,29 +262,14 @@ namespace UnityEngine.Rendering.Universal.Internal
             }
 
             var activeDebugHandler = GetActiveDebugHandler(cameraData);
-            if (useRenderGraph)
+            if (activeDebugHandler != null)
             {
-                if (activeDebugHandler != null)
-                {
-                    passData.debugRendererLists = activeDebugHandler.CreateRendererListsWithDebugRenderState(renderGraph, ref renderingData.cullResults, ref drawSettings, ref filterSettings, ref m_RenderStateBlock);
-                }
-                else
-                {
-                    RenderingUtils.CreateRendererListWithRenderStateBlock(renderGraph, ref renderingData.cullResults, drawSettings, filterSettings, m_RenderStateBlock, ref passData.rendererListHdl);
-                    RenderingUtils.CreateRendererListObjectsWithError(renderGraph, ref renderingData.cullResults, camera, filterSettings, sortFlags, ref passData.objectsWithErrorRendererListHdl);
-                }
+                passData.debugRendererLists = activeDebugHandler.CreateRendererListsWithDebugRenderState(renderGraph, ref renderingData.cullResults, ref drawSettings, ref filterSettings, ref m_RenderStateBlock);
             }
             else
             {
-                if (activeDebugHandler != null)
-                {
-                    passData.debugRendererLists = activeDebugHandler.CreateRendererListsWithDebugRenderState(context, ref renderingData.cullResults, ref drawSettings, ref filterSettings, ref m_RenderStateBlock);
-                }
-                else
-                {
-                    RenderingUtils.CreateRendererListWithRenderStateBlock(context, ref renderingData.cullResults, drawSettings, filterSettings, m_RenderStateBlock, ref passData.rendererList);
-                    RenderingUtils.CreateRendererListObjectsWithError(context, ref renderingData.cullResults, camera, filterSettings, sortFlags, ref passData.objectsWithErrorRendererList);
-                }
+                RenderingUtils.CreateRendererListWithRenderStateBlock(renderGraph, ref renderingData.cullResults, drawSettings, filterSettings, m_RenderStateBlock, ref passData.rendererListHdl);
+                RenderingUtils.CreateRendererListObjectsWithError(renderGraph, ref renderingData.cullResults, camera, filterSettings, sortFlags, ref passData.objectsWithErrorRendererListHdl);
             }
         }
 
@@ -368,7 +324,7 @@ namespace UnityEngine.Rendering.Universal.Internal
 
                 RenderGraphUtils.UseDBufferIfValid(builder, resourceData);
 
-                InitRendererLists(renderingData, cameraData, lightData, ref passData, default(ScriptableRenderContext), renderGraph, true, disableZWrite);
+                InitRendererLists(renderingData, cameraData, lightData, ref passData, renderGraph, disableZWrite);
 
                 var activeDebugHandler = GetActiveDebugHandler(cameraData);
                 if (activeDebugHandler != null)
@@ -386,7 +342,11 @@ namespace UnityEngine.Rendering.Universal.Internal
                 {
                     bool passSupportsFoveation = cameraData.xrUniversal.canFoveateIntermediatePasses || resourceData.isActiveTargetBackBuffer;
                     builder.EnableFoveatedRasterization(cameraData.xr.supportsFoveatedRendering && passSupportsFoveation);
-                    builder.SetExtendedFeatureFlags(ExtendedFeatureFlags.MultiviewRenderRegionsCompatible);
+                    // Apply MultiviewRenderRegionsCompatible flag only to the peripheral view in Quad Views
+                    if (cameraData.xr.multipassId == 0)
+                    {
+                        builder.SetExtendedFeatureFlags(ExtendedFeatureFlags.MultiviewRenderRegionsCompatible);
+                    }
 #if ENABLE_VR && ENABLE_XR_MODULE && PLATFORM_ANDROID
                     if (isMainOpaquePass)
                     {
@@ -395,7 +355,7 @@ namespace UnityEngine.Rendering.Universal.Internal
 #endif
                 }
 
-                builder.SetRenderFunc((PassData data, RasterGraphContext context) =>
+                builder.SetRenderFunc(static (PassData data, RasterGraphContext context) =>
                 {
                     // Currently we only need to call this additional pass when the user
                     // doesn't want transparent objects to receive shadows
@@ -422,11 +382,6 @@ namespace UnityEngine.Rendering.Universal.Internal
     /// </summary>
     internal class DrawObjectsWithRenderingLayersPass : DrawObjectsPass
     {
-#if URP_COMPATIBILITY_MODE
-        RTHandle[] m_ColorTargetIndentifiers;
-        RTHandle m_DepthTargetIndentifiers;
-#endif
-
         /// <summary>
         /// Creates a new <c>DrawObjectsWithRenderingLayersPass</c> instance.
         /// </summary>
@@ -437,62 +392,17 @@ namespace UnityEngine.Rendering.Universal.Internal
         /// <param name="layerMask">The layer mask to use for creating filtering settings that control what objects get rendered.</param>
         /// <param name="stencilState">The stencil settings to use with this poss.</param>
         /// <param name="stencilReference">The stencil reference value to use with this pass.</param>
-        public DrawObjectsWithRenderingLayersPass(URPProfileId profilerTag, bool opaque, RenderPassEvent evt, RenderQueueRange renderQueueRange, LayerMask layerMask, StencilState stencilState, int stencilReference, Vector3 transparencySortAxis, TransparencySortMode transparencySortMode = TransparencySortMode.Default) :
-            base(profilerTag, opaque, evt, renderQueueRange, layerMask, stencilState, stencilReference,transparencySortAxis,transparencySortMode)
+        public DrawObjectsWithRenderingLayersPass(URPProfileId profilerTag, bool opaque, RenderPassEvent evt, RenderQueueRange renderQueueRange, LayerMask layerMask, StencilState stencilState,
+            int stencilReference) :
+            base(profilerTag, opaque, evt, renderQueueRange, layerMask, stencilState, stencilReference)
         {
-#if URP_COMPATIBILITY_MODE
-            m_ColorTargetIndentifiers = new RTHandle[2];
-#endif
         }
 
-#if URP_COMPATIBILITY_MODE
-        /// <summary>
-        /// Sets up the pass.
-        /// </summary>
-        /// <param name="colorAttachment">Color attachment handle.</param>
-        /// <param name="renderingLayersTexture">Texture used with rendering layers.</param>
-        /// <param name="depthAttachment">Depth attachment handle.</param>
-        /// <exception cref="ArgumentException"></exception>
-        public void Setup(RTHandle colorAttachment, RTHandle renderingLayersTexture, RTHandle depthAttachment)
+        public DrawObjectsWithRenderingLayersPass(URPProfileId profilerTag, bool opaque, RenderPassEvent evt, RenderQueueRange renderQueueRange, LayerMask layerMask, StencilState stencilState,
+            int stencilReference, Vector3 transparencySortAxis, TransparencySortMode transparencySortMode = TransparencySortMode.Default) :
+            base(profilerTag, opaque, evt, renderQueueRange, layerMask, stencilState, stencilReference, transparencySortAxis, transparencySortMode)
         {
-            if (colorAttachment == null)
-                throw new ArgumentException("Color attachment can not be null", "colorAttachment");
-            if (renderingLayersTexture == null)
-                throw new ArgumentException("Rendering layers attachment can not be null", "renderingLayersTexture");
-            if (depthAttachment == null)
-                throw new ArgumentException("Depth attachment can not be null", "depthAttachment");
-
-            m_ColorTargetIndentifiers[0] = colorAttachment;
-            m_ColorTargetIndentifiers[1] = renderingLayersTexture;
-            m_DepthTargetIndentifiers = depthAttachment;
         }
-
-        /// <inheritdoc/>
-        [Obsolete(DeprecationMessage.CompatibilityScriptingAPIObsoleteFrom2023_3)]
-        public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
-        {
-            // Disable obsolete warning for internal usage
-            #pragma warning disable CS0618
-            ConfigureTarget(m_ColorTargetIndentifiers, m_DepthTargetIndentifiers);
-            #pragma warning restore CS0618
-        }
-
-        /// <inheritdoc/>
-        [Obsolete(DeprecationMessage.CompatibilityScriptingAPIObsoleteFrom2023_3)]
-        public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
-        {
-            CommandBuffer cmd = renderingData.commandBuffer;
-
-            // Enable Rendering Layers
-            cmd.SetKeyword(ShaderGlobalKeywords.WriteRenderingLayers, true);
-
-            // Execute
-            base.Execute(context, ref renderingData);
-
-            // Clean up
-            cmd.SetKeyword(ShaderGlobalKeywords.WriteRenderingLayers, false);
-        }
-#endif
 
         private class RenderingLayersPassData
         {
@@ -505,7 +415,8 @@ namespace UnityEngine.Rendering.Universal.Internal
             }
         }
 
-        internal void Render(RenderGraph renderGraph, ContextContainer frameData, TextureHandle colorTarget, TextureHandle renderingLayersTexture, TextureHandle depthTarget, TextureHandle mainShadowsTexture, TextureHandle additionalShadowsTexture, RenderingLayerUtils.MaskSize maskSize, uint batchLayerMask = uint.MaxValue)
+        internal void Render(RenderGraph renderGraph, ContextContainer frameData, TextureHandle colorTarget, TextureHandle renderingLayersTexture, TextureHandle depthTarget,
+            TextureHandle mainShadowsTexture, TextureHandle additionalShadowsTexture, RenderingLayerUtils.MaskSize maskSize, uint batchLayerMask = uint.MaxValue)
         {
             using (var builder = renderGraph.AddRasterRenderPass<RenderingLayersPassData>(passName, out var passData, profilingSampler))
             {
@@ -542,7 +453,7 @@ namespace UnityEngine.Rendering.Universal.Internal
                     RenderGraphUtils.UseDBufferIfValid(builder, resourceData);
                 }
 
-                InitRendererLists(renderingData, cameraData, lightData, ref passData.basePassData, default(ScriptableRenderContext), renderGraph, true, disableZWrite);
+                InitRendererLists(renderingData, cameraData, lightData, ref passData.basePassData, renderGraph, disableZWrite);
 
                 var activeDebugHandler = GetActiveDebugHandler(cameraData);
                 if (activeDebugHandler != null)
@@ -562,10 +473,14 @@ namespace UnityEngine.Rendering.Universal.Internal
                 {
                     bool passSupportsFoveation = cameraData.xrUniversal.canFoveateIntermediatePasses || resourceData.isActiveTargetBackBuffer;
                     builder.EnableFoveatedRasterization(cameraData.xr.supportsFoveatedRendering && passSupportsFoveation);
-                    builder.SetExtendedFeatureFlags(ExtendedFeatureFlags.MultiviewRenderRegionsCompatible);
+                    // Apply MultiviewRenderRegionsCompatible flag only to the peripheral view in Quad Views
+                    if (cameraData.xr.multipassId == 0)
+                    {
+                        builder.SetExtendedFeatureFlags(ExtendedFeatureFlags.MultiviewRenderRegionsCompatible);
+                    }
                 }
 
-                builder.SetRenderFunc((RenderingLayersPassData data, RasterGraphContext context) =>
+                builder.SetRenderFunc(static (RenderingLayersPassData data, RasterGraphContext context) =>
                 {
                     // Enable Rendering Layers
                     context.cmd.SetKeyword(ShaderGlobalKeywords.WriteRenderingLayers, true);

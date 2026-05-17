@@ -443,23 +443,6 @@ namespace UnityEngine.Rendering.Universal.Internal
             }
         }
 
-#if URP_COMPATIBILITY_MODE
-        /// <summary>
-        /// Sets up the keywords and data for forward lighting.
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="renderingData"></param>
-        public void Setup(ScriptableRenderContext context, ref RenderingData renderingData)
-        {
-            ContextContainer frameData = renderingData.frameData;
-            UniversalRenderingData universalRenderingData = frameData.Get<UniversalRenderingData>();
-            UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
-            UniversalLightData lightData = frameData.Get<UniversalLightData>();
-
-            SetupLights(CommandBufferHelpers.GetUnsafeCommandBuffer(renderingData.commandBuffer), universalRenderingData, cameraData, lightData);
-        }
-#endif
-
         static ProfilingSampler s_SetupForwardLights = new ProfilingSampler("Setup Forward Lights");
         private class SetupLightPassData
         {
@@ -483,7 +466,7 @@ namespace UnityEngine.Rendering.Universal.Internal
 
                 builder.AllowPassCulling(false);
 
-                builder.SetRenderFunc((SetupLightPassData data, UnsafeGraphContext rgContext) =>
+                builder.SetRenderFunc(static (SetupLightPassData data, UnsafeGraphContext rgContext) =>
                 {
                     data.forwardLights.SetupLights(rgContext.cmd, data.renderingData, data.cameraData, data.lightData);
                 });

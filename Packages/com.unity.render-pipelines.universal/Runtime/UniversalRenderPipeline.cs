@@ -80,9 +80,6 @@ namespace UnityEngine.Rendering.Universal
                 {
                     const string k_Name = nameof(ScriptableRenderer);
                     public static readonly ProfilingSampler setupCullingParameters = new ProfilingSampler($"{k_Name}.{nameof(ScriptableRenderer.SetupCullingParameters)}");
-#if URP_COMPATIBILITY_MODE
-                    public static readonly ProfilingSampler setup = new ProfilingSampler($"{k_Name}.{nameof(ScriptableRenderer.Setup)}");
-#endif
                 };
 
                 public static class Context
@@ -191,11 +188,6 @@ namespace UnityEngine.Rendering.Universal
         internal static RenderGraph s_RenderGraph;
         internal static RTHandleResourcePool s_RTHandlePool;
 
-#if URP_COMPATIBILITY_MODE
-        // internal for tests
-        internal static bool useRenderGraph;
-#endif
-
         // Store locally the value on the instance due as the Render Pipeline Asset data might change before the disposal of the asset, making some APV Resources leak.
         internal bool apvIsEnabled = false;
 
@@ -281,14 +273,6 @@ namespace UnityEngine.Rendering.Universal
             DecalProjector.defaultMaterial = asset.decalMaterial;
 
             s_RenderGraph = new RenderGraph("URPRenderGraph");
-#if URP_COMPATIBILITY_MODE
-            useRenderGraph = !GraphicsSettings.GetRenderPipelineSettings<RenderGraphSettings>().enableRenderCompatibilityMode;
-
-#if !UNITY_EDITOR
-            Debug.Log($"RenderGraph is now {(useRenderGraph ? "enabled" : "disabled")}.");
-#endif
-#endif
-
             s_RTHandlePool = new RTHandleResourcePool();
 
             DebugManager.instance.RefreshEditor();
@@ -778,8 +762,6 @@ namespace UnityEngine.Rendering.Universal
             var cameraMetadata = CameraMetadataCache.GetCached(camera);
             using (new ProfilingScope(cmdScope, cameraMetadata.sampler)) // Enqueues a "BeginSample" command into the CommandBuffer cmd
             {
-                renderer.Clear(cameraData.renderType);
-
                 using (new ProfilingScope(Profiling.Pipeline.Renderer.setupCullingParameters))
                 {
                     var legacyCameraData = new CameraData(frameData);
@@ -880,28 +862,9 @@ namespace UnityEngine.Rendering.Universal
                 CreateShadowAtlasAndCullShadowCasters(lightData, shadowData, cameraData, ref data.cullResults, ref context);
 
                 renderer.AddRenderPasses(ref legacyRenderingData);
-
-#if URP_COMPATIBILITY_MODE
-                if (!useRenderGraph)
-                {
-                    // Disable obsolete warning for internal usage
-                    #pragma warning disable CS0618
-                    using (new ProfilingScope(Profiling.Pipeline.Renderer.setup))
-                    {
-                        renderer.Setup(context, ref legacyRenderingData);
-                    }
-
-                    // Timing scope inside
-                    renderer.Execute(context, ref legacyRenderingData);
-                    #pragma warning restore CS0618
-                }
-                else
-#endif
-                {
                     RenderTextureUVOriginStrategy uvOriginStrategy = UniversalRenderPipeline.renderTextureUVOriginStrategy;
                     RecordAndExecuteRenderGraph(s_RenderGraph, context, renderer, cmd, cameraData.camera, uvOriginStrategy);
                     renderer.FinishRenderGraphRendering(cmd);
-                }
             } // When ProfilingSample goes out of scope, an "EndSample" command is enqueued into CommandBuffer cmd
 
             context.ExecuteCommandBuffer(cmd); // Sends to ScriptableRenderContext all the commands enqueued since cmd.Clear, i.e the "EndSample" command
@@ -909,15 +872,6 @@ namespace UnityEngine.Rendering.Universal
 
             using (new ProfilingScope(Profiling.Pipeline.Context.submit))
             {
-#if URP_COMPATIBILITY_MODE
-                // Render Graph will do the validation by itself, so this is redundant in that case
-                if (!useRenderGraph && renderer.useRenderPassEnabled && !context.SubmitForRenderPassValidation())
-                {
-                    renderer.useRenderPassEnabled = false;
-                    cmd.SetKeyword(ShaderGlobalKeywords.RenderPassEnabled, false);
-                    Debug.LogWarning("Rendering command not supported inside a native RenderPass found. Falling back to non-RenderPass rendering path");
-                }
-#endif
                 context.Submit(); // Actually execute the commands that we previously sent to the ScriptableRenderContext context
             }
             ScriptableRenderer.current = null;
@@ -1370,26 +1324,6 @@ namespace UnityEngine.Rendering.Universal
             cameraData.scaledHeight = Mathf.Max(1, (int) (camera.pixelHeight * cameraData.renderScale));
         }
 
-        static void GetCameraScalingSettings(Camera camera, UniversalAdditionalCameraData additionalCameraData, out float renderScale, out UpscalingFilterSelection upscalingFilter)
-        {
-            var settings = asset;
-            renderScale = settings.renderScale;
-            upscalingFilter = settings.upscalingFilter;
-
-            if (GetRenderer(camera, additionalCameraData) is UniversalRenderer renderer &&
-                renderer.rendererDataAsset != null &&
-                renderer.rendererDataAsset.overrideCameraScaling)
-            {
-                renderScale = renderer.rendererDataAsset.cameraRenderScale;
-                upscalingFilter = renderer.rendererDataAsset.cameraUpscalingFilter;
-
-#if ENABLE_UPSCALER_FRAMEWORK
-                if (upscalingFilter == UpscalingFilterSelection.IUpscaler && settings.upscalingFilter != UpscalingFilterSelection.IUpscaler)
-                    upscalingFilter = UpscalingFilterSelection.Auto;
-#endif
-            }
-        }
-
         static UniversalCameraData CreateCameraData(ContextContainer frameData, Camera camera, UniversalAdditionalCameraData additionalCameraData)
         {
             using var profScope = new ProfilingScope(Profiling.Pipeline.initializeCameraData);
@@ -1446,6 +1380,26 @@ namespace UnityEngine.Rendering.Universal
                 cameraData.isAlphaOutputEnabled = true;
 
             return cameraData;
+        }
+
+        static void GetCameraScalingSettings(Camera camera, UniversalAdditionalCameraData additionalCameraData, out float renderScale, out UpscalingFilterSelection upscalingFilter)
+        {
+            var settings = asset;
+            renderScale = settings.renderScale;
+            upscalingFilter = settings.upscalingFilter;
+
+            if (GetRenderer(camera, additionalCameraData) is UniversalRenderer renderer &&
+                renderer.rendererDataAsset != null &&
+                renderer.rendererDataAsset.overrideCameraScaling)
+            {
+                renderScale = renderer.rendererDataAsset.cameraRenderScale;
+                upscalingFilter = renderer.rendererDataAsset.cameraUpscalingFilter;
+
+#if ENABLE_UPSCALER_FRAMEWORK
+                if (upscalingFilter == UpscalingFilterSelection.IUpscaler && settings.upscalingFilter != UpscalingFilterSelection.IUpscaler)
+                    upscalingFilter = UpscalingFilterSelection.Auto;
+#endif
+            }
         }
 
         /// <summary>
@@ -1527,13 +1481,7 @@ namespace UnityEngine.Rendering.Universal
             cameraData.renderScale = disableRenderScale ? 1.0f : selectedRenderScale;
 
             // Convert the selected upscaling filter into an image upscaling filter.
-            cameraData.upscalingFilter = ResolveUpscalingFilterSelection(new Vector2(cameraData.pixelWidth, cameraData.pixelHeight), cameraData.renderScale, selectedUpscalingFilter,
-#if URP_COMPATIBILITY_MODE
-                GraphicsSettings.TryGetRenderPipelineSettings<RenderGraphSettings>(out var renderGraphSettings) && !renderGraphSettings.enableRenderCompatibilityMode
-#else
-                true
-#endif
-                );
+            cameraData.upscalingFilter = ResolveUpscalingFilterSelection(new Vector2(cameraData.pixelWidth, cameraData.pixelHeight), cameraData.renderScale, selectedUpscalingFilter);
 
             bool upscalerSupportsTemporalAntiAliasing = cameraData.upscalingFilter == ImageUpscalingFilter.STP;
             bool upscalerSupportsSharpening = cameraData.upscalingFilter == ImageUpscalingFilter.FSR;
@@ -1743,15 +1691,6 @@ namespace UnityEngine.Rendering.Universal
             UniversalRenderingData data = frameData.Get<UniversalRenderingData>();
             data.supportsDynamicBatching = settings.supportsDynamicBatching;
             data.perObjectData = GetPerObjectLightFlags(universalLightData, settings, renderingMode);
-
-#if URP_COMPATIBILITY_MODE
-            // Render graph does not support RenderingData.commandBuffer as its execution timeline might break.
-            // RenderingData.commandBuffer is available only for the old non-RG execute code path.
-            if(useRenderGraph)
-                data.m_CommandBuffer = null;
-            else
-                data.m_CommandBuffer = cmd;
-#endif
 
             UniversalRenderer universalRenderer = renderer as UniversalRenderer;
             if (universalRenderer != null)
@@ -2264,14 +2203,14 @@ namespace UnityEngine.Rendering.Universal
         /// <param name="renderScale">Scale being applied to the final image size</param>
         /// <param name="selection">Upscaling filter selected by the user</param>
         /// <returns>Either the original filter provided, or the best replacement available</returns>
-        static ImageUpscalingFilter ResolveUpscalingFilterSelection(Vector2 imageSize, float renderScale, UpscalingFilterSelection selection, bool enableRenderGraph)
+        static ImageUpscalingFilter ResolveUpscalingFilterSelection(Vector2 imageSize, float renderScale, UpscalingFilterSelection selection)
         {
             // By default we just use linear filtering since it's the most compatible choice
             ImageUpscalingFilter filter = ImageUpscalingFilter.Linear;
 
             // Fall back to the automatic filter if the selected filter isn't supported on the current platform or rendering environment
-            if (((selection == UpscalingFilterSelection.FSR) && (!FSRUtils.IsSupported()))
-                || ((selection == UpscalingFilterSelection.STP) && (!STP.IsSupported() || !enableRenderGraph))
+            if ((selection == UpscalingFilterSelection.FSR && !FSRUtils.IsSupported())
+                || (selection == UpscalingFilterSelection.STP && !STP.IsSupported())
             )
             {
                 selection = UpscalingFilterSelection.Auto;
@@ -2507,18 +2446,18 @@ namespace UnityEngine.Rendering.Universal
             // TODO
             if (!cameraData.xr.enabled)
             {
-                cameraData.cameraTargetDescriptor.width = (int)(cameraData.camera.pixelWidth * cameraData.renderScale);
-                cameraData.cameraTargetDescriptor.height = (int)(cameraData.camera.pixelHeight * cameraData.renderScale);
+                cameraData.cameraTargetDescriptor.width = Mathf.Max(1, (int)(cameraData.pixelWidth * cameraData.renderScale));
+                cameraData.cameraTargetDescriptor.height = Mathf.Max(1, (int)(cameraData.pixelHeight * cameraData.renderScale));
 #if ENABLE_UPSCALER_FRAMEWORK
                 if (cameraData.upscalingFilter == ImageUpscalingFilter.IUpscaler)
                 {
                     // An IUpscaler is active. It might want to change the pre-upscale resolution. Negotiate with it.
                     IUpscaler activeUpscaler = upscaling.GetActiveUpscaler();
                     Debug.Assert(activeUpscaler != null);
-                    Vector2Int res = new Vector2Int(cameraData.cameraTargetDescriptor.width, cameraData.scaledHeight);
+                    Vector2Int res = new Vector2Int(cameraData.cameraTargetDescriptor.width, cameraData.cameraTargetDescriptor.height);
                     activeUpscaler.NegotiatePreUpscaleResolution(ref res, new Vector2Int(cameraData.pixelWidth, cameraData.pixelHeight));
-                    cameraData.cameraTargetDescriptor.width = res.x;
-                    cameraData.cameraTargetDescriptor.height = res.y;
+                    cameraData.cameraTargetDescriptor.width = Mathf.Max(1, res.x);
+                    cameraData.cameraTargetDescriptor.height = Mathf.Max(1, res.y);
                 }
 #endif
                 cameraData.scaledWidth = cameraData.cameraTargetDescriptor.width;

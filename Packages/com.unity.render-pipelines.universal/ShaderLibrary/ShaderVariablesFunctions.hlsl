@@ -470,9 +470,12 @@ half3 MixFogColor(half3 fragColor, half3 fogColor, half fogFactor)
     
     if (anyFogEnabled)
     {
-        half fogIntensity = ComputeFogIntensity(fogFactor);
-        // Workaround for UUM-61728: using a manual lerp to avoid rendering artifacts on some GPUs when Vulkan is used
-        fragColor = fragColor * fogIntensity + fogColor * (half(1.0) - fogIntensity);    
+        if (IsFogEnabled())
+        {
+            half fogIntensity = ComputeFogIntensity(fogFactor);
+            // Workaround for UUM-61728: using a manual lerp to avoid rendering artifacts on some GPUs when Vulkan is used
+            fragColor = fragColor * fogIntensity + fogColor * (half(1.0) - fogIntensity);
+        }
     }
     return fragColor;
 }
@@ -557,9 +560,22 @@ void TransformNormalizedScreenUV(inout float2 uv)
     #endif
 }
 
-float2 GetNormalizedScreenSpaceUV(float2 positionCS)
+void TransformNormalizedScreenUVPreTransform(inout float2 uv)
 {
-    float2 normalizedScreenSpaceUV = positionCS.xy * rcp(GetScaledScreenParams().xy);
+    #if defined(UNITY_PRETRANSFORM_TO_DISPLAY_ORIENTATION)
+        if(UNITY_DISPLAY_ORIENTATION_PRETRANSFORM % 2 > 0)
+        {
+            uv = uv.yx;
+        }
+    #endif
+}
+
+float2 GetNormalizedScreenSpaceUV(float2 positionCS)
+{ 
+    float2 screenParamUV = GetScaledScreenParams().xy;
+    TransformNormalizedScreenUVPreTransform(screenParamUV);
+
+    float2 normalizedScreenSpaceUV = positionCS.xy * rcp(screenParamUV);
     TransformNormalizedScreenUV(normalizedScreenSpaceUV);
     return normalizedScreenSpaceUV;
 }
@@ -588,7 +604,8 @@ uint Select4(uint4 v, uint i)
         (((v.y & mask0) | (v.x & ~mask0)) & ~mask1);
 }
 
-#if SHADER_TARGET < 45
+#if SHADER_TARGET < 45 && !defined UNITY_COMPILER_DXC
+// Workaround is only technically required for GL Core <4.0 and GLES <3.1
 uint URP_FirstBitLow(uint m)
 {
     // http://graphics.stanford.edu/~seander/bithacks.html#ZerosOnRightFloatCast
