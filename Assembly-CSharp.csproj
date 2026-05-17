@@ -91,6 +91,7 @@
     <Compile Include="Assets\Scripts\Fishing\FishData.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\SwitchFunctionButtonNode.cs" />
     <Compile Include="Assets\Scripts\UI\Operate\OperateButtonReference.cs" />
+    <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\SetRigidbodyType.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\GetTempCharacterEnterNode.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\RefreshEquipNode.cs" />
     <Compile Include="Assets\Scripts\UI\GamePanel.cs" />
@@ -98,13 +99,13 @@
     <Compile Include="Assets\Scripts\Action\TypedNodes\PlayerTalkItemNode.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetPriority.cs" />
     <Compile Include="Assets\Scripts\Data\MonsterDeloyList.cs" />
-    <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedVector3.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\DisplayOrHideCharacterNode.cs" />
+    <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedVector3.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\LayerMask\SetLayer.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Transform\SetLocalRotation.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Angle.cs" />
-    <Compile Include="Assets\OtherPackage\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\TalkNode.cs" />
+    <Compile Include="Assets\OtherPackage\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
     <Compile Include="Assets\Scripts\Data\MyList.cs" />
     <Compile Include="Assets\Scripts\UI\CreaterReference.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetAngularDamping.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="Assets\Scripts\Behavior\Character\GetACoordinateForCharacter.cs" />
     <Compile Include="Assets\Scripts\ECS\Components\MapBufferElementData.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Transform\SetLocalScale.cs" />
+    <Compile Include="Assets\Scripts\UI\GameScrollbar.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\BehaviorTree.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\Resume.cs" />
     <Compile Include="Assets\Scripts\Behavior\Variables\SharedSharedInt3List.cs" />
@@ -292,6 +294,7 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Animator\SetBoolParameter.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\UseGravity.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SetSharedString.cs" />
+    <Compile Include="Assets\Scripts\Main\GameJsonSettings.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\SetMapItemLeftCharacterNode.cs" />
     <Compile Include="Assets\Scripts\UI\Item\ShortcutItemReference.cs" />
     <Compile Include="Assets\Scripts\Behavior\Common\CheckSelectItem.cs" />
@@ -301,11 +304,11 @@
     <Compile Include="Assets\MyLight\MyShadowPolygon.cs" />
     <Compile Include="Assets\Scripts\EditorTool\MapAreaEditor.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\GetMapItemPosNode.cs" />
-    <Compile Include="Assets\Scripts\Action\TypedNodes\EndNowRoundFightNode.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\DynamicTalkNode.cs" />
+    <Compile Include="Assets\Scripts\Action\TypedNodes\EndNowRoundFightNode.cs" />
     <Compile Include="Assets\Scripts\PlayerStore\SellItem.cs" />
-    <Compile Include="Assets\Scripts\Behavior\Character\CheckCharacterSleep.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\DestoryMultiNPCBehaviorGroupNode.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Character\CheckCharacterSleep.cs" />
     <Compile Include="Assets\Scripts\UI\FightPanel\FightPanel.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\CheckPlayerStoreOpenNode.cs" />
     <Compile Include="Assets\Scripts\Behavior\Common\SetShortcutItemValue.cs" />
@@ -349,6 +352,7 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Math\BoolOperator.cs" />
     <Compile Include="Assets\OtherPackage\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
     <Compile Include="Assets\Scripts\UI\Operate\MapObjTipsPanel.cs" />
+    <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\SetLinearVelocity.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\SetCharacterTriggerItemNode.cs" />
     <Compile Include="Assets\Scripts\UI\StoreProductReference.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\GetPastureLevelNode.cs" />
@@ -360,8 +364,8 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Light\SetCookieSize.cs" />
     <Compile Include="Assets\Scripts\Fishing\FishController.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\IsSleeping.cs" />
-    <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetPitch.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\CreatControllerTempMapItemNode.cs" />
+    <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetPitch.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\MovePosition.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\AddRelativeForce.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Bone2D.cs" />
@@ -372,8 +376,8 @@
     <Compile Include="Assets\Scripts\Pasture\PastureDataList.cs" />
     <Compile Include="Assets\Effect\ProFlares\Demos\DemoScripts\RandomPos.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\StartCreatSpecialTempCharacterNode.cs" />
-    <Compile Include="Assets\Scripts\Action\FightAction.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\SetMapItemLinkCharacterNode.cs" />
+    <Compile Include="Assets\Scripts\Action\FightAction.cs" />
     <Compile Include="Assets\Resources\InputData\MyInputNameData.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\TraceCharacterResultNode.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\UnSetHomeEquipNode.cs" />
@@ -382,6 +386,7 @@
     <Compile Include="Assets\Scripts\Action\GameVolumeAction.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\AudioSource\Stop.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Actions\StackedAction.cs" />
+    <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetAngularDamping.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\TryDeleteAnimalNode.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Examples\Scripts\SpriteCycle.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Behaviour\IsEnabled.cs" />
@@ -434,8 +439,8 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Composites\RandomSequence.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\CreatCharacterNode.cs" />
     <Compile Include="Assets\OtherPackage\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventCheck.cs" />
-    <Compile Include="Assets\Scripts\Data\TagAudioDataList.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\TryRemoveLinkMapItemCharacterNode.cs" />
+    <Compile Include="Assets\Scripts\Data\TagAudioDataList.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetVelocity.cs" />
     <Compile Include="Assets\Scripts\UI\UIObjReference.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Timeline\IsPlaying.cs" />
@@ -518,6 +523,7 @@
     <Compile Include="Assets\Scripts\Main\GameObjectCurveController.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetSpeed.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\TrySetAnimalFoodToPastureNode.cs" />
+    <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetRigidbodyType.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetIgnoreListenerVolume.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetVolume.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Euler.cs" />
@@ -590,6 +596,7 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Conditionals\RandomProbability.cs" />
     <Compile Include="Assets\Scripts\UI\CharacterButtonPanel\CharacterButtonPanel.cs" />
     <Compile Include="Assets\Scripts\UI\Operate\OtherFunctionButtonReference.cs" />
+    <Compile Include="Assets\Scripts\UI\GameTextMeshProUGUI.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\SetFixedTimeNode.cs" />
     <Compile Include="Assets\Scripts\Behavior\PlayerStore\TempBuyPlayerGood.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Animator\SetTrigger.cs" />
@@ -605,6 +612,7 @@
     <Compile Include="Assets\Scripts\Data\FestivalDataList.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\RefreshFightCharactersInfoNode.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\StartFishingGameNode.cs" />
+    <Compile Include="Assets\Scripts\UI\GameTextMeshPro.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetRightVector.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\SetStoreCounterNode.cs" />
     <Compile Include="Assets\Scripts\UI\MyTalkPanel.cs" />
@@ -644,6 +652,7 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\ExternalBehaviorTree.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\GetVisitNPC.cs" />
     <Compile Include="Assets\Scripts\Action\PastureAction.cs" />
+    <Compile Include="Assets\Scripts\UI\GameDropdown.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Animator\GetDeltaPosition.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Transform\GetForwardVector.cs" />
     <Compile Include="Assets\Scripts\UI\TMPLinkOpener.cs" />
@@ -679,6 +688,7 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetIsKinematic.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\TryCreatPlantNode.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetPosition.cs" />
+    <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Variables\SharedRigidbodyType2D.cs" />
     <Compile Include="Assets\Scripts\Event\GameTimeEventManager.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\GameObject\SetTag.cs" />
     <Compile Include="Assets\Scripts\GameGuide\GameGuideData.cs" />
@@ -735,6 +745,7 @@
     <Compile Include="Assets\Scripts\Action\TypedNodes\SetFixedCameraNode.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Animator\SetApplyRootMotion.cs" />
     <Compile Include="Assets\Scripts\UI\Operate\OtherFuntionPanel.cs" />
+    <Compile Include="Assets\Scripts\UI\GameSlider.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetDestination.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\TempCharacterShowEmote.cs" />
     <Compile Include="Assets\Effect\Epic Toon FX\Demo\Scripts\ETFXLoopScript.cs" />
@@ -750,8 +761,8 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\Simulate.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\ShowRandomEmoteNode.cs" />
     <Compile Include="Assets\Scripts\MySprite\MySpriteManager.cs" />
-    <Compile Include="Assets\Scripts\Behavior\Character\CheckNPCNowTaskCanPauseByMulit.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\SwitchSceneNode.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Character\CheckNPCNowTaskCanPauseByMulit.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CheckCharacterDirection.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Vector3\Operator.cs" />
     <Compile Include="Assets\Scripts\Data\MoneyCreatData.cs" />
@@ -777,8 +788,8 @@
     <Compile Include="Assets\Scripts\Behavior\Common\ChangeShortcutItemValue.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\SetCharacterAnimation.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\ShowItemActionNode.cs" />
-    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\IkSolver2DLimb.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\TryStartAutoBehaviorNode.cs" />
+    <Compile Include="Assets\OtherPackage\Anima2D\Scripts\IkSolver2DLimb.cs" />
     <Compile Include="Assets\Scripts\test\PolygonOutMesh.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\TryDeletePastureNode.cs" />
     <Compile Include="Assets\Effect\ProFlares\Demos\DemoScripts\PresetViewer.cs" />
@@ -860,8 +871,8 @@
     <Compile Include="Assets\OtherPackage\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetXYZ.cs" />
     <Compile Include="Assets\Effect\Epic Toon FX\Scripts\ETFXLightFade.cs" />
-    <Compile Include="Assets\Scripts\UI\Talk\SimpleTalkPanel.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\CreatFightPlayerNode.cs" />
+    <Compile Include="Assets\Scripts\UI\Talk\SimpleTalkPanel.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\TryCreatRoomNode.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\OpenFormulaNode.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\RefreshPackageNode.cs" />
@@ -941,12 +952,14 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetIsKinematic.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Math\IntClamp.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\OpenChapterNode.cs" />
+    <Compile Include="Assets\Scripts\UI\GameToggle.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Animation\GetAnimatePhysics.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\GetAngularSpeed.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Actions\StopBehaviorTree.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetGravtyScale.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CheckCharacterInHome.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\TryCreatAnimalNode.cs" />
+    <Compile Include="Assets\Scripts\UI\GameImage.cs" />
     <Compile Include="Assets\Scripts\UI\FuncReference.cs" />
     <Compile Include="Assets\Scripts\UI\ScreenControllerPanel\MyJoyStick.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\WeatherActionNode.cs" />
@@ -1019,8 +1032,8 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Transform\GetChild.cs" />
     <Compile Include="Assets\OtherPackage\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
     <Compile Include="Assets\Scripts\Event\GameEventManager.cs" />
-    <Compile Include="Assets\Scripts\MySprite\SpriteBone\BonePoseController.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\TriggerExitNode.cs" />
+    <Compile Include="Assets\Scripts\MySprite\SpriteBone\BonePoseController.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\SetCharacterStopCreateNode.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\CharacterController\Move.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Vector3\Distance.cs" />
@@ -1029,13 +1042,15 @@
     <Compile Include="Assets\OtherPackage\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
     <Compile Include="Assets\Scripts\Map\CellDebugDisplay.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetSpread.cs" />
-    <Compile Include="Assets\Scripts\test\TestImage.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\UpdateGameTimeNode.cs" />
+    <Compile Include="Assets\Scripts\test\TestImage.cs" />
+    <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\SetAngularDamping.cs" />
     <Compile Include="Assets\Scripts\Character\ProfessionDataList.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\String\BuildString.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\SetTempMapItemCoordinateNode.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\SetCharacterPropertyNode.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Variables\SharedAnimationCurve.cs" />
+    <Compile Include="Assets\Scripts\UI\UGUICompatibility.cs" />
     <Compile Include="Assets\Scripts\UI\Item\ItemReference.cs" />
     <Compile Include="Assets\Scripts\Map\SpecialMapLink.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetVelocity.cs" />
@@ -1100,21 +1115,21 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Decorators\UntilFailure.cs" />
     <Compile Include="Assets\OtherPackage\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Variables\SharedCollider.cs" />
-    <Compile Include="Assets\Scripts\Map\WorldMapController.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\ExploreEndNode.cs" />
+    <Compile Include="Assets\Scripts\Map\WorldMapController.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\IsPaused.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\TryTeamLeaderMoveNode.cs" />
     <Compile Include="Assets\Effect\Epic Toon FX\Demo\Scripts\ETFXSceneManager.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\StopFilmNode.cs" />
+    <Compile Include="Assets\Scripts\Action\TypedNodes\ClosePanelActionNode.cs" />
     <Compile Include="Assets\Scripts\Data\OperateData.cs" />
     <Compile Include="Assets\Scripts\UI\ColorPickerPanel.cs" />
-    <Compile Include="Assets\Scripts\Action\TypedNodes\ClosePanelActionNode.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\MoveRotation.cs" />
     <Compile Include="Assets\Scripts\Film\FilmController.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\FishingIsSuccessNode.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\GetSomeOneGift.cs" />
-    <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Variables\SharedGameObject.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\ChangeMapItemObjLayerNode.cs" />
+    <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Variables\SharedGameObject.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\AudioSource\Pause.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\IkLimb2D.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\ShowMapObjTipsNode.cs" />
@@ -1156,6 +1171,7 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Conditionals\Physics\HasEnteredTrigger.cs" />
     <Compile Include="Assets\Scripts\Data\MonsterData.cs" />
     <Compile Include="Assets\Scripts\Behavior\Round\RoundEnd.cs" />
+    <Compile Include="Assets\Scripts\UI\GameButton.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetPosition.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\SetCharacterRandomCoordinateNode.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetMaxDistance.cs" />
@@ -1178,6 +1194,7 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Quaternion\Identity.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Input\GetMousePosition.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\GetNPCWorkPos.cs" />
+    <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetLinearVelocity.cs" />
     <Compile Include="Assets\Scripts\Behavior\Variables\SharedInt2.cs" />
     <Compile Include="Assets\Scripts\Character\CharacterData.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\SphereCollider\SetRadius.cs" />
@@ -1205,8 +1222,8 @@
     <Compile Include="Assets\Scripts\Action\TypedNodes\CharacterPropertyTriggerNode.cs" />
     <Compile Include="Assets\Scripts\Behavior\Fight\Action\EstimateSkillBehavior.cs" />
     <Compile Include="Assets\OtherPackage\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
-    <Compile Include="Assets\Scripts\Action\TypedNodes\CreatFightPlayerInstanceNode.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\GameGuideActionNode.cs" />
+    <Compile Include="Assets\Scripts\Action\TypedNodes\CreatFightPlayerInstanceNode.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\AttachMapItemDataNode.cs" />
     <Compile Include="Assets\Scripts\UI\SetPanel\LanguageReference.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\AddExplosionForce.cs" />
@@ -1247,8 +1264,8 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Composites\ParallelComplete.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\Stop.cs" />
     <Compile Include="Assets\Effect\Epic Toon FX\Demo\Scripts\ETFXButtonScript.cs" />
-    <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\GetDestination.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\TimeRunNode.cs" />
+    <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\GetDestination.cs" />
     <Compile Include="Assets\Scripts\Main\CloudDataManager.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\SetFixedPlayerShaderPosNode.cs" />
     <Compile Include="Assets\Scripts\Behavior\Common\RunGameActions.cs" />
@@ -1265,6 +1282,7 @@
     <Compile Include="Assets\Scripts\Action\FishingAction.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\BoxCollider\SetSize.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetStartSpeed.cs" />
+    <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\SetLinearDamping.cs" />
     <Compile Include="Assets\Scripts\UI\WorldPanel\FightMapItemReference.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Physics2D\Raycast.cs" />
     <Compile Include="Assets\Scripts\Data\SkillData.cs" />
@@ -1359,8 +1377,8 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Input\IsMouseDown.cs" />
     <Compile Include="Assets\Scripts\UI\PermissionPanel\PermissionReference.cs" />
     <Compile Include="Assets\Scripts\UI\TeamPanel.cs" />
-    <Compile Include="Assets\Scripts\Action\TypedNodes\CreatTempCharacterNode.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\SetDirectionNode.cs" />
+    <Compile Include="Assets\Scripts\Action\TypedNodes\CreatTempCharacterNode.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Composites\Selector.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Conditionals\Physics\HasExitedTrigger.cs" />
     <Compile Include="Assets\Scripts\Behavior\Common\CompareValueBehavior.cs" />
@@ -1400,8 +1418,8 @@
     <Compile Include="Assets\Scripts\Behavior\Character\CheckNPCBehaviorState.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Transform\GetParent.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Light\SetSpotAngle.cs" />
-    <Compile Include="Assets\Scripts\Behavior\Variables\SharedInt3.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\OpenPanelActionNode.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Variables\SharedInt3.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Math\SetBool.cs" />
     <Compile Include="Assets\OtherPackage\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\IkSolver2DCCD.cs" />
@@ -1423,8 +1441,8 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\SetEnableEmission.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetAngularVelocity.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Variables\SharedTransform.cs" />
-    <Compile Include="Assets\Scripts\Behavior\Pasture\LinkPasturePackageBehavior.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\CharacterLevelUpNode.cs" />
+    <Compile Include="Assets\Scripts\Behavior\Pasture\LinkPasturePackageBehavior.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Vector2\Distance.cs" />
     <Compile Include="Assets\Scripts\Data\PackageSetData.cs" />
     <Compile Include="Assets\Scripts\Behavior\CharacterGroup\CreatMultiNPCGroup.cs" />
@@ -1469,6 +1487,7 @@
     <Compile Include="Assets\Scripts\Behavior\Common\GameTimeCheckRun.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\TryUpDataItemEmoteNode.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Input\GetAcceleration.cs" />
+    <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetLinearDamping.cs" />
     <Compile Include="Assets\Scripts\Event\GameTimeEventData.cs" />
     <Compile Include="Assets\Effect\ProFlares\Demos\DemoScripts\DemoControls.cs" />
     <Compile Include="Assets\Scripts\Behavior\Other\TempCharacterTalkBehavior.cs" />
@@ -1490,8 +1509,8 @@
     <Compile Include="Assets\Scripts\Action\TypedNodes\RemoveHomeEquipNode.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\TryTeamLeaderSetCoordinateNode.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CharacterUnLink.cs" />
-    <Compile Include="Assets\Scripts\Data\HomeEquipmentData.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\HideFilmNode.cs" />
+    <Compile Include="Assets\Scripts\Data\HomeEquipmentData.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Animator\StopPlayback.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetPosition.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\SetEnvironmentLightNode.cs" />
@@ -1523,12 +1542,9 @@
     <None Include="Assets\OtherPackage\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\Render\Shader\MyShadow.shader" />
     <None Include="Assets\OtherPackage\TextMesh Pro\Examples &amp; Extras\Fonts\Roboto-Bold - License.txt" />
-    <None Include="Packages\com.unity.inputsystem\package.json" />
     <None Include="Assets\Render\Shader\Sky.shader" />
     <None Include="Assets\OtherPackage\TextMesh Pro\Shaders\TMP_SDF-Mobile-2-Pass.shader" />
-    <None Include="Packages\com.unity.inputsystem\ValidationConfig.json" />
     <None Include="Assets\Effect\Epic Toon FX\Prefabs\Combat\Combat FX.txt" />
-    <None Include="Packages\com.unity.ugui\package.json" />
     <None Include="Assets\Effect\ProFlares\Shaders\ProFlaresBumpSpecShader.shader" />
     <None Include="Assets\MyLight\Material\MyLightMul1.shader" />
     <None Include="Assets\Effect\ProFlares\Shaders\ProFlares2Sided.shader" />
@@ -1537,7 +1553,6 @@
     <None Include="Assets\OtherPackage\TextMesh Pro\Examples &amp; Extras\Fonts\Unity - OFL.txt" />
     <None Include="Assets\Effect\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR_SETTINGS.cginc" />
     <None Include="Assets\Effect\ProFlares\Shaders\ProFlareShaderLinear.shader" />
-    <None Include="Packages\com.unity.render-pipelines.core\Shaders\CoreCopy.shader" />
     <None Include="Assets\OtherPackage\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\Render\Shader\ScreenCloud.shader" />
     <None Include="Assets\Render\Shader\BlitSampleBlur.shader" />
@@ -1553,7 +1568,6 @@
     <None Include="Assets\OtherPackage\graph-visualizer-master\package.json" />
     <None Include="Assets\Effect\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR.cginc" />
     <None Include="Assets\OtherPackage\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
-    <None Include="Packages\com.unity.mathematics\package.json" />
     <None Include="Assets\Effect\Hovl Studio\RPG VFX Bundle\Shaders\DissolveNoise.shader" />
     <None Include="Assets\OtherPackage\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\Effect\ProFlares\Demos\Scenes\README.txt" />
@@ -1561,15 +1575,12 @@
     <None Include="Assets\OtherPackage\Anima2D\Readme.txt" />
     <None Include="Assets\Render\Shader\Damp.shader" />
     <None Include="Assets\Render\Shader\MySprite-Lit-Default.shader" />
-    <None Include="Packages\com.unity.ugui\PackageConversionData.json" />
     <None Include="Assets\Render\Shader\SampleBlur.shader" />
     <None Include="Assets\Effect\ProFlares\Presets\Basic\BasicAtlas\BasicsAtlas.txt" />
     <None Include="Assets\Effect\ProFlares\Demos\IslandDemoAtlas\IslandDemoAtlas.txt" />
     <None Include="Assets\Render\Shader\SampleEffectAdd.shader" />
     <None Include="Assets\Effect\JMO Assets\Cartoon FX Easy Editor\CartoonFX Easy Editor Readme.txt" />
     <None Include="Assets\Effect\Hovl Studio\Black mage spells\Shaders\Add_Fresnel.shader" />
-    <None Include="Packages\com.unity.render-pipelines.core\ValidationConfig.json" />
-    <None Include="Packages\com.unity.render-pipelines.core\package.json" />
     <None Include="Assets\OtherPackage\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\Effect\ProFlares\Shaders\ProFlareShader.shader" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\White Spark.txt" />
@@ -1608,7 +1619,6 @@
     <None Include="Assets\Render\Shader\Sample3D.shader" />
     <None Include="Assets\Render\Shader\MySprite-Simple.shader" />
     <None Include="Assets\OtherPackage\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
-    <None Include="Packages\com.unity.inputsystem\ValidationExceptions.json" />
     <None Include="Assets\Effect\JMO Assets\Cartoon FX Remaster\CFXR Prefabs\Texts\_Make your own text effect.txt" />
     <None Include="Assets\Render\Shader\Cloud.shader" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\TriSun.txt" />
@@ -1629,7 +1639,6 @@
     <None Include="Assets\Effect\Hovl Studio\Archer skills pack\Shaders\Scroll.shader" />
     <None Include="Assets\Effect\JMO Assets\Cartoon FX Remaster\Readme Cartoon FX Remaster.txt" />
     <None Include="Assets\Render\Shader\UnifiedEffects\FX_Shockwave_URP.shader" />
-    <None Include="Packages\com.unity.ugui\Editor Resources\Shaders\TMP_SDF_SSD.cginc" />
     <None Include="Assets\Render\Shader\UnifiedEffects\FX_TwoSided_URP.shader" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\AlienSun.txt" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\LastSunSet.txt" />
@@ -1637,30 +1646,24 @@
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\SciFiBlue.txt" />
     <None Include="Assets\Effect\ProFlares\Shaders\ProFlaresLeavesShader.shader" />
     <None Include="Assets\Effect\Hovl Studio\Render Pipelines support\Shaders\URP_SoftNoise.shader" />
-    <None Include="Packages\com.unity.ugui\Editor Resources\Shaders\TMP_Properties.cginc" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\SpaceSun.txt" />
     <None Include="Assets\Render\Shader\BlendLight.shader" />
     <None Include="Packages\com.unity.timeline\ValidationExceptions.json" />
-    <None Include="Packages\com.unity.ugui\Editor Resources\Shaders\TMP_SDF Internal Editor.shader" />
     <None Include="Assets\Render\Shader\UnifiedEffects\FX_SpriteCore_URP.shader" />
     <None Include="Assets\OtherPackage\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\OtherPackage\codeandweb.com\Readme.txt" />
     <None Include="Assets\Effect\ProFlares\Presets\Basic\Flares\BlueStarFlare.txt" />
     <None Include="Assets\OtherPackage\Anima2D\Examples\Shaders\VisibleOutsideMask.shader" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\SharpGlow.txt" />
-    <None Include="Packages\com.unity.2d.sprite\package.json" />
     <None Include="Assets\Effect\ProFlares\ProFlares_WhatsNew.txt" />
     <None Include="Assets\OtherPackage\Hovl Studio\HSFiles\Shaders\Add_CenterGlow.shader" />
     <None Include="Assets\OtherPackage\Anima2D\Examples\Shaders\VisibleInsideMask.shader" />
     <None Include="Assets\OtherPackage\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
-    <None Include="Packages\com.unity.ugui\PackageConversionData_Assets.json" />
     <None Include="Assets\OtherPackage\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
     <None Include="Assets\Effect\JMO Assets\Cartoon FX Remaster\CFXR Assets\Shaders\CFXR_URP.cginc" />
     <None Include="Assets\Effect\JMO Assets\!JMO Assets Readme.txt" />
     <None Include="Assets\OtherPackage\Anima2D\Examples\Shaders\Unlit-Alpha-Cull-off.shader" />
-    <None Include="Packages\com.unity.mathematics\ValidationExceptions.json" />
     <None Include="Assets\OtherPackage\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
-    <None Include="Packages\com.unity.2d.animation\package.json" />
     <None Include="Assets\OtherPackage\Anima2D\Licenses.txt" />
     <None Include="Assets\OtherPackage\Anima2D\Version.txt" />
     <None Include="Assets\Resources\Sprite.json" />
@@ -1670,7 +1673,6 @@
     <None Include="Assets\OtherPackage\Hovl Studio\Resources\Shaders\ShockWave.shader" />
     <None Include="Assets\OtherPackage\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\Render\Shader\MyTree-Lit-Default.shader" />
-    <None Include="Packages\com.unity.2d.psdimporter\package.json" />
     <None Include="Packages\com.unity.render-pipelines.universal\ValidationConfig.json" />
     <None Include="Assets\Effect\ProFlares\Presets\Mega\Flares\White Star.txt" />
     <None Include="Assets\Render\Shader\Sea.shader" />
@@ -2500,11 +2502,26 @@
     <Reference Include="Unity.Entities">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.2D.Sprite.Editor">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.InternalAPIEngineBridge.001">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.InternalAPIEngineBridge.001.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+    <Reference Include="PsdPlugin">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\PsdPlugin.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Rendering.LightTransport.Editor">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Rendering.LightTransport.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Services.Core">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Services.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Entities.Editor.Properties">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Entities.Editor.Properties.dll</HintPath>
@@ -2524,6 +2541,12 @@
     <Reference Include="Unity.EditorCoroutines.Editor">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.EditorCoroutines.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.2D.Animation.Runtime">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.2D.Animation.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.Runtime.Shared">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.Shared.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Bindings.OpenImageIO.Editor">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Bindings.OpenImageIO.Editor.dll</HintPath>
     </Reference>
@@ -2532,6 +2555,9 @@
     </Reference>
     <Reference Include="Unity.Services.Core.Components">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Services.Core.Components.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.UnifiedRayTracing.Runtime">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.UnifiedRayTracing.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Services.RemoteConfig">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Services.RemoteConfig.dll</HintPath>
@@ -2569,6 +2595,9 @@
     <Reference Include="Unity.RemoteConfig.Editor">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.RemoteConfig.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.TextMeshPro.Editor">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Services.Authentication.PlayerAccounts">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Services.Authentication.PlayerAccounts.dll</HintPath>
     </Reference>
@@ -2581,11 +2610,20 @@
     <Reference Include="UnityEngine.Purchasing.SecurityStub">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\UnityEngine.Purchasing.SecurityStub.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.InputSystem.ForUI">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.InputSystem.ForUI.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Profiling.Core">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Profiling.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.RenderPipelines.GPUDriven.Runtime">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.RenderPipelines.GPUDriven.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="Purchasing.Common">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Purchasing.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Services.Core.Environments">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Services.Core.Environments.dll</HintPath>
@@ -2608,6 +2646,15 @@
     <Reference Include="Unity.ProBuilder">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.ProBuilder.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.2D.Sprite.AIIntegration.Editor">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.2D.Sprite.AIIntegration.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.Editor.Shared">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.RenderPipelines.Core.Editor.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.InputSystem">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.InputSystem.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Splines">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Splines.dll</HintPath>
     </Reference>
@@ -2619,6 +2666,12 @@
     </Reference>
     <Reference Include="Unity.Mathematics.Extensions">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Mathematics.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.Editor">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.RenderPipelines.Core.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.IK.Runtime">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.2D.IK.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.Purchasing">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\UnityEditor.Purchasing.dll</HintPath>
@@ -2656,6 +2709,12 @@
     <Reference Include="Unity.Burst.Editor">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Burst.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Mathematics.Editor">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.Animation.Editor">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.2D.Animation.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Cinemachine.Editor">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Cinemachine.Editor.dll</HintPath>
     </Reference>
@@ -2668,8 +2727,17 @@
     <Reference Include="Unity.Services.Core.Analytics">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Services.Core.Analytics.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.2D.Psdimporter.Editor">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.2D.Psdimporter.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.Runtime">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.ProBuilder.Editor">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.ProBuilder.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.IK.Editor">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.2D.IK.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.ResourceManager">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.ResourceManager.dll</HintPath>
@@ -2685,6 +2753,9 @@
     </Reference>
     <Reference Include="Unity.ProBuilder.AddOns.Editor">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.ProBuilder.AddOns.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mathematics">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Localization">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Localization.dll</HintPath>
@@ -2704,6 +2775,9 @@
     <Reference Include="UnityEngine.Purchasing">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\UnityEngine.Purchasing.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.InternalAPIEngineBridge.004">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.InternalAPIEngineBridge.004.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Deformations">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Deformations.dll</HintPath>
     </Reference>
@@ -2719,6 +2793,9 @@
     <Reference Include="Unity.Settings.Editor">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Settings.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEditor.UI">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
@@ -2729,29 +2806,9 @@
       <Project>{8e07b210-2237-de9c-7b4b-fbbcd2bf148b}</Project>
       <Name>KinoBloom.Runtime</Name>
     </ProjectReference>
-    <ProjectReference Include="Unity.2D.Sprite.Editor.csproj">
-      <Project>{80aa6476-d857-5f41-144a-124f113aa7bc}</Project>
-      <Name>Unity.2D.Sprite.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.TextMeshPro.csproj">
-      <Project>{c8922ec3-0ef2-a2a3-8240-f82fb9c7b730}</Project>
-      <Name>Unity.TextMeshPro</Name>
-    </ProjectReference>
-    <ProjectReference Include="PsdPlugin.csproj">
-      <Project>{5532cf06-d6c1-7f66-9e32-7c9ca80e022b}</Project>
-      <Name>PsdPlugin</Name>
-    </ProjectReference>
     <ProjectReference Include="CFXREditor.csproj">
       <Project>{1c347734-f63c-e57d-1459-295aacaf6dd3}</Project>
       <Name>CFXREditor</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.Rendering.LightTransport.Editor.csproj">
-      <Project>{5b9c7584-b04f-eb7b-fa12-99589138bddf}</Project>
-      <Name>Unity.Rendering.LightTransport.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.RenderPipelines.Core.ShaderLibrary.csproj">
-      <Project>{84cbd183-09aa-0c81-acf3-ae9fb1c20041}</Project>
-      <Name>Unity.RenderPipelines.Core.ShaderLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="CFXRRuntime.csproj">
       <Project>{45da6a71-4dbf-14b5-a1d9-3244a0fdafea}</Project>
@@ -2769,29 +2826,13 @@
       <Project>{0e357d82-3234-ccf4-3ada-ac3ef82afd15}</Project>
       <Name>PPv2URPConverters</Name>
     </ProjectReference>
-    <ProjectReference Include="Unity.2D.Animation.Runtime.csproj">
-      <Project>{ef07b1b4-077f-676c-2dec-13ca68def4a5}</Project>
-      <Name>Unity.2D.Animation.Runtime</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.RenderPipelines.Core.Runtime.Shared.csproj">
-      <Project>{d0441bd8-47a0-e5ff-aa11-59f368a09eb1}</Project>
-      <Name>Unity.RenderPipelines.Core.Runtime.Shared</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Universal.2D.Runtime.csproj">
       <Project>{e0b5f343-9890-bf65-100e-0254e0c7e301}</Project>
       <Name>Unity.RenderPipelines.Universal.2D.Runtime</Name>
     </ProjectReference>
-    <ProjectReference Include="Unity.UnifiedRayTracing.Runtime.csproj">
-      <Project>{0cc52067-3a3d-8ce3-dfa1-e691832bd7ba}</Project>
-      <Name>Unity.UnifiedRayTracing.Runtime</Name>
-    </ProjectReference>
     <ProjectReference Include="VoxelBusters.CoreLibrary.Editor.NativePlugins.csproj">
       <Project>{47af004e-4573-663f-49d4-f64bb7f20885}</Project>
       <Name>VoxelBusters.CoreLibrary.Editor.NativePlugins</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.TextMeshPro.Editor.csproj">
-      <Project>{0955a7bf-9228-7066-c724-eb64723ecb33}</Project>
-      <Name>Unity.TextMeshPro.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.2D.Tilemap.Extras.Editor.csproj">
       <Project>{fe129abb-75a2-16e3-c9a4-e2d48ed9ea41}</Project>
@@ -2805,21 +2846,9 @@
       <Project>{bc1128d5-5c01-92e6-7173-358cda5eace4}</Project>
       <Name>ToonyColorsPro.Demo.Editor</Name>
     </ProjectReference>
-    <ProjectReference Include="Unity.InputSystem.ForUI.csproj">
-      <Project>{0683b9d1-e783-0b51-a15a-e166bd55b8fb}</Project>
-      <Name>Unity.InputSystem.ForUI</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.RenderPipelines.GPUDriven.Runtime.csproj">
-      <Project>{26f51a6c-2435-9c15-dd5a-620b9a4b6cb5}</Project>
-      <Name>Unity.RenderPipelines.GPUDriven.Runtime</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Universal.Shaders.csproj">
       <Project>{f80d9ec2-ea16-faad-47a5-f40c5f6f6bdc}</Project>
       <Name>Unity.RenderPipelines.Universal.Shaders</Name>
-    </ProjectReference>
-    <ProjectReference Include="UnityEngine.UI.csproj">
-      <Project>{e3f4b714-0319-d7cc-b25c-e96055acb09c}</Project>
-      <Name>UnityEngine.UI</Name>
     </ProjectReference>
     <ProjectReference Include="VoxelBusters.CoreLibrary.Editor.Experimental.csproj">
       <Project>{2dd575cd-feac-b55c-a94d-30ab399e4d6e}</Project>
@@ -2833,33 +2862,13 @@
       <Project>{2e8ad010-1cc3-f448-5e19-7d7011fad48c}</Project>
       <Name>Unity.RenderPipelines.Universal.Config.Runtime</Name>
     </ProjectReference>
-    <ProjectReference Include="Unity.2D.Sprite.AIIntegration.Editor.csproj">
-      <Project>{6adb8b79-75a7-89f5-a7d2-057cfef87121}</Project>
-      <Name>Unity.2D.Sprite.AIIntegration.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.RenderPipelines.Core.Editor.Shared.csproj">
-      <Project>{6df3efee-48be-8759-5cbf-14089eefca7e}</Project>
-      <Name>Unity.RenderPipelines.Core.Editor.Shared</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.InputSystem.csproj">
-      <Project>{d0ac7ad6-17be-70c1-ce1b-c5bdbcc86073}</Project>
-      <Name>Unity.InputSystem</Name>
-    </ProjectReference>
     <ProjectReference Include="TextMeshProEffect.csproj">
       <Project>{8ec4b6cf-be70-eec7-84ea-4c0f6fb92afb}</Project>
       <Name>TextMeshProEffect</Name>
     </ProjectReference>
-    <ProjectReference Include="Unity.RenderPipelines.Core.Editor.csproj">
-      <Project>{63bf5654-4bf9-1ad6-ed4b-96bb5059daf6}</Project>
-      <Name>Unity.RenderPipelines.Core.Editor</Name>
-    </ProjectReference>
     <ProjectReference Include="VoxelBusters.CoreLibrary.NativePlugins.AndroidModule.csproj">
       <Project>{ecb8c3aa-b6db-4eae-403a-ed5d1fe3dded}</Project>
       <Name>VoxelBusters.CoreLibrary.NativePlugins.AndroidModule</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.2D.IK.Runtime.csproj">
-      <Project>{e86fe98a-7e3d-741a-ffa9-afadecffdadf}</Project>
-      <Name>Unity.2D.IK.Runtime</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.PlayableGraphVisualizer.Editor.csproj">
       <Project>{ef98976a-e5a3-255a-e39c-12a7946ac591}</Project>
@@ -2901,22 +2910,6 @@
       <Project>{40df9bc0-b6ec-6648-3273-ccadd9ce31ae}</Project>
       <Name>CFXRDemo</Name>
     </ProjectReference>
-    <ProjectReference Include="Unity.Mathematics.Editor.csproj">
-      <Project>{78dec004-216e-5702-174f-64f87edf3522}</Project>
-      <Name>Unity.Mathematics.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.2D.Animation.Editor.csproj">
-      <Project>{90d99031-91a5-ea9f-94f7-a7042d9ff22e}</Project>
-      <Name>Unity.2D.Animation.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.2D.Psdimporter.Editor.csproj">
-      <Project>{c9536da7-d672-3f82-f766-b78956a8d0ce}</Project>
-      <Name>Unity.2D.Psdimporter.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.RenderPipelines.Core.Runtime.csproj">
-      <Project>{c2644d33-61c0-bafd-a63d-4eca9a06fbac}</Project>
-      <Name>Unity.RenderPipelines.Core.Runtime</Name>
-    </ProjectReference>
     <ProjectReference Include="VoxelBusters.EssentialKit.csproj">
       <Project>{ba7e326e-07a3-b7c5-1ab6-9c7ef36da4e9}</Project>
       <Name>VoxelBusters.EssentialKit</Name>
@@ -2924,10 +2917,6 @@
     <ProjectReference Include="Unity.2D.Tilemap.Extras.csproj">
       <Project>{4af49c34-baad-568c-b8c2-5cd59f883782}</Project>
       <Name>Unity.2D.Tilemap.Extras</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.2D.IK.Editor.csproj">
-      <Project>{819563b1-d38d-d628-829d-fe63a3b568a9}</Project>
-      <Name>Unity.2D.IK.Editor</Name>
     </ProjectReference>
     <ProjectReference Include="VoxelBusters.CoreLibrary.Editor.csproj">
       <Project>{cb7cb90f-bd95-c2b8-fe71-9b6263784fca}</Project>
@@ -2945,17 +2934,9 @@
       <Project>{49b284ae-255d-77fe-44d5-a83db1001c85}</Project>
       <Name>Unity.Timeline.Editor</Name>
     </ProjectReference>
-    <ProjectReference Include="Unity.Mathematics.csproj">
-      <Project>{5545666a-913e-de13-94c5-48e02fcaf8fc}</Project>
-      <Name>Unity.Mathematics</Name>
-    </ProjectReference>
     <ProjectReference Include="VoxelBusters.EssentialKit.Editor.Build.iOSModule.csproj">
       <Project>{64cb0852-be9f-766b-ef82-059c36abf240}</Project>
       <Name>VoxelBusters.EssentialKit.Editor.Build.iOSModule</Name>
-    </ProjectReference>
-    <ProjectReference Include="Unity.InternalAPIEngineBridge.004.csproj">
-      <Project>{95a493c0-d90f-2c60-c515-737084af5827}</Project>
-      <Name>Unity.InternalAPIEngineBridge.004</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.PlayableGraphVisualizer.csproj">
       <Project>{144d3b16-84d9-d90a-5a1c-83d35ce50162}</Project>
@@ -2968,10 +2949,6 @@
     <ProjectReference Include="Unity.RenderPipeline.Universal.ShaderLibrary.csproj">
       <Project>{18f3cb02-0c5b-e0d5-aca9-091ae028a67b}</Project>
       <Name>Unity.RenderPipeline.Universal.ShaderLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="UnityEditor.UI.csproj">
-      <Project>{584b21cf-8359-2c78-abf9-c8f9b2ae9106}</Project>
-      <Name>UnityEditor.UI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

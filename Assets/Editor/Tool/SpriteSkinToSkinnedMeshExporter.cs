@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using UnityEngine.U2D.Animation;
+using UnityEngine.U2D;
 using System;
 using System.IO;
 using System.Collections.Generic;
+using Unity.Collections;
+using UnityEngine.Rendering;
 using static UnityEditor.Recorder.OutputPath;
 
 public class CombinedSpriteSkinExporter
@@ -51,20 +54,19 @@ public class CombinedSpriteSkinExporter
             foreach (var spriteSkin in spriteSkins)
             {
                 var spriteRenderer = spriteSkin.GetComponent<SpriteRenderer>();
-                spriteSkin.m_SpriteRenderer = spriteRenderer;
 
                 if (spriteSkin.boneTransforms == null || spriteSkin.boneTransforms.Length == 0)
                     continue;
 
                 var sprite = spriteRenderer.sprite;
-                SpriteSkinData spriteSkinData = default;
-                spriteSkin.CopyToSpriteSkinData(ref spriteSkinData);
+                if (sprite == null)
+                    continue;
 
-                var positions = CopySlice(spriteSkinData.vertices);
+                var positions = CopyNativeSlice(sprite.GetVertexAttribute<Vector3>(VertexAttribute.Position));
                 var uvs = sprite.uv;
                 var triangles = sprite.triangles;
-                var weights = CopySlice(spriteSkinData.boneWeights);
-                var bindposes = CopySlice(spriteSkinData.bindPoses);
+                var weights = CopyNativeSlice(sprite.GetVertexAttribute<BoneWeight>(VertexAttribute.BlendWeight));
+                var bindposes = CopyNativeArray(sprite.GetBindPoses());
 
                 for (int i = 0; i < positions.Length; i++)
                 {
@@ -156,11 +158,19 @@ public class CombinedSpriteSkinExporter
         GameObject.DestroyImmediate(instance);
     }
 
-    static T[] CopySlice<T>(NativeCustomSlice<T> slice) where T : struct
+    static T[] CopyNativeSlice<T>(NativeSlice<T> slice) where T : struct
     {
         T[] arr = new T[slice.Length];
         for (int i = 0; i < slice.Length; i++)
             arr[i] = slice[i];
+        return arr;
+    }
+
+    static T[] CopyNativeArray<T>(NativeArray<T> array) where T : struct
+    {
+        T[] arr = new T[array.Length];
+        for (int i = 0; i < array.Length; i++)
+            arr[i] = array[i];
         return arr;
     }
 }

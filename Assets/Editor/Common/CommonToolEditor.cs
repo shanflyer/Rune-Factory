@@ -411,15 +411,49 @@ public partial class CommonToolEditor : MyEditor
         }
         PSDImporter original = (AssetImporter.GetAtPath(originalPath) as PSDImporter);
         PSDImporter target = (AssetImporter.GetAtPath(targetPath) as PSDImporter);
-        var data2 = target.m_CharacterData;
-        var data1= original.m_CharacterData;
-        data2.bones = data1.bones;
+        if (original == null || target == null)
+        {
+            Debug.LogError($"复制 PSB 骨骼失败，无法获取 PSDImporter。源: {originalPath}, 目标: {targetPath}");
+            return;
+        }
 
-        List<SpriteBone> spriteBones = original.m_CharacterData.bones.ToList();
+        if (!CopyPsdImporterBones(original, target))
+        {
+            Debug.LogError($"复制 PSB 骨骼失败，PSDImporter 内部字段结构不匹配。源: {originalPath}, 目标: {targetPath}");
+            return;
+        }
 
-        target.m_CharacterData.bones=spriteBones.ToArray();
+        EditorUtility.SetDirty(target);
         target.SaveAndReimport();
 
+    }
+
+    static bool CopyPsdImporterBones(PSDImporter original, PSDImporter target)
+    {
+        const System.Reflection.BindingFlags flags = System.Reflection.BindingFlags.Instance |
+                                                     System.Reflection.BindingFlags.Public |
+                                                     System.Reflection.BindingFlags.NonPublic;
+
+        var characterDataField = typeof(PSDImporter).GetField("m_CharacterData", flags);
+        if (characterDataField == null)
+            return false;
+
+        object originalCharacterData = characterDataField.GetValue(original);
+        object targetCharacterData = characterDataField.GetValue(target);
+        if (originalCharacterData == null || targetCharacterData == null)
+            return false;
+
+        var bonesField = originalCharacterData.GetType().GetField("bones", flags);
+        if (bonesField == null)
+            return false;
+
+        object bones = bonesField.GetValue(originalCharacterData);
+        if (bones is Array bonesArray)
+            bones = bonesArray.Clone();
+
+        bonesField.SetValue(targetCharacterData, bones);
+        characterDataField.SetValue(target, targetCharacterData);
+        return true;
     }
 
     public void RefreshPrefab()

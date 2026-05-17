@@ -65,10 +65,10 @@ public class LanguageManage : Singleton<LanguageManage>
     public override async void Init()
     {
         base.Init(); 
-        TMP_Text.SwitchString = SwitchStr;
-        TMP_Text.NowLineSpacing = GetLineSpacing;
-        TMP_Text.NowCharacterSpacing = GetCharacterSpacing;
-        TMP_Text.IsRTL = IsRTL;
+        TMPTextLocalization.SwitchString = SwitchStr;
+        TMPTextLocalization.NowLineSpacing = GetLineSpacing;
+        TMPTextLocalization.NowCharacterSpacing = GetCharacterSpacing;
+        TMPTextLocalization.IsRTL = IsRTL;
 
         LanguageSwitchDataList =GameDataManager.instance.GetData<LanguageSwitchDataList>("LanguageSwitchDataList");
         languageFields.Clear();
@@ -94,7 +94,7 @@ public class LanguageManage : Singleton<LanguageManage>
     protected override void Clear()
     {
         base.Clear();
-        TMP_Text.SwitchString = null;
+        TMPTextLocalization.SwitchString = null;
     }
 
     static Dictionary<string, string> replacements = new Dictionary<string, string>

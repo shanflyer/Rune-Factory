@@ -868,6 +868,9 @@
     <Reference Include="System.Xml.XPath.XDocument">
       <HintPath>D:\Program Files\Unity 6000.3.2f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Xml.XPath.XDocument.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Mathematics">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.TestRunner">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\UnityEngine.TestRunner.dll</HintPath>
     </Reference>
@@ -876,10 +879,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Unity.Mathematics.csproj">
-      <Project>{5545666a-913e-de13-94c5-48e02fcaf8fc}</Project>
-      <Name>Unity.Mathematics</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Core.Runtime.csproj">
       <Project>{c2644d33-61c0-bafd-a63d-4eca9a06fbac}</Project>
       <Name>Unity.RenderPipelines.Core.Runtime</Name>

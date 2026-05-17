@@ -933,6 +933,12 @@
     <Reference Include="Unity.2D.Tilemap.Editor">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\Unity.2D.Tilemap.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEditor.UI">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.TestRunner">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\UnityEngine.TestRunner.dll</HintPath>
     </Reference>
@@ -944,14 +950,6 @@
     <ProjectReference Include="Unity.2D.Tilemap.Extras.csproj">
       <Project>{4af49c34-baad-568c-b8c2-5cd59f883782}</Project>
       <Name>Unity.2D.Tilemap.Extras</Name>
-    </ProjectReference>
-    <ProjectReference Include="UnityEditor.UI.csproj">
-      <Project>{584b21cf-8359-2c78-abf9-c8f9b2ae9106}</Project>
-      <Name>UnityEditor.UI</Name>
-    </ProjectReference>
-    <ProjectReference Include="UnityEngine.UI.csproj">
-      <Project>{e3f4b714-0319-d7cc-b25c-e96055acb09c}</Project>
-      <Name>UnityEngine.UI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
