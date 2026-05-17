@@ -14,30 +14,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 29
   root:
-    rid: 4894396010337927972
+    rid: 4894396078921614009
   references:
     version: 2
     RefIds:
-    - rid: 4894396010337927972
+    - rid: 4894396078921614009
       type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
       data:
         children:
         - node:
-            rid: 4894396010337927973
+            rid: 4894396078921614010
         - node:
-            rid: 4894396010337927974
-    - rid: 4894396010337927973
+            rid: 4894396078921614011
+    - rid: 4894396078921614010
       type: {class: WaitActionNode, ns: , asm: Assembly-CSharp}
       data:
         children:
         - node:
-            rid: 4894396010337927975
+            rid: 4894396078921614012
         delay: 0
-    - rid: 4894396010337927974
+    - rid: 4894396078921614011
       type: {class: SetCharacterStopCreateNode, ns: , asm: Assembly-CSharp}
       data:
         hide: 1
-    - rid: 4894396010337927975
+    - rid: 4894396078921614012
       type: {class: PlayFilmNode, ns: , asm: Assembly-CSharp}
       data:
         filmName: ZeroTown

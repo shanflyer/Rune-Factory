@@ -14,30 +14,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 84
   root:
-    rid: 4894396010337927821
+    rid: 4894396078921613858
   references:
     version: 2
     RefIds:
-    - rid: 4894396010337927821
+    - rid: 4894396078921613858
       type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
       data:
         children:
         - node:
-            rid: 4894396010337927822
+            rid: 4894396078921613859
         - node:
-            rid: 4894396010337927823
-    - rid: 4894396010337927822
+            rid: 4894396078921613860
+    - rid: 4894396078921613859
       type: {class: ClosePanelActionNode, ns: , asm: Assembly-CSharp}
       data:
         children: []
-    - rid: 4894396010337927823
+    - rid: 4894396078921613860
       type: {class: WaitActionNode, ns: , asm: Assembly-CSharp}
       data:
         children:
         - node:
-            rid: 4894396010337927824
+            rid: 4894396078921613861
         delay: 1000
-    - rid: 4894396010337927824
+    - rid: 4894396078921613861
       type: {class: TalkNode, ns: , asm: Assembly-CSharp}
       data:
         displayFunction: 0
