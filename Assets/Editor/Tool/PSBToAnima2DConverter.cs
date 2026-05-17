@@ -2,11 +2,14 @@
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.U2D.Animation;
+using UnityEngine.U2D;
 using System.Collections.Generic;
 using System.IO;
 using Anima2D;
 using System.Linq;
 using System.Net.WebSockets;
+using Unity.Collections;
+using UnityEngine.Rendering;
 using BoneWeight = Anima2D.BoneWeight;
 using UnityEditor.Animations;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
@@ -459,18 +462,17 @@ public class PSBToAnima2DConverter : EditorWindow
 
 
                 Sprite usedSprite = skin.GetComponent<SpriteRenderer>().sprite;
+                if (usedSprite == null)
+                    continue;
 
                 if (newSprites.TryGetValue(usedSprite.rect, out var newSprite))
                 {
                     // 获取顶点、uv、索引、权重、BindPose
-                    var data = new SpriteSkinData();
-                    skin.CopyToSpriteSkinData(ref data);
-
-                    Vector3[] positions = CopySlice(data.vertices);
+                    Vector3[] positions = CopyNativeSlice(usedSprite.GetVertexAttribute<Vector3>(VertexAttribute.Position));
                     Vector2[] uvs = usedSprite.uv;
                     ushort[] triUshorts = usedSprite.triangles;
-                    var weights = CopySlice(data.boneWeights);
-                    Matrix4x4[] bindposes = CopySlice(data.bindPoses);
+                    var weights = CopyNativeSlice(usedSprite.GetVertexAttribute<UnityEngine.BoneWeight>(VertexAttribute.BlendWeight));
+                    Matrix4x4[] bindposes = CopyNativeArray(usedSprite.GetBindPoses());
 
                     // 转成 int[]
                     int[] triangles = new int[triUshorts.Length];
@@ -601,13 +603,21 @@ public class PSBToAnima2DConverter : EditorWindow
     }
 
     /// <summary>
-    /// 从 NativeCustomSlice<T> 中拷贝数据到数组
+    /// 从 NativeSlice<T> 中拷贝数据到数组
     /// </summary>
-    static T[] CopySlice<T>(NativeCustomSlice<T> slice) where T : struct
+    static T[] CopyNativeSlice<T>(NativeSlice<T> slice) where T : struct
     {
         T[] arr = new T[slice.Length];
         for (int i = 0; i < slice.Length; i++)
             arr[i] = slice[i];
+        return arr;
+    }
+
+    static T[] CopyNativeArray<T>(NativeArray<T> array) where T : struct
+    {
+        T[] arr = new T[array.Length];
+        for (int i = 0; i < array.Length; i++)
+            arr[i] = array[i];
         return arr;
     }
 
