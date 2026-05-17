@@ -9,7 +9,10 @@ public static class GameActionAutoMigrate
 
     static GameActionAutoMigrate()
     {
-        if (!_migrating)  // force every time
+        // Only auto-run once per editor environment. Re-running the migration
+        // recreates the SerializeReference object graph and causes Unity to
+        // assign new managed reference ids (rid), which creates noisy diffs.
+        if (!_migrating && !EditorPrefs.GetBool(PREFS_KEY, false))
         {
             EditorApplication.update += TryMigrate;
         }

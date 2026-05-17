@@ -918,6 +918,12 @@
     <Reference Include="System.Xml.XPath.XDocument">
       <HintPath>D:\Program Files\Unity 6000.3.2f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Xml.XPath.XDocument.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEditor.UI">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.TestRunner">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - Copy - 副本\Library\ScriptAssemblies\UnityEngine.TestRunner.dll</HintPath>
     </Reference>
@@ -929,14 +935,6 @@
     <ProjectReference Include="TextMeshProEffect.csproj">
       <Project>{8ec4b6cf-be70-eec7-84ea-4c0f6fb92afb}</Project>
       <Name>TextMeshProEffect</Name>
-    </ProjectReference>
-    <ProjectReference Include="UnityEditor.UI.csproj">
-      <Project>{584b21cf-8359-2c78-abf9-c8f9b2ae9106}</Project>
-      <Name>UnityEditor.UI</Name>
-    </ProjectReference>
-    <ProjectReference Include="UnityEngine.UI.csproj">
-      <Project>{e3f4b714-0319-d7cc-b25c-e96055acb09c}</Project>
-      <Name>UnityEngine.UI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

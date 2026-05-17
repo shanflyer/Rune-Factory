@@ -45,18 +45,6 @@ public static class UGUICompatibilityMigration
     static readonly System.Type GameDropdownType = System.Type.GetType("GameDropdown, Assembly-CSharp");
     static readonly System.Type GameImageType = System.Type.GetType("GameImage, Assembly-CSharp");
     static readonly System.Type GameTextMeshProUGUIType = System.Type.GetType("GameTextMeshProUGUI, Assembly-CSharp");
-    static readonly System.Type GameTextMeshProType = System.Type.GetType("GameTextMeshPro, Assembly-CSharp");
-
-    [MenuItem("Tools/UI/Migrate UGUI Compatibility Data")]
-    public static void MigrateAllPrefabs()
-    {
-        OpenMigrationWindow();
-    }
-
-    public static void OpenMigrationWindow()
-    {
-        UGUICompatibilityMigrationWindow.Open();
-    }
 
     public static void MigratePrefabs(string rootPath)
     {
