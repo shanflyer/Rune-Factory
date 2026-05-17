@@ -14,51 +14,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 24
   root:
-    rid: 4894396124818834086
+    rid: 4894396134827754274
   references:
     version: 2
     RefIds:
-    - rid: 4894396124818834086
+    - rid: 4894396134827754274
       type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
       data:
         children:
         - node:
-            rid: 4894396124818834087
+            rid: 4894396134827754275
         - node:
-            rid: 4894396124818834088
+            rid: 4894396134827754276
         - node:
-            rid: 4894396124818834089
+            rid: 4894396134827754277
         - node:
-            rid: 4894396124818834090
-    - rid: 4894396124818834087
+            rid: 4894396134827754278
+    - rid: 4894396134827754275
       type: {class: PlayFilmNode, ns: , asm: Assembly-CSharp}
       data:
         filmName: "\u89D2\u8272\u9009\u62E9"
         assetName: 
-    - rid: 4894396124818834088
+    - rid: 4894396134827754276
       type: {class: WaitActionNode, ns: , asm: Assembly-CSharp}
       data:
         children:
         - node:
-            rid: 4894396124818834091
+            rid: 4894396134827754279
         delay: 5000
-    - rid: 4894396124818834089
+    - rid: 4894396134827754277
       type: {class: LerpGameTimeNode, ns: , asm: Assembly-CSharp}
       data:
         totalTime: 20
-    - rid: 4894396124818834090
+    - rid: 4894396134827754278
       type: {class: WaitActionNode, ns: , asm: Assembly-CSharp}
       data:
         children:
         - node:
-            rid: 4894396124818834092
+            rid: 4894396134827754280
         delay: 6000
-    - rid: 4894396124818834091
+    - rid: 4894396134827754279
       type: {class: PlayFilmNode, ns: , asm: Assembly-CSharp}
       data:
         filmName: "\u89D2\u8272\u9009\u62E9"
         assetName: EndFirstFight
-    - rid: 4894396124818834092
+    - rid: 4894396134827754280
       type: {class: LerpScreenCycleValueNode, ns: , asm: Assembly-CSharp}
       data:
         cyclePos: {x: 0, y: 0}

@@ -14,90 +14,90 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 85
   root:
-    rid: 4894396124818834185
+    rid: 4894396134827754373
   references:
     version: 2
     RefIds:
-    - rid: 4894396124818834185
+    - rid: 4894396134827754373
       type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
       data:
         children:
         - node:
-            rid: 4894396124818834186
+            rid: 4894396134827754374
         - node:
-            rid: 4894396124818834187
+            rid: 4894396134827754375
         - node:
-            rid: 4894396124818834188
+            rid: 4894396134827754376
         - node:
-            rid: 4894396124818834189
+            rid: 4894396134827754377
         - node:
-            rid: 4894396124818834190
-    - rid: 4894396124818834186
+            rid: 4894396134827754378
+    - rid: 4894396134827754374
       type: {class: LerpScreenCycleValueNode, ns: , asm: Assembly-CSharp}
       data:
         cyclePos: {x: 0, y: 0}
-    - rid: 4894396124818834187
+    - rid: 4894396134827754375
       type: {class: ClosePanelActionNode, ns: , asm: Assembly-CSharp}
       data:
         children: []
-    - rid: 4894396124818834188
+    - rid: 4894396134827754376
       type: {class: WaitActionNode, ns: , asm: Assembly-CSharp}
       data:
         children:
         - node:
-            rid: 4894396124818834191
+            rid: 4894396134827754379
         - node:
-            rid: 4894396124818834192
+            rid: 4894396134827754380
         - node:
-            rid: 4894396124818834193
+            rid: 4894396134827754381
         delay: 600
-    - rid: 4894396124818834189
+    - rid: 4894396134827754377
       type: {class: WaitActionNode, ns: , asm: Assembly-CSharp}
       data:
         children:
         - node:
-            rid: 4894396124818834194
+            rid: 4894396134827754382
         - node:
-            rid: 4894396124818834195
+            rid: 4894396134827754383
         delay: 900
-    - rid: 4894396124818834190
+    - rid: 4894396134827754378
       type: {class: WaitActionNode, ns: , asm: Assembly-CSharp}
       data:
         children:
         - node:
-            rid: 4894396124818834196
+            rid: 4894396134827754384
         - node:
-            rid: 4894396124818834197
+            rid: 4894396134827754385
         delay: 600
-    - rid: 4894396124818834191
+    - rid: 4894396134827754379
       type: {class: DisplayMapNode, ns: , asm: Assembly-CSharp}
       data:
         displayMap: 874
         actionId: 0
         fixedDisplay: 0
-    - rid: 4894396124818834192
+    - rid: 4894396134827754380
       type: {class: SetCharacterCoordinateNode, ns: , asm: Assembly-CSharp}
       data:
         characterId: 0
         fiexedDisplay: 0
-    - rid: 4894396124818834193
+    - rid: 4894396134827754381
       type: {class: DisplayOrHideCharacterNode, ns: , asm: Assembly-CSharp}
       data:
         characterId: 0
         display: 0
-    - rid: 4894396124818834194
+    - rid: 4894396134827754382
       type: {class: LerpScreenCycleValueNode, ns: , asm: Assembly-CSharp}
       data:
         cyclePos: {x: 0, y: 0}
-    - rid: 4894396124818834195
+    - rid: 4894396134827754383
       type: {class: ClosePanelActionNode, ns: , asm: Assembly-CSharp}
       data:
         children: []
-    - rid: 4894396124818834196
+    - rid: 4894396134827754384
       type: {class: StopFilmNode, ns: , asm: Assembly-CSharp}
       data:
         filmName: "\u7B2C\u4E00\u665A"
-    - rid: 4894396124818834197
+    - rid: 4894396134827754385
       type: {class: PlayFilmNode, ns: , asm: Assembly-CSharp}
       data:
         filmName: "\u7B2C\u4E00\u665A"

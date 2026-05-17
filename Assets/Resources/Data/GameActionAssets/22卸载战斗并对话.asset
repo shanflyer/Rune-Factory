@@ -14,49 +14,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 22
   root:
-    rid: 4894396124818834292
+    rid: 4894396134827754480
   references:
     version: 2
     RefIds:
-    - rid: 4894396124818834292
+    - rid: 4894396134827754480
       type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
       data:
         children:
         - node:
-            rid: 4894396124818834293
+            rid: 4894396134827754481
         - node:
-            rid: 4894396124818834294
+            rid: 4894396134827754482
         - node:
-            rid: 4894396124818834295
+            rid: 4894396134827754483
         - node:
-            rid: 4894396124818834296
-    - rid: 4894396124818834293
+            rid: 4894396134827754484
+    - rid: 4894396134827754481
       type: {class: WaitActionNode, ns: , asm: Assembly-CSharp}
       data:
         children:
         - node:
-            rid: 4894396124818834297
+            rid: 4894396134827754485
         - node:
-            rid: 4894396124818834298
+            rid: 4894396134827754486
         delay: 4
-    - rid: 4894396124818834294
+    - rid: 4894396134827754482
       type: {class: ClosePanelActionNode, ns: , asm: Assembly-CSharp}
       data:
         children: []
-    - rid: 4894396124818834295
+    - rid: 4894396134827754483
       type: {class: ExploreEndNode, ns: , asm: Assembly-CSharp}
       data:
         children: []
-    - rid: 4894396124818834296
+    - rid: 4894396134827754484
       type: {class: SetFilmUINode, ns: , asm: Assembly-CSharp}
       data:
         display: 1
-    - rid: 4894396124818834297
+    - rid: 4894396134827754485
       type: {class: DisplayFilmNode, ns: , asm: Assembly-CSharp}
       data:
         filmName: "\u89D2\u8272\u9009\u62E9"
         path: Character
-    - rid: 4894396124818834298
+    - rid: 4894396134827754486
       type: {class: TalkNode, ns: , asm: Assembly-CSharp}
       data:
         displayFunction: 0

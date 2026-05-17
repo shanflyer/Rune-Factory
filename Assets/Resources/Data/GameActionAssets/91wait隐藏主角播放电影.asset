@@ -14,32 +14,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 91
   root:
-    rid: 4894396124818834198
+    rid: 4894396134827754386
   references:
     version: 2
     RefIds:
-    - rid: 4894396124818834198
+    - rid: 4894396134827754386
       type: {class: WaitActionNode, ns: , asm: Assembly-CSharp}
       data:
         children:
         - node:
-            rid: 4894396124818834199
+            rid: 4894396134827754387
         - node:
-            rid: 4894396124818834200
+            rid: 4894396134827754388
         - node:
-            rid: 4894396124818834201
+            rid: 4894396134827754389
         delay: 1000
-    - rid: 4894396124818834199
+    - rid: 4894396134827754387
       type: {class: DisplayOrHideCharacterNode, ns: , asm: Assembly-CSharp}
       data:
         characterId: 0
         display: 0
-    - rid: 4894396124818834200
+    - rid: 4894396134827754388
       type: {class: PlayFilmNode, ns: , asm: Assembly-CSharp}
       data:
         filmName: "\u7B2C\u4E00\u665A"
         assetName: 
-    - rid: 4894396124818834201
+    - rid: 4894396134827754389
       type: {class: ClosePanelActionNode, ns: , asm: Assembly-CSharp}
       data:
         children: []

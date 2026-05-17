@@ -14,36 +14,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 54
   root:
-    rid: 4894396124818834281
+    rid: 4894396134827754469
   references:
     version: 2
     RefIds:
-    - rid: 4894396124818834281
+    - rid: 4894396134827754469
       type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
       data:
         children:
         - node:
-            rid: 4894396124818834282
+            rid: 4894396134827754470
         - node:
-            rid: 4894396124818834283
+            rid: 4894396134827754471
         - node:
-            rid: 4894396124818834284
-    - rid: 4894396124818834282
+            rid: 4894396134827754472
+    - rid: 4894396134827754470
       type: {class: LerpScreenCycleValueNode, ns: , asm: Assembly-CSharp}
       data:
         cyclePos: {x: 0, y: 0}
-    - rid: 4894396124818834283
+    - rid: 4894396134827754471
       type: {class: WaitActionNode, ns: , asm: Assembly-CSharp}
       data:
         children:
         - node:
-            rid: 4894396124818834285
+            rid: 4894396134827754473
         delay: 0
-    - rid: 4894396124818834284
+    - rid: 4894396134827754472
       type: {class: SetCharacterStopCreateNode, ns: , asm: Assembly-CSharp}
       data:
         hide: 1
-    - rid: 4894396124818834285
+    - rid: 4894396134827754473
       type: {class: PlayFilmNode, ns: , asm: Assembly-CSharp}
       data:
         filmName: "\u89D2\u8272\u9009\u62E9"

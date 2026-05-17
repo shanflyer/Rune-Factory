@@ -14,37 +14,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 90
   root:
-    rid: 4894396124818834267
+    rid: 4894396134827754455
   references:
     version: 2
     RefIds:
-    - rid: 4894396124818834267
+    - rid: 4894396134827754455
       type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
       data:
         children:
         - node:
-            rid: 4894396124818834268
+            rid: 4894396134827754456
         - node:
-            rid: 4894396124818834269
+            rid: 4894396134827754457
         - node:
-            rid: 4894396124818834270
+            rid: 4894396134827754458
         - node:
-            rid: 4894396124818834271
-    - rid: 4894396124818834268
+            rid: 4894396134827754459
+    - rid: 4894396134827754456
       type: {class: DisplayOrHideCharacterNode, ns: , asm: Assembly-CSharp}
       data:
         characterId: 0
         display: 0
-    - rid: 4894396124818834269
+    - rid: 4894396134827754457
       type: {class: PlayFilmNode, ns: , asm: Assembly-CSharp}
       data:
         filmName: "\u7B2C\u4E00\u665A"
         assetName: 
-    - rid: 4894396124818834270
+    - rid: 4894396134827754458
       type: {class: ClosePanelActionNode, ns: , asm: Assembly-CSharp}
       data:
         children: []
-    - rid: 4894396124818834271
+    - rid: 4894396134827754459
       type: {class: OpenPanelActionNode, ns: , asm: Assembly-CSharp}
       data:
         dataId: FilmPanel
