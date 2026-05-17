@@ -29,7 +29,7 @@ public class ColorPickerPanel : GamePanel<MyColor>
             RefreshColor(color);
 
             Color rectImageColor = Color.HSVToRGB(value, 1, 1);
-            Bright.colorTR = rectImageColor;
+            Bright.SetGradientColorTR(rectImageColor);
         });
         rectRangeView.vector2Delegate = (Vector2 value) =>
         {
@@ -81,7 +81,7 @@ public class ColorPickerPanel : GamePanel<MyColor>
         rectRangeView.m_Value = new Vector2(s, v);
 
         Color rectImageColor = Color.HSVToRGB(h, 1, 1);
-        Bright.colorTR = rectImageColor;
+        Bright.SetGradientColorTR(rectImageColor);
     }
     public override void SetPanelUISerializeObj()
     {
@@ -99,4 +99,3 @@ public class ColorPickerPanel : GamePanel<MyColor>
 
 
 }
-

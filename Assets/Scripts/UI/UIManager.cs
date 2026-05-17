@@ -109,7 +109,7 @@ public class UIManager : Singleton<UIManager>
         GameActionManager.instance.AddListener<HidePanelGroup>(HidePanelGroup);
         GameActionManager.instance.AddListener<SetFilmUI>(SetFilmUI);
 
-        Selectable.setStringAction = UIAudioForTag; 
+        SelectableGuideRegistry.SetStringAction = UIAudioForTag;
 
         TagAudioDataList tagAudioDataList = await GameSourceManager.instance.GetScriptableObject<TagAudioDataList>("Data/TagAudioData");
         tagUIAudioDic.Clear();
@@ -438,7 +438,7 @@ public class UIManager : Singleton<UIManager>
                 GameObject.Destroy(gamePanelObj);
                 return null;
             }
-            var _Panel = async.Result[0]; 
+            var _Panel = async.Result[0];
             _Panel.transform.localPosition = Vector3.zero;
             var gamePanelComponent = _Panel.GetComponent(type);
 
@@ -709,5 +709,3 @@ public static class RectTransformPresets
         return (new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f));
     }
 }
-
-

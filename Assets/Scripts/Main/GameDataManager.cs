@@ -73,7 +73,7 @@ public class GameDataManager : Singleton<GameDataManager>
 
             try
             {
-                var results = JsonConvert.DeserializeObject<List<T>>(textAsset.text);
+                var results = JsonConvert.DeserializeObject<List<T>>(textAsset.text, GameJsonSettings.CreateDefaultSettings());
                 for (int i = 0; i < results.Count; i++)
                 {
                     var data = results[i];
@@ -129,7 +129,7 @@ public class GameDataManager : Singleton<GameDataManager>
 
                 try
                 {
-                    results = JsonConvert.DeserializeObject<List<T>>(dataAsset.text);
+                    results = JsonConvert.DeserializeObject<List<T>>(dataAsset.text, GameJsonSettings.CreateDefaultSettings());
                    
                 }
                 catch (Exception e)
@@ -259,7 +259,7 @@ public class GameDataManager : Singleton<GameDataManager>
             dataDic = new Dictionary<string, IGameData>();
             try
             {
-                var datas = JsonConvert.DeserializeObject<List<T>>(textAsset.text);
+                var datas = JsonConvert.DeserializeObject<List<T>>(textAsset.text, GameJsonSettings.CreateDefaultSettings());
                 for (int i = 0; i < datas.Count; i++)
                 {
                     var data = datas[i];

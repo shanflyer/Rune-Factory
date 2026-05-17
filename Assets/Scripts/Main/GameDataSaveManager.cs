@@ -279,12 +279,12 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             UserGameSaveDataList userGameSaveDataList = null;
             try
             {
-                userGameSaveDataList = JsonConvert.DeserializeObject<UserGameSaveDataList>(dataStr);
+                userGameSaveDataList = JsonConvert.DeserializeObject<UserGameSaveDataList>(dataStr, JsonSerializerSettings);
             }
             catch
             {
                 dataStr = DecryptDES(dataStr);
-                userGameSaveDataList = JsonConvert.DeserializeObject<UserGameSaveDataList>(dataStr);
+                userGameSaveDataList = JsonConvert.DeserializeObject<UserGameSaveDataList>(dataStr, JsonSerializerSettings);
             }
             //
             userGameSaveDataList.nowSaveData.Init();
@@ -301,12 +301,12 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             UserGameSaveDataList userGameSaveDataList2 = null;
             try
             {
-                userGameSaveDataList2 = JsonConvert.DeserializeObject<UserGameSaveDataList>(clundDataStr);
+                userGameSaveDataList2 = JsonConvert.DeserializeObject<UserGameSaveDataList>(clundDataStr, JsonSerializerSettings);
             }
             catch
             {
                 clundDataStr = DecryptDES(clundDataStr);
-                userGameSaveDataList2 = JsonConvert.DeserializeObject<UserGameSaveDataList>(clundDataStr);
+                userGameSaveDataList2 = JsonConvert.DeserializeObject<UserGameSaveDataList>(clundDataStr, JsonSerializerSettings);
             }
             //
             userGameSaveDataList2.nowSaveData.Init();
@@ -347,12 +347,12 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                 UserGameSaveDataList userGameSaveDataList2 = null;
                 try
                 {
-                    userGameSaveDataList2 = JsonConvert.DeserializeObject<UserGameSaveDataList>(clundDataStr);
+                    userGameSaveDataList2 = JsonConvert.DeserializeObject<UserGameSaveDataList>(clundDataStr, JsonSerializerSettings);
                 }
                 catch
                 {
                     clundDataStr = DecryptDES(clundDataStr);
-                    userGameSaveDataList2 = JsonConvert.DeserializeObject<UserGameSaveDataList>(clundDataStr);
+                    userGameSaveDataList2 = JsonConvert.DeserializeObject<UserGameSaveDataList>(clundDataStr, JsonSerializerSettings);
                 }
                 //
                 userGameSaveDataList2.nowSaveData.Init();
@@ -416,13 +416,18 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         Formatting = Formatting.None
     };
 
+    static GameDataSaveManager()
+    {
+        GameJsonSettings.AddGameConverters(JsonSerializerSettings);
+    }
+
     public static string ObjToString<T>(T t)
     {
         return JsonConvert.SerializeObject(t, JsonSerializerSettings);
     }
     public static T StringToObj<T>(string str)
     {
-        return JsonConvert.DeserializeObject<T>(str);
+        return JsonConvert.DeserializeObject<T>(str, JsonSerializerSettings);
     }
 
     private void SaveUserGameSaveData()
@@ -806,7 +811,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         {
             var field = UserGameSaveDataJsonFields[i];
             var obj = field.GetValue(nowSaveData);
-            var objStr = JsonConvert.SerializeObject(obj);
+            var objStr = JsonConvert.SerializeObject(obj, JsonSerializerSettings);
             string key = GameCommon.BlendString(keyStr, field.Name);
             CloudServices.SetString(key, objStr);
         }
@@ -877,7 +882,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                     try
                     {
                       
-                        object obj = JsonConvert.DeserializeObject(value, field.FieldType);
+                        object obj = JsonConvert.DeserializeObject(value, field.FieldType, JsonSerializerSettings);
                         field.SetValue(userData, obj);
                     }
                     catch

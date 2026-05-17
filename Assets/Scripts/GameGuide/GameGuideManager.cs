@@ -69,8 +69,8 @@ public class GameGuideManager:Singleton<GameGuideManager>
     public override void Init()
     {
         base.Init();
-        Selectable.setIntAction = SetIntAction;
-        Selectable.removeIntAction = RemoveIntAction;
+        SelectableGuideRegistry.SetIntAction = SetIntAction;
+        SelectableGuideRegistry.RemoveIntAction = RemoveIntAction;
         endGuide.Clear();
 
         GameActionManager.instance.AddListener<GameGuideAction>(GameGuideAction);
@@ -165,16 +165,9 @@ public class GameGuideManager:Singleton<GameGuideManager>
     {
         if (guidSelectableDic.TryGetValue(nowGuideSelectableId, out var selectable))
         { 
-            selectable.HideSelected = true;
+            selectable.SetHideSelected(true);
             Debug.Log("指引点击01!!-");
-            if (selectable is Button button)
-            {
-                button.OnPointerClick();
-            }
-            else if (selectable is Toggle toggle)
-            {
-                toggle.OnPointerClick();
-            }
+            selectable.InvokeClick();
 
             ShowGuide();
         }
