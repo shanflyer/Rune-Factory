@@ -1,3 +1,4 @@
+#if !UNITY_6000_0_OR_NEWER
 using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityRigidbody2D
@@ -30,7 +31,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityRigidbody2D
                 return TaskStatus.Failure;
             }
 
-            rigidbody2D.bodyType = isKinematic.Value?RigidbodyType2D.Kinematic:RigidbodyType2D.Dynamic;
+            rigidbody2D.isKinematic = isKinematic.Value;
 
             return TaskStatus.Success;
         }
@@ -42,3 +43,4 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.UnityRigidbody2D
         }
     }
 }
+#endif
