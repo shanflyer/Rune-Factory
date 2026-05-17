@@ -14,30 +14,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 28
   root:
-    rid: 4894396010337928062
+    rid: 4894396124818834339
   references:
     version: 2
     RefIds:
-    - rid: 4894396010337928062
+    - rid: 4894396124818834339
       type: {class: WaitActionNode, ns: , asm: Assembly-CSharp}
       data:
         children:
         - node:
-            rid: 4894396010337928063
+            rid: 4894396124818834340
         - node:
-            rid: 4894396010337928064
+            rid: 4894396124818834341
         - node:
-            rid: 4894396010337928065
+            rid: 4894396124818834342
         delay: 260
-    - rid: 4894396010337928063
+    - rid: 4894396124818834340
       type: {class: CreatTeamPlayerNode, ns: , asm: Assembly-CSharp}
       data:
         holdDisplay: 1
-    - rid: 4894396010337928064
+    - rid: 4894396124818834341
       type: {class: PauseFilmNode, ns: , asm: Assembly-CSharp}
       data:
         filmName: "\u89D2\u8272\u9009\u62E9"
-    - rid: 4894396010337928065
+    - rid: 4894396124818834342
       type: {class: TalkNode, ns: , asm: Assembly-CSharp}
       data:
         displayFunction: 0
