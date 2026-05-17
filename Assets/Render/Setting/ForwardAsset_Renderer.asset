@@ -242,8 +242,6 @@ MonoBehaviour:
   m_UseNativeRenderPass: 1
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
-  m_transparencySortMode: 3
-  m_transparencySortAxis: {x: 0, y: 1, z: 1}
   m_AssetVersion: 3
   m_PrepassLayerMask:
     serializedVersion: 2
@@ -254,6 +252,8 @@ MonoBehaviour:
   m_TransparentLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  m_transparencySortMode: 3
+  m_transparencySortAxis: {x: 0, y: 1, z: 1}
   m_DefaultStencilState:
     overrideStencilState: 0
     stencilReference: 0
@@ -268,7 +268,7 @@ MonoBehaviour:
   m_DepthAttachmentFormat: 0
   m_DepthTextureFormat: 0
   m_AccurateGbufferNormals: 0
-  m_IntermediateTextureMode: 1
+  m_IntermediateTextureMode: 0
   m_OverrideCameraScaling: 1
   m_CameraRenderScale: 0.5
   m_CameraUpscalingFilter: 2
