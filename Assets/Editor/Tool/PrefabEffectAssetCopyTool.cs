@@ -37,8 +37,46 @@ internal sealed class PrefabEffectAssetCopyTool : EditorWindow
         ".dds",
     };
 
+    private static readonly HashSet<string> OldFxShaderNames = new HashSet<string>(StringComparer.Ordinal)
+    {
+        "SampleEffectAdd",
+        "SampleEffectMul",
+        "SampleEffectMulCloud",
+        "Universal Render Pipeline/Particles/Unlit",
+        "Cartoon FX/Remaster/Particle Ubershader",
+        "Hovl/Particles/Add_CenterGlow",
+        "Shader Graphs/URP_Add_CG",
+        "Hovl/Particles/Blend_CenterGlow",
+        "Shader Graphs/URP_Blend_CG",
+        "Shader Graphs/URP_Blend_CG_BlendDepth",
+        "Hovl/Particles/AddTrail",
+        "Hovl/Particles/Blend_LinePath",
+        "Hovl/Particles/Scroll",
+        "Shader Graphs/URP_SwordSlash",
+        "Shader Graphs/URP_LightGlow",
+        "Hovl/Particles/Fire",
+        "Hovl/Particles/Lightning",
+        "Hovl/Particles/Add_Fresnel",
+        "Shader Graphs/URP_Ice",
+        "Hovl/Particles/Distortion",
+        "Shader Graphs/URP_Distortion",
+        "Shader Graphs/URP_BlendDistort",
+        "Hovl/Particles/DissolveNoise",
+        "Shader Graphs/Fx_ParticleDissolve_apb",
+        "Shader Graphs/Fx_RockDissolve",
+        "Project/FX/FX_Dissolve_URP",
+        "Shader Graphs/URP_SoftNoise",
+        "Hovl/Particles/ShockWave",
+        "Shader Graphs/URP_ShockWave",
+        "Project/FX/FX_Shockwave_URP",
+        "Shader Graphs/URP_Blend_TwoSides",
+        "Unlit/MyURP_Blend_CG",
+    };
+
     private string _sourceRootText = "Assets/Resources/Prefabs/Effect";
     private string _targetRoot = "Assets/CopiedEffectAssets";
+    private bool _particleRenderersOnly = true;
+    private bool _oldFxShadersOnly = true;
     private Vector2 _scroll;
     private ScanResult _result;
 
@@ -54,9 +92,11 @@ internal sealed class PrefabEffectAssetCopyTool : EditorWindow
         EditorGUILayout.Space();
         _sourceRootText = EditorGUILayout.TextField("Prefab Source Roots", _sourceRootText);
         _targetRoot = EditorGUILayout.TextField("Target Root", _targetRoot);
+        _particleRenderersOnly = EditorGUILayout.Toggle("Particle Renderers Only", _particleRenderersOnly);
+        _oldFxShadersOnly = EditorGUILayout.Toggle("Old FX Shaders Only", _oldFxShadersOnly);
 
         EditorGUILayout.HelpBox(
-            "Scans prefabs under the source roots, copies missing dependencies into three flat folders under the target root: Textures, Materials, Meshes. Name collisions are auto-renamed. Existing copies from the same source are reused. After copying, the original prefabs are rewritten to reference the new materials and meshes, and the new materials are rewritten to reference the new textures.",
+            "Scans prefabs under the source roots, copies missing dependencies into three flat folders under the target root: Textures, Materials, Meshes. When Particle Renderers Only is enabled, only dependencies referenced by ParticleSystemRenderer components are scanned. When Old FX Shaders Only is enabled, only materials using source shaders from FXShaderMigrationTool are included. Name collisions are auto-renamed. Existing copies from the same source are reused. After copying, the original prefabs are rewritten to reference the new materials and meshes, and the new materials are rewritten to reference the new textures.",
             MessageType.Info);
 
         using (new EditorGUILayout.HorizontalScope())
@@ -126,26 +166,10 @@ internal sealed class PrefabEffectAssetCopyTool : EditorWindow
                 var prefabPath = prefabs[i];
                 EditorUtility.DisplayProgressBar("Prefab Effect Asset Copy", prefabPath, (float)(i + 1) / Math.Max(1, prefabs.Count));
 
-                foreach (var dependency in AssetDatabase.GetDependencies(prefabPath, true))
-                {
-                    if (!dependency.StartsWith("Assets/", StringComparison.Ordinal))
-                        continue;
-
-                    if (dependency.EndsWith(".mat", StringComparison.OrdinalIgnoreCase))
-                    {
-                        materialSet.Add(dependency);
-                        continue;
-                    }
-
-                    if (IsTextureAsset(dependency))
-                    {
-                        textureSet.Add(dependency);
-                        continue;
-                    }
-
-                    if (IsMeshAsset(dependency))
-                        meshSet.Add(dependency);
-                }
+                if (_particleRenderersOnly)
+                    ScanParticleRendererDependencies(prefabPath, materialSet, textureSet, meshSet, _oldFxShadersOnly);
+                else
+                    ScanAllDependencies(prefabPath, materialSet, textureSet, meshSet, _oldFxShadersOnly);
             }
         }
         finally
@@ -158,6 +182,183 @@ internal sealed class PrefabEffectAssetCopyTool : EditorWindow
         _result.Materials.AddRange(materialSet.OrderBy(path => path, StringComparer.Ordinal));
         _result.Textures.AddRange(textureSet.OrderBy(path => path, StringComparer.Ordinal));
         _result.MeshAssets.AddRange(meshSet.OrderBy(path => path, StringComparer.Ordinal));
+    }
+
+    private static void ScanAllDependencies(
+        string prefabPath,
+        ISet<string> materialSet,
+        ISet<string> textureSet,
+        ISet<string> meshSet,
+        bool oldFxShadersOnly)
+    {
+        foreach (var dependency in AssetDatabase.GetDependencies(prefabPath, true))
+        {
+            if (!dependency.StartsWith("Assets/", StringComparison.Ordinal))
+                continue;
+
+            if (dependency.EndsWith(".mat", StringComparison.OrdinalIgnoreCase))
+            {
+                var material = AssetDatabase.LoadAssetAtPath<Material>(dependency);
+                AddMaterialAndTextures(material, materialSet, textureSet, oldFxShadersOnly);
+                continue;
+            }
+
+            if (oldFxShadersOnly)
+                continue;
+
+            if (IsTextureAsset(dependency))
+            {
+                textureSet.Add(dependency);
+                continue;
+            }
+
+            if (IsMeshAsset(dependency))
+                meshSet.Add(dependency);
+        }
+    }
+
+    private static void ScanParticleRendererDependencies(
+        string prefabPath,
+        ISet<string> materialSet,
+        ISet<string> textureSet,
+        ISet<string> meshSet,
+        bool oldFxShadersOnly)
+    {
+        var prefabRoot = PrefabUtility.LoadPrefabContents(prefabPath);
+        try
+        {
+            var particleRenderers = prefabRoot.GetComponentsInChildren<ParticleSystemRenderer>(true);
+            for (var i = 0; i < particleRenderers.Length; i++)
+                ScanParticleRendererDependencies(particleRenderers[i], materialSet, textureSet, meshSet, oldFxShadersOnly);
+        }
+        finally
+        {
+            PrefabUtility.UnloadPrefabContents(prefabRoot);
+        }
+    }
+
+    private static void ScanParticleRendererDependencies(
+        ParticleSystemRenderer particleRenderer,
+        ISet<string> materialSet,
+        ISet<string> textureSet,
+        ISet<string> meshSet,
+        bool oldFxShadersOnly)
+    {
+        var meshReferences = new List<Mesh>();
+        var hasIncludedMaterial = false;
+
+        var sharedMaterials = particleRenderer.sharedMaterials;
+        if (sharedMaterials != null)
+        {
+            for (var i = 0; i < sharedMaterials.Length; i++)
+                hasIncludedMaterial |= AddMaterialAndTextures(sharedMaterials[i], materialSet, textureSet, oldFxShadersOnly);
+        }
+
+        meshReferences.Add(particleRenderer.mesh);
+
+        var serializedObject = new SerializedObject(particleRenderer);
+        var iterator = serializedObject.GetIterator();
+        var enterChildren = true;
+        while (iterator.Next(enterChildren))
+        {
+            enterChildren = false;
+
+            if (iterator.propertyType != SerializedPropertyType.ObjectReference)
+                continue;
+
+            var referencedObject = iterator.objectReferenceValue;
+            if (referencedObject is Material material)
+            {
+                hasIncludedMaterial |= AddMaterialAndTextures(material, materialSet, textureSet, oldFxShadersOnly);
+                continue;
+            }
+
+            if (referencedObject is Mesh mesh)
+                meshReferences.Add(mesh);
+        }
+
+        if (oldFxShadersOnly && !hasIncludedMaterial)
+            return;
+
+        for (var i = 0; i < meshReferences.Count; i++)
+            AddMesh(meshReferences[i], meshSet);
+    }
+
+    private static bool AddMaterialAndTextures(
+        Material material,
+        ISet<string> materialSet,
+        ISet<string> textureSet,
+        bool oldFxShadersOnly)
+    {
+        if (material == null)
+            return false;
+
+        if (oldFxShadersOnly && !IsOldFxShaderMaterial(material))
+            return false;
+
+        var materialPath = AssetDatabase.GetAssetPath(material);
+        if (string.IsNullOrEmpty(materialPath) ||
+            !materialPath.StartsWith("Assets/", StringComparison.Ordinal) ||
+            !materialPath.EndsWith(".mat", StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        materialSet.Add(materialPath);
+        AddMaterialTextures(material, textureSet);
+        return true;
+    }
+
+    private static void AddMaterialTextures(Material material, ISet<string> textureSet)
+    {
+        if (material == null || material.shader == null)
+            return;
+
+        var shader = material.shader;
+        var propertyCount = ShaderUtil.GetPropertyCount(shader);
+        for (var propertyIndex = 0; propertyIndex < propertyCount; propertyIndex++)
+        {
+            if (ShaderUtil.GetPropertyType(shader, propertyIndex) != ShaderUtil.ShaderPropertyType.TexEnv)
+                continue;
+
+            var propertyName = ShaderUtil.GetPropertyName(shader, propertyIndex);
+            var texture = material.GetTexture(propertyName);
+            if (texture == null)
+                continue;
+
+            var texturePath = AssetDatabase.GetAssetPath(texture);
+            if (string.IsNullOrEmpty(texturePath) ||
+                !texturePath.StartsWith("Assets/", StringComparison.Ordinal) ||
+                !IsTextureAsset(texturePath))
+            {
+                continue;
+            }
+
+            textureSet.Add(texturePath);
+        }
+    }
+
+    private static bool IsOldFxShaderMaterial(Material material)
+    {
+        return material != null &&
+               material.shader != null &&
+               OldFxShaderNames.Contains(material.shader.name);
+    }
+
+    private static void AddMesh(Mesh mesh, ISet<string> meshSet)
+    {
+        if (mesh == null)
+            return;
+
+        var meshPath = AssetDatabase.GetAssetPath(mesh);
+        if (string.IsNullOrEmpty(meshPath) ||
+            !meshPath.StartsWith("Assets/", StringComparison.Ordinal) ||
+            !IsMeshAsset(meshPath))
+        {
+            return;
+        }
+
+        meshSet.Add(meshPath);
     }
 
     private void CopyAndRelink()
@@ -218,15 +419,51 @@ internal sealed class PrefabEffectAssetCopyTool : EditorWindow
         }
 
         RelinkCopiedMaterials(materialCopies, textureCopies);
-        RelinkPrefabs(_result.Prefabs, materialCopies, meshCopies);
+        var migratedMaterialCount = MigrateCopiedMaterials(materialCopies.Values);
+        RelinkPrefabs(_result.Prefabs, materialCopies, meshCopies, _particleRenderersOnly);
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 
         EditorUtility.DisplayDialog(
             "Prefab Effect Asset Copy",
-            $"Textures: {textureCopies.Count}\nMaterials: {materialCopies.Count}\nMeshes: {meshCopies.Count}\nPrefabs updated: {_result.Prefabs.Count}",
+            $"Textures: {textureCopies.Count}\nMaterials: {materialCopies.Count}\nMaterials migrated: {migratedMaterialCount}\nMeshes: {meshCopies.Count}\nPrefabs updated: {_result.Prefabs.Count}",
             "OK");
+    }
+
+    private static int MigrateCopiedMaterials(IEnumerable<string> materialPaths)
+    {
+        var paths = materialPaths
+            .Where(path => !string.IsNullOrEmpty(path))
+            .Distinct(StringComparer.Ordinal)
+            .ToList();
+
+        var migratedCount = 0;
+
+        try
+        {
+            for (var i = 0; i < paths.Count; i++)
+            {
+                var materialPath = paths[i];
+                EditorUtility.DisplayProgressBar("Prefab Effect Asset Copy", $"Migrate material {materialPath}", (float)(i + 1) / Math.Max(1, paths.Count));
+
+                var material = AssetDatabase.LoadAssetAtPath<Material>(materialPath);
+                if (material == null || material.shader == null)
+                    continue;
+
+                if (!FXShaderMigrationTool.TryMigrateMaterial(material))
+                    continue;
+
+                EditorUtility.SetDirty(material);
+                migratedCount++;
+            }
+        }
+        finally
+        {
+            EditorUtility.ClearProgressBar();
+        }
+
+        return migratedCount;
     }
 
     private static void RelinkCopiedMaterials(
@@ -285,7 +522,8 @@ internal sealed class PrefabEffectAssetCopyTool : EditorWindow
     private static void RelinkPrefabs(
         IReadOnlyList<string> prefabPaths,
         IReadOnlyDictionary<string, string> materialCopies,
-        IReadOnlyDictionary<string, string> meshCopies)
+        IReadOnlyDictionary<string, string> meshCopies,
+        bool particleRenderersOnly)
     {
         try
         {
@@ -299,66 +537,29 @@ internal sealed class PrefabEffectAssetCopyTool : EditorWindow
 
                 try
                 {
-                    changed |= RelinkRendererMaterials(prefabRoot, materialCopies);
-                    changed |= RelinkMeshComponents(prefabRoot, meshCopies);
-
-                    var components = prefabRoot.GetComponentsInChildren<Component>(true);
-                    for (var componentIndex = 0; componentIndex < components.Length; componentIndex++)
+                    if (particleRenderersOnly)
                     {
-                        var component = components[componentIndex];
-                        if (component == null)
-                            continue;
-
-                        var serializedObject = new SerializedObject(component);
-                        var iterator = serializedObject.GetIterator();
-                        var enterChildren = true;
-                        var componentChanged = false;
-
-                        while (iterator.Next(enterChildren))
-                        {
-                            enterChildren = false;
-
-                            if (iterator.propertyType != SerializedPropertyType.ObjectReference)
-                                continue;
-
-                            var referencedObject = iterator.objectReferenceValue;
-                            if (referencedObject == null)
-                                continue;
-
-                            var sourcePath = AssetDatabase.GetAssetPath(referencedObject);
-                            if (string.IsNullOrEmpty(sourcePath))
-                                continue;
-
-                            if (materialCopies.TryGetValue(sourcePath, out var copiedMaterialPath))
-                            {
-                                var copiedObject = ResolveCopiedReference(referencedObject, copiedMaterialPath);
-                                if (copiedObject != null && copiedObject != referencedObject)
-                                {
-                                    iterator.objectReferenceValue = copiedObject;
-                                    componentChanged = true;
-                                }
-
-                                continue;
-                            }
-
-                            if (meshCopies.TryGetValue(sourcePath, out var copiedMeshPath))
-                            {
-                                var copiedObject = ResolveCopiedReference(referencedObject, copiedMeshPath);
-                                if (copiedObject != null && copiedObject != referencedObject)
-                                {
-                                    iterator.objectReferenceValue = copiedObject;
-                                    componentChanged = true;
-                                }
-                            }
-                        }
-
-                        if (!componentChanged)
-                            continue;
-
-                        serializedObject.ApplyModifiedPropertiesWithoutUndo();
-                        EditorUtility.SetDirty(component);
-                        changed = true;
+                        changed |= RelinkParticleRendererReferences(prefabRoot, materialCopies, meshCopies);
                     }
+                    else
+                    {
+                        changed |= RelinkRendererMaterials(prefabRoot, materialCopies);
+                        changed |= RelinkMeshComponents(prefabRoot, meshCopies);
+                    }
+
+                    if (!particleRenderersOnly)
+                    {
+                        var components = prefabRoot.GetComponentsInChildren<Component>(true);
+                        for (var componentIndex = 0; componentIndex < components.Length; componentIndex++)
+                        {
+                            var component = components[componentIndex];
+                            if (component == null)
+                                continue;
+
+                            changed |= RelinkObjectReferences(component, materialCopies, meshCopies);
+                        }
+                    }
+
 
                     if (changed)
                         PrefabUtility.SaveAsPrefabAsset(prefabRoot, prefabPath);
@@ -373,6 +574,80 @@ internal sealed class PrefabEffectAssetCopyTool : EditorWindow
         {
             EditorUtility.ClearProgressBar();
         }
+    }
+
+    private static bool RelinkParticleRendererReferences(
+        GameObject prefabRoot,
+        IReadOnlyDictionary<string, string> materialCopies,
+        IReadOnlyDictionary<string, string> meshCopies)
+    {
+        var changed = false;
+        var particleRenderers = prefabRoot.GetComponentsInChildren<ParticleSystemRenderer>(true);
+        for (var i = 0; i < particleRenderers.Length; i++)
+        {
+            var particleRenderer = particleRenderers[i];
+            changed |= RelinkRendererMaterials(particleRenderer, materialCopies);
+            changed |= ReplaceParticleMeshes(particleRenderer, meshCopies);
+            changed |= RelinkObjectReferences(particleRenderer, materialCopies, meshCopies);
+        }
+
+        return changed;
+    }
+
+    private static bool RelinkObjectReferences(
+        Component component,
+        IReadOnlyDictionary<string, string> materialCopies,
+        IReadOnlyDictionary<string, string> meshCopies)
+    {
+        var serializedObject = new SerializedObject(component);
+        var iterator = serializedObject.GetIterator();
+        var enterChildren = true;
+        var componentChanged = false;
+
+        while (iterator.Next(enterChildren))
+        {
+            enterChildren = false;
+
+            if (iterator.propertyType != SerializedPropertyType.ObjectReference)
+                continue;
+
+            var referencedObject = iterator.objectReferenceValue;
+            if (referencedObject == null)
+                continue;
+
+            var sourcePath = AssetDatabase.GetAssetPath(referencedObject);
+            if (string.IsNullOrEmpty(sourcePath))
+                continue;
+
+            if (materialCopies.TryGetValue(sourcePath, out var copiedMaterialPath))
+            {
+                var copiedObject = ResolveCopiedReference(referencedObject, copiedMaterialPath);
+                if (copiedObject != null && copiedObject != referencedObject)
+                {
+                    iterator.objectReferenceValue = copiedObject;
+                    componentChanged = true;
+                }
+
+                continue;
+            }
+
+            if (meshCopies.TryGetValue(sourcePath, out var copiedMeshPath))
+            {
+                var copiedObject = ResolveCopiedReference(referencedObject, copiedMeshPath);
+                if (copiedObject != null && copiedObject != referencedObject)
+                {
+                    iterator.objectReferenceValue = copiedObject;
+                    componentChanged = true;
+                }
+            }
+        }
+
+        if (!componentChanged)
+            return false;
+
+        serializedObject.ApplyModifiedPropertiesWithoutUndo();
+        EditorUtility.SetDirty(component);
+        return true;
     }
 
     private static bool RelinkRendererMaterials(
@@ -416,6 +691,41 @@ internal sealed class PrefabEffectAssetCopyTool : EditorWindow
         }
 
         return changed;
+    }
+
+    private static bool RelinkRendererMaterials(
+        Renderer renderer,
+        IReadOnlyDictionary<string, string> materialCopies)
+    {
+        var sharedMaterials = renderer.sharedMaterials;
+        if (sharedMaterials == null || sharedMaterials.Length == 0)
+            return false;
+
+        var rendererChanged = false;
+        for (var materialIndex = 0; materialIndex < sharedMaterials.Length; materialIndex++)
+        {
+            var sourceMaterial = sharedMaterials[materialIndex];
+            if (sourceMaterial == null)
+                continue;
+
+            var sourcePath = AssetDatabase.GetAssetPath(sourceMaterial);
+            if (string.IsNullOrEmpty(sourcePath) || !materialCopies.TryGetValue(sourcePath, out var copiedMaterialPath))
+                continue;
+
+            var copiedMaterial = ResolveCopiedReference(sourceMaterial, copiedMaterialPath) as Material;
+            if (copiedMaterial == null || copiedMaterial == sourceMaterial)
+                continue;
+
+            sharedMaterials[materialIndex] = copiedMaterial;
+            rendererChanged = true;
+        }
+
+        if (!rendererChanged)
+            return false;
+
+        renderer.sharedMaterials = sharedMaterials;
+        EditorUtility.SetDirty(renderer);
+        return true;
     }
 
     private static bool RelinkMeshComponents(
@@ -602,9 +912,23 @@ internal sealed class PrefabEffectAssetCopyTool : EditorWindow
 
     private static List<string> FindPrefabs(IEnumerable<string> roots)
     {
-        return AssetDatabase.FindAssets("t:Prefab", roots.ToArray())
-            .Select(AssetDatabase.GUIDToAssetPath)
+        var sourcePaths = roots.ToArray();
+        var prefabPaths = sourcePaths
             .Where(path => path.EndsWith(".prefab", StringComparison.OrdinalIgnoreCase))
+            .Where(path => AssetDatabase.LoadAssetAtPath<GameObject>(path) != null);
+
+        var folderPaths = sourcePaths
+            .Where(path => !path.EndsWith(".prefab", StringComparison.OrdinalIgnoreCase))
+            .ToArray();
+
+        var foundPrefabPaths = folderPaths.Length == 0
+            ? Enumerable.Empty<string>()
+            : AssetDatabase.FindAssets("t:Prefab", folderPaths)
+            .Select(AssetDatabase.GUIDToAssetPath)
+            .Where(path => path.EndsWith(".prefab", StringComparison.OrdinalIgnoreCase));
+
+        return prefabPaths
+            .Concat(foundPrefabPaths)
             .Distinct()
             .OrderBy(path => path, StringComparer.Ordinal)
             .ToList();

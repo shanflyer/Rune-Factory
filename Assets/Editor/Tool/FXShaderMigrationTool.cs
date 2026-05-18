@@ -219,7 +219,7 @@ internal sealed class FXShaderMigrationTool : EditorWindow
         {
             Name = "Sprite Simple Alpha",
             TargetShader = "Project/FX/FX_SpriteCore_URP",
-            SourceShaders = new[] { "SampleEffectMul", "Universal Render Pipeline/Particles/Unlit", "Cartoon FX/Remaster/Particle Ubershader" },
+            SourceShaders = new[] { "SampleEffectMul", "SampleEffectMulCloud", "Universal Render Pipeline/Particles/Unlit", "Cartoon FX/Remaster/Particle Ubershader" },
             RenderState = AlphaPreset,
             Apply = ApplySpriteSimpleAlpha,
         },
@@ -235,7 +235,7 @@ internal sealed class FXShaderMigrationTool : EditorWindow
         {
             Name = "Sprite Center Glow Alpha",
             TargetShader = "Project/FX/FX_SpriteCore_URP",
-            SourceShaders = new[] { "Hovl/Particles/Blend_CenterGlow", "Shader Graphs/URP_Blend_CG" },
+            SourceShaders = new[] { "Hovl/Particles/Blend_CenterGlow", "Shader Graphs/URP_Blend_CG", "Shader Graphs/URP_Blend_CG_BlendDepth", "Unlit/MyURP_Blend_CG" },
             RenderState = AlphaPreset,
             Apply = ApplySpriteCenterGlow,
         },
@@ -251,7 +251,7 @@ internal sealed class FXShaderMigrationTool : EditorWindow
         {
             Name = "Sprite Line Path",
             TargetShader = "Project/FX/FX_SpriteCore_URP",
-            SourceShaders = new[] { "Hovl/Particles/Blend_LinePath", "Hovl/Particles/Scroll", "Shader Graphs/URP_SwordSlash" },
+            SourceShaders = new[] { "Hovl/Particles/Blend_LinePath", "Hovl/Particles/Scroll", "Shader Graphs/URP_SwordSlash", "Shader Graphs/URP_LightGlow" },
             RenderState = AlphaPreset,
             Apply = ApplySpriteLinePath,
         },
@@ -637,6 +637,17 @@ internal sealed class FXShaderMigrationTool : EditorWindow
         }
 
         return false;
+    }
+
+    public static bool TryMigrateMaterial(Material material)
+    {
+        if (material == null || material.shader == null)
+            return false;
+
+        if (!TryGetRecipe(material, out var recipe))
+            return false;
+
+        return ApplyRecipe(material, recipe);
     }
 
     private static bool ApplyRecipe(Material material, MigrationRecipe recipe)
