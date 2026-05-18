@@ -63,11 +63,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: 9dc58b13b98a39142bc20ec41b6ccdd8, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 0.011764706}
-  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
-  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
-  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
-  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
-  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -84,7 +79,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
-  m_NullClear: 0
 --- !u!114 &-3436218647276984198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,8 +91,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8965d80f3add9fc4ba4fecbab3764945, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_setUid: 0
-  m_guid: 0
   m_Navigation:
     m_Mode: 3
     m_WrapAround: 0
@@ -128,7 +120,6 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 6397758078321362866}
-  HideSelected: 0
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -194,11 +185,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 2100000, guid: c4971307338caba4190cf5158fc86b75, type: 2}
   m_Color: {r: 0, g: 0, b: 0, a: 0.5019608}
-  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
-  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
-  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
-  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
-  m_ColorGradient: 0
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -215,7 +201,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
-  m_NullClear: 0
 --- !u!1 &6281600588739077490
 GameObject:
   m_ObjectHideFlags: 0
@@ -280,11 +265,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
-  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
-  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
-  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
-  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
-  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -301,7 +281,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
-  m_NullClear: 0
 --- !u!223 &5899223262202520607
 Canvas:
   m_ObjectHideFlags: 0
@@ -320,6 +299,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
+  m_UseReflectionProbes: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -444,11 +424,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_ColorTL: {r: 1, g: 1, b: 1, a: 1}
-  m_ColorTR: {r: 1, g: 1, b: 1, a: 1}
-  m_ColorBL: {r: 1, g: 1, b: 1, a: 1}
-  m_ColorBR: {r: 1, g: 1, b: 1, a: 1}
-  m_ColorGradient: 0
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -465,7 +440,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
-  m_NullClear: 0
 --- !u!1 &9052375181969624938
 GameObject:
   m_ObjectHideFlags: 0
@@ -5318,7 +5292,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7f26c91457ce6d84c95e5630cc269324, type: 2}
+  - {fileID: 2100000, guid: 2d1e1f63825f85e4ebd0ca288ea9219d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5364,7 +5338,7 @@ ParticleSystemRenderer:
   m_VertexStreams: 000103040522250c
   m_UseCustomTrailVertexStreams: 0
   m_TrailVertexStreams: 00010304
-  m_Mesh: {fileID: 4300000, guid: 7874f2765cea0a547827d03a8933235d, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 78f010cacaf66744589dfbf2f244c161, type: 3}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
