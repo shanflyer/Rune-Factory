@@ -21,6 +21,7 @@ public class GameDataManager : Singleton<GameDataManager>
         GlobalData=GetData<GameGlobalData>();
         var gameDataSaveManager = GameDataSaveManager.instance;
         //初始加载
+        await LoadAllAsyncData<GameActionBaseData>();
         await LoadAllAsyncData<GameActionData>();
         await LoadAllAsyncData<GrowModelData>();
         await LoadAllAsyncData<ProfessionData>();
