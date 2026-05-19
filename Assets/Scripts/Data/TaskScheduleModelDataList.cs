@@ -108,7 +108,7 @@ public class DailyTaskDataItem
 {
     public int itemValue;
     public int weight;
-    public GameActionData GameActionData;
+    public GameActionAsset GameActionData;
     public AnimationCurve growCurve;
     public DailyTaskDataItem() { }
   

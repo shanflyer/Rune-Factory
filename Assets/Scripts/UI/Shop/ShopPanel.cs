@@ -197,8 +197,8 @@ public class ShopPanel : GamePanel<ShopList>
                 InformationController.instance.AddInformation(string.Format(LanguageManage.SwitchStr("成功购买{0}个+ {1} +"),buyCount, LanguageManage.SwitchStr(itemData.itemName)));
                 if (selectShopItemData.buyAction != 0)
                 {
-                    var GameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(selectShopItemData.buyAction);
-                    GameActionData.Action();
+                    var gameActionAsset = await GameDataManager.instance.GetAsyncData<GameActionAsset>(selectShopItemData.buyAction);
+                    gameActionAsset.Action();
                 }
                 ShopBuySuccess shopBuySuccess = new ShopBuySuccess
                 {

@@ -1119,7 +1119,6 @@ public static class DataPath
         {typeof(MonsterDeploy),"Data/MonsterDeploy/MonsterDeloyList" },
         {typeof(GameActionBaseData),"Data/GameActionAssets" },
         {typeof(GameActionAsset),"Data/GameActionAssets" },
-        {typeof(GameActionData),"Data/GameActionData" },
         {typeof(TalkData),"Data/TalkData" },
         {typeof(MyTimeLineData),"Data/TimeLineData" },
         {typeof(SkillData),"Data/SkillData" },

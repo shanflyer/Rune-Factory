@@ -10,7 +10,7 @@ public class FunctionButtonData : ScriptableObject, IGameData, IReferenceData
     public int id;
     public string buttonName;
     public Sprite icon;
-    public GameActionData gameActionData;
+    public GameActionAsset gameActionData;
     public bool alwaysClosePanel;
     public override string ToString()
     {

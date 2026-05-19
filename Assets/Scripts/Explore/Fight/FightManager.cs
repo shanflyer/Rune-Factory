@@ -489,7 +489,7 @@ public class FightManager : Singleton<FightManager>
 
     public async Task CreateFightMonster(MonsterDeploy monsterDeploy)
     {
-        var beforeAction = await GameDataManager.instance.GetAsyncData<GameActionData>(monsterDeploy.beforeActionId);
+        var beforeAction = await GameDataManager.instance.GetAsyncData<GameActionAsset>(monsterDeploy.beforeActionId);
         if (beforeAction != null)
         {
             beforeAction.Action();
@@ -532,7 +532,7 @@ public class FightManager : Singleton<FightManager>
             GameActionManager.instance.QueueAction(new RefreshFightCharacterList());
         }
 
-        var afterAction = await GameDataManager.instance.GetAsyncData<GameActionData>(monsterDeploy.afterActionId);
+        var afterAction = await GameDataManager.instance.GetAsyncData<GameActionAsset>(monsterDeploy.afterActionId);
         if (afterAction != null)
         {
             afterAction.Action();

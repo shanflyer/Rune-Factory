@@ -27,7 +27,7 @@ public class FunctionData : IGameData, IReferenceData
     public int id;
     public string buttonName;
     public FunctionData[] secondFunctions;
-    public GameActionData gameActionData;
+    public GameActionAsset gameActionData;
 
     public string GetKey()
     {

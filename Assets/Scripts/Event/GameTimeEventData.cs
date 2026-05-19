@@ -38,7 +38,7 @@ public class GameTimeEventData : ScriptableObject, IGameData
 
     public void SetReferenceData()
     {
-        string actionPath = $"Assets/Resources/Data/GameActionData/{name}.asset";
+        string actionPath = $"Assets/Resources/Data/GameActionAssets/{name}.asset";
     }
 
 #endif

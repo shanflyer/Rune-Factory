@@ -6,7 +6,7 @@ public class FightEventAsset : PlayableAsset
 {
     public int index;
     public bool hurtDisplay;
-   // public GameActionData gameActionData;
+   // public GameActionAsset gameActionData;
 
     private SkillEstimateData skillEstimateData;
 

@@ -1146,7 +1146,7 @@ public partial class MapCellController : Singleton<MapCellController>
                     /*
                     if (mapLinkCell.afterAction != 0&& isPlayer)
                     {
-                        var actionData = await GameDataManager.instance.GetAsyncData<GameActionData>(mapLinkCell.afterAction);
+                        var actionData = await GameDataManager.instance.GetAsyncData<GameActionAsset>(mapLinkCell.afterAction);
                         actionData.Action(setResult: (bool value) =>
                         {
                             action.Invoke(mapLinkCell.targetCell, mapLinkCell.afterAction);

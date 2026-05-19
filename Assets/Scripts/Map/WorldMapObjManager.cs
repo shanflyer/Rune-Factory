@@ -382,7 +382,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         await DisplayMap(displayMap.displayMap,displayMap.fixedDisplay);
         if (displayMap.actionId != 0)
         {
-            GameActionData gameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(displayMap.actionId);
+            GameActionAsset gameActionData = await GameDataManager.instance.GetAsyncData<GameActionAsset>(displayMap.actionId);
             gameActionData.Action();
         }
     }

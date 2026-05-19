@@ -28,8 +28,8 @@ namespace MyGame
 
         private async void SwitchScene(SwitchScene switchScene)
         {
-            GameActionData beforeActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(switchScene.beforeLoadActionId);
-            GameActionData afterActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(switchScene.afterLoadActionId);
+            GameActionAsset beforeActionData = await GameDataManager.instance.GetAsyncData<GameActionAsset>(switchScene.beforeLoadActionId);
+            GameActionAsset afterActionData = await GameDataManager.instance.GetAsyncData<GameActionAsset>(switchScene.afterLoadActionId);
 
             SwitchScene(switchScene.sceneName, beforeActionData != null ? () => { beforeActionData.Action(0, 0); }
             : null,

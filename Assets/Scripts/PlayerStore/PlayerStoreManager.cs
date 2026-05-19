@@ -242,7 +242,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         {
             if (runtimeStoreCounter.count == 0)
             {
-                var gameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(setStoreCounter.nullAction);
+                var gameActionData = await GameDataManager.instance.GetAsyncData<GameActionAsset>(setStoreCounter.nullAction);
                 gameActionData.Action(characterId, setStoreCounter.storeCounterId);
             }
             else

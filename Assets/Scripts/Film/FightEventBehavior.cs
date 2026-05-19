@@ -4,7 +4,7 @@ public class FightEventBehavior : PlayableBehaviour
 {
     public int index;
     public bool hurtDisplay;
-    //public GameActionData gameActionData;
+    //public GameActionAsset gameActionData;
     public SkillEstimateData skillEstimateData;
     public override void OnBehaviourPlay(Playable playable, FrameData info)
     {

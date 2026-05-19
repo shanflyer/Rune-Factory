@@ -23,10 +23,10 @@ public class OperateData : ScriptableObject, IGameData, IReferenceData
     public string iconName;
     public Sprite icon;
     public int checkId;
-    public GameActionData checkActionData;
+    public GameActionAsset checkActionData;
     public int actionId;
     public int linkItem; 
-    public GameActionData gameActionData;
+    public GameActionAsset gameActionData;
     public int eventId;
     public GameEventData gameEventData;
     public List<EventReferenceData> eventReferenceDatas = new List<EventReferenceData>();
@@ -45,8 +45,8 @@ public class OperateData : ScriptableObject, IGameData, IReferenceData
 #if UNITY_EDITOR
     public void SetReferenceData()
     {
-        string actionDataPath = $"{DataPath.GetDataPath(typeof(GameActionData))}/{actionId}";
-        gameActionData = Resources.Load<GameActionData>(actionDataPath);
+        string actionDataPath = $"{DataPath.GetDataPath(typeof(GameActionAsset))}/{actionId}";
+        gameActionData = Resources.Load<GameActionAsset>(actionDataPath);
 
         string eventDataPath = $"{DataPath.GetDataPath(typeof(GameEventData))}/{eventId}";
         gameEventData = Resources.Load<GameEventData>(eventDataPath);

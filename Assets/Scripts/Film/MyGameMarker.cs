@@ -22,7 +22,7 @@ public class MyGameMarker : Marker, INotification, INotificationOptionProvider
         get { return m_EmitOnce; }
         set { m_EmitOnce = value; }
     }
-    public List<GameActionData> gameActionDatas = new List<GameActionData>();
+    public List<GameActionAsset> gameActionDatas = new List<GameActionAsset>();
    
     public PropertyName id => throw new System.NotImplementedException();
 

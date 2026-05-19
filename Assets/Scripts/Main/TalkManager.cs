@@ -89,12 +89,12 @@ public class TalkManager : Singleton<TalkManager>
                     int index = i;
                     if (nPCFunctionData.checkAction != 0)
                     {
-                        var GameActionData =
-                            GameDataManager.instance.GetData<GameActionData>(nPCFunctionData.checkAction.ToString());
+                        var gameActionAsset =
+                            GameDataManager.instance.GetData<GameActionAsset>(nPCFunctionData.checkAction.ToString());
 
-                        if (GameActionData != null)
+                        if (gameActionAsset != null)
                         {
-                            GameActionData.Action(characterId, setResult: (bool value) =>
+                            gameActionAsset.Action(characterId, setResult: (bool value) =>
                             {
                                 if (value) NPCTalkOperateData.npcFunctionDatas.Add(nPCFunctionData);
                                 functionCheckResult[index] = true;

@@ -579,7 +579,7 @@ public class PackageManager : Singleton<PackageManager>
             PackageData packageData = gamePackage.OutGamePackageData();
             packageList.packageDatas.Add(packageData);
         
-            GameActionData gameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(openPackage.selectActionId);
+            GameActionAsset gameActionData = await GameDataManager.instance.GetAsyncData<GameActionAsset>(openPackage.selectActionId);
             if (gameActionData != null)
             {
                 gameActionData.Action(packageId, target: openPackage.targetObj);

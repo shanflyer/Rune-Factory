@@ -65,21 +65,12 @@ public class GameActionDataManager : Singleton<GameActionDataManager>
 
     public async void Action(int dataId, SetResult setResult = null, bool immediately = false)
     {
-        // ── 新路径：强类型 GameActionBaseData（零反射）──
-        GameActionBaseData typedData = await GameDataManager.instance.GetAsyncData<GameActionBaseData>(dataId);
-        if (typedData != null)
+        var gameActionData = await GameDataManager.instance.GetAsyncData<GameActionAsset>(dataId);
+        if (gameActionData == null)
         {
-            typedData.CreateAction(setResult: setResult, immediately: immediately);
             return;
         }
 
-        // ── 旧路径：字符串 GameActionData（向后兼容）──
-        GameActionData gameActionData = await GameDataManager.instance.GetAsyncData<GameActionData>(dataId);
-        if (gameActionData == null)
-        {
-           // Debug.LogError($"null gameAction:{dataId}");
-            return;
-        }
         gameActionData.Action(setResult: setResult, immediately: immediately);
     }
 }

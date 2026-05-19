@@ -63,7 +63,7 @@ public class SimpleTalkPanel : GamePanel<NPCTalkOperateData>
     {
         // Debug.Log("Talk:NextAction!!!");
         _nextButton.interactable = false;
-        var actionData = await GameDataManager.instance.GetAsyncData<GameActionData>(talkData.actionId.ToString());
+        var actionData = await GameDataManager.instance.GetAsyncData<GameActionAsset>(talkData.actionId.ToString());
         if (actionData != null) actionData.Action();
         talkData = await GameDataManager.instance.GetAsyncData<TalkData>(talkData.nexTalkId);
         await TalkAction();

@@ -13,7 +13,7 @@ public class NPCFunctionData : ScriptableObject, IGameData,IReferenceData
     [Header("交互事件")]
     public int OperateAction;
     [Header("显示时Action")]
-    public GameActionData GameActionData;
+    public GameActionAsset GameActionData;
     public string GetKey()
     {
         return id.ToString();

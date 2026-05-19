@@ -30,7 +30,7 @@ public class RunGameActions : Action
 
     public List<DynamicParameterData> dynamicParameterDatas;
 
-    public List<GameActionData> gameActionDatas;
+    public List<GameActionAsset> gameActionDatas;
     public bool waitResult;
 
     private TaskStatus taskStatus = TaskStatus.Running;
@@ -65,44 +65,61 @@ public class RunGameActions : Action
         {
             taskStatus = TaskStatus.Success;
         }
+        if (gameActionDatas == null) return;
+
         for (int i = 0; i < gameActionDatas.Count; i++)
         {
+            var gameActionData = gameActionDatas[i];
+            if (gameActionData == null) continue;
+
+            List<Parameter> runtimeParameters = null;
             if (dynamicParameterDatas != null && i < dynamicParameterDatas.Count)
             {
                 var dynamicParameterData = dynamicParameterDatas[i];
-                var gameActionData = gameActionDatas[i];
-                List<Parameter> _parameters = new List<Parameter>();
-                for (int j = 0; j < dynamicParameterData.Parameters.Count; j++)
+                runtimeParameters = new List<Parameter>();
+                if (dynamicParameterData.Parameters != null)
                 {
-                    Parameter parameter = new Parameter
+                    for (int j = 0; j < dynamicParameterData.Parameters.Count; j++)
                     {
-                        value = dynamicParameterData.Parameters[j].ToString()
-                    };
-                    _parameters.Add(parameter);
+                        Parameter parameter = new Parameter
+                        {
+                            value = dynamicParameterData.Parameters[j].ToString()
+                        };
+                        runtimeParameters.Add(parameter);
+                    }
                 }
-                gameActionData._parameters = _parameters;
             }
 
             if (GameDataManager.instance.GlobalData.debug)
                 Debug.Log(
-                    $"behaviorAction:{gameActionDatas[i].typeName}--BehaviorName:{Owner.BehaviorName}--{FriendlyName}");
+                    $"behaviorAction:{gameActionData.root?.GetType().Name}--BehaviorName:{Owner.BehaviorName}--{FriendlyName}");
 
             if (otherDatas != null && i < otherDatas.Count)
             {
                 DynamicData otherData = otherDatas[i];
-                gameActionDatas[i].Action(otherData.source.Value, otherData.target.Value, otherData.value.Value,
-                   setResult: waitResult ? SetActionResult : null, setValue: SetValue, immediately: immediately);
-
-                if (dynamicParameterDatas != null && i < dynamicParameterDatas.Count)
-                    gameActionDatas[i]._parameters.Clear();
+                if (runtimeParameters != null)
+                {
+                    gameActionData.CreateAction(runtimeParameters, otherData.source.Value, otherData.target.Value, otherData.value.Value,
+                        setResult: waitResult ? SetActionResult : null, setValue: SetValue, immediately: immediately);
+                }
+                else
+                {
+                    gameActionData.Action(otherData.source.Value, otherData.target.Value, otherData.value.Value,
+                        setResult: waitResult ? SetActionResult : null, setValue: SetValue, immediately: immediately);
+                }
             }
             else
             {
-                gameActionDatas[i].Action(source.Value, target.Value, sharedSetIntValue.Value, setResult: waitResult ? SetActionResult : null,
-                    setValue: SetValue, immediately: immediately);
-
-                if (dynamicParameterDatas != null && i < dynamicParameterDatas.Count)
-                    gameActionDatas[i]._parameters.Clear();
+                if (runtimeParameters != null)
+                {
+                    gameActionData.CreateAction(runtimeParameters, source.Value, target.Value, sharedSetIntValue.Value,
+                        setResult: waitResult ? SetActionResult : null, setValue: SetValue, immediately: immediately);
+                }
+                else
+                {
+                    gameActionData.Action(source.Value, target.Value, sharedSetIntValue.Value,
+                        setResult: waitResult ? SetActionResult : null, setValue: SetValue, immediately: immediately);
+                }
             }
             
         }

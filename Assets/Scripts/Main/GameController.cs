@@ -121,7 +121,7 @@ public class GameController : MonoBehaviour
 
     public float _CloudValue;
 
-    public GameActionData gameActionData;
+    public GameActionAsset gameActionData;
 
     public void TestGameAction()
     {
