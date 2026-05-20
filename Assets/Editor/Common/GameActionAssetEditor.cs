@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
+using Unity.Mathematics;
 using UnityEngine;
 
 [CustomEditor(typeof(GameActionAsset))]
@@ -173,7 +174,67 @@ public class GameActionAssetEditor : Editor
     EditorGUILayout.EndVertical();
 }
 
-    static object DrawField(string l, Type t, object v) { if (t == typeof(int)) return EditorGUILayout.IntField(l, v==null?0:(int)v); if (t == typeof(float)) return EditorGUILayout.FloatField(l, v==null?0f:(float)v); if (t == typeof(bool)) return EditorGUILayout.Toggle(l, v!=null&&(bool)v); if (t == typeof(string)) return EditorGUILayout.TextField(l, v as string??""); if (t == typeof(Vector2)) return EditorGUILayout.Vector2Field(l, v is Vector2 x?x:Vector2.zero); if (t == typeof(Vector3)) return EditorGUILayout.Vector3Field(l, v is Vector3 x?x:Vector3.zero); if (t == typeof(Vector2Int)) return EditorGUILayout.Vector2IntField(l, v is Vector2Int x?x:Vector2Int.zero); if (t == typeof(Vector3Int)) return EditorGUILayout.Vector3IntField(l, v is Vector3Int x?x:Vector3Int.zero); EditorGUILayout.LabelField(l, v?.ToString()??"null"); return v; }
+    static object DrawField(string label, Type type, object value)
+    {
+        if (type == typeof(int)) return EditorGUILayout.IntField(label, value == null ? 0 : (int)value);
+        if (type == typeof(float)) return EditorGUILayout.FloatField(label, value == null ? 0f : (float)value);
+        if (type == typeof(bool)) return EditorGUILayout.Toggle(label, value != null && (bool)value);
+        if (type == typeof(string)) return EditorGUILayout.TextField(label, value as string ?? "");
+        if (type == typeof(Vector2)) return EditorGUILayout.Vector2Field(label, value is Vector2 x ? x : Vector2.zero);
+        if (type == typeof(Vector3)) return EditorGUILayout.Vector3Field(label, value is Vector3 x ? x : Vector3.zero);
+        if (type == typeof(Vector2Int)) return EditorGUILayout.Vector2IntField(label, value is Vector2Int x ? x : Vector2Int.zero);
+        if (type == typeof(Vector3Int)) return EditorGUILayout.Vector3IntField(label, value is Vector3Int x ? x : Vector3Int.zero);
+        if (type == typeof(int2))
+        {
+            var current = value is int2 x ? x : default;
+            var next = EditorGUILayout.Vector2IntField(label, new Vector2Int(current.x, current.y));
+            return new int2(next.x, next.y);
+        }
+        if (type == typeof(int3))
+        {
+            var current = value is int3 x ? x : default;
+            var next = EditorGUILayout.Vector3IntField(label, new Vector3Int(current.x, current.y, current.z));
+            return new int3(next.x, next.y, next.z);
+        }
+        if (type == typeof(float2))
+        {
+            var current = value is float2 x ? x : default;
+            var next = EditorGUILayout.Vector2Field(label, new Vector2(current.x, current.y));
+            return new float2(next.x, next.y);
+        }
+        if (type.IsEnum)
+        {
+            var current = value as Enum ?? (Enum)Activator.CreateInstance(type);
+            return EditorGUILayout.EnumPopup(label, current);
+        }
+        if (type == typeof(List<int>))
+        {
+            return DrawIntList(label, value as List<int>);
+        }
+
+        EditorGUILayout.LabelField(label, value?.ToString() ?? "null");
+        return value;
+    }
+
+    static List<int> DrawIntList(string label, List<int> value)
+    {
+        var source = value ?? new List<int>();
+        var result = new List<int>(source);
+
+        EditorGUILayout.LabelField(label);
+        EditorGUI.indentLevel++;
+
+        var count = Mathf.Max(0, EditorGUILayout.IntField("Size", result.Count));
+        while (result.Count < count) result.Add(0);
+        while (result.Count > count) result.RemoveAt(result.Count - 1);
+
+        for (int i = 0; i < result.Count; i++)
+            result[i] = EditorGUILayout.IntField("Element " + i, result[i]);
+
+        EditorGUI.indentLevel--;
+
+        return source.SequenceEqual(result) ? value : result;
+    }
 
     static void BuildCache() { if (_cacheBuilt) return; var ts = new List<Type>(); foreach (var a in AppDomain.CurrentDomain.GetAssemblies()) { if (a.GetName().Name.StartsWith("Unity")||a.GetName().Name.StartsWith("System")||a.GetName().Name=="mscorlib") continue; try { foreach (var t in a.GetTypes()) if (t.IsSubclassOf(typeof(ActionNode))&&!t.IsAbstract) ts.Add(t); } catch { } } ts = ts.OrderBy(t => t.Name).ToList(); _nodeTypes = ts.ToArray(); _nodeTypeNames = ts.Select(t => t.Name).ToArray(); _cacheBuilt = true; }
 }
