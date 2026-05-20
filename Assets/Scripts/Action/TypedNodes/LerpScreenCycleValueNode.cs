@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class LerpScreenCycleValueNode : ActionNode
 {
+        public float minCycleValue;
+        public float maxCycleValue;
+        public float lerpTime;
         public Vector2 cyclePos;
 
     public override GameAction CreateAction(
@@ -13,6 +16,9 @@ public class LerpScreenCycleValueNode : ActionNode
     {
         var action = new LerpScreenCycleValue
         {
+                minCycleValue = this.minCycleValue,
+                maxCycleValue = this.maxCycleValue,
+                lerpTime = this.lerpTime,
                 cyclePos = this.cyclePos,
         };
         action.setValue = setValue;

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class OpenPanelActionNode : ActionNode
 {
+        public string typeName;
         public string dataId;
 
     public override GameAction CreateAction(
@@ -13,10 +14,12 @@ public class OpenPanelActionNode : ActionNode
     {
         var action = new OpenPanelAction
         {
+                type = Type.GetType(this.typeName),
                 dataId = this.dataId,
         };
         action.setValue = setValue;
         action.setResult = setResult;
+            if (target != 0 && target != int.MinValue) action.dataId = target.ToString();
         GameActionManager.instance.QueueAction(action, immediately);
         return action;
     }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Unity.Mathematics;
 using UnityEngine;
 
 /// <summary>
@@ -131,6 +132,8 @@ public class GameActionAsset : GameActionBaseData
     {
         if (node == null || parameters == null || parameters.Count == 0) return;
 
+        if (ApplySpecialParameters(node, parameters)) return;
+
         var fields = node.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance)
             .Where(f => f.DeclaringType != typeof(ActionNode)
                         && f.DeclaringType != typeof(ContainerNode)
@@ -143,6 +146,96 @@ public class GameActionAsset : GameActionBaseData
             if (converted != null || !fields[i].FieldType.IsValueType)
                 fields[i].SetValue(node, converted);
         }
+    }
+
+    private static bool ApplySpecialParameters(ActionNode node, List<Parameter> parameters)
+    {
+        if (node is SetCharacterAnimatorNode animatorNode)
+        {
+            if (parameters.Count > 0) animatorNode.characterId = ToInt(parameters[0].value);
+            if (parameters.Count > 1) animatorNode.parameter = parameters[1].value;
+            if (parameters.Count > 2) animatorNode.parameterType = (ParameterType)ConvertValue(parameters[2].value, typeof(ParameterType));
+            if (parameters.Count > 3)
+            {
+                switch (animatorNode.parameterType)
+                {
+                    case ParameterType.BOOL:
+                        animatorNode.boolValue = ToBool(parameters[3].value);
+                        break;
+                    case ParameterType.INT:
+                        animatorNode.intValue = ToInt(parameters[3].value);
+                        break;
+                    case ParameterType.FLOAT:
+                        animatorNode.floatValue = ToFloat(parameters[3].value);
+                        break;
+                }
+            }
+            return true;
+        }
+
+        if (node is ChangeMapNode changeMapNode)
+        {
+            if (parameters.Count > 2)
+                changeMapNode.mapValue = new int3(ToInt(parameters[0].value), ToInt(parameters[1].value), ToInt(parameters[2].value));
+            else if (parameters.Count > 0)
+                changeMapNode.mapValue = (int3)ConvertValue(parameters[0].value, typeof(int3));
+            return true;
+        }
+
+        if (node is LerpScreenCycleValueNode cycleNode)
+        {
+            if (parameters.Count > 0) cycleNode.minCycleValue = ToFloat(parameters[0].value);
+            if (parameters.Count > 1) cycleNode.maxCycleValue = ToFloat(parameters[1].value);
+            if (parameters.Count > 2) cycleNode.lerpTime = ToFloat(parameters[2].value);
+            if (parameters.Count > 4)
+                cycleNode.cyclePos = new Vector2(ToFloat(parameters[3].value), ToFloat(parameters[4].value));
+            else if (parameters.Count > 3)
+                cycleNode.cyclePos = (Vector2)ConvertValue(parameters[3].value, typeof(Vector2));
+            return true;
+        }
+
+        if (node is SetCharacterRandomCoordinateNode randomCoordinateNode)
+        {
+            if (parameters.Count > 0) randomCoordinateNode.characterId = ToInt(parameters[0].value);
+            if (parameters.Count >= 4)
+            {
+                randomCoordinateNode.Coordinate = new int2(ToInt(parameters[1].value), ToInt(parameters[2].value));
+                randomCoordinateNode.range = ToInt(parameters[3].value);
+            }
+            else if (parameters.Count >= 3)
+            {
+                randomCoordinateNode.Coordinate = (int2)ConvertValue(parameters[1].value, typeof(int2));
+                randomCoordinateNode.range = ToInt(parameters[2].value);
+            }
+            return true;
+        }
+
+        if (node is SetCharacterTriggerItemNode triggerItemNode)
+        {
+            if (parameters.Count >= 3)
+            {
+                triggerItemNode.characterId = ToInt(parameters[0].value);
+                triggerItemNode.mapItemEditId = new int2(ToInt(parameters[1].value), ToInt(parameters[2].value));
+            }
+            return true;
+        }
+
+        if (node is SetDirectionNode directionNode)
+        {
+            if (parameters.Count > 2)
+            {
+                directionNode.characterId = ToInt(parameters[0].value);
+                directionNode.direction = new float2(ToFloat(parameters[1].value), ToFloat(parameters[2].value));
+            }
+            else if (parameters.Count > 1)
+            {
+                directionNode.characterId = ToInt(parameters[0].value);
+                directionNode.directionEnum = (Direction)ConvertValue(parameters[1].value, typeof(Direction));
+            }
+            return true;
+        }
+
+        return false;
     }
 
     private static object ConvertValue(string value, Type targetType)
@@ -169,7 +262,7 @@ public class GameActionAsset : GameActionBaseData
 
         if (targetType == typeof(string)) return value;
 
-        var parts = value.Trim('(', ')').Split(',');
+        var parts = SplitParts(value);
         if (targetType == typeof(Vector2))
         {
             if (parts.Length >= 2 && float.TryParse(parts[0], out var x) && float.TryParse(parts[1], out var y))
@@ -194,13 +287,80 @@ public class GameActionAsset : GameActionBaseData
                 return new Vector3Int(x, y, z);
         }
 
+        if (targetType == typeof(int2))
+        {
+            if (parts.Length >= 2 && int.TryParse(parts[0], out var x) && int.TryParse(parts[1], out var y))
+                return new int2(x, y);
+        }
+
+        if (targetType == typeof(int3))
+        {
+            if (parts.Length >= 3 && int.TryParse(parts[0], out var x) && int.TryParse(parts[1], out var y) && int.TryParse(parts[2], out var z))
+                return new int3(x, y, z);
+        }
+
+        if (targetType == typeof(float2))
+        {
+            if (parts.Length >= 2 && float.TryParse(parts[0], out var x) && float.TryParse(parts[1], out var y))
+                return new float2(x, y);
+        }
+
+        if (targetType == typeof(List<int>))
+        {
+            var result = new List<int>();
+            foreach (var part in parts)
+            {
+                if (int.TryParse(part, out var item))
+                    result.Add(item);
+            }
+            return result;
+        }
+
         if (targetType.IsEnum)
         {
-            int.TryParse(value, out var enumValue);
-            return Enum.ToObject(targetType, enumValue);
+            if (int.TryParse(value, out var enumValue))
+                return Enum.ToObject(targetType, enumValue);
+            try
+            {
+                return Enum.Parse(targetType, value);
+            }
+            catch
+            {
+                return DefaultFor(targetType);
+            }
         }
 
         return DefaultFor(targetType);
+    }
+
+    private static string[] SplitParts(string value)
+    {
+        value = value.Trim();
+        var openIndex = value.IndexOf('(');
+        var closeIndex = value.LastIndexOf(')');
+        if (openIndex >= 0 && closeIndex > openIndex)
+            value = value.Substring(openIndex + 1, closeIndex - openIndex - 1);
+        else
+            value = value.Trim('(', ')');
+
+        return value.Split(',').Select(part => part.Trim()).Where(part => part.Length > 0).ToArray();
+    }
+
+    private static int ToInt(string value)
+    {
+        int.TryParse(value, out var result);
+        return result;
+    }
+
+    private static float ToFloat(string value)
+    {
+        float.TryParse(value, out var result);
+        return result;
+    }
+
+    private static bool ToBool(string value)
+    {
+        return value != null && (value.Equals("True", StringComparison.OrdinalIgnoreCase) || value == "1");
     }
 
     private static object DefaultFor(Type type)

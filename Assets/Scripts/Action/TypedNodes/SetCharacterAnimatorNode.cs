@@ -6,8 +6,9 @@ public class SetCharacterAnimatorNode : ActionNode
 {
         public int characterId;
         public string parameter;
-        public int intValue;
+        public ParameterType parameterType;
         public bool boolValue;
+        public int intValue;
         public float floatValue;
 
     public override GameAction CreateAction(
@@ -19,8 +20,9 @@ public class SetCharacterAnimatorNode : ActionNode
         {
                 characterId = this.characterId,
                 parameter = this.parameter,
-                intValue = this.intValue,
+                parameterType = this.parameterType,
                 boolValue = this.boolValue,
+                intValue = this.intValue,
                 floatValue = this.floatValue,
         };
         action.setValue = setValue;

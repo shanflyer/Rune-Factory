@@ -5,6 +5,7 @@ using UnityEngine;
 public class ShowEmoteNode : ActionNode
 {
         public new int id;
+        public EntityType entityType;
         public int emoteId;
         public int showTime;
 
@@ -16,6 +17,7 @@ public class ShowEmoteNode : ActionNode
         var action = new ShowEmote
         {
                 id = this.id,
+                entityType = this.entityType,
                 emoteId = this.emoteId,
                 showTime = this.showTime,
         };

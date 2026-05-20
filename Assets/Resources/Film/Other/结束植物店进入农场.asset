@@ -9,83 +9,103 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f30c6030c4ed304383e0d88a9676ae8, type: 3}
+  m_Script: {fileID: 11500000, guid: eca02ebc7029983458adbd931cf2ccfe, type: 3}
   m_Name: "\u7ED3\u675F\u690D\u7269\u5E97\u8FDB\u5165\u519C\u573A"
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 0
-  typeName: ActionList
-  _parameters:
-  - value: LerpScreenCycleValue
-    parameters:
-    - value: 0
-      parameters: []
-    - value: 1
-      parameters: []
-    - value: 0.6
-      parameters: []
-    - value: -1.404
-      parameters: []
-    - value: -0.57
-      parameters: []
-  - value: WaitAction
-    parameters:
-    - value: 600
-      parameters:
-      - value: DisplayMap
-        parameters:
-        - value: 759
-          parameters: []
-      - value: LerpScreenCycleValue
-        parameters:
-        - value: 1
-          parameters: []
-        - value: 0
-          parameters: []
-        - value: 0.6
-          parameters: []
-        - value: -2.023
-          parameters: []
-        - value: -0.16
-          parameters: []
-      - value: DisplayOrHideCharacter
-        parameters:
-        - value: 5
-          parameters: []
-        - value: true
-          parameters: []
-      - value: DisplayOrHideCharacter
-        parameters:
-        - value: 6
-          parameters: []
-        - value: true
-          parameters: []
-  - value: SaveGuideFilmIndexAction
-    parameters:
-    - value: 5
-      parameters: []
-  - value: WaitAction
-    parameters:
-    - value: 600
-      parameters:
-      - value: StopFilm
-        parameters:
-        - value: "\u690D\u7269\u5E97\u7535\u5F71"
-          parameters: []
-      - value: PlayFilm
-        parameters:
-        - value: "\u7B2C\u4E00\u665A"
-          parameters: []
-        - value: "\u79CD\u690D\u5F15\u5BFC"
-          parameters: []
-  - value: DisplayOrHideCharacter
-    parameters:
-    - value: 5
-      parameters: []
-    - value: true
-      parameters: []
-  - value: DisplayOrHideCharacter
-    parameters:
-    - value: 6
-      parameters: []
-    - value: true
-      parameters: []
+  root:
+    rid: 4894396079054014400
+  references:
+    version: 2
+    RefIds:
+    - rid: 4894396079054014400
+      type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
+      data:
+        children:
+        - node:
+            rid: 4894396079054014401
+        - node:
+            rid: 4894396079054014402
+        - node:
+            rid: 4894396079054014407
+        - node:
+            rid: 4894396079054014408
+        - node:
+            rid: 4894396079054014411
+        - node:
+            rid: 4894396079054014412
+    - rid: 4894396079054014401
+      type: {class: LerpScreenCycleValueNode, ns: , asm: Assembly-CSharp}
+      data:
+        minCycleValue: 0
+        maxCycleValue: 1
+        lerpTime: 0.6
+        cyclePos: {x: -1.404, y: 0}
+    - rid: 4894396079054014402
+      type: {class: WaitActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        delay: 600
+        children:
+        - node:
+            rid: 4894396079054014403
+        - node:
+            rid: 4894396079054014404
+        - node:
+            rid: 4894396079054014405
+        - node:
+            rid: 4894396079054014406
+    - rid: 4894396079054014403
+      type: {class: DisplayMapNode, ns: , asm: Assembly-CSharp}
+      data:
+        displayMap: 759
+        actionId: 0
+        fixedDisplay: 0
+    - rid: 4894396079054014404
+      type: {class: LerpScreenCycleValueNode, ns: , asm: Assembly-CSharp}
+      data:
+        minCycleValue: 1
+        maxCycleValue: 0
+        lerpTime: 0.6
+        cyclePos: {x: -2.023, y: 0}
+    - rid: 4894396079054014405
+      type: {class: DisplayOrHideCharacterNode, ns: , asm: Assembly-CSharp}
+      data:
+        characterId: 5
+        display: 1
+    - rid: 4894396079054014406
+      type: {class: DisplayOrHideCharacterNode, ns: , asm: Assembly-CSharp}
+      data:
+        characterId: 6
+        display: 1
+    - rid: 4894396079054014407
+      type: {class: SaveGuideFilmIndexActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        id: 5
+    - rid: 4894396079054014408
+      type: {class: WaitActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        delay: 600
+        children:
+        - node:
+            rid: 4894396079054014409
+        - node:
+            rid: 4894396079054014410
+    - rid: 4894396079054014409
+      type: {class: StopFilmNode, ns: , asm: Assembly-CSharp}
+      data:
+        filmName: "\u690D\u7269\u5E97\u7535\u5F71"
+    - rid: 4894396079054014410
+      type: {class: PlayFilmNode, ns: , asm: Assembly-CSharp}
+      data:
+        filmName: "\u7B2C\u4E00\u665A"
+        assetName: "\u79CD\u690D\u5F15\u5BFC"
+    - rid: 4894396079054014411
+      type: {class: DisplayOrHideCharacterNode, ns: , asm: Assembly-CSharp}
+      data:
+        characterId: 5
+        display: 1
+    - rid: 4894396079054014412
+      type: {class: DisplayOrHideCharacterNode, ns: , asm: Assembly-CSharp}
+      data:
+        characterId: 6
+        display: 1

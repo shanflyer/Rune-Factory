@@ -9,31 +9,45 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f30c6030c4ed304383e0d88a9676ae8, type: 3}
+  m_Script: {fileID: 11500000, guid: eca02ebc7029983458adbd931cf2ccfe, type: 3}
   m_Name: "\u6682\u505C\u7535\u5F71\uFF0C\u7EC4\u961F\u5BF9\u8BDD"
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 0
-  typeName: ActionList
-  _parameters:
-  - value: PauseFilm
-    parameters:
-    - value: "\u7B2C\u4E00\u665A"
-      parameters: []
-  - value: Talk
-    parameters:
-    - value: 1436
-      parameters: []
-    - value: 23
-      parameters: []
-    - value: true
-      parameters: []
-    - value: 4
-      parameters: []
-  - value: GameGuideAction
-    parameters:
-    - value: 9
-      parameters: []
-  - value: SaveGuideFilmIndexAction
-    parameters:
-    - value: 12
-      parameters: []
+  root:
+    rid: 4894396079002446400
+  references:
+    version: 2
+    RefIds:
+    - rid: 4894396079002446400
+      type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
+      data:
+        children:
+        - node:
+            rid: 4894396079002446401
+        - node:
+            rid: 4894396079002446402
+        - node:
+            rid: 4894396079002446403
+        - node:
+            rid: 4894396079002446404
+    - rid: 4894396079002446401
+      type: {class: PauseFilmNode, ns: , asm: Assembly-CSharp}
+      data:
+        filmName: "\u7B2C\u4E00\u665A"
+    - rid: 4894396079002446402
+      type: {class: TalkNode, ns: , asm: Assembly-CSharp}
+      data:
+        talkId: 1436
+        characterId: 23
+        displayFunction: 1
+        fixedFunctions:
+        - 4
+        nextTalkEventId: 0
+    - rid: 4894396079002446403
+      type: {class: GameGuideActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        guidKey: 9
+    - rid: 4894396079002446404
+      type: {class: SaveGuideFilmIndexActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        id: 12

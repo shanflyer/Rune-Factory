@@ -1,9 +1,11 @@
 // RemoveCellCharacter
 using System;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class RemoveCellCharacterNode : ActionNode
 {
+        public int3 cell;
         public int characterId;
         public bool isTemp;
 
@@ -15,6 +17,7 @@ public class RemoveCellCharacterNode : ActionNode
         var action = new RemoveCellCharacter
         {
                 characterId = this.characterId,
+                cell = this.cell,
                 isTemp = this.isTemp,
         };
         action.setValue = setValue;

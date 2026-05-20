@@ -9,57 +9,79 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f30c6030c4ed304383e0d88a9676ae8, type: 3}
+  m_Script: {fileID: 11500000, guid: eca02ebc7029983458adbd931cf2ccfe, type: 3}
   m_Name: "\u7B2C\u4E00\u5929\u65E9\u4E0A\u79BB\u5F00"
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 0
-  typeName: ActionList
-  _parameters:
-  - value: LerpScreenCycleValue
-    parameters:
-    - value: 0
-      parameters: []
-    - value: 1
-      parameters: []
-    - value: 0.6
-      parameters: []
-    - value: 0
-      parameters: []
-    - value: -0.24
-      parameters: []
-  - value: WaitAction
-    parameters:
-    - value: 900
-      parameters:
-      - value: DisplayMap
-        parameters:
-        - value: 547
-          parameters: []
-        - value: 34
-          parameters: []
-      - value: SetPlayerShaderPos
-        parameters:
-        - value: -0.28-0.2
-          parameters: []
-  - value: WaitAction
-    parameters:
-    - value: 600
-      parameters:
-      - value: StopFilm
-        parameters:
-        - value: "\u7B2C\u4E00\u665A"
-          parameters: []
-  - value: WaitAction
-    parameters:
-    - value: 600
-      parameters:
-      - value: PlayFilm
-        parameters:
-        - value: "\u7B2C\u4E00\u665A"
-          parameters: []
-        - value: "\u7B2C\u4E00\u6B21\u5546\u5E97"
-          parameters: []
-  - value: SaveGuideFilmIndexAction
-    parameters:
-    - value: 2
-      parameters: []
+  root:
+    rid: 4894396079385279400
+  references:
+    version: 2
+    RefIds:
+    - rid: 4894396079385279400
+      type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
+      data:
+        children:
+        - node:
+            rid: 4894396079385279401
+        - node:
+            rid: 4894396079385279402
+        - node:
+            rid: 4894396079385279405
+        - node:
+            rid: 4894396079385279407
+        - node:
+            rid: 4894396079385279409
+    - rid: 4894396079385279401
+      type: {class: LerpScreenCycleValueNode, ns: , asm: Assembly-CSharp}
+      data:
+        minCycleValue: 0
+        maxCycleValue: 1
+        lerpTime: 0.6
+        cyclePos: {x: 0, y: 0}
+    - rid: 4894396079385279402
+      type: {class: WaitActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        delay: 900
+        children:
+        - node:
+            rid: 4894396079385279403
+        - node:
+            rid: 4894396079385279404
+    - rid: 4894396079385279403
+      type: {class: DisplayMapNode, ns: , asm: Assembly-CSharp}
+      data:
+        displayMap: 547
+        actionId: 34
+        fixedDisplay: 0
+    - rid: 4894396079385279404
+      type: {class: SetPlayerShaderPosNode, ns: , asm: Assembly-CSharp}
+      data:
+        pos: {x: 0, y: 0, z: 0}
+    - rid: 4894396079385279405
+      type: {class: WaitActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        delay: 600
+        children:
+        - node:
+            rid: 4894396079385279406
+    - rid: 4894396079385279406
+      type: {class: StopFilmNode, ns: , asm: Assembly-CSharp}
+      data:
+        filmName: "\u7B2C\u4E00\u665A"
+    - rid: 4894396079385279407
+      type: {class: WaitActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        delay: 600
+        children:
+        - node:
+            rid: 4894396079385279408
+    - rid: 4894396079385279408
+      type: {class: PlayFilmNode, ns: , asm: Assembly-CSharp}
+      data:
+        filmName: "\u7B2C\u4E00\u665A"
+        assetName: "\u7B2C\u4E00\u6B21\u5546\u5E97"
+    - rid: 4894396079385279409
+      type: {class: SaveGuideFilmIndexActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        id: 2

@@ -1,16 +1,23 @@
 // container - ChangeMap
 using System;
+using Unity.Mathematics;
 using UnityEngine;
 
-public class ChangeMapNode : ContainerNode
+public class ChangeMapNode : ActionNode
 {
+        public int3 mapValue;
+
     public override GameAction CreateAction(
         int source = 0, int target = 0, int value = -1,
         SetResult setResult = null, SetValue setValue = null,
         bool immediately = false)
     {
-        var action = new ChangeMap { setValue = setValue, setResult = setResult };
-        ExecuteChildren(source, target, value, setResult, setValue, immediately);
+        var action = new ChangeMap
+        {
+                mapValue = this.mapValue,
+        };
+        action.setValue = setValue;
+        action.setResult = setResult;
         GameActionManager.instance.QueueAction(action, immediately);
         return action;
     }

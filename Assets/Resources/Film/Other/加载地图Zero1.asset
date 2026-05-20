@@ -9,19 +9,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f30c6030c4ed304383e0d88a9676ae8, type: 3}
+  m_Script: {fileID: 11500000, guid: eca02ebc7029983458adbd931cf2ccfe, type: 3}
   m_Name: "\u52A0\u8F7D\u5730\u56FEZero1"
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 0
-  typeName: ActionList
-  _parameters:
-  - value: StartWorldInit
-    parameters:
-    - value: World
-      parameters: []
-  - value: SaveGuideFilmIndexAction
-    parameters:
-    - value: 0
-      parameters: []
-  - value: DestroyTeam
-    parameters: []
+  root:
+    rid: 4894396079341982000
+  references:
+    version: 2
+    RefIds:
+    - rid: 4894396079341982000
+      type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
+      data:
+        children:
+        - node:
+            rid: 4894396079341982001
+        - node:
+            rid: 4894396079341982002
+        - node:
+            rid: 4894396079341982003
+    - rid: 4894396079341982001
+      type: {class: StartWorldInitNode, ns: , asm: Assembly-CSharp}
+      data:
+        children: []
+    - rid: 4894396079341982002
+      type: {class: SaveGuideFilmIndexActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        id: 0
+    - rid: 4894396079341982003
+      type: {class: DestroyTeamNode, ns: , asm: Assembly-CSharp}
+      data:
+        teamCharacterId: 0
+        holdDisplay: 0

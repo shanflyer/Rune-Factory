@@ -9,25 +9,41 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f30c6030c4ed304383e0d88a9676ae8, type: 3}
+  m_Script: {fileID: 11500000, guid: eca02ebc7029983458adbd931cf2ccfe, type: 3}
   m_Name: "\u9690\u85CFUI\u7535\u5F71UI"
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 0
-  typeName: ActionList
-  _parameters:
-  - value: OpenPanelAction
-    parameters:
-    - value: FilmPanel
-      parameters: []
-  - value: ClosePanelAction
-    parameters:
-    - value: ScreenControllerPanel
-      parameters: []
-  - value: ClosePanelAction
-    parameters:
-    - value: MainPanel
-      parameters: []
-  - value: ClosePanelAction
-    parameters:
-    - value: PlayerTopPanel
-      parameters: []
+  root:
+    rid: 4894396079713629500
+  references:
+    version: 2
+    RefIds:
+    - rid: 4894396079713629500
+      type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
+      data:
+        children:
+        - node:
+            rid: 4894396079713629501
+        - node:
+            rid: 4894396079713629502
+        - node:
+            rid: 4894396079713629503
+        - node:
+            rid: 4894396079713629504
+    - rid: 4894396079713629501
+      type: {class: OpenPanelActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        typeName: FilmPanel
+        dataId: 0
+    - rid: 4894396079713629502
+      type: {class: ClosePanelActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        typeName: ScreenControllerPanel
+    - rid: 4894396079713629503
+      type: {class: ClosePanelActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        typeName: MainPanel
+    - rid: 4894396079713629504
+      type: {class: ClosePanelActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        typeName: PlayerTopPanel

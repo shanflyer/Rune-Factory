@@ -9,37 +9,46 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f30c6030c4ed304383e0d88a9676ae8, type: 3}
+  m_Script: {fileID: 11500000, guid: eca02ebc7029983458adbd931cf2ccfe, type: 3}
   m_Name: "\u63A2\u7D22\u521D\u59CB"
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 0
-  typeName: ActionList
-  _parameters:
-  - value: SetCharacterCoordinate
-    parameters:
-    - value: 0
-      parameters: []
-    - value: 874
-      parameters:
-      - value: -60,39
-        parameters: []
-  - value: SetCharacterCoordinate
-    parameters:
-    - value: 23
-      parameters: []
-    - value: 874
-      parameters:
-      - value: -57,41
-        parameters: []
-  - value: DisplayOrHideCharacter
-    parameters:
-    - value: 0
-      parameters: []
-    - value: false
-      parameters: []
-  - value: DisplayOrHideCharacter
-    parameters:
-    - value: 23
-      parameters: []
-    - value: false
-      parameters: []
+  root:
+    rid: 4894396079538551700
+  references:
+    version: 2
+    RefIds:
+    - rid: 4894396079538551700
+      type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
+      data:
+        children:
+        - node:
+            rid: 4894396079538551701
+        - node:
+            rid: 4894396079538551702
+        - node:
+            rid: 4894396079538551703
+        - node:
+            rid: 4894396079538551704
+    - rid: 4894396079538551701
+      type: {class: SetCharacterCoordinateNode, ns: , asm: Assembly-CSharp}
+      data:
+        characterId: 0
+        coordinate: {x: -60, y: 39, z: 874}
+        fiexedDisplay: 0
+    - rid: 4894396079538551702
+      type: {class: SetCharacterCoordinateNode, ns: , asm: Assembly-CSharp}
+      data:
+        characterId: 23
+        coordinate: {x: -57, y: 41, z: 874}
+        fiexedDisplay: 0
+    - rid: 4894396079538551703
+      type: {class: DisplayOrHideCharacterNode, ns: , asm: Assembly-CSharp}
+      data:
+        characterId: 0
+        display: 0
+    - rid: 4894396079538551704
+      type: {class: DisplayOrHideCharacterNode, ns: , asm: Assembly-CSharp}
+      data:
+        characterId: 23
+        display: 0

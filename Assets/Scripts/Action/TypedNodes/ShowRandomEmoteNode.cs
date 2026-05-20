@@ -5,6 +5,7 @@ using UnityEngine;
 public class ShowRandomEmoteNode : ActionNode
 {
         public new int id;
+        public EntityType entityType;
         public int randomId;
         public int showTime;
 
@@ -16,6 +17,7 @@ public class ShowRandomEmoteNode : ActionNode
         var action = new ShowRandomEmote
         {
                 id = this.id,
+                entityType = this.entityType,
                 randomId = this.randomId,
                 showTime = this.showTime,
         };

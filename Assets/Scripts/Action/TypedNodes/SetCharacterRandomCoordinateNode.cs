@@ -1,10 +1,12 @@
 // SetCharacterRandomCoordinate
 using System;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class SetCharacterRandomCoordinateNode : ActionNode
 {
         public int characterId;
+        public int2 Coordinate;
         public int range;
 
     public override GameAction CreateAction(
@@ -15,6 +17,7 @@ public class SetCharacterRandomCoordinateNode : ActionNode
         var action = new SetCharacterRandomCoordinate
         {
                 characterId = this.characterId,
+                Coordinate = this.Coordinate,
                 range = this.range,
         };
         action.setValue = setValue;

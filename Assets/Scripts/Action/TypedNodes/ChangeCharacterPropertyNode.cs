@@ -5,6 +5,7 @@ using UnityEngine;
 public class ChangeCharacterPropertyNode : ActionNode
 {
         public int characterId;
+        public CharacterPropertyType propertyType;
         public int changeValue;
 
     public override GameAction CreateAction(
@@ -15,6 +16,7 @@ public class ChangeCharacterPropertyNode : ActionNode
         var action = new ChangeCharacterProperty
         {
                 characterId = this.characterId,
+                propertyType = this.propertyType,
                 changeValue = this.changeValue,
         };
         action.setValue = setValue;

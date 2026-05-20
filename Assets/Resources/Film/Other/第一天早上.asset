@@ -9,25 +9,44 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f30c6030c4ed304383e0d88a9676ae8, type: 3}
+  m_Script: {fileID: 11500000, guid: eca02ebc7029983458adbd931cf2ccfe, type: 3}
   m_Name: "\u7B2C\u4E00\u5929\u65E9\u4E0A"
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 0
-  typeName: ActionList
-  _parameters:
-  - value: PauseFilm
-    parameters:
-    - value: "\u7B2C\u4E00\u665A"
-      parameters: []
-  - value: Talk
-    parameters:
-    - value: 1413
-      parameters: []
-  - value: SaveGuideFilmIndexAction
-    parameters:
-    - value: 1
-      parameters: []
-  - value: TimeRun
-    parameters:
-    - value: false
-      parameters: []
+  root:
+    rid: 4894396079997534500
+  references:
+    version: 2
+    RefIds:
+    - rid: 4894396079997534500
+      type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
+      data:
+        children:
+        - node:
+            rid: 4894396079997534501
+        - node:
+            rid: 4894396079997534502
+        - node:
+            rid: 4894396079997534503
+        - node:
+            rid: 4894396079997534504
+    - rid: 4894396079997534501
+      type: {class: PauseFilmNode, ns: , asm: Assembly-CSharp}
+      data:
+        filmName: "\u7B2C\u4E00\u665A"
+    - rid: 4894396079997534502
+      type: {class: TalkNode, ns: , asm: Assembly-CSharp}
+      data:
+        talkId: 1413
+        characterId: 0
+        displayFunction: 0
+        fixedFunctions: []
+        nextTalkEventId: 0
+    - rid: 4894396079997534503
+      type: {class: SaveGuideFilmIndexActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        id: 1
+    - rid: 4894396079997534504
+      type: {class: TimeRunNode, ns: , asm: Assembly-CSharp}
+      data:
+        run: 0

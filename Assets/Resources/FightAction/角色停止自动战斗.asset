@@ -9,9 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f30c6030c4ed304383e0d88a9676ae8, type: 3}
+  m_Script: {fileID: 11500000, guid: eca02ebc7029983458adbd931cf2ccfe, type: 3}
   m_Name: "\u89D2\u8272\u505C\u6B62\u81EA\u52A8\u6218\u6597"
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 2
-  typeName: StopAllCharacterAutoFight
-  _parameters: []
+  root:
+    rid: 4894396079480102400
+  references:
+    version: 2
+    RefIds:
+    - rid: 4894396079480102400
+      type: {class: StopAllCharacterAutoFightNode, ns: , asm: Assembly-CSharp}
+      data:
+        children: []

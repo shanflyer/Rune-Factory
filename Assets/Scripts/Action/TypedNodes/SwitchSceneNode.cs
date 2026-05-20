@@ -5,6 +5,8 @@ using UnityEngine;
 public class SwitchSceneNode : ActionNode
 {
         public string sceneName;
+        public int beforeLoadActionId;
+        public int afterLoadActionId;
 
     public override GameAction CreateAction(
         int source = 0, int target = 0, int value = -1,
@@ -14,6 +16,8 @@ public class SwitchSceneNode : ActionNode
         var action = new SwitchScene
         {
                 sceneName = this.sceneName,
+                beforeLoadActionId = this.beforeLoadActionId,
+                afterLoadActionId = this.afterLoadActionId,
         };
         action.setValue = setValue;
         action.setResult = setResult;

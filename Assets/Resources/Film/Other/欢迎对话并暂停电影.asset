@@ -9,17 +9,32 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f30c6030c4ed304383e0d88a9676ae8, type: 3}
+  m_Script: {fileID: 11500000, guid: eca02ebc7029983458adbd931cf2ccfe, type: 3}
   m_Name: "\u6B22\u8FCE\u5BF9\u8BDD\u5E76\u6682\u505C\u7535\u5F71"
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 0
-  typeName: ActionList
-  _parameters:
-  - value: Talk
-    parameters:
-    - value: 1407
-      parameters: []
-  - value: PauseFilm
-    parameters:
-    - value: "\u89D2\u8272\u9009\u62E9"
-      parameters: []
+  root:
+    rid: 4894396079629002400
+  references:
+    version: 2
+    RefIds:
+    - rid: 4894396079629002400
+      type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
+      data:
+        children:
+        - node:
+            rid: 4894396079629002401
+        - node:
+            rid: 4894396079629002402
+    - rid: 4894396079629002401
+      type: {class: TalkNode, ns: , asm: Assembly-CSharp}
+      data:
+        talkId: 1407
+        characterId: 0
+        displayFunction: 0
+        fixedFunctions: []
+        nextTalkEventId: 0
+    - rid: 4894396079629002402
+      type: {class: PauseFilmNode, ns: , asm: Assembly-CSharp}
+      data:
+        filmName: "\u89D2\u8272\u9009\u62E9"

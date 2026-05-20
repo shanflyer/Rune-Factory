@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 public struct CheckPlayerStoreOpen : GameAction
 {
@@ -88,11 +88,11 @@ public struct CheckGameTimeDate : GameAction
         }
         if (parameters.Count >= 2)
         {
-            momth = int.Parse(parameters[0].value);
+            momth = int.Parse(parameters[1].value);
         }
         if (parameters.Count >= 3)
         {
-            day = int.Parse(parameters[0].value);
+            day = int.Parse(parameters[2].value);
         }
         if (source != 0 && source != int.MinValue)
         {
@@ -241,7 +241,7 @@ public struct GameCheckAction : GameAction
         this.setValue = setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
-    
+
 }
 
 public struct CheckCharacterTemp : GameAction
@@ -260,5 +260,5 @@ public struct CheckCharacterTemp : GameAction
         this.setValue = setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
-    
+
 }

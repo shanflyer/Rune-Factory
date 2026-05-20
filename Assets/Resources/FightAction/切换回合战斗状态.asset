@@ -9,9 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f30c6030c4ed304383e0d88a9676ae8, type: 3}
+  m_Script: {fileID: 11500000, guid: eca02ebc7029983458adbd931cf2ccfe, type: 3}
   m_Name: "\u5207\u6362\u56DE\u5408\u6218\u6597\u72B6\u6001"
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 0
-  typeName: StartRoundFight
-  _parameters: []
+  root:
+    rid: 4894396080126769800
+  references:
+    version: 2
+    RefIds:
+    - rid: 4894396080126769800
+      type: {class: StartRoundFightNode, ns: , asm: Assembly-CSharp}
+      data:
+        children: []

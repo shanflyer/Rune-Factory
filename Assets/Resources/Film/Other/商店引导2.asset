@@ -9,33 +9,49 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f30c6030c4ed304383e0d88a9676ae8, type: 3}
+  m_Script: {fileID: 11500000, guid: eca02ebc7029983458adbd931cf2ccfe, type: 3}
   m_Name: "\u5546\u5E97\u5F15\u5BFC2"
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 0
-  typeName: ActionList
-  _parameters:
-  - value: PauseFilm
-    parameters:
-    - value: "\u7B2C\u4E00\u665A"
-      parameters: []
-  - value: SetCharacterCoordinate
-    parameters:
-    - value: 0
-      parameters: []
-    - value: 21,-20,547
-      parameters: []
-  - value: DisplayOrHideCharacter
-    parameters:
-    - value: 0
-      parameters: []
-    - value: false
-      parameters: []
-  - value: GameGuideAction
-    parameters:
-    - value: 2
-      parameters: []
-  - value: SetCameraConfiner2D
-    parameters:
-    - value: false
-      parameters: []
+  root:
+    rid: 4894396078947087600
+  references:
+    version: 2
+    RefIds:
+    - rid: 4894396078947087600
+      type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
+      data:
+        children:
+        - node:
+            rid: 4894396078947087601
+        - node:
+            rid: 4894396078947087602
+        - node:
+            rid: 4894396078947087603
+        - node:
+            rid: 4894396078947087604
+        - node:
+            rid: 4894396078947087605
+    - rid: 4894396078947087601
+      type: {class: PauseFilmNode, ns: , asm: Assembly-CSharp}
+      data:
+        filmName: "\u7B2C\u4E00\u665A"
+    - rid: 4894396078947087602
+      type: {class: SetCharacterCoordinateNode, ns: , asm: Assembly-CSharp}
+      data:
+        characterId: 0
+        coordinate: {x: 21, y: -20, z: 547}
+        fiexedDisplay: 0
+    - rid: 4894396078947087603
+      type: {class: DisplayOrHideCharacterNode, ns: , asm: Assembly-CSharp}
+      data:
+        characterId: 0
+        display: 0
+    - rid: 4894396078947087604
+      type: {class: GameGuideActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        guidKey: 2
+    - rid: 4894396078947087605
+      type: {class: SetCameraConfiner2DNode, ns: , asm: Assembly-CSharp}
+      data:
+        enable: 0

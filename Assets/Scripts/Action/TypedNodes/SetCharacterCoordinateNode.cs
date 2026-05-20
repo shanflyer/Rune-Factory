@@ -1,10 +1,12 @@
 // SetCharacterCoordinate
 using System;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class SetCharacterCoordinateNode : ActionNode
 {
         public int characterId;
+        public int3 coordinate;
         public bool fiexedDisplay;
 
     public override GameAction CreateAction(
@@ -15,6 +17,7 @@ public class SetCharacterCoordinateNode : ActionNode
         var action = new SetCharacterCoordinate
         {
                 characterId = this.characterId,
+                coordinate = this.coordinate,
                 fiexedDisplay = this.fiexedDisplay,
         };
         action.setValue = setValue;

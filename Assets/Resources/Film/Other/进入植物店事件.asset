@@ -9,51 +9,61 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f30c6030c4ed304383e0d88a9676ae8, type: 3}
+  m_Script: {fileID: 11500000, guid: eca02ebc7029983458adbd931cf2ccfe, type: 3}
   m_Name: "\u8FDB\u5165\u690D\u7269\u5E97\u4E8B\u4EF6"
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 0
-  typeName: ActionList
-  _parameters:
-  - value: LerpScreenCycleValue
-    parameters:
-    - value: 1
-      parameters: []
-    - value: 0
-      parameters: []
-    - value: 0.6
-      parameters: []
-    - value: -1.3
-      parameters: []
-    - value: -0.55
-      parameters: []
-  - value: AddPlayerGold
-    parameters:
-    - value: 120
-      parameters: []
-  - value: DisplayOrHideCharacter
-    parameters:
-    - value: 5
-      parameters: []
-    - value: false
-      parameters: []
-  - value: DisplayOrHideCharacter
-    parameters:
-    - value: 6
-      parameters: []
-    - value: false
-      parameters: []
-  - value: InitMapLink
-    parameters:
-    - value: 759547
-      parameters: []
-  - value: SetItemAnimation
-    parameters:
-    - value: 547
-      parameters: []
-    - value: 1031331
-      parameters: []
-    - value: 1
-      parameters: []
-    - value: 0
-      parameters: []
+  root:
+    rid: 4894396079744463100
+  references:
+    version: 2
+    RefIds:
+    - rid: 4894396079744463100
+      type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
+      data:
+        children:
+        - node:
+            rid: 4894396079744463101
+        - node:
+            rid: 4894396079744463102
+        - node:
+            rid: 4894396079744463103
+        - node:
+            rid: 4894396079744463104
+        - node:
+            rid: 4894396079744463105
+        - node:
+            rid: 4894396079744463106
+    - rid: 4894396079744463101
+      type: {class: LerpScreenCycleValueNode, ns: , asm: Assembly-CSharp}
+      data:
+        minCycleValue: 1
+        maxCycleValue: 0
+        lerpTime: 0.6
+        cyclePos: {x: -1.3, y: 0}
+    - rid: 4894396079744463102
+      type: {class: AddPlayerGoldNode, ns: , asm: Assembly-CSharp}
+      data:
+        value: 120
+    - rid: 4894396079744463103
+      type: {class: DisplayOrHideCharacterNode, ns: , asm: Assembly-CSharp}
+      data:
+        characterId: 5
+        display: 0
+    - rid: 4894396079744463104
+      type: {class: DisplayOrHideCharacterNode, ns: , asm: Assembly-CSharp}
+      data:
+        characterId: 6
+        display: 0
+    - rid: 4894396079744463105
+      type: {class: InitMapLinkNode, ns: , asm: Assembly-CSharp}
+      data:
+        linkInstanceId: 759547
+    - rid: 4894396079744463106
+      type: {class: SetItemAnimationNode, ns: , asm: Assembly-CSharp}
+      data:
+        mapId: 547
+        id: 1031331
+        editorId: 1
+        keyX: 0
+        keyY: 0

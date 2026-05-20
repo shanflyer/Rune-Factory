@@ -9,19 +9,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f30c6030c4ed304383e0d88a9676ae8, type: 3}
+  m_Script: {fileID: 11500000, guid: eca02ebc7029983458adbd931cf2ccfe, type: 3}
   m_Name: "15\u663E\u793A\u521D\u59CB\u6218\u6597\u754C\u9762\u5E76\u64AD\u653E\u65B0\u624B\u7535\u5F71"
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 15
-  typeName: ActionList
-  _parameters:
-  - value: DisplayFightScene
-    parameters: []
-  - value: StopFilm
-    parameters:
-    - value: StartLoad1
-      parameters: []
-  - value: PlayFilm
-    parameters:
-    - value: StartFight
-      parameters: []
+  root:
+    rid: 4894396079092326700
+  references:
+    version: 2
+    RefIds:
+    - rid: 4894396079092326700
+      type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
+      data:
+        children:
+        - node:
+            rid: 4894396079092326701
+        - node:
+            rid: 4894396079092326702
+        - node:
+            rid: 4894396079092326703
+    - rid: 4894396079092326701
+      type: {class: DisplayFightSceneNode, ns: , asm: Assembly-CSharp}
+      data:
+        children: []
+    - rid: 4894396079092326702
+      type: {class: StopFilmNode, ns: , asm: Assembly-CSharp}
+      data:
+        filmName: StartLoad1
+    - rid: 4894396079092326703
+      type: {class: PlayFilmNode, ns: , asm: Assembly-CSharp}
+      data:
+        filmName: StartFight
+        assetName:

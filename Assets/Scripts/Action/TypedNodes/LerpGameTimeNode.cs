@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class LerpGameTimeNode : ActionNode
 {
+        public int targetHour;
+        public int targetMinute;
         public float totalTime;
 
     public override GameAction CreateAction(
@@ -13,6 +15,8 @@ public class LerpGameTimeNode : ActionNode
     {
         var action = new LerpGameTime
         {
+                targetHour = this.targetHour,
+                targetMinute = this.targetMinute,
                 totalTime = this.totalTime,
         };
         action.setValue = setValue;

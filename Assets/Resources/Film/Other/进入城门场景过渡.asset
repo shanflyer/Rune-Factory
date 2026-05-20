@@ -9,21 +9,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f30c6030c4ed304383e0d88a9676ae8, type: 3}
+  m_Script: {fileID: 11500000, guid: eca02ebc7029983458adbd931cf2ccfe, type: 3}
   m_Name: "\u8FDB\u5165\u57CE\u95E8\u573A\u666F\u8FC7\u6E21"
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 0
-  typeName: ActionList
-  _parameters:
-  - value: LerpScreenCycleValue
-    parameters:
-    - value: 1
-      parameters: []
-    - value: 0
-      parameters: []
-    - value: 1
-      parameters: []
-    - value: -2.08
-      parameters: []
-    - value: 1.4
-      parameters: []
+  root:
+    rid: 4894396080299922500
+  references:
+    version: 2
+    RefIds:
+    - rid: 4894396080299922500
+      type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
+      data:
+        children:
+        - node:
+            rid: 4894396080299922501
+    - rid: 4894396080299922501
+      type: {class: LerpScreenCycleValueNode, ns: , asm: Assembly-CSharp}
+      data:
+        minCycleValue: 1
+        maxCycleValue: 0
+        lerpTime: 1
+        cyclePos: {x: -2.08, y: 0}

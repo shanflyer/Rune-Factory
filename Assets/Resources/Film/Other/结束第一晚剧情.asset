@@ -9,43 +9,64 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f30c6030c4ed304383e0d88a9676ae8, type: 3}
+  m_Script: {fileID: 11500000, guid: eca02ebc7029983458adbd931cf2ccfe, type: 3}
   m_Name: "\u7ED3\u675F\u7B2C\u4E00\u665A\u5267\u60C5"
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 0
-  typeName: ActionList
-  _parameters:
-  - value: StopFilm
-    parameters:
-    - value: "\u7B2C\u4E00\u665A"
-      parameters: []
-  - value: SetCharacterCoordinate
-    parameters:
-    - value: 0
-      parameters: []
-    - value: 405
-      parameters:
-      - value: -4
-        parameters: []
-      - value: -3
-        parameters: []
-  - value: SwitchInputMap
-    parameters:
-    - value: false
-      parameters: []
-  - value: OpenPanelAction
-    parameters:
-    - value: PlayerTopPanel
-      parameters: []
-  - value: OpenPanelAction
-    parameters:
-    - value: ScreenControllerPanel
-      parameters: []
-  - value: OpenPanelAction
-    parameters:
-    - value: ShortcutPanel
-      parameters: []
-  - value: OpenPanelAction
-    parameters:
-    - value: MainPanel
-      parameters: []
+  root:
+    rid: 4894396079617036100
+  references:
+    version: 2
+    RefIds:
+    - rid: 4894396079617036100
+      type: {class: ActionListNode, ns: , asm: Assembly-CSharp}
+      data:
+        children:
+        - node:
+            rid: 4894396079617036101
+        - node:
+            rid: 4894396079617036102
+        - node:
+            rid: 4894396079617036103
+        - node:
+            rid: 4894396079617036104
+        - node:
+            rid: 4894396079617036105
+        - node:
+            rid: 4894396079617036106
+        - node:
+            rid: 4894396079617036107
+    - rid: 4894396079617036101
+      type: {class: StopFilmNode, ns: , asm: Assembly-CSharp}
+      data:
+        filmName: "\u7B2C\u4E00\u665A"
+    - rid: 4894396079617036102
+      type: {class: SetCharacterCoordinateNode, ns: , asm: Assembly-CSharp}
+      data:
+        characterId: 0
+        coordinate: {x: -4, y: -3, z: 405}
+        fiexedDisplay: 0
+    - rid: 4894396079617036103
+      type: {class: SwitchInputMapNode, ns: , asm: Assembly-CSharp}
+      data:
+        UI: 0
+    - rid: 4894396079617036104
+      type: {class: OpenPanelActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        typeName: PlayerTopPanel
+        dataId: 0
+    - rid: 4894396079617036105
+      type: {class: OpenPanelActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        typeName: ScreenControllerPanel
+        dataId: 0
+    - rid: 4894396079617036106
+      type: {class: OpenPanelActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        typeName: ShortcutPanel
+        dataId: 0
+    - rid: 4894396079617036107
+      type: {class: OpenPanelActionNode, ns: , asm: Assembly-CSharp}
+      data:
+        typeName: MainPanel
+        dataId: 0

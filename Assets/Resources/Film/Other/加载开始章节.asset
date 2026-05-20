@@ -9,12 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f30c6030c4ed304383e0d88a9676ae8, type: 3}
+  m_Script: {fileID: 11500000, guid: eca02ebc7029983458adbd931cf2ccfe, type: 3}
   m_Name: "\u52A0\u8F7D\u5F00\u59CB\u7AE0\u8282"
-  m_EditorClassIdentifier: 
-  dataName: "\u52A0\u8F7D\u5F00\u59CB\u7AE0\u8282"
+  m_EditorClassIdentifier: Assembly-CSharp::GameActionAsset
   id: 0
-  typeName: EnterChapter
-  _parameters:
-  - value: 0
-    parameters: []
+  root:
+    rid: 4894396079027766300
+  references:
+    version: 2
+    RefIds:
+    - rid: 4894396079027766300
+      type: {class: EnterChapterNode, ns: , asm: Assembly-CSharp}
+      data:
+        id: 0
