@@ -21,9 +21,9 @@ public class ChangeEquipNode : ActionNode
         };
         action.setValue = setValue;
         action.setResult = setResult;
-            if (source != 0 && source != int.MinValue) action.characterId = source;
-            if (target != 0 && target != int.MinValue) action.outPackageId = target;
-            if (value != -1) action.itemId = value;
+            if (source != 0) action.characterId = source;
+            if (target != 0) action.outPackageId = target;
+            if (value != 0) action.itemId = value;
         GameActionManager.instance.QueueAction(action, immediately);
         return action;
     }

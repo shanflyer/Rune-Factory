@@ -17,6 +17,7 @@ public class SwitchAutoStoreNode : ActionNode
         };
         action.setValue = setValue;
         action.setResult = setResult;
+            if (source != int.MinValue) action.isAuto = source == 1;
         GameActionManager.instance.QueueAction(action, immediately);
         return action;
     }

@@ -21,9 +21,9 @@ public class SetMapEditorItemLinkCharacterNode : ActionNode
         };
         action.setValue = setValue;
         action.setResult = setResult;
-            if (source != 0 && source != int.MinValue) action.mapId = source;
-            if (target != 0 && target != int.MinValue) action.mapItemEditorId = target;
-            if (value != -1) action.linkInstanceId = value;
+            if (source != int.MinValue && source != 0) action.mapId = source;
+            if (target != int.MinValue && target != 0) action.mapItemEditorId = target;
+            if (value != int.MinValue && value != 0) action.linkInstanceId = value;
         GameActionManager.instance.QueueAction(action, immediately);
         return action;
     }

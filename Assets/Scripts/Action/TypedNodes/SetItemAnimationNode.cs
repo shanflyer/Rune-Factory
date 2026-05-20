@@ -27,7 +27,7 @@ public class SetItemAnimationNode : ActionNode
         action.setResult = setResult;
             if (source != 0 && source != int.MinValue) action.id = source;
             if (target != 0 && target != int.MinValue) action.keyX = target;
-            if (value != -1) action.keyY = value;
+            if (value != 0 && value != int.MinValue) action.keyY = value;
         GameActionManager.instance.QueueAction(action, immediately);
         return action;
     }

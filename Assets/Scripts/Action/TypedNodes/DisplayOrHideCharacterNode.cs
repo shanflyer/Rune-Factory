@@ -19,7 +19,8 @@ public class DisplayOrHideCharacterNode : ActionNode
         };
         action.setValue = setValue;
         action.setResult = setResult;
-            if (source != 0 && source != int.MinValue) action.characterId = source;
+            if (source != 0) action.characterId = source;
+            action.display = target == 1;
         GameActionManager.instance.QueueAction(action, immediately);
         return action;
     }

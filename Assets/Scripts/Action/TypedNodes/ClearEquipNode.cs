@@ -6,6 +6,7 @@ public class ClearEquipNode : ActionNode
 {
         public int characterId;
         public int outPackageId;
+        public ItemType itemType;
 
     public override GameAction CreateAction(
         int source = 0, int target = 0, int value = -1,
@@ -16,11 +17,13 @@ public class ClearEquipNode : ActionNode
         {
                 characterId = this.characterId,
                 outPackageId = this.outPackageId,
+                itemType = this.itemType,
         };
         action.setValue = setValue;
         action.setResult = setResult;
-            if (source != 0 && source != int.MinValue) action.characterId = source;
-            if (target != 0 && target != int.MinValue) action.outPackageId = target;
+            if (source != 0) action.characterId = source;
+            if (target != 0) action.outPackageId = target;
+            if (value != 0) action.itemType = (ItemType)value;
         GameActionManager.instance.QueueAction(action, immediately);
         return action;
     }

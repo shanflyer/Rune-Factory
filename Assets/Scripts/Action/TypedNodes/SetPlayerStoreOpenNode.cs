@@ -17,6 +17,7 @@ public class SetPlayerStoreOpenNode : ActionNode
         };
         action.setValue = setValue;
         action.setResult = setResult;
+            if (source != int.MinValue) action.open = source == 1;
         GameActionManager.instance.QueueAction(action, immediately);
         return action;
     }

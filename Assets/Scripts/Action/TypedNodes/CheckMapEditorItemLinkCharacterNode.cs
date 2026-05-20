@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CheckMapEditorItemLinkCharacterNode : ActionNode
 {
+        public int mapId;
+        public int itemEditorId;
         public int characterId;
 
     public override GameAction CreateAction(
@@ -13,11 +15,15 @@ public class CheckMapEditorItemLinkCharacterNode : ActionNode
     {
         var action = new CheckMapEditorItemLinkCharacter
         {
+                mapId = this.mapId,
+                itemEditorId = this.itemEditorId,
                 characterId = this.characterId,
         };
         action.setValue = setValue;
         action.setResult = setResult;
-            if (value != -1) action.characterId = value;
+            if (source > 0) action.mapId = source;
+            if (target > 0) action.itemEditorId = target;
+            if (value != -1 && value != int.MinValue) action.characterId = value;
         GameActionManager.instance.QueueAction(action, immediately);
         return action;
     }

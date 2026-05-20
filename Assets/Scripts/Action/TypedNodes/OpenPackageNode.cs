@@ -30,6 +30,7 @@ public class OpenPackageNode : ActionNode
         action.setValue = setValue;
         action.setResult = setResult;
             if (source != 0 && source != int.MinValue) action.packageId = source;
+            if (target != 0 && target != int.MinValue) action.canSetShortcut = target != 0;
             if (target != 0 && target != int.MinValue) action.targetObj = target;
             if (value != -1) action.selectActionId = value;
         GameActionManager.instance.QueueAction(action, immediately);

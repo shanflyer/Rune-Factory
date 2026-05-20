@@ -21,9 +21,12 @@ public class TryCreateFieldNode : ActionNode
         };
         action.setValue = setValue;
         action.setResult = setResult;
-            if (source != 0 && source != int.MinValue) action.itemInstanceId = source;
-            if (target != 0 && target != int.MinValue) action.editorInstanceId = target;
-            if (value != -1) action.roomId = value;
+            if (source != 0)
+            {
+                action.itemInstanceId = source;
+                action.editorInstanceId = target;
+                action.roomId = value;
+            }
         GameActionManager.instance.QueueAction(action, immediately);
         return action;
     }

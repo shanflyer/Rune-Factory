@@ -17,6 +17,7 @@ public class SetFixedPlayerShaderPosNode : ActionNode
         };
         action.setValue = setValue;
         action.setResult = setResult;
+            action.fixedPos = source != 0;
         GameActionManager.instance.QueueAction(action, immediately);
         return action;
     }

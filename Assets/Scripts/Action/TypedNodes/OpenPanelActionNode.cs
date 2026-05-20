@@ -19,6 +19,7 @@ public class OpenPanelActionNode : ActionNode
         };
         action.setValue = setValue;
         action.setResult = setResult;
+            if (source != 0 && source != int.MinValue) action.dataId = source.ToString();
             if (target != 0 && target != int.MinValue) action.dataId = target.ToString();
         GameActionManager.instance.QueueAction(action, immediately);
         return action;

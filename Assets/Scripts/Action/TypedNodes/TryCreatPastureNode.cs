@@ -23,9 +23,9 @@ public class TryCreatPastureNode : ActionNode
         };
         action.setValue = setValue;
         action.setResult = setResult;
-            if (source != 0 && source != int.MinValue) action.roomId = source;
-            if (target != 0 && target != int.MinValue) action.itemInstanceId = target;
-            if (value != -1) action.dataId = value;
+            if (source != 0) action.roomId = source;
+            if (target != 0) action.itemInstanceId = target;
+            if (value != 0) action.dataId = value;
         GameActionManager.instance.QueueAction(action, immediately);
         return action;
     }

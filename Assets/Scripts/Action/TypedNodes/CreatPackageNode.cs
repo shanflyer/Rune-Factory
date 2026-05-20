@@ -23,10 +23,14 @@ public class CreatPackageNode : ActionNode
         };
         action.setValue = setValue;
         action.setResult = setResult;
-            if (source != 0 && source != int.MinValue) action.instanceId = source;
-            if (target != 0 && target != int.MinValue) action.packageDataId = target;
-            if (value != -1) action.level = value;
-        GameActionManager.instance.QueueAction(action, immediately);
+            if (target < 20)
+            {
+                if (source != 0 && source != int.MinValue) action.instanceId = source;
+                if (target != 0 && target != int.MinValue) action.packageDataId = target;
+                if (value != 0 && value != int.MinValue) action.level = value;
+            }
+            if (source > 10000) action.instanceId = source;
+        GameActionManager.instance.QueueAction(action, true);
         return action;
     }
 }

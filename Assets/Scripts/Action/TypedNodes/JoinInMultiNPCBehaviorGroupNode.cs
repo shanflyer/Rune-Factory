@@ -23,6 +23,7 @@ public class JoinInMultiNPCBehaviorGroupNode : ActionNode
         action.setResult = setResult;
             if (source != 0 && source != int.MinValue) action.characterId = source;
             if (target != 0 && target != int.MinValue) action.groupId = target;
+            if (value != 0 && value != int.MinValue) action.faceCenter = value == 1;
         GameActionManager.instance.QueueAction(action, immediately);
         return action;
     }

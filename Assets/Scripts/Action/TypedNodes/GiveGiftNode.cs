@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GiveGiftNode : ActionNode
 {
+        public int giveCharacter;
+        public int receiveCharacter;
         public int giftId;
 
     public override GameAction CreateAction(
@@ -13,11 +15,15 @@ public class GiveGiftNode : ActionNode
     {
         var action = new GiveGift
         {
+                giveCharacter = this.giveCharacter,
+                receiveCharacter = this.receiveCharacter,
                 giftId = this.giftId,
         };
         action.setValue = setValue;
         action.setResult = setResult;
-            if (value != -1) action.giftId = value;
+            if (source != 0) action.giveCharacter = source;
+            if (target != 0) action.receiveCharacter = target;
+            if (value != 0) action.giftId = value;
         GameActionManager.instance.QueueAction(action, immediately);
         return action;
     }

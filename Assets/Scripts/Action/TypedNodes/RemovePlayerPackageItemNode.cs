@@ -21,9 +21,9 @@ public class RemovePlayerPackageItemNode : ActionNode
         };
         action.setValue = setValue;
         action.setResult = setResult;
-            if (source != 0 && source != int.MinValue) action.characterId = source;
-            if (target != 0 && target != int.MinValue) action.itemDataId = target;
-            if (value != -1) action.itemCount = value;
+            if (source != 0) action.characterId = source;
+            if (target != 0) action.itemDataId = target;
+            if (value > 0) action.itemCount = value;
         GameActionManager.instance.QueueAction(action, immediately);
         return action;
     }

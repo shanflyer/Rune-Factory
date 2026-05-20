@@ -17,6 +17,7 @@ public class SetTempCharacterUpdataNode : ActionNode
         };
         action.setValue = setValue;
         action.setResult = setResult;
+            action.canUpdata = source == 1;
         GameActionManager.instance.QueueAction(action, immediately);
         return action;
     }

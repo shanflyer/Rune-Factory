@@ -20,6 +20,7 @@ public class CheckGameGuideActionNode : ActionNode
         action.setValue = setValue;
         action.setResult = setResult;
             if (source != 0 && source != int.MinValue) action.guidKey = source;
+            action.isEnd = target != 0;
         GameActionManager.instance.QueueAction(action, immediately);
         return action;
     }

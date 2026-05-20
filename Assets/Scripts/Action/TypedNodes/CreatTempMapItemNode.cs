@@ -23,7 +23,7 @@ public class CreatTempMapItemNode : ActionNode
         action.setResult = setResult;
             if (source != 0 && source != int.MinValue) action.characterId = source;
             if (target != 0 && target != int.MinValue) action.instanceId = target;
-            if (value != -1) action.dataId = value;
+            if (value != 0 && value != int.MinValue) action.dataId = value;
         GameActionManager.instance.QueueAction(action, immediately);
         return action;
     }

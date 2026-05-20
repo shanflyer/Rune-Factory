@@ -22,7 +22,9 @@ public class SetCharacterRandomCoordinateNode : ActionNode
         };
         action.setValue = setValue;
         action.setResult = setResult;
-            if (source != 0 && source != int.MinValue) action.characterId = source;
+            if (source != 0) action.characterId = source;
+            action.Coordinate.x = target;
+            action.Coordinate.y = value;
         GameActionManager.instance.QueueAction(action, immediately);
         return action;
     }

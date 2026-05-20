@@ -17,6 +17,7 @@ public class OpenOrCloseInputMapNode : ActionNode
         };
         action.setValue = setValue;
         action.setResult = setResult;
+            action.open = source == 1;
         GameActionManager.instance.QueueAction(action, immediately);
         return action;
     }
