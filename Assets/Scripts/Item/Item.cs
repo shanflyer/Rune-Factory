@@ -110,15 +110,30 @@ public struct Equipment : IReferenceData
 public class ItemManager:Singleton<ItemManager>
 {
     MyDic<int, ItemData> allItemDatas = new MyDic<int, ItemData>();
-    public override async void Init()
+    private Task initializationTask = Task.CompletedTask;
+    public override Task InitializationTask => initializationTask;
+
+    public override void Init()
     {
-        base.Init(); 
+        base.Init();
+        initializationTask = InitAsync();
+    }
+
+    private async Task InitAsync()
+    {
         allItemDatas.Clear();
         var data = await GameDataManager.instance.GetAllAsyncData<ItemData>();
         for(int i = 0; i < data.Count; i++)
         {
             allItemDatas.Add(data[i].id, data[i]);
         }
+    }
+
+    protected override void Clear()
+    {
+        initializationTask = Task.CompletedTask;
+        allItemDatas.Clear();
+        base.Clear();
     }
     public HashSet<int> GetItemsForTag(int tag)
     {

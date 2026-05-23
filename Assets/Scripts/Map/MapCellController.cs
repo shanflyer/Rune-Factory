@@ -187,6 +187,9 @@ public struct SpecialLinkCell
 public partial class MapCellController : Singleton<MapCellController>
 {
     private const int MaxRandomBehaviorCellAttempts = 128;
+    private System.Threading.Tasks.Task initializationTask = System.Threading.Tasks.Task.CompletedTask;
+    public override System.Threading.Tasks.Task InitializationTask => initializationTask;
+
     private readonly Dictionary<int, RuntimeMapRoom> runtimeMapRooms = new();
     private NativeParallelHashMap<uint, short> mapObjBarriers;
     public NativeParallelHashMap<uint, short>.ReadOnly MapObjBarriers => mapObjBarriers.AsReadOnly();
@@ -1632,9 +1635,14 @@ public partial class MapCellController : Singleton<MapCellController>
         return false;
     }
 
-    public override async void Init()
+    public override void Init()
     {
         base.Init();
+        initializationTask = InitAsync();
+    }
+
+    private async System.Threading.Tasks.Task InitAsync()
+    {
         tempMaps = new Dictionary<int, int>();
         var allTempMap = await GameDataManager.instance.GetAllAsyncData<TempMapData>();
         for (var i = 0; i < allTempMap.Count; i++)
@@ -1805,6 +1813,7 @@ public partial class MapCellController : Singleton<MapCellController>
     protected override void Clear()
     {
         base.Clear();
+        initializationTask = System.Threading.Tasks.Task.CompletedTask;
         foreach (var data in MapCharacterGrids)
         {
             data.Value.Dispose();

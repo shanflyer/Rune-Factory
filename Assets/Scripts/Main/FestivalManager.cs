@@ -2,14 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System.Threading.Tasks;
 using Unity.Mathematics;
 
 public class FestivalManager : Singleton<FestivalManager>
 {
-    public override async void Init()
+    private Task initializationTask = Task.CompletedTask;
+    public override Task InitializationTask => initializationTask;
+
+    public override void Init()
     {
         base.Init();
+        initializationTask = InitAsync();
+    }
 
+    private async Task InitAsync()
+    {
         var _customFestivalDatas = await GameDataManager.instance.GetAllAsyncData<FestivalData>();
         FestivalDatas = new Dictionary<int2, List<FestivalData>>();
         customFestivalDatas = new Dictionary<int2, List<FestivalData>>();
@@ -28,6 +36,13 @@ public class FestivalManager : Singleton<FestivalManager>
         LoadBrothDay();
         GameTimeManager.instance.CreatData();
     }
+
+    protected override void Clear()
+    {
+        initializationTask = Task.CompletedTask;
+        base.Clear();
+    }
+
     public  Dictionary<int2,List<FestivalData>> FestivalDatas;
 
     public Dictionary<int2, List<FestivalData>> customFestivalDatas;

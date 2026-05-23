@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -56,21 +57,32 @@ public class LanguageManage : Singleton<LanguageManage>
     public static MyLanguage nowLanguage;
     FieldInfo nowFieldInfo;
     public bool isRTL = false;
+    private Task initializationTask = Task.CompletedTask;
+    public override Task InitializationTask => initializationTask;
 
     public bool IsRTL()
     {
         return isRTL;
     }
     public List<LanguageData> languageDatas => allLanguages.Values.ToList();
-    public override async void Init()
+    public override void Init()
     {
-        base.Init(); 
+        base.Init();
+        initializationTask = InitAsync();
+    }
+
+    private async Task InitAsync()
+    {
         TMPTextLocalization.SwitchString = SwitchStr;
         TMPTextLocalization.NowLineSpacing = GetLineSpacing;
         TMPTextLocalization.NowCharacterSpacing = GetCharacterSpacing;
         TMPTextLocalization.IsRTL = IsRTL;
 
         LanguageSwitchDataList =GameDataManager.instance.GetData<LanguageSwitchDataList>("LanguageSwitchDataList");
+        if (LanguageSwitchDataList == null)
+        {
+            Debug.LogError("LanguageManage init failed: missing LanguageSwitchDataList.");
+        }
         languageFields.Clear();
         Type type = typeof(LanguageSwitchData);
         var fields = type.GetFields();
@@ -94,6 +106,7 @@ public class LanguageManage : Singleton<LanguageManage>
     protected override void Clear()
     {
         base.Clear();
+        initializationTask = Task.CompletedTask;
         TMPTextLocalization.SwitchString = null;
     }
 
@@ -111,7 +124,7 @@ public class LanguageManage : Singleton<LanguageManage>
             return source;
         }
         source = SpanStringReplacer.ReplaceMultipleStrings(source, replacements);
-        if (LanguageSwitchDataList.languageDatas.TryGetValue(source,out var languageSwitchData) && nowFieldInfo!=null)
+        if (LanguageSwitchDataList != null && LanguageSwitchDataList.languageDatas.TryGetValue(source,out var languageSwitchData) && nowFieldInfo!=null)
         {
           return  nowFieldInfo.GetValue(languageSwitchData).ToString();
         }

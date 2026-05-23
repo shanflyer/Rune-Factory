@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 using static UnityEngine.ParticleSystem;
@@ -11,11 +12,24 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
     Material screenMat;
     MyDic<int, GameVolumeObject> volumeObjects = new MyDic<int, GameVolumeObject>();
     Dictionary<string, ParticleSystem> singleParticleDic = new Dictionary<string, ParticleSystem>();
+    private Task initializationTask = Task.CompletedTask;
+    public override Task InitializationTask => initializationTask;
 
-    public override async void Init()
+    public override void Init()
     {
-        base.Init(); 
+        base.Init();
+        initializationTask = InitAsync();
+    }
+
+    private async Task InitAsync()
+    {
         screenMat = await ExtensionsResources.LoadResourceAsync<Material>("Material/ScreenCycle");
+        if (screenMat == null)
+        {
+            Debug.LogError("GameVolumeManager init failed: missing Material/ScreenCycle");
+            return;
+        }
+
         int width = Screen.width;
         int heigh = Screen.height;
         volumeLevel = PlayerPrefs.GetInt("VolumeLevel", 1);
@@ -120,8 +134,12 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
     protected override void Clear()
     {
         base.Clear();
-        screenMat.SetVector("_Offset", new Vector2(0.5f,0.5f));
-        SetScreenCycleValue(0);
+        initializationTask = Task.CompletedTask;
+        if (screenMat != null)
+        {
+            screenMat.SetVector("_Offset", new Vector2(0.5f,0.5f));
+            SetScreenCycleValue(0);
+        }
     }
     void LerpScreenCycleValue(LerpScreenCycleValue LerpScreenCycleValue)
     {

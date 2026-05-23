@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class SceneInfoManager : Singleton<SceneInfoManager>
 {
     private SceneInfo sceneInfoPre;
+    private Task initializationTask = Task.CompletedTask;
+    public override Task InitializationTask => initializationTask;
+
     public async void DisplaySceneInfo(string str,Vector3 pos)
     {
         var runtimeSceneInfo =await GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.OTHER.ToString(),
@@ -22,13 +26,29 @@ public class SceneInfoManager : Singleton<SceneInfoManager>
     }
     protected override void Clear()
     {
+        initializationTask = Task.CompletedTask;
         base.Clear();
     }
     
-    public override async void Init()
+    public override void Init()
     {
         base.Init();
+        initializationTask = InitAsync();
+    }
+
+    private async Task InitAsync()
+    {
         GameObject infoPre = await GameSourceManager.instance.GetPrefab(DataPath.sceneInfoPath);
+        if (infoPre == null)
+        {
+            Debug.LogError($"SceneInfoManager init failed: missing prefab at {DataPath.sceneInfoPath}");
+            return;
+        }
+
         sceneInfoPre = infoPre.GetComponent<SceneInfo>();
+        if (sceneInfoPre == null)
+        {
+            Debug.LogError($"SceneInfoManager init failed: prefab has no SceneInfo at {DataPath.sceneInfoPath}");
+        }
     }
 }

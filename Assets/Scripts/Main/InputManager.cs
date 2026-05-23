@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -20,6 +21,9 @@ public class InputManager :Singleton<InputManager>
 
     private Dictionary<string, InputActionDelegate> performDelegates = new Dictionary<string, InputActionDelegate>();
     private Dictionary<string, InputActionDelegate> cancelDelegates = new Dictionary<string, InputActionDelegate>();
+    private Task initializationTask = Task.CompletedTask;
+    public override Task InitializationTask => initializationTask;
+
     public InputManager()
     {
        
@@ -41,6 +45,7 @@ public class InputManager :Singleton<InputManager>
    
     protected override void Clear()
     {
+        initializationTask = Task.CompletedTask;
         base.Clear();
         using(var e = performDelegates.GetEnumerator())
         {
@@ -82,10 +87,14 @@ public class InputManager :Singleton<InputManager>
     }
 
     EventSystem eventSystem;
-    public override async void Init()
+    public override void Init()
     {
         base.Init();
+        initializationTask = InitAsync();
+    }
 
+    private async Task InitAsync()
+    {
         GameActionManager.instance.AddListener<SwitchInputMap>(SwitchInputMap);
         GameActionManager.instance.AddListener<OpenOrCloseInputMap>(OpenOrCloseInputMap);
 
@@ -101,16 +110,33 @@ public class InputManager :Singleton<InputManager>
 
         if (playerInput == null)
         {
-            GameObject inputController = new GameObject("InputController"); 
+            GameObject inputController = new GameObject("InputController");
             playerInput = inputController.AddComponent<PlayerInput>();
             playerInput.actions = await GameSourceManager.instance.GetScriptableObject<InputActionAsset>(DataPath.InputDataPath);
+            if (playerInput.actions == null)
+            {
+                Debug.LogError($"InputManager init failed: missing input action asset at {DataPath.InputDataPath}");
+                return;
+            }
 
             var pointerPre = await GameSourceManager.instance.GetPrefab(DataPath.pointerEffectPath);
+            if (pointerPre == null)
+            {
+                Debug.LogError($"InputManager init failed: missing pointer prefab at {DataPath.pointerEffectPath}");
+                return;
+            }
+
             var asyncInstantiateOperation = GameObject.InstantiateAsync(pointerPre, inputController.transform);
             await asyncInstantiateOperation;
-            var pointerObj = asyncInstantiateOperation.Result[0]; 
+            var pointerObj = asyncInstantiateOperation.Result[0];
             particleSystem=pointerObj.GetComponent<ParticleSystem>();
         }
+        if (playerInput == null || playerInput.actions == null)
+        {
+            Debug.LogError("InputManager init failed: PlayerInput or InputActionAsset is null.");
+            return;
+        }
+
         var actionMaps= playerInput.actions.actionMaps;
         foreach(var actionMap in actionMaps)
         {

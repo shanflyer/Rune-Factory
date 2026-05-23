@@ -10,6 +10,9 @@ public class UIManager : Singleton<UIManager>
 
     private Transform canvasParent;
     private CanvasGroup canvasGroup;
+    private Task initializationTask = Task.CompletedTask;
+    public override Task InitializationTask => initializationTask;
+
     public Color JoyStickColor=>joyStickColor;
     private  Color joyStickColor=new Color(0.03f,0.87f,1.0f,0.15f);
     static HashSet<Type> pluralUISet = new HashSet<Type>
@@ -92,9 +95,14 @@ public class UIManager : Singleton<UIManager>
             }
         }
     }
-    public override async void Init()
+    public override void Init()
     {
         base.Init();
+        initializationTask = InitAsync();
+    }
+
+    private async Task InitAsync()
+    {
         filmUI = false;
         BaseReference.UILayer = LayerMask.NameToLayer("UI");
         BaseReference.HideLayer = LayerMask.NameToLayer("Hide");
@@ -113,9 +121,16 @@ public class UIManager : Singleton<UIManager>
 
         TagAudioDataList tagAudioDataList = await GameSourceManager.instance.GetScriptableObject<TagAudioDataList>("Data/TagAudioData");
         tagUIAudioDic.Clear();
-        for(int i = 0; i < tagAudioDataList.tagAudioDatas.Count; i++)
+        if (tagAudioDataList == null)
         {
-            tagUIAudioDic[tagAudioDataList.tagAudioDatas[i].tag] = tagAudioDataList.tagAudioDatas[i].audioClip;
+            Debug.LogError("UIManager init failed: missing Data/TagAudioData");
+        }
+        else
+        {
+            for(int i = 0; i < tagAudioDataList.tagAudioDatas.Count; i++)
+            {
+                tagUIAudioDic[tagAudioDataList.tagAudioDatas[i].tag] = tagAudioDataList.tagAudioDatas[i].audioClip;
+            }
         }
 
         string JoyStickColorStr=PlayerPrefs.GetString("JoyStickColor");

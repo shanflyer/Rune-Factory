@@ -128,13 +128,26 @@ public class AudioController : Singleton<AudioController>
     private readonly Dictionary<AudioClip, ManagedAudioClip> managedClipsByClip = new Dictionary<AudioClip, ManagedAudioClip>();
     private float seCleanTimer;
     private int managedResourceGeneration;
+    private Task initializationTask = Task.CompletedTask;
 
     public override bool NeedUpdate => true;
+    public override Task InitializationTask => initializationTask;
 
-    public override async void Init()
+    public override void Init()
     {
         base.Init();
+        initializationTask = InitAsync();
+    }
+
+    private async Task InitAsync()
+    {
         audioMixer = await ExtensionsResources.LoadResourceAsync<AudioMixer>("Audio/AudioMixer");
+        if (audioMixer == null)
+        {
+            Debug.LogError("AudioController init failed: missing Audio/AudioMixer");
+            return;
+        }
+
         ApplySavedMixerVolume();
     }
 
@@ -149,6 +162,7 @@ public class AudioController : Singleton<AudioController>
         DestroyLayer(seLayer);
         ClearManagedAudioClips();
         audioMixer = null;
+        initializationTask = Task.CompletedTask;
         base.Clear();
     }
 

@@ -6,6 +6,8 @@ public class GameTimeEventManager : Singleton<GameTimeEventManager>
     private Dictionary<int,GameTimeEvent> newDayTimeEvents=new Dictionary<int, GameTimeEvent>();
 
     private Dictionary<int, GameTimeEvent> wakeUpTimeEvents=new Dictionary<int, GameTimeEvent>();
+    private System.Threading.Tasks.Task initializationTask = System.Threading.Tasks.Task.CompletedTask;
+    public override System.Threading.Tasks.Task InitializationTask => initializationTask;
     private int newDayActionIndex
     {
         get => GameDataSaveManager.instance.UserGameSaveData.otherSaveData.newDayActionIndex;
@@ -23,10 +25,14 @@ public class GameTimeEventManager : Singleton<GameTimeEventManager>
         }
     }
 
-    public override async void Init()
+    public override void Init()
     {
-        base.Init(); 
+        base.Init();
+        initializationTask = InitAsync();
+    }
 
+    private async System.Threading.Tasks.Task InitAsync()
+    {
         newDayTimeEvents.Clear();
         wakeUpTimeEvents.Clear();
         var gameTimeEventDatas = await GameDataManager.instance.GetAllAsyncData<GameTimeEventData>();
@@ -62,6 +68,7 @@ public class GameTimeEventManager : Singleton<GameTimeEventManager>
     protected override void Clear()
     {
         base.Clear();
+        initializationTask = System.Threading.Tasks.Task.CompletedTask;
         newDayTimeEvents.Clear();
         wakeUpTimeEvents.Clear();
     }

@@ -1,22 +1,45 @@
-﻿ using UnityEngine;
+using System.Threading.Tasks;
+using UnityEngine;
 using UnityEngine.Purchasing;
 
 public class PayManager : Singleton<PayManager>
 {
-    public override async void Init()
+    private Task initializationTask = Task.CompletedTask;
+    public override Task InitializationTask => initializationTask;
+
+    public override void Init()
     {
-        base.Init(); 
-     
+        base.Init();
+        initializationTask = InitAsync();
+    }
+
+    private async Task InitAsync()
+    {
         goldIcon = await GameSourceManager.instance.GetSprite(DataPath.goldSpritePath);
         diamondIcon = await GameSourceManager.instance.GetSprite(DataPath.diamondSpritePath);
+        if (goldIcon == null)
+        {
+            Debug.LogError($"PayManager init failed: missing gold sprite at {DataPath.goldSpritePath}");
+        }
+
+        if (diamondIcon == null)
+        {
+            Debug.LogError($"PayManager init failed: missing diamond sprite at {DataPath.diamondSpritePath}");
+        }
 
         GameActionManager.instance.AddListener<AddPlayerGold>(AddPlayerGold);
     }
- 
+
+    protected override void Clear()
+    {
+        initializationTask = Task.CompletedTask;
+        base.Clear();
+    }
+
     public int NowGold => GameDataSaveManager.instance.UserGameSaveData.otherSaveData.gold;
     public int NowDiamond => GameDataSaveManager.instance.UserGameSaveDataList.commonSaveData.diamond;
 
-    private Sprite goldIcon, diamondIcon; 
+    private Sprite goldIcon, diamondIcon;
 
     public Sprite GetPayMoneySprite(PayType payType)
     {
@@ -36,11 +59,13 @@ public class PayManager : Singleton<PayManager>
         GameDataSaveManager.instance.UserGameSaveData.otherSaveData.gold += count;
         GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
     }
+
     void AddPlayerGold(AddPlayerGold addPlayerGold)
     {
         GameDataSaveManager.instance.UserGameSaveData.otherSaveData.gold += addPlayerGold.value;
         GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
     }
+
     public void AddGold(MoneyCreatData MoneyCreatData)
     {
         PayAction("炼金", $"{string.Format(LanguageManage.SwitchStr("提炼{0}金币"), MoneyCreatData.getValue)}", MoneyCreatData.costValue, MoneyCreatData.costPayType,
@@ -64,7 +89,7 @@ public class PayManager : Singleton<PayManager>
             payType = payType,
             afterAction = afterAction
         };
-       await UIManager.instance.ShowGamePanel<CostSelectPanel, CostEventData>(CostEventData);
+        await UIManager.instance.ShowGamePanel<CostSelectPanel, CostEventData>(CostEventData);
     }
 
     public bool TryCost(PayType payType, int count)
@@ -103,7 +128,7 @@ public class PayManager : Singleton<PayManager>
 
     public async void TryCreatGold()
     {
-       await UIManager.instance.ShowGamePanel<GoldCreatPanel, IReferenceData>(null);
+        await UIManager.instance.ShowGamePanel<GoldCreatPanel, IReferenceData>(null);
     }
 
     public void AddDiamond(int value)
@@ -112,13 +137,14 @@ public class PayManager : Singleton<PayManager>
         GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
         GameDataSaveManager.instance.RefreshUserCommonSaveData(NowDiamond);
     }
+
     public void TryCreatMoney()
     {
         UIManager.instance.ShowGamePanel<StoreProductPanel>();
 
 #if UNITY_EDITOR
-       // nowDiamond += 200;
-      //  GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
+        // nowDiamond += 200;
+        // GameActionManager.instance.QueueAction(default(RefreshPlayerGold));
 #endif
     }
 }

@@ -6,9 +6,17 @@ using static BehaviorDesigner.Runtime.Behavior;
 
 public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
 {
-    public override async void Init()
+    private System.Threading.Tasks.Task initializationTask = System.Threading.Tasks.Task.CompletedTask;
+    public override System.Threading.Tasks.Task InitializationTask => initializationTask;
+
+    public override void Init()
     {
         base.Init();
+        initializationTask = InitAsync();
+    }
+
+    private async System.Threading.Tasks.Task InitAsync()
+    {
         obj = GameObject.Find("CharacterBehaviorManager");
         if (obj == null)
         {
@@ -21,6 +29,14 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
         GameActionManager.instance.AddListener<ReStartCharacterBehavior>(ReStartCharacterBehavior);
         GameActionManager.instance.AddListener<PauseCharacterBehavior>(PauseCharacterBehavior);
        // Object.DontDestroyOnLoad(obj);
+    }
+
+    protected override void Clear()
+    {
+        initializationTask = System.Threading.Tasks.Task.CompletedTask;
+        behaviorTrees.Clear();
+        behaviorHandlers.Clear();
+        base.Clear();
     }
 
     public ExternalBehavior backHomeExternalBehavior { get; private set; }

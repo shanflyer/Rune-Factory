@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MyGame;
 using Unity.Mathematics;
 using UnityEngine;
@@ -91,9 +92,9 @@ public class GameController : MonoBehaviour
                 GameTimeManager.instance.SetTime(value);
             }
         }
-        
+
     }
-     
+
     public int runTimeMinute {
         get
         {
@@ -113,7 +114,7 @@ public class GameController : MonoBehaviour
             {
                 GameTimeManager.instance.SetTime(minute: value);
             }
-        } 
+        }
     }
     [Range(0,4)]
     public float seasonValue;
@@ -172,11 +173,11 @@ public class GameController : MonoBehaviour
         {
             SingletonType.instance.ClearAll();
         }
-        
+
         instance = null;
     }
 
- 
+
     private void OnSavedDataChange(CloudServicesSavedDataChangeResult arg)
     {
         switch (arg.ChangeReason)
@@ -196,7 +197,7 @@ public class GameController : MonoBehaviour
           //  GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr($"云存档数据发生变化！--ChangeReason:{arg.ChangeReason}"), Application.Quit, Application.Quit);
          //   Debug.Log($"云存档数据发生变化！--ChangeReason:{arg.ChangeReason}");
         }
-       
+
     }
 
     string nowUserId;
@@ -214,12 +215,12 @@ public class GameController : MonoBehaviour
             {
                 hideSave = true;
                 GameManager.instance.ShowTwoSelectAction("用户改变", LanguageManage.SwitchStr("云存档用户发生变化，请退出游戏重新进入"), Application.Quit, Application.Quit);
-            } 
+            }
         }
-       
+
     }
     bool startGameCompleted = false;
-    private void OnSynchronizeComplete(CloudServicesSynchronizeResult result)
+    private async void OnSynchronizeComplete(CloudServicesSynchronizeResult result)
     {
        // if (GameDataManager.instance.GlobalData.debug)
             Debug.Log($"云存档OnSynchronizeComplete:{result.Success}");
@@ -228,12 +229,15 @@ public class GameController : MonoBehaviour
         if (result.Success)
         {
             if (!startGameCompleted)
-            { 
+            {
                 GameDataSaveManager.instance.LoadCloudData();
-                StartGame();
                 startGameCompleted = true;
+                if (!await StartGame())
+                {
+                    startGameCompleted = false;
+                }
             }
-           
+
         }
         else if (Application.internetReachability == NetworkReachability.NotReachable)
         {
@@ -272,7 +276,7 @@ if (result.Success)
 
     public void AddCrystal()
     {
-        
+
     }
     private void Awake()
     {
@@ -297,7 +301,7 @@ if (result.Success)
             }
         }
         FilmController.instance.SetParent(filmParent);
-        UIManager.instance.SetParent(UIParent); 
+        UIManager.instance.SetParent(UIParent);
     }
     // Start is called beforee the first frame update
     void Start()
@@ -318,8 +322,34 @@ if (result.Success)
         CloudRemoteConfig cloudRemoteConfig = CloudRemoteConfig.instance;
     }
 
-    void StartGame()
+    async Task<bool> StartGame()
     {
+        try
+        {
+            await GameDataManager.instance.WaitForInitialization();
+            await GameSourceManager.instance.WaitForInitialization();
+        }
+        catch (System.Exception e)
+        {
+            hideSave = true;
+            Debug.LogException(e);
+            GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr("基础数据加载失败，请退出游戏后重试"), Application.Quit, Application.Quit);
+            return false;
+        }
+
+        if (!Application.isPlaying || SingletonType.Cleared)
+        {
+            return false;
+        }
+
+        if (GameDataManager.instance.GlobalData == null)
+        {
+            hideSave = true;
+            Debug.LogError("StartGame failed: GameGlobalData is null.");
+            GameManager.instance.ShowTwoSelectAction("Error", LanguageManage.SwitchStr("基础配置加载失败，请退出游戏后重试"), Application.Quit, Application.Quit);
+            return false;
+        }
+
         environmentManger = EnvironmentManger.instance;
         // var appStoreManager= AppStoreManager.instance;
         var worldMapObjManager = WorldMapObjManager.instance;
@@ -338,16 +368,33 @@ if (result.Success)
         var teamManager = TeamManager.instance;
         var gameGuideManager = GameGuideManager.instance;
         var showItemManager = ShowItemManager.instance;
+        var audioController = AudioController.instance;
+        var languageManage = LanguageManage.instance;
+        var uiManager = UIManager.instance;
+        var inputManager = InputManager.instance;
+
+        if (!await WaitForStartupManager(payManager, nameof(PayManager))) return false;
+        if (!await WaitForStartupManager(gameVolumeManager, nameof(GameVolumeManager))) return false;
+        if (!await WaitForStartupManager(gameRandom, nameof(GameRandom))) return false;
+        if (!await WaitForStartupManager(exploreManger, nameof(ExploreManager))) return false;
+        if (!await WaitForStartupManager(fightManager, nameof(FightManager))) return false;
+        if (!await WaitForStartupManager(festivalManager, nameof(FestivalManager))) return false;
+        if (!await WaitForStartupManager(gameTimeEventManager, nameof(GameTimeEventManager))) return false;
+        if (!await WaitForStartupManager(audioController, nameof(AudioController))) return false;
+        if (!await WaitForStartupManager(languageManage, nameof(LanguageManage))) return false;
+        if (!await WaitForStartupManager(uiManager, nameof(UIManager))) return false;
+        if (!await WaitForStartupManager(inputManager, nameof(InputManager))) return false;
+
         GameTimeManager.instance.ZeroGameTime();
 
         GameTimerController.instance.DelayAction(100, () => { GameTimeManager.instance.SetTime(12, 0); });
 
         var audio = transform.Find("Audio");
-        AudioController.instance.SetAudioSource(audio.gameObject);
+        audioController.SetAudioSource(audio.gameObject);
         GameRuntimeObjManager.instance.CreatParent<RuntimeObjType>(transform);
-        LanguageManage.instance.SystemLanguageMatch(SetLanguage ? SetSystemLanguage : MyLanguage.NULL);
-        UIManager.instance.ShowGamePanel<ZeroPanel>();
-         
+        languageManage.SystemLanguageMatch(SetLanguage ? SetSystemLanguage : MyLanguage.NULL);
+        await uiManager.ShowGamePanel<ZeroPanel>();
+
         SwitchInputMap switchInputMap = new SwitchInputMap
         {
             UI = true
@@ -355,21 +402,38 @@ if (result.Success)
         GameActionManager.instance.QueueAction(switchInputMap, true);
         ZeroSetCloudGlobal();
         loadMap = true;
+        return true;
+    }
+
+    private async Task<bool> WaitForStartupManager<T>(Singleton<T> manager, string managerName) where T : Singleton<T>
+    {
+        try
+        {
+            await manager.WaitForInitialization();
+            return true;
+        }
+        catch (System.Exception e)
+        {
+            hideSave = true;
+            Debug.LogException(e);
+            GameManager.instance.ShowTwoSelectAction("Error", $"{managerName} 初始化失败，请退出游戏后重试", Application.Quit, Application.Quit);
+            return false;
+        }
     }
     void ZeroSetCloudGlobal()
-    { 
+    {
         Shader.SetGlobalVector("_WindDir", _WindDir);
         Shader.SetGlobalVector("_NoiseSet0", _NoiseSet0);
-        Shader.SetGlobalVector("_NoiseSet1", _NoiseSet1); 
+        Shader.SetGlobalVector("_NoiseSet1", _NoiseSet1);
     }
 
     void TestMoveAction(object obj)
     {
         if (obj != null)
         {
-           Debug.Log("TestMoveeA:" + obj); 
-             
-        } 
+           Debug.Log("TestMoveeA:" + obj);
+
+        }
     }
     private void LateUpdate()
     {
@@ -418,7 +482,7 @@ if (result.Success)
             }
 
         }
-       
+
         if (seasonValue != _seasonValue)
         {
             _seasonValue = seasonValue;
@@ -457,7 +521,7 @@ if (result.Success)
     public void TestLookup()
     {
         MapCellJobController.instance.AddPathRequest(testCoordinate.xy, testCoordinate.zw, testMap,
-            (Stack<int2> path, int map, int2 start, int2 end) => 
+            (Stack<int2> path, int map, int2 start, int2 end) =>
             {
                 string pathStr = "path";
                 var pList = path.ToList();
@@ -468,7 +532,7 @@ if (result.Success)
                 Debug.Log($"PlayerMove Job  pathStr{pathStr}");
             });
     }
- 
+
     public void SetCloudGlobal()
     {
         Shader.SetGlobalFloat("_CloudValue", _CloudValue);
@@ -492,12 +556,12 @@ if (result.Success)
 #endif
 
 }
- 
+
 
 #if UNITY_EDITOR
 [CustomEditor(typeof(GameController))]
 public class GameControllerEditor : Editor
-{ 
+{
     public GameController gameController
     {
         get
@@ -516,13 +580,13 @@ public class GameControllerEditor : Editor
             gameController.runTimeHour = EditorGUILayout.IntSlider("Hour", gameController.runTimeHour, 0, 24);
             gameController.runTimeMinute = EditorGUILayout.IntSlider("Minute", gameController.runTimeMinute, 0, 60);
         }
-        
+
         if (GUILayout.Button("test"))
         {
             gameController.TestLookup();
         }
 
-       
+
         if (GUILayout.Button("SetCloud"))
         {
             gameController.SetCloudGlobal();
@@ -543,7 +607,7 @@ public class GameControllerEditor : Editor
         {
             gameController.TestLanguage();
         }
-      
+
     }
 }
 #endif

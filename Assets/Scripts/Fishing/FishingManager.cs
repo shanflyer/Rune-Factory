@@ -4,12 +4,18 @@ using Unity.Mathematics;
 
 public class FishingManager : Singleton<FishingManager>
 {
-    private Dictionary<int2, FishPondData> fishPondDatas = new Dictionary<int2, FishPondData>(); 
+    private Dictionary<int2, FishPondData> fishPondDatas = new Dictionary<int2, FishPondData>();
+    private System.Threading.Tasks.Task initializationTask = System.Threading.Tasks.Task.CompletedTask;
+    public override System.Threading.Tasks.Task InitializationTask => initializationTask;
 
-    public override async void Init()
+    public override void Init()
     {
         base.Init();
+        initializationTask = InitAsync();
+    }
 
+    private async System.Threading.Tasks.Task InitAsync()
+    {
         fishPondDatas.Clear();
         var allData = await GameDataManager.instance.GetAllAsyncData<FishPondData>();
         for (int i = 0; i < allData.Count; i++)
@@ -26,7 +32,8 @@ public class FishingManager : Singleton<FishingManager>
 
     protected override void Clear()
     {
-        base.Clear(); 
+        base.Clear();
+        initializationTask = System.Threading.Tasks.Task.CompletedTask;
         if (!SingletonType.Cleared)
         {
             GameActionManager.instance.RemoveListener<FishingIsSuccess>(FishingIsSuccess);

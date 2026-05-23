@@ -108,12 +108,32 @@ public class WeatherManager : Singleton<WeatherManager>
     private List<Weather> nowDayWeathers = new List<Weather>();
     private List<Weather> nextDayWeathers = new List<Weather>();
     WeatherIconData weatherIconData;
-    public override async void Init()
+    private Task initializationTask = Task.CompletedTask;
+    public override Task InitializationTask => initializationTask;
+
+    public override void Init()
+    {
+        base.Init();
+        initializationTask = InitAsync();
+    }
+
+    private async Task InitAsync()
     {
         weatherIconData = await GameSourceManager.instance.GetSingleScriptableObject<WeatherIconData>("Data/WeatherIconData");
+        if (weatherIconData == null)
+        {
+            Debug.LogError("WeatherManager init failed: missing Data/WeatherIconData.");
+            return;
+        }
+
         weatherIconData.InitData();
-        base.Init();
         GameActionManager.instance.AddListener<CreatWeather>(CreatWeather);
+    }
+
+    protected override void Clear()
+    {
+        initializationTask = Task.CompletedTask;
+        base.Clear();
     }
     public List<WeatherReferenceData> GetNowWeatherReferenceDatas()
     {

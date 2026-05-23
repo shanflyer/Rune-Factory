@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Singleton<T> where T : Singleton<T>
@@ -72,7 +73,15 @@ public class Singleton<T> where T : Singleton<T>
     public virtual void Init()
     {
 
-    } 
+    }
+
+    public virtual Task InitializationTask => Task.CompletedTask;
+
+    public virtual async Task WaitForInitialization()
+    {
+        await InitializationTask;
+    }
+
     protected virtual void Clear()
     { 
         if (NeedUpdate)

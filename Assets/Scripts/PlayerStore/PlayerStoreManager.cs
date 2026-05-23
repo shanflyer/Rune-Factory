@@ -8,6 +8,8 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
     public Dictionary<int,RuntimeStoreCounter> RuntimeStoreCounters => runtimeStoreCounters;
     private Dictionary<int, RuntimeStoreCounter> runtimeStoreCounters;
     private Dictionary<int, RuntimeObj> nowRuntimeStoreCounterObjs = new Dictionary<int, RuntimeObj>();
+    private System.Threading.Tasks.Task initializationTask = System.Threading.Tasks.Task.CompletedTask;
+    public override System.Threading.Tasks.Task InitializationTask => initializationTask;
 
     private SellItem sellItem;
     AnimationCurve timeCurve,weatherCurve;
@@ -19,20 +21,37 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
     }
     protected override void Clear()
     {
+        initializationTask = System.Threading.Tasks.Task.CompletedTask;
         base.Clear();
     }
 
-    public override async void Init()
+    public override void Init()
     {
         base.Init();
+        initializationTask = InitAsync();
+    }
+
+    private async System.Threading.Tasks.Task InitAsync()
+    {
         var storeShow = StoreShow.instance;
+        await storeShow.WaitForInitialization();
         var timeCurveData = await GameDataManager.instance.GetAsyncData<GrowModelData>(GameCommon.timeStoreCurveData);
         timeCurve = timeCurveData.curve;
         var weatherCurveData = await GameDataManager.instance.GetAsyncData<GrowModelData>(GameCommon.weatherStoreCurveData);
         weatherCurve = weatherCurveData.curve;
 
         var playerStorePrefab = await GameSourceManager.instance.GetPrefab(DataPath.StoreCounterPrefab);
+        if (playerStorePrefab == null)
+        {
+            Debug.LogError($"PlayerStoreManager init failed: missing prefab '{DataPath.StoreCounterPrefab}'.");
+            return;
+        }
         sellItem = playerStorePrefab.GetComponent<SellItem>();
+        if (sellItem == null)
+        {
+            Debug.LogError($"PlayerStoreManager init failed: prefab '{DataPath.StoreCounterPrefab}' missing SellItem.");
+            return;
+        }
         runtimeStoreCounters=new Dictionary<int, RuntimeStoreCounter>();
         GameActionManager.instance.AddListener<CreatStoreCounter>(CreatStoreCounter);
         GameActionManager.instance.AddListener<DisplayStoreCounter>(DisplayStoreCounter);

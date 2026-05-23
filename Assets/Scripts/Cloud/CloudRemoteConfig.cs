@@ -8,21 +8,29 @@ using UnityEngine;
 public class CloudRemoteConfig:Singleton<CloudRemoteConfig>
 {
     Dictionary<string, object> defaultConfigs = new Dictionary<string, object>();
-    public override async void Init()
+    private Task initializationTask = Task.CompletedTask;
+    public override Task InitializationTask => initializationTask;
+
+    public override void Init()
     {
         base.Init();
+        initializationTask = InitAsync();
+    }
+
+    private async Task InitAsync()
+    {
         if (Application.internetReachability != NetworkReachability.NotReachable)
         {
             await InitializeRemoteConfigAsync();
+            RemoteConfigService.Instance.FetchCompleted += ApplyRemoteSettings;
+            RemoteConfigService.Instance.FetchConfigs(new userAttributes(), new appAttributes());
         }
 
-        RemoteConfigService.Instance.FetchCompleted += ApplyRemoteSettings;
-        RemoteConfigService.Instance.FetchConfigs(new userAttributes(), new appAttributes()); 
-       
     }
 
     protected override void Clear()
     {
+        initializationTask = Task.CompletedTask;
         base.Clear();
     }
     public struct userAttributes { }

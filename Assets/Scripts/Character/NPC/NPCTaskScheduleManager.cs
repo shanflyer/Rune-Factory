@@ -10,9 +10,17 @@ using UnityEngine;
 public class NPCTaskScheduleManager:Singleton<NPCTaskScheduleManager>
 {
     Dictionary<int, NPCTaskScheduleData> NPCTaskScheduleDatas = new Dictionary<int, NPCTaskScheduleData>();
-    public override async void Init()
+    private Task initializationTask = Task.CompletedTask;
+    public override Task InitializationTask => initializationTask;
+
+    public override void Init()
     {
         base.Init();
+        initializationTask = InitAsync();
+    }
+
+    private async Task InitAsync()
+    {
         GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
         GameActionManager.instance.AddListener<TryContinueBehavior>(TryContinueBehavior);
         var datas=await GameDataManager.instance.GetAllAsyncData<NPCTaskScheduleData>();
@@ -20,6 +28,14 @@ public class NPCTaskScheduleManager:Singleton<NPCTaskScheduleManager>
         {
             NPCTaskScheduleDatas[datas[i].id] = datas[i];
         }
+    }
+
+    protected override void Clear()
+    {
+        initializationTask = Task.CompletedTask;
+        NPCTaskScheduleDatas.Clear();
+        npcBehaviorDic.Clear();
+        base.Clear();
     }
     public bool GetTaskScheduleData(int id,out NPCTaskScheduleData data)
     {

@@ -37,6 +37,8 @@ public enum WeatherDisplayType
 public class EnvironmentManger : Singleton<EnvironmentManger>
 {
     public override bool NeedUpdate => true;
+    private Task initializationTask = Task.CompletedTask;
+    public override Task InitializationTask => initializationTask;
     SkyEnviromentMono skyEnviromentMono;
     
     public SkyEnviromentMono SkyEnviromentMono =>skyEnviromentMono;
@@ -195,10 +197,19 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
        return CharacterFootStepDic.GetValueList(true);
     }
     public float nowWaterFall => nowWeather.waterFall;
-    public override async void Init()
+    public override void Init()
     {
         base.Init();
+        initializationTask = InitAsync();
+    }
+
+    private async Task InitAsync()
+    {
         FootstepDataList=await GameDataManager.instance.GetAsyncData<FootstepDataList>();
+        if (FootstepDataList == null)
+        {
+            Debug.LogError("EnvironmentManger init failed: missing FootstepDataList.");
+        }
 
         if (lightning == null)
         {
@@ -209,6 +220,11 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         if (skyEnviromentMono == null)
         {
             var _skyEnviromentMono = Resources.Load<SkyEnviromentMono>("Prefabs/Environment");
+            if (_skyEnviromentMono == null)
+            {
+                Debug.LogError("EnvironmentManger init failed: missing Prefabs/Environment.");
+                return;
+            }
 
             var asyncInstantiateOperation = GameObject.InstantiateAsync(_skyEnviromentMono, CameraManager.instance.mainCamera.transform);
             await asyncInstantiateOperation;
@@ -591,6 +607,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
 
     protected override void Clear()
     {
+        initializationTask = Task.CompletedTask;
         CharacterFootStepDic.Clear();
         base.Clear();
     }

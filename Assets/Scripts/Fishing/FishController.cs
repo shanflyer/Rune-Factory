@@ -3,14 +3,21 @@ using Unity.Mathematics;
 using UnityEngine;
 
 public class FishController : Singleton<FishController>
-{ 
+{
     Dictionary<int, FisherRuntime> Fishers = new Dictionary<int, FisherRuntime>();
     public override bool NeedUpdate => true;
     private FishTool fishTool;
+    private System.Threading.Tasks.Task initializationTask = System.Threading.Tasks.Task.CompletedTask;
+    public override System.Threading.Tasks.Task InitializationTask => initializationTask;
 
-    public override async void Init()
+    public override void Init()
     {
-        base.Init(); 
+        base.Init();
+        initializationTask = InitAsync();
+    }
+
+    private async System.Threading.Tasks.Task InitAsync()
+    {
         GameActionManager.instance.AddListener<PlayFishWater>(PlayFishWater);
         GameActionManager.instance.AddListener<CreatFisher>(CreatFisher);
         GameActionManager.instance.AddListener<RecycleFisher>(RecycleFisher);
@@ -18,6 +25,10 @@ public class FishController : Singleton<FishController>
         GameActionManager.instance.AddListener<NPCFishingResult>(NPCFishingResult);
         GameActionManager.instance.AddListener<StartFishingGame>(StartFishingGame);
         fishTool = await GameSourceManager.instance.GetComponent<FishTool>(DataPath.fishToolPrefab);
+        if (fishTool == null)
+        {
+            Debug.LogError($"FishController init failed: missing fish tool prefab '{DataPath.fishToolPrefab}'.");
+        }
     }
 
     void StartFishingGame(StartFishingGame startFishingGame)
@@ -125,7 +136,8 @@ public class FishController : Singleton<FishController>
     }
     protected override void Clear()
     {
-        base.Clear(); 
+        initializationTask = System.Threading.Tasks.Task.CompletedTask;
+        base.Clear();
     }
 
     private void PlayFishWater(PlayFishWater playFishWater)

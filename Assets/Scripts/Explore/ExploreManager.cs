@@ -21,6 +21,8 @@ public class FightChapter : IReferenceData
 public class ExploreManager : Singleton<ExploreManager>
 {
     private Dictionary<int,FightChapter> fightChapters = new Dictionary<int, FightChapter>();
+    private System.Threading.Tasks.Task initializationTask = System.Threading.Tasks.Task.CompletedTask;
+    public override System.Threading.Tasks.Task InitializationTask => initializationTask;
 
     public int NowChapter => nowChapter;
 
@@ -40,9 +42,14 @@ public class ExploreManager : Singleton<ExploreManager>
     }
 
     public int NewUid => myUid.Uid;
-    public override async void Init()
+    public override void Init()
     {
         base.Init();
+        initializationTask = InitAsync();
+    }
+
+    private async System.Threading.Tasks.Task InitAsync()
+    {
         myUid = new MyUid();
         fightChapters.Clear();
         var allChapterDatas = await GameDataManager.instance.GetAllAsyncData<FightMapData>();
@@ -371,6 +378,7 @@ public class ExploreManager : Singleton<ExploreManager>
 
     protected override void Clear()
     {
+        initializationTask = System.Threading.Tasks.Task.CompletedTask;
         fightChapters.Clear();
         base.Clear();
     }

@@ -4,19 +4,27 @@ using Unity.Mathematics;
 public class FarmManager : Singleton<FarmManager>
 {
     private Dictionary<int, Field> fields = new Dictionary<int, Field>();
+    private System.Threading.Tasks.Task initializationTask = System.Threading.Tasks.Task.CompletedTask;
+    public override System.Threading.Tasks.Task InitializationTask => initializationTask;
     //private Dictionary<int, Plant> plants = new Dictionary<int, Plant>();
 
 
     protected override void Clear()
     {
+        initializationTask = System.Threading.Tasks.Task.CompletedTask;
         fields.Clear();
         // plants.Clear();
         base.Clear();
     }
 
-    public override async void Init()
+    public override void Init()
     {
         base.Init();
+        initializationTask = InitAsync();
+    }
+
+    private System.Threading.Tasks.Task InitAsync()
+    {
         fields.Clear();
         // plants.Clear();
 
@@ -33,6 +41,7 @@ public class FarmManager : Singleton<FarmManager>
         GameActionManager.instance.AddListener<TrySicklePlant>(TrySicklePlant);
         GameActionManager.instance.AddListener<CheckPlant>(CheckPlant);
         GameActionManager.instance.AddListener<ChangeMapRoom>(ChangeMapRoom);
+        return System.Threading.Tasks.Task.CompletedTask;
     }
     
     void ChangeMapRoom(ChangeMapRoom changeMapRoom)

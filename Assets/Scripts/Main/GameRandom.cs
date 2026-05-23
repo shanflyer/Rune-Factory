@@ -64,12 +64,15 @@ public class GameRandom : Singleton<GameRandom>
         return result;
     }
 
-    public override async void Init()
+    private Task initializationTask = Task.CompletedTask;
+    public override Task InitializationTask => initializationTask;
+
+    public override void Init()
     {
         base.Init();
         randomSeed = (uint)(DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, 0)).TotalMilliseconds;
         random = new Random(randomSeed);
-        await LoadRandomDataList();
+        initializationTask = LoadRandomDataList();
     }
 
     public void RefreshRandomSeed(ref uint randomSeed)
@@ -108,6 +111,11 @@ public class GameRandom : Singleton<GameRandom>
         GameRandomDataList gameRandomDataList = await ExtensionsResources.LoadResourceAsync<GameRandomDataList>(
           $"{DataPath.GetDataPath(typeof(GameRandomDataList))}");
         gameRandomDatas.Clear();
+        if (gameRandomDataList == null)
+        {
+            UnityEngine.Debug.LogError($"GameRandom init failed: missing {DataPath.GetDataPath(typeof(GameRandomDataList))}");
+            return;
+        }
 
         for (int i = 0; i < gameRandomDataList.gameRandomDatas.Count; i++)
         {

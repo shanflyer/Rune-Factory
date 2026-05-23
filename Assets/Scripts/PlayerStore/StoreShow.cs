@@ -9,11 +9,30 @@ public class StoreShow:Singleton<StoreShow>
 {
     //private Transform ShowParent;
     private Animation CoinPrefab;
-    public override async void Init()
+    private Task initializationTask = Task.CompletedTask;
+    public override Task InitializationTask => initializationTask;
+
+    public override void Init()
     {
         base.Init();
+        initializationTask = InitAsync();
+    }
+
+    private async Task InitAsync()
+    {
         CoinPrefab =await GameSourceManager.instance.GetComponent<Animation>(DataPath.StoreCoinPrefab);
+        if (CoinPrefab == null)
+        {
+            Debug.LogError($"StoreShow init failed: missing coin prefab '{DataPath.StoreCoinPrefab}'.");
+            return;
+        }
         GameActionManager.instance.AddListener<ShowCoin>(ShowCoin);
+    }
+
+    protected override void Clear()
+    {
+        initializationTask = Task.CompletedTask;
+        base.Clear();
     }
     public async void ShowCoin(ShowCoin ShowCoin)
     {

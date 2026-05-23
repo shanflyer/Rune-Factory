@@ -78,9 +78,12 @@ public class EmoteManager : Singleton<EmoteManager>
 
     private Dictionary<int, EmoteRuntime> characterEmoteRuntimes = new Dictionary<int, EmoteRuntime>();
     private Dictionary<int, EmoteRuntime> itemEmoteRuntimes = new Dictionary<int, EmoteRuntime>();
+    private Task initializationTask = Task.CompletedTask;
+    public override Task InitializationTask => initializationTask;
 
     protected override void Clear()
     {
+        initializationTask = Task.CompletedTask;
         base.Clear();
         foreach(var e in characterEmoteRuntimes.Values)
         {
@@ -91,11 +94,28 @@ public class EmoteManager : Singleton<EmoteManager>
             e.Dispose();
         }
     }
-    public override async void Init()
+    public override void Init()
     {
         base.Init();
+        initializationTask = InitAsync();
+    }
+
+    private async Task InitAsync()
+    {
         var _emotePrefab = await GameSourceManager.instance.GetPrefab(emoteObjPath);
+        if (_emotePrefab == null)
+        {
+            Debug.LogError($"EmoteManager init failed: missing prefab at {emoteObjPath}");
+            return;
+        }
+
         emoteAnimator = _emotePrefab.GetComponent<Animator>();
+        if (emoteAnimator == null)
+        {
+            Debug.LogError($"EmoteManager init failed: prefab has no Animator at {emoteObjPath}");
+            return;
+        }
+
         GameActionManager.instance.AddListener<ShowEmote>(ShowEmote);
         GameActionManager.instance.AddListener<ShowRandomEmote>(ShowRandomEmote);
         GameActionManager.instance.AddListener<TryRecycleCharacterEmote>(TryRecycleCharacterEmote);

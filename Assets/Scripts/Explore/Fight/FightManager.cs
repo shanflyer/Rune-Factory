@@ -10,8 +10,10 @@ public enum HurtResultType
 }
 
 public class FightManager : Singleton<FightManager>
-{ 
+{
     public override bool NeedUpdate => true;
+    private Task initializationTask = Task.CompletedTask;
+    public override Task InitializationTask => initializationTask;
     private Dictionary<int, FightCharacter> fightCharacters = new Dictionary<int, FightCharacter>();
     private List<int> fightPlayers = new List<int>();
     private List<int> fightMonsters = new List<int>();
@@ -43,10 +45,14 @@ public class FightManager : Singleton<FightManager>
     {
         return useItemSkillRuntime.GetTimeValue();
     }
-    public override async void Init()
+    public override void Init()
     {
         base.Init();
+        initializationTask = InitAsync();
+    }
 
+    private async Task InitAsync()
+    {
         maxRoundCount = Enum.GetValues(typeof(FightRoundType)).Length;
         GameActionManager.instance.AddListener<CreatFightPlayerInstance>(CreatFightPlayerInstance);
         GameActionManager.instance.AddListener<CreatFightPlayer>(CreateFightPlayer);
@@ -150,7 +156,8 @@ public class FightManager : Singleton<FightManager>
     }
 
     protected override void Clear()
-    { 
+    {
+        initializationTask = Task.CompletedTask;
         useItemSkillRuntime = null;
         ClearCharacter();
         GetItemIndexs.Clear();

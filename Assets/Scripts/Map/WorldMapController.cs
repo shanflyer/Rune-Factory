@@ -99,70 +99,34 @@ public class WorldMapController : MonoBehaviour
             UIManager.instance.ShowGamePanel<LoadingPanel>();
         }
 
-        _ = TeamManager.instance;
-        _ = ShortcutManager.instance;
-        _ = EnvironmentManger.instance;
-        if (!await YieldInitFrame(version)) return;
-
-        _ = NPCManager.instance;
-        if (!await YieldInitFrame(version)) return;
-
-        _ = GameEventManager.instance;
-        if (!await YieldInitFrame(version)) return;
-
-        _ = TempCharacterManager.instance;
-        if (!await YieldInitFrame(version)) return;
-
-        _ = CharacterManager.instance;
-        if (!await YieldInitFrame(version)) return;
-
-        _ = GameManager.instance;
-        if (!await YieldInitFrame(version)) return;
-
-        _ = PlayerStoreManager.instance;
-        if (!await YieldInitFrame(version)) return;
-
-        _ = TalkManager.instance;
-        if (!await YieldInitFrame(version)) return;
-
-        _ = FarmManager.instance;
-        if (!await YieldInitFrame(version)) return;
-
-        _ = TempMapItemController.instance;
-        if (!await YieldInitFrame(version)) return;
-
-        _ = FestivalManager.instance;
-        if (!await YieldInitFrame(version)) return;
-
-        _ = GameTimeEventManager.instance;
-        if (!await YieldInitFrame(version)) return;
-
-        _ = GameVolumeManager.instance;
-        if (!await YieldInitFrame(version)) return;
-
-        _ = TimeLineManger.instance;
-        if (!await YieldInitFrame(version)) return;
-
-        _ = EmoteManager.instance;
-        if (!await YieldInitFrame(version)) return;
-
-        _ = HomeEquipManager.instance;
-        if (!await YieldInitFrame(version)) return;
-
-        _ = ManufactureManager.instance;
-        if (!await YieldInitFrame(version)) return;
-
-        _ = PastureManager.instance;
-        if (!await YieldInitFrame(version)) return;
-
-        _ = FishingManager.instance;
-        if (!await YieldInitFrame(version)) return;
-
-        _ = FishController.instance;
-        if (!await YieldInitFrame(version)) return;
-
-        _ = WeatherManager.instance;
-        if (!await YieldInitFrame(version)) return;
+        if (!await InitSingletonAsync<TeamManager>(version)) return;
+        if (!await InitSingletonAsync<ShortcutManager>(version)) return;
+        if (!await InitSingletonAsync<MapCellController>(version)) return;
+        if (!await InitSingletonAsync<ItemManager>(version)) return;
+        if (!await InitSingletonAsync<CharacterBehaviorManager>(version)) return;
+        if (!await InitSingletonAsync<NPCTaskScheduleManager>(version)) return;
+        if (!await InitSingletonAsync<EnvironmentManger>(version)) return;
+        if (!await InitSingletonAsync<NPCManager>(version)) return;
+        if (!await InitSingletonAsync<GameEventManager>(version)) return;
+        if (!await InitSingletonAsync<TempCharacterManager>(version)) return;
+        if (!await InitSingletonAsync<CharacterManager>(version)) return;
+        if (!await InitSingletonAsync<GameManager>(version)) return;
+        if (!await InitSingletonAsync<PlayerStoreManager>(version)) return;
+        if (!await InitSingletonAsync<TalkManager>(version)) return;
+        if (!await InitSingletonAsync<FarmManager>(version)) return;
+        if (!await InitSingletonAsync<TempMapItemController>(version)) return;
+        if (!await InitSingletonAsync<FestivalManager>(version)) return;
+        if (!await InitSingletonAsync<GameTimeEventManager>(version)) return;
+        if (!await InitSingletonAsync<GameVolumeManager>(version)) return;
+        if (!await InitSingletonAsync<TimeLineManger>(version)) return;
+        if (!await InitSingletonAsync<EmoteManager>(version)) return;
+        if (!await InitSingletonAsync<SceneInfoManager>(version)) return;
+        if (!await InitSingletonAsync<HomeEquipManager>(version)) return;
+        if (!await InitSingletonAsync<ManufactureManager>(version)) return;
+        if (!await InitSingletonAsync<PastureManager>(version)) return;
+        if (!await InitSingletonAsync<FishingManager>(version)) return;
+        if (!await InitSingletonAsync<FishController>(version)) return;
+        if (!await InitSingletonAsync<WeatherManager>(version)) return;
 
         AudioController.instance.ClearBGM(AudioClearType.All, BGMGroup.Theme.ToString());
         if (!await YieldInitFrame(version)) return;
@@ -248,6 +212,13 @@ public class WorldMapController : MonoBehaviour
     {
         await Task.Yield();
         return IsInitCurrent(version);
+    }
+
+    private async Task<bool> InitSingletonAsync<T>(int version) where T : Singleton<T>
+    {
+        var manager = Singleton<T>.instance;
+        await manager.WaitForInitialization();
+        return await YieldInitFrame(version);
     }
 
     private bool IsInitCurrent(int version)
