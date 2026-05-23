@@ -125,11 +125,6 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
     }
     void LerpScreenCycleValue(LerpScreenCycleValue LerpScreenCycleValue)
     {
-        IEnumerator enumerator = LerpCycleValue(LerpScreenCycleValue);
-        GameObjectCurveController.instance.StartIEnumerator(enumerator);
-    }
-    IEnumerator LerpCycleValue(LerpScreenCycleValue LerpScreenCycleValue)
-    {
         var screenPos = CameraManager.instance.mainCamera.WorldToScreenPoint(LerpScreenCycleValue.cyclePos);
         var screenSize = GameCommon.GetScreenResolution();
         Vector2 cyclePos = new Vector2(screenPos.x / screenSize.x, screenPos.y / screenSize.y);
@@ -138,7 +133,6 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
         screenMat.SetVector("_Offset", cyclePos); 
        // Debug.Log($"screenPos:{screenPos}--screenSize:{screenSize}-LerpScreenCycleValue.cyclePos:{LerpScreenCycleValue.cyclePos}--{cyclePos}");
         float timeValue = 0;
-        var waitTime= new WaitForFixedUpdate();
         float minCycleValue = LerpScreenCycleValue.minCycleValue;
         float maxCycleValue = LerpScreenCycleValue.maxCycleValue;
         float lerpTime = LerpScreenCycleValue.lerpTime;
@@ -149,13 +143,14 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
             GameActionManager.instance.QueueAction(new HidePanelGroup { hide = true }, true);
         }
 
-        while (timeValue <= lerpTime)
+        GameObjectCurveController.instance.StartFrameTask((float deltaTime) =>
         {
             float value = math.lerp(minCycleValue, maxCycleValue, timeValue / lerpTime);
             SetScreenCycleValue(value);
-            yield return waitTime;
-            timeValue += Time.fixedDeltaTime;
-        }
+            timeValue += deltaTime;
+            return timeValue <= lerpTime;
+        }, () =>
+        {
         SetScreenCycleValue(maxCycleValue);
         if (LerpScreenCycleValue.setResult != null)
         {
@@ -166,6 +161,7 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
         {
             GameActionManager.instance.QueueAction(new HidePanelGroup { hide = false }, true);
         }
+        });
     }
 
     public void SetScreenCycleValue(float value)

@@ -55,15 +55,14 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
     }
     void SwitchAutoStore(SwitchAutoStore SwitchAutoStore)
     {
-        if (nowAutoIEnumerator != null)
+        if (nowAutoTask.IsValid)
         {
-            GameObjectCurveController.instance.StopIEnumerator(nowAutoIEnumerator);
-            nowAutoIEnumerator = null;
+            GameObjectCurveController.instance.Cancel(nowAutoTask);
+            nowAutoTask = default;
         }
         if (SwitchAutoStore.isAuto&& playerStoreOpen)
         {
-            nowAutoIEnumerator = AutoCustomer();
-            GameObjectCurveController.instance.StartIEnumerator(nowAutoIEnumerator);
+            StartAutoCustomerTask();
         }
     }
 
@@ -94,15 +93,15 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         return 0;
     }
 
-    IEnumerator nowAutoIEnumerator;
-    IEnumerator AutoCustomer()
+    GameObjectCurveController.FrameTaskHandle nowAutoTask;
+    void StartAutoCustomerTask()
     {
         float timeValue = 0;
         float nowCd = GameRandom.RandomFloat(GameCommon.autoCustomerCD);
         List<RuntimeStoreCounter> nowRuntimeStoreCounters = new List<RuntimeStoreCounter>();
-        while (true)
+        nowAutoTask = GameObjectCurveController.instance.StartFrameTask((float deltaTime) =>
         {
-            timeValue += Time.deltaTime;
+            timeValue += deltaTime;
             if (timeValue > nowCd)
             {
                 nowRuntimeStoreCounters.Clear();
@@ -134,8 +133,8 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 nowCd += weatherCurve.Evaluate(EnvironmentManger.instance.nowWaterFall);
                 nowCd = nowCd / cdValue;
             }
-            yield return 0;
-        }
+            return true;
+        }, () => nowAutoTask = default);
     }
     void SetPlayerStoreOpen(SetPlayerStoreOpen setPlayerStoreOpen)
     {

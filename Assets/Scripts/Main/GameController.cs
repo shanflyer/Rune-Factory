@@ -288,7 +288,6 @@ if (result.Success)
         //GameObject.DontDestroyOnLoad(gameObject);
         var UIParent = transform.Find("UIController");
         var filmParent = transform.Find("FilmController");
-        GameObjectCurveController.instance.SetUpDataComponent(this);
         if (Camera.main == null)
         {
             var cameraPrefab = Resources.Load<GameObject>(DataPath.cameraPrefabPath);

@@ -203,7 +203,6 @@ public class WorldMapController : MonoBehaviour
             } 
         }
        
-        GameObjectCurveController.instance.SetUpDataComponent(this); 
 
         await GameDataSaveManager.instance.InitLoadSaveData();
 

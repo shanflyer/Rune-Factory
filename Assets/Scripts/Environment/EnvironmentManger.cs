@@ -322,8 +322,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         }
         else
         {
-            var lerp = LerpWeather(setWeather.weather);
-            GameObjectCurveController.instance.StartIEnumerator(lerp);
+            StartLerpWeather(setWeather.weather);
         }
         
     }
@@ -349,13 +348,13 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         skyEnviromentMono.ChangeWeatherDisplayType(weatherDisplayType);
     }
    
-    IEnumerator LerpWeather(Weather newWeather)
+    void StartLerpWeather(Weather newWeather)
     {
         float timeValue = 0;
         bool oldDamp = !nowWeather.IsSnow() && nowWeather.waterFall > 0;
         bool newDamp= !newWeather.IsSnow() && newWeather.waterFall > 0;
         Weather weather = nowWeather;
-        while (timeValue<=2)
+        GameObjectCurveController.instance.StartFrameTask((float deltaTime) =>
         {
             float value = timeValue / 2.0f;
             nowWeather = Weather.Lerp(weather, newWeather, value);
@@ -396,10 +395,9 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             float weatherLightValue= nowWeather.GetWeatherLight();
             float flareLight = nowWeather.GetFlareLight();
             RefreshEnvironment(weatherLightValue, flareLight); 
-            timeValue += Time.deltaTime;
-            yield return 0;
-        } 
-        nowWeather = newWeather;
+            timeValue += deltaTime;
+            return timeValue <= 2;
+        }, () => nowWeather = newWeather);
     }
 
 
@@ -617,24 +615,21 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
            
             float lightningTime = GameRandom.RandomFloat(LightningData.lightningSpeed) * LightningData.LightningTime;
             float waitSoundTime = (1 - lightning) * GameRandom.RandomFloat(LightningData.waitSoundTime)+ lightningTime; 
-            GameObjectCurveController.instance.StartIEnumerator(Lightning());
-
-            IEnumerator Lightning()
+            float timeValue = 0;
+            GameObjectCurveController.instance.StartFrameTask((float deltaTime) =>
             {
-                float timeValue = 0;
-                while (timeValue<= waitSoundTime)
+                if(timeValue<= lightningTime)
                 {
-                    if(timeValue<= lightningTime)
+                    lightningLight = LightningData.lightningCurve.Evaluate(timeValue / lightningTime) * lightning;
+                    if (setLightningLight != null)
                     {
-                        lightningLight = LightningData.lightningCurve.Evaluate(timeValue / lightningTime) * lightning;
-                        if (setLightningLight != null)
-                        {
-                            setLightningLight(lightningLight);
-                        }
-                    } 
-                    timeValue += Time.deltaTime;
-                    yield return 0;
+                        setLightningLight(lightningLight);
+                    }
                 }
+                timeValue += deltaTime;
+                return timeValue <= waitSoundTime;
+            }, () =>
+            {
                 lightningLight = 0;
                 setLightningLight(lightningLight);
                 if (LightningData.sounds!=null&&LightningData.sounds.Length>0)
@@ -644,8 +639,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
                 }
                 LightningCD = 0;
                 waitLightningTime = 0;
-
-            }
+            });
         } 
         LightningData LightningData;
         float waitLightningTime = 0;

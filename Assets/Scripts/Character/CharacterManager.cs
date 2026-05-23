@@ -1005,20 +1005,13 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             var transform = characterRuntimeObj.transform;
             Vector3 targetPos = GameCommon.SetMapPosZ(pos);
-            Vector3 offsetPos = targetPos - transform.position;
-
-            IEnumerator LerpPos()
-            {
-                float timeValue = 0;
-                while (timeValue < 0.2f)
+            GameObjectCurveController.instance.StartLineMove(transform.position, targetPos, 0.2f, (Vector3 lerpPos) =>
                 {
-                    Vector3 pos = offsetPos * Time.deltaTime / 0.2f;
-                    transform.Translate(pos);
-                    yield return 0;
-                    timeValue += Time.deltaTime;
-                }
-            }
-            GameObjectCurveController.instance.StartIEnumerator(LerpPos());
+                    if (transform != null)
+                    {
+                        transform.position = lerpPos;
+                    }
+                });
         }
     }
 
@@ -1051,12 +1044,12 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         Vector2Int offsetCoordinate = Vector2Int.zero;
 
-        if (character.moveEnumeratorId != 0)
+        if (character.moveHandle.IsValid)
         {
             Debug.Log($"Waring:{character.name}--noStop");
         }
-        character.moveEnumeratorId =
-        GameObjectCurveController.instance.Line(character.nowSpeed, startPos, targetPos, (Vector3 pos) =>
+        character.moveHandle =
+        GameObjectCurveController.instance.StartLineMoveBySpeed(character.nowSpeed, startPos, targetPos, (Vector3 pos) =>
         {
             if (runtimeObj != null&&runtimeObj.gameObject.activeSelf)
             {
@@ -1066,7 +1059,7 @@ public class CharacterManager : Singleton<CharacterManager>
         },
             () =>
             {
-                character.moveEnumeratorId = 0;
+                character.moveHandle = default;
                 character.nowSpeed = 0;
                 if (runtimeObj != null)
                     SetCharacterAnimationSpeed(0, runtimeObj);
@@ -1119,13 +1112,13 @@ public class CharacterManager : Singleton<CharacterManager>
 
         var lineSpeed = slant ? moveSpeed * GameCommon.slantValue : moveSpeed;
         lineSpeed *= character.propertySpeed * 0.9f;
-        if (character.moveEnumeratorId != 0)
+        if (character.moveHandle.IsValid)
         { 
             Debug.Log($"Waring:{character.name}--noStop");
         }
             
-        character.moveEnumeratorId =
-        GameObjectCurveController.instance.Line(lineSpeed, startPos, targetPos, (Vector3 pos) =>
+        character.moveHandle =
+        GameObjectCurveController.instance.StartLineMoveBySpeed(lineSpeed, startPos, targetPos, (Vector3 pos) =>
              {
                  if (runtimeObj != null)
                  {
@@ -1164,7 +1157,7 @@ public class CharacterManager : Singleton<CharacterManager>
              },
             () =>
             {
-                character.moveEnumeratorId = 0;
+                character.moveHandle = default;
                // Debug.Log($"pathNodes.count:{pathNodes.Count}");
                 if (pathNodes.Count > 0)
                 {
@@ -1276,8 +1269,8 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         else if (!(character is TempCharacter))
         {
-            GameObjectCurveController.instance.RemoveLineMove(character.moveEnumeratorId);
-            character.moveEnumeratorId = 0;
+            GameObjectCurveController.instance.Cancel(character.moveHandle);
+            character.moveHandle = default;
             character.SetCoordinate(new int3(targetCoordinate, targetMap),refreshMapTemp:false);
             await SetPlayerPos(character);
         }
@@ -1748,7 +1741,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             return;
         }
-        GameObjectCurveController.instance.ObjectMove(
+        GameObjectCurveController.instance.StartCharacterObjectMove(
             controllerCharacter,
             () =>
             {

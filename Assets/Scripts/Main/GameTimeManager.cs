@@ -986,10 +986,6 @@ public class GameTimeManager : Singleton<GameTimeManager>
         }
         //timeDisplayAction.UpdataTime();
     }
-
-    private IEnumerator TimeRunIEnumerator;
- 
-    
     public void InitSaveDate(GameDateSaveData dateData)
     {
         nowGameTime.year = dateData.year;
@@ -1015,18 +1011,16 @@ public class GameTimeManager : Singleton<GameTimeManager>
         Action endAction = null)
     {
         runTime = false;
-        var lerpTimeIEnumerator = LerpTime(targetHour, targetMinute, costTime, endRun, endAction);
-        GameObjectCurveController.instance.StartIEnumerator(lerpTimeIEnumerator);
+        StartLerpTime(targetHour, targetMinute, costTime, endRun, endAction);
     }
 
     private void LerpGameTime(LerpGameTime lerpGameTime)
     {
         runTime = false;
-        var lerpTimeIEnumerator = LerpTime(lerpGameTime.targetHour, lerpGameTime.targetMinute, lerpGameTime.totalTime);
-        GameObjectCurveController.instance.StartIEnumerator(lerpTimeIEnumerator);
+        StartLerpTime(lerpGameTime.targetHour, lerpGameTime.targetMinute, lerpGameTime.totalTime);
     }
 
-    private IEnumerator LerpTime(int targetHour, int targetMinue, float totalTime, bool endRun = false,
+    private void StartLerpTime(int targetHour, int targetMinue, float totalTime, bool endRun = false,
         Action endAction = null)
     {
         int startValue = (Hour * 60 + Minute) * 20;
@@ -1038,16 +1032,16 @@ public class GameTimeManager : Singleton<GameTimeManager>
         int endValue = (targetHour * 60 + targetMinue) * 20;
         int addValue = (int)math.round((endValue - startValue) / totalTime * Time.fixedDeltaTime);
         float timeValue = 0;
-        while (timeValue < totalTime)
+        GameObjectCurveController.instance.StartFrameTask((float deltaTime) =>
         {
-            timeValue += Time.deltaTime;
+            timeValue += deltaTime;
             nowGameTime.mySecond += addValue;
             nowGameTime.TimeInit();
             //Debug.Log($"Time:{timeValue}-hour:{nowGameTime.hour}-minute:{nowGameTime.minute}--second:{nowGameTime.mySecond}");
 
-            yield return new WaitForFixedUpdate();
-        }
-
+            return timeValue < totalTime;
+        }, () =>
+        {
         if (endRun)
         {
             runTime = true;
@@ -1057,6 +1051,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
         {
             endAction.Invoke();
         }
+        });
     }
 
     protected override void FixedUpdate()

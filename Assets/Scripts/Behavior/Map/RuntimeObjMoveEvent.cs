@@ -74,7 +74,7 @@ public class RuntimeObjMoveEvent : Action
 
                 float speed = 1.0f / costTime;
 
-                GameObjectCurveController.instance.Curve(speed, startPos, targetPos, middlePos, SetObjPos, MoveEnd);
+                GameObjectCurveController.instance.StartCurveMoveBySpeed(speed, startPos, targetPos, middlePos, SetObjPos, MoveEnd);
             }
         }
     }

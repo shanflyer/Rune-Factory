@@ -1095,7 +1095,7 @@ public partial class Character
     }
     //public string behavior;
 
-    public int moveEnumeratorId; 
+    public GameObjectCurveController.MoveHandle moveHandle; 
 
     public bool CanMoveCrossMap = true;
 
@@ -1403,7 +1403,7 @@ public partial class Character
     public void StopMove()
     {
         GameObjectCurveController.instance.StopObjectMove(instanceId);
-        if (GameObjectCurveController.instance.StopLineMove(moveEnumeratorId))
+        if (GameObjectCurveController.instance.Pause(moveHandle))
         {
             CharacterManager.instance.SetCharacterAnimationSpeed(0, this);
         }; 
@@ -1411,9 +1411,9 @@ public partial class Character
 
     public void RemoveMove()
     {
-        GameObjectCurveController.instance.RemoveLineMove(moveEnumeratorId);
+        GameObjectCurveController.instance.Cancel(moveHandle);
         CharacterManager.instance.SetCharacterAnimationSpeed(0, this);
-        moveEnumeratorId = 0;
+        moveHandle = default;
 
         moveTarget = int3.zero;
         this.moveEndAction = null;
@@ -1423,7 +1423,7 @@ public partial class Character
 
     public void StartMove()
     {
-        if (GameObjectCurveController.instance.StartLineMove(moveEnumeratorId))
+        if (GameObjectCurveController.instance.Resume(moveHandle))
         {
             CharacterManager.instance.SetCharacterAnimationSpeed(1, this);
         }
