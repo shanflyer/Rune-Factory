@@ -1,0 +1,11 @@
+<Project>
+  <PropertyGroup>
+    <!-- Unity 生成工程中的 System.Net.Http 版本冲突来自 Unity shim 与 Addressables 编辑器程序集，转为消息避免污染本地编译结果。 -->
+    <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);MSB3277</MSBuildWarningsAsMessages>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(MSBuildProjectName)' != 'Assembly-CSharp' and '$(MSBuildProjectName)' != 'Assembly-CSharp-Editor'">
+    <!-- 第三方包和空 firstpass 工程的历史告警不归项目源码修复范围，这里只隔离外部工程噪声。 -->
+    <NoWarn>$(NoWarn);CS0114;CS0618;CS2008;CS8021</NoWarn>
+  </PropertyGroup>
+</Project>
