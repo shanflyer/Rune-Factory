@@ -49,6 +49,15 @@ public class TempMapItemController : Singleton<TempMapItemController>
     protected override void Clear()
     {
         base.Clear();
+        foreach (var pair in characterSetCoordinates)
+        {
+            var character = CharacterManager.instance.GetCharacter(pair.Key);
+            if (character != null)
+            {
+                // 清理临时地图物体时同步摘掉角色坐标回调，避免回调访问已释放的临时物体。
+                character.RemoveSetCoordinateDele(pair.Value);
+            }
+        }
         foreach(var tempMapItem in tempMapItems)
         {
             tempMapItem.Value.Dispose();
