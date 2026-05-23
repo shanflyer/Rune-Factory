@@ -373,9 +373,6 @@ public class WeatherMono : MonoBehaviour,IGameData
 
     public void Play()
     {
-        ParticleSystem.EmitParams ep = new ParticleSystem.EmitParams();
-       
-
         fogParticle.fog.Play();
         snowData.snow.Play();
         rainParticle.rain.Play();

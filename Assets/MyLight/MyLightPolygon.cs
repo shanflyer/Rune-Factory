@@ -23,8 +23,6 @@ public class MyLightPolygon : MyLightBase
     [Range(-10,1)]
     float lerpValue;  
     [SerializeField]
-    bool PiovotCenter = false;
-    [SerializeField]
     bool LerpPiovotCenter = true;
     [SerializeField]
     Vector3 normalOffset = Vector3.zero;

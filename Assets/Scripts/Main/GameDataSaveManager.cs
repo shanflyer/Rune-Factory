@@ -12,7 +12,6 @@ using VoxelBusters.EssentialKit;
 
 public class GameDataSaveManager : Singleton<GameDataSaveManager>
 {
-    private string userName = "User";
     private UserGameSaveDataList userGameSaveDataList;
 
     public UserGameSaveDataList UserGameSaveDataList

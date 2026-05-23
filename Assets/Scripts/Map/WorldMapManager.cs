@@ -634,7 +634,6 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
     private async Task<int> AddMapItem(MapItem mapItem, int mapId,int fixedInstance=0)
     { 
-        bool isInSaveData = true;
         int instanceId = 0;
         if (fixedInstance == 0)
         {
@@ -645,13 +644,11 @@ public class WorldMapManager : Singleton<WorldMapManager>
             }
             if (instanceId == 0)
             {
-                isInSaveData = false;
                 instanceId = MyInstance.instance.Uid;
                 GameDataSaveManager.instance.SaveSpecialItem(itemkey, instanceId);
             }
         }else
         {
-            isInSaveData = false;
             instanceId = fixedInstance;
         }
       
@@ -678,7 +675,6 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
         items.Add(instanceId);
 
-        //if (!isInSaveData && mapItem.blindHomeEquipment != 0)
         if ( mapItem.blindHomeEquipment != 0)
         {
             CreatHomeEquip creatHomeEquip = new CreatHomeEquip

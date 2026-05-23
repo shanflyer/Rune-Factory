@@ -523,7 +523,6 @@ public class GameTimeManager : Singleton<GameTimeManager>
             minute = 0;
             week = Week.SunDay;
             newDay = new NewDay();
-            newHour = new NewHour();
         }
 
         public int GetTimeKey()
@@ -565,7 +564,6 @@ public class GameTimeManager : Singleton<GameTimeManager>
         }
 
         private NewDay newDay;
-        private NewHour newHour;
 
         private bool minuteRefresh = false;
 

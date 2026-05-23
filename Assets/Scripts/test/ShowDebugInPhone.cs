@@ -155,7 +155,6 @@ public class ShowDebugInPhone : MonoBehaviour
         }
     }
 
-    private bool LogShow = false;
     void Update()
     { 
         //因为写入文件的操作必须在主线程中完成,所以在Update中才给你写入文件。  

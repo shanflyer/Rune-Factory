@@ -16,18 +16,8 @@ public class CloudDataManager:Singleton<CloudDataManager>
     {
         this.userId = userId;
 
-        uint maxNumToDisplay = 1;
-        bool allowCreateNew = true;
-        bool allowDelete = true;  
-
-
- 
     }
 
-    private string filename = "data1";
-
-    string dataStr = null;
- 
     /*
     public void OnSavedGameOpened(SavedGameRequestStatus status, ISavedGameMetadata game)
     {
