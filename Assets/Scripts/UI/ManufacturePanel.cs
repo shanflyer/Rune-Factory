@@ -807,12 +807,12 @@ public class ManufacturePanel : GamePanel<Manufature>
 
     private Manufature manufature;
 
-    public override Task InitData(string dataKey)
+    public override async Task InitData(string dataKey)
     {
         Manufature manufature = ManufactureManager.instance.GetManufature(int.Parse(dataKey));
         if (manufature!=null)
         { 
-            InitData(manufature);
+            await InitDataAsync(manufature);
             if (manufactureData.needItem != null && manufactureData.needItem.Count > 0)
             {
                 var shortcutPackage = ShortcutManager.instance.playerShortcutPackage;
@@ -834,7 +834,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                     };
                     GameActionManager.instance.QueueAction(simpleTalk);
                     Close();
-                    return null;
+                    return;
                 }
             }
             // ClearFormulaItemBoxReferences();
@@ -845,7 +845,7 @@ public class ManufacturePanel : GamePanel<Manufature>
             InformationObj.transform.localScale = Vector3.zero;
         }
         RefreshRPCostAndOut();
-        return base.InitData(dataKey);
+        await base.InitData(dataKey);
     }
 
     private void UpdateGameTime(UpdateGameTime updateGameTime)
@@ -904,20 +904,22 @@ public class ManufacturePanel : GamePanel<Manufature>
     {
         if (manufature.instanceId == refreshManufature.manufature.instanceId)
         {
-            InitData(refreshManufature.manufature);
+            // 刷新事件入口保持同步，制造数据重载异常统一进入日志。
+            AsyncTaskRunner.Run(InitDataAsync(refreshManufature.manufature), nameof(RefreshManufature));
         }
     }
 
     public override void InitReferenceData(Manufature v)
     {
         base.InitReferenceData(v);
-        InitData(v);
+        // 面板引用数据入口保持同步，制造数据加载异常统一进入日志。
+        AsyncTaskRunner.Run(InitDataAsync(v), nameof(InitData));
 
         bool selectOpenFormula = selectFormula != null && selectFormula.opened;
         AutoSelect.transform.localScale = selectOpenFormula ? Vector3.one : Vector3.zero;
     }
 
-    private async void InitData(Manufature v)
+    private async System.Threading.Tasks.Task InitDataAsync(Manufature v)
     {
         SelectItemBoxRefrence = null;
         InformationObj.transform.localScale = Vector3.zero;

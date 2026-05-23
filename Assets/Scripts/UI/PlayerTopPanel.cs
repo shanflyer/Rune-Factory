@@ -81,29 +81,30 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         RPValue = FindChildGameObject<TextMeshProUGUI>("RPValue");
     }
     
-    protected override async void Awake()
+    protected override void Awake()
     {
         base.Awake();
         LeftToggle.onValueChanged.AddListener(arg0 => LeftNode.gameObject.SetActive(arg0));
         RightToggle.onValueChanged.AddListener(arg0 => RightNode.gameObject.SetActive(arg0));
-        playerButton.onClick.AddListener(async () =>
+        playerButton.onClick.AddListener(() =>
         {
             var characterInformation = CharacterManager.instance.controllerCharacter.GetInformation();
-           await UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformation);
+            // 按钮回调保持同步，面板加载异常统一进入异步日志。
+            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformation), nameof(CharacterInformationPanel));
         });
 
-        calendar.onClick.AddListener(async () =>
+        calendar.onClick.AddListener(() =>
         {
-           await UIManager.instance.ShowGamePanel<CalendarPanel>();
+            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<CalendarPanel>(), nameof(CalendarPanel));
         });
         goldAdd.onClick.AddListener(PayManager.instance.TryCreatGold);
         crystalAdd.onClick.AddListener(PayManager.instance.TryCreatMoney);
 
-        SetButton.onClick.AddListener(async () =>
+        SetButton.onClick.AddListener(() =>
         {
-            
+
             // AudioController.instance.PlayAudio(SE.click);
-           await UIManager.instance.ShowGamePanel<SetPanel>();
+            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<SetPanel>(), nameof(SetPanel));
         });
         MapButton.onClick.AddListener(() =>
         {

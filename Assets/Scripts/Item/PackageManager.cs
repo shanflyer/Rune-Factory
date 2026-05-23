@@ -542,7 +542,13 @@ public class PackageManager : Singleton<PackageManager>
             }
         }
     }
-    async void LoadObjPackageAnimationData()
+    void LoadObjPackageAnimationData()
+    {
+        // 包裹动画数据加载入口保持同步，加载异常统一进入异步日志。
+        AsyncTaskRunner.Run(LoadObjPackageAnimationDataAsync(), nameof(LoadObjPackageAnimationData));
+    }
+
+    async System.Threading.Tasks.Task LoadObjPackageAnimationDataAsync()
     {
         var datas =await GameDataManager.instance.GetAllAsyncData<ObjPackageAnimationData>();
         objPackageAnimationDatas.Clear();

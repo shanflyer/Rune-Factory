@@ -95,9 +95,15 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
 
     private ItemInfo ItemInfo; private SelectAction<Item> action;
 
-    public override async void InitReferenceData(ItemInfo v)
+    public override void InitReferenceData(ItemInfo v)
     {
         base.InitReferenceData(v);
+        // 面板引用数据入口保持同步，物品详情加载异常统一进入日志。
+        AsyncTaskRunner.Run(InitReferenceDataAsync(v), nameof(InitReferenceData));
+    }
+
+    private async System.Threading.Tasks.Task InitReferenceDataAsync(ItemInfo v)
+    {
         ItemInfo = v;
         switch (v.item.itemType)
         {

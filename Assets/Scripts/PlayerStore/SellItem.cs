@@ -76,9 +76,15 @@ public class SellItem : GamePanel<Item>
         }
     }
 
-    public override async void InitReferenceData(Item v)
+    public override void InitReferenceData(Item v)
     {
         base.InitReferenceData(v);
+        // 售卖展示入口保持同步，物品显示数据加载异常统一进入日志。
+        AsyncTaskRunner.Run(InitReferenceDataAsync(v), nameof(InitReferenceData));
+    }
+
+    private async System.Threading.Tasks.Task InitReferenceDataAsync(Item v)
+    {
         item = v;
         ShopItemDisplayData shopItemDisplayData = await GameDataManager.instance.GetAsyncData<ShopItemDisplayData>(item.dataId);
         if (shopItemDisplayData == null)

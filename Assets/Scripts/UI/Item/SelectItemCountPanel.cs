@@ -92,9 +92,15 @@ public class SelectItemCountPanel :GamePanel<SelectItemData>
         AddButton.interactable = AddToMaxButton.interactable = selectCount < selectItemData.maxCount;
         ReduceButton.interactable = ReduceButton.interactable = selectCount < selectItemData.minCount;
     }
-    public override async void InitReferenceData(SelectItemData v)
+    public override void InitReferenceData(SelectItemData v)
     {
         base.InitReferenceData(v);
+        // 面板引用数据入口保持同步，物品数据加载异常统一进入日志。
+        AsyncTaskRunner.Run(InitReferenceDataAsync(v), nameof(InitReferenceData));
+    }
+
+    private async System.Threading.Tasks.Task InitReferenceDataAsync(SelectItemData v)
+    {
         selectItemData = v;
         selectCount = selectItemData.defaultCount;
         itemData = await GameDataManager.instance.GetAsyncData<ItemData>(selectItemData.itemId);

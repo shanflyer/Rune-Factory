@@ -184,9 +184,15 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
         CloseButton = FindChildGameObject<Button>("CloseButton");
     }
     SetStoreCounterItem storeCunterSetData;
-    public override async void InitReferenceData(SetStoreCounterItem v)
+    public override void InitReferenceData(SetStoreCounterItem v)
     {
         base.InitReferenceData(v);
+        // 面板引用数据入口保持同步，柜台物品加载异常统一进入日志。
+        AsyncTaskRunner.Run(InitReferenceDataAsync(v), nameof(InitReferenceData));
+    }
+
+    private async System.Threading.Tasks.Task InitReferenceDataAsync(SetStoreCounterItem v)
+    {
         storeCunterSetData = v;
        await itemBoxReference.InitData(new Item
         {

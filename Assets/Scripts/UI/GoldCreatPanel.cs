@@ -56,9 +56,15 @@ public class GoldCreatPanel : GamePanel<IReferenceData>
         }
         
     }
-    public override async void InitReferenceData(IReferenceData v)
+    public override void InitReferenceData(IReferenceData v)
     {
         base.InitReferenceData(v);
+        // 面板引用数据入口保持同步，异步列表加载异常统一进入日志。
+        AsyncTaskRunner.Run(InitReferenceDataAsync(), nameof(InitReferenceData));
+    }
+
+    private async System.Threading.Tasks.Task InitReferenceDataAsync()
+    {
         var datas =await GameDataManager.instance.GetAllAsyncData<MoneyCreatData>();
         List<MoneyCreatData> MoneyCreatDatas = new List<MoneyCreatData>();
         for(int i = 0; i < datas.Count; i++)

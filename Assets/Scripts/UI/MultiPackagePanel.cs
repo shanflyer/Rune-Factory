@@ -407,9 +407,15 @@ public class MultiPackagePanel : GamePanel<PackageList>
         buyCountValue.SetTextWithoutNotify(SelectCount.ToString());
     }
 
-    public override async void InitReferenceData(PackageList v)
+    public override void InitReferenceData(PackageList v)
     {
         base.InitReferenceData(v);
+        // 面板引用数据入口保持同步，多背包数据加载异常统一进入日志。
+        AsyncTaskRunner.Run(InitReferenceDataAsync(v), nameof(InitReferenceData));
+    }
+
+    private async System.Threading.Tasks.Task InitReferenceDataAsync(PackageList v)
+    {
 
         GameActionManager.instance.QueueAction(new ClosePanelAction
         {

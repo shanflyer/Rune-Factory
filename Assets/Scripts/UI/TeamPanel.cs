@@ -174,9 +174,15 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
           //  UIManager.instance.CloseGamePanel<CharacterInformationPanel>();
         }
     }
-    public override async void InitReferenceData(CharacterInformationDataList v)
+    public override void InitReferenceData(CharacterInformationDataList v)
     {
         base.InitReferenceData(v);
+        // 面板引用数据入口保持同步，队伍列表加载异常统一进入日志。
+        AsyncTaskRunner.Run(InitReferenceDataAsync(v), nameof(InitReferenceData));
+    }
+
+    private async System.Threading.Tasks.Task InitReferenceDataAsync(CharacterInformationDataList v)
+    {
         await teamerList.InitListData(v.characterInformationDatas, SelectAction, toggleGroup);
         teamerList.Select(v.characterInformationDatas[0]); 
     }

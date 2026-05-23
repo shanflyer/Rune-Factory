@@ -144,7 +144,8 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
             AsyncTaskRunner.Run(NPCFunctionList.InitListData(new List<NPCFunctionData>()), nameof(InitReferenceData));
         }
 
-        InitData();
+        // 对话初始化入口保持同步，后续事件推进异常统一进入日志。
+        AsyncTaskRunner.Run(InitDataAsync(), nameof(InitData));
     }
 
     private bool runNextTalkEvent = false;
@@ -257,7 +258,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
             NPCFunctionParent.localScale = NPCTalkOperateData.displayFunction ? Vector3.one : Vector3.zero;
         }
     }
-    private async void InitData()
+    private async Task InitDataAsync()
     {
         await TalkAction();
     }

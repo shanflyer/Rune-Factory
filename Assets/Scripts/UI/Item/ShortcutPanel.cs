@@ -209,10 +209,16 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
         return base.InitData(dataKey);
     }
 
-    public override async void InitReferenceData(ShortcutPackage v)
+    public override void InitReferenceData(ShortcutPackage v)
     {
         useButton.interactable = unEquipButton.interactable = false;
         base.InitReferenceData(v);
+        // 面板引用数据入口保持同步，快捷栏列表加载异常统一进入日志。
+        AsyncTaskRunner.Run(InitReferenceDataAsync(v), nameof(InitReferenceData));
+    }
+
+    private async System.Threading.Tasks.Task InitReferenceDataAsync(ShortcutPackage v)
+    {
         shortcutPackage = v;
         var items = v.GetShortcutItems();
 

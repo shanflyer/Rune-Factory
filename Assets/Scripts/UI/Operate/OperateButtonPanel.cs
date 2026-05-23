@@ -82,9 +82,15 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
         PlayerOperateManager.instance.OperateAction(operateData, operateDataList.eventReferenceDatas);
     }
 
-    public override async void InitReferenceData(OperateDataList v)
+    public override void InitReferenceData(OperateDataList v)
     {
         base.InitReferenceData(v);
+        // 面板引用数据入口保持同步，操作列表加载异常统一进入日志。
+        AsyncTaskRunner.Run(InitReferenceDataAsync(v), nameof(InitReferenceData));
+    }
+
+    private async System.Threading.Tasks.Task InitReferenceDataAsync(OperateDataList v)
+    {
 
         v.OperateDatas.RemoveAll(d => d.operateData == null);
         if (v.OperateDatas.Count == 0)

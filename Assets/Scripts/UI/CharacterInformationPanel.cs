@@ -288,9 +288,15 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         BackGround.enabled = !hide;
     }
     
-    public override async void InitReferenceData(CharacterInformationData v)
+    public override void InitReferenceData(CharacterInformationData v)
     {
         base.InitReferenceData(v);
+        // 面板引用数据入口保持同步，角色详细数据加载异常统一进入日志。
+        AsyncTaskRunner.Run(InitReferenceDataAsync(v), nameof(InitReferenceData));
+    }
+
+    private async System.Threading.Tasks.Task InitReferenceDataAsync(CharacterInformationData v)
+    {
         data = v;
         v.head.SetImageSprite(characterHead, headSize,Vector2.zero);
         HideBackGround(UIManager.instance.GamePanelIsShow<TeamPanel>());

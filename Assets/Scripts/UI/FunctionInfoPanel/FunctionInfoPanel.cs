@@ -13,7 +13,7 @@ public class FunctionInfoPanel : GamePanel<FunctionInfoData>
     [SerializeField]
     private Button close;
     private DisplayList<FunctionInfoReference, InfoData> functionInfoList;
-    protected override async void Awake()
+    protected override void Awake()
     {
         functionInfoList = new DisplayList<FunctionInfoReference, InfoData>(FunctionInfoReference, infoParent);
         close.onClick.AddListener(Close);

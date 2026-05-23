@@ -71,13 +71,19 @@ public class AdventureResultPanel: GamePanel<FightResult>
         } 
     }
     List<int> characters = new List<int>();
-    public override async void InitReferenceData(FightResult fightResult)
+    public override void InitReferenceData(FightResult fightResult)
     {
         base.InitReferenceData(fightResult);
         SuccessTitle.transform.localScale = fightResult.victory ? Vector3.one : Vector3.zero;
         FailureTitle.transform.localScale = fightResult.victory ? Vector3.zero : Vector3.one;
         AudioController.instance.ClearBGM(Group: BGMGroup.Battle.ToString(), audioClearType: AudioClearType.All);
         AudioController.instance.PlayAudioME(fightResult.victory ? successAudioClip : failedAudioClip, Group: MEGroup.Battle.ToString());
+        // 结算面板入口保持同步，列表加载和关闭面板异常统一进入日志。
+        AsyncTaskRunner.Run(InitReferenceDataAsync(fightResult), nameof(InitReferenceData));
+    }
+
+    private async System.Threading.Tasks.Task InitReferenceDataAsync(FightResult fightResult)
+    {
         Debug.Log("fightResult.getItems");
         await itemList.InitListData(fightResult.getItems);
         Debug.Log("fightResult.fighterResults");

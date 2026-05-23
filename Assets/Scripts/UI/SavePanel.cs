@@ -71,9 +71,15 @@ public class SavePanel : GamePanel<UserGameSaveDataList>
         }
     }
 
-    public override async void InitReferenceData(UserGameSaveDataList v)
+    public override void InitReferenceData(UserGameSaveDataList v)
     {
         base.InitReferenceData(v);
+        // 面板引用数据入口保持同步，存档列表加载异常统一进入日志。
+        AsyncTaskRunner.Run(InitReferenceDataAsync(v), nameof(InitReferenceData));
+    }
+
+    private async System.Threading.Tasks.Task InitReferenceDataAsync(UserGameSaveDataList v)
+    {
         //selectGameSaveData = null;
        await saveList.InitListData(v.userGameSaveDatas, SelectAction, toggleGroup);
        saveList.SelectDefault();

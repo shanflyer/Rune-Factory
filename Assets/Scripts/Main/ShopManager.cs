@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Mathematics;
 
 public class ShopManager : Singleton<ShopManager>
@@ -9,7 +10,8 @@ public class ShopManager : Singleton<ShopManager>
     public override void Init()
     {
         base.Init();
-        InitShop();
+        // 管理器初始化入口保持同步，异步加载异常统一进入日志。
+        AsyncTaskRunner.Run(InitShopAsync(), nameof(InitShop));
         GameActionManager.instance.AddListener<TryVisitShop>(TryVisitShop); 
         GameActionManager.instance.AddListener<RefreshShopLevel>(RefreshShopLevel);
     }
@@ -45,7 +47,12 @@ public class ShopManager : Singleton<ShopManager>
         }
     }
  
-    async void InitShop()
+    Task InitShop()
+    {
+        return InitShopAsync();
+    }
+
+    async Task InitShopAsync()
     {
         shopListDic.Clear();
         _shopListDic.Clear();

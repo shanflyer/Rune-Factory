@@ -121,7 +121,8 @@ public class SimpleTalkPanel : GamePanel<NPCTalkOperateData>
         else
             AsyncTaskRunner.Run(NPCFunctionList.InitListData(new List<NPCFunctionData>()), nameof(InitReferenceData));
 
-        InitData();
+        // 对话初始化入口保持同步，后续事件推进异常统一进入日志。
+        AsyncTaskRunner.Run(InitDataAsync(), nameof(InitData));
     }
 
     private bool runNextTalkEvent;
@@ -243,7 +244,7 @@ public class SimpleTalkPanel : GamePanel<NPCTalkOperateData>
         }
     }
 
-    private async void InitData()
+    private async Task InitDataAsync()
     {
         await TalkAction();
     }

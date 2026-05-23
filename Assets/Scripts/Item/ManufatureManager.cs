@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Unity.Mathematics;
 
 public class Formula
@@ -45,10 +46,16 @@ public class ManufactureManager : Singleton<ManufactureManager>
         GameActionManager.instance.AddListener<OpenFormula>(OpenFormula);
         GameActionManager.instance.AddListener<SetManufature>(SetManufature);
         Manufactures.Clear();
-        InitData();
+        // 管理器初始化入口保持同步，配方加载异常统一进入异步日志。
+        AsyncTaskRunner.Run(InitDataAsync(), nameof(InitData));
     }
 
-    async void InitData()
+    Task InitData()
+    {
+        return InitDataAsync();
+    }
+
+    async Task InitDataAsync()
     {
         var datas =await GameDataManager.instance.GetAllAsyncData<FormulaData>();
         HashSet<int> openFormulas = GameDataSaveManager.instance.UserGameSaveData.openFormulas.ToHashSet();
