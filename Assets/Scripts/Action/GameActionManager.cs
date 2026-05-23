@@ -17,12 +17,14 @@ public class GameActionManager : Singleton<GameActionManager>
     {
         base.Init();
         delegates.Clear();
+        onceDelegates.Clear();
     }
 
     protected override void Clear()
     {
         base.Clear();
         delegates.Clear();
+        onceDelegates.Clear();
         ActionQueue.Clear();
     }
 
@@ -56,7 +58,11 @@ public class GameActionManager : Singleton<GameActionManager>
             {
                 delegates.Remove(type);
             }
-            delegates[type] = _d;
+            else
+            {
+                delegates[type] = _d;
+            }
+            onceDelegates.Remove(del);
         }
     }
 
@@ -81,6 +87,10 @@ public class GameActionManager : Singleton<GameActionManager>
                     if (_d == null)
                     {
                         delegates.Remove(type);
+                    }
+                    else
+                    {
+                        delegates[type] = _d;
                     }
                     onceDelegates.Remove(_delegate);
                 }

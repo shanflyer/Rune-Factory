@@ -186,6 +186,7 @@ public struct SpecialLinkCell
 
 public partial class MapCellController : Singleton<MapCellController>
 {
+    private const int MaxRandomBehaviorCellAttempts = 128;
     private readonly Dictionary<int, RuntimeMapRoom> runtimeMapRooms = new();
     private NativeParallelHashMap<uint, short> mapObjBarriers;
     public NativeParallelHashMap<uint, short>.ReadOnly MapObjBarriers => mapObjBarriers.AsReadOnly();
@@ -257,7 +258,15 @@ public partial class MapCellController : Singleton<MapCellController>
         if (runtimeMapRooms.TryGetValue(mapInstance, out var runtimeMapRoom))
         {
             var result = runtimeMapRoom.GetRandomBehaviorCell(areaId);
-            while (!CheckIsWalk(result.x, result.y, soureMap)) result = runtimeMapRoom.GetRandomBehaviorCell(areaId);
+            for (int i = 0; i < MaxRandomBehaviorCellAttempts && !CheckIsWalk(result.x, result.y, soureMap); i++)
+            {
+                result = runtimeMapRoom.GetRandomBehaviorCell(areaId);
+            }
+            if (!CheckIsWalk(result.x, result.y, soureMap))
+            {
+                Debug.LogError($"GetRandomBehaviorCell failed. map:{soureMap}, trueMap:{mapInstance}, areaId:{areaId}");
+                return int3.zero;
+            }
             result.z = soureMap;
             return result;
         }
@@ -271,10 +280,17 @@ public partial class MapCellController : Singleton<MapCellController>
         if (runtimeMapRooms.TryGetValue(mapInstance, out var runtimeMapRoom))
         {
             var result = runtimeMapRoom.GetRandomBehaviorCell(behaviorAreaType);
-            while (!CheckIsWalk(result.x, result.y, soureMap))
+            for (int i = 0; i < MaxRandomBehaviorCellAttempts && !CheckIsWalk(result.x, result.y, soureMap); i++)
+            {
                 result = runtimeMapRoom.GetRandomBehaviorCell(behaviorAreaType);
+            }
+            if (!CheckIsWalk(result.x, result.y, soureMap))
+            {
+                Debug.LogError($"GetRandomBehaviorCell failed. map:{soureMap}, trueMap:{mapInstance}, areaType:{behaviorAreaType}");
+                return int3.zero;
+            }
             result.z = soureMap;
-            return result; 
+            return result;
         }
         return int3.zero;
     }

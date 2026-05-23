@@ -3,6 +3,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
+using UnityEngine;
 
 public delegate void MoveWithPath(Stack<int2> path, int map, int2 startCoordinate, int2 targetCoordinate);
 
@@ -362,6 +363,10 @@ public class MapCellJobController : Singleton<MapCellJobController>
                 var w = r.z - r.x + 1;
                 var h = r.w - r.y + 1;
                 var area = w * h;
+                if (area > ushort.MaxValue)
+                {
+                    Debug.LogError($"Pathfinding room area exceeds ushort index limit. room:{requestsSnap[i].roomId}, width:{w}, height:{h}, area:{area}, limit:{ushort.MaxValue}");
+                }
                 areas[i] = area;
                 baseOffsets[i] = totalArea;
                 totalArea += area;
