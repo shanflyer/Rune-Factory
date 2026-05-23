@@ -48,6 +48,8 @@ public class AudioController : Singleton<AudioController>
     private const float DefaultFadeDuration = 1f;
     private const float WeightEpsilon = 0.001f;
     private const int MaxSeVoicesPerGroup = 8;
+    private const float AudioClipUnloadDelay = 45f;
+    private const int MaxIdleManagedAudioClips = 16;
 
     private sealed class AudioLayer
     {
@@ -95,12 +97,21 @@ public class AudioController : Singleton<AudioController>
         public bool Loop;
     }
 
+    private sealed class ManagedAudioClip
+    {
+        public string Path;
+        public AudioClip Clip;
+        public Task<AudioClip> LoadTask;
+        public int RefCount;
+        public float UnloadTime;
+        public bool WaitingUnload;
+    }
+
     private struct PendingAudioPlayData
     {
         public string Key;
         public float Weight;
         public bool Loop;
-        public AudioClip Clip;
     }
 
     [SerializeField]
@@ -113,7 +124,10 @@ public class AudioController : Singleton<AudioController>
     private readonly AudioLayer seLayer = new AudioLayer("SE");
     private readonly List<AudioFadeTask> fadeTasks = new List<AudioFadeTask>();
     private readonly Dictionary<string, List<SeVoice>> seVoices = new Dictionary<string, List<SeVoice>>();
+    private readonly Dictionary<string, ManagedAudioClip> managedClipsByPath = new Dictionary<string, ManagedAudioClip>();
+    private readonly Dictionary<AudioClip, ManagedAudioClip> managedClipsByClip = new Dictionary<AudioClip, ManagedAudioClip>();
     private float seCleanTimer;
+    private int managedResourceGeneration;
 
     public override bool NeedUpdate => true;
 
@@ -133,6 +147,7 @@ public class AudioController : Singleton<AudioController>
         DestroyLayer(bgsLayer);
         DestroyLayer(meLayer);
         DestroyLayer(seLayer);
+        ClearManagedAudioClips();
         audioMixer = null;
         base.Clear();
     }
@@ -141,6 +156,7 @@ public class AudioController : Singleton<AudioController>
     {
         UpdateFadeTasks(Time.deltaTime);
         UpdateSeVoices(Time.deltaTime);
+        UpdateManagedAudioClips();
     }
 
     public void SetBgmAudioSourceVolume(float value)
@@ -167,7 +183,7 @@ public class AudioController : Singleton<AudioController>
     {
         if (se == SE.NULL) return;
 
-        var audioClip = await GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.SEPath, se.ToString()));
+        var audioClip = await LoadManagedAudioClip(GameCommon.AddString(DataPath.SEPath, se.ToString()));
         PlaySE(audioClip, loop, Group);
     }
 
@@ -198,7 +214,7 @@ public class AudioController : Singleton<AudioController>
         }
 
         var version = NextRequestVersion(bgmLayer, Group);
-        var audioClip = await GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.BGMPath, clipName));
+        var audioClip = await LoadManagedAudioClip(GameCommon.AddString(DataPath.BGMPath, clipName));
         if (!IsRequestCurrent(bgmLayer, Group, version)) return;
 
         PlayLayerClip(bgmLayer, audioClip, clipName, loop, audioClearType, weight, isLerp, Group, false);
@@ -215,7 +231,7 @@ public class AudioController : Singleton<AudioController>
 
         var key = bgm.ToString();
         var version = NextRequestVersion(bgmLayer, Group);
-        var audioClip = await GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.BGMPath, key));
+        var audioClip = await LoadManagedAudioClip(GameCommon.AddString(DataPath.BGMPath, key));
         if (!IsRequestCurrent(bgmLayer, Group, version)) return;
 
         PlayLayerClip(bgmLayer, audioClip, key, loop, audioClearType, weight, isLerp, Group, false);
@@ -225,7 +241,7 @@ public class AudioController : Singleton<AudioController>
     {
         if (string.IsNullOrEmpty(clipName) || clipName == NullClipKey) return;
 
-        var audioClip = await GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.SEPath, clipName));
+        var audioClip = await LoadManagedAudioClip(GameCommon.AddString(DataPath.SEPath, clipName));
         PlaySE(audioClip, loop, Group);
     }
 
@@ -251,7 +267,7 @@ public class AudioController : Singleton<AudioController>
 
         var key = bgs.ToString();
         var version = NextRequestVersion(bgsLayer, Group);
-        var audioClip = await GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.BGSPath, key));
+        var audioClip = await LoadManagedAudioClip(GameCommon.AddString(DataPath.BGSPath, key));
         if (!IsRequestCurrent(bgsLayer, Group, version)) return;
 
         PlayLayerClip(bgsLayer, audioClip, key, loop, audioClearType, weight, isLerp, Group, false);
@@ -273,7 +289,7 @@ public class AudioController : Singleton<AudioController>
         var loadTasks = new Task<AudioClip>[pendingDatas.Count];
         for (var i = 0; i < pendingDatas.Count; i++)
         {
-            loadTasks[i] = GameSourceManager.instance.GetAudioClip(GameCommon.AddString(DataPath.BGSPath, pendingDatas[i].Key));
+            loadTasks[i] = LoadManagedAudioClip(GameCommon.AddString(DataPath.BGSPath, pendingDatas[i].Key));
         }
 
         var clips = await Task.WhenAll(loadTasks);
@@ -301,7 +317,7 @@ public class AudioController : Singleton<AudioController>
         if (audioClip == null || !EnsureLayerReady(seLayer)) return;
 
         var groupMixer = GetOrCreateGroupMixer(seLayer, Group);
-        var audioClipPlayable = AudioClipPlayable.Create(seLayer.Graph, audioClip, loop);
+        var audioClipPlayable = CreateClipPlayable(seLayer, audioClip, loop);
         groupMixer.AddInput(audioClipPlayable, 0, 1);
 
         if (!seVoices.TryGetValue(Group, out var voices))
@@ -436,7 +452,7 @@ public class AudioController : Singleton<AudioController>
         }
         else if (audioClearType == AudioClearType.All)
         {
-            var newPlayable = AudioClipPlayable.Create(layer.Graph, audioClip, loop);
+            var newPlayable = CreateClipPlayable(layer, audioClip, loop);
             if (isLerp && groupMixer.GetInputCount() > 0)
             {
                 StartFadeReplace(layer, group, groupMixer, new List<Playable> { newPlayable }, new List<float> { weight }, true);
@@ -451,7 +467,7 @@ public class AudioController : Singleton<AudioController>
         {
             if (!TrySetExistingClipWeight(groupMixer, audioClip, weight))
             {
-                var newPlayable = AudioClipPlayable.Create(layer.Graph, audioClip, loop);
+                var newPlayable = CreateClipPlayable(layer, audioClip, loop);
                 groupMixer.AddInput(newPlayable, 0, isLerp ? 0 : weight);
                 if (isLerp)
                     StartFadeIn(layer, group, groupMixer, newPlayable, weight);
@@ -494,7 +510,7 @@ public class AudioController : Singleton<AudioController>
             {
                 if (audioClips[i].audioClip == null) continue;
 
-                var playable = AudioClipPlayable.Create(layer.Graph, audioClips[i].audioClip, audioClips[i].loop);
+                var playable = CreateClipPlayable(layer, audioClips[i].audioClip, audioClips[i].loop);
                 newPlayables.Add(playable);
                 targetWeights.Add(audioClips[i].weight);
             }
@@ -538,6 +554,7 @@ public class AudioController : Singleton<AudioController>
     private void DestroyLayer(AudioLayer layer)
     {
         CancelFade(layer);
+        ReleaseLayerClipReferences(layer);
         layer.GroupMixers.Clear();
         layer.States.Clear();
 
@@ -552,6 +569,169 @@ public class AudioController : Singleton<AudioController>
     private bool EnsureLayerReady(AudioLayer layer)
     {
         return layer.Graph.IsValid() && layer.RootMixer.IsValid();
+    }
+
+    private async Task<AudioClip> LoadManagedAudioClip(string path)
+    {
+        if (string.IsNullOrEmpty(path)) return null;
+        var generation = managedResourceGeneration;
+
+        if (!managedClipsByPath.TryGetValue(path, out var managedClip))
+        {
+            managedClip = new ManagedAudioClip { Path = path };
+            managedClipsByPath.Add(path, managedClip);
+        }
+
+        if (managedClip.Clip != null)
+            return managedClip.Clip;
+
+        if (managedClip.LoadTask == null)
+            managedClip.LoadTask = GameSourceManager.instance.GetAudioClip(path);
+
+        var clip = await managedClip.LoadTask;
+        managedClip.LoadTask = null;
+        if (generation != managedResourceGeneration)
+        {
+            UnloadOrphanManagedClip(path, clip);
+            return null;
+        }
+
+        managedClip.Clip = clip;
+
+        if (clip != null)
+        {
+            managedClipsByClip[clip] = managedClip;
+            ScheduleManagedClipUnload(managedClip);
+        }
+
+        return clip;
+    }
+
+    private AudioClipPlayable CreateClipPlayable(AudioLayer layer, AudioClip clip, bool loop)
+    {
+        var playable = AudioClipPlayable.Create(layer.Graph, clip, loop);
+        RetainManagedClip(clip);
+        return playable;
+    }
+
+    private void RetainManagedClip(AudioClip clip)
+    {
+        if (clip == null || !managedClipsByClip.TryGetValue(clip, out var managedClip)) return;
+
+        managedClip.RefCount++;
+        managedClip.WaitingUnload = false;
+    }
+
+    private void ReleaseManagedClip(AudioClip clip)
+    {
+        if (clip == null || !managedClipsByClip.TryGetValue(clip, out var managedClip)) return;
+
+        managedClip.RefCount = Mathf.Max(0, managedClip.RefCount - 1);
+        if (managedClip.RefCount == 0)
+            ScheduleManagedClipUnload(managedClip);
+    }
+
+    private void ScheduleManagedClipUnload(ManagedAudioClip managedClip)
+    {
+        if (managedClip == null || managedClip.Clip == null || managedClip.RefCount > 0) return;
+
+        managedClip.WaitingUnload = true;
+        managedClip.UnloadTime = Time.realtimeSinceStartup + AudioClipUnloadDelay;
+    }
+
+    private void UpdateManagedAudioClips()
+    {
+        if (managedClipsByPath.Count == 0) return;
+
+        var now = Time.realtimeSinceStartup;
+        var idleCount = 0;
+        foreach (var pair in managedClipsByPath)
+        {
+            var managedClip = pair.Value;
+            if (managedClip.Clip != null && managedClip.RefCount == 0)
+                idleCount++;
+        }
+
+        foreach (var pair in managedClipsByPath)
+        {
+            var managedClip = pair.Value;
+            if (!managedClip.WaitingUnload || managedClip.RefCount > 0 || managedClip.Clip == null) continue;
+            if (managedClip.UnloadTime <= now || idleCount > MaxIdleManagedAudioClips)
+            {
+                UnloadManagedClip(managedClip);
+                idleCount--;
+            }
+        }
+    }
+
+    private void UnloadManagedClip(ManagedAudioClip managedClip)
+    {
+        if (managedClip == null || managedClip.Clip == null || managedClip.RefCount > 0) return;
+
+        var clip = managedClip.Clip;
+        managedClipsByClip.Remove(clip);
+        managedClip.Clip = null;
+        managedClip.WaitingUnload = false;
+
+        try
+        {
+            Resources.UnloadAsset(clip);
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"Unload audio clip failed: {managedClip.Path} - {e.Message}");
+        }
+    }
+
+    private void ClearManagedAudioClips()
+    {
+        managedResourceGeneration++;
+        foreach (var pair in managedClipsByPath)
+        {
+            var managedClip = pair.Value;
+            if (managedClip.Clip == null) continue;
+
+            managedClip.RefCount = 0;
+            UnloadManagedClip(managedClip);
+        }
+
+        managedClipsByClip.Clear();
+        managedClipsByPath.Clear();
+    }
+
+    private void UnloadOrphanManagedClip(string path, AudioClip clip)
+    {
+        if (clip == null) return;
+
+        try
+        {
+            Resources.UnloadAsset(clip);
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"Unload orphan audio clip failed: {path} - {e.Message}");
+        }
+    }
+
+    private void ReleaseLayerClipReferences(AudioLayer layer)
+    {
+        if (!layer.Graph.IsValid()) return;
+
+        foreach (var pair in layer.GroupMixers)
+        {
+            var mixer = pair.Value;
+            if (!mixer.IsValid()) continue;
+
+            for (var i = 0; i < mixer.GetInputCount(); i++)
+                ReleasePlayableClipReference(mixer.GetInput(i));
+        }
+    }
+
+    private void ReleasePlayableClipReference(Playable playable)
+    {
+        if (!playable.IsValid() || !playable.IsPlayableOfType<AudioClipPlayable>()) return;
+
+        ReleaseManagedClip(((AudioClipPlayable)playable).GetClip());
     }
 
     private AudioMixerPlayable GetOrCreateGroupMixer(AudioLayer layer, string group)
@@ -866,7 +1046,8 @@ public class AudioController : Singleton<AudioController>
     {
         if (!playable.IsValid()) return;
 
-        // 资源释放交给资源管理器/场景生命周期处理；这里仅销毁 playable，避免切歌时触发 UnloadAsset 抖动。
+        ReleasePlayableClipReference(playable);
+        // 资源层会在引用归零后延迟释放；这里仅销毁 playable，避免切歌时触发同步卸载抖动。
         playable.Destroy();
     }
 
