@@ -102,7 +102,8 @@ public class WorldMapController : MonoBehaviour
         _ = GameDataSaveManager.instance.loadGameSaveData;
         if (GameGuideManager.instance.endGuideFilmIndex > 0)
         {
-            UIManager.instance.ShowGamePanel<LoadingPanel>();
+            await UIManager.instance.ShowGamePanel<LoadingPanel>();
+            if (!IsInitCurrent(version)) return;
         }
 
         if (!await InitSingletonAsync<TeamManager>(version)) return;
@@ -160,12 +161,12 @@ public class WorldMapController : MonoBehaviour
         GameTimeManager.instance.runTime = true;
 
         if (!await YieldInitFrame(version)) return;
-        UIManager.instance.ShowGamePanel<MainPanel>();
+        await UIManager.instance.ShowGamePanel<MainPanel>();
 
         if (!await YieldInitFrame(version)) return;
-        UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
-        UIManager.instance.ShowGamePanel<PlayerTopPanel>();
-        UIManager.instance.ShowGamePanel<ShortcutPanel>();
+        await UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
+        await UIManager.instance.ShowGamePanel<PlayerTopPanel>();
+        await UIManager.instance.ShowGamePanel<ShortcutPanel>();
 
         ScheduleAutoSave();
     }

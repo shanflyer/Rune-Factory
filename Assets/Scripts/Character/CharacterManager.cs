@@ -551,10 +551,10 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
                 if (SceneManager.instance.Now == "World")
                 {
-                     UIManager.instance.ShowGamePanel<PlayerTopPanel>();
+                     AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<PlayerTopPanel>(), nameof(PlayerTopPanel));
                      //UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
                     var shortcutPackage = ShortcutManager.instance.GetShortcutPackage(_controllerCharacter.instanceId);
-                    UIManager.instance.ShowGamePanel<ShortcutPanel, ShortcutPackage>(shortcutPackage);
+                    AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<ShortcutPanel, ShortcutPackage>(shortcutPackage), nameof(ShortcutPanel));
                 }
                 characterRuntionObjs.TryGetValue(controllerCharacter, out var _ControllerRuntimeObj);
                 ControllerRuntimeObj = _ControllerRuntimeObj; 
@@ -733,7 +733,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             character.SetObjCoordinate(creatCharacter.mapInstance,
             new int2(creatCharacter.coordinateX, creatCharacter.coordinateY));
-            RefreshNpcRuntimeObj(character, creatCharacter.controller);
+            await RefreshNpcRuntimeObj(character, creatCharacter.controller);
         }
         
         if (creatCharacter.controller)
@@ -848,7 +848,7 @@ public class CharacterManager : Singleton<CharacterManager>
             {
                 var character = characters[i];
                 if (character.mapInstance == WorldMapObjManager.instance.displayMap)
-                    RefreshNpcRuntimeObj(character, character == controllerCharacter);
+                    AsyncTaskRunner.Run(RefreshNpcRuntimeObj(character, character == controllerCharacter), nameof(RefreshNpcRuntimeObj));
             }
     }
 

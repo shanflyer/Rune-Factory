@@ -740,14 +740,14 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
             if (mapId == WorldMapObjManager.instance.displayMap)
             {
-                WorldMapObjManager.instance.DisplayMapItem(runtimeMapItem);
+                await WorldMapObjManager.instance.DisplayMapItem(runtimeMapItem);
             }
         }
         
 
         if (mapItem.instanceId != 0)
         {
-            LoadMapItemAsync(mapId, mapItem.instanceId);
+            await LoadMapItemAsync(mapId, mapItem.instanceId);
         }
       
        

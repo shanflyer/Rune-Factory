@@ -49,13 +49,16 @@ public class GameEventManager : Singleton<GameEventManager>
     private Dictionary<int, BehaviorTree> behaviorTrees = new Dictionary<int, BehaviorTree>();
     void SampleGameEvent(SampleGameEvent sampleGameEvent)
     {
-        AddGameEvent(sampleGameEvent.eventId);
-        if (sampleGameEvent.setResult != null)
-        {
-            sampleGameEvent.setResult(true);
-        }
-
+        AsyncTaskRunner.Run(SampleGameEventAsync(sampleGameEvent), nameof(SampleGameEvent));
     }
+
+    private async Task SampleGameEventAsync(SampleGameEvent sampleGameEvent)
+    {
+        // 采样事件需要等事件数据加载完成后再回写结果，避免调用方拿到过早的成功。
+        bool result = await AddGameEvent(sampleGameEvent.eventId);
+        sampleGameEvent.setResult?.Invoke(result);
+    }
+
     private void RemoveGameEvent(RemoveGameEvent removeGameEvent)
     {
         RemoveGameEvent(removeGameEvent.eventId);

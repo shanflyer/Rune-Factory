@@ -61,7 +61,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             }
             else
             {
-                DisplayMapItem(refreshMapItemDisplay.runtimeMapItem);
+                AsyncTaskRunner.Run(DisplayMapItem(refreshMapItemDisplay.runtimeMapItem), nameof(DisplayMapItem));
             }
         }
     }
@@ -450,7 +450,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                 if (WorldMapManager.instance.GetRuntimeMapItem(mapItems[i], out RuntimeMapItem mapItem))
                 {
                    mapDisplayCompleted.Add(mapItem.instanceId); 
-                   DisplayMapItem(mapItem);
+                   await DisplayMapItem(mapItem);
                 }
             }
             nowMapRoomObj = await CreatMapRunTime(DisplayMapRoomData, mapId);
@@ -725,7 +725,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
 
     private Dictionary<int, Manufature> manufatureObjs = new Dictionary<int, Manufature>();
 
-    public async void DisplayMapItem(RuntimeMapItem runtimeMapItem)
+    public async Task DisplayMapItem(RuntimeMapItem runtimeMapItem)
     {
         if (!nowRuntimeMapItemObjs.ContainsKey(runtimeMapItem.instanceId))
         {

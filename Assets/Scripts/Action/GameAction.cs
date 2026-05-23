@@ -25,14 +25,14 @@ public delegate void SetInt3Value(int3 value);
 
 public delegate void SetResult(bool value);
 
-public static class GameActionAsyncRunner
+public static class AsyncTaskRunner
 {
-    public static void Run(Task task, string actionName)
+    public static void Run(Task task, string context)
     {
-        _ = RunAsync(task, actionName);
+        _ = RunAsync(task, context);
     }
 
-    private static async Task RunAsync(Task task, string actionName)
+    private static async Task RunAsync(Task task, string context)
     {
         try
         {
@@ -40,10 +40,19 @@ public static class GameActionAsyncRunner
         }
         catch (Exception e)
         {
-            // GameAction.Init 仍是同步接口，异步初始化统一在这里兜底，避免异常被静默吞掉。
-            Debug.LogError($"GameAction async init failed: {actionName}");
+            // 同步回调里无法直接 await 的任务统一走这里，避免异步异常静默丢失。
+            Debug.LogError($"Async task failed: {context}");
             Debug.LogException(e);
         }
+    }
+}
+
+public static class GameActionAsyncRunner
+{
+    public static void Run(Task task, string actionName)
+    {
+        // GameAction.Init 仍是同步接口，异步初始化统一转给通用兜底器。
+        AsyncTaskRunner.Run(task, $"GameAction async init: {actionName}");
     }
 }
 
