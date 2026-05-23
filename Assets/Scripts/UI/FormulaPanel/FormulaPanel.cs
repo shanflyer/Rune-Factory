@@ -99,7 +99,8 @@ public class FormulaPanel : GamePanel<IReferenceData>
                 leftFormulaReferenceDatas.Add(formulaReferenceDatas[index]);
             }
         }
-        leftFormulaList.InitListData(leftFormulaReferenceDatas, SelectFormulaData, toggleGroup);
+        // 翻页刷新来自同步 UI 入口，列表刷新异常统一记录。
+        AsyncTaskRunner.Run(leftFormulaList.InitListData(leftFormulaReferenceDatas, SelectFormulaData, toggleGroup), "FormulaPanel.RefreshDisplay");
 
         List<FormulaReferenceData> rightFormulaReferenceDatas = new List<FormulaReferenceData>();
         for (int i = 0; i < 8; i++)
@@ -110,7 +111,7 @@ public class FormulaPanel : GamePanel<IReferenceData>
                 rightFormulaReferenceDatas.Add(formulaReferenceDatas[index]);
             }
         }
-        rightFormulaList.InitListData(rightFormulaReferenceDatas, SelectFormulaData, toggleGroup);
+        AsyncTaskRunner.Run(rightFormulaList.InitListData(rightFormulaReferenceDatas, SelectFormulaData, toggleGroup), "FormulaPanel.RefreshDisplay");
         leftFormulaList.SelectDefault();
     }
 
