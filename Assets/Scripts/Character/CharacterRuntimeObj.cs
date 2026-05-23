@@ -79,7 +79,7 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
     [SerializeField]
     private float2 direction;
 
-    public Collider2D collider => myShadow.PolygonCollider;
+    public new Collider2D collider => myShadow.PolygonCollider;
 
     public void Clear()
     {

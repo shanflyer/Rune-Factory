@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class WeatherPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
-    Animation animation;
+    new Animation animation;
     [SerializeField]   
     Transform nowWeatherParent, nextWeatherParent;
     DisplayList<WeatherReference, WeatherReferenceData> nowWeathers;

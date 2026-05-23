@@ -313,7 +313,7 @@ public partial class MapCellController : Singleton<MapCellController>
             }
             catch (Exception exception)
             {
-                Debug.LogError($"room:{roomId}-itemInstanceId{itemInstanceId}--{cells.Count}");
+                Debug.LogError($"room:{roomId}-itemInstanceId{itemInstanceId}--{cells.Count}--{exception}");
             }
 
             return true;
@@ -337,7 +337,7 @@ public partial class MapCellController : Singleton<MapCellController>
             }
             catch (Exception exception)
             {
-                Debug.LogError($"room:{roomId}-itemInstanceId{itemInstanceId}--{cells.Count}");
+                Debug.LogError($"room:{roomId}-itemInstanceId{itemInstanceId}--{cells.Count}--{exception}");
             }
            
             return true;

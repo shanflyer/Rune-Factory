@@ -13,7 +13,7 @@ public class GameDropdown : Dropdown, IGuideSelectable
         set => m_GameHideSelected = value;
     }
 
-    public new void InitListSelectable(int index)
+    public void InitListSelectable(int index)
     {
         UGUISelectableUtility.InitListSelectable(this, m_GameSetUid, ref m_GameGuid, index);
     }

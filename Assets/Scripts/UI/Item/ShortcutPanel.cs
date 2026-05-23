@@ -45,6 +45,16 @@ public struct ShortcutItem : IReferenceData
         return false;
     }
 
+    public override bool Equals(object obj)
+    {
+        return obj is ShortcutItem other && Item.instanceId == other.Item.instanceId;
+    }
+
+    public override int GetHashCode()
+    {
+        return Item.instanceId.GetHashCode();
+    }
+
     public static explicit operator ShortcutItem(Object v)
     {
         throw new NotImplementedException();

@@ -12,7 +12,7 @@ public class GameImage : Image
     [SerializeField] Color m_GameColorBR = Color.white;
     [SerializeField] bool m_GameColorGradient;
 
-    public new bool NullClear
+    public bool NullClear
     {
         get => m_GameNullClear;
         set
@@ -25,31 +25,31 @@ public class GameImage : Image
         }
     }
 
-    public new Color colorTL
+    public Color colorTL
     {
         get => m_GameColorTL;
         set => SetGradientColor(ref m_GameColorTL, value);
     }
 
-    public new Color colorTR
+    public Color colorTR
     {
         get => m_GameColorTR;
         set => SetGradientColor(ref m_GameColorTR, value);
     }
 
-    public new Color colorBL
+    public Color colorBL
     {
         get => m_GameColorBL;
         set => SetGradientColor(ref m_GameColorBL, value);
     }
 
-    public new Color colorBR
+    public Color colorBR
     {
         get => m_GameColorBR;
         set => SetGradientColor(ref m_GameColorBR, value);
     }
 
-    public new bool colorGradient
+    public bool colorGradient
     {
         get => m_GameColorGradient;
         set

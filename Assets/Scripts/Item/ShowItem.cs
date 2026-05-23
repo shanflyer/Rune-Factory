@@ -3,7 +3,7 @@ using UnityEngine;
 public class ShowItem : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer itemRenderer;
-    [SerializeField] private Animation animation;
+    [SerializeField] private new Animation animation;
 
     private int mapInstance;
     private RuntimeObj _runtimeObj;

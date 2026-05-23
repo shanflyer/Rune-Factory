@@ -5,7 +5,7 @@ using UnityEngine;
 public class DynamicTalkNode : ActionNode
 {
         public string content;
-        public new string name;
+        public string name;
 
     public override GameAction CreateAction(
         int source = 0, int target = 0, int value = -1,

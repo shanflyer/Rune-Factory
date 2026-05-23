@@ -10,7 +10,7 @@ namespace UnityEngine.Rendering.Universal.Internal
         private class MyRenderGraphPass : ScriptableRenderPass
         {
             private readonly Settings settings;
-            private readonly string passName = "MyRenderGraphPass";
+            private readonly new string passName = "MyRenderGraphPass";
             private readonly List<ShaderTagId> m_ShaderTagIdList = new();
             private RenderStateBlock m_RenderStateBlock;
 

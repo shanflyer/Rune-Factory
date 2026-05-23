@@ -5,7 +5,7 @@ using UnityEngine;
 public class SetItemAnimationNode : ActionNode
 {
         public int mapId;
-        public new int id;
+        public int id;
         public int editorId;
         public int keyX;
         public int keyY;

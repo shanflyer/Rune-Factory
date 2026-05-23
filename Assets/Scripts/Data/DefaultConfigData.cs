@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class DefaultConfigData : ScriptableObject, IGameData
 {
-    public string name;
+    public new string name;
     public string value;
     public string GetKey()
     {

@@ -19,7 +19,7 @@ namespace UnityEngine.Rendering.Universal.Internal
         private class BakerRenderGraphPass : ScriptableRenderPass
         {
             private Settings settings;
-            private string passName = "BakerRenderGraphPass";
+            private new string passName = "BakerRenderGraphPass";
             private List<ShaderTagId> m_ShaderTagIdList = new List<ShaderTagId>();
             private RenderStateBlock m_RenderStateBlock;
 

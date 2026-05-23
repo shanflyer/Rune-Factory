@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CreatRuntimePackageNode : ActionNode
 {
-        public new string name;
+        public string name;
         public int instanceId;
         public int caseCount;
         public bool itemPackage;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TryUpDataCharacterEmoteNode : ActionNode
 {
-        public new int id;
+        public int id;
         public int emote;
         public int showTime;
 

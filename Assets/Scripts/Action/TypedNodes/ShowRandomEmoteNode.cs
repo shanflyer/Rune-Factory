@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ShowRandomEmoteNode : ActionNode
 {
-        public new int id;
+        public int id;
         public EntityType entityType;
         public int randomId;
         public int showTime;

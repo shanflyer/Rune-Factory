@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CloseMapObjTipsNode : ActionNode
 {
-        public new int id;
+        public int id;
 
     public override GameAction CreateAction(
         int source = 0, int target = 0, int value = -1,

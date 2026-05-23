@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ShowEmoteNode : ActionNode
 {
-        public new int id;
+        public int id;
         public EntityType entityType;
         public int emoteId;
         public int showTime;

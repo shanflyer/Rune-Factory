@@ -241,7 +241,7 @@ public class DisplayList<T, V> where T : UIObjReference<V>
                 list.Add(t);
                 _dataCount++;
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
             }

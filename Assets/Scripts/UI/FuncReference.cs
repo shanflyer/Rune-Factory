@@ -148,7 +148,7 @@ public class FuncReference : UIObjReference<FunctionData>
         }
     }
 
-    private void OnDisable()
+    public override void OnDisable()
     {
         if (moveSelectButtonHandle.IsValid)
         {

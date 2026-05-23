@@ -15,7 +15,7 @@ public class MyLightBase : MonoBehaviour
     [SerializeField]
     float value = 1; 
     [SerializeField]
-    protected Renderer renderer;
+    protected new Renderer renderer;
     [SerializeField]
     bool fixedColor = false;
     public Color Color
