@@ -620,7 +620,8 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         public Lightning()
         {
             lightningLight = 0;
-            InitDataAsync();
+            // Lightning 构造函数不能 await，数据加载异常交给统一异步兜底记录。
+            AsyncTaskRunner.Run(InitDataAsync(), nameof(Lightning));
         }
         async Task InitDataAsync()
         {

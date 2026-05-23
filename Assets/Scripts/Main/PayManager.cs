@@ -140,7 +140,8 @@ public class PayManager : Singleton<PayManager>
 
     public void TryCreatMoney()
     {
-        UIManager.instance.ShowGamePanel<StoreProductPanel>();
+        // 打开商品面板不阻塞按钮回调，异步失败统一记录。
+        AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<StoreProductPanel>(), nameof(TryCreatMoney));
 
 #if UNITY_EDITOR
         // nowDiamond += 200;

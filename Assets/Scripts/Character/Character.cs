@@ -715,10 +715,11 @@ public partial class Character
         }
         else
         {
-            SetLevel(1, true); 
+            SetLevel(1, true);
             if(needCreatPackage)
             {
-                CreatCharacterPackage(overridePackage, packageInstancId);
+                // 构造函数不能 await，角色背包创建失败时通过统一异步日志暴露。
+                AsyncTaskRunner.Run(CreatCharacterPackage(overridePackage, packageInstancId), nameof(CreatCharacterPackage));
             }
             
         }
@@ -1665,7 +1666,8 @@ public partial class Character
             value = reference
         });
 
-        GameEventManager.instance.AddGameEvent(eventId, eventReferenceDatas);
+        // 触发器在同步坐标更新链路中派发，事件执行失败不能静默丢失。
+        AsyncTaskRunner.Run(GameEventManager.instance.AddGameEvent(eventId, eventReferenceDatas), nameof(TriggerEventAction));
     }
     /// <summary>
     /// 设置坐标
@@ -1754,7 +1756,8 @@ public partial class Character
 
         if (refreshObj)
         {
-            CharacterManager.instance.RefreshNpcRuntimeObj(this, isController, refreshMapTemp, fiexedDisplay);
+            // 坐标同步不能等待表现层刷新，刷新任务异常统一记录。
+            AsyncTaskRunner.Run(CharacterManager.instance.RefreshNpcRuntimeObj(this, isController, refreshMapTemp, fiexedDisplay), nameof(SetCoordinate));
         }
        
         // ForwardTrigger(coordinate, direction);

@@ -62,7 +62,7 @@ public class FishingManager : Singleton<FishingManager>
             };
             GameActionManager.instance.QueueAction(ShowMapObjTips);
 
-            UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
+            await UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
         }
 
         if(waitFishers.TryGetValue(fishingIsSuccess.characterId,out var action))
@@ -215,7 +215,8 @@ public class FishingManager : Singleton<FishingManager>
             GameActionManager.instance.QueueAction(showMapObjTips);
         }
        
-        UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
+        // 停止钓鱼来自同步 Action 回调，恢复操作面板时保留异步异常日志。
+        AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<ScreenControllerPanel>(), nameof(StopFishing));
         int characterId = stopFishing.characterId;
         if (waitFishers.TryGetValue(characterId, out var @delegate))
         {

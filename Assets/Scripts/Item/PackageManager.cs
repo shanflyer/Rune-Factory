@@ -499,7 +499,7 @@ public class PackageManager : Singleton<PackageManager>
                        value=giveGift.giftId
                    }, 
                 };
-                GameEventManager.instance.AddGameEvent(itemData.useEventId, eventReferenceDatas);
+                await GameEventManager.instance.AddGameEvent(itemData.useEventId, eventReferenceDatas);
             }
             else
             {
@@ -1132,7 +1132,7 @@ public class PackageManager : Singleton<PackageManager>
                        value=itemData.typeValue
                    },
                 };
-                GameEventManager.instance.AddGameEvent(itemData.useEventId, eventReferenceDatas);
+                await GameEventManager.instance.AddGameEvent(itemData.useEventId, eventReferenceDatas);
                 if (!string.IsNullOrEmpty(itemData.useInfo))
                 {
                     InformationController.instance.AddInformation(itemData.useInfo, true, true);

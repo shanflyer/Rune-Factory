@@ -895,7 +895,8 @@ public class GameTimeManager : Singleton<GameTimeManager>
         bool isController = CharacterManager.instance.controllerCharacter.instanceId == characterId;
         if (isController)
         {
-            UIManager.instance.ShowGamePanel<SleepMaskPanel>();
+            // 睡眠 Action 是同步分发，遮罩面板加载异常走统一异步日志。
+            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<SleepMaskPanel>(), nameof(PlayerSleep));
         }
         else if (NPCManager.instance.GetNPCFormInstance(characterId, out var npc))
         {

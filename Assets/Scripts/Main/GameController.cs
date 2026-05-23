@@ -491,7 +491,8 @@ if (result.Success)
         }
         if (Keyboard.current.pKey.wasPressedThisFrame)
         {
-            UIManager.instance.ShowGamePanel<AllItemPanel>();
+            // 编辑器快捷键不阻塞 Update，但需要保留面板加载异常。
+            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<AllItemPanel>(), nameof(AllItemPanel));
         }
         if (autoChangeLanguage && myLanguage != SetSystemLanguage)
         {

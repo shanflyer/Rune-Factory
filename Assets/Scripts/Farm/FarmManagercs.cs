@@ -828,8 +828,9 @@ public class Plant
                     nowCycle++;
                 }
                 GameDataSaveManager.instance.SetPlantFruitCount(PlantData.id, PlantData.fruitCount);
-                PackageManager.instance.SetItemInPackage(item,
-                    CharacterManager.instance.controllerCharacter.characterPackage, true);
+                // 采摘在同步交互链路中触发，背包写入任务统一记录异常，避免后台任务静默失败。
+                AsyncTaskRunner.Run(PackageManager.instance.SetItemInPackage(item,
+                    CharacterManager.instance.controllerCharacter.characterPackage, true), nameof(GetPlantFruit));
                 return true;
             }
 
@@ -852,8 +853,9 @@ public class Plant
                     dataId = GameCommon.grassItem,
                     count = growthStateData.productValue
                 };
-                PackageManager.instance.SetItemInPackage(item,
-                    CharacterManager.instance.controllerCharacter.characterPackage, true); 
+                // 割草奖励不阻塞收割动作，但异步异常需要进入统一日志。
+                AsyncTaskRunner.Run(PackageManager.instance.SetItemInPackage(item,
+                    CharacterManager.instance.controllerCharacter.characterPackage, true), nameof(GetSicklePlant));
             }
              
         }
