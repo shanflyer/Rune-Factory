@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -130,7 +131,13 @@ public class ItemData : ScriptableObject, IGameData
 
     int animalDay = 0;
     
-    public async void Init()
+    public void Init()
+    {
+        // IGameData.Init 是同步接口，异步补充字段集中兜底，避免初始化异常丢失。
+        GameActionAsyncRunner.Run(InitAsync(), nameof(ItemData));
+    }
+
+    private async Task InitAsync()
     {
         switch (type)
         {

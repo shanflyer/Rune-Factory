@@ -56,7 +56,13 @@ public class WorldMapController : MonoBehaviour
         WeatherManager.instance.RefreshWeather(GameTimeManager.instance.Hour);
     }
 
-    public async void Init()
+    public void Init()
+    {
+        // MonoBehaviour 事件入口保持同步签名，实际异步流程集中到 InitAsync 里捕获异常。
+        _ = InitAsync();
+    }
+
+    private async Task InitAsync()
     {
         int version = ++initVersion;
         GameTimerController.instance.RemoveWaiter(AutoSave);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -23,6 +24,28 @@ public delegate void SetFloatValue(float value);
 public delegate void SetInt3Value(int3 value);
 
 public delegate void SetResult(bool value);
+
+public static class GameActionAsyncRunner
+{
+    public static void Run(Task task, string actionName)
+    {
+        _ = RunAsync(task, actionName);
+    }
+
+    private static async Task RunAsync(Task task, string actionName)
+    {
+        try
+        {
+            await task;
+        }
+        catch (Exception e)
+        {
+            // GameAction.Init 仍是同步接口，异步初始化统一在这里兜底，避免异常被静默吞掉。
+            Debug.LogError($"GameAction async init failed: {actionName}");
+            Debug.LogException(e);
+        }
+    }
+}
 
 public struct PayEndAction : GameAction
 {

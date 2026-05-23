@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Mathematics;
 
 public struct GetPastureLevel : GameAction
@@ -196,7 +197,13 @@ public struct TryGetAnimalFoodFromPasture : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
-    public async void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    {
+        // GameAction.Init 是同步接口，含异步取值的初始化放到任务里并统一记录异常。
+        GameActionAsyncRunner.Run(InitAsync(parameters, source, target, value, setResult, setValue, immediately), nameof(TryGetAnimalFoodFromPasture));
+    }
+
+    private async Task InitAsync(List<Parameter> parameters, int source, int target, int value, SetResult setResult, SetValue setValue, bool immediately)
     {
         if (parameters.Count > 0)
         {
@@ -235,8 +242,15 @@ public struct TrySetAnimalFoodToPasture : GameAction
     public int pastureId;
     public Item item;
 
-    public async void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
         SetResult setResult = null, SetValue setValue = null, bool immediately = false)
+    {
+        // GameAction.Init 是同步接口，含异步取值的初始化放到任务里并统一记录异常。
+        GameActionAsyncRunner.Run(InitAsync(parameters, source, target, value, setResult, setValue, immediately), nameof(TrySetAnimalFoodToPasture));
+    }
+
+    private async Task InitAsync(List<Parameter> parameters, int source, int target, int value,
+        SetResult setResult, SetValue setValue, bool immediately)
     {
         if (parameters.Count > 0)
         {
@@ -275,7 +289,13 @@ public struct TryGetItemFromPastureBox : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
-    public async void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
+    {
+        // GameAction.Init 是同步接口，含异步取值的初始化放到任务里并统一记录异常。
+        GameActionAsyncRunner.Run(InitAsync(parameters, source, target, value, setResult, setValue, immediately), nameof(TryGetItemFromPastureBox));
+    }
+
+    private async Task InitAsync(List<Parameter> parameters, int source, int target, int value, SetResult setResult, SetValue setValue, bool immediately)
     {
         if (parameters.Count > 0)
         {
