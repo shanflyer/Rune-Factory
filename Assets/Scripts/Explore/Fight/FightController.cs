@@ -195,6 +195,8 @@ public class FightController : MonoBehaviour
 
     private Dictionary<int, FightPlayerRuntime> fightPlayerRuntimes = new Dictionary<int, FightPlayerRuntime>();
     private Dictionary<int, FightPlayerRuntime> fightMonsterRuntimes = new Dictionary<int, FightPlayerRuntime>();
+    private readonly Dictionary<int, GameObjectCurveController.MoveHandle> fightCharacterMoveHandles =
+        new Dictionary<int, GameObjectCurveController.MoveHandle>();
 
     private Transform monsterObj;
 
@@ -303,8 +305,22 @@ public class FightController : MonoBehaviour
     {
         if (fightPlayerRuntimes.TryGetValue(fightCharacterMove.characterId, out var fightPlayerRuntime))
         {
+            if (fightCharacterMoveHandles.TryGetValue(fightCharacterMove.characterId, out var oldHandle))
+            {
+                GameObjectCurveController.instance.Cancel(oldHandle);
+                fightCharacterMoveHandles.Remove(fightCharacterMove.characterId);
+            }
+
+            Transform characterTransform = fightPlayerRuntime.animator.transform;
+            Vector3 startPos = characterTransform.position;
             Vector3 targetPos = playerPos[fightCharacterMove.newIndex].position;
-            StartCoroutine(FightCharacterMoving(fightPlayerRuntime.animator.transform, targetPos));
+            var handle = GameObjectCurveController.instance.StartLineMove(startPos, targetPos,
+                GameCommon.fightCharacterMoveTime, pos => characterTransform.position = pos, () =>
+                {
+                    characterTransform.position = targetPos;
+                    fightCharacterMoveHandles.Remove(fightCharacterMove.characterId);
+                });
+            fightCharacterMoveHandles[fightCharacterMove.characterId] = handle;
         }
     }
 
@@ -1192,6 +1208,7 @@ public class FightController : MonoBehaviour
 
     private float waitTime;
     private float nowTime;
+    private GameObjectCurveController.FrameTaskHandle mapMoveHandle;
 
     public void StartWalk()
     {
@@ -1209,9 +1226,13 @@ public class FightController : MonoBehaviour
             {
                 waitTime = GameRandom.RandomInt(GameCommon.fightWalkTime.x, GameCommon.fightWalkTime.y) * 0.001f;
             }
-            waitTime = 10;
-            StopCoroutine("MapMoving");
-            StartCoroutine("MapMoving");
+            if (mapMoveHandle.IsValid)
+            {
+                GameObjectCurveController.instance.Cancel(mapMoveHandle);
+                mapMoveHandle = default;
+            }
+
+            StartMapMovingTask();
 
             ExploreManager.instance.LerpExploreTime(waitTime);
         }
@@ -1219,7 +1240,12 @@ public class FightController : MonoBehaviour
 
     public void StopWalk()
     {
-        StopCoroutine("MapMoving");
+        if (mapMoveHandle.IsValid)
+        {
+            GameObjectCurveController.instance.Cancel(mapMoveHandle);
+            mapMoveHandle = default;
+        }
+
         SetFightCharacterAnimator(new SetFightCharacterAnimator
         {
             characterId = -1,
@@ -1230,43 +1256,33 @@ public class FightController : MonoBehaviour
         GameTimeManager.instance.runTime = false;
     }
 
-    private IEnumerator FightCharacterMoving(Transform characterTransform, Vector3 targetPos)
-    {
-        Vector3 startPos = characterTransform.position;
-        float timeValue = 0;
-        while (timeValue > GameCommon.fightCharacterMoveTime)
-        {
-            timeValue += Time.deltaTime;
-            characterTransform.position = (targetPos - startPos) * timeValue / GameCommon.fightCharacterMoveTime + startPos;
-            yield return 0;
-        }
-        characterTransform.position = targetPos;
-    }
-
-    private IEnumerator MapMoving()
+    private void StartMapMovingTask()
     {
         float footStepTime = 0.3f;
         float nowFootTime = 0;
 
-        while (nowTime < waitTime)
+        mapMoveHandle = GameObjectCurveController.instance.StartFrameTask(deltaTime =>
         {
-            nowFootTime += Time.deltaTime;
+            nowFootTime += deltaTime;
             if(nowFootTime>footStepTime)
             {
                 nowFootTime = 0;
                 AudioController.instance.PlaySE(footStep, false, "FootStep");
             }
 
-            nowTime += Time.deltaTime;
+            nowTime += deltaTime;
             fightMapRuntime.SceneMove();
-            yield return 1;
-        }
-        nowTime = 0;
-        waitTime = 0;
-        StopWalk();
-        ChapterStepAction chapterStepAction = new ChapterStepAction();
-        GameActionManager.instance.QueueAction(chapterStepAction, true);
-        chapterFight = true;
+            return nowTime < waitTime;
+        }, () =>
+        {
+            mapMoveHandle = default;
+            nowTime = 0;
+            waitTime = 0;
+            StopWalk();
+            ChapterStepAction chapterStepAction = new ChapterStepAction();
+            GameActionManager.instance.QueueAction(chapterStepAction, true);
+            chapterFight = true;
+        });
     }
 
     private SkillRuntime ActionSkillRuntime;

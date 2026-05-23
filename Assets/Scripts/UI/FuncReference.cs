@@ -1,4 +1,3 @@
-﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +15,7 @@ public class FuncReference : UIObjReference<FunctionData>
 
     private FunctionData functionData;
     private List<Button> secondSelectButtons = new List<Button>();
+    private GameObjectCurveController.FrameTaskHandle moveSelectButtonHandle;
 
     public override void SetPanelUISerializeObj()
     {
@@ -27,13 +27,18 @@ public class FuncReference : UIObjReference<FunctionData>
 
     private const float showTime = 1.0f;
     private float secondButtonHigh;
-   // private bool show = false;
 
-    private IEnumerator MoveSelectButton(bool hide)
+    private void StartMoveSelectButtonTask(bool hide)
     {
+        if (moveSelectButtonHandle.IsValid)
+        {
+            GameObjectCurveController.instance.Cancel(moveSelectButtonHandle);
+            moveSelectButtonHandle = default;
+        }
+
         button.interactable = false;
         float timeValue = 0;
-        List<Vector3> targets = new List<Vector3>();
+        List<Vector3> targets = new List<Vector3>(secondSelectButtons.Count);
         if (hide)
         {
             for (int i = 0; i < secondSelectButtons.Count; i++)
@@ -50,47 +55,55 @@ public class FuncReference : UIObjReference<FunctionData>
                 targets.Add(new Vector3(0, y, 0));
             }
         }
-        List<Vector3> zeros = new List<Vector3>();
+
+        List<Vector3> starts = new List<Vector3>(secondSelectButtons.Count);
         for (int i = 0; i < secondSelectButtons.Count; i++)
         {
             RectTransform rectTransform = secondSelectButtons[i].transform as RectTransform;
-
-            zeros.Add(rectTransform.localPosition);
+            starts.Add(rectTransform.localPosition);
         }
 
-        while (timeValue <= showTime)
+        moveSelectButtonHandle = GameObjectCurveController.instance.StartFrameTask(deltaTime =>
         {
-            float lerpValue = timeValue / showTime;
+            float lerpValue = Mathf.Clamp01(timeValue / showTime);
             for (int i = 0; i < secondSelectButtons.Count; i++)
             {
                 var selectButton = secondSelectButtons[i];
-                Vector3 pos = Vector3.Lerp(zeros[i], targets[i], lerpValue);
+                Vector3 pos = Vector3.Lerp(starts[i], targets[i], lerpValue);
                 RectTransform rectTransform = selectButton.transform as RectTransform;
                 rectTransform.localPosition = pos;
             }
 
-            timeValue += Time.deltaTime;
-            yield return 0;
-        }
-        if (hide)
+            timeValue += deltaTime;
+            return timeValue <= showTime;
+        }, () =>
         {
-            secondParent.transform.localScale = Vector3.zero;
-        }
-        button.interactable = true;
+            moveSelectButtonHandle = default;
+            for (int i = 0; i < secondSelectButtons.Count; i++)
+            {
+                RectTransform rectTransform = secondSelectButtons[i].transform as RectTransform;
+                rectTransform.localPosition = targets[i];
+            }
+
+            if (hide)
+            {
+                secondParent.transform.localScale = Vector3.zero;
+            }
+
+            button.interactable = true;
+        });
     }
 
     private void ShowSecondSelectButton()
     {
         show = true;
-        IEnumerator enumerator = MoveSelectButton(false);
-        GameController.instance.StartCoroutine(enumerator);
+        StartMoveSelectButtonTask(false);
     }
 
     private void HideSecondSelectButton()
     {
         show = false;
-        IEnumerator enumerator = MoveSelectButton(true);
-        GameController.instance.StartCoroutine(enumerator);
+        StartMoveSelectButtonTask(true);
     }
 
     public async void InitFunction(FunctionData functionData, Button secondSelectButton)
@@ -104,14 +117,19 @@ public class FuncReference : UIObjReference<FunctionData>
             secondSelectButtons.Clear();
             for (int i = 0; i < functionData.secondFunctions.Length; i++)
             {
-                var async=InstantiateAsync(secondSelectButton, secondParent, Vector3.zero, Quaternion.identity);
+                int functionIndex = i;
+                var async = InstantiateAsync(secondSelectButton, secondParent, Vector3.zero, Quaternion.identity);
                 await async;
                 var selectButton = async.Result[0];
                 selectButton.transform.localScale = Vector3.one;
-                selectButton.GetComponentInChildren<Text>().text = functionData.secondFunctions[i].buttonName;
-                selectButton.onClick.AddListener(() => { functionData.secondFunctions[i].gameActionData.Action(); });
+                selectButton.GetComponentInChildren<Text>().text = functionData.secondFunctions[functionIndex].buttonName;
+                selectButton.onClick.AddListener(() =>
+                {
+                    functionData.secondFunctions[functionIndex].gameActionData.Action();
+                });
                 secondSelectButtons.Add(selectButton);
             }
+
             button.onClick.AddListener(() =>
             {
                 if (show)
@@ -127,6 +145,20 @@ public class FuncReference : UIObjReference<FunctionData>
         else
         {
             button.onClick.AddListener(() => { this.functionData.gameActionData.Action(); });
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (moveSelectButtonHandle.IsValid)
+        {
+            GameObjectCurveController.instance.Cancel(moveSelectButtonHandle);
+            moveSelectButtonHandle = default;
+        }
+
+        if (button != null)
+        {
+            button.interactable = true;
         }
     }
 }
