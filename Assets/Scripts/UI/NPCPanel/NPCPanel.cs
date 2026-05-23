@@ -156,7 +156,8 @@ public class NPCPanel : GamePanel<NPCList>
                 npcs.Add(NPCList.npcs[index]);
             }
         }
-        displayList.InitListData(npcs, SelectAction, toggleGroup);
+        // NPC 分页刷新是同步入口，列表初始化异常统一记录。
+        AsyncTaskRunner.Run(displayList.InitListData(npcs, SelectAction, toggleGroup), nameof(DisplayNpc));
     }
     public override void InitReferenceData(NPCList v)
     {

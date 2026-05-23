@@ -125,7 +125,8 @@ public class ItemCostSelectPanel : GamePanel<ItemCostEventData>
         TitleText.SetSWText(v.title);
         noticeText.SetSWText(v.notice);
         RefreshMonneyDisplay();
-        costItems.InitListData(v.items);
+        // 消耗物品列表来自同步初始化入口，刷新异常统一记录。
+        AsyncTaskRunner.Run(costItems.InitListData(v.items), nameof(InitReferenceData));
     }
 
 }

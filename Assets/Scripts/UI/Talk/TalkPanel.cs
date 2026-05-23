@@ -136,11 +136,12 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
 
         if (v.displayFunction)
         {
-            NPCFunctionList.InitListData(v.npcFunctionDatas, SelectNPCFunctionData);
+            // 对话功能按钮由同步引用数据入口刷新，异常统一记录。
+            AsyncTaskRunner.Run(NPCFunctionList.InitListData(v.npcFunctionDatas, SelectNPCFunctionData), nameof(InitReferenceData));
         }
         else
         {
-            NPCFunctionList.InitListData(new List<NPCFunctionData>());
+            AsyncTaskRunner.Run(NPCFunctionList.InitListData(new List<NPCFunctionData>()), nameof(InitReferenceData));
         }
 
         InitData();

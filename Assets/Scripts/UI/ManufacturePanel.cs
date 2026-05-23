@@ -955,11 +955,12 @@ public class ManufacturePanel : GamePanel<Manufature>
                 formulaTypeDatas.Add(new FormulaTypeData { formulaType = formulaType });
                 nowSelectFormulaTypes.Add(formulaType);
             }
-            this.formulaTypes.InitListData(formulaTypeDatas, SelectFormulaTypeData);
+            // 配方类型列表在同步面板初始化中刷新，异常统一记录。
+            AsyncTaskRunner.Run(this.formulaTypes.InitListData(formulaTypeDatas, SelectFormulaTypeData), nameof(InitReferenceData));
         }
         else
         {
-            this.formulaTypes.InitListData(new List<FormulaTypeData>(), SelectFormulaTypeData);
+            AsyncTaskRunner.Run(this.formulaTypes.InitListData(new List<FormulaTypeData>(), SelectFormulaTypeData), nameof(InitReferenceData));
         }
 
         RefreshFormulaSelect();

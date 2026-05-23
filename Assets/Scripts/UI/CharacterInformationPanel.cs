@@ -189,7 +189,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         FriendshipInfo.onClick.AddListener(async () =>
         {
             FunctionInfoData functionInfoData=await GameDataManager.instance.GetAsyncData<FunctionInfoData>(1);
-            UIManager.instance.ShowGamePanel<FunctionInfoPanel,FunctionInfoData>(functionInfoData);
+            await UIManager.instance.ShowGamePanel<FunctionInfoPanel,FunctionInfoData>(functionInfoData);
         });
     }
 

@@ -77,11 +77,11 @@ public class TalkManager : Singleton<TalkManager>
                 int functionId = functionIds[i]; 
                 if (functionId == GameCommon.setTeamerFunctionId && TeamManager.instance.playerTeam.CheckCharacter(characterId))
                 {
-                   // continue;
+                    // continue;
                     //NPCFunctionData nPCFunctionData = await GameDataManager.instance.GetAsyncData<NPCFunctionData>(functionId);
                    // NPCTalkOperateData.npcFunctionDatas.Add(nPCFunctionData);
                     functionCheckResult[i] = true;
-                    ShowTalkAsync();
+                    await ShowTalkAsync();
                 }
                 else
                 {
@@ -98,7 +98,8 @@ public class TalkManager : Singleton<TalkManager>
                             {
                                 if (value) NPCTalkOperateData.npcFunctionDatas.Add(nPCFunctionData);
                                 functionCheckResult[index] = true;
-                                ShowTalkAsync();
+                                // 条件回调是同步委托，显示对话任务异常统一记录。
+                                AsyncTaskRunner.Run(ShowTalkAsync(), nameof(ShowTalkAsync));
                             }, immediately: true);
                         }
                     } 
@@ -106,7 +107,7 @@ public class TalkManager : Singleton<TalkManager>
                     {
                         NPCTalkOperateData.npcFunctionDatas.Add(nPCFunctionData);
                         functionCheckResult[index] = true;
-                        ShowTalkAsync();
+                        await ShowTalkAsync();
                     }
                    
                 }

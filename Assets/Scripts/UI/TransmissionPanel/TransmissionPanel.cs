@@ -111,7 +111,7 @@ public class TransmissionPanel : GamePanel<IReferenceData>
     
     public override async Task InitData(string dataKey)
     {
-        base.InitData(dataKey);
+        await base.InitData(dataKey);
         FightMap.transform.localScale = Vector3.zero;
         try
         {
@@ -151,7 +151,7 @@ public class TransmissionPanel : GamePanel<IReferenceData>
         GetParentPos(CharacterManager.instance.controllerCharacter.mapInstance, out playerReferenceData.parentPos);
         nPCReferenceDatas.Add(playerReferenceData);
 
-        npcList.InitListData(nPCReferenceDatas);
+        await npcList.InitListData(nPCReferenceDatas);
     }
 
     private void RefreshChild(Transform parent, int childCount)

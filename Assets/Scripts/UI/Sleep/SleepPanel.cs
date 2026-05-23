@@ -35,7 +35,7 @@ public class SleepPanel : GamePanel<MyInt>
         mapItemInstance = int.Parse(dataKey);
         var SleepSetDataList = await GameDataManager.instance.GetAsyncData<SleepSetDataList>("SleepSetDataList");
         var SleepList = SleepSetDataList.GetNowSleepSetData(GameTimeManager.instance.Hour,GameTimeManager.instance.GameDay);
-        sleepSetList.InitListData(SleepList, SelectAction);
+        await sleepSetList.InitListData(SleepList, SelectAction);
     }
 
     private int mapItemInstance = 0;

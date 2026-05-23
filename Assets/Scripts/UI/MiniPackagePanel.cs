@@ -216,7 +216,7 @@ public class MiniPackagePanel : GamePanel<PackageList>
         PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(selectPackageData.dataId);
         Title.SetSWText(packageSetData.packageName);
 
-        itemBoxs.InitListData(items, SelectPackageItem, toggleGroup: itemSelectGroup);
+        await itemBoxs.InitListData(items, SelectPackageItem, toggleGroup: itemSelectGroup);
         itemBoxs.ClearSelect();
 
         caseCount.text = $"{selectPackageData.items.Count}/{selectPackageData.caseCount}";

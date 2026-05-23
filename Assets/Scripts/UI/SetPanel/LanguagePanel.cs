@@ -41,12 +41,13 @@ public class LanguagePanel : GamePanel<IReferenceData>
     }
     void RefreshLanguage()
     {
-        languages.InitListData(LanguageManage.instance.languageDatas, (LanguageData languageData,int index, bool selected) =>
+        // 语言刷新来自同步入口，列表初始化异常统一记录。
+        AsyncTaskRunner.Run(languages.InitListData(LanguageManage.instance.languageDatas, (LanguageData languageData,int index, bool selected) =>
         {
             if (selected)
             {
                 LanguageManage.instance.SetLanguage(languageData.languageType);
             }
-        });
-    } 
+        }), nameof(RefreshLanguage));
+    }
 }

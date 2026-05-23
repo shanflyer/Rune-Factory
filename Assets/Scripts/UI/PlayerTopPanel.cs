@@ -107,7 +107,8 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         });
         MapButton.onClick.AddListener(() =>
         {
-            UIManager.instance.ShowGamePanel<TransmissionPanel>();
+            // 按钮回调保持同步，面板加载异常交给统一异步日志。
+            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<TransmissionPanel>(), nameof(TransmissionPanel));
         });
 
         GameActionManager.instance.AddListener<NewDay>(NewDay);
@@ -117,7 +118,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         GameActionManager.instance.AddListener<SetWeather>(SetWeather);
         GameActionManager.instance.AddListener<NewHour>(NewHour);
         GameActionManager.instance.AddListener<SaveGuideFilmIndexAction>(SaveGuideFilmIndexAction);
-        UIManager.instance.ShowGamePanel<CharacterButtonPanel>();
+        AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<CharacterButtonPanel>(), nameof(CharacterButtonPanel));
 
         if (GameController.instance.startPlay || GameGuideManager.instance.IsEndGuide())
         {

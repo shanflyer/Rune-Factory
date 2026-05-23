@@ -117,9 +117,9 @@ public class SimpleTalkPanel : GamePanel<NPCTalkOperateData>
         talkData = v.defaultTalk;
 
         if (v.displayFunction)
-            NPCFunctionList.InitListData(v.npcFunctionDatas, SelectNPCFunctionData);
+            AsyncTaskRunner.Run(NPCFunctionList.InitListData(v.npcFunctionDatas, SelectNPCFunctionData), nameof(InitReferenceData));
         else
-            NPCFunctionList.InitListData(new List<NPCFunctionData>());
+            AsyncTaskRunner.Run(NPCFunctionList.InitListData(new List<NPCFunctionData>()), nameof(InitReferenceData));
 
         InitData();
     }

@@ -28,7 +28,7 @@ public class MyTalkPanel : GamePanel<IReferenceData>
         });
         Share.onClick.AddListener(ShareAction);
 
-        Committer.onClick.AddListener(()=> { UIManager.instance.ShowGamePanel<CommitterPanel>(); } );
+        Committer.onClick.AddListener(()=> { AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<CommitterPanel>(), nameof(CommitterPanel)); } );
 
         Help0.onClick.AddListener(() =>
         {
@@ -47,11 +47,11 @@ public class MyTalkPanel : GamePanel<IReferenceData>
         });
         about.onClick.AddListener(() =>
         {
-            UIManager.instance.ShowGamePanel<AboutPanel>();
+            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<AboutPanel>(), nameof(AboutPanel));
         });
         developer.onClick.AddListener(() =>
         {
-            UIManager.instance.ShowGamePanel<DeveloperPanel>();
+            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<DeveloperPanel>(), nameof(DeveloperPanel));
         });
 
         CloseBtn.onClick.AddListener(Close);

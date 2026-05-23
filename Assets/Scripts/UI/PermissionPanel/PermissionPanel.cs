@@ -26,10 +26,10 @@ public class PermissionPanel :GamePanel<IReferenceData>
         permissionReference = FindChildGameObject<PermissionReference>("PermissionReference");
         PermissionParent = FindChildGameObject("PermissionParent");
     }
-    public override Task InitData(string dataKey)
+    public override async Task InitData(string dataKey)
     {
-        permissionList.InitListData(GamePlayerRecordManager.instance.Permissions);
-        return base.InitData(dataKey);
+        await permissionList.InitListData(GamePlayerRecordManager.instance.Permissions);
+        await base.InitData(dataKey);
     }
     public override void InitReferenceData(IReferenceData v)
     {

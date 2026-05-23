@@ -158,7 +158,7 @@ public class ShopPanel : GamePanel<ShopList>
                 notice = "队伍人数超过4，不能购买动物"
             };
 
-            UIManager.instance.ShowGamePanel<TwoSelectPanel, TwoSelectData>(twoSelectData);
+            await UIManager.instance.ShowGamePanel<TwoSelectPanel, TwoSelectData>(twoSelectData);
             
             return;
         }
@@ -235,7 +235,8 @@ public class ShopPanel : GamePanel<ShopList>
         {
             SelectInformation.transform.localScale = Vector3.zero;
             List<ShopItemData> shopItemDatas = shop.GetOpenShopItem();
-            shopItems.InitListData(shopItemDatas, SeletShopItem, ItemGroup);
+            // 店铺切换来自同步选择回调，商品列表刷新异常统一记录。
+            AsyncTaskRunner.Run(shopItems.InitListData(shopItemDatas, SeletShopItem, ItemGroup), nameof(SelecShopData));
         }
     }
 
@@ -246,7 +247,7 @@ public class ShopPanel : GamePanel<ShopList>
         Title.SetSWText(v.groupName);
         ShopGroup.enabled = true;
         ItemGroup.enabled = true;
-        shops.InitListData(v.shops.GetValueList(), SelecShopData, ShopGroup);
+        AsyncTaskRunner.Run(shops.InitListData(v.shops.GetValueList(), SelecShopData, ShopGroup), nameof(InitReferenceData));
         shops.SelectDefault();
         SelecShopData(v.shops[0],0, true);
         buyCount = 1;

@@ -73,7 +73,8 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
 
             if (GameDataManager.instance.GlobalData.debug)
                 Debug.Log(debugLog);
-            OperateList1.InitListData(operateDatas, SelectAction);
+            // 操作列表展开来自同步按钮回调，列表刷新异常统一记录。
+            AsyncTaskRunner.Run(OperateList1.InitListData(operateDatas, SelectAction), "OperateList1");
         }
     }
     void SelectAction(OperateDataReferenceData operateData,int index,bool select)
@@ -108,7 +109,7 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
 
             if (GameDataManager.instance.GlobalData.debug)
                 Debug.Log(debugLog);
-            OperateList0.InitListData(v.OperateDatas, SelectAction);
+            await OperateList0.InitListData(v.OperateDatas, SelectAction);
         }
         else
         {
@@ -143,7 +144,7 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
             }
 
             
-            OperateList0.InitListData(operateDatas, SelectAction);
+            await OperateList0.InitListData(operateDatas, SelectAction);
         }
     }
 }

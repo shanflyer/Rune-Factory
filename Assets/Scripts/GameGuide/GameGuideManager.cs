@@ -110,8 +110,9 @@ public class GameGuideManager:Singleton<GameGuideManager>
         guidSelectableDic[id] = selectable;
         if (waitGuide != 0 && waitGuide == id)
         {
-            UIManager.instance.ShowGamePanel<GameGuidePanel, GuidStepData>(guidStepData);
-        } 
+            // 引导控件注册是同步入口，面板加载异常统一记录。
+            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<GameGuidePanel, GuidStepData>(guidStepData), nameof(SetIntAction));
+        }
         
     }
     void RemoveIntAction(int id,Selectable selectable)
@@ -136,7 +137,7 @@ public class GameGuideManager:Singleton<GameGuideManager>
         {
             nowGuideSelectableId = guidStepData.selectableId;
             if (guidSelectableDic.TryGetValue(nowGuideSelectableId, out var selectable))
-                UIManager.instance.ShowGamePanel<GameGuidePanel, GuidStepData>(guidStepData);
+                AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<GameGuidePanel, GuidStepData>(guidStepData), nameof(ShowGuide));
             else
                 waitGuide = nowGuideSelectableId;
         }

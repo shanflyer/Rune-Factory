@@ -92,7 +92,8 @@ public class SetPanel : GamePanel<IReferenceData>
         });
         languageButton.onClick.AddListener(() =>
         {
-            UIManager.instance.ShowGamePanel<LanguagePanel>();
+            // 同步按钮回调不等待面板加载，异常统一记录。
+            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<LanguagePanel>(), nameof(LanguagePanel));
         });
         changeColorButton.onClick.AddListener(async () =>
         {

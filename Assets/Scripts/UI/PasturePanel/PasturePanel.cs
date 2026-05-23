@@ -186,7 +186,8 @@ public class PasturePanel : GamePanel<MyListInt>
                 animalDatas.Add(myInt);
             } 
         }
-        animals.InitListData(animalDatas, SelectAnimal);
+        // 动物列表刷新来自同步状态变更，列表初始化异常统一记录。
+        AsyncTaskRunner.Run(animals.InitListData(animalDatas, SelectAnimal), nameof(RefreshAnimalList));
 
         if (animalDatas.Count == 0)
         {

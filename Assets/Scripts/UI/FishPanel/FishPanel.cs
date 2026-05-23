@@ -175,7 +175,8 @@ public class FishPanel : GamePanel<IReferenceData>
                 leftFishReferenceDatas.Add(fishReferenceDatas[index]);
             }            
         }
-        leftFishList.InitListData(leftFishReferenceDatas, SelectFishReference, toggleGroup);
+        // 图鉴翻页是同步/延迟回调，列表刷新异常统一记录。
+        AsyncTaskRunner.Run(leftFishList.InitListData(leftFishReferenceDatas, SelectFishReference, toggleGroup), nameof(DisplayFishes));
 
         List<FishReferenceData> rightFishReferenceDatas = new List<FishReferenceData>();
         for (int i = 0; i < 8; i++)
@@ -186,7 +187,7 @@ public class FishPanel : GamePanel<IReferenceData>
                 rightFishReferenceDatas.Add(fishReferenceDatas[index]);
             }
         }
-        rightFishList.InitListData(rightFishReferenceDatas, SelectFishReference, toggleGroup);
+        AsyncTaskRunner.Run(rightFishList.InitListData(rightFishReferenceDatas, SelectFishReference, toggleGroup), nameof(DisplayFishes));
         leftFishList.SelectDefault();
     }
 

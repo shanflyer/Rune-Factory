@@ -274,7 +274,8 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         base.InitReferenceData(v);
         moveHomeEquipItemSet.Clear();
 
-        EquipBoxs.InitListData(v.homeEquips, SelectEquip, EquipSelectGroup);
+        // 家具列表初始化入口是同步的，列表刷新异常统一记录。
+        AsyncTaskRunner.Run(EquipBoxs.InitListData(v.homeEquips, SelectEquip, EquipSelectGroup), nameof(InitReferenceData));
         EquipBoxs.ClearSelect();
         hidePanels.hide = true;
         InfoButton.transform.localScale = ActionButton.transform.localScale = Vector3.zero;

@@ -92,7 +92,8 @@ public class MainPanel : GamePanel<IReferenceData>
         });
         MyTalk.onClick.AddListener(() =>
         {
-            UIManager.instance.ShowGamePanel<MyTalkPanel>();
+            // 主界面按钮回调保持同步，面板加载失败统一记录。
+            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<MyTalkPanel>(), nameof(MyTalkPanel));
         });
         Toggle.onValueChanged.AddListener((value)=>
         {

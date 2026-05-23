@@ -28,7 +28,8 @@ public class FunctionInfoPanel : GamePanel<FunctionInfoData>
     }
     public override void InitReferenceData(FunctionInfoData v)
     {
-        functionInfoList.InitListData(v.DataList.ToList());
+        // 引用数据初始化是同步入口，列表刷新异常统一进入异步日志。
+        AsyncTaskRunner.Run(functionInfoList.InitListData(v.DataList.ToList()), nameof(InitReferenceData));
         base.InitReferenceData(v);
     }
  

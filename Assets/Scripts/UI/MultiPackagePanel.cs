@@ -132,7 +132,8 @@ public class MultiPackagePanel : GamePanel<PackageList>
             }
 
             Title0.SetSWText(packageSetData0.packageName);
-            itemBoxs0.InitListData(items0, SelectPackageItem, toggleGroup: itemSelectGroup);
+            // 快捷刷新来自同步 Action，列表刷新任务异常统一记录。
+            AsyncTaskRunner.Run(itemBoxs0.InitListData(items0, SelectPackageItem, toggleGroup: itemSelectGroup), nameof(RefreshShortcut));
             caseCount0.text = $"{packageData.items.Count}/{packageData.caseCount}";
             bool canLevelUp = packageSetData0.canLevelUp ? packageLevel0 < packageSetData0.maxLevel - 1 : false;
             packageLevelUp0.transform.localScale = canLevelUp ? Vector3.one : Vector3.zero;
@@ -168,7 +169,7 @@ public class MultiPackagePanel : GamePanel<PackageList>
                 items1.Add(defaultItem);
             }
             Title1.SetSWText(packageSetData1.packageName);
-            itemBoxs1.InitListData(items1, SelectPackageItem, toggleGroup: itemSelectGroup);
+            AsyncTaskRunner.Run(itemBoxs1.InitListData(items1, SelectPackageItem, toggleGroup: itemSelectGroup), nameof(RefreshShortcut));
             caseCount1.text = $"{packageData.items.Count}/{packageData.caseCount}";
             bool canLevelUp = packageSetData1.canLevelUp ? packageLevel1 < packageSetData1.maxLevel - 1 :false;
             packageLevelUp1.transform.localScale = canLevelUp ? Vector3.one : Vector3.zero;
@@ -452,7 +453,7 @@ public class MultiPackagePanel : GamePanel<PackageList>
         }
 
         Title0.SetSWText(packageSetData0.packageName);
-        itemBoxs0.InitListData(items0, SelectPackageItem, toggleGroup: itemSelectGroup);
+        await itemBoxs0.InitListData(items0, SelectPackageItem, toggleGroup: itemSelectGroup);
         caseCount0.text = $"{itemCaseCount0}/{packageData0.caseCount}";
         bool canLevelUp = packageSetData0.canLevelUp ? packageLevel0 < packageSetData0.maxLevel - 1 : false;
         packageLevelUp0.transform.localScale = canLevelUp? Vector3.one : Vector3.zero;
@@ -486,7 +487,7 @@ public class MultiPackagePanel : GamePanel<PackageList>
         }
 
         Title1.SetSWText(packageSetData1.packageName);
-        itemBoxs1.InitListData(items1, SelectPackageItem, toggleGroup: itemSelectGroup);
+        await itemBoxs1.InitListData(items1, SelectPackageItem, toggleGroup: itemSelectGroup);
         caseCount1.text = $"{itemCaseCount1}/{packageData1.caseCount}";
         bool canLevelUp1 = packageSetData1.canLevelUp ? packageLevel1 < packageSetData1.maxLevel-1 : false;
         packageLevelUp1.transform.localScale = canLevelUp1 ? Vector3.one : Vector3.zero;

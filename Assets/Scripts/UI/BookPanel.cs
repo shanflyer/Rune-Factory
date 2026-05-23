@@ -39,11 +39,11 @@ public class BookPanel : GamePanel<IReferenceData>
         });
         formulaButton.onClick.AddListener(() =>
         {
-            UIManager.instance.ShowGamePanel<FormulaPanel>();
+            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<FormulaPanel>(), nameof(FormulaPanel));
         });
         plantButton.onClick.AddListener(() =>
         {
-            UIManager.instance.ShowGamePanel<PlantPanel>();
+            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<PlantPanel>(), nameof(PlantPanel));
         });
     }
 }

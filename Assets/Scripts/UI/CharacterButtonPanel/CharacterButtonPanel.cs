@@ -33,7 +33,8 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
                     }
                 }
 
-                characterButtons.InitListData(nowCharacters, SelectAction);
+                // 角色按钮刷新来自同步 UI 回调，列表初始化异常统一记录。
+                AsyncTaskRunner.Run(characterButtons.InitListData(nowCharacters, SelectAction), nameof(Awake));
             }
         });
 
@@ -152,13 +153,13 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
                     characterButtonParent.gameObject.SetActive(false);
                     CharacterButtonReference.transform.localScale = Vector3.one;
                     MultiCharacterButton.transform.localScale = Vector3.zero;
-                    CharacterButtonReference.InitData(nowCharacters[0], SelectAction);
+                    await CharacterButtonReference.InitData(nowCharacters[0], SelectAction);
                     CharacterButtonReference.enabled = true; 
                     break;
                 default:
                     if (characterButtonParent.gameObject.activeSelf)
                     {
-                        characterButtons.InitListData(nowCharacters, SelectAction);
+                        await characterButtons.InitListData(nowCharacters, SelectAction);
                     }
                     else
                     {
@@ -215,12 +216,12 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
                     CharacterButtonReference.transform.localScale = Vector3.one;
                     CharacterButtonReference.enabled = true;
                     MultiCharacterButton.transform.localScale = Vector3.zero;
-                    CharacterButtonReference.InitData(nowCharacters[0], SelectAction);
+                    await CharacterButtonReference.InitData(nowCharacters[0], SelectAction);
                     break;
                 default:
                     if (characterButtonParent.gameObject.activeSelf)
                     {
-                        characterButtons.InitListData(nowCharacters, SelectAction);
+                        await characterButtons.InitListData(nowCharacters, SelectAction);
                     }
                     else
                     {

@@ -161,7 +161,8 @@ public class PlantPanel : GamePanel<IReferenceData>
                 leftPlantDatas.Add(allPlantData[index]);
             }
         }
-        leftList.InitListData(leftPlantDatas, SelectPlantReference, toggleGroup);
+        // 图鉴翻页是同步/延迟回调，列表刷新异常统一记录。
+        AsyncTaskRunner.Run(leftList.InitListData(leftPlantDatas, SelectPlantReference, toggleGroup), nameof(DisplayPlants));
 
         List<PlantData> rightPlantDatas = new List<PlantData>();
         for (int i = 0; i < 8; i++)
@@ -172,7 +173,7 @@ public class PlantPanel : GamePanel<IReferenceData>
                 rightPlantDatas.Add(allPlantData[index]);
             }
         }
-        rightList.InitListData(rightPlantDatas, SelectPlantReference, toggleGroup);
+        AsyncTaskRunner.Run(rightList.InitListData(rightPlantDatas, SelectPlantReference, toggleGroup), nameof(DisplayPlants));
         leftList.SelectDefault();
     }
      

@@ -68,7 +68,7 @@ public class GoldCreatPanel : GamePanel<IReferenceData>
                 MoneyCreatDatas.Add(datas[i]);
             }
         }
-        createrList.InitListData(MoneyCreatDatas, SelectCreater,CreaterGroup);
+        await createrList.InitListData(MoneyCreatDatas, SelectCreater,CreaterGroup);
     }
     public override void Close()
     {
