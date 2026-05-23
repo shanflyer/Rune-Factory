@@ -263,7 +263,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         return -1;
     }
     public bool LoadDataSuccess { get; private set; }
-     
+
     public void InitUserSaveData(string userName, string clundDataStr = null)
     {
         userGameSaveDataList = LoadUserGameSaveData(userName, clundDataStr);
@@ -272,99 +272,119 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     private UserGameSaveDataList LoadUserGameSaveData(string userName, string clundDataStr = null)
     {
         string saveDataPath = $"{DataPath.gameSaveDataPath}{"/"}{userName}";
+        UserGameSaveDataList localSaveData = null;
+        UserGameSaveDataList cloudSaveData = null;
         if (File.Exists(saveDataPath))
         {
-           
-            string dataStr = File.ReadAllText(saveDataPath);
-            UserGameSaveDataList userGameSaveDataList = null;
             try
             {
-                userGameSaveDataList = JsonConvert.DeserializeObject<UserGameSaveDataList>(dataStr, JsonSerializerSettings);
+                TryLoadSaveDataList(File.ReadAllText(saveDataPath), "本地存档", out localSaveData);
             }
-            catch
+            catch (Exception e)
             {
-                dataStr = DecryptDES(dataStr);
-                userGameSaveDataList = JsonConvert.DeserializeObject<UserGameSaveDataList>(dataStr, JsonSerializerSettings);
+                Debug.LogError($"Read local save failed: {saveDataPath}");
+                Debug.LogException(e);
             }
-            //
-            userGameSaveDataList.nowSaveData.Init();
-            userGameSaveDataList.nowSaveData.index = -1;
-            for (int i = 0; i < userGameSaveDataList.userGameSaveDatas.Count; i++)
-            {
-                userGameSaveDataList.userGameSaveDatas[i].Init();
-                userGameSaveDataList.userGameSaveDatas[i].index = i;
-            }
-            if (string.IsNullOrEmpty(clundDataStr))
-            {
-                return userGameSaveDataList;
-            }
-            UserGameSaveDataList userGameSaveDataList2 = null;
-            try
-            {
-                userGameSaveDataList2 = JsonConvert.DeserializeObject<UserGameSaveDataList>(clundDataStr, JsonSerializerSettings);
-            }
-            catch
-            {
-                clundDataStr = DecryptDES(clundDataStr);
-                userGameSaveDataList2 = JsonConvert.DeserializeObject<UserGameSaveDataList>(clundDataStr, JsonSerializerSettings);
-            }
-            //
-            userGameSaveDataList2.nowSaveData.Init();
-            userGameSaveDataList2.nowSaveData.index = -1;
-            for (int i = 0; i < userGameSaveDataList2.userGameSaveDatas.Count; i++)
-            {
-                userGameSaveDataList2.userGameSaveDatas[i].Init();
-                userGameSaveDataList2.userGameSaveDatas[i].index = i;
-            }
-
-            DateTime t0 = Convert.ToDateTime(userGameSaveDataList.nowSaveData.saveTime);
-            DateTime t2 = Convert.ToDateTime(userGameSaveDataList2.nowSaveData.saveTime);
-            if (t2 >= t0)
-            {
-                return userGameSaveDataList2;
-            }
-            else
-            {
-                return userGameSaveDataList;
-            }
-
-
         }
-        else
-        {
-            if (string.IsNullOrEmpty(clundDataStr))
-            {
-                UserGameSaveDataList userGameSaveDataList = new UserGameSaveDataList();
-                userGameSaveDataList.nowSaveData = UserGameSaveData.CreatSaveData(-1);
-                userGameSaveDataList.userGameSaveDatas = new List<UserGameSaveData>
-                {
-                UserGameSaveData.CreatSaveData(0),UserGameSaveData.CreatSaveData(1),UserGameSaveData.CreatSaveData(2)
-                 };
-                return userGameSaveDataList;
-            }
-            else
-            {
-                UserGameSaveDataList userGameSaveDataList2 = null;
-                try
-                {
-                    userGameSaveDataList2 = JsonConvert.DeserializeObject<UserGameSaveDataList>(clundDataStr, JsonSerializerSettings);
-                }
-                catch
-                {
-                    clundDataStr = DecryptDES(clundDataStr);
-                    userGameSaveDataList2 = JsonConvert.DeserializeObject<UserGameSaveDataList>(clundDataStr, JsonSerializerSettings);
-                }
-                //
-                userGameSaveDataList2.nowSaveData.Init();
-                userGameSaveDataList2.nowSaveData.index = -1;
-                for (int i = 0; i < userGameSaveDataList2.userGameSaveDatas.Count; i++)
-                {
-                    userGameSaveDataList2.userGameSaveDatas[i].Init();
-                    userGameSaveDataList2.userGameSaveDatas[i].index = i;
-                }
-                return userGameSaveDataList2;
-            }
 
+        if (!string.IsNullOrEmpty(clundDataStr))
+        {
+            TryLoadSaveDataList(clundDataStr, "云存档", out cloudSaveData);
+        }
+
+        if (localSaveData != null && cloudSaveData != null)
+        {
+            return SelectLatestSaveDataList(localSaveData, cloudSaveData);
+        }
+        return cloudSaveData ?? localSaveData ?? CreateEmptySaveDataList();
+    }
+
+    private static UserGameSaveDataList CreateEmptySaveDataList()
+    {
+        return new UserGameSaveDataList
+        {
+            nowSaveData = UserGameSaveData.CreatSaveData(-1),
+            userGameSaveDatas = new List<UserGameSaveData>
+            {
+                UserGameSaveData.CreatSaveData(0),
+                UserGameSaveData.CreatSaveData(1),
+                UserGameSaveData.CreatSaveData(2)
+            }
+        };
+    }
+
+    private static UserGameSaveDataList SelectLatestSaveDataList(UserGameSaveDataList localSaveData, UserGameSaveDataList cloudSaveData)
+    {
+        var localTime = GetSaveTime(localSaveData.nowSaveData);
+        var cloudTime = GetSaveTime(cloudSaveData.nowSaveData);
+        return cloudTime >= localTime ? cloudSaveData : localSaveData;
+    }
+
+    private static DateTime GetSaveTime(UserGameSaveData saveData)
+    {
+        return DateTime.TryParse(saveData?.saveTime, out var saveTime) ? saveTime : DateTime.MinValue;
+    }
+
+    private static bool TryLoadSaveDataList(string dataStr, string source, out UserGameSaveDataList saveDataList)
+    {
+        if (TryDeserializeSaveDataList(dataStr, source, out saveDataList))
+        {
+            return true;
+        }
+
+        var decryptedDataStr = DecryptDES(dataStr);
+        if (!string.Equals(decryptedDataStr, dataStr, StringComparison.Ordinal) &&
+            TryDeserializeSaveDataList(decryptedDataStr, $"{source}解密数据", out saveDataList))
+        {
+            return true;
+        }
+
+        Debug.LogError($"Load save data failed: {source}");
+        saveDataList = null;
+        return false;
+    }
+
+    private static bool TryDeserializeSaveDataList(string dataStr, string source, out UserGameSaveDataList saveDataList)
+    {
+        try
+        {
+            saveDataList = JsonConvert.DeserializeObject<UserGameSaveDataList>(dataStr, JsonSerializerSettings);
+            NormalizeSaveDataList(saveDataList);
+            return true;
+        }
+        catch (Exception e)
+        {
+            // 候选存档必须完整初始化后才能替换当前存档，避免半加载状态污染运行时。
+            Debug.LogError($"Deserialize save data failed: {source}");
+            Debug.LogException(e);
+            saveDataList = null;
+            return false;
+        }
+    }
+
+    private static void NormalizeSaveDataList(UserGameSaveDataList saveDataList)
+    {
+        if (saveDataList == null)
+        {
+            throw new InvalidDataException("Save data list is null.");
+        }
+
+        saveDataList.commonSaveData ??= new CommonSaveData();
+        saveDataList.nowSaveData ??= UserGameSaveData.CreatSaveData(-1);
+        saveDataList.nowSaveData.index = -1;
+        saveDataList.nowSaveData.Init();
+
+        saveDataList.userGameSaveDatas ??= new List<UserGameSaveData>();
+        while (saveDataList.userGameSaveDatas.Count < 3)
+        {
+            saveDataList.userGameSaveDatas.Add(UserGameSaveData.CreatSaveData(saveDataList.userGameSaveDatas.Count));
+        }
+
+        for (int i = 0; i < 3; i++)
+        {
+            saveDataList.userGameSaveDatas[i] ??= UserGameSaveData.CreatSaveData(i);
+            saveDataList.userGameSaveDatas[i].index = i;
+            saveDataList.userGameSaveDatas[i].Init();
         }
     }
 
@@ -578,6 +598,15 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     {
         base.Init();
         //InitUserSaveData();
+        EnsureSaveFieldCaches();
+    }
+
+    private void EnsureSaveFieldCaches()
+    {
+        if (UserGameSaveDataIntFields != null && UserGameSaveDataStringFields != null && UserGameSaveDataJsonFields != null)
+        {
+            return;
+        }
 
         Type type = typeof(UserGameSaveData);
         var UserGameSaveDataFields=type.GetFields();
@@ -610,7 +639,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     }
 
     public void TryAutoSaveData()
-    { 
+    {
        // if (loadCompleted&&GameGuideManager.instance.endGuideFilmIndex >= 0&&!GameController.instance.hideSave)
         {
             SaveData(-1);
@@ -618,24 +647,47 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     }
 
     public bool SaveData(int selectSaveIndex)
-    { 
+    {
         if (selectSaveIndex > 2)
         {
             return false;
-        } 
-        SaveUserGameSaveData();
-
-        if (selectSaveIndex >= 0)
-        { 
-            userGameSaveDataList.userGameSaveDatas[selectSaveIndex] =new UserGameSaveData(UserGameSaveData);
-            userGameSaveDataList.userGameSaveDatas[selectSaveIndex].index = selectSaveIndex;
         }
+        EnsureSaveFieldCaches();
+        var nowSaveDataBackup = UserGameSaveData != null ? new UserGameSaveData(UserGameSaveData) : null;
+        var selectedSaveDataBackup = selectSaveIndex >= 0 && userGameSaveDataList.userGameSaveDatas[selectSaveIndex] != null
+            ? new UserGameSaveData(userGameSaveDataList.userGameSaveDatas[selectSaveIndex])
+            : null;
+        try
+        {
+            SaveUserGameSaveData();
 
-        SaveCloudData(selectSaveIndex);
-        CloudServices.Synchronize();
+            if (selectSaveIndex >= 0)
+            {
+                userGameSaveDataList.userGameSaveDatas[selectSaveIndex] =new UserGameSaveData(UserGameSaveData);
+                userGameSaveDataList.userGameSaveDatas[selectSaveIndex].index = selectSaveIndex;
+            }
+
+            SaveCloudData(selectSaveIndex);
+            CloudServices.Synchronize();
+        }
+        catch (Exception e)
+        {
+            // 保存过程中任何一步失败都回滚内存快照，避免 UI 显示已保存但实际云端未落盘。
+            Debug.LogError($"Save data failed. index={selectSaveIndex}");
+            Debug.LogException(e);
+            if (nowSaveDataBackup != null)
+            {
+                userGameSaveDataList.nowSaveData = nowSaveDataBackup;
+            }
+            if (selectSaveIndex >= 0)
+            {
+                userGameSaveDataList.userGameSaveDatas[selectSaveIndex] = selectedSaveDataBackup;
+            }
+            return false;
+        }
         /*
 
-#if UNITY_EDITOR 
+#if UNITY_EDITOR
         string strs = JsonConvert.SerializeObject(userGameSaveDataList, JsonSerializerSettings);
         if (GameDataManager.instance.GlobalData.Encrypt)
         {
@@ -819,40 +871,44 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     }
     public void LoadCloudData()
     {
-        LoadDataSuccess = true;
-        userGameSaveDataList = new UserGameSaveDataList();
+        EnsureSaveFieldCaches();
+        var previousSaveDataList = userGameSaveDataList;
+        try
+        {
+            var loadedSaveDataList = LoadCloudDataList();
+            // 云存档先完整构建并初始化，成功后再替换当前引用，避免半加载状态进入游戏。
+            userGameSaveDataList = loadedSaveDataList;
+            LoadDataSuccess = true;
+            loadCompleted = HasAnySaveData(userGameSaveDataList);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("Load cloud save data failed.");
+            Debug.LogException(e);
+            LoadDataSuccess = false;
+            userGameSaveDataList = previousSaveDataList ?? CreateEmptySaveDataList();
+            loadCompleted = HasAnySaveData(userGameSaveDataList);
+        }
+    }
+
+    private UserGameSaveDataList LoadCloudDataList()
+    {
+        var loadedSaveDataList = new UserGameSaveDataList();
         int diamond = CloudServices.GetInt("diamond");
-        userGameSaveDataList.commonSaveData = new CommonSaveData
+        loadedSaveDataList.commonSaveData = new CommonSaveData
         {
             diamond = diamond
         };
-        if (GameController.instance.startPlay)
+        loadedSaveDataList.nowSaveData = GameController.instance.startPlay ? new UserGameSaveData() : LoadUserData("auto_");
+        loadedSaveDataList.userGameSaveDatas = new List<UserGameSaveData>
         {
-            userGameSaveDataList.nowSaveData = new UserGameSaveData();
-        }
-        else
-        {
-            userGameSaveDataList.nowSaveData = LoadUserData("auto_");
-            userGameSaveDataList.nowSaveData.index = -1;
-            userGameSaveDataList.nowSaveData.Init();
-        }
-        
-        
-        userGameSaveDataList.userGameSaveDatas = new List<UserGameSaveData>();
+            LoadUserData("player_0"),
+            LoadUserData("player_1"),
+            LoadUserData("player_2")
+        };
 
-        var nowSaveData0 = LoadUserData("player_0");
-        var nowSaveData1 = LoadUserData("player_1");
-        var nowSaveData2 = LoadUserData("player_2");
-        nowSaveData0.Init();
-        nowSaveData1.Init();
-        nowSaveData2.Init();
-        nowSaveData0.index = 0;
-        nowSaveData1.index = 1;
-        nowSaveData2.index = 2;
-
-        userGameSaveDataList.userGameSaveDatas.Add(nowSaveData0);
-        userGameSaveDataList.userGameSaveDatas.Add(nowSaveData1);
-        userGameSaveDataList.userGameSaveDatas.Add(nowSaveData2);
+        NormalizeSaveDataList(loadedSaveDataList);
+        return loadedSaveDataList;
 
         UserGameSaveData LoadUserData(string key)
         {
@@ -898,10 +954,14 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             }
             return userData;
         }
-
-        loadCompleted = !string.IsNullOrEmpty(userGameSaveDataList.nowSaveData.saveTime) || !string.IsNullOrEmpty(userGameSaveDataList.userGameSaveDatas[0].saveTime) ||
-            !string.IsNullOrEmpty(userGameSaveDataList.userGameSaveDatas[1].saveTime) || !string.IsNullOrEmpty(userGameSaveDataList.userGameSaveDatas[2].saveTime);
     }
 
-    
+    private static bool HasAnySaveData(UserGameSaveDataList saveDataList)
+    {
+        return !string.IsNullOrEmpty(saveDataList.nowSaveData?.saveTime) ||
+               saveDataList.userGameSaveDatas.Count > 0 && !string.IsNullOrEmpty(saveDataList.userGameSaveDatas[0]?.saveTime) ||
+               saveDataList.userGameSaveDatas.Count > 1 && !string.IsNullOrEmpty(saveDataList.userGameSaveDatas[1]?.saveTime) ||
+               saveDataList.userGameSaveDatas.Count > 2 && !string.IsNullOrEmpty(saveDataList.userGameSaveDatas[2]?.saveTime);
+    }
+
 }
