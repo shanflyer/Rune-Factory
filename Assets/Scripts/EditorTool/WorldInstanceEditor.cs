@@ -165,7 +165,8 @@ public class WorldInstanceEditor : MonoBehaviour
         {
             mapInstanceEditors.Remove(mapInstanceEditor.id);
         }
-        var links = FindObjectsByType<MapLinkEditor>(FindObjectsSortMode.InstanceID);
+        // 删除链接时不依赖对象排序，使用 Unity 6 推荐的无排序查找。
+        var links = FindObjectsByType<MapLinkEditor>();
         foreach (var link in links)
         {
             if (link.CheckLink(mapInstanceEditor.id))

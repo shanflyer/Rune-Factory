@@ -515,7 +515,8 @@ if (result.Success)
     public List<Character> tempCharacters = new List<Character>();
     public void TestInstanceId()
     {
-        int instanceId = selectable.GetInstanceID();
+        // 测试输出跟随 Unity 6 的 EntityId，避免继续调用已废弃的 InstanceID。
+        EntityId instanceId = selectable.GetEntityId();
         Debug.LogWarning($"instanceId:{instanceId}");
     }
 

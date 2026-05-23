@@ -133,7 +133,8 @@ public class ProFlareInspector : Editor
             {
                 _flare._Atlas = _Atlas;
 
-                ProFlareBatch[] flareBatchs = GameObject.FindObjectsByType(typeof(ProFlareBatch), FindObjectsSortMode.None) as ProFlareBatch[];
+                // 只按 Atlas 过滤批次，不依赖对象排序。
+                ProFlareBatch[] flareBatchs = Object.FindObjectsByType<ProFlareBatch>();
 
                 int matchCount = 0;
                 foreach (ProFlareBatch flareBatch in flareBatchs)
@@ -177,7 +178,8 @@ public class ProFlareInspector : Editor
             }
             if (missing)
             {
-                ProFlareBatch[] flareBatchs = GameObject.FindObjectsByType(typeof(ProFlareBatch), FindObjectsSortMode.None) as ProFlareBatch[];
+                // 只按 Atlas 过滤批次，不依赖对象排序。
+                ProFlareBatch[] flareBatchs = Object.FindObjectsByType<ProFlareBatch>();
 
                 int matchCount = 0;
                 foreach (ProFlareBatch flareBatch in flareBatchs)

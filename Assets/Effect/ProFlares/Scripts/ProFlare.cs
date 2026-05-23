@@ -278,8 +278,8 @@ public class ProFlare : MonoBehaviour {
 	
 	void PopulateFlareBatches(){
 		
-        //Atlas is set but Flare is not try and find a FlareBatch with the same atlas;
-        ProFlareBatch[] flareBatchs = GameObject.FindObjectsOfType(typeof(ProFlareBatch)) as ProFlareBatch[];
+        // Unity 6 不再建议依赖 InstanceID 排序；这里仅按 Atlas 匹配，使用无排序查找即可。
+        ProFlareBatch[] flareBatchs = Object.FindObjectsByType<ProFlareBatch>(FindObjectsInactive.Exclude);
         int matchCount = 0;
 		
 		foreach (ProFlareBatch flareBatch in flareBatchs){

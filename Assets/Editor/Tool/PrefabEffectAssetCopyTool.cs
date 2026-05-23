@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Object = UnityEngine.Object;
 
 internal sealed class PrefabEffectAssetCopyTool : EditorWindow
@@ -315,13 +316,14 @@ internal sealed class PrefabEffectAssetCopyTool : EditorWindow
             return;
 
         var shader = material.shader;
-        var propertyCount = ShaderUtil.GetPropertyCount(shader);
+        // Unity 6 废弃 ShaderUtil 属性读取，改用 Shader 公开属性 API。
+        var propertyCount = shader.GetPropertyCount();
         for (var propertyIndex = 0; propertyIndex < propertyCount; propertyIndex++)
         {
-            if (ShaderUtil.GetPropertyType(shader, propertyIndex) != ShaderUtil.ShaderPropertyType.TexEnv)
+            if (shader.GetPropertyType(propertyIndex) != ShaderPropertyType.Texture)
                 continue;
 
-            var propertyName = ShaderUtil.GetPropertyName(shader, propertyIndex);
+            var propertyName = shader.GetPropertyName(propertyIndex);
             var texture = material.GetTexture(propertyName);
             if (texture == null)
                 continue;
@@ -487,15 +489,16 @@ internal sealed class PrefabEffectAssetCopyTool : EditorWindow
                     continue;
 
                 var shader = material.shader;
-                var propertyCount = ShaderUtil.GetPropertyCount(shader);
+                // Unity 6 废弃 ShaderUtil 属性读取，改用 Shader 公开属性 API。
+                var propertyCount = shader.GetPropertyCount();
                 var changed = false;
 
                 for (var propertyIndex = 0; propertyIndex < propertyCount; propertyIndex++)
                 {
-                    if (ShaderUtil.GetPropertyType(shader, propertyIndex) != ShaderUtil.ShaderPropertyType.TexEnv)
+                    if (shader.GetPropertyType(propertyIndex) != ShaderPropertyType.Texture)
                         continue;
 
-                    var propertyName = ShaderUtil.GetPropertyName(shader, propertyIndex);
+                    var propertyName = shader.GetPropertyName(propertyIndex);
                     var referencedObject = material.GetTexture(propertyName);
                     if (referencedObject == null)
                         continue;

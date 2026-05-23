@@ -64,17 +64,17 @@ public class ShowDebugInPhone : MonoBehaviour
         {
             File.Delete(outpathWarning);
         }
-        //转换场景不删除  
-        Application.DontDestroyOnLoad(gameObject);
+        // 转换场景不删除，使用 Unity 6 推荐的 Object 接口。
+        DontDestroyOnLoad(gameObject);
     }
     async void OnEnable()
     {
 #if UNITY_EDITOR
-        Application.RegisterLogCallback(HangleLog);
+        Application.logMessageReceived += HangleLog;
 #else
         if (await CloudRemoteConfig.instance.GetConfigBool("LogShow"))
         {
-            Application.RegisterLogCallback(HangleLog);
+            Application.logMessageReceived += HangleLog;
         }
 #endif 
         //注册log监听  
@@ -82,9 +82,8 @@ public class ShowDebugInPhone : MonoBehaviour
     }
     void OnDisable()
     {
-        // Remove callback when object goes out of scope  
-        //当对象超出范围,删除回调。  
-        Application.RegisterLogCallback(null);
+        // 当对象超出范围时只移除本对象注册的回调，避免清掉其他日志监听。
+        Application.logMessageReceived -= HangleLog;
     }
     void HangleLog(string logString, string stackTrace, LogType type)
     {

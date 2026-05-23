@@ -12,7 +12,7 @@ namespace Anima2D
 	{
 		public delegate void CallbackFunction();
 		public delegate void OnSceneFunc(SceneView sceneView);
-		public delegate void HierarchyWindowItemCallback(int instanceID, Rect selectionRect);
+		public delegate void HierarchyWindowItemCallback(EntityId entityId, Rect selectionRect);
 
 		public static CallbackFunction update;
 		public static OnSceneFunc onSceneGUIDelegate;
@@ -33,7 +33,8 @@ namespace Anima2D
 #else
 			EditorApplication.hierarchyWindowChanged += () => { hierarchyChanged(); };
 #endif
-			EditorApplication.hierarchyWindowItemOnGUI = (i, r) => { hierarchyWindowItemOnGUI(i, r); };
+			// Unity 6 的层级窗口 GUI 回调改为 EntityId 版本。
+			EditorApplication.hierarchyWindowItemByEntityIdOnGUI = (i, r) => { hierarchyWindowItemOnGUI(i, r); };
 			Undo.undoRedoPerformed += () => { undoRedoPerformed(); };
 		}
 	}

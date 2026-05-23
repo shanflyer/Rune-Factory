@@ -98,7 +98,8 @@ public class InputManager :Singleton<InputManager>
         GameActionManager.instance.AddListener<SwitchInputMap>(SwitchInputMap);
         GameActionManager.instance.AddListener<OpenOrCloseInputMap>(OpenOrCloseInputMap);
 
-        var eventSystems =GameObject.FindObjectsByType<EventSystem>(FindObjectsSortMode.None);
+        // 只需要检测重复 EventSystem，不依赖查找顺序。
+        var eventSystems =GameObject.FindObjectsByType<EventSystem>();
         if (eventSystems.Length > 1)
         {
             GameObject.Destroy(eventSystems[1].gameObject);
@@ -106,7 +107,7 @@ public class InputManager :Singleton<InputManager>
         if (eventSystems.Length > 0)
             eventSystem = eventSystems[0];
 
-        playerInput = UnityEngine.Object.FindFirstObjectByType<PlayerInput>();
+        playerInput = UnityEngine.Object.FindAnyObjectByType<PlayerInput>();
 
         if (playerInput == null)
         {

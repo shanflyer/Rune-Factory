@@ -116,7 +116,8 @@ public class ProFlareBatchInspector : Editor
 
                 _ProFlareBatch.dirty = true;
 
-                ProFlare[] flares = GameObject.FindObjectsByType(typeof(ProFlare), FindObjectsSortMode.None) as ProFlare[];
+                // 编辑器刷新不依赖对象排序，使用 Unity 6 推荐的无排序查找。
+                ProFlare[] flares = Object.FindObjectsByType<ProFlare>();
 
                 foreach (ProFlare flare in flares)
                 {
@@ -153,7 +154,8 @@ public class ProFlareBatchInspector : Editor
             {
                 _ProFlareBatch.ForceRefresh();
 
-                ProFlare[] flares = GameObject.FindObjectsByType(typeof(ProFlare), FindObjectsSortMode.None) as ProFlare[];
+                // 编辑器刷新不依赖对象排序，使用 Unity 6 推荐的无排序查找。
+                ProFlare[] flares = Object.FindObjectsByType<ProFlare>();
 
                 foreach (ProFlare flare in flares)
                 {

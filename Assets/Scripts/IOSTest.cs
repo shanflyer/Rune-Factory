@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.Networking;
 public class IOSTest : MonoBehaviour
 {
 #if UNITY_EDITOR
@@ -72,11 +73,18 @@ public class IOSTest : MonoBehaviour
         // NativeShare.Share("测试", Application.persistentDataPath + "/ScreenShot.png", "https://www.baidu.com");
         // showSocialSharing("测试",Application.persistentDataPath+"/ScreenShot.png");
         // (char* body, char* url, char* imageDataString, char* subject)
-        using (WWW www = new WWW(imagePath))
+        // WWW 已废弃，测试分享图片读取改为 UnityWebRequest 的本地文件读取流程。
+        using (UnityWebRequest request = UnityWebRequest.Get(imagePath))
         {
-            yield return www;
+            yield return request.SendWebRequest();
+            if (request.result != UnityWebRequest.Result.Success)
+            {
+                Debug.LogError($"Share image load failed: {request.error}");
+                yield break;
+            }
+
             Texture2D texture = new Texture2D(2, 2);
-            texture.LoadImage(www.bytes);
+            texture.LoadImage(request.downloadHandler.data);
             imageDataString = Convert.ToBase64String(texture.EncodeToPNG());
         }
 

@@ -10,7 +10,8 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
 {
     public override bool NeedUpdate => true;
     Material screenMat;
-    MyDic<int, GameVolumeObject> volumeObjects = new MyDic<int, GameVolumeObject>();
+    // Unity 6 使用 EntityId 作为对象键，避免继续依赖已废弃的 int InstanceID。
+    MyDic<EntityId, GameVolumeObject> volumeObjects = new MyDic<EntityId, GameVolumeObject>();
     Dictionary<string, ParticleSystem> singleParticleDic = new Dictionary<string, ParticleSystem>();
     private Task initializationTask = Task.CompletedTask;
     public override Task InitializationTask => initializationTask;
@@ -121,14 +122,14 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
     }
     public void AddVolumeObject(GameVolumeObject volumeObject)
     {
-        int instanceID = volumeObject.GetInstanceID();
+        EntityId instanceID = volumeObject.GetEntityId();
         volumeObjects.Add(instanceID, volumeObject);
         volumeObject.SetVolumeLevel(volumeLevel);
 
     }
     public void RemoveVolumeObject(GameVolumeObject volumeObject)
     {
-        int instanceID = volumeObject.GetInstanceID();
+        EntityId instanceID = volumeObject.GetEntityId();
         volumeObjects.Remove(instanceID);
     }
     protected override void Clear()

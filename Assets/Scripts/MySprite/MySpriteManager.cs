@@ -53,7 +53,8 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
 
     #region Member Variables
 
-    private Dictionary<int, Mesh> _meshCache = new Dictionary<int, Mesh>();
+    // Sprite 缓存键使用 Unity 6 推荐的 EntityId，避免 int InstanceID 迁移风险。
+    private Dictionary<EntityId, Mesh> _meshCache = new Dictionary<EntityId, Mesh>();
     private Dictionary<string, Material> _materialCache = new Dictionary<string, Material>();
 
     #endregion Member Variables
@@ -68,7 +69,7 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
             return (null, null);
         }
 
-        int spriteId = sprite.GetInstanceID();
+        EntityId spriteId = sprite.GetEntityId();
         string materialKey = GenerateMaterialKey(materialTemplate, sprite.texture);
 
         Mesh mesh = GetCachedMesh(spriteId, sprite);
@@ -81,7 +82,7 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
 
     #region Mesh Generation
 
-    private Mesh GetCachedMesh(int spriteId, Sprite sprite)
+    private Mesh GetCachedMesh(EntityId spriteId, Sprite sprite)
     {
         if (!_meshCache.TryGetValue(spriteId, out Mesh mesh)||mesh==null)
         {
@@ -154,7 +155,7 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
 
         // 创建Mesh
         Mesh mesh = new Mesh();
-        mesh.name = $"SpriteMesh_{sprite.GetInstanceID()}";
+        mesh.name = $"SpriteMesh_{sprite.GetEntityId()}";
         mesh.SetVertices(finalVertices);
         mesh.SetUVs(0, finalUVs);
         mesh.SetTriangles(outputTriangles.ToArray(), 0);
@@ -218,7 +219,7 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
 
     private string GenerateMaterialKey(Material template, Texture2D mainTexture)
     {
-        return $"{template.GetInstanceID()}_{mainTexture.GetInstanceID()}";
+        return $"{template.GetEntityId()}_{mainTexture.GetEntityId()}";
     }
 
     private Material CreateMaterialInstance(Material template, Sprite sprite)

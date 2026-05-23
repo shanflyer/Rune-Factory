@@ -16,7 +16,8 @@ namespace Anima2D
 			{
 				if (!m_Instance)
 				{
-					m_Instance = GameObject.FindObjectOfType<EditorUpdaterProxy>();
+					// 编辑器代理只需要任意一个实例，使用 Unity 6 推荐的无排序查找。
+					m_Instance = GameObject.FindAnyObjectByType<EditorUpdaterProxy>();
 					
 					if (!m_Instance)
 					{

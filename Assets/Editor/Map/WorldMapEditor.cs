@@ -147,8 +147,9 @@ public class WorldMapEditor : MyEditor
             return;
         }
 
-        var mapInstances = FindObjectsByType<MapInstanceEditor>(FindObjectsSortMode.None);
-        var links = FindObjectsByType<MapLinkEditor>(FindObjectsSortMode.None);
+        // 保存只按对象内容写回数据，不依赖 Unity 对象排序。
+        var mapInstances = FindObjectsByType<MapInstanceEditor>();
+        var links = FindObjectsByType<MapLinkEditor>();
 
         
 

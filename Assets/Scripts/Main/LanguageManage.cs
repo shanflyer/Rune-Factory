@@ -135,13 +135,14 @@ public class LanguageManage : Singleton<LanguageManage>
         PlayerPrefs.SetInt("MyLanguage", (int)myLanguage);
         GetLocalLanguage(myLanguage);
 
-        var allTMP_Text = Object.FindObjectsByType<TMP_Text>(FindObjectsSortMode.None);
+        // 切换语言只需要遍历文本组件，不依赖对象排序。
+        var allTMP_Text = Object.FindObjectsByType<TMP_Text>();
         for(int i = 0; i < allTMP_Text.Length; i++)
         {
             allTMP_Text[i].FixedSwitchString();
         }
 
-        var languageSwitchImages=Object.FindObjectsByType<LanguageSwitchImage>(FindObjectsSortMode.None);
+        var languageSwitchImages=Object.FindObjectsByType<LanguageSwitchImage>();
         for(int i = 0; i < languageSwitchImages.Length; i++)
         {
             languageSwitchImages[i].SetImage(myLanguage);

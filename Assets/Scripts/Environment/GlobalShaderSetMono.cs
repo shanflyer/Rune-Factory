@@ -247,14 +247,15 @@ public class GlobalShaderSetMono : MonoBehaviour
             Shader.SetGlobalVector("LightDirection", directionValue);
             Shader.SetGlobalFloat("_ShadowValue", natureLightData.shadowValue );
 
-            var MySpriteShadows = FindObjectsByType<MySpriteShadow>(FindObjectsSortMode.InstanceID);
+            // 只批量刷新方向，不依赖对象顺序，避免使用已过时的排序参数。
+            var MySpriteShadows = FindObjectsByType<MySpriteShadow>();
             for (int i = 0; i < MySpriteShadows.Length; i++)
             {
                 MySpriteShadows[i].SetDirectionAngle(natureLightData.direction.x );
             }
             if (skyEnviromentMono == null)
             {
-                skyEnviromentMono = FindFirstObjectByType<SkyEnviromentMono>();
+                skyEnviromentMono = FindAnyObjectByType<SkyEnviromentMono>();
             }
             if (skyEnviromentMono != null)
             {
@@ -274,7 +275,8 @@ public class GlobalShaderSetMono : MonoBehaviour
             }
         }
 
-        var MyLights = FindObjectsByType<MyLight>(FindObjectsInactive.Include,FindObjectsSortMode.InstanceID);
+        // 灯光显隐刷新不需要稳定排序，但需要包含未激活对象。
+        var MyLights = FindObjectsByType<MyLight>(FindObjectsInactive.Include);
         for(int i = 0; i < MyLights.Length; i++)
         {
             MyLights[i].Display(dayValue);

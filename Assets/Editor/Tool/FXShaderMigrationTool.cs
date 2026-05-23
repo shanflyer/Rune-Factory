@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 internal sealed class FXShaderMigrationTool : EditorWindow
 {
@@ -53,29 +54,30 @@ internal sealed class FXShaderMigrationTool : EditorWindow
             if (shader == null)
                 return bag;
 
-            var propertyCount = ShaderUtil.GetPropertyCount(shader);
+            // Unity 6 废弃 ShaderUtil 属性读取，改用运行时 Shader 属性 API。
+            var propertyCount = shader.GetPropertyCount();
             for (var i = 0; i < propertyCount; i++)
             {
-                var propertyName = ShaderUtil.GetPropertyName(shader, i);
-                var propertyType = ShaderUtil.GetPropertyType(shader, i);
+                var propertyName = shader.GetPropertyName(i);
+                var propertyType = shader.GetPropertyType(i);
 
                 switch (propertyType)
                 {
-                    case ShaderUtil.ShaderPropertyType.Color:
+                    case ShaderPropertyType.Color:
                     {
                         var value = material.GetColor(propertyName);
                         bag.Colors[propertyName] = value;
                         bag.Vectors[propertyName] = value;
                         break;
                     }
-                    case ShaderUtil.ShaderPropertyType.Vector:
+                    case ShaderPropertyType.Vector:
                         bag.Vectors[propertyName] = material.GetVector(propertyName);
                         break;
-                    case ShaderUtil.ShaderPropertyType.Float:
-                    case ShaderUtil.ShaderPropertyType.Range:
+                    case ShaderPropertyType.Float:
+                    case ShaderPropertyType.Range:
                         bag.Floats[propertyName] = material.GetFloat(propertyName);
                         break;
-                    case ShaderUtil.ShaderPropertyType.TexEnv:
+                    case ShaderPropertyType.Texture:
                         bag.Textures[propertyName] = new TextureValue
                         {
                             Texture = material.GetTexture(propertyName),

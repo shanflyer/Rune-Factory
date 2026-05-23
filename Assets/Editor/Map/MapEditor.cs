@@ -183,7 +183,8 @@ public class MapEditor : MyEditor
 
     public int CreatMapItemInstance(int id)
     {
-        var mapItemInstances = FindObjectsByType<MapItemInstanceEditor>(FindObjectsInactive.Include, FindObjectsSortMode.None).ToList();
+        // 生成实例 ID 只需要检查已有对象，包含未激活对象但不依赖排序。
+        var mapItemInstances = FindObjectsByType<MapItemInstanceEditor>(FindObjectsInactive.Include).ToList();
         int intanceid = id * 1000 + Random.Range(0, 1000);
         while (mapItemInstances.Exists(m => m.mapItem.instanceId == intanceid))
         {
@@ -200,7 +201,7 @@ public class MapEditor : MyEditor
             //selectMapRoomDataObj.mapRoomData.mapObj = roomObj;
 
             selectMapRoomDataObj.mapRoomData.mapItems.Clear();
-            var mapItemInstances = FindObjectsByType<MapItemInstanceEditor>(FindObjectsSortMode.None);
+            var mapItemInstances = FindObjectsByType<MapItemInstanceEditor>();
             HashSet<int> instanceId = new HashSet<int>();
             foreach (var mapItemInstance in mapItemInstances)
             {
@@ -212,7 +213,7 @@ public class MapEditor : MyEditor
                 selectMapRoomDataObj.mapRoomData.mapItems.Add(mapItemInstance.mapItem);
             }
 
-            var mapAreas = FindObjectsByType<MapAreaEditor>(FindObjectsSortMode.None);
+            var mapAreas = FindObjectsByType<MapAreaEditor>();
             selectMapRoomDataObj.mapRoomData.npcBehaviorAreas.Clear();
             selectMapRoomDataObj.mapRoomData.specialNpcBehaviorAreas.Clear();
             foreach (var mapArea in mapAreas)

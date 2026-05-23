@@ -46,17 +46,18 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     Transform sunTransform => skyEnviromentMono.Sun;
  
 
-    MyDic<int,MySpriteShadow> shadows = new MyDic<int, MySpriteShadow>();
+    // Unity 6 使用 EntityId 作为对象稳定标识，避免继续依赖即将移除的 int InstanceID。
+    MyDic<EntityId,MySpriteShadow> shadows = new MyDic<EntityId, MySpriteShadow>();
 
 
-    private Dictionary<int,MyLight> lights=new Dictionary<int, MyLight>();
-    private List<int> lightIds =new List<int>();
+    private Dictionary<EntityId,MyLight> lights=new Dictionary<EntityId, MyLight>();
+    private List<EntityId> lightIds =new List<EntityId>();
 
-    MyDic<int,Audio2DPolygon> audio2DPolygons = new MyDic<int,Audio2DPolygon>();
+    MyDic<EntityId,Audio2DPolygon> audio2DPolygons = new MyDic<EntityId,Audio2DPolygon>();
 
     public void AddAudio2DPolygon(Audio2DPolygon audio2DPolygon)
     {
-        int instanceID = audio2DPolygon.GetInstanceID();
+        EntityId instanceID = audio2DPolygon.GetEntityId();
         audio2DPolygons.TrySetValue(instanceID, audio2DPolygon);
         try
         {
@@ -70,7 +71,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     }
     public void RemoveAudio2DPolygon(Audio2DPolygon audio2DPolygon)
     {
-        int instanceID = audio2DPolygon.GetInstanceID();
+        EntityId instanceID = audio2DPolygon.GetEntityId();
         audio2DPolygons.Remove(instanceID); 
     }
     public void UpDataAudio2DPolygon()
@@ -87,20 +88,20 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
 
     public void AddMyShadow(MySpriteShadow mySpriteShadow)
     {
-        int instanceID = mySpriteShadow.GetInstanceID();
+        EntityId instanceID = mySpriteShadow.GetEntityId();
          shadows.Add(instanceID, mySpriteShadow);
         mySpriteShadow.SetDirectionAngle(direction.x);
 
     }
     public void RemoveMyShadow(MySpriteShadow mySpriteShadow)
     {
-        int instanceID = mySpriteShadow.GetInstanceID();
+        EntityId instanceID = mySpriteShadow.GetEntityId();
         shadows.Remove(instanceID); 
     }
 
     public void AddMyLight(MyLight myLight)
     {
-        int instanceID = myLight.GetInstanceID();
+        EntityId instanceID = myLight.GetEntityId();
         if (!lightIds.Contains(instanceID))
         {
             lights.Add(instanceID, myLight);
@@ -111,7 +112,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     }
     public void RemoveMyLight(MyLight myLight)
     {
-        int instanceID = myLight.GetInstanceID();
+        EntityId instanceID = myLight.GetEntityId();
         lights.Remove(instanceID);
         lightIds.Remove(instanceID );
     }

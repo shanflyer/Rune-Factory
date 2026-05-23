@@ -66,7 +66,8 @@ namespace MyGame
                 }
                 else
                 {
-                    UnityEngine.SceneManagement.SceneManager.UnloadScene(nowSceen);
+                    // Unity 6 已废弃同步卸载，非异步分支也统一等待异步卸载完成。
+                    await UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(nowSceen);
                 }
                 nowSceen = null;
             }

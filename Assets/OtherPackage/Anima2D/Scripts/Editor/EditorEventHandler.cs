@@ -89,14 +89,15 @@ namespace Anima2D
 			s_SpriteMeshInstances = EditorExtra.FindComponentsOfType<SpriteMeshInstance>().ToList();
 		}
 
-		private static void HierarchyWindowItemCallback(int pID, Rect pRect)
+		private static void HierarchyWindowItemCallback(EntityId pID, Rect pRect)
 		{
 			instancePosition = Vector3.zero;
 			GameObject parent = null;
 
 			if(pRect.Contains(Event.current.mousePosition))
 			{
-				parent = EditorUtility.InstanceIDToObject(pID) as GameObject;
+				// Unity 6 层级窗口回调改用 EntityId，避免 int InstanceID 转换。
+				parent = EditorUtility.EntityIdToObject(pID) as GameObject;
 
 				if(parent)
 				{

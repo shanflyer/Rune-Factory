@@ -213,7 +213,8 @@ public class ProFlareBatch : MonoBehaviour {
 		PI_Div180 = Mathf.PI / 180;
 		Div180_PI = 180 / Mathf.PI;
 		
-		ProFlare[] flares = GameObject.FindObjectsOfType(typeof(ProFlare)) as ProFlare[];
+		// Unity 6 不再建议依赖 InstanceID 排序；这里只需要枚举当前可用的 Flare。
+		ProFlare[] flares = Object.FindObjectsByType<ProFlare>(FindObjectsInactive.Exclude);
 		
 		for(int i = 0; i < flares.Length; i++){
 			if(flares[i]._Atlas == _atlas)
@@ -543,7 +544,8 @@ public class ProFlareBatch : MonoBehaviour {
 		
 		FlaresList.Clear();
 		
-		ProFlare[] flares = GameObject.FindObjectsOfType(typeof(ProFlare)) as ProFlare[];
+		// Unity 6 不再建议依赖 InstanceID 排序；这里只需要枚举当前可用的 Flare。
+		ProFlare[] flares = Object.FindObjectsByType<ProFlare>(FindObjectsInactive.Exclude);
 		
 		for(int i = 0; i < flares.Length; i++){
 			if(flares[i]._Atlas == _atlas)
