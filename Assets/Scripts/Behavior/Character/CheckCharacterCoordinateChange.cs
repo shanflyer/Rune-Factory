@@ -21,14 +21,40 @@ public class CheckCharacterCoordinateChange:Action
         {
             result = true;
         }
-        result = false;
+        else if (!continued)
+        {
+            result = false;
+        }
     }
+
+    public override void OnBehaviorComplete()
+    {
+        base.OnBehaviorComplete();
+        RemoveListener();
+    }
+
+    public override void OnEnd()
+    {
+        base.OnEnd();
+        RemoveListener();
+    }
+
+    private void RemoveListener()
+    {
+        if (!SingletonType.Cleared)
+        {
+            // 行为树节点结束时主动解绑，避免下一次 OnStart 叠加监听。
+            GameActionManager.instance.RemoveListener<CharacterCoordinateTrigger>(CharacterCoordinateTriggerAction);
+        }
+        addAction = false;
+    }
+
     public override void OnStart()
     {
         if (!addAction)
         {
             GameActionManager.instance.AddListener<CharacterCoordinateTrigger>(CharacterCoordinateTriggerAction);
-            addAction = false;
+            addAction = true;
         }
     }
     public override TaskStatus OnUpdate()

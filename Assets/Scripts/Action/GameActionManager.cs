@@ -34,8 +34,16 @@ public class GameActionManager : Singleton<GameActionManager>
         if (delegates.TryGetValue(type, out Delegate d))
         {
             var _d = d as ActionDelegate<T>;
-            _d += del;
-            delegates[type] = _d;
+            if (_d == null)
+            {
+                delegates[type] = del;
+            }
+            else if (!ContainsDelegate(_d, del))
+            {
+                // 场景或行为树可能重复初始化，同一委托只注册一次，避免事件被重复响应。
+                _d += del;
+                delegates[type] = _d;
+            }
         }
         else
         {
@@ -45,6 +53,19 @@ public class GameActionManager : Singleton<GameActionManager>
         {
             onceDelegates.Add(del);
         }
+    }
+
+    private static bool ContainsDelegate<T>(ActionDelegate<T> source, ActionDelegate<T> target) where T : GameAction
+    {
+        foreach (var item in source.GetInvocationList())
+        {
+            if (item == (Delegate)target)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void RemoveListener<T>(ActionDelegate<T> del) where T : GameAction

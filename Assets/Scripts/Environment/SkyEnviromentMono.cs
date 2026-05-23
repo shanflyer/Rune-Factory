@@ -109,7 +109,7 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
     EmissionModule farEmission, nearEmission,starEmission;
     MainModule farMain, nearMain;
     private void Awake()
-    { 
+    {
         GameActionManager.instance.AddListener<DisplaySky>(DisplaySky);
         GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
        
@@ -127,6 +127,18 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
         dt *= environmentLerpOffset.y;
         dt = math.clamp(dt, environmentLerpOffset.z, environmentLerpOffset.w);
         transform.localPosition = new Vector3(0, dt, 0);
+    }
+
+    private void OnDestroy()
+    {
+        if (SingletonType.Cleared)
+        {
+            return;
+        }
+
+        // 场景环境对象销毁时解除事件监听，避免旧实例继续响应全局 Action。
+        GameActionManager.instance.RemoveListener<DisplaySky>(DisplaySky);
+        GameActionManager.instance.RemoveListener<UpdateGameTime>(UpdateGameTime);
     }
 
     /*
