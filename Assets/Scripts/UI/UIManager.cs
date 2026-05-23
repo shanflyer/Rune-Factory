@@ -59,7 +59,8 @@ public class UIManager : Singleton<UIManager>
         filmUI = show;
         if (show)
         {
-            ShowGamePanel<FilmPanel>();
+            // 电影模式来自同步状态切换，面板加载失败统一记录。
+            AsyncTaskRunner.Run(ShowGamePanel<FilmPanel>(), nameof(SetFilmUI));
             using (var e = filmHidePanel.GetEnumerator())
             {
                 while (e.MoveNext())
@@ -546,7 +547,8 @@ public class UIManager : Singleton<UIManager>
 
         gamePanel.Show(layer);
         gamePanel.gameObject.SetActive(true);
-        gamePanel.InitData(dataKey);
+        // Immediately 接口保持同步返回，初始化任务异常统一进入日志。
+        AsyncTaskRunner.Run(gamePanel.InitData(dataKey), nameof(ShowGamePanelImmediately));
 
         return gamePanel;
     }

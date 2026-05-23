@@ -87,7 +87,8 @@ public class DisplayList<T, V> where T : UIObjReference<V>
         {
             if (list[i].t.Equals(v))
             {
-                list[i].InitData(v, SelectAction, toggleGroup);
+                // 同步选中刷新不能 await，引用刷新异常走统一异步日志。
+                AsyncTaskRunner.Run(list[i].InitData(v, SelectAction, toggleGroup), nameof(SetSelectData));
             }
         }
     }
@@ -120,7 +121,7 @@ public class DisplayList<T, V> where T : UIObjReference<V>
             {
                 list[i].enabled = true;
                 list[i].transform.localScale = Vector3.one;
-                list[i].InitData(componentData[i], SelectAction, toggleGroup);
+                await list[i].InitData(componentData[i], SelectAction, toggleGroup);
             }
             else
             {
@@ -143,7 +144,7 @@ public class DisplayList<T, V> where T : UIObjReference<V>
                     t.transform.SetParent(parent);
                     t.transform.localScale = Vector3.one;
                     t.index = i;
-                    t.InitData(componentData[i], SelectAction, toggleGroup);
+                    await t.InitData(componentData[i], SelectAction, toggleGroup);
                     list.Add(t);
                 }
                 catch (Exception e)
@@ -211,7 +212,8 @@ public class DisplayList<T, V> where T : UIObjReference<V>
             list[_dataCount].ClearData();
             list[_dataCount].enabled = true;
             list[_dataCount].transform.localScale = Vector3.one;
-            list[_dataCount].InitData(componentData, SelectAction, toggleGroup);
+            // AddListData 是同步增量接口，单项初始化异常统一记录。
+            AsyncTaskRunner.Run(list[_dataCount].InitData(componentData, SelectAction, toggleGroup), nameof(AddListData));
             _dataCount++;
         }
         else
@@ -235,7 +237,7 @@ public class DisplayList<T, V> where T : UIObjReference<V>
                 t.transform.SetParent(parent);
                 t.transform.localScale = Vector3.one;
                 t.index = _dataCount;
-                t.InitData(componentData, SelectAction, toggleGroup);
+                AsyncTaskRunner.Run(t.InitData(componentData, SelectAction, toggleGroup), nameof(AddListData));
                 list.Add(t);
                 _dataCount++;
             }
@@ -276,7 +278,7 @@ public class DisplayList<T, V> where T : UIObjReference<V>
             {
                 list[i].enabled = true;
                 list[i].transform.localScale = Vector3.one;
-                list[i].InitData(componentData[i], SelectAction, toggleGroup);
+                await list[i].InitData(componentData[i], SelectAction, toggleGroup);
             }
             else
             {
@@ -298,7 +300,7 @@ public class DisplayList<T, V> where T : UIObjReference<V>
                     t.enabled = true;
                     t.transform.SetParent(parent);
                     t.transform.localScale = Vector3.one;
-                    t.InitData(componentData[i], SelectAction, toggleGroup);
+                    await t.InitData(componentData[i], SelectAction, toggleGroup);
                     list.Add(t);
                     t.name = i.ToString();
                 }

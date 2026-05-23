@@ -24,7 +24,8 @@ public class GameNotificationManager : Singleton<GameNotificationManager>
         }
         else
         {
-            UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
+            // 通知入口是同步调用，面板加载异常由统一异步兜底记录。
+            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo), nameof(ShowItemResultInfo));
         }
     }
     public void TryContinueItemResultInfoShow()
@@ -34,6 +35,6 @@ public class GameNotificationManager : Singleton<GameNotificationManager>
             return;
         }
         var itemResultInfo = itemResultInfuse.Dequeue();
-        UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo);
+        AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<ItemResultPanel, ItemResultInfo>(itemResultInfo), nameof(TryContinueItemResultInfoShow));
     }
 }
