@@ -729,14 +729,14 @@ internal sealed class FXShaderMigrationTool : EditorWindow
     private static void ApplySpriteSimpleAdd(MaterialPropertyBag bag, Material target)
     {
         ApplySpriteSimpleCommon(bag, target, 0f);
-        SetFloat(target, "_Emission", FirstFloat(bag, 1f, "_Emission", "_HdrMultiply"));
+        SetFloat(target, "_Emission", ResolveSpriteEmission(bag));
         SetFloat(target, "_Opacity", FirstFloat(bag, 1f, "_Opacity"));
     }
 
     private static void ApplySpriteSimpleAlpha(MaterialPropertyBag bag, Material target)
     {
         ApplySpriteSimpleCommon(bag, target, 0f);
-        SetFloat(target, "_Emission", FirstFloat(bag, 1f, "_Emission", "_HdrMultiply"));
+        SetFloat(target, "_Emission", ResolveSpriteEmission(bag));
         SetFloat(target, "_Opacity", FirstFloat(bag, 1f, "_Opacity"));
     }
 
@@ -748,6 +748,8 @@ internal sealed class FXShaderMigrationTool : EditorWindow
         CopyTexture(target, "_Flow", bag, "_Flow", "_DistortTex");
         CopyTexture(target, "_SecondColorTex", bag, "_SecondColorTex");
         CopyColor(target, "_Color", bag, Color.white, "_Color", "_BaseColor");
+        if (IsCfxrParticleUbershader(bag))
+            SetColor(target, "_Color", Color.white);
         CopyVector(target, "_SpeedMainTexUVNoiseZW", bag, Vector4.zero, "_SpeedMainTexUVNoiseZW");
         SetFloat(target, "_SingleChannel", FirstFloat(bag, 0f, "_SingleChannel"));
         SetFloat(target, "_UseSecondColor", FirstFloat(bag, 0f, "_UseSecondColor"));
@@ -1111,6 +1113,19 @@ internal sealed class FXShaderMigrationTool : EditorWindow
     private static float FirstFloat(MaterialPropertyBag bag, float defaultValue, params string[] sourceNames)
     {
         return bag.TryGetFloat(out var value, sourceNames) ? value : defaultValue;
+    }
+
+    private static float ResolveSpriteEmission(MaterialPropertyBag bag)
+    {
+        if (IsCfxrParticleUbershader(bag))
+            return FirstFloat(bag, 0f, "_HdrBoost") > 0.5f ? FirstFloat(bag, 1f, "_HdrMultiply") : 1f;
+
+        return FirstFloat(bag, 1f, "_Emission", "_HdrMultiply");
+    }
+
+    private static bool IsCfxrParticleUbershader(MaterialPropertyBag bag)
+    {
+        return string.Equals(bag.ShaderName, "Cartoon FX/Remaster/Particle Ubershader", StringComparison.Ordinal);
     }
 
     private static void SetFloat(Material target, string name, float value)
