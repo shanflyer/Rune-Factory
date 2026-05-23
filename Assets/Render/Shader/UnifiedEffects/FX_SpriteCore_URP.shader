@@ -20,6 +20,7 @@ Shader "Project/FX/FX_SpriteCore_URP"
         _Mask("遮罩纹理", 2D) = "white" {}
         _Flow("流动扰动纹理", 2D) = "gray" {}
         _DissolveTex("溶解纹理", 2D) = "white" {}
+        _SecondColorTex("旧版第二颜色贴图", 2D) = "black" {}
         _Tex1("旧版火焰纹理1", 2D) = "white" {}
         _Tex2("旧版火焰纹理2", 2D) = "white" {}
         _FlowMap("旧版流向图", 2D) = "gray" {}
@@ -51,6 +52,11 @@ Shader "Project/FX/FX_SpriteCore_URP"
         _SpeedTex1("旧版纹理1滚动", Vector) = (0,0,0,0)
         _SpeedTex2XYEmission("旧版纹理2滚动/发光", Vector) = (0,0,1,0)
         _NoisespeedXYEmissonZPowerW("旧版噪声滚动/发光/强度", Vector) = (0,0,1,1)
+        _UseLegacyUvDistortion("旧版UV扰动", Float) = 0
+        _FadeAlongU("旧版U向渐隐扰动", Float) = 0
+        _SingleChannel("旧版单通道纹理", Float) = 0
+        _UseSecondColor("旧版第二顶点色", Float) = 0
+        _SecondColorSmooth("旧版第二颜色平滑", Range(0.0001,0.5)) = 0.2
 
         [Header(Controls)]
         _Emission("发光强度", Float) = 1
@@ -127,6 +133,7 @@ Shader "Project/FX/FX_SpriteCore_URP"
                 float4 _Mask_ST;
                 float4 _Flow_ST;
                 float4 _DissolveTex_ST;
+                float4 _SecondColorTex_ST;
                 float4 _Tex1_ST;
                 float4 _Tex2_ST;
                 float4 _FlowMap_ST;
@@ -145,6 +152,11 @@ Shader "Project/FX/FX_SpriteCore_URP"
                 float4 _SpeedTex1;
                 float4 _SpeedTex2XYEmission;
                 float4 _NoisespeedXYEmissonZPowerW;
+                float _UseLegacyUvDistortion;
+                float _FadeAlongU;
+                float _SingleChannel;
+                float _UseSecondColor;
+                float _SecondColorSmooth;
                 float _Emission;
                 float _Opacity;
                 float _NoisePower;
@@ -176,6 +188,7 @@ Shader "Project/FX/FX_SpriteCore_URP"
             TEXTURE2D(_Mask); SAMPLER(sampler_Mask);
             TEXTURE2D(_Flow); SAMPLER(sampler_Flow);
             TEXTURE2D(_DissolveTex); SAMPLER(sampler_DissolveTex);
+            TEXTURE2D(_SecondColorTex); SAMPLER(sampler_SecondColorTex);
             TEXTURE2D(_Tex1); SAMPLER(sampler_Tex1);
             TEXTURE2D(_Tex2); SAMPLER(sampler_Tex2);
             TEXTURE2D(_FlowMap); SAMPLER(sampler_FlowMap);
@@ -200,6 +213,7 @@ Shader "Project/FX/FX_SpriteCore_URP"
                 float2 maskUV = TRANSFORM_TEX(input.uv0.xy, _Mask);
                 float2 flowUV = TRANSFORM_TEX(input.uv0.xy, _Flow);
                 float2 dissolveUV = TRANSFORM_TEX(input.uv0.xy, _DissolveTex);
+                float2 secondColorUV = TRANSFORM_TEX(input.uv0.xy, _SecondColorTex);
                 float2 tex1UV = TRANSFORM_TEX(input.uv0.xy, _Tex1);
                 float2 tex2UV = TRANSFORM_TEX(input.uv0.xy, _Tex2);
                 float2 flowMapUV = TRANSFORM_TEX(input.uv0.xy, _FlowMap);
@@ -215,7 +229,7 @@ Shader "Project/FX/FX_SpriteCore_URP"
 
                 // Keep high frequency paths cheap: only sample extra maps when the active mode needs them.
                 bool useMask = (mode == 1) || (mode == 2) || (mode == 4) || (mode == 6) || (mode >= 10);
-                bool useFlow = (mode == 1) || (mode == 3) || (mode >= 10);
+                bool useFlow = (mode == 1) || (mode == 3) || (mode >= 10) || (_UseLegacyUvDistortion > 0.5);
 
                 half4 maskSample = half4(1.0, 1.0, 1.0, 1.0);
                 if (useMask)
@@ -230,10 +244,19 @@ Shader "Project/FX/FX_SpriteCore_URP"
                 }
 
                 float2 distortion = ((flowSample.rg * 2.0) - 1.0) * (_FlowStrength + _DistortionSpeedXYPowerZ.z) * maskSample.r;
+                if (_FadeAlongU > 0.5)
+                {
+                    distortion *= input.uv0.y * 0.5;
+                }
                 float2 distortedMainUV = mainUV + distortion;
                 float2 distortedSecondaryUV = secondaryUV + distortion;
 
                 half4 mainSample = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, distortedMainUV);
+                if (_SingleChannel > 0.5)
+                {
+                    mainSample = half4(1.0, 1.0, 1.0, mainSample.r);
+                }
+
                 half4 noiseSample = SAMPLE_TEXTURE2D(_Noise, sampler_Noise, noiseUV);
                 half4 secondarySample = mainSample;
             #if defined(_FX_USE_SECONDARY_TEX)
@@ -243,6 +266,7 @@ Shader "Project/FX/FX_SpriteCore_URP"
             #if defined(_FX_USE_DISSOLVE_TEX)
                 dissolveSample = SAMPLE_TEXTURE2D(_DissolveTex, sampler_DissolveTex, dissolveUV);
             #endif
+                half secondColorMap = SAMPLE_TEXTURE2D(_SecondColorTex, sampler_SecondColorTex, secondColorUV).r;
                 half4 tex1Sample = half4(1.0, 1.0, 1.0, 1.0);
             #if defined(_FX_USE_TEX1_TEX)
                 tex1Sample = SAMPLE_TEXTURE2D(_Tex1, sampler_Tex1, tex1UV);
@@ -259,6 +283,7 @@ Shader "Project/FX/FX_SpriteCore_URP"
                 half4 combined = mainSample;
                 half3 tint = _Color.rgb;
                 half3 extraRgb = 0.0;
+                half3 legacySecondRgb = 0.0;
                 half alpha = mainSample.a;
 
                 // 0-6: original sprite-family presets.
@@ -350,7 +375,14 @@ Shader "Project/FX/FX_SpriteCore_URP"
                     alpha *= dissolveMask;
                 }
 
-                half3 finalRgb = (combined.rgb * tint + extraRgb) * input.color.rgb * _Emission;
+                if (_UseSecondColor > 0.5)
+                {
+                    float secondTime = lerp(-_SecondColorSmooth, 1.0 + _SecondColorSmooth, input.uv2.a);
+                    secondColorMap = smoothstep(secondColorMap - _SecondColorSmooth, secondColorMap + _SecondColorSmooth, secondTime);
+                    legacySecondRgb = input.uv2.rgb * secondColorMap;
+                }
+
+                half3 finalRgb = ((combined.rgb * tint + extraRgb) * input.color.rgb + legacySecondRgb) * _Emission;
                 finalRgb = FXApplyFog(finalRgb, input.fogFactor);
                 half finalAlpha = saturate(alpha * _Color.a * _Opacity * input.color.a * softFade);
                 return half4(finalRgb, finalAlpha);

@@ -418,8 +418,8 @@ internal sealed class PrefabEffectAssetCopyTool : EditorWindow
             EditorUtility.ClearProgressBar();
         }
 
+        var migratedMaterialCount = MigrateCopiedMaterials(materialCopies);
         RelinkCopiedMaterials(materialCopies, textureCopies);
-        var migratedMaterialCount = MigrateCopiedMaterials(materialCopies.Values);
         RelinkPrefabs(_result.Prefabs, materialCopies, meshCopies, _particleRenderersOnly);
 
         AssetDatabase.SaveAssets();
@@ -431,30 +431,33 @@ internal sealed class PrefabEffectAssetCopyTool : EditorWindow
             "OK");
     }
 
-    private static int MigrateCopiedMaterials(IEnumerable<string> materialPaths)
+    private static int MigrateCopiedMaterials(IReadOnlyDictionary<string, string> materialCopies)
     {
-        var paths = materialPaths
-            .Where(path => !string.IsNullOrEmpty(path))
-            .Distinct(StringComparer.Ordinal)
+        var pairs = materialCopies
+            .Where(pair => !string.IsNullOrEmpty(pair.Key) && !string.IsNullOrEmpty(pair.Value))
+            .GroupBy(pair => pair.Value, StringComparer.Ordinal)
+            .Select(group => group.First())
             .ToList();
 
         var migratedCount = 0;
 
         try
         {
-            for (var i = 0; i < paths.Count; i++)
+            for (var i = 0; i < pairs.Count; i++)
             {
-                var materialPath = paths[i];
-                EditorUtility.DisplayProgressBar("Prefab Effect Asset Copy", $"Migrate material {materialPath}", (float)(i + 1) / Math.Max(1, paths.Count));
+                var sourcePath = pairs[i].Key;
+                var copiedPath = pairs[i].Value;
+                EditorUtility.DisplayProgressBar("Prefab Effect Asset Copy", $"Migrate material {copiedPath}", (float)(i + 1) / Math.Max(1, pairs.Count));
 
-                var material = AssetDatabase.LoadAssetAtPath<Material>(materialPath);
-                if (material == null || material.shader == null)
+                var sourceMaterial = AssetDatabase.LoadAssetAtPath<Material>(sourcePath);
+                var copiedMaterial = AssetDatabase.LoadAssetAtPath<Material>(copiedPath);
+                if (sourceMaterial == null || copiedMaterial == null)
                     continue;
 
-                if (!FXShaderMigrationTool.TryMigrateMaterial(material))
+                if (!FXShaderMigrationTool.TryMigrateMaterialFromSource(sourceMaterial, copiedMaterial))
                     continue;
 
-                EditorUtility.SetDirty(material);
+                EditorUtility.SetDirty(copiedMaterial);
                 migratedCount++;
             }
         }

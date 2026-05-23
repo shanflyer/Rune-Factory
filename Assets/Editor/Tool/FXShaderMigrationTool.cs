@@ -650,7 +650,23 @@ internal sealed class FXShaderMigrationTool : EditorWindow
         return ApplyRecipe(material, recipe);
     }
 
+    public static bool TryMigrateMaterialFromSource(Material sourceMaterial, Material targetMaterial)
+    {
+        if (sourceMaterial == null || sourceMaterial.shader == null || targetMaterial == null)
+            return false;
+
+        if (!TryGetRecipe(sourceMaterial, out var recipe))
+            return false;
+
+        return ApplyRecipe(targetMaterial, recipe, MaterialPropertyBag.Capture(sourceMaterial));
+    }
+
     private static bool ApplyRecipe(Material material, MigrationRecipe recipe)
+    {
+        return ApplyRecipe(material, recipe, MaterialPropertyBag.Capture(material));
+    }
+
+    private static bool ApplyRecipe(Material material, MigrationRecipe recipe, MaterialPropertyBag bag)
     {
         var targetShader = Shader.Find(recipe.TargetShader);
         if (targetShader == null)
@@ -659,7 +675,6 @@ internal sealed class FXShaderMigrationTool : EditorWindow
             return false;
         }
 
-        var bag = MaterialPropertyBag.Capture(material);
         material.shader = targetShader;
         material.shaderKeywords = Array.Empty<string>();
         material.renderQueue = bag.RenderQueue;
@@ -684,10 +699,12 @@ internal sealed class FXShaderMigrationTool : EditorWindow
 
         if (bag.TryGetFloat(out var floatValue, "_SrcBlend"))
             srcBlend = floatValue;
-        else if (preset.UseLegacyBlend2 && bag.TryGetFloat(out floatValue, "_Blend2"))
-            dstBlend = floatValue;
+        else if (preset.UseLegacyBlend2)
+            srcBlend = 1f;
 
         if (bag.TryGetFloat(out floatValue, "_DstBlend"))
+            dstBlend = floatValue;
+        else if (preset.UseLegacyBlend2 && bag.TryGetFloat(out floatValue, "_Blend2"))
             dstBlend = floatValue;
         if (bag.TryGetFloat(out floatValue, "_SrcBlendAlpha", "_SrcBlend1"))
             srcBlendAlpha = floatValue;
@@ -728,8 +745,14 @@ internal sealed class FXShaderMigrationTool : EditorWindow
         SetFloat(target, "_EffectMode", effectMode);
         CopyTexture(target, "_MainTex", bag, "_MainTex", "_BaseMap", "_MainTexture", "Texture2D_F593E37E", "Texture2D_EDA87E5");
         CopyTexture(target, "_Noise", bag, "_Noise", "_OpacityTex", "_EmissionTex");
+        CopyTexture(target, "_Flow", bag, "_Flow", "_DistortTex");
+        CopyTexture(target, "_SecondColorTex", bag, "_SecondColorTex");
         CopyColor(target, "_Color", bag, Color.white, "_Color", "_BaseColor");
         CopyVector(target, "_SpeedMainTexUVNoiseZW", bag, Vector4.zero, "_SpeedMainTexUVNoiseZW");
+        SetFloat(target, "_SingleChannel", FirstFloat(bag, 0f, "_SingleChannel"));
+        SetFloat(target, "_UseSecondColor", FirstFloat(bag, 0f, "_UseSecondColor"));
+        SetFloat(target, "_SecondColorSmooth", FirstFloat(bag, 0.2f, "_SecondColorSmooth"));
+        ApplyLegacyUvDistortion(target, bag);
         ApplySoftParticles(target, bag);
     }
 
@@ -1009,6 +1032,29 @@ internal sealed class FXShaderMigrationTool : EditorWindow
         SetFloat(target, "_UseSoftParticle", useSoftParticles ? 1f : 0f);
         SetFloat(target, "_SoftParticleNearFadeDistance", nearFade);
         SetFloat(target, "_SoftParticleFarFadeDistance", farFade);
+    }
+
+    private static void ApplyLegacyUvDistortion(Material target, MaterialPropertyBag bag)
+    {
+        if (!bag.Textures.TryGetValue("_DistortTex", out var distortTexture) || distortTexture.Texture == null)
+            return;
+
+        var distortion = Vector4.zero;
+        if (bag.TryGetVector(out var scrolling, "_DistortScrolling"))
+        {
+            distortion.x = scrolling.x;
+            distortion.y = scrolling.y;
+        }
+
+        distortion.z = FirstFloat(bag, 0f, "_Distort");
+        distortion.w = FirstFloat(bag, 0f, "_FadeAlongU");
+
+        if (distortion.z <= 0f)
+            return;
+
+        SetFloat(target, "_UseLegacyUvDistortion", 1f);
+        SetFloat(target, "_FadeAlongU", distortion.w);
+        CopyVector(target, "_DistortionSpeedXYPowerZ", bag, distortion, "_DistortionSpeedXYPowerZ");
     }
 
     private static bool LooksLikeBuiltInParticle(Material material)

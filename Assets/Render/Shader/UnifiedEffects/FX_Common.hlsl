@@ -13,6 +13,7 @@ struct FXAttributes
     float4 tangentOS : TANGENT;
     float4 uv0 : TEXCOORD0;
     float4 uv1 : TEXCOORD1;
+    float4 uv2 : TEXCOORD2;
     half4 color : COLOR;
     UNITY_VERTEX_INPUT_INSTANCE_ID
 };
@@ -31,6 +32,7 @@ struct FXVaryings
     half4 color : COLOR;
     float4 screenPos : TEXCOORD4;
     half fogFactor : TEXCOORD5;
+    float4 uv2 : TEXCOORD6;
     UNITY_VERTEX_INPUT_INSTANCE_ID
     UNITY_VERTEX_OUTPUT_STEREO
 };
@@ -51,6 +53,7 @@ FXVaryings FXVertex(FXAttributes input)
     output.normalWS = normalize(normalInputs.normalWS);
     output.uv0 = input.uv0;
     output.uv1 = input.uv1;
+    output.uv2 = input.uv2;
     output.color = input.color;
     output.screenPos = ComputeScreenPos(positionInputs.positionCS);
     output.fogFactor = ComputeFogFactor(positionInputs.positionCS.z);
