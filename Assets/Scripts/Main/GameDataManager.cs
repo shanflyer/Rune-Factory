@@ -100,6 +100,23 @@ public class GameDataManager : Singleton<GameDataManager>
         Debug.LogWarning($"GameDataManager missing data: type={type.FullName}, key={key}, path={path}");
     }
 
+    private static bool TryGetLoadedData<T>(Dictionary<string, IGameData> dataDic, string key, out T result) where T : IGameData
+    {
+        result = default(T);
+        if (dataDic == null)
+        {
+            return false;
+        }
+
+        if (dataDic.TryGetValue(key, out var data) && data is T typedData)
+        {
+            result = typedData;
+            return true;
+        }
+
+        return false;
+    }
+
     private async Task LoadAllAsyncData<T>() where T : IGameData
     {
         Type type = typeof(T);
@@ -335,18 +352,22 @@ public class GameDataManager : Singleton<GameDataManager>
                     AddLoadedData(dataDic, item, type, path);
                 }
                 allGameStaticDatas[type] = dataDic;
-                if (dataDic.TryGetValue(key, out var data1))
+                // 批量资源加载完成后立即回读目标 key，避免缓存已命中却继续落到 missing 日志。
+                if (TryGetLoadedData(dataDic, key, out T loadedData))
                 {
-                    return (T)data1;
+                    return loadedData;
                 }
             }
             else if(dataAsset is T t)
             {
                 t.Init();
                 dataDic = new Dictionary<string, IGameData>();
-                dataDic[key] = t;
+                AddLoadedData(dataDic, t, type, path);
                 allGameStaticDatas[type] = dataDic;
-                return t;
+                if (string.IsNullOrEmpty(key) || t.GetKey() == key)
+                {
+                    return t;
+                }
             }
         }
 
@@ -369,6 +390,11 @@ public class GameDataManager : Singleton<GameDataManager>
                 Debug.LogWarning($"GameDataManager failed to get async TextAsset: type={type.FullName}, key={key}, path={path}, error={e}");
             }
             allGameStaticDatas[type] = dataDic;
+            // 文本资源反序列化后同样要回读一次，避免成功加载后仍返回 default。
+            if (TryGetLoadedData(dataDic, key, out T loadedData))
+            {
+                return loadedData;
+            }
         }
         LogMissingData(type, key, dataPath);
         return default(T); ;
