@@ -327,14 +327,14 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
 
     private static bool TryLoadSaveDataList(string dataStr, string source, out UserGameSaveDataList saveDataList)
     {
-        if (TryDeserializeSaveDataList(dataStr, source, out saveDataList))
+        if (TryDeserializeSaveDataList(dataStr, source, false, out saveDataList))
         {
             return true;
         }
 
         var decryptedDataStr = DecryptDES(dataStr);
         if (!string.Equals(decryptedDataStr, dataStr, StringComparison.Ordinal) &&
-            TryDeserializeSaveDataList(decryptedDataStr, $"{source}解密数据", out saveDataList))
+            TryDeserializeSaveDataList(decryptedDataStr, $"{source}解密数据", true, out saveDataList))
         {
             return true;
         }
@@ -344,7 +344,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         return false;
     }
 
-    private static bool TryDeserializeSaveDataList(string dataStr, string source, out UserGameSaveDataList saveDataList)
+    private static bool TryDeserializeSaveDataList(string dataStr, string source, bool logError, out UserGameSaveDataList saveDataList)
     {
         try
         {
@@ -355,8 +355,11 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         catch (Exception e)
         {
             // 候选存档必须完整初始化后才能替换当前存档，避免半加载状态污染运行时。
-            Debug.LogError($"Deserialize save data failed: {source}");
-            Debug.LogException(e);
+            if (logError)
+            {
+                Debug.LogError($"Deserialize save data failed: {source}");
+                Debug.LogException(e);
+            }
             saveDataList = null;
             return false;
         }
