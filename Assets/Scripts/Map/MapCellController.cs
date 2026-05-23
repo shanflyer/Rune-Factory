@@ -81,23 +81,24 @@ public class RuntimeMapRoom
     {
         //roomCellData.Dispose();
         NpcBehaviorAreas = null;
-        NpcBehaviorAreaTypeDic.Clear();
+        NpcBehaviorAreaTypeDic?.Clear();
 
-        linkMapIndexes.Dispose(); 
+        // 地图房间可能在初始化失败或重复 Clear 时释放，Native 容器必须先确认已创建。
+        if (linkMapIndexes.IsCreated) linkMapIndexes.Dispose();
 
-        commonTriggerDatas.Dispose();
-        commonTriggerCellIndexes.Dispose();
-        commonTriggerCells.Dispose();
+        if (commonTriggerDatas.IsCreated) commonTriggerDatas.Dispose();
+        if (commonTriggerCellIndexes.IsCreated) commonTriggerCellIndexes.Dispose();
+        if (commonTriggerCells.IsCreated) commonTriggerCells.Dispose();
 
-        playerTriggerAreaDatas.Dispose();
-        playerTriggerCells.Dispose();
-        playerTriggerCellIndexes.Dispose();
+        if (playerTriggerAreaDatas.IsCreated) playerTriggerAreaDatas.Dispose();
+        if (playerTriggerCells.IsCreated) playerTriggerCells.Dispose();
+        if (playerTriggerCellIndexes.IsCreated) playerTriggerCellIndexes.Dispose();
 
-        playerForwardTriggerAreaDatas.Dispose();
-        playerForwardTriggerCells.Dispose();
-        playerForwardTriggerIndexes.Dispose();
+        if (playerForwardTriggerAreaDatas.IsCreated) playerForwardTriggerAreaDatas.Dispose();
+        if (playerForwardTriggerCells.IsCreated) playerForwardTriggerCells.Dispose();
+        if (playerForwardTriggerIndexes.IsCreated) playerForwardTriggerIndexes.Dispose();
 
-        mapGroundIndexDatas.Dispose(); 
+        if (mapGroundIndexDatas.IsCreated) mapGroundIndexDatas.Dispose();
     }
 
     public int id;
@@ -1824,10 +1825,11 @@ public partial class MapCellController : Singleton<MapCellController>
             runtimeMapRoom.Value.Dispose();
         }
         runtimeMapRooms.Clear();
-        mapObjBarriers.Dispose();
-        mapLinkCellSet.Dispose(); 
-        mapLinkSet.Dispose();
-        changeBarriers.Dispose();
+        // Clear 可能早于异步初始化完成或被重复调用，释放前统一检查 Native 容器状态。
+        if (mapObjBarriers.IsCreated) mapObjBarriers.Dispose();
+        if (mapLinkCellSet.IsCreated) mapLinkCellSet.Dispose();
+        if (mapLinkSet.IsCreated) mapLinkSet.Dispose();
+        if (changeBarriers.IsCreated) changeBarriers.Dispose();
     }
 }
 

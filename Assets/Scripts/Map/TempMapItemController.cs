@@ -54,6 +54,8 @@ public class TempMapItemController : Singleton<TempMapItemController>
             tempMapItem.Value.Dispose();
         }
         tempMapItems.Clear();
+        characterTempMapItems.Clear();
+        characterSetCoordinates.Clear();
     }
 
     public List<TempMapItem> GetTempMapItems(int roomId)
@@ -305,6 +307,7 @@ public class TempMapItem : INativeData
 
     public void Dispose()
     {
-        colliderCells.Dispose();
+        // 临时地图物体可能被取消设置和场景清理同时回收，避免 NativeList 二次释放。
+        if (colliderCells.IsCreated) colliderCells.Dispose();
     }
 }

@@ -156,6 +156,8 @@ public class MapCharacterGrid
 
     public void Dispose()
     {
-        characters.Dispose();
+        // 角色格子可能在地图重载时重复释放，先判断 NativeList 是否仍有效。
+        if (characters.IsCreated) characters.Dispose();
+        characterIndexs?.Clear();
     }
 }
