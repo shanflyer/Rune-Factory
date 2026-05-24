@@ -9,7 +9,12 @@ public class FriendShip
     public int friendLevel;
     public int needValue;
 
-    public async void AddValue(int value)
+    public void AddValue(int value)
+    {
+        AsyncTaskRunner.Run(() => AddValueAsync(value), nameof(AddValue));
+    }
+
+    public async System.Threading.Tasks.Task AddValueAsync(int value)
     {
         int totalVaue = value + nowValue;
         int friendLevel = this.friendLevel;
@@ -69,8 +74,8 @@ public class FriendManager : Singleton<FriendManager>
         NPCFriendShips.Clear();
       
         GameActionManager.instance.AddListener<AddFriendShipValue>(AddFriendShipValue);
-        GameActionManager.instance.AddListener<TryGiveGiftOpenPackage>(TryGiveGiftOpenPackage);
-        GameActionManager.instance.AddListener<GiveGift>(GiveGift);
+        GameActionManager.instance.AddAsyncListener<TryGiveGiftOpenPackage>(TryGiveGiftOpenPackageAsync, nameof(TryGiveGiftOpenPackage));
+        GameActionManager.instance.AddAsyncListener<GiveGift>(GiveGiftAsync, nameof(GiveGift));
         GameActionManager.instance.AddListener<NewDay>(NewDay);
     }
     public void ZeroFriendShip(int npcId,int zeroFriendShipLevel)
@@ -96,7 +101,7 @@ public class FriendManager : Singleton<FriendManager>
         }
        
     }
-    private async void GiveGift(GiveGift giveGift)
+    private async System.Threading.Tasks.Task GiveGiftAsync(GiveGift giveGift)
     {
         EventReferenceData eventReferenceData = new EventReferenceData
         {
@@ -120,7 +125,7 @@ public class FriendManager : Singleton<FriendManager>
        await GameEventManager.instance.AddGameEvent(GameCommon.giftEventId, eventReferenceDatas);
     }
 
-    private async void TryGiveGiftOpenPackage(TryGiveGiftOpenPackage tryGiveGiftOpenPackage)
+    private async System.Threading.Tasks.Task TryGiveGiftOpenPackageAsync(TryGiveGiftOpenPackage tryGiveGiftOpenPackage)
     {
         PackageList packageList = new PackageList
         {

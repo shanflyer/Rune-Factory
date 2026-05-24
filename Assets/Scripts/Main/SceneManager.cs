@@ -23,10 +23,10 @@ namespace MyGame
         public override void Init()
         {
             base.Init();
-            GameActionManager.instance.AddListener<SwitchScene>(SwitchScene);
+            GameActionManager.instance.AddAsyncListener<SwitchScene>(SwitchSceneAsync, nameof(SwitchScene));
         }
 
-        private async void SwitchScene(SwitchScene switchScene)
+        private async System.Threading.Tasks.Task SwitchSceneAsync(SwitchScene switchScene)
         {
             GameActionAsset beforeActionData = await GameDataManager.instance.GetAsyncData<GameActionAsset>(switchScene.beforeLoadActionId);
             GameActionAsset afterActionData = await GameDataManager.instance.GetAsyncData<GameActionAsset>(switchScene.afterLoadActionId);
@@ -56,7 +56,12 @@ namespace MyGame
             nowSceen = sceneName;
         }
 
-        public async void UnloadNowScene(bool Async = true)
+        public void UnloadNowScene(bool Async = true)
+        {
+            AsyncTaskRunner.Run(() => UnloadNowSceneAsync(Async), nameof(UnloadNowScene));
+        }
+
+        public async System.Threading.Tasks.Task UnloadNowSceneAsync(bool Async = true)
         {
             if (!string.IsNullOrEmpty(nowSceen))
             {

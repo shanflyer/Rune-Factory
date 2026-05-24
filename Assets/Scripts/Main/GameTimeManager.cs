@@ -223,7 +223,13 @@ public class GameTimeManager : Singleton<GameTimeManager>
             UpDataGameTimeAction();
         }
 
-        public async void SetMapOverrideEnvironment(string dayEnvironmentDataName,
+        public void SetMapOverrideEnvironment(string dayEnvironmentDataName,
+            string duskEnvironmentDataName, string dawnEnvironmentDataName, string nightEnvironmentDataName)
+        {
+            AsyncTaskRunner.Run(() => SetMapOverrideEnvironmentAsync(dayEnvironmentDataName, duskEnvironmentDataName, dawnEnvironmentDataName, nightEnvironmentDataName), nameof(SetMapOverrideEnvironment));
+        }
+
+        public async System.Threading.Tasks.Task SetMapOverrideEnvironmentAsync(string dayEnvironmentDataName,
             string duskEnvironmentDataName, string dawnEnvironmentDataName, string nightEnvironmentDataName)
         {
             overrideDawnEnvironmentData =
@@ -457,7 +463,12 @@ public class GameTimeManager : Singleton<GameTimeManager>
 
         bool waitCreatWeather = false;
 
-        async void CreateWeather()
+        void CreateWeather()
+        {
+            AsyncTaskRunner.Run(CreateWeatherAsync, nameof(CreateWeather));
+        }
+
+        async System.Threading.Tasks.Task CreateWeatherAsync()
         {
             if (SeasonData.season == Season.Default)
             {

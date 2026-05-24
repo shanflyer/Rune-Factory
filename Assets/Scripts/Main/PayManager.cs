@@ -80,7 +80,12 @@ public class PayManager : Singleton<PayManager>
                    });
     }
 
-    public async void PayAction(string title, string notice, int cost, PayType payType, SetResult afterAction)
+    public void PayAction(string title, string notice, int cost, PayType payType, SetResult afterAction)
+    {
+        AsyncTaskRunner.Run(() => PayActionAsync(title, notice, cost, payType, afterAction), nameof(PayAction));
+    }
+
+    public async System.Threading.Tasks.Task PayActionAsync(string title, string notice, int cost, PayType payType, SetResult afterAction)
     {
         CostEventData CostEventData = new CostEventData
         {
@@ -127,7 +132,12 @@ public class PayManager : Singleton<PayManager>
         return false;
     }
 
-    public async void TryCreatGold()
+    public void TryCreatGold()
+    {
+        AsyncTaskRunner.Run(TryCreatGoldAsync, nameof(TryCreatGold));
+    }
+
+    public async System.Threading.Tasks.Task TryCreatGoldAsync()
     {
         await UIManager.instance.ShowGamePanel<GoldCreatPanel, IReferenceData>(null);
     }

@@ -622,7 +622,12 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         count = 0;
         return false;
     }
-    public async void SetPlantFruitCount(int id,int count)
+    public void SetPlantFruitCount(int id,int count)
+    {
+        AsyncTaskRunner.Run(() => SetPlantFruitCountAsync(id, count), nameof(SetPlantFruitCount));
+    }
+
+    public async System.Threading.Tasks.Task SetPlantFruitCountAsync(int id,int count)
     {
         if (!UserGameSaveData.plantSaveDatas.TryGetValue(id, out var plantSaveData))
         {

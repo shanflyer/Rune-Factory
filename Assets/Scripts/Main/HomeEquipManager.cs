@@ -12,16 +12,13 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
     {
         base.Init();
         homeEquips.Clear();
-        GameActionManager.instance.AddListener<CreatHomeEquip>(CreatHomeEquip);
+        GameActionManager.instance.AddAsyncListener<CreatHomeEquip>(CreatHomeEquipAsync, nameof(CreatHomeEquip));
         GameActionManager.instance.AddListener<RemoveHomeEquip>(RemoveHomeEquip);
         GameActionManager.instance.AddListener<ChangeHomeEquipCharacter>(ChangeHomeEquipCharacter);
         GameActionManager.instance.AddListener<TryLayInHomeEquip>(TryLayInHomeEquip);
         GameActionManager.instance.AddListener<SetHomeEquipCoordinate>(SetHomeEquipCoordinate);
         GameActionManager.instance.AddListener<RefreshHomeEquip>(RefreshHomeEquip);
-        GameActionManager.instance.AddListener<DisplayHomeEquipPanel>(async (DisplayHomeEquipPanel DisplayHomeEquipPanel) =>
-        {
-          await  UIManager.instance.ShowGamePanel<PlayerHomeEquipPanel, HomeEquipList>(GetHomeEquipList(DisplayHomeEquipPanel.characterId));
-        });
+        GameActionManager.instance.AddAsyncListener<DisplayHomeEquipPanel>(DisplayHomeEquipPanelAsync, nameof(DisplayHomeEquipPanel));
         GameActionManager.instance.AddListener<UnSetHomeEquip>(UnSetHomeEquip);
     }
 
@@ -29,6 +26,11 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
     {
         base.Clear();
         homeEquips.Clear();
+    }
+
+    private async System.Threading.Tasks.Task DisplayHomeEquipPanelAsync(DisplayHomeEquipPanel displayHomeEquipPanel)
+    {
+        await UIManager.instance.ShowGamePanel<PlayerHomeEquipPanel, HomeEquipList>(GetHomeEquipList(displayHomeEquipPanel.characterId));
     }
 
     public bool GetHomeEquip(int instanceId, out HomeEquip homeEquip)
@@ -108,7 +110,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         }
         equipCountData[homeEquipSaveData.equipDataId] = count;
     }
-    private async void CreatHomeEquip(CreatHomeEquip creatHomeEquip)
+    private async System.Threading.Tasks.Task CreatHomeEquipAsync(CreatHomeEquip creatHomeEquip)
     {
         if (homeEquips.ContainsKey(creatHomeEquip.instanceId))
         {
@@ -375,7 +377,12 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         }
     }
 
-    public async void BuyAction(ShopItemData selectShopItemData)
+    public void BuyAction(ShopItemData selectShopItemData)
+    {
+        AsyncTaskRunner.Run(() => BuyActionAsync(selectShopItemData), nameof(BuyAction));
+    }
+
+    public async System.Threading.Tasks.Task BuyActionAsync(ShopItemData selectShopItemData)
     {
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(selectShopItemData.item);
         if (itemData == null)

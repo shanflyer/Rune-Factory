@@ -20,12 +20,12 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
     {
         base.Init();
         // InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_ClickPos, ClickObj);
-        GameActionManager.instance.AddListener<ShowMapObjTips>(ShowMapObjTips);
+        GameActionManager.instance.AddAsyncListener<ShowMapObjTips>(ShowMapObjTipsAsync, nameof(ShowMapObjTips));
         GameActionManager.instance.AddListener<CloseMapObjTips>(CloseMapObjTips);
-        GameActionManager.instance.AddListener<PlayerTalkItem>(PlayerTalkItem);
+        GameActionManager.instance.AddAsyncListener<PlayerTalkItem>(PlayerTalkItemAsync, nameof(PlayerTalkItem));
     }
 
-    private async void PlayerTalkItem(PlayerTalkItem playerTalkItem)
+    private async System.Threading.Tasks.Task PlayerTalkItemAsync(PlayerTalkItem playerTalkItem)
     {
         if (CharacterManager.instance.GetRuntimeCharacterObj(playerTalkItem.characterId, out var characterRuntimeObj))
         {
@@ -53,7 +53,12 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
     /// <param name="reference">数据id</param>
     /// <param name="enter">是否进入事件</param>
 
-    private async void ClickObj(object obj)
+    private void ClickObj(object obj)
+    {
+        AsyncTaskRunner.Run(() => ClickObjAsync(obj), nameof(ClickObj));
+    }
+
+    private async System.Threading.Tasks.Task ClickObjAsync(object obj)
     {
         EventSystem.current.FixUpdate();
         if (EventSystem.current.currentSelectedGameObject != null)
@@ -131,7 +136,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
         UIManager.instance.CloseGamePanel<OperateButtonPanel>();
     }
 
-    private async void ShowMapObjTips(ShowMapObjTips ShowMapObjTips)
+    private async System.Threading.Tasks.Task ShowMapObjTipsAsync(ShowMapObjTips ShowMapObjTips)
     {
         if (ShowMapObjTips.id != 0)
         {

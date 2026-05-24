@@ -116,7 +116,7 @@ public class EmoteManager : Singleton<EmoteManager>
             return;
         }
 
-        GameActionManager.instance.AddListener<ShowEmote>(ShowEmote);
+        GameActionManager.instance.AddAsyncListener<ShowEmote>(ShowEmoteAsync, nameof(ShowEmote));
         GameActionManager.instance.AddListener<ShowRandomEmote>(ShowRandomEmote);
         GameActionManager.instance.AddListener<TryRecycleCharacterEmote>(TryRecycleCharacterEmote);
         GameActionManager.instance.AddListener<TryRecycleItemEmote>(TryRecycleItemEmote);
@@ -171,7 +171,17 @@ public class EmoteManager : Singleton<EmoteManager>
         var emoteId = result[0].x;
         ShowEmote(emoteId, showRandomEmote.entityType, showRandomEmote.id, showRandomEmote.showTime);
     }
-    async void ShowEmote(int emoteId,EntityType entityType,int entityId,int showTime)
+    void ShowEmote(int emoteId,EntityType entityType,int entityId,int showTime)
+    {
+        AsyncTaskRunner.Run(() => ShowEmoteAsync(emoteId, entityType, entityId, showTime), nameof(ShowEmote));
+    }
+
+    async System.Threading.Tasks.Task ShowEmoteAsync(ShowEmote showEmote)
+    {
+        await ShowEmoteAsync(showEmote.emoteId, showEmote.entityType, showEmote.id, showEmote.showTime);
+    }
+
+    async System.Threading.Tasks.Task ShowEmoteAsync(int emoteId,EntityType entityType,int entityId,int showTime)
     {
         EmoteRuntime emoteRuntime = null;
         switch (entityType)

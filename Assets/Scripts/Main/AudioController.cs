@@ -193,7 +193,12 @@ public class AudioController : Singleton<AudioController>
         seAudioSource = seLayer.Source;
     }
 
-    public async void PlayAudio(SE se, bool loop = false, string Group = "Default")
+    public void PlayAudio(SE se, bool loop = false, string Group = "Default")
+    {
+        AsyncTaskRunner.Run(() => PlayAudioAsync(se, loop, Group), nameof(PlayAudio));
+    }
+
+    public async System.Threading.Tasks.Task PlayAudioAsync(SE se, bool loop = false, string Group = "Default")
     {
         if (se == SE.NULL) return;
 
@@ -218,7 +223,13 @@ public class AudioController : Singleton<AudioController>
         PlayAudioBGM(null, false, audioClearType, 1, false, Group);
     }
 
-    public async void PlayBGM(string clipName, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear,
+    public void PlayBGM(string clipName, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear,
+        float weight = 1, bool isLerp = false, string Group = "Default")
+    {
+        AsyncTaskRunner.Run(() => PlayBGMAsync(clipName, loop, audioClearType, weight, isLerp, Group), nameof(PlayBGM));
+    }
+
+    public async System.Threading.Tasks.Task PlayBGMAsync(string clipName, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear,
         float weight = 1, bool isLerp = false, string Group = "Default")
     {
         if (string.IsNullOrEmpty(clipName) || clipName == NullClipKey)
@@ -234,7 +245,13 @@ public class AudioController : Singleton<AudioController>
         PlayLayerClip(bgmLayer, audioClip, clipName, loop, audioClearType, weight, isLerp, Group, false);
     }
 
-    public async void PlayBGM(BGM bgm, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear,
+    public void PlayBGM(BGM bgm, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear,
+        float weight = 1, bool isLerp = false, string Group = "Default")
+    {
+        AsyncTaskRunner.Run(() => PlayBGMAsync(bgm, loop, audioClearType, weight, isLerp, Group), nameof(PlayBGM));
+    }
+
+    public async System.Threading.Tasks.Task PlayBGMAsync(BGM bgm, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear,
         float weight = 1, bool isLerp = false, string Group = "Default")
     {
         if (bgm == BGM.NULL)
@@ -251,7 +268,12 @@ public class AudioController : Singleton<AudioController>
         PlayLayerClip(bgmLayer, audioClip, key, loop, audioClearType, weight, isLerp, Group, false);
     }
 
-    public async void PlaySE(string clipName, bool loop = false, string Group = "Default")
+    public void PlaySE(string clipName, bool loop = false, string Group = "Default")
+    {
+        AsyncTaskRunner.Run(() => PlaySEAsync(clipName, loop, Group), nameof(PlaySE));
+    }
+
+    public async System.Threading.Tasks.Task PlaySEAsync(string clipName, bool loop = false, string Group = "Default")
     {
         if (string.IsNullOrEmpty(clipName) || clipName == NullClipKey) return;
 
@@ -270,7 +292,13 @@ public class AudioController : Singleton<AudioController>
         return new float3(GetMixerVolume("MasterVolume"), GetMixerVolume("BGMVolume"), GetMixerVolume("SEVolume"));
     }
 
-    public async void PlayAudio(BGS bgs, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear,
+    public void PlayAudio(BGS bgs, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear,
+        float weight = 1, bool isLerp = false, string Group = "Default")
+    {
+        AsyncTaskRunner.Run(() => PlayAudioAsync(bgs, loop, audioClearType, weight, isLerp, Group), nameof(PlayAudio));
+    }
+
+    public async System.Threading.Tasks.Task PlayAudioAsync(BGS bgs, bool loop = true, AudioClearType audioClearType = AudioClearType.NoClear,
         float weight = 1, bool isLerp = false, string Group = "Default")
     {
         if (bgs == BGS.NULL)
@@ -287,7 +315,13 @@ public class AudioController : Singleton<AudioController>
         PlayLayerClip(bgsLayer, audioClip, key, loop, audioClearType, weight, isLerp, Group, false);
     }
 
-    public async void PlayAudio(List<float3> bgs, AudioClearType audioClearType = AudioClearType.NoClear,
+    public void PlayAudio(List<float3> bgs, AudioClearType audioClearType = AudioClearType.NoClear,
+        bool isLerp = false, string Group = "Default")
+    {
+        AsyncTaskRunner.Run(() => PlayAudioAsync(bgs, audioClearType, isLerp, Group), nameof(PlayAudio));
+    }
+
+    public async System.Threading.Tasks.Task PlayAudioAsync(List<float3> bgs, AudioClearType audioClearType = AudioClearType.NoClear,
         bool isLerp = false, string Group = "Default")
     {
         var version = NextRequestVersion(bgsLayer, Group);

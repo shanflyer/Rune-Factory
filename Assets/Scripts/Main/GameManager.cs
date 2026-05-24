@@ -7,11 +7,11 @@ public class GameManager : Singleton<GameManager>
     public override void Init()
     {
         base.Init();
-        GameActionManager.instance.AddListener<ShowMapObjTips>(ShowMapObjTips);
-        GameActionManager.instance.AddListener<CloseMapObjTips>(CloseMapObjTips);
-        GameActionManager.instance.AddListener<ShowItemResult>(ShowItemResult);
+        GameActionManager.instance.AddAsyncListener<ShowMapObjTips>(ShowMapObjTipsAsync, nameof(ShowMapObjTips));
+        GameActionManager.instance.AddAsyncListener<CloseMapObjTips>(CloseMapObjTipsAsync, nameof(CloseMapObjTips));
+        GameActionManager.instance.AddAsyncListener<ShowItemResult>(ShowItemResultAsync, nameof(ShowItemResult));
     }
-    async void ShowItemResult(ShowItemResult showItemResult)
+    async System.Threading.Tasks.Task ShowItemResultAsync(ShowItemResult showItemResult)
     {
         ItemData itemData =await GameDataManager.instance.GetAsyncData<ItemData>(showItemResult.item);
         ItemResultInfo itemResultInfo = new ItemResultInfo
@@ -24,7 +24,12 @@ public class GameManager : Singleton<GameManager>
         GameNotificationManager.instance.ShowItemResultInfo(itemResultInfo);
         //UIManager.instance.ShowGamePanel<ItemResultPanel,ItemResultInfo>(itemResultInfo);
     }
-    public async void ShowTwoSelectAction(string title, string notice, Action yesAction, Action noAction)
+    public void ShowTwoSelectAction(string title, string notice, Action yesAction, Action noAction)
+    {
+        AsyncTaskRunner.Run(() => ShowTwoSelectActionAsync(title, notice, yesAction, noAction), nameof(ShowTwoSelectAction));
+    }
+
+    public async System.Threading.Tasks.Task ShowTwoSelectActionAsync(string title, string notice, Action yesAction, Action noAction)
     {
         TwoSelectData twoSelectData = new TwoSelectData
         {
@@ -36,7 +41,7 @@ public class GameManager : Singleton<GameManager>
        await UIManager.instance.ShowGamePanel<TwoSelectPanel, TwoSelectData>(twoSelectData);
     }
 
-    private async void CloseMapObjTips(CloseMapObjTips closeMapObjTips)
+    private async System.Threading.Tasks.Task CloseMapObjTipsAsync(CloseMapObjTips closeMapObjTips)
     {
         var mapObjTipsPanel = await UIManager.instance.GetGamePanel<MapObjTipsPanel>();
         if (mapObjTipsPanel)
@@ -55,7 +60,7 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    private async void ShowMapObjTips(ShowMapObjTips showMapObjTips)
+    private async System.Threading.Tasks.Task ShowMapObjTipsAsync(ShowMapObjTips showMapObjTips)
     {
         int itemId = showMapObjTips.id;
         if (WorldMapObjManager.instance.GetRuntimeMapItemObj(itemId, out var runtimeObj))
@@ -72,7 +77,12 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    public async void ShowObjTips(string info, Transform parent)
+    public void ShowObjTips(string info, Transform parent)
+    {
+        AsyncTaskRunner.Run(() => ShowObjTipsAsync(info, parent), nameof(ShowObjTips));
+    }
+
+    public async System.Threading.Tasks.Task ShowObjTipsAsync(string info, Transform parent)
     { 
        await UIManager.instance.ShowGamePanel<MapObjTipsPanel>(info, parent: parent);
     }

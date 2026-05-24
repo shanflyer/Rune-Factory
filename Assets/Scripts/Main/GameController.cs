@@ -220,7 +220,12 @@ public class GameController : MonoBehaviour
 
     }
     bool startGameCompleted = false;
-    private async void OnSynchronizeComplete(CloudServicesSynchronizeResult result)
+    private void OnSynchronizeComplete(CloudServicesSynchronizeResult result)
+    {
+        AsyncTaskRunner.Run(() => OnSynchronizeCompleteAsync(result), nameof(OnSynchronizeComplete));
+    }
+
+    private async System.Threading.Tasks.Task OnSynchronizeCompleteAsync(CloudServicesSynchronizeResult result)
     {
        // if (GameDataManager.instance.GlobalData.debug)
             Debug.Log($"云存档OnSynchronizeComplete:{result.Success}");

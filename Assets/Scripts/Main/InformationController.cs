@@ -29,11 +29,7 @@ public class InformationController : Singleton<InformationController>
         {
             if (_PromptPanel == null)
             {
-                GetPromptPanel();
-                async void GetPromptPanel()
-                {
-                    _PromptPanel = await UIManager.instance.GetGamePanel<PromptPanel>();
-                }
+                AsyncTaskRunner.Run(GetPromptPanelAsync, nameof(GetPromptPanelAsync));
             }
             return _PromptPanel;
         }
@@ -41,9 +37,19 @@ public class InformationController : Singleton<InformationController>
 
     private PromptPanel _PromptPanel;
 
+    private async System.Threading.Tasks.Task GetPromptPanelAsync()
+    {
+        _PromptPanel = await UIManager.instance.GetGamePanel<PromptPanel>();
+    }
+
     private float showTime;
 
-    protected override async void Update()
+    protected override void Update()
+    {
+        AsyncTaskRunner.Run(UpdateAsync, nameof(InformationController.Update));
+    }
+
+    private async System.Threading.Tasks.Task UpdateAsync()
     {
         base.Update();
         if (showTime <= 0)

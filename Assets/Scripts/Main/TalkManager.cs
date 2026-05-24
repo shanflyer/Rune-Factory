@@ -7,11 +7,11 @@ public class TalkManager : Singleton<TalkManager>
     public override void Init()
     {
         base.Init();
-        GameActionManager.instance.AddListener<Talk>(Talk);
-        GameActionManager.instance.AddListener<SimpleTalk>(SimpleTalk);
+        GameActionManager.instance.AddAsyncListener<Talk>(TalkAsync, nameof(Talk));
+        GameActionManager.instance.AddAsyncListener<SimpleTalk>(SimpleTalkAsync, nameof(SimpleTalk));
     }
 
-    private async void SimpleTalk(SimpleTalk simpleTalk)
+    private async System.Threading.Tasks.Task SimpleTalkAsync(SimpleTalk simpleTalk)
     {
         if (CharacterManager.instance.GetRuntimeCharacterObj(simpleTalk.characterId, out var characterRuntimeObj))
         {
@@ -27,12 +27,12 @@ public class TalkManager : Singleton<TalkManager>
         }
     }
 
-    private void Talk(Talk talk)
+    System.Threading.Tasks.Task TalkAsync(Talk talk)
     {
-        Talk(talk.talkId, talk.characterId, talk.displayFunction, talk.endAction, talk.nextTalkEventId,talk.fixedFunctions);
+        return TalkAsync(talk.talkId, talk.characterId, talk.displayFunction, talk.endAction, talk.nextTalkEventId, talk.fixedFunctions);
     }
 
-    async void Talk(int talkId, int characterId = -1,
+    async System.Threading.Tasks.Task TalkAsync(int talkId, int characterId = -1,
         bool displayFunction = false, Action endAction = null, int nextTalkEventId = 0,List<int> fixedFunctions=null)
     {
         TalkData talkData = await GameDataManager.instance.GetAsyncData<TalkData>(talkId);

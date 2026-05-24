@@ -9,7 +9,12 @@ public class SceneInfoManager : Singleton<SceneInfoManager>
     private Task initializationTask = Task.CompletedTask;
     public override Task InitializationTask => initializationTask;
 
-    public async void DisplaySceneInfo(string str,Vector3 pos)
+    public void DisplaySceneInfo(string str,Vector3 pos)
+    {
+        AsyncTaskRunner.Run(() => DisplaySceneInfoAsync(str, pos), nameof(DisplaySceneInfo));
+    }
+
+    public async System.Threading.Tasks.Task DisplaySceneInfoAsync(string str,Vector3 pos)
     {
         var runtimeSceneInfo =await GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.OTHER.ToString(),
            "", sceneInfoPre, 0);

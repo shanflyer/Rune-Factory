@@ -12,7 +12,7 @@ public class ShopManager : Singleton<ShopManager>
         base.Init();
         // 管理器初始化入口保持同步，异步加载异常统一进入日志。
         AsyncTaskRunner.Run(InitShopAsync(), nameof(InitShop));
-        GameActionManager.instance.AddListener<TryVisitShop>(TryVisitShop); 
+        GameActionManager.instance.AddAsyncListener<TryVisitShop>(TryVisitShopAsync, nameof(TryVisitShop));
         GameActionManager.instance.AddListener<RefreshShopLevel>(RefreshShopLevel);
     }
     void RefreshShopLevel(RefreshShopLevel refreshShopLevel)
@@ -80,7 +80,7 @@ public class ShopManager : Singleton<ShopManager>
             shopListDic.Add(shopGroupData.name, shopList);
         }
     }
-    async void TryVisitShop(TryVisitShop tryVisitShop)
+    async System.Threading.Tasks.Task TryVisitShopAsync(TryVisitShop tryVisitShop)
     {
         string shopName = tryVisitShop.ShopName;
         if (string.IsNullOrEmpty(shopName))
@@ -135,7 +135,12 @@ public class Shop:IReferenceData
 
     
     int friendLevel = 1;
-    public async void RefreshOpenItem(bool show = false)
+    public void RefreshOpenItem(bool show = false)
+    {
+        AsyncTaskRunner.Run(() => RefreshOpenItemAsync(show), nameof(RefreshOpenItem));
+    }
+
+    public async System.Threading.Tasks.Task RefreshOpenItemAsync(bool show = false)
     {
         if (this.bindCharacters != null)
         {
