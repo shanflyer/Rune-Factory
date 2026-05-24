@@ -54,8 +54,8 @@ public class GameDataManager : Singleton<GameDataManager>
             {
                 Debug.LogError($"GameDataManager init failed: missing {nameof(GameGlobalData)} at {DataPath.GetDataPath(typeof(GameGlobalData))}");
             }
-            LastIntegrityReport = ValidateDataPathRegistry();
-            LogDataIntegrityReport(LastIntegrityReport);
+            LastIntegrityReport = DataResourceRegistry.ValidateDataPathRegistry();
+            DataResourceRegistry.LogDataIntegrityReport(LastIntegrityReport);
 
             var gameDataSaveManager = GameDataSaveManager.instance;
             //初始加载
@@ -80,93 +80,12 @@ public class GameDataManager : Singleton<GameDataManager>
 
     private static bool TryGetDataPath(Type type, out string path)
     {
-        path = DataPath.GetDataPath(type);
-        if (!string.IsNullOrEmpty(path))
-        {
-            return true;
-        }
-
-        Debug.LogError($"GameDataManager data path is not registered: {type.FullName}");
-        return false;
+        return DataResourceRegistry.TryGetDataPath(type, out path);
     }
 
     public static DataIntegrityReport ValidateDataPathRegistry()
     {
-        var report = new DataIntegrityReport();
-        var pathOwners = new Dictionary<string, Type>();
-
-        foreach (var dataPath in DataPath.dataPathDic)
-        {
-            report.checkedCount++;
-            Type type = dataPath.Key;
-            string path = dataPath.Value;
-            if (string.IsNullOrEmpty(path))
-            {
-                report.missingPaths.Add($"{type.FullName}: <empty>");
-                continue;
-            }
-
-            if (pathOwners.TryGetValue(path, out var ownerType))
-            {
-                report.duplicatePaths.Add($"{path}: {ownerType.Name}, {type.Name}");
-            }
-            else
-            {
-                pathOwners[path] = type;
-            }
-
-            UnityEngine.Object singleAsset = Resources.Load(path);
-            UnityEngine.Object[] folderAssets = Resources.LoadAll(path);
-            if (singleAsset == null && (folderAssets == null || folderAssets.Length == 0))
-            {
-                report.missingPaths.Add($"{type.FullName}: {path}");
-                continue;
-            }
-
-            if (singleAsset != null &&
-                singleAsset is not IGameData &&
-                singleAsset is not TextAsset &&
-                !IsDataArrayAsset(singleAsset, type))
-            {
-                report.incompatibleAssets.Add($"{type.FullName}: {path}, asset={singleAsset.GetType().Name}");
-            }
-        }
-
-        return report;
-    }
-
-    private static bool IsDataArrayAsset(UnityEngine.Object asset, Type dataType)
-    {
-        Type dataArrayType = typeof(IDataArray<>).MakeGenericType(dataType);
-        return dataArrayType.IsInstanceOfType(asset);
-    }
-
-    private static void LogDataIntegrityReport(DataIntegrityReport report)
-    {
-        if (report == null)
-        {
-            return;
-        }
-
-        if (!report.HasProblem)
-        {
-            Debug.Log($"GameDataManager data integrity report: checked={report.checkedCount}, ok.");
-            return;
-        }
-
-        Debug.LogWarning($"GameDataManager data integrity report: checked={report.checkedCount}, missing={report.missingPaths.Count}, incompatible={report.incompatibleAssets.Count}, duplicatePath={report.duplicatePaths.Count}.");
-        for (int i = 0; i < report.missingPaths.Count; i++)
-        {
-            Debug.LogWarning($"Missing data path: {report.missingPaths[i]}");
-        }
-        for (int i = 0; i < report.incompatibleAssets.Count; i++)
-        {
-            Debug.LogWarning($"Incompatible data asset: {report.incompatibleAssets[i]}");
-        }
-        for (int i = 0; i < report.duplicatePaths.Count; i++)
-        {
-            Debug.LogWarning($"Duplicate data path: {report.duplicatePaths[i]}");
-        }
+        return DataResourceRegistry.ValidateDataPathRegistry();
     }
 
     private static void AddLoadedData(Dictionary<string, IGameData> dataDic, IGameData data, Type type, string path)
