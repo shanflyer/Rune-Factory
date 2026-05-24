@@ -13,6 +13,10 @@ using VoxelBusters.EssentialKit;
 public class GameDataSaveManager : Singleton<GameDataSaveManager>
 {
     private const int CurrentSaveVersion = 1;
+    private const string CloudCommitValue = "committed";
+    private const string CloudCommitMetaName = "__commit";
+    private const string CloudChecksumMetaName = "__checksum";
+    private const string CloudVersionMetaName = "__version";
 
     private UserGameSaveDataList userGameSaveDataList;
     private string currentUserName;
@@ -937,9 +941,14 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             CloudServices.RemoveKey(key);
         }
         //CloudServices.RemoveKey(GameCommon.BlendString(keyStr, "specialMapItemList"));
+        CloudServices.RemoveKey(GetCloudMetaKey(keyStr, CloudCommitMetaName));
+        CloudServices.RemoveKey(GetCloudMetaKey(keyStr, CloudChecksumMetaName));
+        CloudServices.RemoveKey(GetCloudMetaKey(keyStr, CloudVersionMetaName));
     }
     void SetCloudData(UserGameSaveData nowSaveData, string keyStr)
     {
+        // 先标记写入中，字段全部写完并写入校验值后再提交，避免半写云存档被当作有效数据。
+        CloudServices.SetString(GetCloudMetaKey(keyStr, CloudCommitMetaName), "writing");
         for (int i = 0; i < UserGameSaveDataIntFields.Count; i++)
         {
             var field = UserGameSaveDataIntFields[i];
@@ -962,7 +971,39 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             string key = GameCommon.BlendString(keyStr, field.Name);
             CloudServices.SetString(key, objStr);
         }
+        CloudServices.SetInt(GetCloudMetaKey(keyStr, CloudVersionMetaName), CurrentSaveVersion);
+        CloudServices.SetString(GetCloudMetaKey(keyStr, CloudChecksumMetaName), ComputeCloudUserDataChecksum(nowSaveData));
+        CloudServices.SetString(GetCloudMetaKey(keyStr, CloudCommitMetaName), CloudCommitValue);
         //CloudServices.RemoveKey(GameCommon.BlendString(keyStr, "specialMapItemList"));
+    }
+
+    private static string GetCloudMetaKey(string keyStr, string metaName)
+    {
+        return $"{keyStr}{metaName}";
+    }
+
+    private string ComputeCloudUserDataChecksum(UserGameSaveData saveData)
+    {
+        EnsureSaveFieldCaches();
+        var builder = new StringBuilder();
+        AppendFields(UserGameSaveDataIntFields);
+        AppendFields(UserGameSaveDataStringFields);
+        AppendFields(UserGameSaveDataJsonFields);
+        using var sha256 = SHA256.Create();
+        byte[] hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(builder.ToString()));
+        return Convert.ToBase64String(hash);
+
+        void AppendFields(List<FieldInfo> fields)
+        {
+            for (int i = 0; i < fields.Count; i++)
+            {
+                var field = fields[i];
+                builder.Append(field.Name);
+                builder.Append('=');
+                builder.Append(JsonConvert.SerializeObject(field.GetValue(saveData), JsonSerializerSettings));
+                builder.Append(';');
+            }
+        }
     }
     public void LoadCloudData()
     {
@@ -992,7 +1033,8 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         int diamond = CloudServices.GetInt("diamond");
         loadedSaveDataList.commonSaveData = new CommonSaveData
         {
-            diamond = diamond
+            diamond = diamond,
+            saveVersion = CurrentSaveVersion
         };
         loadedSaveDataList.nowSaveData = GameController.instance.startPlay ? new UserGameSaveData() : LoadUserData("auto_");
         loadedSaveDataList.userGameSaveDatas = new List<UserGameSaveData>
@@ -1045,9 +1087,36 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                 else
                 {
 
-                }                
+                }
             }
+            ValidateCloudUserDataCommit(key, userData);
             return userData;
+        }
+    }
+
+    private void ValidateCloudUserDataCommit(string keyStr, UserGameSaveData userData)
+    {
+        string commit = CloudServices.GetString(GetCloudMetaKey(keyStr, CloudCommitMetaName));
+        if (string.IsNullOrEmpty(commit))
+        {
+            return;
+        }
+
+        if (commit != CloudCommitValue)
+        {
+            throw new InvalidDataException($"Cloud save slot is not committed: {keyStr}");
+        }
+
+        string expectedChecksum = CloudServices.GetString(GetCloudMetaKey(keyStr, CloudChecksumMetaName));
+        if (string.IsNullOrEmpty(expectedChecksum))
+        {
+            return;
+        }
+
+        string actualChecksum = ComputeCloudUserDataChecksum(userData);
+        if (!string.Equals(expectedChecksum, actualChecksum, StringComparison.Ordinal))
+        {
+            throw new InvalidDataException($"Cloud save slot checksum mismatch: {keyStr}");
         }
     }
 
@@ -1108,14 +1177,39 @@ internal static class GameSaveFileStore
         string tempPath = saveDataPath + TempSaveExtension;
         string backupPath = GetBackupSaveDataPath(saveDataPath);
 
-        // 先写临时文件，再刷新备份，最后覆盖正式文件，保证失败时至少保留上一份完整存档。
-        File.WriteAllText(tempPath, dataStr);
-        if (File.Exists(saveDataPath))
+        try
         {
-            File.Copy(saveDataPath, backupPath, true);
+            // 先完整写入临时文件，再用 File.Replace 原子替换；不支持原子替换的平台回退到备份后覆盖。
+            File.WriteAllText(tempPath, dataStr, Encoding.UTF8);
+            if (File.Exists(saveDataPath))
+            {
+                File.Copy(saveDataPath, backupPath, true);
+                try
+                {
+                    File.Replace(tempPath, saveDataPath, backupPath, true);
+                    return;
+                }
+                catch (PlatformNotSupportedException)
+                {
+                    File.Copy(tempPath, saveDataPath, true);
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    File.Copy(tempPath, saveDataPath, true);
+                }
+            }
+            else
+            {
+                File.Move(tempPath, saveDataPath);
+            }
         }
-        File.Copy(tempPath, saveDataPath, true);
-        File.Delete(tempPath);
+        finally
+        {
+            if (File.Exists(tempPath))
+            {
+                File.Delete(tempPath);
+            }
+        }
     }
 
     public static void Rollback(string saveDataPath)
