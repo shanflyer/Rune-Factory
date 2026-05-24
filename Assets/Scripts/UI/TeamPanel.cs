@@ -46,7 +46,12 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
         if (!SingletonType.Cleared)
             GameActionManager.instance.RemoveListener<RefreshTeam>(RefreshTeam);
     }
-    async void TalkAction()
+    void TalkAction()
+    {
+        AsyncTaskRunner.Run(TalkActionAsync, nameof(TalkAction));
+    }
+
+    async System.Threading.Tasks.Task TalkActionAsync()
     {
         Character character = CharacterManager.instance.GetCharacter(SelectCharacterId);
         if (character != null)
@@ -147,7 +152,12 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
     }
 
     int SelectCharacterId = 0;
-    async void SelectAction(CharacterInformationData characterInformationData, int index, bool select)
+    void SelectAction(CharacterInformationData characterInformationData, int index, bool select)
+    {
+        AsyncTaskRunner.Run(() => SelectActionAsync(characterInformationData, index, select), nameof(SelectAction));
+    }
+
+    async System.Threading.Tasks.Task SelectActionAsync(CharacterInformationData characterInformationData, int index, bool select)
     {
         if (select)
         {

@@ -59,7 +59,12 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
     [SerializeField]
     private float infoOffsetY =330f;
 
-    private async void SelectEquipReference(Equipment equipment, int index, bool selected = false)
+    private void SelectEquipReference(Equipment equipment, int index, bool selected = false)
+    {
+        AsyncTaskRunner.Run(() => SelectEquipReferenceAsync(equipment, index, selected), nameof(SelectEquipReference));
+    }
+
+    private async System.Threading.Tasks.Task SelectEquipReferenceAsync(Equipment equipment, int index, bool selected = false)
     {
         bool isController = equipment.characterId == CharacterManager.instance.controllerCharacter.instanceId;
 
@@ -116,7 +121,12 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
 
             GameActionManager.instance.QueueAction(openPackage,true);
 
-            async void ChangeEquip(Item item, int index, bool select)
+            void ChangeEquip(Item item, int index, bool select)
+            {
+                AsyncTaskRunner.Run(() => ChangeEquipAsync(item, index, select), nameof(ChangeEquip));
+            }
+
+            async System.Threading.Tasks.Task ChangeEquipAsync(Item item, int index, bool select)
             {
                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
                 if (itemData.type != equipment.ItemType)

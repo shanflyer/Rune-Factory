@@ -178,7 +178,12 @@ public class PlantPanel : GamePanel<IReferenceData>
     }
      
 
-    private async void SelectPlantReference(PlantData plantData,int index, bool selected)
+    private void SelectPlantReference(PlantData plantData,int index, bool selected)
+    {
+        AsyncTaskRunner.Run(() => SelectPlantReferenceAsync(plantData, index, selected), nameof(SelectPlantReference));
+    }
+
+    private async System.Threading.Tasks.Task SelectPlantReferenceAsync(PlantData plantData,int index, bool selected)
     {
         if (selected)
         {

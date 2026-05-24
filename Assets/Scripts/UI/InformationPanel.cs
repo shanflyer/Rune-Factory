@@ -22,7 +22,12 @@ public class InformationPanel : GamePanel<IReferenceData>
         close = FindChildGameObject<Button>("Close");
         close.onClick.AddListener(Close);
     }
-    public async void RefreshInformations(List<string> strs,int startIndex)
+    public void RefreshInformations(List<string> strs,int startIndex)
+    {
+        AsyncTaskRunner.Run(() => RefreshInformationsAsync(strs, startIndex), nameof(RefreshInformations));
+    }
+
+    public async System.Threading.Tasks.Task RefreshInformationsAsync(List<string> strs,int startIndex)
     {
         int index = 0;
         for(int i = startIndex; i < strs.Count; i++)

@@ -128,7 +128,12 @@ public class CalendarPanel : GamePanel<IReferenceData>
         CreatSeason(season);
         AfterDisplay();
     } 
-    async void CreatSeason(Season season)
+    void CreatSeason(Season season)
+    {
+        AsyncTaskRunner.Run(() => CreatSeasonAsync(season), nameof(CreatSeason));
+    }
+
+    async System.Threading.Tasks.Task CreatSeasonAsync(Season season)
     {
         List<GameDate> gameDates = GameTimeManager.instance.GetGameDataForSeason(season);  
         if (DatesParent.transform.childCount > gameDates.Count)

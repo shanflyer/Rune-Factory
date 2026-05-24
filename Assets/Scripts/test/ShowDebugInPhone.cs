@@ -67,7 +67,12 @@ public class ShowDebugInPhone : MonoBehaviour
         // 转换场景不删除，使用 Unity 6 推荐的 Object 接口。
         DontDestroyOnLoad(gameObject);
     }
-    async void OnEnable()
+    void OnEnable()
+    {
+        AsyncTaskRunner.Run(OnEnableAsync, nameof(ShowDebugInPhone));
+    }
+
+    async System.Threading.Tasks.Task OnEnableAsync()
     {
 #if UNITY_EDITOR
         Application.logMessageReceived += HangleLog;

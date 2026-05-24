@@ -43,7 +43,12 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
     }
     List<MyInt> nowCharacters = new List<MyInt>();
     HashSet<int> characters = new HashSet<int>();
-    async void SelectAction(MyInt seletCharacter, int index, bool selected = true)
+    void SelectAction(MyInt seletCharacter, int index, bool selected = true)
+    {
+        AsyncTaskRunner.Run(() => SelectActionAsync(seletCharacter, index, selected), nameof(SelectAction));
+    }
+
+    async System.Threading.Tasks.Task SelectActionAsync(MyInt seletCharacter, int index, bool selected = true)
     {
 
         Character character = CharacterManager.instance.GetCharacter(seletCharacter.value);
@@ -107,7 +112,12 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
         }
     }
 
-    private async void RefreshOperateCharacters(RefreshOperateCharacters refreshOperateCharacters)
+    private void RefreshOperateCharacters(RefreshOperateCharacters refreshOperateCharacters)
+    {
+        AsyncTaskRunner.Run(() => RefreshOperateCharactersAsync(refreshOperateCharacters), nameof(RefreshOperateCharacters));
+    }
+
+    private async System.Threading.Tasks.Task RefreshOperateCharactersAsync(RefreshOperateCharacters refreshOperateCharacters)
     {
         bool refresh = false; 
         refreshOperateCharacters.joinCharacters.ExceptWith(TeamManager.instance.playerTeam.TeamCharacters); 
@@ -172,7 +182,12 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
         }
     }
 
-    private async void RefreshOperateCharacter(RefreshOperateCharacter refreshOperateCharacter)
+    private void RefreshOperateCharacter(RefreshOperateCharacter refreshOperateCharacter)
+    {
+        AsyncTaskRunner.Run(() => RefreshOperateCharacterAsync(refreshOperateCharacter), nameof(RefreshOperateCharacter));
+    }
+
+    private async System.Threading.Tasks.Task RefreshOperateCharacterAsync(RefreshOperateCharacter refreshOperateCharacter)
     {
         if (CharacterManager.instance.IsTempCharacter(refreshOperateCharacter.characterId))
         {

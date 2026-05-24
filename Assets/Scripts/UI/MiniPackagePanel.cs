@@ -59,7 +59,12 @@ public class MiniPackagePanel : GamePanel<PackageList>
         packageLevelUp.onClick.AddListener(TryPackageLevelUp);
     }
 
-    private async void TryPackageLevelUp()
+    private void TryPackageLevelUp()
+    {
+        AsyncTaskRunner.Run(TryPackageLevelUpAsync, nameof(TryPackageLevelUp));
+    }
+
+    private async System.Threading.Tasks.Task TryPackageLevelUpAsync()
     {
         PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(selectPackageData.dataId);
         if (packageSetData && packageSetData.canLevelUp)
@@ -121,7 +126,12 @@ public class MiniPackagePanel : GamePanel<PackageList>
         //this.RefreshPackage();
         //RefreshPackage();
     }
-    private async void SelectPackageItem(Item item, int index, bool selected = true)
+    private void SelectPackageItem(Item item, int index, bool selected = true)
+    {
+        AsyncTaskRunner.Run(() => SelectPackageItemAsync(item, index, selected), nameof(SelectPackageItem));
+    }
+
+    private async System.Threading.Tasks.Task SelectPackageItemAsync(Item item, int index, bool selected = true)
     {
         if (selected)
         {
@@ -184,7 +194,12 @@ public class MiniPackagePanel : GamePanel<PackageList>
     {
         itemBoxs.SelectDefault();
     }
-    private async void RefreshPackage()
+    private void RefreshPackage()
+    {
+        AsyncTaskRunner.Run(RefreshPackageAsync, nameof(RefreshPackage));
+    }
+
+    private async System.Threading.Tasks.Task RefreshPackageAsync()
     {
         //selectPackageData = packageList.packageDatas[selectIndex];
         if (selectPackageData.dataId == 0)

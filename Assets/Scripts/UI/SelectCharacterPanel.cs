@@ -177,7 +177,12 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
         DateDropdown.value = 0;
     }
 
-    private async void OkButtonAction()
+    private void OkButtonAction()
+    {
+        AsyncTaskRunner.Run(OkButtonActionAsync, nameof(OkButtonAction));
+    }
+
+    private async System.Threading.Tasks.Task OkButtonActionAsync()
     { 
         
         //DataSaveAndLoadTest.IniteZerodata();

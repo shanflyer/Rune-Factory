@@ -130,7 +130,12 @@ public class AllItemPanel : GamePanel<IReferenceData>
     }
   
 
-    private async void SelectPackageItem(Item item, int index, bool selected = true)
+    private void SelectPackageItem(Item item, int index, bool selected = true)
+    {
+        AsyncTaskRunner.Run(() => SelectPackageItemAsync(item, index, selected), nameof(SelectPackageItem));
+    }
+
+    private async System.Threading.Tasks.Task SelectPackageItemAsync(Item item, int index, bool selected = true)
     {
         if (selected)
         {
@@ -164,7 +169,12 @@ public class AllItemPanel : GamePanel<IReferenceData>
     }
 
  
-    private async void RefreshPackage()
+    private void RefreshPackage()
+    {
+        AsyncTaskRunner.Run(RefreshPackageAsync, nameof(RefreshPackage));
+    }
+
+    private async System.Threading.Tasks.Task RefreshPackageAsync()
     {
         
         List<Item> items = new List<Item>();

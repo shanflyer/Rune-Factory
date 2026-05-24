@@ -260,7 +260,12 @@ public class MultiPackagePanel : GamePanel<PackageList>
         }
     }
 
-    private async void SelectPackageItem(Item item,int index, bool selected = true)
+    private void SelectPackageItem(Item item,int index, bool selected = true)
+    {
+        AsyncTaskRunner.Run(() => SelectPackageItemAsync(item, index, selected), nameof(SelectPackageItem));
+    }
+
+    private async System.Threading.Tasks.Task SelectPackageItemAsync(Item item,int index, bool selected = true)
     {
         if (selected)
         {

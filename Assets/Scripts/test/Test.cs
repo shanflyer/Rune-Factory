@@ -112,7 +112,12 @@ public class Test : MonoBehaviour
 
     public GameObject prefab;
     public GameObject obj;
-    public async void TestCreatObj()
+    public void TestCreatObj()
+    {
+        AsyncTaskRunner.Run(TestCreatObjAsync, nameof(TestCreatObj));
+    }
+
+    public async System.Threading.Tasks.Task TestCreatObjAsync()
     {
         var AsyncInstantiateOperation = InstantiateAsync(prefab);
         await AsyncInstantiateOperation;

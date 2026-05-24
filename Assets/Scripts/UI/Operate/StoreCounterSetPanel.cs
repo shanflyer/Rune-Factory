@@ -53,7 +53,12 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
             Close();
         });
     }
-    async void ChangeItemAction()
+    void ChangeItemAction()
+    {
+        AsyncTaskRunner.Run(ChangeItemActionAsync, nameof(ChangeItemAction));
+    }
+
+    async System.Threading.Tasks.Task ChangeItemActionAsync()
     {
         int packageId = CharacterManager.instance.controllerCharacter.characterPackage;
 
@@ -71,7 +76,12 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
     }
     int changeCount = 0;
 
-    async void SelectPackageItem(Item item, int index, bool select)
+    void SelectPackageItem(Item item, int index, bool select)
+    {
+        AsyncTaskRunner.Run(() => SelectPackageItemAsync(item, index, select), nameof(SelectPackageItem));
+    }
+
+    async System.Threading.Tasks.Task SelectPackageItemAsync(Item item, int index, bool select)
     {
         SetStoreCounterItem setStoreCounterItem = new SetStoreCounterItem
         {
@@ -83,7 +93,12 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
         UIManager.instance.CloseGamePanel<WarehousePanel>();
     }
 
-    async void SetItemCountAction()
+    void SetItemCountAction()
+    {
+        AsyncTaskRunner.Run(SetItemCountActionAsync, nameof(SetItemCountAction));
+    }
+
+    async System.Threading.Tasks.Task SetItemCountActionAsync()
     {
          
         if (PlayerStoreManager.instance.GetRuntimeStoreCounter(storeCunterSetData.storeCounterId, out var runtimeStoreCounter))
@@ -133,7 +148,12 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
         //changeCount = count - storeCunterSetData.count;
         //RefreshChangeCount(); 
     }
-    async void GetItemDownAction()
+    void GetItemDownAction()
+    {
+        AsyncTaskRunner.Run(GetItemDownActionAsync, nameof(GetItemDownAction));
+    }
+
+    async System.Threading.Tasks.Task GetItemDownActionAsync()
     {
         int packageId = CharacterManager.instance.controllerCharacter.characterPackage;
         if (PlayerStoreManager.instance.GetRuntimeStoreCounter(storeCunterSetData.storeCounterId, out var runtimeStoreCounter))

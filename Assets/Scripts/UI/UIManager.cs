@@ -158,7 +158,12 @@ public class UIManager : Singleton<UIManager>
             }
         }
     } 
-    public async void SetJoyStickColor(Color color)
+    public void SetJoyStickColor(Color color)
+    {
+        AsyncTaskRunner.Run(() => SetJoyStickColorAsync(color), nameof(SetJoyStickColor));
+    }
+
+    public async System.Threading.Tasks.Task SetJoyStickColorAsync(Color color)
     {
         joyStickColor = color;
         PlayerPrefs.SetString("JoyStickColor", $"{color.r},{color.g},{color.b},{color.a}");

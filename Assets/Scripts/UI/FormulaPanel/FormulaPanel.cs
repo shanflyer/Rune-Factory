@@ -195,7 +195,12 @@ public class FormulaPanel : GamePanel<IReferenceData>
             frontButton.gameObject.SetActive(true);
         }
     }
-    async void SelectFormulaType(FormulaType formulaType, int index, bool select)
+    void SelectFormulaType(FormulaType formulaType, int index, bool select)
+    {
+        AsyncTaskRunner.Run(() => SelectFormulaTypeAsync(formulaType, index, select), nameof(SelectFormulaType));
+    }
+
+    async System.Threading.Tasks.Task SelectFormulaTypeAsync(FormulaType formulaType, int index, bool select)
     {
         if (select)
         {

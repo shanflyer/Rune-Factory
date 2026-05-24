@@ -146,7 +146,12 @@ public class SetPanel : GamePanel<IReferenceData>
 
         cameraSlider.SetValueWithoutNotify(GameVolumeManager.instance.DepthFieldValue);
     } 
-    private async void SaveSet()
+    private void SaveSet()
+    {
+        AsyncTaskRunner.Run(SaveSetAsync, nameof(SaveSet));
+    }
+
+    private async System.Threading.Tasks.Task SaveSetAsync()
     {
         Close();
        await UIManager.instance.ShowGamePanel<SavePanel, UserGameSaveDataList>(GameDataSaveManager.instance.UserGameSaveDataList);

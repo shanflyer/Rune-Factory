@@ -89,13 +89,23 @@ public class ZeroPanel : GamePanel<IReferenceData>
         }
     }
 
-    private async void LoadDataPanel()
+    private void LoadDataPanel()
+    {
+        AsyncTaskRunner.Run(LoadDataPanelAsync, nameof(LoadDataPanel));
+    }
+
+    private async System.Threading.Tasks.Task LoadDataPanelAsync()
     {
         Close();
         await UIManager.instance.ShowGamePanel<SelectLoadPanel, UserGameSaveDataList>(GameDataSaveManager.instance.UserGameSaveDataList);
     }
 
-    private async void StartGame()
+    private void StartGame()
+    {
+        AsyncTaskRunner.Run(StartGameAsync, nameof(StartGame));
+    }
+
+    private async System.Threading.Tasks.Task StartGameAsync()
     {
         Close();
         PlayFilm playFilm = new PlayFilm

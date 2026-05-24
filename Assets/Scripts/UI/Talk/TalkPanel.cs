@@ -76,7 +76,12 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
         base.Close();
     }
 
-    private async void NextAction()
+    private void NextAction()
+    {
+        AsyncTaskRunner.Run(NextActionAsync, nameof(NextAction));
+    }
+
+    private async System.Threading.Tasks.Task NextActionAsync()
     {
        // Debug.Log("Talk:NextAction!!!");
         nextButton.interactable = false;
@@ -90,7 +95,12 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
         nextButton.interactable = true;
     }
 
-    private async void SelectNPCFunctionData(NPCFunctionData NPCFunctionData, int index, bool selected = true)
+    private void SelectNPCFunctionData(NPCFunctionData NPCFunctionData, int index, bool selected = true)
+    {
+        AsyncTaskRunner.Run(() => SelectNPCFunctionDataAsync(NPCFunctionData, index, selected), nameof(SelectNPCFunctionData));
+    }
+
+    private async System.Threading.Tasks.Task SelectNPCFunctionDataAsync(NPCFunctionData NPCFunctionData, int index, bool selected = true)
     {
         switch (NPCFunctionData.closeTalk)
         {

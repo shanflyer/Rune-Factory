@@ -98,7 +98,12 @@ public class WorldPanel : GamePanel<MyInt>
         Close();
     }
 
-    private async void SelectFightChapter(UIFightChapterData uIFightChapterData, int index, bool selected)
+    private void SelectFightChapter(UIFightChapterData uIFightChapterData, int index, bool selected)
+    {
+        AsyncTaskRunner.Run(() => SelectFightChapterAsync(uIFightChapterData, index, selected), nameof(SelectFightChapter));
+    }
+
+    private async System.Threading.Tasks.Task SelectFightChapterAsync(UIFightChapterData uIFightChapterData, int index, bool selected)
     {
         if (selected)
         {
@@ -138,7 +143,12 @@ public class WorldPanel : GamePanel<MyInt>
         }
     }
 
-    private async void RefreshUI(Season selectSeason)
+    private void RefreshUI(Season selectSeason)
+    {
+        AsyncTaskRunner.Run(() => RefreshUIAsync(selectSeason), nameof(RefreshUI));
+    }
+
+    private async System.Threading.Tasks.Task RefreshUIAsync(Season selectSeason)
     {
         var fightMapDatas = await GameDataManager.instance.GetAllAsyncData<FightMapData>();
 

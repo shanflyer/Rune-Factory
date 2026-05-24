@@ -192,7 +192,12 @@ public class FishPanel : GamePanel<IReferenceData>
     }
 
     int selectFishDataId;
-    async void SelectFishReference(FishReferenceData fishReferenceData, int index, bool selected)
+    void SelectFishReference(FishReferenceData fishReferenceData, int index, bool selected)
+    {
+        AsyncTaskRunner.Run(() => SelectFishReferenceAsync(fishReferenceData, index, selected), nameof(SelectFishReference));
+    }
+
+    async System.Threading.Tasks.Task SelectFishReferenceAsync(FishReferenceData fishReferenceData, int index, bool selected)
     {
         if (selected)
         {

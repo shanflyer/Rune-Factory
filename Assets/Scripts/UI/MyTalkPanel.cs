@@ -66,7 +66,12 @@ public class MyTalkPanel : GamePanel<IReferenceData>
         base.OnEnable();
         GameActionManager.instance.AddListener<PayEndAction>(PayEndAction);
     }
-    async void ShareAction()
+    void ShareAction()
+    {
+        AsyncTaskRunner.Run(ShareActionAsync, nameof(ShareAction));
+    }
+
+    async System.Threading.Tasks.Task ShareActionAsync()
     {
         ShareSheet shareSheet = ShareSheet.CreateInstance();
         shareSheet.AddText(LanguageManage.SwitchStr("这是一个有趣的游戏，分享给大家"));

@@ -252,7 +252,12 @@ public class ManufacturePanel : GamePanel<Manufature>
 
     private int _produceCount = 1;
 
-    private async void CreatItem()
+    private void CreatItem()
+    {
+        AsyncTaskRunner.Run(CreatItemAsync, nameof(CreatItem));
+    }
+
+    private async System.Threading.Tasks.Task CreatItemAsync()
     {
         if (manufature.waitTime > 0)
         {
@@ -421,7 +426,12 @@ public class ManufacturePanel : GamePanel<Manufature>
         
     }
 
-    private async void RefreshFormulaSelect()
+    private void RefreshFormulaSelect()
+    {
+        AsyncTaskRunner.Run(RefreshFormulaSelectAsync, nameof(RefreshFormulaSelect));
+    }
+
+    private async System.Threading.Tasks.Task RefreshFormulaSelectAsync()
     {
         List<OptionData> formulaOptionDatas = new List<OptionData>();
         if (manufactureData.hideNull)
@@ -483,7 +493,12 @@ public class ManufacturePanel : GamePanel<Manufature>
         SelectFormula(0);
     }
 
-    private async void ClearFormulaItemBoxReferences(bool clearOutBox = true)
+    private void ClearFormulaItemBoxReferences(bool clearOutBox = true)
+    {
+        AsyncTaskRunner.Run(() => ClearFormulaItemBoxReferencesAsync(clearOutBox), nameof(ClearFormulaItemBoxReferences));
+    }
+
+    private async System.Threading.Tasks.Task ClearFormulaItemBoxReferencesAsync(bool clearOutBox = true)
     {
         Item defaultItem = default(Item);
         defaultItem.instanceId = -1;
@@ -498,7 +513,12 @@ public class ManufacturePanel : GamePanel<Manufature>
         }
     }
 
-    private async void RefreshRPCostAndOut()
+    private void RefreshRPCostAndOut()
+    {
+        AsyncTaskRunner.Run(RefreshRPCostAndOutAsync, nameof(RefreshRPCostAndOut));
+    }
+
+    private async System.Threading.Tasks.Task RefreshRPCostAndOutAsync()
     {
         matchFormula = CheckFormula();
         formulaCost = 0;
@@ -659,7 +679,12 @@ public class ManufacturePanel : GamePanel<Manufature>
         }
     }
 
-    private async void DisplayFormula()
+    private void DisplayFormula()
+    {
+        AsyncTaskRunner.Run(DisplayFormulaAsync, nameof(DisplayFormula));
+    }
+
+    private async System.Threading.Tasks.Task DisplayFormulaAsync()
     {
         ClearFormulaItemBoxReferences();
         produceCount = 1;
@@ -693,7 +718,12 @@ public class ManufacturePanel : GamePanel<Manufature>
     }
 
     //自动选择材料
-    private async void AutoSelectMaterials()
+    private void AutoSelectMaterials()
+    {
+        AsyncTaskRunner.Run(AutoSelectMaterialsAsync, nameof(AutoSelectMaterials));
+    }
+
+    private async System.Threading.Tasks.Task AutoSelectMaterialsAsync()
     {
         if (selectFormula != null)
         {
@@ -882,7 +912,12 @@ public class ManufacturePanel : GamePanel<Manufature>
         }
     }
 
-    private async void CreatProduct()
+    private void CreatProduct()
+    {
+        AsyncTaskRunner.Run(CreatProductAsync, nameof(CreatProduct));
+    }
+
+    private async System.Threading.Tasks.Task CreatProductAsync()
     {
         manufature.waitTime = 0;
         SetManufature setManufature = new SetManufature
@@ -1010,7 +1045,12 @@ public class ManufacturePanel : GamePanel<Manufature>
     private HashSet<FormulaType> nowSelectFormulaTypes = new HashSet<FormulaType>();
     private ItemBoxReference SelectItemBoxRefrence;
 
-    private async void GetOutProduct()
+    private void GetOutProduct()
+    {
+        AsyncTaskRunner.Run(GetOutProductAsync, nameof(GetOutProduct));
+    }
+
+    private async System.Threading.Tasks.Task GetOutProductAsync()
     {
         var allSet = PackageManager.instance.CheckPackageTryItemIn(
             CharacterManager.instance.controllerCharacter.characterPackage, manufature.product.x, manufature.product.y);
@@ -1061,7 +1101,12 @@ public class ManufacturePanel : GamePanel<Manufature>
     }
 
 
-    async void SetFormulaItem(Item item, int index, bool select)
+    void SetFormulaItem(Item item, int index, bool select)
+    {
+        AsyncTaskRunner.Run(() => SetFormulaItemAsync(item, index, select), nameof(SetFormulaItem));
+    }
+
+    async System.Threading.Tasks.Task SetFormulaItemAsync(Item item, int index, bool select)
     {
         item.count = 0;
         await SelectItemBoxRefrence.InitData(item, null, FormulaItemBoxGroup);
@@ -1073,7 +1118,12 @@ public class ManufacturePanel : GamePanel<Manufature>
         DisplayItem(SelectItemBoxRefrence, true);
         RefreshRPCostAndOut();
     }
-    async void ClearFormulaItem()
+    void ClearFormulaItem()
+    {
+        AsyncTaskRunner.Run(ClearFormulaItemAsync, nameof(ClearFormulaItem));
+    }
+
+    async System.Threading.Tasks.Task ClearFormulaItemAsync()
     {
         selectActionButtonName.SetSWText(LanguageManage.SwitchStr("放入"));
         selectActionButton.onClick.RemoveAllListeners();
@@ -1102,7 +1152,12 @@ public class ManufacturePanel : GamePanel<Manufature>
         moneyValue.enabled = false;
         ItemIcon.enabled = false;
     }
-    private async void DisplayItem(ItemBoxReference itemBoxReference, bool selected = true)
+    private void DisplayItem(ItemBoxReference itemBoxReference, bool selected = true)
+    {
+        AsyncTaskRunner.Run(() => DisplayItemAsync(itemBoxReference, selected), nameof(DisplayItem));
+    }
+
+    private async System.Threading.Tasks.Task DisplayItemAsync(ItemBoxReference itemBoxReference, bool selected = true)
     {
         if (selected)
         {

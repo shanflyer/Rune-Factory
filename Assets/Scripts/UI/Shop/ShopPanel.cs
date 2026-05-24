@@ -131,7 +131,12 @@ public class ShopPanel : GamePanel<ShopList>
         buyCountValue.SetTextWithoutNotify(buyCount.ToString());
     }
 
-    private async void BuyAction()
+    private void BuyAction()
+    {
+        AsyncTaskRunner.Run(BuyActionAsync, nameof(BuyAction));
+    }
+
+    private async System.Threading.Tasks.Task BuyActionAsync()
     {
         switch (selectShopItemData.type)
         {
@@ -149,7 +154,12 @@ public class ShopPanel : GamePanel<ShopList>
         }
     }
 
-    private async void BuyAnimal()
+    private void BuyAnimal()
+    {
+        AsyncTaskRunner.Run(BuyAnimalAsync, nameof(BuyAnimal));
+    }
+
+    private async System.Threading.Tasks.Task BuyAnimalAsync()
     {
         if (TeamManager.instance.playerTeam.TeamCharacters.Count > 4)
         {
@@ -209,7 +219,12 @@ public class ShopPanel : GamePanel<ShopList>
         }
     }
 
-    private async void SeletShopItem(ShopItemData shopItemData, int index, bool selected = true)
+    private void SeletShopItem(ShopItemData shopItemData, int index, bool selected = true)
+    {
+        AsyncTaskRunner.Run(() => SeletShopItemAsync(shopItemData, index, selected), nameof(SeletShopItem));
+    }
+
+    private async System.Threading.Tasks.Task SeletShopItemAsync(ShopItemData shopItemData, int index, bool selected = true)
     {
         selectShopItemData = shopItemData;
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(shopItemData.item);

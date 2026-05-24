@@ -62,7 +62,12 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
         if (!SingletonType.Cleared)
             GameActionManager.instance.RemoveListener<RefreshItemValue>(RefreshItemValue);
     }
-    async void RefreshItemValue(RefreshItemValue refreshItemValue)
+    void RefreshItemValue(RefreshItemValue refreshItemValue)
+    {
+        AsyncTaskRunner.Run(() => RefreshItemValueAsync(refreshItemValue), nameof(RefreshItemValue));
+    }
+
+    async System.Threading.Tasks.Task RefreshItemValueAsync(RefreshItemValue refreshItemValue)
     {
         if (refreshItemValue.itemId == data.Item.instanceId)
         {

@@ -129,7 +129,12 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
         UIManager.instance.UnLoadPanel(types);
     }
 
-    private async void CopyDataAsync()
+    private void CopyDataAsync()
+    {
+        AsyncTaskRunner.Run(CopyDataTaskAsync, nameof(CopyDataAsync));
+    }
+
+    private async System.Threading.Tasks.Task CopyDataTaskAsync()
     {
         if (selectGameSaveData != null && !string.IsNullOrEmpty(selectGameSaveData.saveTime))
         {
@@ -143,7 +148,12 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
         }
     }
 
-    private async void DeleteData()
+    private void DeleteData()
+    {
+        AsyncTaskRunner.Run(DeleteDataAsync, nameof(DeleteData));
+    }
+
+    private async System.Threading.Tasks.Task DeleteDataAsync()
     {
         GameDataSaveManager.instance.DeleteSaveData(selectGameSaveData);
         await SaveReference.InitData(data.nowSaveData, SelectAction, toggleGroup);
