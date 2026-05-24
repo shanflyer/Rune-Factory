@@ -7,11 +7,11 @@ public class ShowItemManager : Singleton<ShowItemManager>
     public override void Init()
     {
         base.Init();
-        GameActionManager.instance.AddListener<ShowItemAction>(ShowItemAction);
+        GameActionManager.instance.AddAsyncListener<ShowItemAction>(ShowItemActionAsync, nameof(ShowItemAction));
         prefab = ExtensionsResources.LoadResource<ShowItem>("Prefabs/Other/ShowItem");
     }
 
-    public async void ShowItemAction(ShowItemAction ShowItemAction)
+    private async System.Threading.Tasks.Task ShowItemActionAsync(ShowItemAction ShowItemAction)
     {
         var itemData = await GameDataManager.instance.GetAsyncData<ItemData>(ShowItemAction.itemId);
         var runtimeObj = await GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.OTHER.ToString(),
@@ -20,7 +20,12 @@ public class ShowItemManager : Singleton<ShowItemManager>
             runtimeObj);
     }
 
-    public async void Show(Sprite sprite, int mapInstance, Vector3 position)
+    public void Show(Sprite sprite, int mapInstance, Vector3 position)
+    {
+        AsyncTaskRunner.Run(() => ShowAsync(sprite, mapInstance, position), nameof(Show));
+    }
+
+    public async System.Threading.Tasks.Task ShowAsync(Sprite sprite, int mapInstance, Vector3 position)
     {
         var runtimeObj = await GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.OTHER.ToString(),
             "ShowItem", prefab, 0);

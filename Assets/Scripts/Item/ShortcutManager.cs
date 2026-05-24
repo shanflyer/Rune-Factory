@@ -26,9 +26,9 @@ public class ShortcutManager : Singleton<ShortcutManager>
     {
         base.Init();
         shortcutPackages.Clear();
-        GameActionManager.instance.AddListener<RemoveShortcutItem>(RemoveShortcutItem);
-        GameActionManager.instance.AddListener<SetShortcutItem>(SetShortcutItem);
-        GameActionManager.instance.AddListener<RefreshShortcut>(RefreshShortcutAsync);
+        GameActionManager.instance.AddAsyncListener<RemoveShortcutItem>(RemoveShortcutItemAsync, nameof(RemoveShortcutItem));
+        GameActionManager.instance.AddAsyncListener<SetShortcutItem>(SetShortcutItemAsync, nameof(SetShortcutItem));
+        GameActionManager.instance.AddAsyncListener<RefreshShortcut>(RefreshShortcutAsync, nameof(RefreshShortcut));
         GameActionManager.instance.AddListener<SortShortcutItem>(SortShortcutItem);
         GameActionManager.instance.AddListener<RefreshItemValue>(RefreshItemValue);
     }
@@ -50,7 +50,7 @@ public class ShortcutManager : Singleton<ShortcutManager>
         };
         GameActionManager.instance.QueueAction(refreshShortcut);
     }
-    async void RefreshShortcutAsync(RefreshShortcut refreshShortcut)
+    async System.Threading.Tasks.Task RefreshShortcutAsync(RefreshShortcut refreshShortcut)
     {
         if (ExploreManager.instance.isExplore)
         {
@@ -117,7 +117,7 @@ public class ShortcutManager : Singleton<ShortcutManager>
         shortcutPackage.SetItemValue(refreshItemValue.itemId, refreshItemValue.itemValue);
 
     }
-    async void RemoveShortcutItem(RemoveShortcutItem removeShortcutItem)
+    async System.Threading.Tasks.Task RemoveShortcutItemAsync(RemoveShortcutItem removeShortcutItem)
     {
         var shortcutPackage = GetShortcutPackage(removeShortcutItem.characterId);
 
@@ -125,7 +125,7 @@ public class ShortcutManager : Singleton<ShortcutManager>
         //shortcutPackages.SetData(shortcutPackage);
         await RefreshDisplayShortcutPackageAsync(shortcutPackage);
     }
-    async void SetShortcutItem(SetShortcutItem setShortcutItem)
+    async System.Threading.Tasks.Task SetShortcutItemAsync(SetShortcutItem setShortcutItem)
     {
         var shortcutPackage = GetShortcutPackage(setShortcutItem.characterId);
         if (shortcutPackage.SetItem(setShortcutItem.Item))
@@ -218,7 +218,12 @@ public class ShortcutPackage : IReferenceData, INativeData
         }
         return result;
     }
-    public async void SetItemValue(int instanceId,int itemValue)
+    public void SetItemValue(int instanceId,int itemValue)
+    {
+        AsyncTaskRunner.Run(() => SetItemValueAsync(instanceId, itemValue), nameof(SetItemValue));
+    }
+
+    public async System.Threading.Tasks.Task SetItemValueAsync(int instanceId,int itemValue)
     {
         for(int i = 0; i < items.Length; i++)
         {

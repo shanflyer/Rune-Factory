@@ -41,7 +41,7 @@ public class ManufactureManager : Singleton<ManufactureManager>
     public override void Init()
     {
         base.Init();
-        GameActionManager.instance.AddListener<CreatManufature>(CreatManufature);
+        GameActionManager.instance.AddAsyncListener<CreatManufature>(CreatManufatureAsync, nameof(CreatManufature));
         GameActionManager.instance.AddListener<ClearManufature>(ClearManufature);
         GameActionManager.instance.AddListener<OpenFormula>(OpenFormula);
         GameActionManager.instance.AddListener<SetManufature>(SetManufature);
@@ -163,7 +163,7 @@ public class ManufactureManager : Singleton<ManufactureManager>
         Manufactures.Add(manufatureSaveData.instanceId, manufature);
     }
 
-    private async void CreatManufature(CreatManufature creatManufature)
+    private async System.Threading.Tasks.Task CreatManufatureAsync(CreatManufature creatManufature)
     {
         var manufatureData = await GameDataManager.instance.GetAsyncData<ManufactureData>(creatManufature.manufatureId);
         if (!Manufactures.ContainsKey(creatManufature.instanceId))
