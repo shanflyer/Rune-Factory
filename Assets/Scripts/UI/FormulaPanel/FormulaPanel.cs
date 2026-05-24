@@ -200,7 +200,7 @@ public class FormulaPanel : GamePanel<IReferenceData>
         AsyncTaskRunner.Run(() => SelectFormulaTypeAsync(formulaType, index, select), nameof(SelectFormulaType));
     }
 
-    async System.Threading.Tasks.Task SelectFormulaTypeAsync(FormulaType formulaType, int index, bool select)
+    System.Threading.Tasks.Task SelectFormulaTypeAsync(FormulaType formulaType, int index, bool select)
     {
         if (select)
         {
@@ -223,6 +223,9 @@ public class FormulaPanel : GamePanel<IReferenceData>
             DisplayFormulas();
             leftFormulaList.SelectDefault();
         }
+
+        // 配方分类切换当前是同步刷新，保留 Task 返回给统一异常捕获入口。
+        return System.Threading.Tasks.Task.CompletedTask;
     }
     public override async Task InitData(string dataKey)
     {

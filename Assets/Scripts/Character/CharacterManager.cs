@@ -852,17 +852,20 @@ public class CharacterManager : Singleton<CharacterManager>
             }
     }
 
-    private async System.Threading.Tasks.Task SetCharacterCoordinateAsync(SetCharacterCoordinate setCharacterCoordinate)
+    private System.Threading.Tasks.Task SetCharacterCoordinateAsync(SetCharacterCoordinate setCharacterCoordinate)
     {
         Character character = GetCharacter(setCharacterCoordinate.characterId);
-       
+
         if (character != null)
         {
             character.RemoveMove();
             character.SetCoordinate(setCharacterCoordinate.coordinate,
-                fiexedDisplay: setCharacterCoordinate.fiexedDisplay); 
+                fiexedDisplay: setCharacterCoordinate.fiexedDisplay);
            //await RefreshNpcRuntimeObj(character);
         }
+
+        // 事件监听仍使用 Task 签名，当前同步处理完成后直接返回。
+        return System.Threading.Tasks.Task.CompletedTask;
     }
 
     private void SetCharacterValue(SetCharacterProperty setCharacterProperty)

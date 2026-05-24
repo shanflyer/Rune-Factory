@@ -71,7 +71,7 @@ public class UIObjReference<T> : BaseReference
         }
     }
 
-    public virtual async Task InitData(T t, SelectAction<T> SelectAction = null, ToggleGroup toggleGroup = null)
+    public virtual Task InitData(T t, SelectAction<T> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         if (guideSelectable != null)
             guideSelectable.InitListSelectable(transform.GetSiblingIndex());
@@ -80,6 +80,9 @@ public class UIObjReference<T> : BaseReference
         {
             this.SelectAction = SelectAction;
         }
+
+        // 基础引用初始化是同步赋值，派生类仍可覆盖为异步加载。
+        return Task.CompletedTask;
     }
 
     public virtual void InitChildObjData()

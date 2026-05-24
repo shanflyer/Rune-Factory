@@ -26,6 +26,10 @@ public class BaseReference : MonoBehaviour
     }
     public virtual void Show(int layer = -1) { show = true; }
     public virtual void Close() { show = false; } 
-    public virtual async Task InitData(string dataKey) { } 
-   
+    public virtual Task InitData(string dataKey)
+    {
+        // 默认面板没有异步数据，派生类可覆盖为真正的加载流程。
+        return Task.CompletedTask;
+    }
+
 }

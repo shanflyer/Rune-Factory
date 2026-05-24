@@ -1235,7 +1235,7 @@ public class RuntimeMapItem : INativeData
         AsyncTaskRunner.Run(RefreshItemOperateAsync, nameof(RefreshItemOperate));
     }
 
-    public async System.Threading.Tasks.Task RefreshItemOperateAsync()
+    public System.Threading.Tasks.Task RefreshItemOperateAsync()
     {
         //物体交互
         int operateDataLength =operateDatas.Count;
@@ -1312,6 +1312,9 @@ public class RuntimeMapItem : INativeData
 
             UIManager.instance.ShowGamePanelImmediately<OperateButtonPanel, OperateDataList>(operateDataList);
         }
+
+        // 交互刷新目前是同步计算，保留 Task 返回值给统一异步入口。
+        return System.Threading.Tasks.Task.CompletedTask;
     }
  
     public void ResetOperateData(List<int> newOperates)

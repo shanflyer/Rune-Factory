@@ -431,7 +431,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         AsyncTaskRunner.Run(RefreshFormulaSelectAsync, nameof(RefreshFormulaSelect));
     }
 
-    private async System.Threading.Tasks.Task RefreshFormulaSelectAsync()
+    private System.Threading.Tasks.Task RefreshFormulaSelectAsync()
     {
         List<OptionData> formulaOptionDatas = new List<OptionData>();
         if (manufactureData.hideNull)
@@ -491,6 +491,9 @@ public class ManufacturePanel : GamePanel<Manufature>
 
         FormulaDropdown.options = formulaOptionDatas;
         SelectFormula(0);
+
+        // 配方选项刷新为同步装配，保留 Task 签名给按钮回调统一调度。
+        return System.Threading.Tasks.Task.CompletedTask;
     }
 
     private void ClearFormulaItemBoxReferences(bool clearOutBox = true)

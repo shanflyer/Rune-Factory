@@ -76,6 +76,8 @@ public class ShowDebugInPhone : MonoBehaviour
     {
 #if UNITY_EDITOR
         Application.logMessageReceived += HangleLog;
+        // 编辑器下没有远端配置等待项，显式 await 已完成任务以保持异步签名。
+        await System.Threading.Tasks.Task.CompletedTask;
 #else
         if (await CloudRemoteConfig.instance.GetConfigBool("LogShow"))
         {

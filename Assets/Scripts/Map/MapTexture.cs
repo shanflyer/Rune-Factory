@@ -23,7 +23,7 @@ public class MapTexture:MonoBehaviour
         AsyncTaskRunner.Run(CreateTextureAsync, nameof(CreateTexture));
     }
 
-    private async Task CreateTextureAsync()
+    private Task CreateTextureAsync()
     {
         Vector4[] offsets = new Vector4[tilemaps.Count];
 
@@ -182,6 +182,8 @@ public class MapTexture:MonoBehaviour
         Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(isSingleMap ? $"{path}/{tilemaps[0].transform.parent.name}-{tilemaps[0].name}.png" : $"{path}/{tilemaps[0].transform.parent.name}.png");
         childRender.sprite = sprite;
 
+        // 编辑器贴图生成是同步流程，显式完成 Task 以兼容统一调度器。
+        return Task.CompletedTask;
     }
     public void Release()
     {

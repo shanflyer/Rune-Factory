@@ -136,7 +136,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
         UIManager.instance.CloseGamePanel<OperateButtonPanel>();
     }
 
-    private async System.Threading.Tasks.Task ShowMapObjTipsAsync(ShowMapObjTips ShowMapObjTips)
+    private System.Threading.Tasks.Task ShowMapObjTipsAsync(ShowMapObjTips ShowMapObjTips)
     {
         if (ShowMapObjTips.id != 0)
         {
@@ -150,7 +150,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                         if (NPC.startSleepHour >= 0)
                         {
                             runtimMapItem.RefreshItemOperate();
-                            return;
+                            return System.Threading.Tasks.Task.CompletedTask;
                         }
 
                     RefreshOperateCharacter refreshOperateCharacter = new RefreshOperateCharacter
@@ -163,8 +163,12 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                 }
 
                 runtimMapItem.RefreshItemOperate();
+                return System.Threading.Tasks.Task.CompletedTask;
             }
         }
+
+        // 没有可显示对象时保持异步监听契约，直接结束。
+        return System.Threading.Tasks.Task.CompletedTask;
     }
 
     public void OperateAction(OperateDataReferenceData operateDataReference, List<EventReferenceData> _eventReferenceDatas)

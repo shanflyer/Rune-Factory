@@ -19,7 +19,7 @@ public class CheckShortcutItem : Action
         AsyncTaskRunner.Run(OnStartAsync, nameof(CheckShortcutItem));
     }
 
-    private async System.Threading.Tasks.Task OnStartAsync()
+    private System.Threading.Tasks.Task OnStartAsync()
     {
         character = CharacterManager.instance.controllerCharacter;
         
@@ -32,6 +32,9 @@ public class CheckShortcutItem : Action
                  
             }
         }
+
+        // 保留 Task 签名给异步调度器使用，同步路径显式完成，避免 Unity CS1998 警告。
+        return System.Threading.Tasks.Task.CompletedTask;
     }
 
     public override TaskStatus OnUpdate()
