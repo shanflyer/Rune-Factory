@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class GameActionManager : Singleton<GameActionManager>
 {
+    private const int MaxImmediateActionDepth = 64;
+    private const int MaxQueuedActionsPerFrame = 10000;
+
     public override bool NeedUpdate { get => true; }
 
     public delegate void ActionDelegate<T>(T e) where T : GameAction;
@@ -12,6 +16,7 @@ public class GameActionManager : Singleton<GameActionManager>
     private Queue<ActionBus> ActionQueue = new Queue<ActionBus>();
     private Dictionary<Type, Delegate> delegates = new Dictionary<Type, Delegate>();
     private HashSet<Delegate> onceDelegates = new HashSet<Delegate>();
+    private int immediateActionDepth;
 
     public override void Init()
     {
@@ -98,23 +103,52 @@ public class GameActionManager : Singleton<GameActionManager>
                 delegates.Remove(type);
                 return;
             }
-            _d(gameAction);
-
-            foreach (Delegate _delegate in d.GetInvocationList())
+            if (immediateActionDepth >= MaxImmediateActionDepth)
             {
-                if (onceDelegates.Contains(_delegate))
+                Debug.LogError($"GameActionManager trigger depth exceeded: type={type.FullName}, depth={immediateActionDepth}");
+                return;
+            }
+
+            immediateActionDepth++;
+            try
+            {
+                foreach (Delegate _delegate in d.GetInvocationList())
                 {
-                    _d -= _delegate as ActionDelegate<T>;
-                    if (_d == null)
+                    var actionDelegate = _delegate as ActionDelegate<T>;
+                    if (actionDelegate == null)
                     {
-                        delegates.Remove(type);
+                        continue;
                     }
-                    else
+
+                    try
                     {
-                        delegates[type] = _d;
+                        // 单个监听失败不能阻断同一 Action 的其他监听，once 清理也必须继续执行。
+                        actionDelegate(gameAction);
                     }
-                    onceDelegates.Remove(_delegate);
+                    catch (Exception e)
+                    {
+                        Debug.LogError($"GameActionManager listener failed: type={type.FullName}, listener={_delegate.Method.DeclaringType?.FullName}.{_delegate.Method.Name}");
+                        Debug.LogException(e);
+                    }
+
+                    if (onceDelegates.Contains(_delegate))
+                    {
+                        _d -= actionDelegate;
+                        if (_d == null)
+                        {
+                            delegates.Remove(type);
+                        }
+                        else
+                        {
+                            delegates[type] = _d;
+                        }
+                        onceDelegates.Remove(_delegate);
+                    }
                 }
+            }
+            finally
+            {
+                immediateActionDepth--;
             }
         }
     }
@@ -144,14 +178,30 @@ public class GameActionManager : Singleton<GameActionManager>
 
     protected override void Update()
     {
+        int executedCount = 0;
         while (ActionQueue.Count > 0)
-        { 
+        {
             var gameAction = ActionQueue.Dequeue();
             if (gameAction != null)
             {
-                gameAction();
+                try
+                {
+                    gameAction();
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError("GameActionManager queued action failed.");
+                    Debug.LogException(e);
+                }
             }
-            
+
+            executedCount++;
+            if (executedCount >= MaxQueuedActionsPerFrame)
+            {
+                // 防止循环派发在同一帧无限扩张，剩余 Action 留到下一帧继续处理。
+                Debug.LogError($"GameActionManager queued action limit reached: count={executedCount}, remaining={ActionQueue.Count}");
+                break;
+            }
         }
     }
 }
