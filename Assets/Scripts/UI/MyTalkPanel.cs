@@ -28,7 +28,7 @@ public class MyTalkPanel : GamePanel<IReferenceData>
         });
         Share.onClick.AddListener(ShareAction);
 
-        Committer.onClick.AddListener(()=> { AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<CommitterPanel>(), nameof(CommitterPanel)); } );
+        Committer.onClick.AddListener(()=> { RunLifecycleTask(_ => UIManager.instance.ShowGamePanel<CommitterPanel>(), nameof(CommitterPanel)); } );
 
         Help0.onClick.AddListener(() =>
         {
@@ -47,18 +47,22 @@ public class MyTalkPanel : GamePanel<IReferenceData>
         });
         about.onClick.AddListener(() =>
         {
-            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<AboutPanel>(), nameof(AboutPanel));
+            RunLifecycleTask(_ => UIManager.instance.ShowGamePanel<AboutPanel>(), nameof(AboutPanel));
         });
         developer.onClick.AddListener(() =>
         {
-            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<DeveloperPanel>(), nameof(DeveloperPanel));
+            RunLifecycleTask(_ => UIManager.instance.ShowGamePanel<DeveloperPanel>(), nameof(DeveloperPanel));
         });
 
         CloseBtn.onClick.AddListener(Close);
     }
     public override void OnDisable()
     {
-        GameActionManager.instance.RemoveListener<PayEndAction>(PayEndAction);
+        if (!SingletonType.Cleared && GameActionManager.HasInstance)
+        {
+            GameActionManager.instance.RemoveListener<PayEndAction>(PayEndAction);
+        }
+
         base.OnDisable();
     }
     public override void OnEnable()
@@ -68,15 +72,20 @@ public class MyTalkPanel : GamePanel<IReferenceData>
     }
     void ShareAction()
     {
-        AsyncTaskRunner.Run(ShareActionAsync, nameof(ShareAction));
+        RunLifecycleTask(ShareActionAsync, nameof(ShareAction));
     }
 
-    async System.Threading.Tasks.Task ShareActionAsync()
+    async System.Threading.Tasks.Task ShareActionAsync(System.Threading.CancellationToken cancellationToken)
     {
         ShareSheet shareSheet = ShareSheet.CreateInstance();
         shareSheet.AddText(LanguageManage.SwitchStr("这是一个有趣的游戏，分享给大家"));
         shareSheet.AddImage(texture2D);
         string sharedURL =await CloudRemoteConfig.instance.GetConfig("SharedURL");
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         shareSheet.AddURL(URLString.URLWithPath(sharedURL));
         shareSheet.SetCompletionCallback((result, error) => {
             Debug.Log("Share Sheet was closed. Result code: " + result.ResultCode);

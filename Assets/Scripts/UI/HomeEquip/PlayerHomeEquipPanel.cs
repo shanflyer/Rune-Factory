@@ -167,7 +167,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         EquipBoxs = new DisplayList<HomeEquipReference, HomeEquip>(homeEquipReference, EquipParent);
 
         ActionButton.onClick.AddListener(SelectAction);
-        InfoButton.onClick.AddListener(async () =>
+        InfoButton.onClick.AddListener(() =>
         {
             ItemInfo itemInfo = new ItemInfo
             {
@@ -178,9 +178,9 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                     itemType = ItemType.家具,
                 } ,
                 showClose = true,
-                OffsetPos = infoOffsetY, 
+                OffsetPos = infoOffsetY,
             };
-           await UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
+            RunLifecycleTask(_ => UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo), nameof(ItemInfoPanel));
         });
 
         TitleButton.onClick.AddListener(() =>
@@ -274,9 +274,17 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         base.InitReferenceData(v);
         moveHomeEquipItemSet.Clear();
 
-        // 家具列表初始化入口是同步的，列表刷新异常统一记录。
-        AsyncTaskRunner.Run(EquipBoxs.InitListData(v.homeEquips, SelectEquip, EquipSelectGroup), nameof(InitReferenceData));
-        EquipBoxs.ClearSelect();
+        // 家具列表绑定面板生命周期，关闭或重开后旧列表不再清选中状态。
+        RunLifecycleTask(async token =>
+        {
+            await EquipBoxs.InitListData(v.homeEquips, SelectEquip, EquipSelectGroup, cancellationToken: token);
+            if (ShouldStopLifecycleTask(token))
+            {
+                return;
+            }
+
+            EquipBoxs.ClearSelect();
+        }, nameof(InitReferenceData));
         hidePanels.hide = true;
         InfoButton.transform.localScale = ActionButton.transform.localScale = Vector3.zero;
         ItemName.SetSWText("");

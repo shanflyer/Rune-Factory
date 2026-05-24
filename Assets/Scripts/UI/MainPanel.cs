@@ -77,23 +77,23 @@ public class MainPanel : GamePanel<IReferenceData>
         Application.OpenURL(InstagramWeb);
 #endif
         });
-        InfoButton.onClick.AddListener(async () =>
+        InfoButton.onClick.AddListener(() =>
         {
-           await UIManager.instance.ShowGamePanel<BookPanel>();
+            RunLifecycleTask(_ => UIManager.instance.ShowGamePanel<BookPanel>(), nameof(BookPanel));
         });
-        TeamButton.onClick.AddListener(async () =>
+        TeamButton.onClick.AddListener(() =>
         {
-           await UIManager.instance.ShowGamePanel<TeamPanel, CharacterInformationDataList>(TeamManager.instance.GetMyTeamCharacterInfo());
+            RunLifecycleTask(_ => UIManager.instance.ShowGamePanel<TeamPanel, CharacterInformationDataList>(TeamManager.instance.GetMyTeamCharacterInfo()), nameof(TeamPanel));
         });
-        HomeEquipmentButton.onClick.AddListener(async () =>
+        HomeEquipmentButton.onClick.AddListener(() =>
         {
             var homeEquipList= HomeEquipManager.instance.GetHomeEquipList(CharacterManager.instance.controllerCharacter.instanceId);
-          await  UIManager.instance.ShowGamePanel<PlayerHomeEquipPanel,HomeEquipList>(homeEquipList);
+            RunLifecycleTask(_ => UIManager.instance.ShowGamePanel<PlayerHomeEquipPanel,HomeEquipList>(homeEquipList), nameof(PlayerHomeEquipPanel));
         });
         MyTalk.onClick.AddListener(() =>
         {
-            // 主界面按钮回调保持同步，面板加载失败统一记录。
-            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<MyTalkPanel>(), nameof(MyTalkPanel));
+            // 主界面按钮回调绑定面板生命周期，关闭后不再继续打开旧面板。
+            RunLifecycleTask(_ => UIManager.instance.ShowGamePanel<MyTalkPanel>(), nameof(MyTalkPanel));
         });
         Toggle.onValueChanged.AddListener((value)=>
         {

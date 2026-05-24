@@ -91,7 +91,7 @@ public class ZeroPanel : GamePanel<IReferenceData>
 
     private void LoadDataPanel()
     {
-        AsyncTaskRunner.Run(LoadDataPanelAsync, nameof(LoadDataPanel));
+        RunLifecycleTask(_ => LoadDataPanelAsync(), nameof(LoadDataPanel));
     }
 
     private async System.Threading.Tasks.Task LoadDataPanelAsync()
@@ -102,7 +102,7 @@ public class ZeroPanel : GamePanel<IReferenceData>
 
     private void StartGame()
     {
-        AsyncTaskRunner.Run(StartGameAsync, nameof(StartGame));
+        RunLifecycleTask(_ => StartGameAsync(), nameof(StartGame));
     }
 
     private async System.Threading.Tasks.Task StartGameAsync()

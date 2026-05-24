@@ -24,14 +24,19 @@ public class InformationPanel : GamePanel<IReferenceData>
     }
     public void RefreshInformations(List<string> strs,int startIndex)
     {
-        AsyncTaskRunner.Run(() => RefreshInformationsAsync(strs, startIndex), nameof(RefreshInformations));
+        RunLifecycleTask(token => RefreshInformationsAsync(strs, startIndex, token), nameof(RefreshInformations));
     }
 
-    public async System.Threading.Tasks.Task RefreshInformationsAsync(List<string> strs,int startIndex)
+    public async System.Threading.Tasks.Task RefreshInformationsAsync(List<string> strs,int startIndex, System.Threading.CancellationToken cancellationToken)
     {
         int index = 0;
         for(int i = startIndex; i < strs.Count; i++)
         {
+            if (ShouldStopLifecycleTask(cancellationToken))
+            {
+                return;
+            }
+
             if (infoParent.childCount > index)
             {
                 Transform child=infoParent.GetChild(index);
@@ -42,6 +47,11 @@ public class InformationPanel : GamePanel<IReferenceData>
             {
                 var async = InstantiateAsync(info, infoParent);
                 await async;
+                if (ShouldStopLifecycleTask(cancellationToken))
+                {
+                    return;
+                }
+
                 TextMeshProUGUI infoObj = async.Result[0];
                 infoObj.SetSWText(strs[i]);
                 infoObj.transform.localScale = Vector3.one;
@@ -52,6 +62,11 @@ public class InformationPanel : GamePanel<IReferenceData>
         {
             for(int i=0;i<startIndex;i++)
             {
+                if (ShouldStopLifecycleTask(cancellationToken))
+                {
+                    return;
+                }
+
                 if (infoParent.childCount > index)
                 {
                     Transform child = infoParent.GetChild(index);
@@ -62,6 +77,11 @@ public class InformationPanel : GamePanel<IReferenceData>
                 {
                     var async = InstantiateAsync(info, infoParent);
                     await async;
+                    if (ShouldStopLifecycleTask(cancellationToken))
+                    {
+                        return;
+                    }
+
                     TextMeshProUGUI infoObj = async.Result[0];
                     infoObj.SetSWText(strs[i]);
                     infoObj.transform.localScale = Vector3.one;

@@ -113,8 +113,14 @@ public class PlantPanel : GamePanel<IReferenceData>
     {
         await base.InitData(dataKey);
 
-        if (allPlantData == null || allPlantData.Count > 0)
+        if (allPlantData == null || allPlantData.Count == 0)
+        {
             allPlantData = await GameDataManager.instance.GetAllAsyncData<PlantData>();
+            if (ShouldStopLifecycleTask(LifecycleCancellationToken))
+            {
+                return;
+            }
+        }
 
         nextButton.transform.localScale = Vector3.one;
         frontButton.transform.localScale = Vector3.one;
@@ -147,6 +153,11 @@ public class PlantPanel : GamePanel<IReferenceData>
 
     private void DisplayPlants()
     {
+        if (LifecycleCanceled)
+        {
+            return;
+        }
+
         leftParent.localScale = Vector3.one;
         rightParent.localScale = Vector3.one;
         nextButton.transform.localScale = Vector3.one;
@@ -161,9 +172,6 @@ public class PlantPanel : GamePanel<IReferenceData>
                 leftPlantDatas.Add(allPlantData[index]);
             }
         }
-        // 图鉴翻页是同步/延迟回调，列表刷新异常统一记录。
-        AsyncTaskRunner.Run(leftList.InitListData(leftPlantDatas, SelectPlantReference, toggleGroup), nameof(DisplayPlants));
-
         List<PlantData> rightPlantDatas = new List<PlantData>();
         for (int i = 0; i < 8; i++)
         {
@@ -173,17 +181,32 @@ public class PlantPanel : GamePanel<IReferenceData>
                 rightPlantDatas.Add(allPlantData[index]);
             }
         }
-        AsyncTaskRunner.Run(rightList.InitListData(rightPlantDatas, SelectPlantReference, toggleGroup), nameof(DisplayPlants));
-        leftList.SelectDefault();
+        // 作物图鉴翻页刷新绑定面板生命周期，关闭后不再覆盖当前 UI 状态。
+        RunLifecycleTask(async token =>
+        {
+            await leftList.InitListData(leftPlantDatas, SelectPlantReference, toggleGroup, cancellationToken: token);
+            if (ShouldStopLifecycleTask(token))
+            {
+                return;
+            }
+
+            await rightList.InitListData(rightPlantDatas, SelectPlantReference, toggleGroup, cancellationToken: token);
+            if (ShouldStopLifecycleTask(token))
+            {
+                return;
+            }
+
+            leftList.SelectDefault();
+        }, nameof(DisplayPlants));
     }
      
 
     private void SelectPlantReference(PlantData plantData,int index, bool selected)
     {
-        AsyncTaskRunner.Run(() => SelectPlantReferenceAsync(plantData, index, selected), nameof(SelectPlantReference));
+        RunLifecycleTask(token => SelectPlantReferenceAsync(plantData, index, selected, token), nameof(SelectPlantReference));
     }
 
-    private async System.Threading.Tasks.Task SelectPlantReferenceAsync(PlantData plantData,int index, bool selected)
+    private async System.Threading.Tasks.Task SelectPlantReferenceAsync(PlantData plantData,int index, bool selected, System.Threading.CancellationToken cancellationToken)
     {
         if (selected)
         {
@@ -191,6 +214,11 @@ public class PlantPanel : GamePanel<IReferenceData>
             {
                 PlantName.SetSWText(plantData.plantName);
                 ItemData seedData = await GameDataManager.instance.GetAsyncData<ItemData>(plantData.seed);
+                if (ShouldStopLifecycleTask(cancellationToken))
+                {
+                    return;
+                }
+
                 desc.SetSWText(seedData.GetInfo());
                 otherDesc.SetSWText(seedData.GetProperty().Replace("\n", " "));
                 string _seasonStr = "";
@@ -208,6 +236,11 @@ public class PlantPanel : GamePanel<IReferenceData>
                 sellValue.text = plantData.openLevel.ToString();
 
                 ItemData product = await GameDataManager.instance.GetAsyncData<ItemData>(plantData.fruit);
+                if (ShouldStopLifecycleTask(cancellationToken))
+                {
+                    return;
+                }
+
                 price.text = product.sellPrice.ToString();
             }
             else

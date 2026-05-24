@@ -25,8 +25,8 @@ public class OtherFuntionPanel : GamePanel<FunctionButtonList>
     public override void InitReferenceData(FunctionButtonList v)
     {
         base.InitReferenceData(v);
-        // 功能按钮面板初始化入口是同步的，列表刷新异常统一记录。
-        AsyncTaskRunner.Run(buttonList.InitListData(v.buttons), nameof(InitReferenceData));
+        // 功能按钮列表绑定面板生命周期，关闭后旧按钮不再写回。
+        RunLifecycleTask(token => buttonList.InitListData(v.buttons, cancellationToken: token), nameof(InitReferenceData));
         HidePanel hidePanel = new HidePanel
         {
             hide = true,

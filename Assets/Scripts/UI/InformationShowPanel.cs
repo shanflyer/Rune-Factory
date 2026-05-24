@@ -20,10 +20,10 @@ public class InformationShowPanel : GamePanel<IReferenceData>
     protected override void Awake()
     {
         base.Awake();
-        display.onClick.AddListener(async () =>
+        display.onClick.AddListener(() =>
         {
             //AudioController.instance.PlayAudio(SE.click);
-           await UIManager.instance.ShowGamePanel<InformationPanel>(layer:20);
+            RunLifecycleTask(_ => UIManager.instance.ShowGamePanel<InformationPanel>(layer:20), nameof(InformationPanel));
         });
     }
     public void SetInfo(string str)

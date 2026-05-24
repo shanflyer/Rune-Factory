@@ -17,11 +17,9 @@ public class SelectStartPanel : GamePanel<IReferenceData>
     protected override void Awake()
     {
         base.Awake();
-        NewButton.onClick.AddListener(async () =>
+        NewButton.onClick.AddListener(() =>
         {
-            Close();
-            UIManager.instance.CloseGamePanel<ZeroPanel>();
-           await UIManager.instance.ShowGamePanel<SelectCharacterPanel>();
+            RunLifecycleTask(_ => NewGameAsync(), nameof(NewButton));
         });
         LoadButton.onClick.AddListener(() =>
         {
@@ -29,5 +27,12 @@ public class SelectStartPanel : GamePanel<IReferenceData>
             UIManager.instance.CloseGamePanel<ZeroPanel>();
             
         });
+    }
+
+    private async System.Threading.Tasks.Task NewGameAsync()
+    {
+        Close();
+        UIManager.instance.CloseGamePanel<ZeroPanel>();
+        await UIManager.instance.ShowGamePanel<SelectCharacterPanel>();
     }
 }

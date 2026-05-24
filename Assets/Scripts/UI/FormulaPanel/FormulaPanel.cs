@@ -9,9 +9,9 @@ public class FormulaPanel : GamePanel<IReferenceData>
     [SerializeField]
     Button closeBtn;
     [SerializeField]
-    Transform tagParent; 
+    Transform tagParent;
     [SerializeField]
-    FormulaReference formulaReference; 
+    FormulaReference formulaReference;
     [SerializeField]
     FormulaTagReference formulaTagReference;
     [SerializeField]
@@ -60,7 +60,7 @@ public class FormulaPanel : GamePanel<IReferenceData>
             DelayDisplayFormulas(false);
         });
 
-        
+
     }
     void DelayDisplayFormulas(bool next)
     {
@@ -82,14 +82,19 @@ public class FormulaPanel : GamePanel<IReferenceData>
     }
     void DisplayFormulas()
     {
+        if (LifecycleCanceled)
+        {
+            return;
+        }
+
         leftParent.localScale = Vector3.one;
         rightParent.localScale = Vector3.one;
         nextButton.transform.localScale = Vector3.one;
         frontButton.transform.localScale = Vector3.one;
         BookPaper.gameObject.SetActive(false);
 
-       
-        InitButton(); 
+
+        InitButton();
         List<FormulaReferenceData> leftFormulaReferenceDatas = new List<FormulaReferenceData>();
         for (int i = 0; i < 8; i++)
         {
@@ -99,9 +104,6 @@ public class FormulaPanel : GamePanel<IReferenceData>
                 leftFormulaReferenceDatas.Add(formulaReferenceDatas[index]);
             }
         }
-        // ∑≠“≥À¢–¬¿¥◊‘Õ¨≤Ω UI »Îø⁄£¨¡–±ÌÀ¢–¬“Ï≥£Õ≥“ªº«¬º°£
-        AsyncTaskRunner.Run(leftFormulaList.InitListData(leftFormulaReferenceDatas, SelectFormulaData, toggleGroup), "FormulaPanel.RefreshDisplay");
-
         List<FormulaReferenceData> rightFormulaReferenceDatas = new List<FormulaReferenceData>();
         for (int i = 0; i < 8; i++)
         {
@@ -111,8 +113,23 @@ public class FormulaPanel : GamePanel<IReferenceData>
                 rightFormulaReferenceDatas.Add(formulaReferenceDatas[index]);
             }
         }
-        AsyncTaskRunner.Run(rightFormulaList.InitListData(rightFormulaReferenceDatas, SelectFormulaData, toggleGroup), "FormulaPanel.RefreshDisplay");
-        leftFormulaList.SelectDefault();
+        // ÁøªÈ°µÂà∑Êñ∞ÁªëÂÆöÈù¢ÊùøÁîüÂëΩÂë®ÊúüÔºåÈÅøÂÖçÂÖ≥Èó≠ÂêéÊóßÂàóË°®Âà∑Êñ∞ÁªßÁª≠ÈÄâ‰∏≠ÊàñÂÜô UI„ÄÇ
+        RunLifecycleTask(async token =>
+        {
+            await leftFormulaList.InitListData(leftFormulaReferenceDatas, SelectFormulaData, toggleGroup, cancellationToken: token);
+            if (ShouldStopLifecycleTask(token))
+            {
+                return;
+            }
+
+            await rightFormulaList.InitListData(rightFormulaReferenceDatas, SelectFormulaData, toggleGroup, cancellationToken: token);
+            if (ShouldStopLifecycleTask(token))
+            {
+                return;
+            }
+
+            leftFormulaList.SelectDefault();
+        }, "FormulaPanel.RefreshDisplay");
     }
 
     public override void SetPanelUISerializeObj()
@@ -152,14 +169,14 @@ public class FormulaPanel : GamePanel<IReferenceData>
                 List<string> formulaMats = new List<string>();
                 for(int i = 0; i < formulaReferenceData.formulaData.StuffItems.Count; i++)
                 {
-                    ItemData itemData = formulaReferenceData.formulaData.StuffItems[i]; 
+                    ItemData itemData = formulaReferenceData.formulaData.StuffItems[i];
                     formulaMats.Add(itemData.itemName);
                     if(i< formulaReferenceData.formulaData.StuffItems.Count - 1)
                     {
                         formulaMats.Add(",");
                     }
                 }
-                formulaMaterialText.SetADDText("–Ë“™≤ƒ¡œ:", formulaMats); 
+                formulaMaterialText.SetADDText("ÈúÄË¶ÅÊùêÊñô:", formulaMats);
                 formulaInfoText.SetSWText(formulaReferenceData.formulaData.ProductItem.GetInfo());
             }
             else
@@ -167,7 +184,7 @@ public class FormulaPanel : GamePanel<IReferenceData>
                 formulaNameText.text = "????";
                 formulaInfoText.text = "??????????????????";
                 formulaTypeText.text = "????";
-                formulaMaterialText.SetADDText("–Ë“™≤ƒ¡œ:", "??????");
+                formulaMaterialText.SetADDText("ÈúÄË¶ÅÊùêÊñô:", "??????");
             }
         }
     }
@@ -197,11 +214,16 @@ public class FormulaPanel : GamePanel<IReferenceData>
     }
     void SelectFormulaType(FormulaType formulaType, int index, bool select)
     {
-        AsyncTaskRunner.Run(() => SelectFormulaTypeAsync(formulaType, index, select), nameof(SelectFormulaType));
+        RunLifecycleTask(token => SelectFormulaTypeAsync(formulaType, index, select, token), nameof(SelectFormulaType));
     }
 
-    System.Threading.Tasks.Task SelectFormulaTypeAsync(FormulaType formulaType, int index, bool select)
+    System.Threading.Tasks.Task SelectFormulaTypeAsync(FormulaType formulaType, int index, bool select, System.Threading.CancellationToken cancellationToken)
     {
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return System.Threading.Tasks.Task.CompletedTask;
+        }
+
         if (select)
         {
             this.formulaType = formulaType;
@@ -224,7 +246,7 @@ public class FormulaPanel : GamePanel<IReferenceData>
             leftFormulaList.SelectDefault();
         }
 
-        // ≈‰∑Ω∑÷¿‡«–ªªµ±«∞ «Õ¨≤ΩÀ¢–¬£¨±£¡Ù Task ∑µªÿ∏¯Õ≥“ª“Ï≥£≤∂ªÒ»Îø⁄°£
+        // ÈÖçÊñπÂàÜÁ±ªÂàáÊç¢ÂΩìÂâçÊòØÂêåÊ≠•Âà∑Êñ∞Ôºå‰øùÁïô Task ËøîÂõûÁªôÁªü‰∏ÄÂºÇÂ∏∏ÊçïËé∑ÂÖ•Âè£„ÄÇ
         return System.Threading.Tasks.Task.CompletedTask;
     }
     public override async Task InitData(string dataKey)
@@ -234,6 +256,11 @@ public class FormulaPanel : GamePanel<IReferenceData>
             formulaDataDic = new Dictionary<FormulaType, List<FormulaData>>();
             formulaTypes = new List<FormulaType>();
             var allFormula = await GameDataManager.instance.GetAllAsyncData<FormulaData>();
+            if (ShouldStopLifecycleTask(LifecycleCancellationToken))
+            {
+                return;
+            }
+
             for (int i = 0; i < allFormula.Count; i++)
             {
                 if (!formulaDataDic.TryGetValue(allFormula[i].formulaType, out var formulaDatas))
@@ -245,8 +272,13 @@ public class FormulaPanel : GamePanel<IReferenceData>
                 formulaDatas.Add(allFormula[i]);
             }
         }
-       await formulaTagList.InitListData(formulaTypes, SelectFormulaType);
+       await formulaTagList.InitListData(formulaTypes, SelectFormulaType, cancellationToken: LifecycleCancellationToken);
+        if (ShouldStopLifecycleTask(LifecycleCancellationToken))
+        {
+            return;
+        }
+
         formulaTagList.SelectDefault();
-       
+
     }
 }

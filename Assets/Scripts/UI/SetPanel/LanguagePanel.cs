@@ -41,13 +41,13 @@ public class LanguagePanel : GamePanel<IReferenceData>
     }
     void RefreshLanguage()
     {
-        // 语言刷新来自同步入口，列表初始化异常统一记录。
-        AsyncTaskRunner.Run(languages.InitListData(LanguageManage.instance.languageDatas, (LanguageData languageData,int index, bool selected) =>
+        // 语言列表绑定面板生命周期，关闭后旧选项不再回写。
+        RunLifecycleTask(token => languages.InitListData(LanguageManage.instance.languageDatas, (LanguageData languageData,int index, bool selected) =>
         {
             if (selected)
             {
                 LanguageManage.instance.SetLanguage(languageData.languageType);
             }
-        }), nameof(RefreshLanguage));
+        }, cancellationToken: token), nameof(RefreshLanguage));
     }
 }

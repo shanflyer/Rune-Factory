@@ -59,13 +59,18 @@ public class GoldCreatPanel : GamePanel<IReferenceData>
     public override void InitReferenceData(IReferenceData v)
     {
         base.InitReferenceData(v);
-        // 面板引用数据入口保持同步，异步列表加载异常统一进入日志。
-        AsyncTaskRunner.Run(InitReferenceDataAsync(), nameof(InitReferenceData));
+        // 金币生成列表绑定面板生命周期，关闭后旧加载不再写入列表。
+        RunLifecycleTask(InitReferenceDataAsync, nameof(InitReferenceData));
     }
 
-    private async System.Threading.Tasks.Task InitReferenceDataAsync()
+    private async System.Threading.Tasks.Task InitReferenceDataAsync(System.Threading.CancellationToken cancellationToken)
     {
         var datas =await GameDataManager.instance.GetAllAsyncData<MoneyCreatData>();
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         List<MoneyCreatData> MoneyCreatDatas = new List<MoneyCreatData>();
         for(int i = 0; i < datas.Count; i++)
         {
@@ -74,7 +79,7 @@ public class GoldCreatPanel : GamePanel<IReferenceData>
                 MoneyCreatDatas.Add(datas[i]);
             }
         }
-        await createrList.InitListData(MoneyCreatDatas, SelectCreater,CreaterGroup);
+        await createrList.InitListData(MoneyCreatDatas, SelectCreater, CreaterGroup, cancellationToken: cancellationToken);
     }
     public override void Close()
     {

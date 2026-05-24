@@ -91,44 +91,57 @@ public class WarehousePanel : GamePanel<PackageList>
         packageSelectList = new DisplayList<PackageSelectReference, PackageData>(packageSelect, packageSelectParent);
         packageLevelUp.onClick.AddListener(TryPackageLevelUp);
 
-        ShortCutActionButton.onClick.AddListener(async () =>
+        ShortCutActionButton.onClick.AddListener(() =>
         {
-            if (SelectItem.instanceId != 0)
+            RunLifecycleTask(async token =>
             {
-                if (SelectItem.dataId != 0)
+                if (SelectItem.instanceId != 0)
                 {
-                    if (await SelectItem.IsSingleItem())
+                    if (SelectItem.dataId != 0)
                     {
-                        SetShortcutItem setShortcutItem = new SetShortcutItem
+                        if (await SelectItem.IsSingleItem())
                         {
-                            characterId = CharacterManager.instance.controllerCharacter.instanceId,
-                            Item = SelectItem
-                        };
-                        GameActionManager.instance.QueueAction(setShortcutItem);
+                            if (ShouldStopLifecycleTask(token))
+                            {
+                                return;
+                            }
+
+                            SetShortcutItem setShortcutItem = new SetShortcutItem
+                            {
+                                characterId = CharacterManager.instance.controllerCharacter.instanceId,
+                                Item = SelectItem
+                            };
+                            GameActionManager.instance.QueueAction(setShortcutItem);
+                        }
+                        else
+                        {
+                            Item newItem = new Item
+                            {
+                                dataId = SelectItem.dataId,
+                                count = PackageManager.instance.GetPackageItemCount(selectPackageData.instanceId, SelectItem.dataId)
+                            };
+                            newItem = await Item.SetValue(newItem, SelectItem.value);
+                            if (ShouldStopLifecycleTask(token))
+                            {
+                                return;
+                            }
+
+                            SetShortcutItem setShortcutItem = new SetShortcutItem
+                            {
+                                characterId = CharacterManager.instance.controllerCharacter.instanceId,
+                                Item = newItem
+                            };
+                            GameActionManager.instance.QueueAction(setShortcutItem);
+                        }
                     }
-                    else
+                    SetPackageSelectItem setPackageSelectItem = new SetPackageSelectItem
                     {
-                        Item newItem = new Item
-                        {
-                            dataId = SelectItem.dataId,
-                            count = PackageManager.instance.GetPackageItemCount(selectPackageData.instanceId, SelectItem.dataId)
-                        };
-                        newItem = await Item.SetValue(newItem, SelectItem.value);
-                        SetShortcutItem setShortcutItem = new SetShortcutItem
-                        {
-                            characterId = CharacterManager.instance.controllerCharacter.instanceId,
-                            Item = newItem
-                        };
-                        GameActionManager.instance.QueueAction(setShortcutItem);
-                    }
+                        packageId = selectPackageData.instanceId,
+                        selectItem = SelectItem.instanceId != 0 ? SelectItem.instanceId : SelectItem.dataId
+                    };
+                    GameActionManager.instance.QueueAction(setPackageSelectItem);
                 }
-                SetPackageSelectItem setPackageSelectItem = new SetPackageSelectItem
-                {
-                    packageId = selectPackageData.instanceId,
-                    selectItem = SelectItem.instanceId != 0 ? SelectItem.instanceId : SelectItem.dataId
-                };
-                GameActionManager.instance.QueueAction(setPackageSelectItem);
-            }
+            }, nameof(ShortCutActionButton));
         });
     }
 
@@ -217,7 +230,7 @@ public class WarehousePanel : GamePanel<PackageList>
 
     public override void Close()
     {
-        AsyncTaskRunner.Run(CloseAsync, nameof(Close));
+        RunLifecycleTask(_ => CloseAsync(), nameof(Close));
     }
 
     async System.Threading.Tasks.Task CloseAsync()

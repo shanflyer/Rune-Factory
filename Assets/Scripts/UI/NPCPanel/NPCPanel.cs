@@ -71,6 +71,11 @@ public class NPCPanel : GamePanel<NPCList>
         BookPaper.Play("Paper");
         GameTimerController.instance.DelayAction(820, () =>
         {
+            if (LifecycleCanceled)
+            {
+                return;
+            }
+
             NPCParent.localScale = Vector3.one;
             nextButton.transform.localScale = Vector3.one;
             frontButton.transform.localScale = Vector3.one;
@@ -108,13 +113,17 @@ public class NPCPanel : GamePanel<NPCList>
 
     private void DetailAction()
     {
-        AsyncTaskRunner.Run(DetailActionAsync, nameof(DetailAction));
+        RunLifecycleTask(DetailActionAsync, nameof(DetailAction));
     }
 
-    private async System.Threading.Tasks.Task DetailActionAsync()
+    private async System.Threading.Tasks.Task DetailActionAsync(System.Threading.CancellationToken cancellationToken)
     {
         CharacterInformationData characterInformationData = selectNpc.GetInformation();
        await UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformationData);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
     }
 
     private NPC selectNpc;
@@ -152,6 +161,11 @@ public class NPCPanel : GamePanel<NPCList>
     }
     void DisplayNpc()
     {
+        if (LifecycleCanceled)
+        {
+            return;
+        }
+
         var npcs = new List<NPC>();
         for(int i = 0; i < 10; i++)
         {
@@ -161,8 +175,8 @@ public class NPCPanel : GamePanel<NPCList>
                 npcs.Add(NPCList.npcs[index]);
             }
         }
-        // NPC 分页刷新是同步入口，列表初始化异常统一记录。
-        AsyncTaskRunner.Run(displayList.InitListData(npcs, SelectAction, toggleGroup), nameof(DisplayNpc));
+        // NPC 分页刷新绑定面板生命周期，关闭后旧分页不再写列表。
+        RunLifecycleTask(token => displayList.InitListData(npcs, SelectAction, toggleGroup, cancellationToken: token), nameof(DisplayNpc));
     }
     public override void InitReferenceData(NPCList v)
     {

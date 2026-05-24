@@ -254,7 +254,7 @@ public class ManufacturePanel : GamePanel<Manufature>
 
     private void CreatItem()
     {
-        AsyncTaskRunner.Run(CreatItemAsync, nameof(CreatItem));
+        RunLifecycleTask(_ => CreatItemAsync(), nameof(CreatItem));
     }
 
     private async System.Threading.Tasks.Task CreatItemAsync()

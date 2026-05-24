@@ -186,20 +186,27 @@ public class PasturePanel : GamePanel<MyListInt>
                 animalDatas.Add(myInt);
             } 
         }
-        // 动物列表刷新来自同步状态变更，列表初始化异常统一记录。
-        AsyncTaskRunner.Run(animals.InitListData(animalDatas, SelectAnimal), nameof(RefreshAnimalList));
+        // 动物列表刷新绑定牧场面板生命周期，关闭后旧刷新不再选中条目。
+        RunLifecycleTask(async token =>
+        {
+            await animals.InitListData(animalDatas, SelectAnimal, cancellationToken: token);
+            if (ShouldStopLifecycleTask(token))
+            {
+                return;
+            }
 
-        if (animalDatas.Count == 0)
-        {
-            SetButton.transform.localScale = Vector3.zero;
-            animalIcon.enabled = false;
-            animalNameText.enabled = false;
-        }
-        else
-        {
-            animals.ClearSelect();
-            animals.SelectDefault();
-        }
+            if (animalDatas.Count == 0)
+            {
+                SetButton.transform.localScale = Vector3.zero;
+                animalIcon.enabled = false;
+                animalNameText.enabled = false;
+            }
+            else
+            {
+                animals.ClearSelect();
+                animals.SelectDefault();
+            }
+        }, nameof(RefreshAnimalList));
     }
 
     void RefreshPasture(RefreshPasture refreshPasturee)

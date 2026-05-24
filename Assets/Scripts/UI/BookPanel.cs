@@ -28,22 +28,30 @@ public class BookPanel : GamePanel<IReferenceData>
     {
         base.Awake();
         closeButton.onClick.AddListener(Close);
-        characterButton.onClick.AddListener(async () =>
+        characterButton.onClick.AddListener(() =>
         {
-          await  UIManager.instance.ShowGamePanel<NPCPanel,NPCList>(NPCManager.instance.GetNPCList());
-            Close();
+            RunLifecycleTask(async token =>
+            {
+                await UIManager.instance.ShowGamePanel<NPCPanel, NPCList>(NPCManager.instance.GetNPCList());
+                if (ShouldStopLifecycleTask(token))
+                {
+                    return;
+                }
+
+                Close();
+            }, nameof(NPCPanel));
         });
-        fishButton.onClick.AddListener(async () =>
+        fishButton.onClick.AddListener(() =>
         {
-          await  UIManager.instance.ShowGamePanel<FishPanel>();
+            RunLifecycleTask(_ => UIManager.instance.ShowGamePanel<FishPanel>(), nameof(FishPanel));
         });
         formulaButton.onClick.AddListener(() =>
         {
-            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<FormulaPanel>(), nameof(FormulaPanel));
+            RunLifecycleTask(_ => UIManager.instance.ShowGamePanel<FormulaPanel>(), nameof(FormulaPanel));
         });
         plantButton.onClick.AddListener(() =>
         {
-            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<PlantPanel>(), nameof(PlantPanel));
+            RunLifecycleTask(_ => UIManager.instance.ShowGamePanel<PlantPanel>(), nameof(PlantPanel));
         });
     }
 }

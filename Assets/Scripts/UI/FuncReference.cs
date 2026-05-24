@@ -109,10 +109,10 @@ public class FuncReference : UIObjReference<FunctionData>
 
     public void InitFunction(FunctionData functionData, Button secondSelectButton)
     {
-        AsyncTaskRunner.Run(InitFunctionAsync(functionData, secondSelectButton), nameof(InitFunction));
+        RunLifecycleTask(token => InitFunctionAsync(functionData, secondSelectButton, token), nameof(InitFunction));
     }
 
-    private async Task InitFunctionAsync(FunctionData functionData, Button secondSelectButton)
+    private async Task InitFunctionAsync(FunctionData functionData, Button secondSelectButton, System.Threading.CancellationToken cancellationToken)
     {
         this.functionData = functionData;
         nameText.text = functionData.buttonName;
@@ -126,6 +126,11 @@ public class FuncReference : UIObjReference<FunctionData>
                 int functionIndex = i;
                 var async = InstantiateAsync(secondSelectButton, secondParent, Vector3.zero, Quaternion.identity);
                 await async;
+                if (ShouldStopLifecycleTask(cancellationToken))
+                {
+                    return;
+                }
+
                 var selectButton = async.Result[0];
                 selectButton.transform.localScale = Vector3.one;
                 selectButton.GetComponentInChildren<Text>().text = functionData.secondFunctions[functionIndex].buttonName;

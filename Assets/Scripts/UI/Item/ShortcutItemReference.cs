@@ -59,20 +59,31 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
     public override void OnDisable()
     {
         base.OnDisable();
-        if (!SingletonType.Cleared)
+        if (!SingletonType.Cleared && GameActionManager.HasInstance)
             GameActionManager.instance.RemoveListener<RefreshItemValue>(RefreshItemValue);
     }
     void RefreshItemValue(RefreshItemValue refreshItemValue)
     {
-        AsyncTaskRunner.Run(() => RefreshItemValueAsync(refreshItemValue), nameof(RefreshItemValue));
+        RunLifecycleTask(token => RefreshItemValueAsync(refreshItemValue, token), nameof(RefreshItemValue));
     }
 
-    async System.Threading.Tasks.Task RefreshItemValueAsync(RefreshItemValue refreshItemValue)
+    async System.Threading.Tasks.Task RefreshItemValueAsync(RefreshItemValue refreshItemValue, System.Threading.CancellationToken cancellationToken)
     {
         if (refreshItemValue.itemId == data.Item.instanceId)
         {
             data.Item=await Item.SetValue(data.Item,refreshItemValue.itemValue);
-            ItemValue.fillAmount =await data.Item.GetValue();
+            if (ShouldStopLifecycleTask(cancellationToken))
+            {
+                return;
+            }
+
+            var fillAmount = await data.Item.GetValue();
+            if (ShouldStopLifecycleTask(cancellationToken))
+            {
+                return;
+            }
+
+            ItemValue.fillAmount = fillAmount;
         }
     }
     public override void ClearData()
@@ -90,6 +101,11 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
         toggle.group = toggleGroup;
         this.SelectAction = SelectAction;
         itemData = await GameDataManager.instance.GetAsyncData<ItemData>(data.Item.dataId.ToString());
+        if (LifecycleCanceled)
+        {
+            return;
+        }
+
         toggle.enabled = true;
         if (itemData != null)
         {
@@ -101,7 +117,13 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
             count.enabled = data.Item.count > 0;
             toggle.enabled = true;
             ItemValueBg.transform.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
-            ItemValue.fillAmount =await data.Item.GetValue(); 
+            var fillAmount = await data.Item.GetValue();
+            if (LifecycleCanceled)
+            {
+                return;
+            }
+
+            ItemValue.fillAmount = fillAmount;
 
         }
         else

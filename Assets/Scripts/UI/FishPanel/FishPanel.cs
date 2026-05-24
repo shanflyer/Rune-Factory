@@ -103,8 +103,14 @@ public class FishPanel : GamePanel<IReferenceData>
     {
       await  base.InitData(dataKey);
 
-        if (allFishes==null||allFishes.Count > 0)
+        if (allFishes==null||allFishes.Count == 0)
+        {
             allFishes = await GameDataManager.instance.GetAllAsyncData<FishData>();
+            if (ShouldStopLifecycleTask(LifecycleCancellationToken))
+            {
+                return;
+            }
+        }
 
 
         nextButton.transform.localScale = Vector3.one;
@@ -161,6 +167,11 @@ public class FishPanel : GamePanel<IReferenceData>
     }
     void DisplayFishes()
     {
+        if (LifecycleCanceled)
+        {
+            return;
+        }
+
         leftParent.localScale = Vector3.one;
         rightParent.localScale = Vector3.one;
         nextButton.transform.localScale = Vector3.one;
@@ -175,9 +186,6 @@ public class FishPanel : GamePanel<IReferenceData>
                 leftFishReferenceDatas.Add(fishReferenceDatas[index]);
             }            
         }
-        // 图鉴翻页是同步/延迟回调，列表刷新异常统一记录。
-        AsyncTaskRunner.Run(leftFishList.InitListData(leftFishReferenceDatas, SelectFishReference, toggleGroup), nameof(DisplayFishes));
-
         List<FishReferenceData> rightFishReferenceDatas = new List<FishReferenceData>();
         for (int i = 0; i < 8; i++)
         {
@@ -187,23 +195,43 @@ public class FishPanel : GamePanel<IReferenceData>
                 rightFishReferenceDatas.Add(fishReferenceDatas[index]);
             }
         }
-        AsyncTaskRunner.Run(rightFishList.InitListData(rightFishReferenceDatas, SelectFishReference, toggleGroup), nameof(DisplayFishes));
-        leftFishList.SelectDefault();
+        // 鱼类图鉴翻页刷新绑定当前面板 token，关闭后不再写回旧图鉴页。
+        RunLifecycleTask(async token =>
+        {
+            await leftFishList.InitListData(leftFishReferenceDatas, SelectFishReference, toggleGroup, cancellationToken: token);
+            if (ShouldStopLifecycleTask(token))
+            {
+                return;
+            }
+
+            await rightFishList.InitListData(rightFishReferenceDatas, SelectFishReference, toggleGroup, cancellationToken: token);
+            if (ShouldStopLifecycleTask(token))
+            {
+                return;
+            }
+
+            leftFishList.SelectDefault();
+        }, nameof(DisplayFishes));
     }
 
     int selectFishDataId;
     void SelectFishReference(FishReferenceData fishReferenceData, int index, bool selected)
     {
-        AsyncTaskRunner.Run(() => SelectFishReferenceAsync(fishReferenceData, index, selected), nameof(SelectFishReference));
+        RunLifecycleTask(token => SelectFishReferenceAsync(fishReferenceData, index, selected, token), nameof(SelectFishReference));
     }
 
-    async System.Threading.Tasks.Task SelectFishReferenceAsync(FishReferenceData fishReferenceData, int index, bool selected)
+    async System.Threading.Tasks.Task SelectFishReferenceAsync(FishReferenceData fishReferenceData, int index, bool selected, System.Threading.CancellationToken cancellationToken)
     {
         if (selected)
         {
             if (fishReferenceData.record != 0)
             {
                 FishData fishData = await GameDataManager.instance.GetAsyncData<FishData>(fishReferenceData.dataId);
+                if (ShouldStopLifecycleTask(cancellationToken))
+                {
+                    return;
+                }
+
                 fishName.SetSWText(fishData.fishName);
                 desc.SetSWText(fishData.info);
                 record.text = $"{fishReferenceData.record}cm";

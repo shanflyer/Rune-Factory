@@ -43,16 +43,21 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
     public override void OnDisable()
     {
         base.OnDisable();
-        if (!SingletonType.Cleared)
+        if (!SingletonType.Cleared && GameActionManager.HasInstance)
             GameActionManager.instance.RemoveListener<RefreshTeam>(RefreshTeam);
     }
     void TalkAction()
     {
-        AsyncTaskRunner.Run(TalkActionAsync, nameof(TalkAction));
+        RunLifecycleTask(TalkActionAsync, nameof(TalkAction));
     }
 
-    async System.Threading.Tasks.Task TalkActionAsync()
+    async System.Threading.Tasks.Task TalkActionAsync(System.Threading.CancellationToken cancellationToken)
     {
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         Character character = CharacterManager.instance.GetCharacter(SelectCharacterId);
         if (character != null)
         {
@@ -91,6 +96,10 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
                 {
                     eventReferenceData,targetReferenceData,NextTalkReferenceData
                 });
+                if (ShouldStopLifecycleTask(cancellationToken))
+                {
+                    return;
+                }
 
             }
             
@@ -154,14 +163,19 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
     int SelectCharacterId = 0;
     void SelectAction(CharacterInformationData characterInformationData, int index, bool select)
     {
-        AsyncTaskRunner.Run(() => SelectActionAsync(characterInformationData, index, select), nameof(SelectAction));
+        RunLifecycleTask(token => SelectActionAsync(characterInformationData, index, select, token), nameof(SelectAction));
     }
 
-    async System.Threading.Tasks.Task SelectActionAsync(CharacterInformationData characterInformationData, int index, bool select)
+    async System.Threading.Tasks.Task SelectActionAsync(CharacterInformationData characterInformationData, int index, bool select, System.Threading.CancellationToken cancellationToken)
     {
         if (select)
         {
             var panel = await UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformationData);
+            if (ShouldStopLifecycleTask(cancellationToken))
+            {
+                return;
+            }
+
             if (panel == null)
             {
                 return;
@@ -187,13 +201,18 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
     public override void InitReferenceData(CharacterInformationDataList v)
     {
         base.InitReferenceData(v);
-        // 面板引用数据入口保持同步，队伍列表加载异常统一进入日志。
-        AsyncTaskRunner.Run(InitReferenceDataAsync(v), nameof(InitReferenceData));
+        // 队伍列表刷新绑定面板生命周期，关闭或重开后旧列表不再抢选中态。
+        RunLifecycleTask(token => InitReferenceDataAsync(v, token), nameof(InitReferenceData));
     }
 
-    private async System.Threading.Tasks.Task InitReferenceDataAsync(CharacterInformationDataList v)
+    private async System.Threading.Tasks.Task InitReferenceDataAsync(CharacterInformationDataList v, System.Threading.CancellationToken cancellationToken)
     {
-        await teamerList.InitListData(v.characterInformationDatas, SelectAction, toggleGroup);
+        await teamerList.InitListData(v.characterInformationDatas, SelectAction, toggleGroup, cancellationToken: cancellationToken);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         teamerList.Select(v.characterInformationDatas[0]); 
     }
 }

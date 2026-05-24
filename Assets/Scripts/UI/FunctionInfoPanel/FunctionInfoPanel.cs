@@ -28,9 +28,9 @@ public class FunctionInfoPanel : GamePanel<FunctionInfoData>
     }
     public override void InitReferenceData(FunctionInfoData v)
     {
-        // 引用数据初始化是同步入口，列表刷新异常统一进入异步日志。
-        AsyncTaskRunner.Run(functionInfoList.InitListData(v.DataList.ToList()), nameof(InitReferenceData));
         base.InitReferenceData(v);
+        // 功能说明列表绑定面板生命周期，关闭后旧列表不再回写。
+        RunLifecycleTask(token => functionInfoList.InitListData(v.DataList.ToList(), cancellationToken: token), nameof(InitReferenceData));
     }
  
     public override Task InitData(string dataKey)

@@ -95,15 +95,20 @@ public class SelectItemCountPanel :GamePanel<SelectItemData>
     public override void InitReferenceData(SelectItemData v)
     {
         base.InitReferenceData(v);
-        // 面板引用数据入口保持同步，物品数据加载异常统一进入日志。
-        AsyncTaskRunner.Run(InitReferenceDataAsync(v), nameof(InitReferenceData));
+        // 数量选择面板绑定生命周期，关闭后旧物品数据不再写 UI。
+        RunLifecycleTask(token => InitReferenceDataAsync(v, token), nameof(InitReferenceData));
     }
 
-    private async System.Threading.Tasks.Task InitReferenceDataAsync(SelectItemData v)
+    private async System.Threading.Tasks.Task InitReferenceDataAsync(SelectItemData v, System.Threading.CancellationToken cancellationToken)
     {
         selectItemData = v;
         selectCount = selectItemData.defaultCount;
         itemData = await GameDataManager.instance.GetAsyncData<ItemData>(selectItemData.itemId);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         Name.text = itemData.itemName;
         ItemIcon.sprite = itemData.icon;
         InputField.text = selectCount.ToString();

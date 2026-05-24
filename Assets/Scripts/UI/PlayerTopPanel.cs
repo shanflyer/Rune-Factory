@@ -92,13 +92,13 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         playerButton.onClick.AddListener(() =>
         {
             var characterInformation = CharacterManager.instance.controllerCharacter.GetInformation();
-            // 按钮回调保持同步，面板加载异常统一进入异步日志。
-            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformation), nameof(CharacterInformationPanel));
+            // 顶栏按钮回调绑定面板生命周期，关闭后不再继续打开旧详情。
+            RunLifecycleTask(_ => UIManager.instance.ShowGamePanel<CharacterInformationPanel, CharacterInformationData>(characterInformation), nameof(CharacterInformationPanel));
         });
 
         calendar.onClick.AddListener(() =>
         {
-            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<CalendarPanel>(), nameof(CalendarPanel));
+            RunLifecycleTask(_ => UIManager.instance.ShowGamePanel<CalendarPanel>(), nameof(CalendarPanel));
         });
         goldAdd.onClick.AddListener(PayManager.instance.TryCreatGold);
         crystalAdd.onClick.AddListener(PayManager.instance.TryCreatMoney);
@@ -107,15 +107,15 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         {
 
             // AudioController.instance.PlayAudio(SE.click);
-            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<SetPanel>(), nameof(SetPanel));
+            RunLifecycleTask(_ => UIManager.instance.ShowGamePanel<SetPanel>(), nameof(SetPanel));
         });
         MapButton.onClick.AddListener(() =>
         {
-            // 按钮回调保持同步，面板加载异常交给统一异步日志。
-            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<TransmissionPanel>(), nameof(TransmissionPanel));
+            // 顶栏地图按钮绑定生命周期，关闭后不再继续打开旧传送面板。
+            RunLifecycleTask(_ => UIManager.instance.ShowGamePanel<TransmissionPanel>(), nameof(TransmissionPanel));
         });
 
-        AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<CharacterButtonPanel>(), nameof(CharacterButtonPanel));
+        RunLifecycleTask(_ => UIManager.instance.ShowGamePanel<CharacterButtonPanel>(), nameof(CharacterButtonPanel));
 
         if (GameController.instance.startPlay || GameGuideManager.instance.IsEndGuide())
         {

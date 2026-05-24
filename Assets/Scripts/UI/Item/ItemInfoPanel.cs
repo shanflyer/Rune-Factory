@@ -98,11 +98,11 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
     public override void InitReferenceData(ItemInfo v)
     {
         base.InitReferenceData(v);
-        // 面板引用数据入口保持同步，物品详情加载异常统一进入日志。
-        AsyncTaskRunner.Run(InitReferenceDataAsync(v), nameof(InitReferenceData));
+        // 物品详情加载绑定面板生命周期，关闭后旧详情不再覆盖当前内容。
+        RunLifecycleTask(token => InitReferenceDataAsync(v, token), nameof(InitReferenceData));
     }
 
-    private async System.Threading.Tasks.Task InitReferenceDataAsync(ItemInfo v)
+    private async System.Threading.Tasks.Task InitReferenceDataAsync(ItemInfo v, System.Threading.CancellationToken cancellationToken)
     {
         ItemInfo = v;
         switch (v.item.itemType)
@@ -110,6 +110,11 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
            
             case ItemType.家具:
                 HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(v.item.dataId);
+                if (ShouldStopLifecycleTask(cancellationToken))
+                {
+                    return;
+                }
+
                 Icon.sprite = homeEquipmentData.icon;
                 Name.SetSWText(homeEquipmentData.equipmentName);
                 type.SetSWText(homeEquipmentData.homeEquipType); 
@@ -141,6 +146,11 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
                 break;
             default:
                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(v.item.dataId);
+                if (ShouldStopLifecycleTask(cancellationToken))
+                {
+                    return;
+                }
+
                 Icon.sprite = itemData.icon;
                 Name.SetSWText(itemData.itemName);
                 type.SetSWText(itemData.type);

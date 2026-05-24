@@ -102,15 +102,9 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
         NameInputField.onValueChanged.AddListener(NameInputAction);
 
         Ok.onClick.AddListener(OkButtonAction);
-        Return.onClick.AddListener(async () =>
-        { 
-            Close();
-            GameActionManager.instance.QueueAction(new StopFilm
-            {
-                filmName = "角色选择"
-            });
-           var zeroPanel= await UIManager.instance.ShowGamePanel<ZeroPanel>(); 
-            zeroPanel.PlayZeroBGM();
+        Return.onClick.AddListener(() =>
+        {
+            RunLifecycleTask(_ => ReturnToZeroAsync(), nameof(Return));
         });
 
         InitData();
@@ -179,12 +173,23 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
 
     private void OkButtonAction()
     {
-        AsyncTaskRunner.Run(OkButtonActionAsync, nameof(OkButtonAction));
+        RunLifecycleTask(OkButtonActionAsync, nameof(OkButtonAction));
     }
 
-    private async System.Threading.Tasks.Task OkButtonActionAsync()
-    { 
-        
+    private async System.Threading.Tasks.Task ReturnToZeroAsync()
+    {
+        Close();
+        GameActionManager.instance.QueueAction(new StopFilm
+        {
+            filmName = "角色选择"
+        });
+        var zeroPanel = await UIManager.instance.ShowGamePanel<ZeroPanel>();
+        zeroPanel.PlayZeroBGM();
+    }
+
+    private async System.Threading.Tasks.Task OkButtonActionAsync(System.Threading.CancellationToken cancellationToken)
+    {
+
         //DataSaveAndLoadTest.IniteZerodata();
        await UIManager.instance.ShowGamePanel<CharacterSelectInformationPanel,SelectCharacterData>(new SelectCharacterData
        {

@@ -130,12 +130,12 @@ public class CalendarPanel : GamePanel<IReferenceData>
     } 
     void CreatSeason(Season season)
     {
-        AsyncTaskRunner.Run(() => CreatSeasonAsync(season), nameof(CreatSeason));
+        RunLifecycleTask(token => CreatSeasonAsync(season, token), nameof(CreatSeason));
     }
 
-    async System.Threading.Tasks.Task CreatSeasonAsync(Season season)
+    async System.Threading.Tasks.Task CreatSeasonAsync(Season season, System.Threading.CancellationToken cancellationToken)
     {
-        List<GameDate> gameDates = GameTimeManager.instance.GetGameDataForSeason(season);  
+        List<GameDate> gameDates = GameTimeManager.instance.GetGameDataForSeason(season);
         if (DatesParent.transform.childCount > gameDates.Count)
         {
             for(int i = gameDates.Count; i < DatesParent.transform.childCount; i++)
@@ -143,7 +143,13 @@ public class CalendarPanel : GamePanel<IReferenceData>
                 Destroy(DatesParent.transform.GetChild(i).gameObject);
             }
         }
-        await  dateReferences.InitListData(gameDates,DisplayClickDate,DatesParent,Async:false);
+        // 日历翻页会频繁触发，旧月份列表完成后不能覆盖当前月份。
+        await dateReferences.InitListData(gameDates, DisplayClickDate, DatesParent, Async: false, cancellationToken: cancellationToken);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         AfterDisplay();
     }
 

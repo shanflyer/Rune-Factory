@@ -55,10 +55,10 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
     }
     void ChangeItemAction()
     {
-        AsyncTaskRunner.Run(ChangeItemActionAsync, nameof(ChangeItemAction));
+        RunLifecycleTask(ChangeItemActionAsync, nameof(ChangeItemAction));
     }
 
-    async System.Threading.Tasks.Task ChangeItemActionAsync()
+    async System.Threading.Tasks.Task ChangeItemActionAsync(System.Threading.CancellationToken cancellationToken)
     {
         int packageId = CharacterManager.instance.controllerCharacter.characterPackage;
 
@@ -72,16 +72,21 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
             }
         };
         var WarehousePanel =await UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         WarehousePanel.SetSelectItemAction(SelectPackageItem, "更换");
     }
     int changeCount = 0;
 
     void SelectPackageItem(Item item, int index, bool select)
     {
-        AsyncTaskRunner.Run(() => SelectPackageItemAsync(item, index, select), nameof(SelectPackageItem));
+        RunLifecycleTask(token => SelectPackageItemAsync(item, index, select, token), nameof(SelectPackageItem));
     }
 
-    async System.Threading.Tasks.Task SelectPackageItemAsync(Item item, int index, bool select)
+    async System.Threading.Tasks.Task SelectPackageItemAsync(Item item, int index, bool select, System.Threading.CancellationToken cancellationToken)
     {
         SetStoreCounterItem setStoreCounterItem = new SetStoreCounterItem
         {
@@ -90,15 +95,20 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
             count = 0
         };
        await UIManager.instance.ShowGamePanel<StoreCounterSetPanel, SetStoreCounterItem>(setStoreCounterItem);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         UIManager.instance.CloseGamePanel<WarehousePanel>();
     }
 
     void SetItemCountAction()
     {
-        AsyncTaskRunner.Run(SetItemCountActionAsync, nameof(SetItemCountAction));
+        RunLifecycleTask(SetItemCountActionAsync, nameof(SetItemCountAction));
     }
 
-    async System.Threading.Tasks.Task SetItemCountActionAsync()
+    async System.Threading.Tasks.Task SetItemCountActionAsync(System.Threading.CancellationToken cancellationToken)
     {
          
         if (PlayerStoreManager.instance.GetRuntimeStoreCounter(storeCunterSetData.storeCounterId, out var runtimeStoreCounter))
@@ -116,6 +126,10 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
                     GameActionManager.instance.QueueAction(storeCunterSetData);
 
                     await PackageManager.instance.SetItemInPackage(new Item { dataId = storeCunterSetData.itemId, count = -changeCount }, packageId);
+                    if (ShouldStopLifecycleTask(cancellationToken))
+                    {
+                        return;
+                    }
 
                 }
                 else
@@ -137,6 +151,11 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
                 if (PackageManager.instance.GetOutItenFromPackage(packageId, storeCunterSetData.itemId, storeCunterSetData.count))
                 {
                     await PackageManager.instance.SetItemInPackage(new Item { dataId = runtimeStoreCounter.itemData.id, count = runtimeStoreCounter.count }, packageId);
+                    if (ShouldStopLifecycleTask(cancellationToken))
+                    {
+                        return;
+                    }
+
                     GameActionManager.instance.QueueAction(storeCunterSetData);
                 }
             }
@@ -150,10 +169,10 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
     }
     void GetItemDownAction()
     {
-        AsyncTaskRunner.Run(GetItemDownActionAsync, nameof(GetItemDownAction));
+        RunLifecycleTask(GetItemDownActionAsync, nameof(GetItemDownAction));
     }
 
-    async System.Threading.Tasks.Task GetItemDownActionAsync()
+    async System.Threading.Tasks.Task GetItemDownActionAsync(System.Threading.CancellationToken cancellationToken)
     {
         int packageId = CharacterManager.instance.controllerCharacter.characterPackage;
         if (PlayerStoreManager.instance.GetRuntimeStoreCounter(storeCunterSetData.storeCounterId, out var runtimeStoreCounter))
@@ -165,6 +184,11 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
                     dataId= storeCunterSetData.itemId,
                     count= runtimeStoreCounter.count
                 }, packageId);
+              if (ShouldStopLifecycleTask(cancellationToken))
+              {
+                  return;
+              }
+
               storeCunterSetData.count = count;
                 GameActionManager.instance.QueueAction(storeCunterSetData);
             }
@@ -207,21 +231,30 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
     public override void InitReferenceData(SetStoreCounterItem v)
     {
         base.InitReferenceData(v);
-        // 面板引用数据入口保持同步，柜台物品加载异常统一进入日志。
-        AsyncTaskRunner.Run(InitReferenceDataAsync(v), nameof(InitReferenceData));
+        // 柜台设置面板绑定生命周期，关闭后旧物品数据不再写 UI。
+        RunLifecycleTask(token => InitReferenceDataAsync(v, token), nameof(InitReferenceData));
     }
 
-    private async System.Threading.Tasks.Task InitReferenceDataAsync(SetStoreCounterItem v)
+    private async System.Threading.Tasks.Task InitReferenceDataAsync(SetStoreCounterItem v, System.Threading.CancellationToken cancellationToken)
     {
         storeCunterSetData = v;
        await itemBoxReference.InitData(new Item
         {
             dataId = storeCunterSetData.itemId, count = 0
-        });
+        }, null, null, cancellationToken);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
 
         changeCount = 0;
 
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(storeCunterSetData.itemId);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         if (itemData != null)
         {
             sellItemName.SetSWText(itemData.itemName);

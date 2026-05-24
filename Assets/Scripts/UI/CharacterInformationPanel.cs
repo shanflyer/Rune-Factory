@@ -61,10 +61,10 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
 
     private void SelectEquipReference(Equipment equipment, int index, bool selected = false)
     {
-        AsyncTaskRunner.Run(() => SelectEquipReferenceAsync(equipment, index, selected), nameof(SelectEquipReference));
+        RunLifecycleTask(token => SelectEquipReferenceAsync(equipment, index, selected, token), nameof(SelectEquipReference));
     }
 
-    private async System.Threading.Tasks.Task SelectEquipReferenceAsync(Equipment equipment, int index, bool selected = false)
+    private async System.Threading.Tasks.Task SelectEquipReferenceAsync(Equipment equipment, int index, bool selected, System.Threading.CancellationToken cancellationToken)
     {
         bool isController = equipment.characterId == CharacterManager.instance.controllerCharacter.instanceId;
 
@@ -84,6 +84,11 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
                 OffsetPos=infoOffsetY
             };
             itemInfo.item=await Item.SetValue(itemInfo.item,(int)equipment.itemValue * 100);
+            if (ShouldStopLifecycleTask(cancellationToken))
+            {
+                return;
+            }
+
             void SelectAction(Item item, int index, bool selected = true)
             {
                 Character character = CharacterManager.instance.GetCharacter(equipment.characterId); 
@@ -99,6 +104,10 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
                 GameActionManager.instance.QueueAction(clearEquip, true);
             }
            await UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
+           if (ShouldStopLifecycleTask(cancellationToken))
+           {
+               return;
+           }
         }
         else if (isController)
         {
@@ -123,12 +132,17 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
 
             void ChangeEquip(Item item, int index, bool select)
             {
-                AsyncTaskRunner.Run(() => ChangeEquipAsync(item, index, select), nameof(ChangeEquip));
+                RunLifecycleTask(token => ChangeEquipAsync(item, index, select, token), nameof(ChangeEquip));
             }
 
-            async System.Threading.Tasks.Task ChangeEquipAsync(Item item, int index, bool select)
+            async System.Threading.Tasks.Task ChangeEquipAsync(Item item, int index, bool select, System.Threading.CancellationToken changeToken)
             {
                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
+                if (ShouldStopLifecycleTask(changeToken))
+                {
+                    return;
+                }
+
                 if (itemData.type != equipment.ItemType)
                 {
                     return;
@@ -164,7 +178,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
     public override void OnDisable()
     {
         base.OnDisable();
-        if (!SingletonType.Cleared)
+        if (!SingletonType.Cleared && GameActionManager.HasInstance)
         {
             GameActionManager.instance.RemoveListener<RefreshEquip>(RefreshEquip);
             GameActionManager.instance.RemoveListener<CharacterPropertyTrigger>(RefreshCharacterProperty);
@@ -196,10 +210,18 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             Close();
         });
 
-        FriendshipInfo.onClick.AddListener(async () =>
+        FriendshipInfo.onClick.AddListener(() =>
         {
-            FunctionInfoData functionInfoData=await GameDataManager.instance.GetAsyncData<FunctionInfoData>(1);
-            await UIManager.instance.ShowGamePanel<FunctionInfoPanel,FunctionInfoData>(functionInfoData);
+            RunLifecycleTask(async token =>
+            {
+                FunctionInfoData functionInfoData = await GameDataManager.instance.GetAsyncData<FunctionInfoData>(1);
+                if (ShouldStopLifecycleTask(token))
+                {
+                    return;
+                }
+
+                await UIManager.instance.ShowGamePanel<FunctionInfoPanel, FunctionInfoData>(functionInfoData);
+            }, nameof(FriendshipInfo));
         });
     }
 
@@ -301,11 +323,11 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
     public override void InitReferenceData(CharacterInformationData v)
     {
         base.InitReferenceData(v);
-        // 面板引用数据入口保持同步，角色详细数据加载异常统一进入日志。
-        AsyncTaskRunner.Run(InitReferenceDataAsync(v), nameof(InitReferenceData));
+        // 角色详情绑定面板生命周期，关闭或切换角色后旧异步结果不再覆盖当前 UI。
+        RunLifecycleTask(token => InitReferenceDataAsync(v, token), nameof(InitReferenceData));
     }
 
-    private async System.Threading.Tasks.Task InitReferenceDataAsync(CharacterInformationData v)
+    private async System.Threading.Tasks.Task InitReferenceDataAsync(CharacterInformationData v, System.Threading.CancellationToken cancellationToken)
     {
         data = v;
         v.head.SetImageSprite(characterHead, headSize,Vector2.zero);
@@ -342,6 +364,11 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             else
             {
                 var FriendShipData = await GameDataManager.instance.GetAsyncData<FriendShipData>(2);
+                if (ShouldStopLifecycleTask(cancellationToken))
+                {
+                    return;
+                }
+
                 FriendshipLevel.text = $"Lv.1";
                 FriendshipValue.text = $"{0}/{FriendShipData.needValue}";
                 FriendshipSlider.fillAmount = 0;
@@ -372,6 +399,11 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         LevelValue.text = v.level.ToString();
         var spriteRenference = await GameSourceManager.instance.GetScriptableObject<SpriteResourceRenference>(
             $"Reference/AttributeType{(int)v.attributeType}");
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         if (spriteRenference == null)
         {
             Attribute.sprite = null;
@@ -388,7 +420,12 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             itemValue = v.equip.weapon.y / 100.0f,
             ItemType = ItemType.武器,
             hide= v.isAnimal
-      }, SelectEquipReference); ;
+      }, SelectEquipReference, null, cancellationToken);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
       await  ClothesBox.InitData(new Equipment
         {
             characterId = characterId,
@@ -396,7 +433,11 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             itemValue = v.equip.clothes.y / 100.0f,
             ItemType = ItemType.防具,
              hide = v.isAnimal
-      }, SelectEquipReference);
+      }, SelectEquipReference, null, cancellationToken);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
 
       await  ShoesBox.InitData(new Equipment
         {
@@ -405,7 +446,11 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             itemValue = v.equip.headgear.y / 100.0f,
             ItemType = ItemType.帽子,
           hide = v.isAnimal
-      }, SelectEquipReference); ;
+      }, SelectEquipReference, null, cancellationToken);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
 
       await  HeadgearBox.InitData(new Equipment
         {
@@ -414,7 +459,11 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             itemValue = v.equip.shoes.y / 100.0f,
             ItemType = ItemType.鞋子,
           hide = v.isAnimal
-      }, SelectEquipReference);
+      }, SelectEquipReference, null, cancellationToken);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
 
        
         if (v.isAnimal)

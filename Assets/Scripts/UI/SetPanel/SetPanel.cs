@@ -92,13 +92,13 @@ public class SetPanel : GamePanel<IReferenceData>
         });
         languageButton.onClick.AddListener(() =>
         {
-            // 同步按钮回调不等待面板加载，异常统一记录。
-            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<LanguagePanel>(), nameof(LanguagePanel));
+            // 设置子面板绑定当前设置面板生命周期，关闭后不再继续打开旧语言面板。
+            RunLifecycleTask(_ => UIManager.instance.ShowGamePanel<LanguagePanel>(), nameof(LanguagePanel));
         });
-        changeColorButton.onClick.AddListener(async () =>
+        changeColorButton.onClick.AddListener(() =>
         {
-            ColorPickerPanel ColorPickerPanel=await UIManager.instance.ShowGamePanel<ColorPickerPanel,MyColor>(
-                new MyColor { color =UIManager.instance.JoyStickColor,colorEvent= JoyStickColorChange });
+            RunLifecycleTask(_ => UIManager.instance.ShowGamePanel<ColorPickerPanel,MyColor>(
+                new MyColor { color =UIManager.instance.JoyStickColor,colorEvent= JoyStickColorChange }), nameof(ColorPickerPanel));
         });
         colorASlider.onValueChanged.AddListener((float value) =>
         {
@@ -148,7 +148,7 @@ public class SetPanel : GamePanel<IReferenceData>
     } 
     private void SaveSet()
     {
-        AsyncTaskRunner.Run(SaveSetAsync, nameof(SaveSet));
+        RunLifecycleTask(_ => SaveSetAsync(), nameof(SaveSet));
     }
 
     private async System.Threading.Tasks.Task SaveSetAsync()

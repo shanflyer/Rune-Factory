@@ -31,7 +31,7 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
     public override void OnDisable()
     {
         base.OnDisable();
-        if (!SingletonType.Cleared)
+        if (!SingletonType.Cleared && GameActionManager.HasInstance)
             GameActionManager.instance.RemoveListener<SwitchOperateList>(SwitchOperateList);
     }
 
@@ -73,8 +73,8 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
 
             if (GameDataManager.instance.GlobalData.debug)
                 Debug.Log(debugLog);
-            // 操作列表展开来自同步按钮回调，列表刷新异常统一记录。
-            AsyncTaskRunner.Run(OperateList1.InitListData(operateDatas, SelectAction), "OperateList1");
+            // 操作列表展开绑定当前面板生命周期，关闭后旧二级列表不再回写。
+            RunLifecycleTask(token => OperateList1.InitListData(operateDatas, SelectAction, cancellationToken: token), "OperateList1");
         }
     }
     void SelectAction(OperateDataReferenceData operateData,int index,bool select)
@@ -85,11 +85,11 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
     public override void InitReferenceData(OperateDataList v)
     {
         base.InitReferenceData(v);
-        // 面板引用数据入口保持同步，操作列表加载异常统一进入日志。
-        AsyncTaskRunner.Run(InitReferenceDataAsync(v), nameof(InitReferenceData));
+        // 操作列表绑定面板生命周期，重开后旧数据不再覆盖当前按钮。
+        RunLifecycleTask(token => InitReferenceDataAsync(v, token), nameof(InitReferenceData));
     }
 
-    private async System.Threading.Tasks.Task InitReferenceDataAsync(OperateDataList v)
+    private async System.Threading.Tasks.Task InitReferenceDataAsync(OperateDataList v, System.Threading.CancellationToken cancellationToken)
     {
 
         v.OperateDatas.RemoveAll(d => d.operateData == null);
@@ -115,7 +115,7 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
 
             if (GameDataManager.instance.GlobalData.debug)
                 Debug.Log(debugLog);
-            await OperateList0.InitListData(v.OperateDatas, SelectAction);
+            await OperateList0.InitListData(v.OperateDatas, SelectAction, cancellationToken: cancellationToken);
         }
         else
         {
@@ -126,10 +126,20 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
                 operateDatas.Add(v.OperateDatas[i]);
             }
             OperateData defaultData = await GameDataManager.instance.GetAsyncData<OperateData>(GameCommon.defaultOperateId);
+            if (ShouldStopLifecycleTask(cancellationToken))
+            {
+                return;
+            }
+
             if (defaultData.checkActionData != null)
             {
                 defaultData.checkActionData.Action(setResult: (bool result) =>
                 {
+                    if (ShouldStopLifecycleTask(cancellationToken))
+                    {
+                        return;
+                    }
+
                     if (result)
                     {
                         operateDatas.Add(new OperateDataReferenceData
@@ -149,8 +159,8 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
                 });
             }
 
-            
-            await OperateList0.InitListData(operateDatas, SelectAction);
+
+            await OperateList0.InitListData(operateDatas, SelectAction, cancellationToken: cancellationToken);
         }
     }
 }

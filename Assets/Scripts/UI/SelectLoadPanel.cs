@@ -55,10 +55,9 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
         Copy.onClick.AddListener(CopyDataAsync);
         Delete.onClick.AddListener(DeleteData);
         Start.onClick.AddListener(StartAction);
-        Return.onClick.AddListener(async () =>
+        Return.onClick.AddListener(() =>
         {
-           await UIManager.instance.ShowGamePanel<ZeroPanel>();
-            Close();
+            RunLifecycleTask(_ => ReturnToZeroAsync(), nameof(Return));
         });
         SaveReference.index = -1;
         saveList = new DisplayList<SaveReference, UserGameSaveData>(SaveReference, SaveDataParent);
@@ -86,6 +85,12 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
         base.InitReferenceData(v);
         // 存档列表刷新绑定面板生命周期，关闭或重开后旧结果不再覆盖新状态。
         RunLifecycleTask(token => InitReferenceDataAsync(v, token), nameof(InitReferenceData));
+    }
+
+    private async System.Threading.Tasks.Task ReturnToZeroAsync()
+    {
+        await UIManager.instance.ShowGamePanel<ZeroPanel>();
+        Close();
     }
 
     private async System.Threading.Tasks.Task InitReferenceDataAsync(UserGameSaveDataList v, System.Threading.CancellationToken cancellationToken)

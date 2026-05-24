@@ -133,11 +133,16 @@ public class ShopPanel : GamePanel<ShopList>
 
     private void BuyAction()
     {
-        AsyncTaskRunner.Run(BuyActionAsync, nameof(BuyAction));
+        RunLifecycleTask(BuyActionAsync, nameof(BuyAction));
     }
 
-    private async System.Threading.Tasks.Task BuyActionAsync()
+    private async System.Threading.Tasks.Task BuyActionAsync(System.Threading.CancellationToken cancellationToken)
     {
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         switch (selectShopItemData.type)
         {
             case ShopItemType.道具:
@@ -156,10 +161,10 @@ public class ShopPanel : GamePanel<ShopList>
 
     private void BuyAnimal()
     {
-        AsyncTaskRunner.Run(BuyAnimalAsync, nameof(BuyAnimal));
+        RunLifecycleTask(BuyAnimalAsync, nameof(BuyAnimal));
     }
 
-    private async System.Threading.Tasks.Task BuyAnimalAsync()
+    private async System.Threading.Tasks.Task BuyAnimalAsync(System.Threading.CancellationToken cancellationToken)
     {
         if (TeamManager.instance.playerTeam.TeamCharacters.Count > 4)
         {
@@ -174,12 +179,21 @@ public class ShopPanel : GamePanel<ShopList>
         }
 
             ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(selectShopItemData.item);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         if (itemData != null)
         {
             int trueCost = (int)(itemData.shopPrice * selectShopItemData.priceValue * 0.01f) * buyCount;
             PayManager.instance.PayAction("购买", $"{string.Format(LanguageManage.SwitchStr("购买{0}个"), buyCount)}+ {LanguageManage.SwitchStr(itemData.itemName)} +", trueCost, selectShopItemData.payType, async (bool result) =>
             {
                 if (!result)
+                {
+                    return;
+                }
+                if (ShouldStopLifecycleTask(cancellationToken))
                 {
                     return;
                 }
@@ -221,13 +235,18 @@ public class ShopPanel : GamePanel<ShopList>
 
     private void SeletShopItem(ShopItemData shopItemData, int index, bool selected = true)
     {
-        AsyncTaskRunner.Run(() => SeletShopItemAsync(shopItemData, index, selected), nameof(SeletShopItem));
+        RunLifecycleTask(token => SeletShopItemAsync(shopItemData, index, selected, token), nameof(SeletShopItem));
     }
 
-    private async System.Threading.Tasks.Task SeletShopItemAsync(ShopItemData shopItemData, int index, bool selected = true)
+    private async System.Threading.Tasks.Task SeletShopItemAsync(ShopItemData shopItemData, int index, bool selected, System.Threading.CancellationToken cancellationToken)
     {
         selectShopItemData = shopItemData;
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(shopItemData.item);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         if (itemData != null)
         {
             selectItemName.SetADDText("+ ",itemData.itemName," +");
@@ -250,8 +269,8 @@ public class ShopPanel : GamePanel<ShopList>
         {
             SelectInformation.transform.localScale = Vector3.zero;
             List<ShopItemData> shopItemDatas = shop.GetOpenShopItem();
-            // 店铺切换来自同步选择回调，商品列表刷新异常统一记录。
-            AsyncTaskRunner.Run(shopItems.InitListData(shopItemDatas, SeletShopItem, ItemGroup), nameof(SelecShopData));
+            // 店铺切换来自同步选择回调，商品列表刷新绑定当前面板生命周期。
+            RunLifecycleTask(token => shopItems.InitListData(shopItemDatas, SeletShopItem, ItemGroup, cancellationToken: token), nameof(SelecShopData));
         }
     }
 
@@ -262,9 +281,18 @@ public class ShopPanel : GamePanel<ShopList>
         Title.SetSWText(v.groupName);
         ShopGroup.enabled = true;
         ItemGroup.enabled = true;
-        AsyncTaskRunner.Run(shops.InitListData(v.shops.GetValueList(), SelecShopData, ShopGroup), nameof(InitReferenceData));
-        shops.SelectDefault();
-        SelecShopData(v.shops[0],0, true);
+        // 商店入口列表完成后再默认选中，避免关闭或重开后旧列表抢状态。
+        RunLifecycleTask(async token =>
+        {
+            await shops.InitListData(v.shops.GetValueList(), SelecShopData, ShopGroup, cancellationToken: token);
+            if (ShouldStopLifecycleTask(token))
+            {
+                return;
+            }
+
+            shops.SelectDefault();
+            SelecShopData(v.shops[0],0, true);
+        }, nameof(InitReferenceData));
         buyCount = 1;
         RefreshBuyCount();
     }

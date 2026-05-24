@@ -85,7 +85,7 @@ public class MultiPackagePanel : GamePanel<PackageList>
     public override void OnDisable()
     {
         base.OnDisable();
-        if (!SingletonType.Cleared)
+        if (!SingletonType.Cleared && GameActionManager.HasInstance)
             GameActionManager.instance.RemoveListener<RefreshShortcut>(RefreshShortcut);
     }
 
@@ -132,8 +132,8 @@ public class MultiPackagePanel : GamePanel<PackageList>
             }
 
             Title0.SetSWText(packageSetData0.packageName);
-            // 快捷刷新来自同步 Action，列表刷新任务异常统一记录。
-            AsyncTaskRunner.Run(itemBoxs0.InitListData(items0, SelectPackageItem, toggleGroup: itemSelectGroup), nameof(RefreshShortcut));
+            // 快捷刷新来自同步 Action，列表刷新绑定当前多背包面板生命周期。
+            RunLifecycleTask(token => itemBoxs0.InitListData(items0, SelectPackageItem, toggleGroup: itemSelectGroup, cancellationToken: token), nameof(RefreshShortcut));
             caseCount0.text = $"{packageData.items.Count}/{packageData.caseCount}";
             bool canLevelUp = packageSetData0.canLevelUp ? packageLevel0 < packageSetData0.maxLevel - 1 : false;
             packageLevelUp0.transform.localScale = canLevelUp ? Vector3.one : Vector3.zero;
@@ -169,7 +169,7 @@ public class MultiPackagePanel : GamePanel<PackageList>
                 items1.Add(defaultItem);
             }
             Title1.SetSWText(packageSetData1.packageName);
-            AsyncTaskRunner.Run(itemBoxs1.InitListData(items1, SelectPackageItem, toggleGroup: itemSelectGroup), nameof(RefreshShortcut));
+            RunLifecycleTask(token => itemBoxs1.InitListData(items1, SelectPackageItem, toggleGroup: itemSelectGroup, cancellationToken: token), nameof(RefreshShortcut));
             caseCount1.text = $"{packageData.items.Count}/{packageData.caseCount}";
             bool canLevelUp = packageSetData1.canLevelUp ? packageLevel1 < packageSetData1.maxLevel - 1 :false;
             packageLevelUp1.transform.localScale = canLevelUp ? Vector3.one : Vector3.zero;
@@ -262,10 +262,10 @@ public class MultiPackagePanel : GamePanel<PackageList>
 
     private void SelectPackageItem(Item item,int index, bool selected = true)
     {
-        AsyncTaskRunner.Run(() => SelectPackageItemAsync(item, index, selected), nameof(SelectPackageItem));
+        RunLifecycleTask(token => SelectPackageItemAsync(item, index, selected, token), nameof(SelectPackageItem));
     }
 
-    private async System.Threading.Tasks.Task SelectPackageItemAsync(Item item,int index, bool selected = true)
+    private async System.Threading.Tasks.Task SelectPackageItemAsync(Item item,int index, bool selected, System.Threading.CancellationToken cancellationToken)
     {
         if (selected)
         {
@@ -283,6 +283,11 @@ public class MultiPackagePanel : GamePanel<PackageList>
                 ItemInformation.localScale = Vector3.one;
                 SelectItem = item;
                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
+                if (ShouldStopLifecycleTask(cancellationToken))
+                {
+                    return;
+                }
+
                 ItemIcon.sprite = itemData.icon;
                 ItemIcon.enabled = true;
                 ItemIcon.SetNativeSize();
@@ -415,11 +420,11 @@ public class MultiPackagePanel : GamePanel<PackageList>
     public override void InitReferenceData(PackageList v)
     {
         base.InitReferenceData(v);
-        // 面板引用数据入口保持同步，多背包数据加载异常统一进入日志。
-        AsyncTaskRunner.Run(InitReferenceDataAsync(v), nameof(InitReferenceData));
+        // 多背包初始化绑定面板生命周期，关闭或重开后旧加载不再覆盖两侧列表。
+        RunLifecycleTask(token => InitReferenceDataAsync(v, token), nameof(InitReferenceData));
     }
 
-    private async System.Threading.Tasks.Task InitReferenceDataAsync(PackageList v)
+    private async System.Threading.Tasks.Task InitReferenceDataAsync(PackageList v, System.Threading.CancellationToken cancellationToken)
     {
 
         GameActionManager.instance.QueueAction(new ClosePanelAction
@@ -433,8 +438,17 @@ public class MultiPackagePanel : GamePanel<PackageList>
         packageLevel1 = packageData1.level;
         PackageCaseCount0 = packageData0.caseCount;
         packageSetData0 = await GameDataManager.instance.GetAsyncData<PackageSetData>(packageData0.dataId);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         PackageCaseCount1 = packageData1.caseCount;
         packageSetData1 = await GameDataManager.instance.GetAsyncData<PackageSetData>(packageData1.dataId);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
 
         Item defaultItem = default(Item);
         List<Item> items0 = new List<Item>();
@@ -464,7 +478,12 @@ public class MultiPackagePanel : GamePanel<PackageList>
         }
 
         Title0.SetSWText(packageSetData0.packageName);
-        await itemBoxs0.InitListData(items0, SelectPackageItem, toggleGroup: itemSelectGroup);
+        await itemBoxs0.InitListData(items0, SelectPackageItem, toggleGroup: itemSelectGroup, cancellationToken: cancellationToken);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         caseCount0.text = $"{itemCaseCount0}/{packageData0.caseCount}";
         bool canLevelUp = packageSetData0.canLevelUp ? packageLevel0 < packageSetData0.maxLevel - 1 : false;
         packageLevelUp0.transform.localScale = canLevelUp? Vector3.one : Vector3.zero;
@@ -498,7 +517,12 @@ public class MultiPackagePanel : GamePanel<PackageList>
         }
 
         Title1.SetSWText(packageSetData1.packageName);
-        await itemBoxs1.InitListData(items1, SelectPackageItem, toggleGroup: itemSelectGroup);
+        await itemBoxs1.InitListData(items1, SelectPackageItem, toggleGroup: itemSelectGroup, cancellationToken: cancellationToken);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         caseCount1.text = $"{itemCaseCount1}/{packageData1.caseCount}";
         bool canLevelUp1 = packageSetData1.canLevelUp ? packageLevel1 < packageSetData1.maxLevel-1 : false;
         packageLevelUp1.transform.localScale = canLevelUp1 ? Vector3.one : Vector3.zero;

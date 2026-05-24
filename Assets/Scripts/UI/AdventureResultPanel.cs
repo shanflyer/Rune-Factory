@@ -78,20 +78,31 @@ public class AdventureResultPanel: GamePanel<FightResult>
         FailureTitle.transform.localScale = fightResult.victory ? Vector3.zero : Vector3.one;
         AudioController.instance.ClearBGM(Group: BGMGroup.Battle.ToString(), audioClearType: AudioClearType.All);
         AudioController.instance.PlayAudioME(fightResult.victory ? successAudioClip : failedAudioClip, Group: MEGroup.Battle.ToString());
-        // 结算面板入口保持同步，列表加载和关闭面板异常统一进入日志。
-        AsyncTaskRunner.Run(InitReferenceDataAsync(fightResult), nameof(InitReferenceData));
+        // 结算列表绑定面板生命周期，关闭后旧结算不再继续写 UI 或关闭战斗面板。
+        RunLifecycleTask(token => InitReferenceDataAsync(fightResult, token), nameof(InitReferenceData));
     }
 
-    private async System.Threading.Tasks.Task InitReferenceDataAsync(FightResult fightResult)
+    private async System.Threading.Tasks.Task InitReferenceDataAsync(FightResult fightResult, System.Threading.CancellationToken cancellationToken)
     {
         Debug.Log("fightResult.getItems");
-        await itemList.InitListData(fightResult.getItems);
+        await itemList.InitListData(fightResult.getItems, cancellationToken: cancellationToken);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         Debug.Log("fightResult.fighterResults");
+        characters.Clear();
         for(int i = 0; i < fightResult.fighterResults.Count; i++)
         {
             characters.Add(fightResult.fighterResults[i].Character.instanceId);
         }
-        await teamerList.InitListData(fightResult.fighterResults);
+        await teamerList.InitListData(fightResult.fighterResults, cancellationToken: cancellationToken);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         UIManager.instance.CloseGamePanel<FightPanel>();
     }
     

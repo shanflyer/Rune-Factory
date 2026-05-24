@@ -102,13 +102,13 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
     [SerializeField] private Transform Node;
     public override void OnEnable()
     {
-        base.OnEnable(); 
+        base.OnEnable();
     }
 
     public override void OnDisable()
     {
         base.OnDisable();
-         
+
     }
 
     public void ChangeLayer(int layer)
@@ -122,7 +122,7 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
         itemList = new DisplayList<ShortcutItemReference, ShortcutItem>(ShortcutItemReference, itemParent);
         bagButton.onClick.AddListener( () =>
         {
-            
+
             if (UIManager.instance.GamePanelIsShow<WarehousePanel>())
             {
                 UIManager.instance.CloseGamePanel<WarehousePanel>();
@@ -134,7 +134,7 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
                     packageId = CharacterManager.instance.controllerCharacter.characterPackage,
                     // selectItemTypes = new List<ItemType> { ItemType.Default },
                     targetObj = CharacterManager.instance.controllerCharacter.instanceId,
-                    selectActionName = "Ê¹ÓÃ",
+                    selectActionName = "ä½¿ç”¨",
                     selectAction = TryUsedItem,
                     canSetShortcut = true
                     /*
@@ -186,7 +186,7 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
 
     private Item selectPackageItem;
 
-  
+
     private void TryUsedItem(Item item, int index, bool select)
     {
         ItemUseAction itemUseAction = new ItemUseAction
@@ -223,16 +223,21 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
     {
         useButton.interactable = unEquipButton.interactable = false;
         base.InitReferenceData(v);
-        // Ãæ°åÒýÓÃÊý¾ÝÈë¿Ú±£³ÖÍ¬²½£¬¿ì½ÝÀ¸ÁÐ±í¼ÓÔØÒì³£Í³Ò»½øÈëÈÕÖ¾¡£
-        AsyncTaskRunner.Run(InitReferenceDataAsync(v), nameof(InitReferenceData));
+        // å¿«æ·æ åˆ—è¡¨ç»‘å®šé¢æ¿ç”Ÿå‘½å‘¨æœŸï¼Œå…³é—­æˆ–é‡å¼€åŽæ—§åˆ—è¡¨ä¸å†å›žå†™é€‰ä¸­é¡¹ã€‚
+        RunLifecycleTask(token => InitReferenceDataAsync(v, token), nameof(InitReferenceData));
     }
 
-    private async System.Threading.Tasks.Task InitReferenceDataAsync(ShortcutPackage v)
+    private async System.Threading.Tasks.Task InitReferenceDataAsync(ShortcutPackage v, System.Threading.CancellationToken cancellationToken)
     {
         shortcutPackage = v;
         var items = v.GetShortcutItems();
 
-        await itemList.InitListData(items, SelectShortcutItem,toggleGroup,Async:false);
+        await itemList.InitListData(items, SelectShortcutItem, toggleGroup, Async: false, cancellationToken: cancellationToken);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         if (shortcutItem.Item.instanceId == 0)
         {
         }
@@ -277,7 +282,7 @@ public class ShortcutPanel : GamePanel<ShortcutPackage>
         }
         else
         {
-            
+
             if (selectShortIndex == item.index)
             {
                 selectShortIndex = 0;
