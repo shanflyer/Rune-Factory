@@ -13,15 +13,21 @@ namespace Anima2D
 	public class SpriteMeshPostprocessor : AssetPostprocessor
 	{
 		static Dictionary<string,string> s_SpriteMeshToTextureCache = new Dictionary<string, string>();
+		const string k_AutoImportedTextureSessionKey = "Anima2D.SpriteMeshPostprocessor.AutoImportedTexture.";
 		
 		static bool s_Initialized = false;
 		
 		static SpriteMeshPostprocessor()
 		{
-			if(!Application.isPlaying)
+			if(!Application.isPlaying && !EditorApplication.isPlayingOrWillChangePlaymode)
 			{
 				EditorApplication.delayCall += Initialize;
 			}
+		}
+
+		static bool CanRunImportMaintenance()
+		{
+			return !Application.isPlaying && !EditorApplication.isPlayingOrWillChangePlaymode;
 		}
 		
 		public static SpriteMesh GetSpriteMeshFromSprite(Sprite sprite)
@@ -49,6 +55,11 @@ namespace Anima2D
 		
 		static void Initialize() 
 		{
+			if(!CanRunImportMaintenance())
+			{
+				return;
+			}
+			
 			s_SpriteMeshToTextureCache.Clear();
 			
 			string[] spriteMeshGUIDs = AssetDatabase.FindAssets("t:SpriteMesh");
@@ -76,15 +87,43 @@ namespace Anima2D
 			
 			needsOverride = needsOverride.Distinct().ToList();
 			
-			AssetDatabase.StartAssetEditing();
-			
-			foreach(string textureGuid in needsOverride)
+			try
 			{
-				AssetDatabase.ImportAsset(AssetDatabase.GUIDToAssetPath(textureGuid));
+				AssetDatabase.StartAssetEditing();
+				
+				foreach(string textureGuid in needsOverride)
+				{
+					ImportTextureOncePerSession(textureGuid);
+				}
+			}
+			finally
+			{
+				AssetDatabase.StopAssetEditing();
 			}
 			
-			AssetDatabase.StopAssetEditing();
+		}
+
+		static void ImportTextureOncePerSession(string textureGuid)
+		{
+			if(string.IsNullOrEmpty(textureGuid))
+			{
+				return;
+			}
 			
+			string sessionKey = k_AutoImportedTextureSessionKey + textureGuid;
+			
+			if(SessionState.GetBool(sessionKey,false))
+			{
+				return;
+			}
+			
+			string texturePath = AssetDatabase.GUIDToAssetPath(textureGuid);
+			
+			if(!string.IsNullOrEmpty(texturePath))
+			{
+				AssetDatabase.ImportAsset(texturePath);
+				SessionState.SetBool(sessionKey,true);
+			}
 		}
 		
 		static void UpgradeSpriteMesh(SpriteMesh spriteMesh)
