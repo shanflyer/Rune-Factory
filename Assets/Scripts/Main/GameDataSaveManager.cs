@@ -74,7 +74,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     {
         if (loadDataIsNotNull && CharacterManager.instance.controllerCharacter == null)
         { 
-            PackageManager.instance.InitFromSaveData(loadGameSaveData.packageSaveDatas);
+            await PackageManager.instance.InitFromSaveData(loadGameSaveData.packageSaveDatas);
             PackageManager.instance.playerPackages.AddRange(loadGameSaveData.otherSaveData.playerPackages);
 
             await CharacterManager.instance.CreatePlayer((int)loadGameSaveData.playerData.gender,loadGameSaveData.playerData.name, 0, loadGameSaveData.playerData.instanceId);
@@ -467,7 +467,12 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         }
         return null;
     }
-    public async void InitPlayerData(string playerName, Gender gender, Season season, int day, int year = 1300)
+    public void InitPlayerData(string playerName, Gender gender, Season season, int day, int year = 1300)
+    {
+        AsyncTaskRunner.Run(InitPlayerDataAsync(playerName, gender, season, day, year), nameof(InitPlayerData));
+    }
+
+    public async Task InitPlayerDataAsync(string playerName, Gender gender, Season season, int day, int year = 1300)
     {
         UserGameSaveDataList.nowSaveData = new UserGameSaveData()
         {

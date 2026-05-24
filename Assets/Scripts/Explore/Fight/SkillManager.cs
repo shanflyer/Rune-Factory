@@ -113,8 +113,8 @@ public class BuffRuntime
         Vector3 pos = FightController.instance.GetPosForCharacterId(characterId);
         if (buffData.buffObj != null)
         {
-            InitRuntimeObj();
-            async void InitRuntimeObj()
+            AsyncTaskRunner.Run(InitRuntimeObjAsync(), nameof(BuffRuntime));
+            async Task InitRuntimeObjAsync()
             {
                 runtimeObj = await GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.OTHER.ToString(), buffData.buffObj.name, buffData.buffObj, instanceId);
                 buffActionBehavior = runtimeObj.obj as BuffActionBehavior;
@@ -160,8 +160,8 @@ public class BuffRuntime
         Vector3 pos=FightController.instance.GetPosForCharacterId(characterId);
         if (buffData.buffObj!= null)
         {
-            InitRuntimeObj();
-            async void InitRuntimeObj()
+            AsyncTaskRunner.Run(InitRuntimeObjAsync(), nameof(BuffRuntime));
+            async Task InitRuntimeObjAsync()
             {
                 runtimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.OTHER.ToString(), buffData.buffObj.name, buffData.buffObj, instanceId);
                 buffActionBehavior = runtimeObj.obj as BuffActionBehavior;

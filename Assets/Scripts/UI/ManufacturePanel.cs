@@ -404,7 +404,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                     {
                         InformationController.instance.AddInformation(LanguageManage.SwitchStr("空间不足，部分物体没有获得"));
                     }*/
-                    InitDisplay();
+                    AsyncTaskRunner.Run(InitDisplayAsync(), nameof(InitDisplayAsync));
                     PackageManager.instance.RemovePlayerPackageItem(costItem.dataId, costItem.count);
                     
                     AutoSelect.interactable = false;
@@ -758,7 +758,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         return ManufactureManager.instance.CheckFormula(items); 
     }
 
-    private async void InitDisplay()
+    private async Task InitDisplayAsync()
     {
         Item defaultItem = default(Item);
         defaultItem.instanceId = -1;
@@ -966,7 +966,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         }
 
         RefreshFormulaSelect();
-        InitDisplay();
+        AsyncTaskRunner.Run(InitDisplayAsync(), nameof(InitDisplayAsync));
         if (WorldMapObjManager.instance.GetRuntimeMapItemObj(v.instanceId, out var runtimeObj))
         {
             Vector2 pos = runtimeObj.transform.position;

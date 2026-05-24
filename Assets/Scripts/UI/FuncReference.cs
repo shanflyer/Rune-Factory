@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -106,7 +107,12 @@ public class FuncReference : UIObjReference<FunctionData>
         StartMoveSelectButtonTask(true);
     }
 
-    public async void InitFunction(FunctionData functionData, Button secondSelectButton)
+    public void InitFunction(FunctionData functionData, Button secondSelectButton)
+    {
+        AsyncTaskRunner.Run(InitFunctionAsync(functionData, secondSelectButton), nameof(InitFunction));
+    }
+
+    private async Task InitFunctionAsync(FunctionData functionData, Button secondSelectButton)
     {
         this.functionData = functionData;
         nameText.text = functionData.buttonName;

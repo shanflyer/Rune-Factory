@@ -83,7 +83,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             set
             {
                 season = value;
-                InitSeasonData();
+                AsyncTaskRunner.Run(InitSeasonDataAsync(), nameof(InitSeasonDataAsync));
             }
         }
 
@@ -243,7 +243,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             overrideEnvironment = false;
         }
 
-        private async void InitSeasonData()
+        private async Task InitSeasonDataAsync()
         {
             SeasonData = await GameDataManager.instance.GetAsyncData<SeasonData>(season.ToString());
             dayStart = SeasonData.sunupHour * 60 + SeasonData.sunupMinute + 30;

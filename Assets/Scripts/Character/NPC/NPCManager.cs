@@ -394,7 +394,7 @@ public class NPC : IReferenceData
         return npcData.GetTalk(friendShipLevel,character.mapInstance);
     }
     private NPCBehaviorData NPCBehaviorData;
-    public async void InitBehaviorData()
+    public async Task InitBehaviorDataAsync()
     {
         NPCBehaviorData = await GameDataManager.instance.GetAsyncData<NPCBehaviorData>(npcData.id);
         likeItemSet.Clear();
@@ -780,7 +780,7 @@ public class NPCManager : Singleton<NPCManager>
                // Debug.Log($"npc:{npcs[i].npcName}--不适合");
                 continue;
             }
-            npcs[i].InitBehaviorData();
+            AsyncTaskRunner.Run(npcs[i].InitBehaviorDataAsync(), nameof(InitNPCBehavior));
         }
     }
     void TryNPCJoinTeam(TryNPCJoinTeam tryNPCJoinTeam)

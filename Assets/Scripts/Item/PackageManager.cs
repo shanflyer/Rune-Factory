@@ -673,7 +673,7 @@ public class PackageManager : Singleton<PackageManager>
         }
     }
 
-    public async void InitFromSaveData(List<PackageSaveData> packageSaveDatas)
+    public async Task InitFromSaveData(List<PackageSaveData> packageSaveDatas)
     {
         for (int i = 0; i < packageSaveDatas.Count; i++)
         {
