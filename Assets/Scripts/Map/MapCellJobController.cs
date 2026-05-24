@@ -313,8 +313,10 @@ public class MapCellJobController : Singleton<MapCellJobController>
     {
         base.Clear();
         if (jobRunning) pathJobHandle.Complete();
+        DisposeCurrentJobResources();
+        jobRunning = false;
         if (pathRequests.IsCreated) pathRequests.Dispose();
-        if (pendingRequests.IsCreated) pendingRequests.Dispose(); 
+        if (pendingRequests.IsCreated) pendingRequests.Dispose();
     }
 
     protected override void Update()
@@ -428,53 +430,67 @@ public class MapCellJobController : Singleton<MapCellJobController>
         }
         if (!pathJobHandle.IsCompleted) return;
 
-        pathJobHandle.Complete();
-
-        // —— 读取 —— //
-        var reader = pathStream.AsReader();
-        int n = reader.ForEachCount; // == requestsSnap.Length
-        for (int i = 0; i < n; i++)
+        try
         {
-            reader.BeginForEachIndex(i);
-            Stack<int2> path = new Stack<int2>();
-            while (reader.RemainingItemCount > 0)
-                path.Push(reader.Read<int2>());
-            reader.EndForEachIndex();
-            // 用快照，避免索引错位
-            var req = requestsSnap[i];
+            pathJobHandle.Complete();
 
-            callbacksSnap[i].Invoke(path, req.roomId, req.start, req.end);
+            // —— 读取 —— //
+            var reader = pathStream.AsReader();
+            int n = reader.ForEachCount; // == requestsSnap.Length
+            for (int i = 0; i < n; i++)
+            {
+                reader.BeginForEachIndex(i);
+                Stack<int2> path = new Stack<int2>();
+                while (reader.RemainingItemCount > 0)
+                    path.Push(reader.Read<int2>());
+                reader.EndForEachIndex();
+                // 用快照，避免索引错位
+                var req = requestsSnap[i];
+
+                try
+                {
+                    callbacksSnap[i].Invoke(path, req.roomId, req.start, req.end);
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError($"Pathfinding callback failed. room:{req.roomId}, start:{req.start}, end:{req.end}");
+                    Debug.LogException(e);
+                }
+            }
+
+            MapCellController.instance.ChangeMapBarrierAction();
         }
+        finally
+        {
+            // Job 临时容器必须在异常路径也释放，否则退出 PlayMode 或回调异常会留下 Native 泄漏。
+            DisposeCurrentJobResources();
 
-        MapCellController.instance.ChangeMapBarrierAction();
-       
+            // 把 pending 并回下一批
+            for (int i = 0; i < pendingRequests.Length; i++)
+                pathRequests.Add(pendingRequests[i]);
+            pendingRequests.Clear();
 
-        // —— 释放（只释放一次）—— //
-        pathStream.Dispose();
+            foreach (var cb in pendingCallbacks)
+                MoveWithPath.Add(cb);
+            pendingCallbacks.Clear();
 
-        openCells.Dispose();
-        openCosts.Dispose();
-        openCounts.Dispose();
+            jobRunning = false; // ★★ 关键：避免下帧再次读已释放的 stream
+        }
+    }
 
-        bestG.Dispose();
-        parentFlat.Dispose();
-        nodeState.Dispose();
-
-        areas.Dispose();
-        baseOffsets.Dispose();
-        mapRanges.Dispose();
-        requestsSnap.Dispose();
-
-        // 把 pending 并回下一批
-        for (int i = 0; i < pendingRequests.Length; i++)
-            pathRequests.Add(pendingRequests[i]);
-        pendingRequests.Clear();
-
-        foreach (var cb in pendingCallbacks)
-            MoveWithPath.Add(cb);
-        pendingCallbacks.Clear();
-
-        jobRunning = false; // ★★ 关键：避免下帧再次读已释放的 stream
+    private void DisposeCurrentJobResources()
+    {
+        if (pathStream.IsCreated) pathStream.Dispose();
+        if (openCells.IsCreated) openCells.Dispose();
+        if (openCosts.IsCreated) openCosts.Dispose();
+        if (openCounts.IsCreated) openCounts.Dispose();
+        if (bestG.IsCreated) bestG.Dispose();
+        if (parentFlat.IsCreated) parentFlat.Dispose();
+        if (nodeState.IsCreated) nodeState.Dispose();
+        if (areas.IsCreated) areas.Dispose();
+        if (baseOffsets.IsCreated) baseOffsets.Dispose();
+        if (mapRanges.IsCreated) mapRanges.Dispose();
+        if (requestsSnap.IsCreated) requestsSnap.Dispose();
     }
 
     public void AddPathRequest(int2 start, int2 end, int roomId, MoveWithPath moveWithPath)
