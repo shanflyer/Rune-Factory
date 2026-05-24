@@ -745,7 +745,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
     public int Year => nowGameTime.year;
     public Season Season => nowGameTime.Season;
     public Week Week => nowGameTime.week;
-    public int Day => nowGameTime.day;
+    public int Day => nowGameTime != null ? nowGameTime.day : 0;
 
     public int GameDay
     {
@@ -1077,5 +1077,4 @@ public class GameTimeManager : Singleton<GameTimeManager>
     }
 
 }
-
 

@@ -88,9 +88,25 @@ public static class DataResourceRegistry
 
     private static bool IsCompatibleDataAsset(UnityEngine.Object asset, Type dataType)
     {
-        if (asset is IGameData || asset is TextAsset)
+        if (asset == null || dataType == null)
+        {
+            return false;
+        }
+
+        if (dataType.IsInstanceOfType(asset) || asset is TextAsset)
         {
             return true;
+        }
+
+        if (asset is IGameData && typeof(IGameData).IsAssignableFrom(dataType))
+        {
+            return true;
+        }
+
+        if (!typeof(IGameData).IsAssignableFrom(dataType))
+        {
+            // DataPath 里也登记了 GameRandomDataList 这类普通 ScriptableObject，不能套 IDataArray<T> 的 IGameData 约束。
+            return false;
         }
 
         Type dataArrayType = typeof(IDataArray<>).MakeGenericType(dataType);
