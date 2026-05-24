@@ -1,10 +1,14 @@
 using System.Collections.Generic;
+using System.Reflection;
 using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.TestTools;
 
 public sealed class GameInfrastructureTests
 {
+    private static readonly MethodInfo LogAssertExpectMethod =
+        System.Type.GetType("UnityEngine.TestTools.LogAssert, UnityEngine.TestRunner")
+            ?.GetMethod("Expect", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(LogType), typeof(string) }, null);
+
     private struct TestGameAction : GameAction
     {
         public SetValue setValue { get; set; }
@@ -80,7 +84,8 @@ public sealed class GameInfrastructureTests
 
         try
         {
-            LogAssert.Expect(LogType.Error, "GameActionManager listener failed: type=GameInfrastructureTests+TestGameAction, listener=GameInfrastructureTests.<ActionDispatch_ContinuesAfterListenerException>b__5_0");
+            // 反射登记预期日志，避免普通脚本程序集强依赖 Unity TestRunner 类型。
+            LogAssertExpectMethod?.Invoke(null, new object[] { LogType.Error, "GameActionManager listener failed: type=GameInfrastructureTests+TestGameAction, listener=GameInfrastructureTests.<ActionDispatch_ContinuesAfterListenerException>b__5_0" });
             GameActionManager.instance.AddListener(throwingListener);
             GameActionManager.instance.AddListener(countingListener);
 
