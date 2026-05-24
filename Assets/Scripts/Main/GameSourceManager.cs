@@ -51,6 +51,7 @@ public class GameSourceManager : Singleton<GameSourceManager>
 
     public async Task<ExternalBehavior> GetBehavior(string path)
     {
+        path = NormalizeCachePath(path);
         if (behaviorCache.TryGetValue(path, out var behavior))
         {
             return behavior;
@@ -63,6 +64,7 @@ public class GameSourceManager : Singleton<GameSourceManager>
 
     public async Task<Sprite> GetSprite(string path)
     {
+        path = NormalizeCachePath(path);
         if (spriteCache.TryGetValue(path, out var sprite))
         {
             return sprite;
@@ -84,6 +86,7 @@ public class GameSourceManager : Singleton<GameSourceManager>
 
     public async Task<AudioClip> GetAudioClip(string path)
     {
+        path = NormalizeCachePath(path);
         if (audioClipCache.TryGetValue(path, out var audioClip))
         {
             return audioClip;
@@ -108,6 +111,7 @@ public class GameSourceManager : Singleton<GameSourceManager>
 
     public GameObject GetPrefabImmediately(string path)
     {
+        path = NormalizeCachePath(path);
         if (prefabCache.TryGetValue(path, out var obj))
         {
             return obj;
@@ -120,6 +124,7 @@ public class GameSourceManager : Singleton<GameSourceManager>
 
     public async Task<GameObject> GetPrefab(string path)
     {
+        path = NormalizeCachePath(path);
         if (prefabCache.TryGetValue(path, out var obj))
         {
             return obj;
@@ -132,6 +137,7 @@ public class GameSourceManager : Singleton<GameSourceManager>
 
     public async Task<T> GetScriptableObject<T>(string path) where T : ScriptableObject
     {
+        path = NormalizeCachePath(path);
         if (scriptableObjectCache.TryGetValue(path, out var cached) && cached is T typedCached)
         {
             return typedCached;
@@ -147,11 +153,17 @@ public class GameSourceManager : Singleton<GameSourceManager>
         return await GetScriptableObject<T>(path);
     }
 
+    private static string NormalizeCachePath(string path)
+    {
+        return ExtensionsResources.NormalizeResourcePath(path);
+    }
+
     private static void CacheLoadedAsset<T>(Dictionary<string, T> cache, string path, T asset) where T : UnityEngine.Object
     {
+        path = NormalizeCachePath(path);
         if (!string.IsNullOrEmpty(path) && asset != null)
         {
-            // Resources 资源本身由 Unity 管理生命周期，这里只缓存引用，减少重复查找和异步请求。
+            // Resources 资源本体由 Unity 管理生命周期，这里只缓存引用并统一路径 key。
             cache[path] = asset;
         }
     }

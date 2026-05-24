@@ -1,25 +1,66 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using System.IO;
 using UnityEngine.Networking;
 using Object = UnityEngine.Object;
 
-public  static class ExtensionsResources
+public static class ExtensionsResources
 {
+    private static readonly object CacheSyncRoot = new object();
     private static readonly Dictionary<string, Object> ResourceCache = new Dictionary<string, Object>();
     private static readonly Dictionary<string, Object[]> ResourceAllCache = new Dictionary<string, Object[]>();
+    private static readonly Dictionary<string, Task<Object>> ResourceLoadTasks = new Dictionary<string, Task<Object>>();
 
     public static ResourceRequestAwaiter GetAwaiter(this ResourceRequest request) => new ResourceRequestAwaiter(request);
 
     public static void ClearCache()
     {
-        ResourceCache.Clear();
-        ResourceAllCache.Clear();
+        lock (CacheSyncRoot)
+        {
+            ResourceCache.Clear();
+            ResourceAllCache.Clear();
+            ResourceLoadTasks.Clear();
+        }
+    }
+
+    public static string NormalizeResourcePath(string path)
+    {
+        return string.IsNullOrWhiteSpace(path) ? string.Empty : path.Replace('\\', '/').Trim().Trim('/');
+    }
+
+    public static bool TryGetCachedResource<T>(string path, out T asset) where T : Object
+    {
+        asset = null;
+        string normalizedPath = NormalizeResourcePath(path);
+        if (string.IsNullOrEmpty(normalizedPath))
+        {
+            return false;
+        }
+
+        string cacheKey = GetResourceCacheKey(typeof(T), normalizedPath);
+        lock (CacheSyncRoot)
+        {
+            if (ResourceCache.TryGetValue(cacheKey, out var cachedAsset) && cachedAsset is T typedAsset)
+            {
+                asset = typedAsset;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static async Task<T> PreloadResourceAsync<T>(string path) where T : Object
+    {
+        return await LoadResourceAsync<T>(path);
+    }
+
+    public static T[] PreloadAllResource<T>(string path) where T : Object
+    {
+        return LoadAllResource<T>(path);
     }
 
     private static string GetResourceCacheKey(Type type, string path)
@@ -27,56 +68,67 @@ public  static class ExtensionsResources
         return $"{type.FullName}:{path}";
     }
 
-    public static async Task<T> LoadResourceAsync<T>(string path)where T : UnityEngine.Object
+    private static bool TryPreparePath(string context, Type type, string path, out string normalizedPath)
     {
-        if (string.IsNullOrEmpty(path))
+        normalizedPath = NormalizeResourcePath(path);
+        if (!string.IsNullOrEmpty(normalizedPath))
         {
-            Debug.LogError($"LoadResourceAsync failed: empty path for {typeof(T).FullName}");
+            return true;
+        }
+
+        Debug.LogError($"{context} failed: empty path for {type?.FullName ?? "<null>"}");
+        return false;
+    }
+
+    public static async Task<T> LoadResourceAsync<T>(string path) where T : Object
+    {
+        if (!TryPreparePath(nameof(LoadResourceAsync), typeof(T), path, out var normalizedPath))
+        {
             return null;
         }
 
-        var cacheKey = GetResourceCacheKey(typeof(T), path);
-        if (ResourceCache.TryGetValue(cacheKey, out var cachedAsset))
-        {
-            return cachedAsset as T;
-        }
-
-        var gres = Resources.LoadAsync(path, typeof(T));
-        await gres;
-        var asset = gres.asset as T;
-        CacheResource(cacheKey, asset);
-        return asset;
+        var asset = await LoadResourceObjectAsync(typeof(T), typeof(T), normalizedPath);
+        return asset as T;
     }
-    public static T LoadResource<T>(string path) where T : UnityEngine.Object
+
+    public static T LoadResource<T>(string path) where T : Object
     {
-        if (string.IsNullOrEmpty(path))
+        if (!TryPreparePath(nameof(LoadResource), typeof(T), path, out var normalizedPath))
         {
-            Debug.LogError($"LoadResource failed: empty path for {typeof(T).FullName}");
             return null;
         }
 
-        var cacheKey = GetResourceCacheKey(typeof(T), path);
-        if (ResourceCache.TryGetValue(cacheKey, out var cachedAsset))
+        string cacheKey = GetResourceCacheKey(typeof(T), normalizedPath);
+        lock (CacheSyncRoot)
         {
-            return cachedAsset as T;
+            if (ResourceCache.TryGetValue(cacheKey, out var cachedAsset))
+            {
+                return cachedAsset as T;
+            }
         }
 
-        var asset = Resources.Load<T>(path);
+        var asset = Resources.Load<T>(normalizedPath);
         CacheResource(cacheKey, asset);
         return asset;
     }
+
     public static T LoadIGameData<T>(string path) where T : IGameData
     {
-        if (string.IsNullOrEmpty(path))
+        if (!TryPreparePath(nameof(LoadIGameData), typeof(T), path, out var normalizedPath))
         {
-            Debug.LogError($"LoadIGameData failed: empty path for {typeof(T).FullName}");
             return default(T);
         }
 
-        var cacheKey = GetResourceCacheKey(typeof(T), path);
-        if (!ResourceCache.TryGetValue(cacheKey, out var asset))
+        string cacheKey = GetResourceCacheKey(typeof(T), normalizedPath);
+        Object asset;
+        lock (CacheSyncRoot)
         {
-            asset = Resources.Load(path);
+            ResourceCache.TryGetValue(cacheKey, out asset);
+        }
+
+        if (asset == null)
+        {
+            asset = Resources.Load(normalizedPath);
             CacheResource(cacheKey, asset);
         }
 
@@ -87,63 +139,62 @@ public  static class ExtensionsResources
 
         if (asset != null)
         {
-            Debug.LogError($"LoadIGameData failed: incompatible asset. type={typeof(T).FullName}, path={path}, asset={asset.name}");
+            Debug.LogError($"LoadIGameData failed: incompatible asset. type={typeof(T).FullName}, path={normalizedPath}, asset={asset.name}");
         }
         return default(T);
     }
+
     public static async Task<T> LoadResourceIGameData<T>(string path) where T : IGameData
     {
-        if (string.IsNullOrEmpty(path))
+        if (!TryPreparePath(nameof(LoadResourceIGameData), typeof(T), path, out var normalizedPath))
         {
-            Debug.LogError($"LoadResourceIGameData failed: empty path for {typeof(T).FullName}");
             return default(T);
         }
 
-        var cacheKey = GetResourceCacheKey(typeof(T), path);
-        if (ResourceCache.TryGetValue(cacheKey, out var cachedAsset))
-        {
-            return cachedAsset is T cachedGameData ? cachedGameData : default(T);
-        }
-
-        var gres = Resources.LoadAsync(path);
-        await gres;
-        CacheResource(cacheKey, gres.asset);
-        if(gres.asset is T gameData)
+        var asset = await LoadResourceObjectAsync(typeof(T), null, normalizedPath);
+        if (asset is T gameData)
         {
             return gameData;
         }
-        if (gres.asset != null)
+
+        if (asset != null)
         {
-            Debug.LogError($"LoadResourceIGameData failed: incompatible asset. type={typeof(T).FullName}, path={path}, asset={gres.asset.name}");
+            Debug.LogError($"LoadResourceIGameData failed: incompatible asset. type={typeof(T).FullName}, path={normalizedPath}, asset={asset.name}");
         }
         return default(T);
     }
 
-    public static List<T> LoadAllIGameData<T>(string path) where T: IGameData
+    public static List<T> LoadAllIGameData<T>(string path) where T : IGameData
     {
-        if (string.IsNullOrEmpty(path))
+        if (!TryPreparePath(nameof(LoadAllIGameData), typeof(T), path, out var normalizedPath))
         {
-            Debug.LogError($"LoadAllIGameData failed: empty path for {typeof(T).FullName}");
             return new List<T>();
         }
 
-        var cacheKey = GetResourceCacheKey(typeof(T), path);
-        if (!ResourceAllCache.TryGetValue(cacheKey, out var gres))
+        string cacheKey = GetResourceCacheKey(typeof(T), normalizedPath);
+        Object[] loadedAssets;
+        lock (CacheSyncRoot)
         {
-            // LoadAll 的结果统一缓存，数据展开仍每次返回新 List，避免调用方误改共享集合。
-            gres = Resources.LoadAll(path);
-            ResourceAllCache[cacheKey] = gres;
+            ResourceAllCache.TryGetValue(cacheKey, out loadedAssets);
         }
-        List<T> ts = new List<T>();
+
+        if (loadedAssets == null)
+        {
+            // LoadAll 结果集中缓存，展开时返回新的 List，避免调用方误改共享集合。
+            loadedAssets = Resources.LoadAll(normalizedPath);
+            CacheAllResource(cacheKey, loadedAssets);
+        }
+
+        List<T> results = new List<T>();
         try
         {
-            for (int i = 0; i < gres.Length; i++)
+            for (int i = 0; i < loadedAssets.Length; i++)
             {
-                if (gres[i] is T t)
+                if (loadedAssets[i] is T data)
                 {
-                    ts.Add(t);
+                    results.Add(data);
                 }
-                else if (gres[i] is IDataArray<T> dataArray)
+                else if (loadedAssets[i] is IDataArray<T> dataArray)
                 {
                     var dataList = dataArray.DataList;
                     if (dataList == null)
@@ -153,101 +204,152 @@ public  static class ExtensionsResources
 
                     for (int j = 0; j < dataList.Length; j++)
                     {
-                        ts.Add(dataList[j]);
+                        results.Add(dataList[j]);
                     }
                 }
-                else if (gres[i] != null)
+                else if (loadedAssets[i] != null)
                 {
-                    Debug.LogError($"LoadAllIGameData skipped incompatible asset. type={typeof(T).FullName}, path={path}, asset={gres[i].name}");
+                    Debug.LogError($"LoadAllIGameData skipped incompatible asset. type={typeof(T).FullName}, path={normalizedPath}, asset={loadedAssets[i].name}");
                 }
             }
         }
         catch (Exception e)
         {
-            Debug.LogWarning($"LoadAllIGameData failed: type={typeof(T).FullName}, path={path}, error={e}");
+            Debug.LogWarning($"LoadAllIGameData failed: type={typeof(T).FullName}, path={normalizedPath}, error={e}");
         }
 
-        return ts;
+        return results;
     }
 
-
-    public static T[] LoadAllResource<T>(string path) where T : UnityEngine.Object
+    public static T[] LoadAllResource<T>(string path) where T : Object
     {
-        var cacheKey = GetResourceCacheKey(typeof(T), path);
-        if (ResourceAllCache.TryGetValue(cacheKey, out var cachedAssets) && cachedAssets is T[] typedCachedAssets)
+        if (!TryPreparePath(nameof(LoadAllResource), typeof(T), path, out var normalizedPath))
         {
-            return typedCachedAssets;
+            return Array.Empty<T>();
         }
 
-        var assets = Resources.LoadAll<T>(path);
-        ResourceAllCache[cacheKey] = assets;
+        string cacheKey = GetResourceCacheKey(typeof(T), normalizedPath);
+        lock (CacheSyncRoot)
+        {
+            if (ResourceAllCache.TryGetValue(cacheKey, out var cachedAssets) && cachedAssets is T[] typedCachedAssets)
+            {
+                return typedCachedAssets;
+            }
+        }
+
+        var assets = Resources.LoadAll<T>(normalizedPath);
+        CacheAllResource(cacheKey, assets);
         return assets;
     }
+
     public static async Task<Object> LoadResourceAsync(string path)
     {
-        if (string.IsNullOrEmpty(path))
+        if (!TryPreparePath(nameof(LoadResourceAsync), typeof(Object), path, out var normalizedPath))
         {
-            Debug.LogError("LoadResourceAsync failed: empty path");
             return null;
         }
 
-        var cacheKey = GetResourceCacheKey(typeof(Object), path);
-        if (ResourceCache.TryGetValue(cacheKey, out var cachedAsset))
-        {
-            return cachedAsset;
-        }
-
-        var gres = Resources.LoadAsync(path);
-        await gres;
-        CacheResource(cacheKey, gres.asset);
-        return gres.asset;
+        return await LoadResourceObjectAsync(typeof(Object), null, normalizedPath);
     }
-    public static async Task<Object> LoadResourceAsync(Type type,string path)
+
+    public static async Task<Object> LoadResourceAsync(Type type, string path)
     {
-        if (type == null || string.IsNullOrEmpty(path))
+        if (type == null || !TryPreparePath(nameof(LoadResourceAsync), type, path, out var normalizedPath))
         {
             Debug.LogError($"LoadResourceAsync failed: type={type}, path={path}");
             return null;
         }
 
-        var cacheKey = GetResourceCacheKey(type, path);
-        if (ResourceCache.TryGetValue(cacheKey, out var cachedAsset))
+        Type loadType = typeof(Object).IsAssignableFrom(type) ? type : null;
+        return await LoadResourceObjectAsync(type, loadType, normalizedPath);
+    }
+
+    private static async Task<Object> LoadResourceObjectAsync(Type cacheType, Type loadType, string normalizedPath)
+    {
+        string cacheKey = GetResourceCacheKey(cacheType, normalizedPath);
+        Task<Object> loadTask;
+        lock (CacheSyncRoot)
         {
-            return cachedAsset;
+            if (ResourceCache.TryGetValue(cacheKey, out var cachedAsset))
+            {
+                return cachedAsset;
+            }
+
+            if (!ResourceLoadTasks.TryGetValue(cacheKey, out loadTask))
+            {
+                // 同一路径同类型的异步加载只发起一次 Resources 请求，后续调用等待同一个任务。
+                loadTask = LoadResourceObjectInternalAsync(cacheKey, loadType, normalizedPath);
+                ResourceLoadTasks[cacheKey] = loadTask;
+            }
         }
 
-        var gres = Resources.LoadAsync(path,type);
-        await gres;
-        CacheResource(cacheKey, gres.asset);
-        return gres.asset;
+        try
+        {
+            return await loadTask;
+        }
+        finally
+        {
+            lock (CacheSyncRoot)
+            {
+                if (ResourceLoadTasks.TryGetValue(cacheKey, out var currentTask) && currentTask == loadTask)
+                {
+                    ResourceLoadTasks.Remove(cacheKey);
+                }
+            }
+        }
+    }
+
+    private static async Task<Object> LoadResourceObjectInternalAsync(string cacheKey, Type loadType, string normalizedPath)
+    {
+        ResourceRequest request = loadType == null
+            ? Resources.LoadAsync(normalizedPath)
+            : Resources.LoadAsync(normalizedPath, loadType);
+        await request;
+        CacheResource(cacheKey, request.asset);
+        return request.asset;
     }
 
     private static void CacheResource(string cacheKey, Object asset)
     {
-        if (asset != null)
+        if (asset == null)
+        {
+            return;
+        }
+
+        lock (CacheSyncRoot)
         {
             ResourceCache[cacheKey] = asset;
         }
     }
 
+    private static void CacheAllResource(string cacheKey, Object[] assets)
+    {
+        lock (CacheSyncRoot)
+        {
+            ResourceAllCache[cacheKey] = assets ?? Array.Empty<Object>();
+        }
+    }
+
     public static async Task<UnityEngine.Object[]> LoadAsyncBundle(string url)
     {
-
         string path = Path.Combine(Application.streamingAssetsPath, url);
-
         var uri = new System.Uri(path);
-
         var getRequest = UnityWebRequestAssetBundle.GetAssetBundle(uri.AbsoluteUri);
         await getRequest.SendWebRequest();
 
-        AssetBundle ab = (getRequest.downloadHandler as DownloadHandlerAssetBundle).assetBundle;
-        var ddd = ab.LoadAllAssetsAsync();
+        AssetBundle assetBundle = (getRequest.downloadHandler as DownloadHandlerAssetBundle).assetBundle;
+        if (assetBundle == null)
+        {
+            Debug.LogError($"LoadAsyncBundle failed: {uri.AbsoluteUri}");
+            return Array.Empty<Object>();
+        }
 
-
-
-        return ddd.allAssets;
+        var loadRequest = assetBundle.LoadAllAssetsAsync();
+        await loadRequest;
+        return loadRequest.allAssets;
     }
 }
+
 public class ResourceRequestAwaiter : INotifyCompletion
 {
     public Action Continuation;

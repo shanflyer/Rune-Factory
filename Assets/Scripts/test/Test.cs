@@ -251,7 +251,7 @@ public class Test : MonoBehaviour
     public void TestNewtosoftTostring()
     {
         string path = DataPath.GetDataPath(typeof(ItemAnimationData));
-        var allData = Resources.LoadAll<ItemAnimationData>(path);
+        var allData = ExtensionsResources.LoadAllResource<ItemAnimationData>(path);
         if (allData != null && allData.Length > 0)
         {
             string strs = JsonConvert.SerializeObject(allData);
@@ -317,5 +317,4 @@ public class TestEditor : Editor
     }
 }
 #endif
-
 
