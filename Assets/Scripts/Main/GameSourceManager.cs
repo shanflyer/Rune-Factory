@@ -96,7 +96,13 @@ public class GameSourceManager : Singleton<GameSourceManager>
 
     public async Task<T> GetComponent<T>(string path) where T : Component
     {
-        var obj = await ExtensionsResources.LoadResourceAsync<GameObject>(path);
+        var obj = await GetPrefab(path);
+        return obj != null ? obj.GetComponentInChildren<T>() : null;
+    }
+
+    public T GetComponentImmediately<T>(string path) where T : Component
+    {
+        var obj = GetPrefabImmediately(path);
         return obj != null ? obj.GetComponentInChildren<T>() : null;
     }
 

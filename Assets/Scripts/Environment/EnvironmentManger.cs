@@ -39,7 +39,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     public override bool NeedUpdate => true;
     private Task initializationTask = Task.CompletedTask;
     public override Task InitializationTask => initializationTask;
-    public override IReadOnlyList<System.Type> InitializationDependencies => new[] { typeof(GameDataManager), typeof(CameraManager), typeof(GameActionManager) };
+    public override IReadOnlyList<System.Type> InitializationDependencies => new[] { typeof(GameDataManager), typeof(GameSourceManager), typeof(CameraManager), typeof(GameActionManager) };
     SkyEnviromentMono skyEnviromentMono;
     
     public SkyEnviromentMono SkyEnviromentMono =>skyEnviromentMono;
@@ -221,7 +221,8 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
 
         if (skyEnviromentMono == null)
         {
-            var _skyEnviromentMono = ExtensionsResources.LoadResource<SkyEnviromentMono>("Prefabs/Environment");
+            // 环境 prefab 通过统一资源入口加载，复用缓存并集中记录缺失资源。
+            var _skyEnviromentMono = await GameSourceManager.instance.GetComponent<SkyEnviromentMono>("Prefabs/Environment");
             if (_skyEnviromentMono == null)
             {
                 Debug.LogError("EnvironmentManger init failed: missing Prefabs/Environment.");

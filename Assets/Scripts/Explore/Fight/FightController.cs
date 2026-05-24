@@ -245,7 +245,16 @@ public class FightController : MonoBehaviour
         // controllerBehavior = GetComponent<BehaviorTree>();
         var sceneInfoManager = SceneInfoManager.instance;
 
-        monsterObj = ExtensionsResources.LoadResource<GameObject>(DataPath.monsterPrefabPath).transform;
+        var monsterPrefab = GameSourceManager.instance.GetPrefabImmediately(DataPath.monsterPrefabPath);
+        if (monsterPrefab == null)
+        {
+            Debug.LogError($"FightController init failed: missing monster prefab at {DataPath.monsterPrefabPath}.");
+        }
+        else
+        {
+            // 战斗怪物根 prefab 统一走资源缓存，避免战斗场景反复同步 Resources.Load。
+            monsterObj = monsterPrefab.transform;
+        }
 
         playerSelectMaskerDic.Clear();
         var playerMaskers = playerMaskParent.GetComponentsInChildren<SelectMasker>();
@@ -829,11 +838,20 @@ public class FightController : MonoBehaviour
         footStep = fightMapData.footStep;
         if (!string.IsNullOrEmpty(fightMapData.fightMapObjName))
         {
-            var fightMapObj = ExtensionsResources.LoadResource<GameObject>($"Prefabs/FightMap/{fightMapData.fightMapObjName}");
-            var mapRuntimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.FIGHTMAP.ToString(),
-                fightMapData.id.ToString(), fightMapObj.transform, 0);
+            var fightMapPath = $"Prefabs/FightMap/{fightMapData.fightMapObjName}";
+            var fightMapObj = await GameSourceManager.instance.GetPrefab(fightMapPath);
+            if (fightMapObj == null)
+            {
+                Debug.LogError($"CreateFightMap failed: missing fight map prefab at {fightMapPath}.");
+            }
+            else
+            {
+                // 战斗地图 prefab 通过 GameSourceManager 复用缓存，减少章节切换时的重复 Resources 查找。
+                var mapRuntimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.FIGHTMAP.ToString(),
+                    fightMapData.id.ToString(), fightMapObj.transform, 0);
 
-            fightMapRuntime = new FightMapRuntime(mapRuntimeObj, fightMapData.cycleSize); 
+                fightMapRuntime = new FightMapRuntime(mapRuntimeObj, fightMapData.cycleSize);
+            }
         }
         DisplaySky displaySky = new DisplaySky
         {

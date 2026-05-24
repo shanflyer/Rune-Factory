@@ -300,7 +300,8 @@ if (result.Success)
         var filmParent = transform.Find("FilmController");
         if (Camera.main == null)
         {
-            var cameraPrefab = ExtensionsResources.LoadResource<GameObject>(DataPath.cameraPrefabPath);
+            // 启动相机也走统一 prefab 缓存，避免绕过资源管理入口。
+            var cameraPrefab = GameSourceManager.instance.GetPrefabImmediately(DataPath.cameraPrefabPath);
             if (cameraPrefab != null)
             {
                 Instantiate(cameraPrefab);
