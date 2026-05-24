@@ -43,35 +43,50 @@ public class InformationController : Singleton<InformationController>
     }
 
     private float showTime;
+    private bool updateRunning;
 
     protected override void Update()
     {
+        if (updateRunning)
+        {
+            return;
+        }
+
         AsyncTaskRunner.Run(UpdateAsync, nameof(InformationController.Update));
     }
 
     private async System.Threading.Tasks.Task UpdateAsync()
     {
-        base.Update();
-        if (showTime <= 0)
+        updateRunning = true;
+        try
         {
-            if (informationsQueue.Count > 0)
+            base.Update();
+            if (showTime <= 0)
             {
-                var information = informationsQueue.Dequeue();
-                if (InformationShowPanel == null)
-                    InformationShowPanel = await UIManager.instance.GetGamePanel<InformationShowPanel>(true);
-                InformationShowPanel.SetInfo(information);
-                InformationShowPanel.Show();
-                showTime = 2.0f;
+                if (informationsQueue.Count > 0)
+                {
+                    var information = informationsQueue.Dequeue();
+                    if (InformationShowPanel == null)
+                        InformationShowPanel = await UIManager.instance.GetGamePanel<InformationShowPanel>(true);
+                    InformationShowPanel.SetInfo(information);
+                    InformationShowPanel.Show();
+                    showTime = 2.0f;
+                }
+                else
+                {
+                    if (InformationShowPanel != null) InformationShowPanel.Close();
+                }
             }
             else
             {
-                if (InformationShowPanel != null) InformationShowPanel.Close();
+                showTime -= Time.deltaTime;
+                if (showTime < 0) showTime = 0;
             }
         }
-        else
+        finally
         {
-            showTime -= Time.deltaTime;
-            if (showTime < 0) showTime = 0;
+            // Update 由每帧触发，异步等待 UI 时必须防止重复进入同一轮刷新。
+            updateRunning = false;
         }
     }
  

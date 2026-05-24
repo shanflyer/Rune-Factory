@@ -15,7 +15,7 @@ public class GameActionManager : Singleton<GameActionManager>
 
     private Queue<ActionBus> ActionQueue = new Queue<ActionBus>();
     private Dictionary<Type, Delegate> delegates = new Dictionary<Type, Delegate>();
-    private Dictionary<Delegate, Delegate> asyncDelegateWrappers = new Dictionary<Delegate, Delegate>();
+    private Dictionary<(Type actionType, Delegate listener), Delegate> asyncDelegateWrappers = new Dictionary<(Type actionType, Delegate listener), Delegate>();
     private HashSet<Delegate> onceDelegates = new HashSet<Delegate>();
     private int immediateActionDepth;
 
@@ -65,11 +65,12 @@ public class GameActionManager : Singleton<GameActionManager>
 
     public void AddAsyncListener<T>(Func<T, System.Threading.Tasks.Task> del, string context, bool once = false) where T : GameAction
     {
-        // Action 总线仍保持同步派发，异步监听器通过统一入口承接异常。
-        if (!asyncDelegateWrappers.TryGetValue(del, out var wrapperDelegate))
+        var key = (typeof(T), (Delegate)del);
+        // 异步监听按 Action 类型分开缓存，避免同一委托跨类型复用包装回调。
+        if (!asyncDelegateWrappers.TryGetValue(key, out var wrapperDelegate))
         {
             ActionDelegate<T> wrapper = action => AsyncTaskRunner.Run(() => del(action), context);
-            asyncDelegateWrappers[del] = wrapper;
+            asyncDelegateWrappers[key] = wrapper;
             wrapperDelegate = wrapper;
         }
 
@@ -78,13 +79,14 @@ public class GameActionManager : Singleton<GameActionManager>
 
     public void RemoveAsyncListener<T>(Func<T, System.Threading.Tasks.Task> del) where T : GameAction
     {
-        if (!asyncDelegateWrappers.TryGetValue(del, out var wrapperDelegate))
+        var key = (typeof(T), (Delegate)del);
+        if (!asyncDelegateWrappers.TryGetValue(key, out var wrapperDelegate))
         {
             return;
         }
 
         RemoveListener<T>((ActionDelegate<T>)wrapperDelegate);
-        asyncDelegateWrappers.Remove(del);
+        asyncDelegateWrappers.Remove(key);
     }
 
     public void RemoveListenersForTarget(object target)
@@ -130,11 +132,11 @@ public class GameActionManager : Singleton<GameActionManager>
 
     private void RemoveAsyncWrappersForTarget(object target)
     {
-        var asyncDelegates = new List<Delegate>(asyncDelegateWrappers.Keys);
+        var asyncDelegates = new List<(Type actionType, Delegate listener)>(asyncDelegateWrappers.Keys);
         for (int i = 0; i < asyncDelegates.Count; i++)
         {
-            Delegate asyncDelegate = asyncDelegates[i];
-            if (asyncDelegate.Target != target)
+            var asyncDelegate = asyncDelegates[i];
+            if (asyncDelegate.listener.Target != target)
             {
                 continue;
             }
