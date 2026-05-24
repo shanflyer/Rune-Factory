@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,6 +19,7 @@ public class UIManager : Singleton<UIManager>
     private readonly Dictionary<Type, BaseReference> gamePanels = new(); 
     private readonly Dictionary<Type, GamePanelLifecycleState> panelStates = new();
     private readonly Dictionary<Type, int> panelVersions = new();
+    private readonly Dictionary<Type, CancellationTokenSource> panelCancellationSources = new();
 
     private Transform canvasParent;
     private CanvasGroup canvasGroup;
@@ -241,9 +243,46 @@ public class UIManager : Singleton<UIManager>
         return panelVersions.TryGetValue(type, out var version) ? version : 0;
     }
 
+    private (int version, CancellationToken token) BeginPanelOperation(Type type, GamePanelLifecycleState state)
+    {
+        if (IsPluralUI(type))
+        {
+            SetPanelState(type, state);
+            return (GetPanelVersion(type), CancellationToken.None);
+        }
+
+        CancelPanelCancellation(type);
+        var version = GetPanelVersion(type) + 1;
+        panelVersions[type] = version;
+        SetPanelState(type, state);
+        var cancellationSource = new CancellationTokenSource();
+        panelCancellationSources[type] = cancellationSource;
+        return (version, cancellationSource.Token);
+    }
+
+    private void CancelPanelCancellation(Type type)
+    {
+        if (!panelCancellationSources.TryGetValue(type, out var cancellationSource))
+        {
+            return;
+        }
+
+        panelCancellationSources.Remove(type);
+        if (!cancellationSource.IsCancellationRequested)
+        {
+            cancellationSource.Cancel();
+        }
+        cancellationSource.Dispose();
+    }
+
     private bool IsPanelVersionCurrent(Type type, int version)
     {
         return GetPanelVersion(type) == version;
+    }
+
+    private bool IsPanelOperationCurrent(Type type, int version, CancellationToken cancellationToken)
+    {
+        return !cancellationToken.IsCancellationRequested && (IsPluralUI(type) || IsPanelVersionCurrent(type, version));
     }
 
     private void SetPanelState(Type type, GamePanelLifecycleState state)
@@ -253,7 +292,11 @@ public class UIManager : Singleton<UIManager>
 
     private void CancelPanelCallbacks(Type type, GamePanelLifecycleState state)
     {
-        panelVersions[type] = GetPanelVersion(type) + 1;
+        if (!IsPluralUI(type))
+        {
+            CancelPanelCancellation(type);
+            panelVersions[type] = GetPanelVersion(type) + 1;
+        }
         panelStates[type] = state;
     }
 
@@ -333,6 +376,9 @@ public class UIManager : Singleton<UIManager>
     }
     private GamePanel<V> ShowGamePanelImmediately<V>(Type type, V data, int layer = -1, Transform parent = null) where V : IReferenceData
     {
+        var panelOperation = BeginPanelOperation(type, GamePanelLifecycleState.Loading);
+        int panelVersion = panelOperation.version;
+        var cancellationToken = panelOperation.token;
 
         if (!gamePanels.TryGetValue(type, out BaseReference panel) || panel == null)
         {
@@ -363,6 +409,12 @@ public class UIManager : Singleton<UIManager>
                 }
                 gamePanels[type] = gamePanel;
             }
+
+            if (!IsPanelOperationCurrent(type, panelVersion, cancellationToken))
+            {
+                GameObject.Destroy(_Panel);
+                return null;
+            }
                  
             gamePanel.Show(layer);
             SetPanelState(type, GamePanelLifecycleState.Opened);
@@ -377,6 +429,10 @@ public class UIManager : Singleton<UIManager>
                 panel.transform.localPosition = Vector3.zero;
             }
             var gamePanel = panel as GamePanel<V>;
+            if (!IsPanelOperationCurrent(type, panelVersion, cancellationToken))
+            {
+                return null;
+            }
             gamePanel.Show(layer);
             SetPanelState(type, GamePanelLifecycleState.Opened);
             gamePanel.InitReferenceData(data);
@@ -385,13 +441,14 @@ public class UIManager : Singleton<UIManager>
     }
     private async Task<GamePanel<V>> ShowGamePanel<V>(Type type, V data, int layer = -1, Transform parent = null) where V : IReferenceData
     {
-        int panelVersion = GetPanelVersion(type);
+        var panelOperation = BeginPanelOperation(type, GamePanelLifecycleState.Loading);
+        int panelVersion = panelOperation.version;
+        var cancellationToken = panelOperation.token;
         if (!gamePanels.TryGetValue(type, out BaseReference panel) || panel == null)
         {
-            SetPanelState(type, GamePanelLifecycleState.Loading);
             string path = $"{DataPath.UIPath}{type}";
             var gamePanelObj = await GameSourceManager.instance.GetPrefab(path);
-            if (!IsPanelVersionCurrent(type, panelVersion))
+            if (!IsPanelOperationCurrent(type, panelVersion, cancellationToken))
             {
                 return null;
             }
@@ -403,7 +460,7 @@ public class UIManager : Singleton<UIManager>
                 SetPanelState(type, GamePanelLifecycleState.Destroyed);
                 return null;
             }
-            if (!IsPanelVersionCurrent(type, panelVersion))
+            if (!IsPanelOperationCurrent(type, panelVersion, cancellationToken))
             {
                 GameObject.Destroy(async.Result[0]);
                 return null;
@@ -433,6 +490,11 @@ public class UIManager : Singleton<UIManager>
                 gamePanels[type] = gamePanel;
             }
 
+            if (!IsPanelOperationCurrent(type, panelVersion, cancellationToken))
+            {
+                GameObject.Destroy(_Panel);
+                return null;
+            }
             gamePanel.gameObject.SetActive(true);
             gamePanel.Show(layer);
             SetPanelState(type, GamePanelLifecycleState.Opened);
@@ -447,6 +509,10 @@ public class UIManager : Singleton<UIManager>
                 panel.transform.localPosition = Vector3.zero;
             }
             var gamePanel = panel as GamePanel<V>;
+            if (!IsPanelOperationCurrent(type, panelVersion, cancellationToken))
+            {
+                return null;
+            }
             gamePanel.gameObject.SetActive(true);
             gamePanel.Show(layer);
             SetPanelState(type, GamePanelLifecycleState.Opened);
@@ -493,13 +559,14 @@ public class UIManager : Singleton<UIManager>
     HashSet<Type> openedPanels = new HashSet<Type>();
     private async Task<BaseReference> ShowGamePanel(Type type, string dataKey = null, int layer = -1, Transform parent = null)
     { 
-        int panelVersion = GetPanelVersion(type);
+        var panelOperation = BeginPanelOperation(type, GamePanelLifecycleState.Loading);
+        int panelVersion = panelOperation.version;
+        var cancellationToken = panelOperation.token;
         if (!gamePanels.TryGetValue(type, out BaseReference gamePanel) || gamePanel == null || IsPluralUI(type))
         {
-            SetPanelState(type, GamePanelLifecycleState.Loading);
             string path = $"{DataPath.UIPath}{type}";
             var gamePanelObj = await GameSourceManager.instance.GetPrefab(path);
-            if (!IsPanelVersionCurrent(type, panelVersion))
+            if (!IsPanelOperationCurrent(type, panelVersion, cancellationToken))
             {
                 return null;
             }
@@ -520,7 +587,7 @@ public class UIManager : Singleton<UIManager>
                 SetPanelState(type, GamePanelLifecycleState.Destroyed);
                 return null;
             }
-            if (!IsPanelVersionCurrent(type, panelVersion))
+            if (!IsPanelOperationCurrent(type, panelVersion, cancellationToken))
             {
                 GameObject.Destroy(async.Result[0]);
                 return null;
@@ -559,6 +626,14 @@ public class UIManager : Singleton<UIManager>
                 gamePanels[type] = gamePanel;
             }
         }
+        if (!IsPanelOperationCurrent(type, panelVersion, cancellationToken))
+        {
+            if (gamePanel != null && IsPluralUI(type))
+            {
+                GameObject.Destroy(gamePanel.gameObject);
+            }
+            return null;
+        }
         if (parent != null)
         {
             gamePanel.transform.SetParent(parent);
@@ -569,15 +644,22 @@ public class UIManager : Singleton<UIManager>
         gamePanel.gameObject.SetActive(true);
         try
         {
-            await gamePanel.InitData(dataKey);
-            if (!IsPanelVersionCurrent(type, panelVersion))
+            await gamePanel.InitData(dataKey, cancellationToken);
+            if (!IsPanelOperationCurrent(type, panelVersion, cancellationToken))
             {
                 return null;
             }
         }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            return null;
+        }
         catch
         {
-            SetPanelState(type, GamePanelLifecycleState.Closed);
+            if (IsPanelOperationCurrent(type, panelVersion, cancellationToken))
+            {
+                SetPanelState(type, GamePanelLifecycleState.Closed);
+            }
             throw;
         }
       
@@ -587,6 +669,9 @@ public class UIManager : Singleton<UIManager>
     private BaseReference ShowGamePanelImmediately(Type type, string dataKey = null, int layer = -1,
         Transform parent = null)
     {
+        var panelOperation = BeginPanelOperation(type, GamePanelLifecycleState.Loading);
+        int panelVersion = panelOperation.version;
+        var cancellationToken = panelOperation.token;
         if (!gamePanels.TryGetValue(type, out var gamePanel) || gamePanel == null || IsPluralUI(type))
         {
             var path = $"{DataPath.UIPath}{type}";
@@ -623,6 +708,15 @@ public class UIManager : Singleton<UIManager>
             }
         }
 
+        if (!IsPanelOperationCurrent(type, panelVersion, cancellationToken))
+        {
+            if (gamePanel != null && IsPluralUI(type))
+            {
+                GameObject.Destroy(gamePanel.gameObject);
+            }
+            return null;
+        }
+
         if (parent != null)
         {
             gamePanel.transform.SetParent(parent);
@@ -632,8 +726,8 @@ public class UIManager : Singleton<UIManager>
         gamePanel.Show(layer);
         SetPanelState(type, GamePanelLifecycleState.Opened);
         gamePanel.gameObject.SetActive(true);
-        // Immediately 接口保持同步返回，初始化任务异常统一进入日志。
-        AsyncTaskRunner.Run(gamePanel.InitData(dataKey), nameof(ShowGamePanelImmediately));
+        // Immediately 接口同步返回，异步初始化仍绑定本次打开 token，避免旧回调覆盖新状态。
+        AsyncTaskRunner.Run(gamePanel.InitData(dataKey, cancellationToken), nameof(ShowGamePanelImmediately));
 
         return gamePanel;
     }

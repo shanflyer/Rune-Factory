@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Unity.Entities.UniversalDelegates;
 using UnityEngine;
@@ -18,6 +19,8 @@ public class BaseReference : MonoBehaviour
     public bool show;
     [HideInInspector]
     public int index;
+    private CancellationToken lifecycleCancellationToken = CancellationToken.None;
+    public CancellationToken LifecycleCancellationToken => lifecycleCancellationToken;
     public virtual bool changeInputModel { get=>true; }
     public virtual void SetPanelUISerializeObj()
     {
@@ -30,6 +33,17 @@ public class BaseReference : MonoBehaviour
     {
         // 默认面板没有异步数据，派生类可覆盖为真正的加载流程。
         return Task.CompletedTask;
+    }
+
+    public virtual Task InitData(string dataKey, CancellationToken cancellationToken)
+    {
+        // UIManager 会在新打开或关闭面板时取消旧 token，派生类可读取该 token 中断更细的异步刷新。
+        lifecycleCancellationToken = cancellationToken;
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return Task.CompletedTask;
+        }
+        return InitData(dataKey);
     }
 
 }
