@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.Mathematics;
 
 public class HomeEquipManager : Singleton<HomeEquipManager>
@@ -70,7 +70,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         if (homeEquips.TryGetValue(unSetHomeEquip.instanceId, out var homeEquip))
         {
             homeEquip.mapInstance = -1;
-            homeEquip.coordinate = int2.zero; 
+            homeEquip.coordinate = int2.zero;
             RefreshHomeEquip(homeEquip);
             unSetHomeEquip.setResult(true);
 
@@ -82,7 +82,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
     {
         var homeEquipmentData =
             GameDataManager.instance.GetData<HomeEquipmentData>(homeEquipSaveData.equipDataId.ToString());
-        HomeEquip homeEquip = 
+        HomeEquip homeEquip =
             new HomeEquip(homeEquipSaveData.instanceId, homeEquipSaveData.mapEditorInstance,
             homeEquipSaveData.characterId, homeEquipmentData);
         homeEquips.Add(homeEquip.instanceId, homeEquip);
@@ -122,7 +122,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(creatHomeEquip.equipDataId);
         int instanceId = creatHomeEquip.instanceId == 0 ? MyInstance.instance.Uid : creatHomeEquip.instanceId;
         var homeEquip = new HomeEquip(instanceId, instanceId, characterId, homeEquipmentData);
-      
+
         if (creatHomeEquip.instanceId == 0)
         {
             AddMapItem addMapItem = new AddMapItem
@@ -132,9 +132,9 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
                 mapId = -1,
                 fixeInstanceId= instanceId
             };
-            GameActionManager.instance.QueueAction(addMapItem); 
+            GameActionManager.instance.QueueAction(addMapItem);
         }
-         
+
         if (!characterHomeEquips.TryGetValue(creatHomeEquip.characterId, out var ints))
         {
             ints = new List<int>();
@@ -155,7 +155,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
                 count = _count + 1;
             }
         }
-        equipCountData[creatHomeEquip.equipDataId] = count; 
+        equipCountData[creatHomeEquip.equipDataId] = count;
 
         switch (homeEquipmentData.homeEquipFunc)
         {
@@ -193,7 +193,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
                         manufatureId = homeEquipmentData.homeEquipFuncValue
                     };
                     GameActionManager.instance.QueueAction(creatManufature);
-                } 
+                }
                 break;
             case HomeEquipFunc.装饰:
                 break;
@@ -284,7 +284,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
                     }
                     equipCountData[homeEquip.equipDataId] = count;
                 }
-                homeEquip.characterId = changeHomeEquipCharacter.newPlayer; 
+                homeEquip.characterId = changeHomeEquipCharacter.newPlayer;
             }
 
             GameDataSaveManager.instance.UserGameSaveData.SetMapHomeEquipData(homeEquip);
@@ -300,7 +300,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
                 if (homeEquips.TryGetValue(tryLayInHomeEquip.equipInstanceId, out var homeEquip))
                 {
                     homeEquip.mapInstance = 0;
-                    homeEquip.coordinate = int2.zero; 
+                    homeEquip.coordinate = int2.zero;
                     tryLayInHomeEquip.setResult(true);
 
                     GameDataSaveManager.instance.UserGameSaveData.SetMapHomeEquipData(homeEquip);
@@ -320,7 +320,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
                 if (homeEquips.TryGetValue(setHomeEquipCoordinate.equipInstanceId, out var homeEquip))
                 {
                     homeEquip.mapInstance = setHomeEquipCoordinate.mapInstanceId;
-                    homeEquip.coordinate = setHomeEquipCoordinate.coordinate; 
+                    homeEquip.coordinate = setHomeEquipCoordinate.coordinate;
                     if (setHomeEquipCoordinate.setResult != null)
                     {
                         setHomeEquipCoordinate.setResult(true);
@@ -363,7 +363,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
             };
             void SetMapItem(int itemInstance)
             {
-                homeEquip.mapItemInstance = itemInstance; 
+                homeEquip.mapItemInstance = itemInstance;
             }
             GameActionManager.instance.QueueAction(addMapItem, true);
         }
@@ -412,10 +412,10 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
 
                 CreatHomeEquip CreatHomeEquip = new CreatHomeEquip
                 {
-                    characterId = CharacterManager.instance.controllerCharacter.instanceId, 
+                    characterId = CharacterManager.instance.controllerCharacter.instanceId,
                     equipDataId = itemData.typeValue
                 };
-                GameActionManager.instance.QueueAction(CreatHomeEquip); 
+                GameActionManager.instance.QueueAction(CreatHomeEquip);
 
                 InformationController.instance.AddInformation($"{LanguageManage.SwitchStr("成功购买1个")}+ {LanguageManage.SwitchStr(itemData.itemName)} +");
                 if (selectShopItemData.buyAction != 0)
@@ -441,12 +441,12 @@ public struct HomeEquipList : IReferenceData
 public class HomeEquip : INativeData, IReferenceData
 {
     public int instanceId;
-    public int mapItemInstance; 
-    public HomeEquipmentData homeEquipmentData; 
+    public int mapItemInstance;
+    public HomeEquipmentData homeEquipmentData;
     public int2 coordinate;
     public int mapEditorInstance;
     public int mapInstance;
-    public int characterId; 
+    public int characterId;
     public int Key => instanceId;
 
     public int equipDataId=> homeEquipmentData.id;

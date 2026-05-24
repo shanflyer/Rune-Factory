@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,8 +25,8 @@ public class LanguageData : ScriptableObject, IGameData,IReferenceData
         return languageType.ToString();
     }
     public void SetReferenceData()
-    { 
+    {
     }
 
-    
+
 }

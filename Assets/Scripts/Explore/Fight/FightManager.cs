@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
@@ -63,7 +63,7 @@ public class FightManager : Singleton<FightManager>
         GameActionManager.instance.AddListener<CreatFightPlayerInstance>(CreatFightPlayerInstance);
         GameActionManager.instance.AddListener<CreatFightPlayer>(CreateFightPlayer);
         GameActionManager.instance.AddListener<ActionSkillEstimate>(ActionSkillEstimate);
-        GameActionManager.instance.AddListener<NextActionSkillEstimate>(NextActionSkillEstimate); 
+        GameActionManager.instance.AddListener<NextActionSkillEstimate>(NextActionSkillEstimate);
         GameActionManager.instance.AddListener<AddBuffAction>(AddBuffAction);
 
         deathTimeLineData = await GameSourceManager.instance.GetScriptableObject<MyTimeLineData>(DataPath.MonsterDeathPath);
@@ -128,9 +128,9 @@ public class FightManager : Singleton<FightManager>
         return _fightCharacters;
     }
     private void ExploreEnd(ExploreEnd exploreEnd)
-    { 
+    {
         for(int i = 0; i < fightPlayers.Count; i++)
-        { 
+        {
             ChangeCharacterProperty changeCharacterProperty = new ChangeCharacterProperty
             {
                 characterId = fightPlayers[i],
@@ -149,7 +149,7 @@ public class FightManager : Singleton<FightManager>
         AudioController.instance.SetBGSGroupValue(BGSGroup.Map.ToString(), EnvironmentManger.instance.badWeather);
         AudioController.instance.SetBGSGroupValue(BGSGroup.Rain.ToString(), 1);
         AudioController.instance.SetBGSGroupValue(BGSGroup.Wind.ToString(), 1);
-        AudioController.instance.SetBGSGroupValue(BGSGroup.Lightning.ToString(), 1); 
+        AudioController.instance.SetBGSGroupValue(BGSGroup.Lightning.ToString(), 1);
     }
 
     void EndNowRoundFight(EndNowRoundFight endNowRoundFight)
@@ -178,7 +178,7 @@ public class FightManager : Singleton<FightManager>
     private void ClearCharacter()
     {
         fightCharacters.Clear();
-        fightPlayers.Clear(); 
+        fightPlayers.Clear();
         fightMonsters.Clear();
         playerDic.Clear();
         singleMonsterDic.Clear();
@@ -251,19 +251,19 @@ public class FightManager : Singleton<FightManager>
                       verticalMonsterDic.Remove(monster.fightPos.x);
 
                       if (!fightMonsters.Remove(characterDeath.characterId))
-                      { 
+                      {
                           fightCharacters.Remove(characterDeath.characterId);
-                      } 
+                      }
                   }
                   else if (fightPlayers.Contains(characterDeath.characterId))
-                  { 
+                  {
                       var fightCharacter = fightCharacters[characterDeath.characterId];
                       fightCharacter.DeathAction();
                       fightPlayers.Remove(characterDeath.characterId);
                       fightCharacters.Remove(characterDeath.characterId);
                       if (PastureManager.instance.CheckAnimal(characterDeath.characterId))
                       {
-                          
+
                           FightController.instance.RemoveFightPlayerRuntime(characterDeath.characterId);
 
                           LeaveTeam leaveTeam = new LeaveTeam
@@ -277,12 +277,12 @@ public class FightManager : Singleton<FightManager>
                               animalId = characterDeath.characterId
                           };
                           GameActionManager.instance.QueueAction(tryDeleteAnimal);
-                          
+
                       }
                       else
                       {
                           fightCharacter.fightCharacterStaues = FightCharacterStaues.濒死;
-                      } 
+                      }
                   }
                   FightController.instance.RemoveFightPlayerRuntime(characterDeath.characterId);
                   GameActionManager.instance.QueueAction(new RefreshFightCharacterList());
@@ -298,7 +298,7 @@ public class FightManager : Singleton<FightManager>
     {
         if (fightMonsters.Contains(characterId))
         {
-            var fightMonster = (FightMonster)fightCharacters[characterId]; 
+            var fightMonster = (FightMonster)fightCharacters[characterId];
             var dropResult = GameRandom.instance.GetRandomValue(fightMonster.monsterData.dropId);
 
             List<int2> items = new List<int2>();
@@ -402,14 +402,14 @@ public class FightManager : Singleton<FightManager>
 
     }
     private void CreateFightPlayer(CreatFightPlayer creatFightPlayer)
-    { 
+    {
         playerDic.Clear();
         for (int i = 0; i < creatFightPlayer.players.Count; i++)
         {
             Character character = CharacterManager.instance.GetCharacterForDataId(creatFightPlayer.players[i]);
 
             FightPlayer fightPlayer = new FightPlayer(character);
-            fightPlayer.fightPos = i; 
+            fightPlayer.fightPos = i;
 
             fightPlayer.CreatSkillRuntime();
             fightCharacters.Add(fightPlayer.instanceId, fightPlayer);
@@ -425,7 +425,7 @@ public class FightManager : Singleton<FightManager>
             playerDic.Add(i, fightPlayer.instanceId);
         }
         CreateUseItemSkill();
-       
+
     }
 
     public bool GetFightCharacter(int id, out FightCharacter fightCharacter)
@@ -451,7 +451,7 @@ public class FightManager : Singleton<FightManager>
         GameActionManager.instance.QueueAction(refreshFightCharactersInfo);
     }
 
-    
+
     public void CreateFightPlayer()
     {
         /*
@@ -480,7 +480,7 @@ public class FightManager : Singleton<FightManager>
                     dataIdSet.Add(character.dataId);
                     players.Add(character.dataId);
                     playerInstances.Add(character.instanceId);
-                }               
+                }
 
             }
             if (dataIdSet.Count == players.Count)
@@ -499,7 +499,7 @@ public class FightManager : Singleton<FightManager>
                 };
                 GameActionManager.instance.QueueAction(CreatFightPlayer, true);
             }
-         
+
         }
         RefreshFightPlayerInfo();
         isFight = false;
@@ -527,7 +527,7 @@ public class FightManager : Singleton<FightManager>
             int raw = i - col * 3 - 1;
 
             MonsterData monsterData = await GameDataManager.instance.GetAsyncData<MonsterData>(characterId);
-            FightMonster fightMonster = new FightMonster(monsterData, ExploreManager.instance.NewUid, new int2(col, raw));   
+            FightMonster fightMonster = new FightMonster(monsterData, ExploreManager.instance.NewUid, new int2(col, raw));
             fightCharacters.Add(fightMonster.instanceId, fightMonster);
             fightMonsters.Add(fightMonster.instanceId);
             // Debug.Log($"singleMonsterDic.Count{singleMonsterDic.Count}--fightMonster.instanceId}}{fightMonster.instanceId}--fightMonster.fightPos{fightMonster.fightPos}");
@@ -863,7 +863,7 @@ public class FightManager : Singleton<FightManager>
     }
     private List<int> GetTarget(TargetType targetType, FightCharacter fightCharacter)
     {
-        List<int> finalTargets = new List<int>(); 
+        List<int> finalTargets = new List<int>();
         switch (targetType)
         {
             case TargetType.敌方:
@@ -920,7 +920,7 @@ public class FightManager : Singleton<FightManager>
             case TargetType.自身:
                 finalTargets.Add(fightCharacter.instanceId);
                 return finalTargets;
-        } 
+        }
         return finalTargets;
     }
     private List<List<int>> GetTarget(TargetType targetType, FightCharacter fightCharacter, TargetRangeType targetRangeType)
@@ -1065,7 +1065,7 @@ public class FightManager : Singleton<FightManager>
         for (int i = 0; i < characters.Count; i++)
         {
             RandomItem randomItem = new RandomItem
-            { 
+            {
                 itemValue = characters[characters.Count - 1 - i],
                 randomValue = 20 * i,
                 maxCount = 1,
@@ -1103,10 +1103,10 @@ public class FightManager : Singleton<FightManager>
         var skillData = skillRuntime.skillData;
         List<FightCharacter> targets = new List<FightCharacter>();
         for(int i = 0; i < nextActionSkillEstimate.targets.Count; i++)
-        { 
+        {
             SkillAction(skillData.nextFightType,skillData.nextSkillActionType,skillData.nextActionValue, source, fightCharacters[nextActionSkillEstimate.targets[i]], nextActionSkillEstimate.displayHurt);
         }
-       
+
     }
 
     public  void BuffAction(BuffData buffData, int characterId, bool isDisplayHurt)
@@ -1176,17 +1176,17 @@ public class FightManager : Singleton<FightManager>
                 {
                     hurt = 1;
                 }
-                FightHPChange(-hurt, target, isDisplayHurt, hurtResultType); 
+                FightHPChange(-hurt, target, isDisplayHurt, hurtResultType);
                 break;
             case FightType.回复:
                 int addHp = 0;
                 if (skillActionType == SkillActionType.属性值)
                 {
-                    addHp =(int)( target.characterProperty.MaxHP * (actionValue * 0.01f));  
+                    addHp =(int)( target.characterProperty.MaxHP * (actionValue * 0.01f));
                 }
                 else
                 {
-                    addHp = actionValue; 
+                    addHp = actionValue;
                 }
                 FightHPChange(addHp, target, isDisplayHurt, HurtResultType.Default);
                 break;
@@ -1209,7 +1209,7 @@ public class FightManager : Singleton<FightManager>
             characterId=target.instanceId,
             changeValue = changeValue,
             propertyType = CharacterPropertyType.生命,
-        }; 
+        };
         GameActionManager.instance.QueueAction(changeCharacterProperty, true);
         int hp = target.characterProperty.HP;
         if (isDisplayHurt)
@@ -1238,13 +1238,13 @@ public class FightManager : Singleton<FightManager>
             characterId = target.instanceId
         };
         GameActionManager.instance.QueueAction(refreshFightCharacterInfo, true);
-       
+
     }
 
 
     private void ActionSkillEstimate(ActionSkillEstimate actionSkillEstimate)
     {
-        cdTimeMoving = false; 
+        cdTimeMoving = false;
         int skillId = actionSkillEstimate.skillId;
         int sourceId = actionSkillEstimate.sourceId;
         int targetId = actionSkillEstimate.targetId;
@@ -1261,7 +1261,7 @@ public class FightManager : Singleton<FightManager>
         {
             skillRuntime = source.skillRuntimes[skillId];
         }
-       
+
         var skillData = skillRuntime.skillData;
 
         ChangeCharacterProperty changeCharacterProperty = new ChangeCharacterProperty
@@ -1332,8 +1332,8 @@ public class FightManager : Singleton<FightManager>
             return monsterCount;
         }
     }
-   
-    
+
+
     public Queue<int> GetReadyFighter()
     {
         Queue<int> nowFightCharacters = new Queue<int>();
@@ -1588,9 +1588,9 @@ public class FightManager : Singleton<FightManager>
             {
                 int characterId = fightMonsters[i];
                 fightCharacters.Remove(characterId);
-                FightController.instance.RemoveFightPlayerRuntime(characterId); 
-            } 
-            fightMonsters.Clear(); 
+                FightController.instance.RemoveFightPlayerRuntime(characterId);
+            }
+            fightMonsters.Clear();
 
             singleMonsterDic.Clear();
             horizontalMonsterDic.Clear();
@@ -1620,7 +1620,7 @@ public class FightManager : Singleton<FightManager>
                     {
                         targets.Add(player);
                     }
-                } 
+                }
                 break;
             case TargetRangeType.全部:
                 targets = new List<int>();
@@ -1690,7 +1690,7 @@ public class FightManager : Singleton<FightManager>
                 {
                     fightCharacter.Value.UpData(Time.deltaTime);
                 }
-               
+
             }
             useItemCd += Time.deltaTime;
             if (useItemCd >= GameCommon.DefaultPerRoundCd)

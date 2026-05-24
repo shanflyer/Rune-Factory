@@ -1,4 +1,4 @@
-﻿
+
 using UnityEngine;
 using Unity.Mathematics;
 using System.Collections.Generic;
@@ -6,8 +6,8 @@ using System;
 #if UNITY_EDITOR
 using UnityEditor;
 
-#endif 
- 
+#endif
+
 [Serializable]
 public struct MapNpcData
 {
@@ -24,7 +24,7 @@ public struct MapNpcData
     }
 
     public void SetReferenceData()
-    { 
+    {
     }
 }
 public class MapNpcDataList : ScriptableObject, IGameData
@@ -35,10 +35,10 @@ public class MapNpcDataList : ScriptableObject, IGameData
         public List<MapNpcData> datas;
     }
 #if UNITY_EDITOR
-    private MapNpcData[] mapNpcDatas; 
+    private MapNpcData[] mapNpcDatas;
 #endif
-   
-    public IntIntDictionary keys=new IntIntDictionary(); 
+
+    public IntIntDictionary keys=new IntIntDictionary();
     public List<DataList> datas = new List<DataList>();
     public List<MapNpcData> GetMapNPCDatas(int mapId)
     {
@@ -74,7 +74,7 @@ public class MapNpcDataList : ScriptableObject, IGameData
             else
             {
                 datas[index].datas.Add(mapNpcData);
-            } 
+            }
         }
     }
 #endif

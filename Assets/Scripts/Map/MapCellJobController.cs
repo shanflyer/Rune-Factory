@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
@@ -252,7 +252,7 @@ public struct SparsePathfindingSIMDJob : IJobParallelFor
     }
 }
 
- 
+
 public struct PathRequest
 {
     public int2 start;
@@ -269,7 +269,7 @@ public struct ChangeBarrier
 public class MapCellJobController : Singleton<MapCellJobController>
 {
     public NativeList<PathRequest> pathRequests;
-   
+
 
     public List<MoveWithPath> MoveWithPath = new List<MoveWithPath>();
     public override bool NeedUpdate => true;
@@ -295,18 +295,18 @@ public class MapCellJobController : Singleton<MapCellJobController>
     private NativeStream pathStream;
 
     // —— 快照（这批要跑的请求/回调）—— //
-    private NativeArray<PathRequest> requestsSnap; 
+    private NativeArray<PathRequest> requestsSnap;
     private List<MoveWithPath> callbacksSnap;
 
     // —— 等待下一批 —— //
-    private NativeList<PathRequest> pendingRequests; 
+    private NativeList<PathRequest> pendingRequests;
     private List<MoveWithPath> pendingCallbacks = new List<MoveWithPath>();
 
     public override void Init()
     {
         base.Init();
         pathRequests = new NativeList<PathRequest>(Allocator.Persistent);
-        pendingRequests = new NativeList<PathRequest>(Allocator.Persistent); 
+        pendingRequests = new NativeList<PathRequest>(Allocator.Persistent);
     }
 
     protected override void Clear()
@@ -339,7 +339,7 @@ public class MapCellJobController : Singleton<MapCellJobController>
             for (var i = 0; i < batchCount; i++)
                 callbacksSnap.Add(MoveWithPath[i]);
 
-            // —— 本批处理完的从列表里移除，剩下的留着下次跑 —— 
+            // —— 本批处理完的从列表里移除，剩下的留着下次跑 ——
             if (requestCount > batchCount)
                 // 把没跑的搬去 pending，等待下轮
                 for (var i = batchCount; i < requestCount; i++)
@@ -416,7 +416,7 @@ public class MapCellJobController : Singleton<MapCellJobController>
             jobRunning = true;
         }
 
-       
+
     }
 
 

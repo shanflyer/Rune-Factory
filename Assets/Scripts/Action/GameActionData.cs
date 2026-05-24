@@ -38,13 +38,13 @@ public class GameActionData : ScriptableObject, IGameData
                         parameterStr = $"{parameterStr}--{_parameters[i]}";
                     }
                 }
-               
+
                Debug.Log($"Action:{name}--parameters:{parameterStr}");
             }
         }
 
         GameActionDataManager.instance.GameAction(typeName, _parameters, source, target, value, setResult, setValue, immediately);
-      
+
     }
 
 #if UNITY_EDITOR
@@ -78,7 +78,7 @@ public class Parameter
                 outStr = $"{outStr}；{parameters[i]}";
             }
         }
-       
+
         return outStr;
     }
 }

@@ -1,12 +1,12 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 [TaskCategory("NewGame/回合/事件")]
 [TaskName("检查自身是否存活")]
 public class CheckSelfSurvival : Action
-{ 
+{
     [SerializeField]
-    SharedInt fightCharacter; 
+    SharedInt fightCharacter;
     public override void OnStart()
     {
         if (fightCharacter == null)

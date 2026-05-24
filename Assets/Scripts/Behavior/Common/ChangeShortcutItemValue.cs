@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 
 
@@ -11,7 +11,7 @@ public class ChangeShortcutItemValue : Action
     public SharedIntList item;
 
     public override TaskStatus OnUpdate()
-    { 
+    {
         ShortcutPackage shortcutPackage = ShortcutManager.instance.GetShortcutPackage(characterId.Value);
         shortcutPackage.TryChangeItemValue(item.Value, value.Value);
         return TaskStatus.Success;

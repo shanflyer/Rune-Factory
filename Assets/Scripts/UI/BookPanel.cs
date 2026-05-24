@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BookPanel : GamePanel<IReferenceData> 
+public class BookPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
     Button plantButton;
     [SerializeField]
-    Button fishButton; 
+    Button fishButton;
     [SerializeField]
     Button characterButton;
     [SerializeField]

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 
@@ -39,7 +39,7 @@ public class SetCharacterAnimation : Action
 
     public override TaskStatus OnUpdate()
     {
-       
+
         return TaskStatus.Success;
     }
 }

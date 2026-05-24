@@ -181,7 +181,7 @@ public class MapInstanceEditor : MonoBehaviour
             if (groundParentObj == null)
             {
                 groundParentObj = new GameObject("GroundParent").transform;
-                groundParentObj.transform.SetParent(transform, false); 
+                groundParentObj.transform.SetParent(transform, false);
                 groundParent = groundParentObj.transform;
                 //roundParent.localPosition = new Vector3(GameCommon.cellSize, GameCommon.cellSize);
 
@@ -226,7 +226,7 @@ public class MapInstanceEditor : MonoBehaviour
                     areaParentObj.transform.SetParent(transform, false);
                     areaParent = areaParentObj.transform;
                 }
-              
+
             }
             InitMapObj();
             if (displayTile)
@@ -235,7 +235,7 @@ public class MapInstanceEditor : MonoBehaviour
                 InitGroundMapTile();
                 InitMapArea();
             }
-          
+
         }
     }
     public bool CheckPos(ref int2 clickCoordinate)
@@ -262,10 +262,10 @@ public class MapInstanceEditor : MonoBehaviour
     private void InitMapObj(bool hideTilemap = false)
     {
         if (mapRoomData != null)
-        { 
+        {
             GameObject mapObj = mapRoomData.mapObj ? (GameObject)PrefabUtility.InstantiatePrefab(mapRoomData.mapObj) :
-                Instantiate(defaultGround);  
-            mapObj.transform.SetParent(groundParent, false); 
+                Instantiate(defaultGround);
+            mapObj.transform.SetParent(groundParent, false);
             mapObj.name = mapRoomData.mapObj ? mapRoomData.mapObj.name : mapRoomData.roomName;
 
             foreach (var item in mapRoomData.mapItems)
@@ -281,7 +281,7 @@ public class MapInstanceEditor : MonoBehaviour
                         itemObj.transform.localPosition = Vector3.zero;
 
                         GameObject Grid = new GameObject("Grid");
-                        Grid.transform.SetParent(transform, false);  
+                        Grid.transform.SetParent(transform, false);
 
                         GameObject ItemTile = new GameObject("ItemTile");
                         ItemTile.transform.SetParent(Grid.transform, false);
@@ -291,7 +291,7 @@ public class MapInstanceEditor : MonoBehaviour
 
                         var grid = Grid.AddComponent<Grid>();
                         var tilemap = ItemTile.AddComponent<Tilemap>();
-                        var tilemapRenderer = ItemTile.AddComponent<TilemapRenderer>(); 
+                        var tilemapRenderer = ItemTile.AddComponent<TilemapRenderer>();
                         grid.cellSize = new Vector3(GameCommon.cellWidth, GameCommon.cellHigh, 0);
                         tilemap.color = new Color(1, 1, 1, 0.5f);
                         Grid.transform.SetParent(itemInstance, false);
@@ -320,8 +320,8 @@ public class MapInstanceEditor : MonoBehaviour
                             }
                             tilemap.SetTiles(poses.ToArray(), tileBases.ToArray());
                         }
- 
-                         
+
+
                         itemInstance.transform.SetParent(itemParent, false);
                         var mapItemInstanceEditor = itemInstance.gameObject.AddComponent<MapItemInstanceEditor>();
                         mapItemInstanceEditor.InitData(itemData,item.blindHomeEquipment, item.instanceId, item.coordinate,item.eventReferenceDatas);
@@ -335,7 +335,7 @@ public class MapInstanceEditor : MonoBehaviour
     {
         GameObject areaObj = Instantiate(areaPrefab, areaParent);
         MapAreaEditor mapAreaEditor = areaObj.GetComponent<MapAreaEditor>();
-        mapAreaEditor.SetData(newArea, newAreatype); 
+        mapAreaEditor.SetData(newArea, newAreatype);
         tilemapRenderers.Add(mapAreaEditor.tilemapRenderer);
     }
     private void InitMapArea(bool hideTilemap = false)
@@ -348,7 +348,7 @@ public class MapInstanceEditor : MonoBehaviour
                 GameObject areaObj = Instantiate(areaPrefab, areaParent);
                 MapAreaEditor mapAreaEditor = areaObj.GetComponent<MapAreaEditor>();
                 mapAreaEditor.SetData(areaData);
-               
+
             }
             for(int i = 0; i < mapRoomData.specialNpcBehaviorAreas.Count; i++)
             {
@@ -379,11 +379,11 @@ public class MapInstanceEditor : MonoBehaviour
                     minCoordinate.y = y < minCoordinate.y ? y : minCoordinate.y;
                     maxCoordinate.x = x > maxCoordinate.x ? x : maxCoordinate.x;
                     maxCoordinate.y = y > maxCoordinate.y ? y : maxCoordinate.y;
-                    
+
                     if(!(tile != null && tile.name == "1"))
                     {
                         cells.Add(new int2(x, y));
-                    } 
+                    }
                 }
             }
         }
@@ -394,7 +394,7 @@ public class MapInstanceEditor : MonoBehaviour
 
         var groundboundary = groundTilemap.cellBounds;
         Dictionary<int, List<int2>> groundCells = new Dictionary<int, List<int2>>();
-       
+
         for (int x = groundboundary.xMin; x <= groundboundary.xMax; x++)
         {
             for (int y = groundboundary.yMin; y <= groundboundary.yMax; y++)
@@ -463,7 +463,7 @@ public class MapInstanceEditor : MonoBehaviour
             int minY = mapRoomData.barrierGrids[i * 4 + 1];
             int maxX = mapRoomData.barrierGrids[i * 4 + 2];
             int maxY = mapRoomData.barrierGrids[i * 4 + 3];
-            
+
             List<Vector3Int> poses=new List<Vector3Int>();
             List<TileBase> tileBases = new List<TileBase>();
             for(int x = minX; x <= maxX; x++)
@@ -472,8 +472,8 @@ public class MapInstanceEditor : MonoBehaviour
                 {
                     poses.Add(new Vector3Int(x, y));
                     tileBases.Add(barrierTile);
-                    barriers.Add(new Vector3Int(x, y)); 
-                   
+                    barriers.Add(new Vector3Int(x, y));
+
                 }
             }
             tilemap.SetTiles(poses.ToArray(), tileBases.ToArray());
@@ -505,8 +505,8 @@ public class MapInstanceEditor : MonoBehaviour
     private void InitGroundMapTile()
     {
         groundTilemap.ClearAllTiles();
-           
-        int gridCount = mapRoomData.groundGrids.Count / 4; 
+
+        int gridCount = mapRoomData.groundGrids.Count / 4;
         for (int i = 0; i < gridCount; i++)
         {
             int minX = mapRoomData.groundGrids[i * 4];
@@ -532,7 +532,7 @@ public class MapInstanceEditor : MonoBehaviour
                 groundTilemap.SetTiles(poses.ToArray(), tileBases.ToArray());
             }
 
-        } 
+        }
     }
 
     private Vector3 oldPos;

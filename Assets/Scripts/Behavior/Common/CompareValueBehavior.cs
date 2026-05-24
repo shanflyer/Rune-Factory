@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using BehaviorDesigner.Runtime.Tasks;
 using BehaviorDesigner.Runtime;
@@ -13,7 +13,7 @@ public class CompareValueBehavior : Action
     [SerializeField]
     public SharedInt target;
     public override void OnStart()
-    { 
+    {
     }
 
     public override TaskStatus OnUpdate()

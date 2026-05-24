@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SleepMaskPanel : GamePanel<IReferenceData> 
+public class SleepMaskPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
     Image mask;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,7 +20,7 @@ public class SkillData : ScriptableObject, IGameData
     public TargetRangeType targetRangeType;
 
     public FightType fightType;
-    public SkillActionType skillActionType;  
+    public SkillActionType skillActionType;
     public int actionValue;
 
     public int nextProbability;
@@ -34,8 +34,8 @@ public class SkillData : ScriptableObject, IGameData
     public MyTimeLineData nextTimeLineData;
 
     public int cost;
-    public Sprite icon; 
-    private string iconName; 
+    public Sprite icon;
+    private string iconName;
     private string myTimeLineDataName;
     public MyTimeLineData myTimeLineData;
     public string desc;
@@ -48,12 +48,12 @@ public class SkillData : ScriptableObject, IGameData
         return id.ToString();
     }
 #if UNITY_EDITOR
-    static Dictionary<string, Sprite> allSprites = new Dictionary<string, Sprite>(); 
+    static Dictionary<string, Sprite> allSprites = new Dictionary<string, Sprite>();
     public static void Clear()
     {
-        allSprites.Clear(); 
+        allSprites.Clear();
     }
- 
+
     public void SetReferenceData()
     {
         myTimeLineData = ExtensionsResources.LoadResource<MyTimeLineData>($"{DataPath.GetDataPath(typeof(MyTimeLineData))}/{myTimeLineDataName}");
@@ -69,11 +69,11 @@ public class SkillData : ScriptableObject, IGameData
 
         if (!allSprites.TryGetValue(iconName, out icon))
         {
-             
+
         }
 
-        
+
     }
 #endif
-  
+
 }

@@ -6,9 +6,9 @@ using UnityEngine.UI;
 
 public class LanguagePanel : GamePanel<IReferenceData>
 {
-   
+
     [SerializeField]
-    private Button  returnButton; 
+    private Button  returnButton;
     [SerializeField]
     private LanguageReference languageReference;
     [SerializeField]
@@ -16,7 +16,7 @@ public class LanguagePanel : GamePanel<IReferenceData>
     DisplayList<LanguageReference, LanguageData> languages;
     public override void SetPanelUISerializeObj()
     {
-        base.SetPanelUISerializeObj();  
+        base.SetPanelUISerializeObj();
         languageReference = FindChildGameObject<LanguageReference>("LanguageReference");
         languageParent = FindChildGameObject("LanguageParent");
         returnButton = FindChildGameObject<Button>("ReturnButton");
@@ -30,13 +30,13 @@ public class LanguagePanel : GamePanel<IReferenceData>
         returnButton.onClick.AddListener(() =>
         {
             Close();
-        }); 
-          
+        });
+
     }
     public override async Task InitData(string dataKey)
     {
-       await base.InitData(dataKey); 
-       
+       await base.InitData(dataKey);
+
         RefreshLanguage();
     }
     void RefreshLanguage()

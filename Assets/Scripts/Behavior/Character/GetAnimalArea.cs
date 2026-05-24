@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
@@ -32,7 +32,7 @@ public class GetAnimalArea : Action
                 result.SetValue(new int3(cell.xy, animal.pasture));
                 return TaskStatus.Success;
             }
-          
+
         }
 
         return TaskStatus.Failure;

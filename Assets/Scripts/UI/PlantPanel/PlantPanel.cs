@@ -199,7 +199,7 @@ public class PlantPanel : GamePanel<IReferenceData>
             leftList.SelectDefault();
         }, nameof(DisplayPlants));
     }
-     
+
 
     private void SelectPlantReference(PlantData plantData,int index, bool selected)
     {
@@ -252,7 +252,7 @@ public class PlantPanel : GamePanel<IReferenceData>
                 BadSeason.text = "???????????";
                 sellValue.text = "?";
                 price.text = "??";
-            } 
+            }
         }
     }
 }

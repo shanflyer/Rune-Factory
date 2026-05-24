@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class CharacterInformationPanel : GamePanel<CharacterInformationData>
-{ 
+{
     [SerializeField]
     private Image characterHead;
 
@@ -76,9 +76,9 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
                 {
                     itemType = equipment.ItemType,
                     instanceId = equipment.characterId,
-                    dataId = equipment.dataId, 
+                    dataId = equipment.dataId,
                 },
-                
+
                 ActionName = isController ? "卸下" : null,
                 action = SelectAction,
                 OffsetPos=infoOffsetY
@@ -91,9 +91,9 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
 
             void SelectAction(Item item, int index, bool selected = true)
             {
-                Character character = CharacterManager.instance.GetCharacter(equipment.characterId); 
+                Character character = CharacterManager.instance.GetCharacter(equipment.characterId);
 
-               
+
 
                 ClearEquip clearEquip = new ClearEquip
                 {
@@ -121,7 +121,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
                 isMiniShow=true
                 //selectActionId = GameCommon.selectEquipBoxAction
             };
-            
+
             openPackage.itemMatchData.itemMatchType = ItemMatchType.ItemType;
             openPackage.itemMatchData.matchValues = new HashSet<int>
             {
@@ -147,7 +147,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
                 {
                     return;
                 }
-              
+
                 ChangeEquip changeEquip = new ChangeEquip
                 {
                     characterId = equipment.characterId,
@@ -183,7 +183,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             GameActionManager.instance.RemoveListener<RefreshEquip>(RefreshEquip);
             GameActionManager.instance.RemoveListener<CharacterPropertyTrigger>(RefreshCharacterProperty);
         }
-           
+
     }
 
     private void RefreshEquip(RefreshEquip refreshEquip)
@@ -295,7 +295,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         SpeedValue.text = characterProperty.Speed.ToString();
         LuckValue.text = characterProperty.Lucky.ToString();
 
-        AttackUp.enabled = AttackDown.enabled = DefenseDown.enabled = DefenseUp.enabled 
+        AttackUp.enabled = AttackDown.enabled = DefenseDown.enabled = DefenseUp.enabled
             =SpeedDown.enabled=SpeedUp.enabled=LuckUp.enabled=LuckDown.enabled= false;
         if (data.characterProperty.AT > characterProperty.AT)
             AttackUp.enabled = true;
@@ -314,12 +314,12 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         if (data.characterProperty.Speed < characterProperty.Speed)
             SpeedDown.enabled = true;
     }
-     
+
     public void HideBackGround(bool hide)
     {
         BackGround.enabled = !hide;
     }
-    
+
     public override void InitReferenceData(CharacterInformationData v)
     {
         base.InitReferenceData(v);
@@ -333,8 +333,8 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         v.head.SetImageSprite(characterHead, headSize,Vector2.zero);
         HideBackGround(UIManager.instance.GamePanelIsShow<TeamPanel>());
         characterId = v.characterId;
-        
-        
+
+
         if (v.isNpc)
         {
             State.SetSWText(v.NPCState);
@@ -412,7 +412,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         {
             Attribute.sprite = spriteRenference.sprite;
         }
-       
+
       await  WeaponBox.InitData(new Equipment
         {
             characterId = characterId,
@@ -465,7 +465,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
             return;
         }
 
-       
+
         if (v.isAnimal)
         {
             Visit.localScale = Vector3.zero;
@@ -475,7 +475,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         if (v.isNpc)
         {
             Visit.localScale = Vector3.one;
-            State.transform.localScale = Vector3.one; 
+            State.transform.localScale = Vector3.one;
             Friendship.localScale = Vector3.one;
         }
         else
@@ -498,7 +498,7 @@ public class CharacterInformationPanel : GamePanel<CharacterInformationData>
         {
             Close();
         }
-        
+
         return base.InitData(dataKey);
     }
 }

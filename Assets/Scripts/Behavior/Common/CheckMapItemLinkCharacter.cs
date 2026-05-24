@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
 
@@ -6,13 +6,13 @@ using Unity.Mathematics;
 [TaskName("检查道具链接角色")]
 public class CheckMapItemLinkCharacter : Action
 {
-    public SharedInt characterId; 
-    public SharedInt itemId; 
+    public SharedInt characterId;
+    public SharedInt itemId;
     public SharedInt mapId;
     public SharedInt editorId;
- 
+
     public override  void OnStart()
-    { 
+    {
     }
 
     public override TaskStatus OnUpdate()
@@ -32,7 +32,7 @@ public class CheckMapItemLinkCharacter : Action
             }
         }
 
-        
+
 
         return TaskStatus.Failure;
     }

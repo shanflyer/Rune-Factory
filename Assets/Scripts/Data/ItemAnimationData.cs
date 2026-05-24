@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -11,7 +11,7 @@ public class ItemAnimationData : ScriptableObject,IGameData
     public List<AnimationStateData> animationStateDatas = new List<AnimationStateData>();
     public ItemAnimationDictionary animationStateDataDic=new ItemAnimationDictionary();
    // private Dictionary<int2, AnimationStateData> animationStateDataDic = new Dictionary<int2, AnimationStateData>();
-    
+
     public void InitDic()
     {
         animationStateDataDic.Clear();
@@ -49,7 +49,7 @@ public class ItemAnimationData : ScriptableObject,IGameData
                 clipCount = clips.Count;
 
                 Random random = new Random((uint)GameCommon.CreateRandSeed());
-                int index = random.NextInt(0, clips.Count); 
+                int index = random.NextInt(0, clips.Count);
                 return clips[index];
             }
         }
@@ -74,7 +74,7 @@ public class ItemAnimationData : ScriptableObject,IGameData
 public struct AnimationStateData
 {
     public string stateName;
-    public int2 key; 
+    public int2 key;
     public string parameterName;
     public float transitionDuration;
     public List<AnimationClip> clips;

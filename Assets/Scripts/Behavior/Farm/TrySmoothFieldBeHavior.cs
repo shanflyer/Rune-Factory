@@ -1,11 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 [TaskCategory("Game/农场")]
 [TaskName("尝试平整土地")]
 public class TrySmoothFieldBeHavior : Action
 {
-    public SharedInt targetId; 
+    public SharedInt targetId;
     public override void OnStart()
     {
         taskStatus = TaskStatus.Running;

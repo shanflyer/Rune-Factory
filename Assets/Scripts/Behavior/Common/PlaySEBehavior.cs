@@ -1,4 +1,4 @@
-﻿
+
 using System.Collections.Generic;
 using UnityEngine;
 using BehaviorDesigner.Runtime;
@@ -16,7 +16,7 @@ public class PlaySEBehavior : Action
     {
         AudioController.instance.PlayAudio(SE);
     }
-    
+
     public override TaskStatus OnUpdate()
     {
         return TaskStatus.Success;

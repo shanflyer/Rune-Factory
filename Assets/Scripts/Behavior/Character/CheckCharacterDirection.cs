@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime.Tasks;
+using BehaviorDesigner.Runtime.Tasks;
 using BehaviorDesigner.Runtime;
 using UnityEngine;
 
@@ -14,7 +14,7 @@ public class CheckCharacterDirection : Action
         {
             characterId = (SharedInt)Owner.GetVariable("CharacterId");
         }
-        
+
     }
 
     public override TaskStatus OnUpdate()

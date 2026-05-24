@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 public class ShortcutManager : Singleton<ShortcutManager>
@@ -12,12 +12,12 @@ public class ShortcutManager : Singleton<ShortcutManager>
             if (CharacterManager.instance == null || CharacterManager.instance.controllerCharacter == null) return null;
             return GetShortcutPackage(CharacterManager.instance.controllerCharacter.instanceId);
         }
-    } 
+    }
     public ShortcutPackage GetShortcutPackage(int characterId)
     {
         if(!shortcutPackages.TryGetValue(characterId,out var shortcutPackage))
         {
-            shortcutPackage =new ShortcutPackage(characterId); 
+            shortcutPackage =new ShortcutPackage(characterId);
             shortcutPackages.Add(characterId,shortcutPackage );
         }
         return shortcutPackage;
@@ -73,7 +73,7 @@ public class ShortcutManager : Singleton<ShortcutManager>
                         shortcutPackage.items[i] = default(Item);
                     }
                     else
-                    { 
+                    {
                         if (item.instanceId != 0)
                         {
                             item = await Item.SetValue(item, PackageManager.instance.GetPackageItemValue(CharacterManager.instance.controllerCharacter.characterPackage, item.instanceId));
@@ -82,7 +82,7 @@ public class ShortcutManager : Singleton<ShortcutManager>
                         {
                             item = await Item.SetValue(item, PackageManager.instance.GetPackageItemValue(CharacterManager.instance.controllerCharacter.characterPackage, item.dataId));
                         }
-                        
+
 
                         item.count = itemCount;
                         shortcutPackage.items[i] = item;
@@ -108,7 +108,7 @@ public class ShortcutManager : Singleton<ShortcutManager>
             if (shortcutPanel != null)
             {
                shortcutPanel.InitReferenceData(shortcutPackage);
-            }    
+            }
         }
     }
     void RefreshItemValue(RefreshItemValue refreshItemValue)
@@ -142,19 +142,19 @@ public class ShortcutManager : Singleton<ShortcutManager>
             await RefreshDisplayShortcutPackageAsync(shortcutPackage);
         }
     }
-   
+
 }
 public class ShortcutPackage : IReferenceData, INativeData
 {
     public ShortcutPackage(int characterId)
     {
         this.characterId = characterId;
-        items = new Item[GameCommon.shortcutItemCount]; 
+        items = new Item[GameCommon.shortcutItemCount];
         for (int i = 0; i < GameCommon.shortcutItemCount; i++)
         {
-            items[i] = default(Item); 
+            items[i] = default(Item);
         }
-      
+
     }
 
     public int packagerId
@@ -189,7 +189,7 @@ public class ShortcutPackage : IReferenceData, INativeData
             Item oldItem = items[oldIndex];
             items[oldIndex] = items[index];
             items[index] = oldItem;
-        } 
+        }
     }
     public bool CheckItem(int itemId,out int itemInstance)
     {
@@ -264,7 +264,7 @@ public class ShortcutPackage : IReferenceData, INativeData
                     selectItem = items[i].instanceId,
                     value = value
                 };
-                GameActionManager.instance.QueueAction(addItemValue); 
+                GameActionManager.instance.QueueAction(addItemValue);
             }
         }
         return true;
@@ -282,7 +282,7 @@ public class ShortcutPackage : IReferenceData, INativeData
                     value = value
                 };
                 GameActionManager.instance.QueueAction(addItemValue);
-             
+
             }
         }
         return true;
@@ -306,7 +306,7 @@ public class ShortcutPackage : IReferenceData, INativeData
         if (index <= items.Length)
         {
             haveItems.Remove(items[index - 1].instanceId != 0 ? items[index - 1].instanceId : items[index - 1].dataId);
-            items[index-1] = default(Item); 
+            items[index-1] = default(Item);
         }
     }
     public bool SetItem(Item item)
@@ -326,13 +326,13 @@ public class ShortcutPackage : IReferenceData, INativeData
             {
                 items[i] = item;
                 haveItems.Add(item.instanceId != 0 ? item.instanceId : item.dataId);
-                return true; 
+                return true;
             }
         }
         return false;
     }
-   
+
     public void Dispose()
-    { 
+    {
     }
 }

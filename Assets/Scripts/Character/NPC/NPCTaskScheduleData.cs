@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using System;
 using Unity.Mathematics;
 using UnityEngine;
@@ -14,9 +14,9 @@ public class NPCTaskScheduleData : ScriptableObject, IGameData
 {
     public int id;
     public string taskName;
-    public NPCTaskScheduleType type; 
+    public NPCTaskScheduleType type;
     private string behaviorName;
-    public ExternalBehaviorTree externalBehavior; 
+    public ExternalBehaviorTree externalBehavior;
     public bool canBreak;
     public bool PauseWhenDisabled;
     public bool holdPos;
@@ -57,7 +57,7 @@ public struct GameTimeKey : IEquatable<int2>, IEquatable<GameTimeKey>
         GameTimeKey gameTimeKey = new GameTimeKey
         {
             minTime =new int2(int.Parse(strs[0]), int.Parse(strs[1])),
-            maxTime = new int2(int.Parse(strs[2]), int.Parse(strs[3])), 
+            maxTime = new int2(int.Parse(strs[2]), int.Parse(strs[3])),
         };
         return gameTimeKey;
     }
@@ -88,13 +88,13 @@ public struct GameTimeKey : IEquatable<int2>, IEquatable<GameTimeKey>
     public GameTimeKey(int[] timeArray)
     {
         minTime = new int2(timeArray[0], timeArray[1]);
-        maxTime = new int2(timeArray[2], timeArray[3]); 
+        maxTime = new int2(timeArray[2], timeArray[3]);
     }
 
     public GameTimeKey(int minHour, int minMinute, int maxHour, int maxMinute)
     {
         minTime = new int2(minHour, minMinute);
-        maxTime = new int2(maxHour, maxMinute); 
+        maxTime = new int2(maxHour, maxMinute);
     }
 
     public override bool Equals(object obj)

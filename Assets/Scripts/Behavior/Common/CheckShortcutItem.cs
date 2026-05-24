@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Collections.Generic;
 public class CheckShortcutItem : Action
 {
     [SerializeField]
-    public SharedInt characterId; 
+    public SharedInt characterId;
     public SharedIntList checkValue;
     [SerializeField]
     private SharedInt resultItem;
@@ -22,14 +22,14 @@ public class CheckShortcutItem : Action
     private System.Threading.Tasks.Task OnStartAsync()
     {
         character = CharacterManager.instance.controllerCharacter;
-        
+
         if (!characterId.IsNull())
         {
             character = CharacterManager.instance.GetCharacter(characterId.Value);
             if (character != null)
             {
-                shortcutPackage = ShortcutManager.instance.GetShortcutPackage(character.instanceId); 
-                 
+                shortcutPackage = ShortcutManager.instance.GetShortcutPackage(character.instanceId);
+
             }
         }
 
@@ -40,7 +40,7 @@ public class CheckShortcutItem : Action
     public override TaskStatus OnUpdate()
     {
         if (shortcutPackage!=null)
-        { 
+        {
             for(int i = 0; i < checkValue.Value.Count; i++)
             {
                 if (shortcutPackage.CheckItem(checkValue.Value[i],out List<int> item))
@@ -50,7 +50,7 @@ public class CheckShortcutItem : Action
                     return TaskStatus.Success;
                 }
             }
-           
+
         }
         return TaskStatus.Failure;
     }

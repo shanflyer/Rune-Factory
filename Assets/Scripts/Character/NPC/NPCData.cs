@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections.Generic;
 using Unity.Mathematics;
 
@@ -14,7 +14,7 @@ public class NPCData : ScriptableObject, IReferenceData, IGameData
     public bool hide;
     public string text;
     public List<int> functionIds;
-    public List<int> friendLevels; 
+    public List<int> friendLevels;
     public string shopName;
     public int playerOperateEventId;
     public int nextTalkEventId;
@@ -57,7 +57,7 @@ public class NPCData : ScriptableObject, IReferenceData, IGameData
                 return talkId;
             }
         }
-        
+
 
         return talkId;
     }
@@ -72,7 +72,7 @@ public class NPCData : ScriptableObject, IReferenceData, IGameData
     }
 
     public void SetReferenceData()
-    { 
+    {
         talkDatas.Clear();
         for(int i = 0; i < talkForFriendShip.Count; i++)
         {

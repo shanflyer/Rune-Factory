@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -16,20 +16,20 @@ public class logdata
     public void Show(/*bool showstack*/)
     {
         GUILayout.Label(output);
-        //if (showstack)  
+        //if (showstack)
         GUILayout.Label(stack);
     }
 }
-/// <summary>  
-/// 手机调试脚本  
-/// 本脚本挂在一个空对象或转换场景时不删除的对象即可  
-/// 错误和异常输出日记路径 Application.persistentDataPath  
-/// </summary>  
+/// <summary>
+/// 手机调试脚本
+/// 本脚本挂在一个空对象或转换场景时不删除的对象即可
+/// 错误和异常输出日记路径 Application.persistentDataPath
+/// </summary>
 public class ShowDebugInPhone : MonoBehaviour
 {
-    List<logdata> logDatas = new List<logdata>();//log链表  
-    List<logdata> errorDatas = new List<logdata>();//错误和异常链表  
-    List<logdata> warningDatas = new List<logdata>();//警告链表  
+    List<logdata> logDatas = new List<logdata>();//log链表
+    List<logdata> errorDatas = new List<logdata>();//错误和异常链表
+    List<logdata> warningDatas = new List<logdata>();//警告链表
     static List<string> mWriteLogTxt = new List<string>();
     static List<string> mWriteErrorTxt = new List<string>();
     static List<string> mWriteWarningTxt = new List<string>();
@@ -45,13 +45,13 @@ public class ShowDebugInPhone : MonoBehaviour
     private string outpathWarning;
     void Start()
     {
-        //Application.persistentDataPath Unity中只有这个路径是既可以读也可以写的。  
+        //Application.persistentDataPath Unity中只有这个路径是既可以读也可以写的。
         //Debug.Log(Application.persistentDataPath);
         outpathLog = Application.persistentDataPath + @"/outLog.txt";
         outpathError = Application.persistentDataPath + @"/outLogError.txt";
         outpathWarning = Application.persistentDataPath + @"/outLogWarining.txt";
 
-        //每次启动客户端删除之前保存的Log  
+        //每次启动客户端删除之前保存的Log
         if (File.Exists(outpathLog))
         {
             File.Delete(outpathLog);
@@ -83,8 +83,8 @@ public class ShowDebugInPhone : MonoBehaviour
         {
             Application.logMessageReceived += HangleLog;
         }
-#endif 
-        //注册log监听  
+#endif
+        //注册log监听
 
     }
     void OnDisable()
@@ -162,9 +162,9 @@ public class ShowDebugInPhone : MonoBehaviour
     }
 
     void Update()
-    { 
-        //因为写入文件的操作必须在主线程中完成,所以在Update中才给你写入文件。  
-        
+    {
+        //因为写入文件的操作必须在主线程中完成,所以在Update中才给你写入文件。
+
     }
     void OnGUI()
     {
@@ -215,7 +215,7 @@ public class ShowDebugInPhone : MonoBehaviour
             }
             GUILayout.EndScrollView();
         }
-        
+
         if (showError)
         {
             GUI.color = Color.red;
@@ -236,6 +236,6 @@ public class ShowDebugInPhone : MonoBehaviour
             }
             GUILayout.EndScrollView();
         }
-        
+
     }
 }

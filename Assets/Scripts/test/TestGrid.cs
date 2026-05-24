@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -51,7 +51,7 @@ public class TestGrid : MonoBehaviour
         gridNeighborDic.Remove(gridLine);
     }
 
-   
+
 
     private bool IsInGrid(int2 cell, int4 grid)
     {
@@ -948,14 +948,14 @@ public class TestGrid : MonoBehaviour
             Gizmos.DrawLine(p2, p3);
             Gizmos.DrawLine(p3, p0);
 
-           
+
         }
     }
     private void Update()
     {
-       
 
-       
+
+
     }
 }
 

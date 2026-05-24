@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 
@@ -11,11 +11,11 @@ public class CheckCharacterInGroup : Action
     private SharedInt characterId;
     [SerializeField]
     private SharedInt groupId;
-     
+
     public override TaskStatus OnUpdate()
     {
         Character character = CharacterManager.instance.GetCharacter(characterId.Value);
-      
+
         groupId.Value = character.groupId;
         if (character.groupId == 0)
         {
@@ -25,6 +25,6 @@ public class CheckCharacterInGroup : Action
         {
             return TaskStatus.Success;
         }
-         
+
     }
 }

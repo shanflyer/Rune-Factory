@@ -1,4 +1,4 @@
-﻿using System; 
+using System;
 using UnityEngine;
 [ExecuteAlways]
  public class BuffActionBehavior:MonoBehaviour
@@ -26,7 +26,7 @@ using UnityEngine;
         }
         else
         {
-            if (stopAction != null) stopAction(); 
+            if (stopAction != null) stopAction();
         }
     }
     private void OnParticleSystemStopped()

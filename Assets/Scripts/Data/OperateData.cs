@@ -1,4 +1,4 @@
-﻿ 
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,7 +25,7 @@ public class OperateData : ScriptableObject, IGameData, IReferenceData
     public int checkId;
     public GameActionAsset checkActionData;
     public int actionId;
-    public int linkItem; 
+    public int linkItem;
     public GameActionAsset gameActionData;
     public int eventId;
     public GameEventData gameEventData;

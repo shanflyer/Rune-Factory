@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -89,7 +89,7 @@ public class WorldPanel : GamePanel<MyInt>
         {
             InformationController.instance.AddInformation(LanguageManage.SwitchStr("体力不足，无法进行探索！"), true, true);
             return;
-        } 
+        }
 
         EnterChapter enterChapter = new EnterChapter
         {
@@ -138,7 +138,7 @@ public class WorldPanel : GamePanel<MyInt>
             exploreButton.interactable =
 #if UNITY_EDITOR
                 GameController.instance.test ? true :
-#endif 
+#endif
                 chapterData.open;
         }
         else
@@ -178,7 +178,7 @@ public class WorldPanel : GamePanel<MyInt>
             }
             seasonIndex.Enqueue(i);
         }
-         
+
         for (int i = 0; i < fightMapDatas.Count; i++)
         {
             if (ShouldStopLifecycleTask(cancellationToken))
@@ -202,7 +202,7 @@ public class WorldPanel : GamePanel<MyInt>
                         season =
 #if UNITY_EDITOR
                        GameController.instance.test ? true :
-#endif  
+#endif
                         fightMapData.season == selectSeason
                     };
                     await seasonFightChapterList[index].InitData(data, SelectFightChapter, null, cancellationToken);

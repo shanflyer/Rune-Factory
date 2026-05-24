@@ -174,7 +174,7 @@ public class ShopPanel : GamePanel<ShopList>
             };
 
             await UIManager.instance.ShowGamePanel<TwoSelectPanel, TwoSelectData>(twoSelectData);
-            
+
             return;
         }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -6,7 +6,7 @@ using UnityEngine;
 public class GameGuideFilmData : ScriptableObject, IGameData
 {
     public int id;
-    public string guidName; 
+    public string guidName;
     public int beforeEventId;
     public int3 fixedMap;
     public int fixedDate;
@@ -21,6 +21,6 @@ public class GameGuideFilmData : ScriptableObject, IGameData
         return id.ToString();
     }
     public void SetReferenceData()
-    { 
+    {
     }
 }

@@ -46,7 +46,7 @@ public class Test : MonoBehaviour
     private  List<int> playerPackages;
     [SerializeField]
     UserGameSaveData UserGameSaveData;
- 
+
     public  List<int3> datas = new List<int3>();
 
     public void TestInt2Dictionary()
@@ -74,8 +74,8 @@ public class Test : MonoBehaviour
             var obj = JsonConvert.DeserializeObject(str, file.FieldType);
             file.SetValue(int2Test1, obj);
         }
-         
-      
+
+
     }
     public void TestUserGameSaveData()
     {

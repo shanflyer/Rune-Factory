@@ -2,7 +2,7 @@ using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 [TaskCategory("NewGame")]
-[TaskName("ÆÀ¹ÀÑ¡Ôñ¼¼ÄÜÐÐÎª")]
+[TaskName("è¯„ä¼°é€‰æ‹©æŠ€èƒ½è¡Œä¸º")]
 public class EstimateSkillBehavior : Action
 {
     public FightType fightType;
@@ -16,7 +16,7 @@ public class EstimateSkillBehavior : Action
     SkillEstimateData selectSkill;
     public override void OnStart()
 	{
-       
+
     }
 
     public override void OnAwake()
@@ -31,7 +31,7 @@ public class EstimateSkillBehavior : Action
     }
 
     public override float GetUtility()
-    {  
+    {
         float UtilityValue = 0;
         if (sharedSkillList.Value.TryGetValue(fightType, out var skills))
         {
@@ -45,7 +45,7 @@ public class EstimateSkillBehavior : Action
                 }
             }
         }
-        return UtilityValue; 
+        return UtilityValue;
     }
 
     float GetSkillUtilityValue(int skill)

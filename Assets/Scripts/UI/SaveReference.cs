@@ -76,7 +76,7 @@ public class SaveReference : UIObjReference<UserGameSaveData>
             Time.text = "-";
             SaveTime.text = "-";
         }
-       
+
     }
 
     public void Awake()

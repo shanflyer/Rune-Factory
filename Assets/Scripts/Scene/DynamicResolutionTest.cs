@@ -22,7 +22,7 @@ public class DynamicResolutionTest : MonoBehaviour
     float m_widthScale = 1.0f;
     float m_heightScale = 1.0f;
 
-    // ¿çÖ¡±£³ÖµÄ¶¯Ì¬·Ö±æÂÊËã·¨±äÁ¿
+    // è·¨å¸§ä¿æŒçš„åŠ¨æ€åˆ†è¾¨ç‡ç®—æ³•å˜é‡
     uint m_frameCount = 0;
 
     const uint kNumFrameTimings = 2;
@@ -30,7 +30,7 @@ public class DynamicResolutionTest : MonoBehaviour
     double m_gpuFrameTime;
     double m_cpuFrameTime;
 
-    // Ê¹ÓÃ´Ëº¯Êı½øĞĞ³õÊ¼»¯
+    // ä½¿ç”¨æ­¤å‡½æ•°è¿›è¡Œåˆå§‹åŒ–
     void Start()
     {
         int rezWidth = (int)Mathf.Ceil(ScalableBufferManager.widthScaleFactor * Screen.currentResolution.width);
@@ -42,25 +42,25 @@ public class DynamicResolutionTest : MonoBehaviour
             rezHeight);
     }
 
-    // Ã¿Ö¡µ÷ÓÃÒ»´Î Update
+    // æ¯å¸§è°ƒç”¨ä¸€æ¬¡ Update
     void Update()
     {
         float oldWidthScale = m_widthScale;
         float oldHeightScale = m_heightScale;
-        // Ìá¸ß·Ö±æÂÊ
+        // æé«˜åˆ†è¾¨ç‡
         if (Keyboard.current.upArrowKey.wasPressedThisFrame)
         {
             m_heightScale = Mathf.Min(maxResolutionHeightScale, m_heightScale + scaleHeightIncrement);
             m_widthScale = Mathf.Min(maxResolutionWidthScale, m_widthScale + scaleWidthIncrement);
         }
-        // ½µµÍ·Ö±æÂÊ
+        // é™ä½åˆ†è¾¨ç‡
         if (Keyboard.current.downArrowKey.wasPressedThisFrame)
         {
             m_heightScale = Mathf.Max(minResolutionHeightScale, m_heightScale - scaleHeightIncrement);
             m_widthScale = Mathf.Max(minResolutionWidthScale, m_widthScale - scaleWidthIncrement);
         }
 
-     
+
         if (m_widthScale != oldWidthScale || m_heightScale != oldHeightScale)
         {
             ScalableBufferManager.ResizeBuffers(m_widthScale, m_heightScale);
@@ -77,7 +77,7 @@ public class DynamicResolutionTest : MonoBehaviour
             ScalableBufferManager.heightScaleFactor);
     }
 
-    // ¹ÀËãÏÂÒ»Ö¡Ê±¼ä²¢ÔÚ±ØÒªÊ±¸üĞÂ·Ö±æÂÊËõ·Å¡£
+    // ä¼°ç®—ä¸‹ä¸€å¸§æ—¶é—´å¹¶åœ¨å¿…è¦æ—¶æ›´æ–°åˆ†è¾¨ç‡ç¼©æ”¾ã€‚
     private void DetermineResolution()
     {
         ++m_frameCount;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -42,7 +42,7 @@ public struct LerpScreenCycleValue : GameAction
             maxCycleValue = float.Parse(parameters[1].value);
             lerpTime = float.Parse(parameters[2].value);
 
-            cyclePos = new Vector2(float.Parse(parameters[3].value), 
+            cyclePos = new Vector2(float.Parse(parameters[3].value),
                 float.Parse(parameters[4].value));
         }
         else if (parameters.Count >= 4)

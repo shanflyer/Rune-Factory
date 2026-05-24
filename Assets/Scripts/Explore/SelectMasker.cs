@@ -23,7 +23,7 @@ public class SelectMasker : MonoBehaviour
             if (blueMasker)
                 blueMasker.gameObject.SetActive(true);
         }
-    } 
+    }
     public void DisplayOrHide(bool display)
     {
         if (display)

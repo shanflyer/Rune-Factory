@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,14 +18,14 @@ public class MapController:Singleton<MapCellController>
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
     }
     private void TryCreateRoom(WorldMap worldMap)
-    {  
+    {
         var entity = entityManager.CreateEntity();
         entityManager.AddComponent<MapComponent>(entity);
         entityManager.SetComponentData(entity, new MapComponent
         {
-            id = worldMap.id, 
+            id = worldMap.id,
             coordinate=worldMap.coordinate
-           
+
         });
         entityManager.AddBuffer<MapLink>(entity);
 

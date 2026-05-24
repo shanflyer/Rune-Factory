@@ -44,7 +44,7 @@ public class GoldCreatPanel : GamePanel<IReferenceData>
         CreaterGroup = createrParent.GetComponent<ToggleGroup>();
 
         ReturnButton = FindChildGameObject<Button>("ReturnButton");
-    } 
+    }
 
     MoneyCreatData selectMoneyCreatData;
     void SelectCreater(MoneyCreatData MoneyCreatData, int index, bool selected)
@@ -54,7 +54,7 @@ public class GoldCreatPanel : GamePanel<IReferenceData>
             selectMoneyCreatData = MoneyCreatData;
             resultValue.text = MoneyCreatData.getValue.ToString();
         }
-        
+
     }
     public override void InitReferenceData(IReferenceData v)
     {

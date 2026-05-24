@@ -33,7 +33,7 @@ public class MainPanel : GamePanel<IReferenceData>
         {
             GameActionManager.instance.RemoveListener<RefreshTeam>(RefreshTeam);
         }
-      
+
     }
     void RefreshTeam(RefreshTeam refreshTeam)
     {
@@ -111,8 +111,8 @@ public class MainPanel : GamePanel<IReferenceData>
         {
             TeamButton.gameObject.SetActive(false);
         }
-        
+
         return base.InitData(dataKey);
-       
+
     }
 }

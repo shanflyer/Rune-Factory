@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -27,7 +27,7 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
 
     [SerializeField]
     private Button Ok, Return;
-     
+
 
     private Gender gender;
     private string playerName;
@@ -48,12 +48,12 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
 
     protected override void Awake()
     {
-        base.Awake(); 
+        base.Awake();
 
         MealSelcet.onValueChanged.AddListener((bool value) =>
         {
             if (value && gender != Gender.male)
-            { 
+            {
                 gender = Gender.male;
                 PlayFilm playFilm = new PlayFilm
                 {
@@ -67,7 +67,7 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
         FemealSelect.onValueChanged.AddListener((bool value) =>
         {
             if (value && gender != Gender.female)
-            { 
+            {
                 gender = Gender.female;
                 PlayFilm playFilm = new PlayFilm
                 {
@@ -118,12 +118,12 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
     }
 
     private void SelectDate(int index)
-    { 
+    {
         brothDate = index + 1;
     }
 
     private void SelectSeason(int index)
-    { 
+    {
         index++;
         brothSeason = (Season)index;
     }
@@ -155,14 +155,14 @@ public class SelectCharacterPanel : GamePanel<IReferenceData>
     bool userChangeName = false;
     private void InitData()
     {
-      
-        userChangeName = false; 
+
+        userChangeName = false;
         foreach (var optionData in SeasonDropdown.options)
         {
-            optionData.text = LanguageManage.SwitchStr(optionData.text); 
+            optionData.text = LanguageManage.SwitchStr(optionData.text);
         }
 
-        //DataSaveAndLoadTest.isJsonData = false; 
+        //DataSaveAndLoadTest.isJsonData = false;
         gender = Gender.male;
         RefreshName();
         brothSeason = Season.春;

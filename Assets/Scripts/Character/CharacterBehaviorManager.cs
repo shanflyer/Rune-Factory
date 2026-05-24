@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -70,8 +70,8 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
     void PauseCharacterBehavior(PauseCharacterBehavior pauseCharacterBehavior)
     {
         if (behaviorTrees.TryGetValue(pauseCharacterBehavior.characterId, out BehaviorTree behaviorTree))
-        { 
-            behaviorTree.DisableBehavior(true); 
+        {
+            behaviorTree.DisableBehavior(true);
         }
     }
     void ReStartCharacterBehavior(ReStartCharacterBehavior reStartCharacterBehavior)
@@ -97,20 +97,20 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
     private void StartCharacterBehavior(StartCharacterBehavior startCharacterBehavior)
     {
         if (behaviorTrees.TryGetValue(startCharacterBehavior.characterId, out BehaviorTree behaviorTree))
-        { 
+        {
             behaviorTree.enabled = true;
             behaviorTree.EnableBehavior();
             if (!behaviorTree.StartWhenEnabled)
             {
                 behaviorTree.Start();
-            } 
+            }
         }
     }
-    
+
     public void AddBehavior(int characterId, ExternalBehavior externalBehavior, BehaviorHandler behaviorHandler=null,
         bool PauseWhenDisabled = false,string behaviorName="")
     {
-       
+
         Character character = CharacterManager.instance.GetCharacter(characterId);
        // Debug.Log($"AddBehavior:{character.name}--{externalBehavior.name}");
         if (!behaviorTrees.TryGetValue(characterId, out BehaviorTree behaviorTree))
@@ -123,12 +123,12 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
             }
         }
         else
-        { 
+        {
             character.RemoveMove();
         }
-       
+
         behaviorHandlers[characterId] = behaviorHandler;
-        behaviorTree.ExternalBehavior = externalBehavior; 
+        behaviorTree.ExternalBehavior = externalBehavior;
         behaviorTree.SetVariable("CharacterId", new SharedInt { Value = characterId });
         behaviorTree.RestartWhenComplete = false;
         //behaviorTree.r
@@ -142,8 +142,8 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
 
         void CallBack(Behavior behavior)
         {
-            if(behavior is  BehaviorTree tree) 
-            { 
+            if(behavior is  BehaviorTree tree)
+            {
                 tree.StopAllTaskCoroutines();
                 tree.DisableBehavior();
                 behaviorTree.enabled = false;
@@ -162,7 +162,7 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
                     Debug.Log($"没有行为回调:{character.name}");
                 }
             }
-             
+
         }
     }
 

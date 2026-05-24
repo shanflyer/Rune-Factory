@@ -87,7 +87,7 @@ public class TransmissionPanel : GamePanel<IReferenceData>
         var scaleValue = Value * 1.5f;
         MapImage.localScale = new Vector3(scaleValue, scaleValue, scaleValue);
     }
-  
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -122,7 +122,7 @@ public class TransmissionPanel : GamePanel<IReferenceData>
         gridSimData.needRefresh = true;
         dirtyChildMapCount++;
     }
-    
+
     public override async Task InitData(string dataKey)
     {
         await base.InitData(dataKey);
@@ -151,7 +151,7 @@ public class TransmissionPanel : GamePanel<IReferenceData>
                 Character = npcs.npcs[i].Character,
                 getVectorForMap = GetParentPos,
                 changeUINPCReferenceMap = ChangeUIMapNPCReference
-            }; 
+            };
             GetParentPos(npcs.npcs[i].Character.mapInstance, out nPCReferenceData.parentPos);
             nPCReferenceDatas.Add(nPCReferenceData);
         }
@@ -213,6 +213,6 @@ public class TransmissionPanel : GamePanel<IReferenceData>
             }
         }
     }
- 
+
 }
-     
+

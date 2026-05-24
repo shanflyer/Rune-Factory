@@ -15,11 +15,11 @@ public class SkillActionPanel :GamePanel<IReferenceData>
     protected override void Awake()
     {
         base.Awake();
-        ActionButton.onClick.AddListener(() => 
+        ActionButton.onClick.AddListener(() =>
         {
             ManualSkillAction manualSkillAction = new ManualSkillAction();
             GameActionManager.instance.QueueAction(manualSkillAction, true);
-            Debug.Log($"…Ë÷√‘›Õ£true");
+            Debug.Log($"ËÆæÁΩÆÊöÇÂÅútrue");
             if (FightManager.instance.isFight)
             {
                 SkillPauseAction skillPauseAction = new SkillPauseAction
@@ -28,12 +28,12 @@ public class SkillActionPanel :GamePanel<IReferenceData>
                 };
                 GameActionManager.instance.QueueAction(skillPauseAction, true);
             }
-              
+
             Close();
         });
-        CancleButton.onClick.AddListener(() => 
+        CancleButton.onClick.AddListener(() =>
         {
-            Debug.Log($"»°œ˚‘›Õ£false");
+            Debug.Log($"ÂèñÊ∂àÊöÇÂÅúfalse");
             if (FightManager.instance.isFight)
             {
                 SkillPauseAction skillPauseAction = new SkillPauseAction
@@ -41,7 +41,7 @@ public class SkillActionPanel :GamePanel<IReferenceData>
                     pause = false,
                 };
                 GameActionManager.instance.QueueAction(skillPauseAction, true);
-            } 
+            }
             NoSelectSkillAction noSelectSkillAction = new NoSelectSkillAction();
             GameActionManager.instance.QueueAction(noSelectSkillAction, true);
             Close();

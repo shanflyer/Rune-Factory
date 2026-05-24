@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 
 [TaskCategory("Game/Character")]
@@ -34,7 +34,7 @@ public class SetSomeOneGift : Action
     {
         if (giveGift.receiveCharacter == characterId.Value)
         {
-             
+
             taskStatus = TaskStatus.Success;
         }
     }

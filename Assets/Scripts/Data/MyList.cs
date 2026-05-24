@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +19,7 @@ public class MyList<T>
         {
             list.AddRange(values);
         }
-        
+
         length = list.Count;
     }
     public void SetList(List<T> values)
@@ -28,7 +28,7 @@ public class MyList<T>
         if (values != null)
         {
             list.AddRange(values);
-        } 
+        }
         length = list.Count;
     }
     public MyList()
@@ -50,7 +50,7 @@ public class MyList<T>
     public void RemoveAt(int index)
     {
         if (length > index)
-        { 
+        {
             if (length == 1)
             {
                 length = 0;
@@ -68,7 +68,7 @@ public class MyList<T>
         {
            throw new IndexOutOfRangeException();
         }
-      
+
     }
     public void Clear()
     {
@@ -86,7 +86,7 @@ public class MyDic<K,T>
     public int length { get; private set; }
     public T this[int index]
     {
-        get { return list[index]; } 
+        get { return list[index]; }
     }
     public MyDic()
     {
@@ -225,7 +225,7 @@ public class MyDic<K,T>
             {
                 indexDic.Remove(keys[length - 1]);
                 list.RemoveAt(length - 1);
-                keys.RemoveAt(length - 1); 
+                keys.RemoveAt(length - 1);
                 length--;
             }
             else
@@ -245,7 +245,7 @@ public class MyDic<K,T>
             throw new IndexOutOfRangeException();
         }
 
-    } 
+    }
     public void Clear()
     {
         length = 0;
@@ -257,7 +257,7 @@ public class MyDic<K,T>
 
 public class MySet<T>
 {
-    private List<T> list; 
+    private List<T> list;
     private Dictionary<T, int> indexDic;
     public int length { get; private set; }
     public T this[int index]
@@ -267,13 +267,13 @@ public class MySet<T>
     public MySet()
     {
         list = new List<T>();
-        indexDic = new Dictionary<T, int>(); 
+        indexDic = new Dictionary<T, int>();
         length = 0;
     }
     public T GetValueForIndex(int index)
     {
         return list[index];
-    } 
+    }
     public List<T> GetValueList(bool native = false)
     {
         if (native)
@@ -284,7 +284,7 @@ public class MySet<T>
         result.AddRange(list);
         return result;
     }
-    
+
     public bool Contains(T t)
     {
         return indexDic.ContainsKey(t);
@@ -301,7 +301,7 @@ public class MySet<T>
             Add( t);
         }
     }
-    
+
     public void Add(T item)
     {
         if (list.Count > length)
@@ -310,7 +310,7 @@ public class MySet<T>
         }
         else
         {
-            list.Add(item); 
+            list.Add(item);
         }
         indexDic.Add(item, length);
         length++;
@@ -322,13 +322,13 @@ public class MySet<T>
             if (length == 1)
             {
                 length = 0;
-                list.Clear(); 
+                list.Clear();
                 indexDic.Clear();
             }
             else if (index == list.Count - 1)
             {
                 indexDic.Remove(list[index]);
-                list.RemoveAt(length - 1);  
+                list.RemoveAt(length - 1);
                 length--;
             }
             else
@@ -336,7 +336,7 @@ public class MySet<T>
                 indexDic.Remove(list[index]);
                 indexDic[list[length - 1]] = index;
                 list[index] = list[length - 1];
-                list.RemoveAt(length - 1);  
+                list.RemoveAt(length - 1);
                 length--;
             }
         }
@@ -359,20 +359,20 @@ public class MySet<T>
             if (length == 1)
             {
                 length = 0;
-                list.Clear(); 
+                list.Clear();
                 indexDic.Clear();
             }
             else if (index == list.Count - 1)
             {
-                list.RemoveAt(length - 1);  
+                list.RemoveAt(length - 1);
                 length--;
             }
             else
             {
-               
+
                 indexDic[list[length - 1]] = index;
                 list[index] = list[length - 1];
-                list.RemoveAt(length - 1);  
+                list.RemoveAt(length - 1);
                 length--;
             }
         }
@@ -385,7 +385,7 @@ public class MySet<T>
     public void Clear()
     {
         length = 0;
-        list.Clear(); 
+        list.Clear();
         indexDic.Clear();
     }
 }

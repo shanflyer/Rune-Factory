@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 
 [System.Serializable]
 public class SharedSkillEstimateData : SharedVariable<SkillEstimateData>

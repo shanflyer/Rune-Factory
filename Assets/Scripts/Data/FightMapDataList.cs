@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,7 +18,7 @@ public class FightMapDataList : ScriptableObject, IGameData,IDataArray<FightMapD
             var data = DataList[i];
             data.SetReferenceData();
             DataList[i] = data;
-        } 
+        }
     }
 #endif
     public string GetKey()
@@ -33,19 +33,19 @@ public class FightMapDataList : ScriptableObject, IGameData,IDataArray<FightMapD
 
 [Serializable]
 public struct FightMapData : IGameData
-{ 
+{
     public string mapName;
     public int id;
 
-    public string fightMapObjName; 
+    public string fightMapObjName;
     public string info;
     public Season season;
     public WeatherDisplayType weatherDisplayType;
-    public float cycleSize;    
+    public float cycleSize;
     public List<int> items;
     public List<int> monsterDeploys;
     public List<int> endMonsterEvents;
-    public string exploreBGM, fightBGM, bossBGM, footStep; 
+    public string exploreBGM, fightBGM, bossBGM, footStep;
     public bool clearWeather;
     public bool skyDisplay;
     public bool displaySunlight;
@@ -61,7 +61,7 @@ public struct FightMapData : IGameData
 #if UNITY_EDITOR
     public void SetReferenceData()
     {
-        
+
     }
 #endif
     public string GetKey()

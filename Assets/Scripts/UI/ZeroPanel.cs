@@ -12,7 +12,7 @@ public class ZeroPanel : GamePanel<IReferenceData>
 
     [SerializeField]
     private Button start;
-     
+
 
     [SerializeField]
     private ParticleSystemRenderer systemRenderer;
@@ -27,7 +27,7 @@ public class ZeroPanel : GamePanel<IReferenceData>
     {
         base.SetPanelUISerializeObj();
         titleIcon = FindChildGameObject<Image>("Icon");
-        start = FindChildGameObject<Button>("StartButton"); 
+        start = FindChildGameObject<Button>("StartButton");
         systemRenderer = FindChildGameObject<ParticleSystemRenderer>("Cloud");
         selectPanel = FindChildGameObject("SelectPanel");
         newButton = FindChildGameObject<Button>("New");
@@ -46,14 +46,14 @@ public class ZeroPanel : GamePanel<IReferenceData>
 
     public override void Show(int layer = -1)
     {
-        var uiLayer = LayerMask.NameToLayer("UI"); 
+        var uiLayer = LayerMask.NameToLayer("UI");
         systemRenderer.gameObject.layer = uiLayer;
         base.Show(layer);
     }
 
     public override void Close()
     {
-        var hideLayer = LayerMask.NameToLayer("Hide"); 
+        var hideLayer = LayerMask.NameToLayer("Hide");
         systemRenderer.gameObject.layer = hideLayer;
 
         base.Close();
@@ -62,7 +62,7 @@ public class ZeroPanel : GamePanel<IReferenceData>
     private AudioClip startBGM;
     public void PlayZeroBGM()
     {
-        AudioController.instance.PlayBGM(startBGM, true, AudioClearType.All, Group: BGMGroup.Theme.ToString()); 
+        AudioController.instance.PlayBGM(startBGM, true, AudioClearType.All, Group: BGMGroup.Theme.ToString());
     }
 
     private void ClickStart()

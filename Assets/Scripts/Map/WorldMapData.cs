@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -14,7 +14,7 @@ public class WorldMapData : ScriptableObject, IGameData
 
     public void SetReferenceData()
     {
-      
+
     }
     public StringStringDictionary GetDataDic()
     {
@@ -38,7 +38,7 @@ public class WorldMapData : ScriptableObject, IGameData
 
 [Serializable]
 public struct WorldMap
-{ 
+{
     public MapRoomData mapRoomData;
     public int id;
     public int3 coordinate;
@@ -89,6 +89,5 @@ public class LinkMapCell
     public List<Direction> directions=new List<Direction>();
     public List<int> girds=new List<int>();
     public int3 targetCell;
-    public int afterAction; 
+    public int afterAction;
 }
- 

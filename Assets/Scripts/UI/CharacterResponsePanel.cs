@@ -15,7 +15,7 @@ public struct CharacterResponseData : IReferenceData
 }
 
 public class CharacterResponsePanel : GamePanel<CharacterResponseData>
-{ 
+{
 
     [SerializeField]
     private TextMeshProUGUI TalkValue;
@@ -59,7 +59,7 @@ public class CharacterResponsePanel : GamePanel<CharacterResponseData>
             animationPlayableOutput.SetSourcePlayable(clipPlayable);
             graph.Play();
         }
-      
+
         GameTimerController.instance.DelayAction(characterResponseData.displayTime == 0 ? GameCommon.defaultPlayerTalkTime : characterResponseData.displayTime,
             () =>
             {

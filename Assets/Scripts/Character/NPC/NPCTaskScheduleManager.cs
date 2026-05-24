@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -80,7 +80,7 @@ public class NPCTaskScheduleManager:Singleton<NPCTaskScheduleManager>
     {
         NPCBehavior nPCBehavior = new NPCBehavior(instance);
         npcBehaviorDic.Add(instance, nPCBehavior);
-    } 
+    }
     public void RemoveBehavior(int instance)
     {
         npcBehaviorDic.Remove(instance);
@@ -137,13 +137,13 @@ public class NPCTaskScheduleManager:Singleton<NPCTaskScheduleManager>
         {
             nPCBehavior.SetNPCTaskScheduleTimeList(dailyTasks, externalBehavior);
         }
-       
+
     }
     internal class NPCBehavior
     {
         internal NPCBehavior(int instanceId)
         {
-            characterInstance = instanceId; 
+            characterInstance = instanceId;
             endBehavior = true;
             behaviorCanBreak = false;
         }
@@ -460,7 +460,7 @@ public class NPCTaskScheduleTimeList
                     minCount = 1
                 };
                 gameRandomData.randomItems.Add(randomItem);
-            } 
+            }
         }
         gameRandomData.Pretreatment();
         var randomResults = GameRandom.instance.GetRandomValue(gameRandomData, 1);

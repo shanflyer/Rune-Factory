@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 
@@ -14,7 +14,7 @@ public class CharacterIsTeamer : Action
         if (characterId == null || characterId.IsNull())
         {
             characterId = (SharedInt)Owner.GetVariable("CharacterId");
-            
+
         }
         character = CharacterManager.instance.GetCharacter(characterId.Value);
     }

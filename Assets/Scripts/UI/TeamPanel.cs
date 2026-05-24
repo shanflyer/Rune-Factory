@@ -62,7 +62,7 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
         if (character != null)
         {
             if (!PastureManager.instance.TalkAnimal(character.instanceId))
-            { 
+            {
                 EventReferenceData eventReferenceData = new EventReferenceData
                 {
                     name = "CharacterId",
@@ -102,7 +102,7 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
                 }
 
             }
-            
+
         }
     }
     void LeaveAction()
@@ -128,7 +128,7 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
                 };
                 GameActionManager.instance.QueueAction(leaveTeam);
                 InformationController.instance.AddInformation(LanguageManage.SwitchStr("动物已经回到牧场"), true, true);
-            } 
+            }
         }
         else
         {
@@ -138,14 +138,14 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
             };
             GameActionManager.instance.QueueAction(leaveTeam);
 
-        } 
-        
+        }
+
     }
     public override void Close()
     {
         base.Close();
         SelectCharacterId = 0;
-        UIManager.instance.CloseGamePanel<CharacterInformationPanel>(); 
+        UIManager.instance.CloseGamePanel<CharacterInformationPanel>();
     }
     void RefreshTeam(RefreshTeam refreshTeam)
     {
@@ -188,7 +188,7 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
             else
             {
                 operatePanel.gameObject.SetActive(true);
-            } 
+            }
             panel.HideBackGround(true);
         }
         else if(SelectCharacterId != characterInformationData.characterId)
@@ -213,6 +213,6 @@ public class TeamPanel : GamePanel<CharacterInformationDataList>
             return;
         }
 
-        teamerList.Select(v.characterInformationDatas[0]); 
+        teamerList.Select(v.characterInformationDatas[0]);
     }
 }

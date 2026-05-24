@@ -162,7 +162,7 @@ public class MultiPackagePanel : GamePanel<PackageList>
                         item.locked = false;
                     }
                     items1.Add(item);
-                } 
+                }
             }
             for (int i = items1.Count; i < packageData.caseCount; i++)
             {
@@ -322,9 +322,9 @@ public class MultiPackagePanel : GamePanel<PackageList>
                           //  DownMove.localScale = Vector3.zero;
                             ActionButton.interactable = false;
                         }
-                        
-                    } 
-                  
+
+                    }
+
                 }
                 if (SelectItem.packageId == packageId1)
                 {
@@ -346,7 +346,7 @@ public class MultiPackagePanel : GamePanel<PackageList>
                            // UPMove.localScale = Vector3.zero;
                             ActionButton.interactable = false;
                         }
-                            
+
                     }
                     UPMove.localScale = Vector3.one;
                     DownMove.localScale = Vector3.zero;

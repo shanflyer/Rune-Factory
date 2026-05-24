@@ -1,4 +1,4 @@
-﻿#if UNITY_EDITOR 
+#if UNITY_EDITOR
 using UnityEditor;
 #endif
 using Unity.Mathematics;
@@ -27,5 +27,5 @@ public class SkyBackGroundData : ScriptableObject, IGameData, IReferenceData
         string sourcePath = "Assets/Texture/Background/";
         backGround = AssetDatabase.LoadAssetAtPath<Sprite>($"{sourcePath}{bgName}.png");
     }
-#endif 
+#endif
 }

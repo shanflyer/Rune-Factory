@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 
@@ -6,7 +6,7 @@ using BehaviorDesigner.Runtime.Tasks;
 [TaskCategory("Game/Character")]
 [TaskName("检查角色")]
 public class CharacterCheck : Action
-{ 
+{
     public SharedInt characterId;
     public override void OnStart()
     {

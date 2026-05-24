@@ -1,4 +1,4 @@
-﻿// 支持并行写入 + 并行读取 + TryRemove，模仿 Unity UnsafeParallelHashMap，实现桶式哈希 + 链式冲突处理结构
+// 支持并行写入 + 并行读取 + TryRemove，模仿 Unity UnsafeParallelHashMap，实现桶式哈希 + 链式冲突处理结构
 
 using System;
 using System.Runtime.CompilerServices;
@@ -120,7 +120,7 @@ namespace NativeCollections
             int idx = Interlocked.Increment(ref *m_Count) - 1;
             if (idx >= m_Capacity) return false;
 
-            // 写入 key 
+            // 写入 key
             m_Keys[idx] = key;
 
             // 标记为“写入中”
@@ -179,7 +179,7 @@ namespace NativeCollections
 
 
             value = default;
-            return TryGetResult.NotFound; 
+            return TryGetResult.NotFound;
         }
 
 
@@ -229,7 +229,7 @@ namespace NativeCollections
             m_Capacity = m_Capacity,
             m_BucketCapacityMask = m_BucketCapacityMask
         };
-       
+
 
         public struct ParallelReader
         {
@@ -239,7 +239,7 @@ namespace NativeCollections
             [NativeDisableUnsafePtrRestriction] internal TValue* m_Values;
             [NativeDisableUnsafePtrRestriction] internal int* m_States;
             internal int m_BucketCapacityMask;
-            internal int m_Capacity;  
+            internal int m_Capacity;
             public TryGetResult TryGetValue(TKey key, out TValue value)
             {
                 int hash = key.GetHashCode();
@@ -277,7 +277,7 @@ namespace NativeCollections
                     {
                       //  UnityEngine.Debug.Log($"  [ScanFallback] key={key}, state={state}, i={i}");
                         value = default;
-                        return TryGetResult.PendingWrite; 
+                        return TryGetResult.PendingWrite;
                     }
                 }
 
@@ -316,7 +316,7 @@ namespace NativeCollections
                 int idx = Interlocked.Increment(ref *m_Count) - 1;
                 if (idx >= m_Capacity) return false;
 
-                // 写入 key 
+                // 写入 key
                 m_Keys[idx] = key;
 
                 // 标记为“写入中”

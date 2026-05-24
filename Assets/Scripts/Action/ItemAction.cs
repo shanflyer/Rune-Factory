@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -35,7 +35,7 @@ public struct AddItemValue : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
-    public int characterId; 
+    public int characterId;
     public int selectItem;
     public int value;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -160,7 +160,7 @@ public struct SetShortcutItem : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
-    public int characterId; 
+    public int characterId;
     public Item Item;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
@@ -172,7 +172,7 @@ public struct SetShortcutItem : GameAction
     }
 }
 
- 
+
 
 public struct RefreshItemValue : GameAction
 {
@@ -242,7 +242,7 @@ public struct OpenPackage : GameAction
             selectActionId = value;
             canSetShortcut = target != 0;
         }
-        
+
         targetObj = target;
         GameActionManager.instance.QueueAction(this, immediately);
     }
@@ -299,14 +299,14 @@ public struct RemovePackageItemInstance : GameAction
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int packageId;
-    public int itemInstanceId; 
+    public int itemInstanceId;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
         if (parameters.Count >= 3)
         {
             packageId = int.Parse(parameters[0].value);
-            itemInstanceId = int.Parse(parameters[1].value); 
+            itemInstanceId = int.Parse(parameters[1].value);
         }
         this.setResult = setResult;
         this.setValue=setValue;
@@ -325,7 +325,7 @@ public struct ChangePackageInnstance : GameAction
         if (parameters.Count >= 2)
         {
             oldInstanceId = int.Parse(parameters[0].value);
-            newInstanceId = int.Parse(parameters[1].value); 
+            newInstanceId = int.Parse(parameters[1].value);
         }
         if (source != 0 && source != int.MinValue)
         {
@@ -418,7 +418,7 @@ public struct CreatPackage : GameAction
             packageDataId = target;
 
         }
-        
+
         this.setValue = setValue;
         this.setResult = setResult;
         GameActionManager.instance.QueueAction(this,true);

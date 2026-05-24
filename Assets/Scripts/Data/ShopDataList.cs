@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 using System;
 
- 
+
 public struct EditorShopItemData
 {
     public int shopId;
@@ -15,7 +15,7 @@ public struct EditorShopItemData
     public ShopItemType shopItemType;
     public List<int> bindCharacters;
     public PayType payType;
-    public int priceValue; 
+    public int priceValue;
     public bool buyLimitOne;
     public int buyAction;
     public int mapInstance;
@@ -36,7 +36,7 @@ public class ShopDataList : ScriptableObject, IGameData,IDataArray<ShopGroup>
     public EditorShopItemData[] shopItemDatas;
     public void SetReferenceData()
     {
-        List<ShopGroup> shopGroups = new List<ShopGroup>(); 
+        List<ShopGroup> shopGroups = new List<ShopGroup>();
         int groupIndex = -2;
         int shopIndex = -2;
         ShopGroup shopGroup=new ShopGroup();
@@ -95,7 +95,7 @@ public class ShopDataList : ScriptableObject, IGameData,IDataArray<ShopGroup>
                     shopGroup.shopDatas.Add(shopData);
                     shopIndex = shopGroup.shopDatas.Count - 1;
                 }
-               
+
             }
             shopData.shopItem.Add(
                 new ShopItemData
@@ -120,17 +120,17 @@ public class ShopDataList : ScriptableObject, IGameData,IDataArray<ShopGroup>
         this.shopGroups = shopGroups.ToArray();
     }
 
-    
+
 #endif
     [SerializeField]
     private ShopGroup[] shopGroups;
 
     public ShopGroup[] DataList => shopGroups;
-     
+
 }
 [Serializable]
 public class ShopGroup : IReferenceData, IGameData
-{ 
+{
     public string name;
     public int mapInstance;
     public int mapItem;
@@ -143,14 +143,14 @@ public class ShopGroup : IReferenceData, IGameData
     }
 
     public void SetReferenceData()
-    { 
-    } 
+    {
+    }
 }
 [Serializable]
 public class ShopData :IReferenceData
 {
     public string shopName;
-   
+
     public int shopId;
     public List<ShopItemData> shopItem=new List<ShopItemData>();
 }

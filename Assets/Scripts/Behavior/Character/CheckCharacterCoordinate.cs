@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
@@ -9,9 +9,9 @@ using Unity.Mathematics;
 public class CheckCharacterCoordinate : Action
 {
     public SharedInt characterId;
-    public SharedInt3 coordinate; 
+    public SharedInt3 coordinate;
     public bool continued;
-    Character character; 
+    Character character;
     private int3 oldCoordinate;
 
     public override void OnStart()
@@ -24,16 +24,16 @@ public class CheckCharacterCoordinate : Action
     public override TaskStatus OnUpdate()
     {
         if (character != null)
-        { 
+        {
             if (continued)
-            { 
+            {
                 if (character.ObjCoordinate.Equals(coordinate.Value))
                 {
                     return TaskStatus.Success;
                 }
             }
             else
-            { 
+            {
                 if (!character.ObjCoordinate.Equals(oldCoordinate))
                 {
                     if (character.ObjCoordinate.Equals(coordinate.Value))
@@ -44,7 +44,7 @@ public class CheckCharacterCoordinate : Action
                 }
             }
 
-           
+
         }
         return TaskStatus.Failure;
     }

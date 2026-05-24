@@ -1,4 +1,4 @@
-﻿using System; 
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(menuName ="Data/角色动画状态包装")]
@@ -13,7 +13,7 @@ public class CharacterAnimatorStateParameterDataList : ScriptableObject, IGameDa
     }
 
     public void SetReferenceData()
-    { 
+    {
     }
 
 }
@@ -22,7 +22,7 @@ public struct CharacterAnimatorStateParameterData : IGameData
 {
     public string animatorStateName;
     public string parameterName;
-    public ParameterType parameterType; 
+    public ParameterType parameterType;
 
     public string GetKey()
     {
@@ -33,6 +33,6 @@ public struct CharacterAnimatorStateParameterData : IGameData
         return animatorStateName;
     }
     public void SetReferenceData()
-    { 
+    {
     }
 }

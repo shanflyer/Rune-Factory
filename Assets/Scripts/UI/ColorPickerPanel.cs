@@ -1,4 +1,4 @@
- 
+
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -39,7 +39,7 @@ public class ColorPickerPanel : GamePanel<MyColor>
         };
         RInput.onValueChanged.AddListener((string value) =>
         {
-            RefreshInputColor(); 
+            RefreshInputColor();
         });
         GInput.onValueChanged.AddListener((string value) =>
         {

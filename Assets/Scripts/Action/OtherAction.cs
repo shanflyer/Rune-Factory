@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 public struct SaveGuideFilmIndexAction : GameAction
 {
@@ -78,7 +78,7 @@ public struct CheckGameGuideAction : GameAction
             if (parameters.Count > 1)
                 isEnd = bool.Parse(parameters[0].value);
         }
-        else 
+        else
         {
             if (source != 0 && source != int.MinValue)
             {

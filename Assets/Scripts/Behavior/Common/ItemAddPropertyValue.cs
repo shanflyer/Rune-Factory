@@ -1,4 +1,4 @@
-﻿
+
 using System.Collections.Generic;
 using UnityEngine;
 using BehaviorDesigner.Runtime;
@@ -12,7 +12,7 @@ public class ItemAddPropertyValue : Action
     [SerializeField]
     SharedInt characterId;
     [SerializeField]
-    SharedInt itemId; 
+    SharedInt itemId;
     public override void OnStart()
     {
         AsyncTaskRunner.Run(OnStartAsync, nameof(ItemAddPropertyValue));
@@ -21,7 +21,7 @@ public class ItemAddPropertyValue : Action
     private async System.Threading.Tasks.Task OnStartAsync()
     {
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(itemId.Value);
-      
+
         var property = itemData.Property;
         if (property.HP != 0)
         {
@@ -54,7 +54,7 @@ public class ItemAddPropertyValue : Action
             GameActionManager.instance.QueueAction(changeCharacterProperty);
         }
     }
- 
+
     public override TaskStatus OnUpdate()
     {
         return TaskStatus.Success;

@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
-using BehaviorDesigner.Runtime.Tasks;  
+using BehaviorDesigner.Runtime.Tasks;
 
 
 [TaskCategory("Game/Character")]
@@ -10,7 +10,7 @@ public class GetCharacterPackageBehavior : Action
     [SerializeField]
     private SharedInt characterId;
     [SerializeField]
-    private SharedInt packageId; 
+    private SharedInt packageId;
     public override void OnStart()
     {
         if (characterId == null || characterId.IsNull())

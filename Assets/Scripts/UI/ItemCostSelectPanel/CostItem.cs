@@ -23,6 +23,6 @@ public class CostItem : UIObjReference<MyInt3>
         countText.color = t.value.y > t.value.z ? Color.red : Color.green;
 
       await  base.InitData(t, SelectAction, toggleGroup);
-        
+
     }
 }

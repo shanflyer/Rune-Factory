@@ -91,7 +91,7 @@ public class MiniPackagePanel : GamePanel<PackageList>
         {
         typeof(ShortcutPanel),
         typeof(OperateButtonPanel),
-        typeof(OtherFuntionPanel),  
+        typeof(OtherFuntionPanel),
         typeof(PermissionPanel),
         typeof(ScreenControllerPanel),
         typeof(CharacterButtonPanel)
@@ -116,7 +116,7 @@ public class MiniPackagePanel : GamePanel<PackageList>
             hidePanels.hide = false;
             GameActionManager.instance.QueueAction(hidePanels);
         }
-            
+
     }
 
     private SelectAction<Item> otherSelectItemAction;
@@ -127,7 +127,7 @@ public class MiniPackagePanel : GamePanel<PackageList>
 
         selectPackageData = packageList.packageDatas[0];
         RefreshPackage();
-      
+
         //this.RefreshPackage();
         //RefreshPackage();
     }
@@ -152,7 +152,7 @@ public class MiniPackagePanel : GamePanel<PackageList>
                     item = item,
                     showClose = false,
                     action = selectItemAction,
-                    ActionName = actionName, 
+                    ActionName = actionName,
                     OffsetPos=infoOffsetY
                 };
                 await UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
@@ -170,7 +170,7 @@ public class MiniPackagePanel : GamePanel<PackageList>
         else if (SelectItem.instanceId == item.instanceId)
         {
             SelectItem = default(Item);
-            UIManager.instance.CloseGamePanel<ItemInfoPanel>(); 
+            UIManager.instance.CloseGamePanel<ItemInfoPanel>();
         }
     }
 

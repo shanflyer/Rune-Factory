@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 [TaskCategory("NewGame/Event")]
@@ -13,7 +13,7 @@ public class GameEventEnd : Action
             var behavior = this.Owner;
 			gameEventId = (SharedInt)behavior.GetVariable("ID");
         }
-		 
+
 		GameEventManager.instance.RemoveGameEvent(gameEventId.Value);
 		if(Owner)
             GameObject.Destroy(Owner);

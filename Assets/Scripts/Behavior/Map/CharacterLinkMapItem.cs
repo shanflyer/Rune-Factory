@@ -28,7 +28,7 @@ public class CharacterLinkMapItem : Action
                     characterId = character.instanceId,
                     pos = Pos
                 };
-                GameActionManager.instance.QueueAction(SetCharacterTempPos); 
+                GameActionManager.instance.QueueAction(SetCharacterTempPos);
 
                 var setDirection = new SetDirection
                 {

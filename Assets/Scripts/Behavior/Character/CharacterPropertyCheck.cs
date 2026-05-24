@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 
@@ -6,16 +6,16 @@ using BehaviorDesigner.Runtime.Tasks;
 [TaskName("检查角色属性")]
 [TaskIcon("{SkinColor}SelectorIcon.png")]
 public class CharacterPropertyCheck : Action
-{ 
+{
 	public CompareTarget source;
 	public CompareType compareType;
 	public CompareTarget target;
-	 
+
 	// Start is called before the first frame update
 	public override void OnStart()
 	{
-		
-	} 
+
+	}
 
 	public override TaskStatus OnUpdate()
 	{

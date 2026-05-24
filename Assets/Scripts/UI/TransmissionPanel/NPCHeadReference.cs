@@ -55,14 +55,14 @@ public class NPCHeadReference : UIObjReference<NPCReferenceData>
         if (GameCommon.CheckDisplay(data.Character.mapInstance))
         {  //_rectTransform.localScale = Vector2.one;
             var coordinateIndex = data.Character.GetMapStartIndex();
-          
+
             _rectTransform.anchoredPosition = data.parentPos + new Vector2(coordinateIndex.x, coordinateIndex.y) * 2;
 #if UNITY_EDITOR
             _coordinateIndex=coordinateIndex;
             _mapInstance = data.Character.mapInstance;
 #endif
-          
+
         }
-       
+
     }
 }

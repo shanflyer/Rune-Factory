@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
@@ -24,7 +24,7 @@ public struct FightPlayerRuntime
             animator.SetFloat("Dir_X", 1);
             animator.SetFloat("Dir_Y", 0);
         }
-      
+
         showFixedColor = default;
         //material.SetFloat("_LightBlend", 0.5f);
     }
@@ -36,7 +36,7 @@ public struct FightPlayerRuntime
 
     public void Recycle()
     {
-        material.SetFloat("_LightBlend", 1); 
+        material.SetFloat("_LightBlend", 1);
         playableDirector = null;
         animator = null;
         if (behaviorTree != null)
@@ -261,10 +261,10 @@ public class FightController : MonoBehaviour
         var playerColliders =  playerMaskParent.GetComponentsInChildren<Collider2D>();
         for (int i = 0; i < playerMaskers.Length; i++)
         {
-            playerSelectMaskerDic.Add(int.Parse(playerMaskers[i].transform.parent.name), 
-                new SelectObj 
-                { 
-                    selectMasker = playerMaskers[i], 
+            playerSelectMaskerDic.Add(int.Parse(playerMaskers[i].transform.parent.name),
+                new SelectObj
+                {
+                    selectMasker = playerMaskers[i],
                     collider2D = playerColliders[i],
                 }
              ) ;
@@ -289,7 +289,7 @@ public class FightController : MonoBehaviour
         for (int i = 0; i < horizontalMaskers.Length; i++)
         {
             // horizontalMaskers[i].DisplayOrHide(false);
-            horizontalMaskerDic.Add(int.Parse(horizontalMaskers[i].transform.parent.name), 
+            horizontalMaskerDic.Add(int.Parse(horizontalMaskers[i].transform.parent.name),
                 new SelectObj { selectMasker = horizontalMaskers[i], collider2D = horizontalColliders[i] });
         }
         verticalMaskerDic.Clear();
@@ -381,14 +381,14 @@ public class FightController : MonoBehaviour
                 allMaskParent.SetActive(false);
                 foreach (var selectMasker in singleSelectMaskerDic)
                 {
-                    selectMasker.Value.Display(false); 
+                    selectMasker.Value.Display(false);
                 }
                 if (allFightMonsters.Count == 1)
                 {
                     var fightPos = allFightMonsters[0].fightPos;
                     if (singleSelectMaskerDic.TryGetValue(fightPos, out var selectMasker))
                     {
-                        selectMasker.Display(true); 
+                        selectMasker.Display(true);
                         selectValue = fightPos;
                         SelectTransform = selectMasker.transform;
                     }
@@ -579,7 +579,7 @@ public class FightController : MonoBehaviour
         }
     }
 
-   
+
 
     private void SwitchAutoExplore(SwitchAutoExplore switchAutoExplore)
     {
@@ -624,7 +624,7 @@ public class FightController : MonoBehaviour
     private void DisplayFightScene(DisplayFightScene displayFightScene)
     {
         GameRuntimeObjManager.instance.SetObjParent(FightRuntimeObjType.FIGHTMAP.ToString(), false);
-        
+
     }
 
     private void HideFightScene(HideFightScene hideFightScene)
@@ -757,7 +757,7 @@ public class FightController : MonoBehaviour
                         startPos = targetPos,
                         targetPos = finalPos,
                         middlePos = targetPos + (finalPos - targetPos) * 0.5f,
-                        CurveEndAction = () => { 
+                        CurveEndAction = () => {
                             GameRuntimeObjManager.instance.RecycleRuntimeObj(itemRuntime);
                         }
                     };
@@ -823,7 +823,7 @@ public class FightController : MonoBehaviour
         {
             fightMapRuntime.Recycle();
             GameRuntimeObjManager.instance.ClearRuntime<FightRuntimeObjType>();
-        } 
+        }
     }
 
     AudioClip footStepAudioClip;
@@ -900,16 +900,16 @@ public class FightController : MonoBehaviour
                     characterData.obj.name, characterData.obj.transform, character.instanceId, isActive: false);
                 var transform = characterRuntime.obj as Transform;
 
-                transform.position = playerPos[index].position; 
+                transform.position = playerPos[index].position;
                 transform.gameObject.SetActive(true);
                 FightPlayerRuntime fightPlayerRuntime = new FightPlayerRuntime(characterRuntime);
-               
+
                 var ExternalBehavior = await GameSourceManager.instance.GetBehavior($"{DataPath.BehaviorPath}{characterData.fightBehavior}");
                 fightPlayerRuntime.behaviorTree.ExternalBehavior = ExternalBehavior;
                 fightPlayerRuntimes[character.instanceId] = fightPlayerRuntime;
                 fightPlayerRuntime.behaviorTree.enabled = true;
                 fightPlayerRuntime.behaviorTree.SetVariableValue("fightCharacter", character.instanceId);
-                 
+
             }
         }
 
@@ -939,11 +939,11 @@ public class FightController : MonoBehaviour
                 var characterRuntime =await GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.PLAYER.ToString(),
                     characterData.obj.name, characterData.obj.transform, character.instanceId, isActive: false);
                 var transform = characterRuntime.obj as Transform;
-                 
+
                 transform.position = playerPos[index].position;
                 transform.gameObject.SetActive(true);
                 FightPlayerRuntime fightPlayerRuntime = new FightPlayerRuntime(characterRuntime);
-               
+
                 var ExternalBehavior = await GameSourceManager.instance.GetBehavior($"{DataPath.BehaviorPath}{characterData.fightBehavior}");
                 fightPlayerRuntime.behaviorTree.ExternalBehavior = ExternalBehavior;
                 fightPlayerRuntimes[character.instanceId] = fightPlayerRuntime;
@@ -1079,7 +1079,7 @@ public class FightController : MonoBehaviour
     public Transform GetSkillShowTarget(FightCharacter targetCharacter, TargetRangeType targetRangeType, bool self)
     {
         bool isPlayer = targetCharacter is FightPlayer;
-       
+
 
         if (isPlayer)
         {
@@ -1479,5 +1479,5 @@ public class FightController : MonoBehaviour
         }
         return Vector3.zero;
     }
-  
+
 }

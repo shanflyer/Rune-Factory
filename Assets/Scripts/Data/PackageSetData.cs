@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -22,11 +22,11 @@ public class PackageSetData : ScriptableObject, IGameData, IReferenceData
     public int levelUpCost;
     public string iconName;
     public PackageType packageType;
-    public MoveItemType moveItemType; 
+    public MoveItemType moveItemType;
     public bool singleCase;
     public int objPackageAnimationDataId;
     public SpriteResourceRenference icon;
-    public List<int> limitItems=new List<int> (); 
+    public List<int> limitItems=new List<int> ();
     public List<int2> initItems = new List<int2>();
 
     public string GetKey()

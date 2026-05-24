@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using BehaviorDesigner.Runtime.Tasks;
 using BehaviorDesigner.Runtime;
@@ -32,6 +32,6 @@ public class CheckNowFightCharacterActionEnd : Action
         else
         {
             return TaskStatus.Success;
-        } 
+        }
     }
 }

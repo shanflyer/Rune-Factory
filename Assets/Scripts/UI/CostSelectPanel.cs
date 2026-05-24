@@ -1,4 +1,4 @@
-﻿using TMPro;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,7 +23,7 @@ public class CostSelectPanel : GamePanel<CostEventData>
     private Button yesButton, noButton;
 
     private CostEventData CostEventData;
-     
+
 
     public override void OnEnable()
     {

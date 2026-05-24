@@ -1,4 +1,4 @@
-﻿
+
 using System.Collections.Generic;
 using UnityEngine;
 using BehaviorDesigner.Runtime;
@@ -56,7 +56,7 @@ public class ItemAddBuff : Action
                 GameActionManager.instance.QueueAction(addBuffAction);
             }
         }
-         
+
     }
 
     public override TaskStatus OnUpdate()

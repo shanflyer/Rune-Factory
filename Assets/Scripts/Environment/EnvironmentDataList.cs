@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +18,7 @@ public class EnvironmentDataList: ScriptableObject, IGameData, IDataArray<Enviro
     }
 
     public void SetReferenceData()
-    { 
+    {
     }
 }
 
@@ -31,7 +31,7 @@ public struct EnvironmentData : IGameData
     public Gradient GlobalColor;
     public Gradient CloudColor;
     public Gradient SkyTopColor, SkyBottomColor;
-    public AnimationCurve SkyHalfValue; 
+    public AnimationCurve SkyHalfValue;
     public AnimationCurve shadowValue;
     public AnimationCurve directionXValue, directionYValue;
     public AnimationCurve sunXValue, sunYValue,sunScaleValue;
@@ -51,6 +51,6 @@ public struct EnvironmentData : IGameData
         return name;
     }
     public void SetReferenceData()
-    { 
+    {
     }
 }

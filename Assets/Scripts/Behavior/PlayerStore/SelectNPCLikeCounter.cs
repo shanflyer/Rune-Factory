@@ -1,7 +1,7 @@
-﻿using BehaviorDesigner.Runtime.Tasks;
+using BehaviorDesigner.Runtime.Tasks;
 using BehaviorDesigner.Runtime;
 using UnityEngine;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 
 [TaskCategory("Game/PlayerStore")]
 [TaskName("选择NPC喜欢的物品")]
@@ -42,7 +42,7 @@ public class SelectNPCLikeCounter : Action
                     return TaskStatus.Success;
                 }
             }
-        } 
+        }
         return TaskStatus.Failure;
     }
 }

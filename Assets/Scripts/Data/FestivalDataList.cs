@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -20,7 +20,7 @@ public class FestivalDataList: ScriptableObject,IGameData,IDataArray<FestivalDat
     }
 
     public void SetReferenceData()
-    { 
+    {
     }
 }
 [System.Serializable]
@@ -34,13 +34,13 @@ public enum FestivalType
 [System.Serializable]
 public struct FestivalData : IGameData, IReferenceData
 {
-    public string name; 
+    public string name;
     public int id;
     public Season season;
     public int date;
     public FestivalType festivalType;
     public string value;
-    public string text; 
+    public string text;
 #if UNITY_EDITOR
     public void SetReferenceData()
     {

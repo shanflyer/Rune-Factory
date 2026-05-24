@@ -20,7 +20,7 @@ public class MapAreaEditor : MonoBehaviour
     private TextMeshPro text;
 
     private Vector3 oldPos;
-     
+
     private void Awake()
     {
         tilemap = GetComponentInChildren<Tilemap>();
@@ -31,10 +31,10 @@ public class MapAreaEditor : MonoBehaviour
         this.name = name.ToString();
         text.text=text.name = name.ToString();
         this.behaviorAreaType = behaviorAreaType;
-         
+
     }
     public void SetData(SpecialNpcBehaviorArea SpecialNpcBehaviorArea)
-    { 
+    {
         var gridCount = SpecialNpcBehaviorArea.grids.Count / 4;
         for (int j = 0; j < gridCount; j++)
         {
@@ -84,10 +84,10 @@ public class MapAreaEditor : MonoBehaviour
             }
             tilemap.SetTiles(poses.ToArray(), tileBases.ToArray());
         }
-        gameObject.name = text.SetSWText(areaData.Name); 
+        gameObject.name = text.SetSWText(areaData.Name);
         transform.position = GameCommon.GetZeroMapPos(areaData.pos);
         this.behaviorAreaType = npcBehaviorArea.behaviorAreaType;
-      
+
     }
 
     public SpecialNpcBehaviorArea GetSpecialData()

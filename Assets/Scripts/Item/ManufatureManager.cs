@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Unity.Mathematics;
@@ -13,7 +13,7 @@ public class Formula
     {
         this.formulaData = formulaData;
         this.opened = opened;
-         
+
     }
 }
 public class ManufactureManager : Singleton<ManufactureManager>
@@ -29,13 +29,13 @@ public class ManufactureManager : Singleton<ManufactureManager>
     {
         for(int i = 0; i < formulas.length; i++)
         {
-            var formula = formulas[i]; 
+            var formula = formulas[i];
             if (formula.formulaData.Check(items))
             {
                 return formula;
             }
         }
-        
+
         return null;
     }
     public override void Init()
@@ -87,7 +87,7 @@ public class ManufactureManager : Singleton<ManufactureManager>
     }
 
     void SetManufature(SetManufature setManufature)
-    { 
+    {
         Manufactures[setManufature.manufature.instanceId] = setManufature.manufature;
         RefreshManufature refreshManufature = new RefreshManufature
         {
@@ -132,7 +132,7 @@ public class ManufactureManager : Singleton<ManufactureManager>
     {
         if(Manufactures.TryGetValue(clearManufature.manufatureId,out var manufature))
         {
-            manufature.ClearProduct(); 
+            manufature.ClearProduct();
             RefreshManufature refreshManufature = new RefreshManufature
             {
                 manufature = manufature
@@ -150,7 +150,7 @@ public class ManufactureManager : Singleton<ManufactureManager>
             instanceId = manufatureSaveData.instanceId,
             dataId = manufatureSaveData.dataId,
             waitTime = manufatureSaveData.waitTime,
-            startTime = manufatureSaveData.startTime, 
+            startTime = manufatureSaveData.startTime,
             product=manufatureSaveData.product,
 
 
@@ -178,13 +178,13 @@ public class ManufactureManager : Singleton<ManufactureManager>
             Manufactures.Add(creatManufature.instanceId, manufature);
             for (int i = 0; i < manufatureData.linkFormulas.Count; i++)
             {
-                
+
                 manufature.formulas.Add(manufatureData.linkFormulas[i].x);
             }
 
             GameDataSaveManager.instance.UserGameSaveData.SetManufature(manufature);
         }
-        
+
     }
 
     public List<Formula> GetManufatureAllFormulas(int id)
@@ -197,15 +197,15 @@ public class ManufactureManager : Singleton<ManufactureManager>
                 if(GetFormula(f,out var formula))
                 {
                     formulas.Add(formula);
-                } 
+                }
             }
         }
         return formulas;
     }
-      
+
 }
 
- 
+
 public class Manufature :  IReferenceData
 {
     public int instanceId;
@@ -218,7 +218,7 @@ public class Manufature :  IReferenceData
     public Formula matchFormula;
     public List<int> formulas=new List<int>();
 
-     
+
     public override string ToString()
     {
         return instanceId.ToString();
@@ -249,6 +249,6 @@ public class Manufature :  IReferenceData
 
     public void Dispose()
     {
-        formulas.Clear(); 
+        formulas.Clear();
     }
 }

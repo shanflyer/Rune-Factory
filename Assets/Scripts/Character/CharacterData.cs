@@ -21,8 +21,8 @@ public class CharacterData : ScriptableObject, IGameData
     public string fightBehavior;
     public int packageId;
     public AttributeType attributeType;
-   
-   
+
+
 
     public string GetKey()
     {
@@ -35,10 +35,10 @@ public class CharacterData : ScriptableObject, IGameData
     }
 
 #if UNITY_EDITOR
- 
+
     public void SetReferenceData()
     {
-        
+
     }
 
 #endif

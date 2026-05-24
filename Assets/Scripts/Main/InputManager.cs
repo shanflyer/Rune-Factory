@@ -13,7 +13,7 @@ public class InputManager :Singleton<InputManager>
 {
     private const string UIActionMap = "UI";
     private const string PlayerActionMap = "Player";
-     
+
     private PlayerInput playerInput;
     public InputActionMap playerAction;
     public InputActionMap uiAction;
@@ -27,7 +27,7 @@ public class InputManager :Singleton<InputManager>
 
     public InputManager()
     {
-       
+
         /*
        playerInput = UnityEngine.Object.FindObjectOfType<PlayerInput>();
 
@@ -43,7 +43,7 @@ public class InputManager :Singleton<InputManager>
         test.performed += TestAction;*/
     }
 
-   
+
     protected override void Clear()
     {
         initializationTask = Task.CompletedTask;
@@ -84,7 +84,7 @@ public class InputManager :Singleton<InputManager>
 
     public void SetControllerValue()
     {
-       
+
     }
 
     EventSystem eventSystem;
@@ -168,7 +168,7 @@ public class InputManager :Singleton<InputManager>
                     }
                 };
                 action.performed += PerformedDelegate;
-                
+
 
                 void CanceledDelegate(CallbackContext callbackContext)
                 {
@@ -184,26 +184,26 @@ public class InputManager :Singleton<InputManager>
                 };
                 action.canceled += CanceledDelegate;
 
-                InputActions[action.name] = action; 
+                InputActions[action.name] = action;
             }
 
            actionMap.Enable();
         }
 
-        
+
         playerInput.defaultActionMap =PlayerActionMap;
 
         //AddInputActionDelegate(MyInputNameData.Player_Pointer, ShowPointerEffect);
         //AddInputActionDelegate(MyInputNameData.Other_Pointer, ShowPointerEffect);
 
-        
+
     }
     void OpenOrCloseInputMap(OpenOrCloseInputMap OpenOrCloseInputMap)
     {
         if (uiAction != null)
         {
             if (OpenOrCloseInputMap.open)
-            { 
+            {
                 uiAction.Enable();
             }
             else
@@ -219,7 +219,7 @@ public class InputManager :Singleton<InputManager>
                 if (!OnlyUI)
                 {
                     playerAction.Enable();
-                } 
+                }
             }
             else
             {
@@ -248,10 +248,10 @@ public class InputManager :Singleton<InputManager>
                 //uiAction.Disable();
                 playerAction.Enable();
             }
-           
+
           //  playerInput.currentActionMap = UI ? uiAction : playerAction;
         }
-       // 
+       //
        // playerInput.defaultActionMap = UI ? UIActionMap : PlayerActionMap;
     }
 
@@ -259,7 +259,7 @@ public class InputManager :Singleton<InputManager>
     {
         if(performDelegates.TryGetValue(actionName,out InputActionDelegate nowDelegate))
         {
-            nowDelegate += inputActionDelegate; 
+            nowDelegate += inputActionDelegate;
         }
         else
         {
@@ -268,7 +268,7 @@ public class InputManager :Singleton<InputManager>
         performDelegates[actionName] = nowDelegate;
 
         if (cancledAction)
-        { 
+        {
             if(cancelDelegates.TryGetValue(actionName, out InputActionDelegate cancledDelegate))
             {
                 cancledDelegate += inputActionDelegate;
@@ -279,13 +279,13 @@ public class InputManager :Singleton<InputManager>
             }
             cancelDelegates[actionName] = cancledDelegate;
         }
-       
+
     }
     public void RemoveInputActionDelegate(string actionName, InputActionDelegate inputActionDelegate)
     {
         if (performDelegates.TryGetValue(actionName, out InputActionDelegate nowDelegate))
         {
-            nowDelegate -= inputActionDelegate; 
+            nowDelegate -= inputActionDelegate;
             if (nowDelegate == null)
             {
                 performDelegates.Remove(actionName);
@@ -305,8 +305,8 @@ public class InputManager :Singleton<InputManager>
             else
             {
                 cancelDelegates[actionName] = cancledDelegate;
-            } 
+            }
         }
     }
- 
+
 }

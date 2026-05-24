@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -7,7 +7,7 @@ public class MyInstance : Singleton<MyInstance>
     HashSet<int> instanceIds = new HashSet<int>();
     Random random = new Random();
 
-   
+
     public override void Init()
     {
         base.Init();
@@ -59,7 +59,7 @@ public class MyInstance : Singleton<MyInstance>
         }
     }
 
- 
+
     protected override void Clear()
     {
         instanceIds.Clear();

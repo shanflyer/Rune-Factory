@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 
 [TaskCategory("Game/Character")]
@@ -96,7 +96,7 @@ public class CharacterTalk : Action
                 endAction = isStopMove.Value ? () =>
                 {
                     CharacterStartMoveAction();
-                    RemoveEvent(); 
+                    RemoveEvent();
                 }
                 :
                 () => { RemoveEvent(); }
@@ -109,7 +109,7 @@ public class CharacterTalk : Action
             };
             GameActionManager.instance.QueueAction(pauseCharacterBehavior, true);
         }
-        
+
         taskStatus = TaskStatus.Success;
     }
 

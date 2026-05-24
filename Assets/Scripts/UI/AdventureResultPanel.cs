@@ -31,14 +31,14 @@ public class AdventureResultPanel: GamePanel<FightResult>
     }
 
     private void OKAction()
-    { 
+    {
         Close();
-   
+
         GameRuntimeObjManager.instance.ClearRuntime<FightRuntimeObjType>();
 
         ExploreEnd exploreEnd = new ExploreEnd();
         GameActionManager.instance.QueueAction(exploreEnd, true);
-  
+
         if (!data.victory)
         {
            var teamers=  TeamManager.instance.playerTeam.Teamers;
@@ -63,12 +63,12 @@ public class AdventureResultPanel: GamePanel<FightResult>
                         }
                     };
                     GameActionManager.instance.QueueAction(leaveTeam, true);
-                    
+
                 }
 
 
             }
-        } 
+        }
     }
     List<int> characters = new List<int>();
     public override void InitReferenceData(FightResult fightResult)
@@ -105,7 +105,7 @@ public class AdventureResultPanel: GamePanel<FightResult>
 
         UIManager.instance.CloseGamePanel<FightPanel>();
     }
-    
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -115,7 +115,7 @@ public class AdventureResultPanel: GamePanel<FightResult>
         itemReference = FindChildGameObject<ItemReference>("ItemBoxReference");
         Team = FindChildGameObject("Team");
         teamerRenference = FindChildGameObject<AdventureTeamerRenference>("AdventureTeamer");
-        OkButton = FindChildGameObject<Button>("OkButton"); 
+        OkButton = FindChildGameObject<Button>("OkButton");
     }
 
 }

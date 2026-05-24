@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
@@ -199,7 +199,7 @@ public class WeatherManager : Singleton<WeatherManager>
         {
             nextDayWeathers = await CreatWeather(creatWeather.nextWeather);
             GameDataSaveManager.instance.UserGameSaveData.nextWeathers = nextDayWeathers;
-                
+
         }
     }
 
@@ -241,7 +241,7 @@ public class WeatherManager : Singleton<WeatherManager>
             {
                 weather = nowWeather
             };
-            GameActionManager.instance.QueueAction(setWeather); 
+            GameActionManager.instance.QueueAction(setWeather);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
@@ -42,7 +42,7 @@ public class GetVisitShop : Action
                    targetCell.Value = new int3(cell, visitMap.Value);
                    return TaskStatus.Success;
                }
-               
+
             }
         }
 

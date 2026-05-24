@@ -62,7 +62,7 @@ public class TeatAudio : MonoBehaviour
         {
             mixerPlayable = AudioMixerPlayable.Create(playableGraph, 0);
         }
-        
+
         AudioClipPlayable audioClipPlayable = AudioClipPlayable.Create(playableGraph, testAudio, true);
         var count = mixerPlayable.GetInputCount();
         Debug.Log($"InputCount:{count}");
@@ -77,7 +77,7 @@ public class TeatAudio : MonoBehaviour
       //  mixerPlayable.SetInputWeight(audioClipPlayable, 1);
         AudioPlayableOutput.SetSourcePlayable(mixerPlayable);
         playableGraph.Play();
-        
+
     }
     public void DestroyPlayableGraph()
     {
@@ -89,7 +89,7 @@ public class TeatAudio : MonoBehaviour
     {
         var count = mixerPlayable.GetInputCount();
         Debug.Log($"InputCount:{count}");
-         
+
         if (count > 0)
         {
            playableGraph.Disconnect(mixerPlayable, count-1);
@@ -154,7 +154,7 @@ public class TeatAudio : MonoBehaviour
             {
                 Debug.Log($"out {i}:{clip.name}");
             }
-            
+
         }
 
         var root = playableGraph.GetRootPlayableCount();
@@ -194,13 +194,13 @@ public class TeatAudio : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
 #if UNITY_EDITOR

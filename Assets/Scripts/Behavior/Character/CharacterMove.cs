@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
@@ -34,15 +34,15 @@ public class CharacterMove : Action
     {
         base.OnAwake();
     }
-     
+
     public override void OnBehaviorComplete()
     {
-        base.OnBehaviorComplete();  
+        base.OnBehaviorComplete();
     }
 
     public override void OnEnd()
     {
-        base.OnEnd();  
+        base.OnEnd();
     }
 
     private int2 offsetCoordinate = int2.zero;
@@ -97,7 +97,7 @@ public class CharacterMove : Action
     {
         if (smartMove)
         {
-          
+
             //var character = CharacterManager.instance.GetCharacter(characterId.Value);
             if (!character.TryMove(target.Value.z, target.Value.xy, MoveEndAction))
             {
@@ -122,7 +122,7 @@ public class CharacterMove : Action
             }
 
         }
-       
+
         //return TaskStatus.Success;
         return taskStatus;
     }

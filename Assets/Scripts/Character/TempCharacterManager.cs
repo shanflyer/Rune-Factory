@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 
@@ -37,7 +37,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
 
     void StopTempCharacterCreat(StopTempCharacterCreat stopTempCharacterCreat)
     {
-        maxTempCount = 0; 
+        maxTempCount = 0;
     }
     private void ClearTempCharacter(ClearTempCharacter clearTempCharacter)
     {
@@ -66,7 +66,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
 #if UNITY_EDITOR
     public List<int> TempList => tempList;
 #endif
-     
+
     Dictionary<int2, SpecialAreaTempCharacterCreatData> specialTempCharacterCreatDataDic = new Dictionary<int2, SpecialAreaTempCharacterCreatData>();
 
     private void StartCreateSpecialTempCharacter(StartCreatSpecialTempCharacter startCreatSpecialTempCharacter)
@@ -85,7 +85,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
                 areaRange = startCreatSpecialTempCharacter.gridRange,
                 tempCharacterCreatData = SpecialTempCharacterCreatData,
                 oldSpecialCharacters=new List<int>()
-            }; 
+            };
             specialTempCharacterCreatDataDic.Add(startCreatSpecialTempCharacter.areaKey, specialAreaTempCharacterCreatData);
             UpDataTryCreateSpecialTempCharacter();
 
@@ -94,7 +94,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
                 if (!specialTempCharacterCreatDataDic.TryGetValue(startCreatSpecialTempCharacter.areaKey, out var specialAreaTempCharacterCreatData))
                 {
                     return;
-                } 
+                }
                 int nowCd = 1;
                 int2 nowTimeKey = GameTimeManager.instance.nowHourMinute;
                 if (SpecialTempCharacterCreatData.gameTimeKeyIntDic.TryGetValue(nowTimeKey, out var cdRange))
@@ -113,18 +113,18 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
                     }
                 }
 
-                Action creatSpecialTempDelegate = UpDataTryCreateSpecialTempCharacter; 
+                Action creatSpecialTempDelegate = UpDataTryCreateSpecialTempCharacter;
                 GameTimerController.instance.DelayAction(nowCd, creatSpecialTempDelegate);
                 specialAreaTempCharacterCreatData.creatSpecialTempDelegate = creatSpecialTempDelegate;
                 specialTempCharacterCreatDataDic[startCreatSpecialTempCharacter.areaKey] = specialAreaTempCharacterCreatData;
             }
-        } 
-    } 
+        }
+    }
 
- 
-    
+
+
     void ClearSpecialNPC()
-    { 
+    {
         using(var e = specialTempCharacterCreatDataDic.GetEnumerator())
         {
             while (e.MoveNext())
@@ -156,7 +156,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
                 specialAreaTempCharacterCreatData.oldSpecialCharacters.Clear();
             }
         }
-       
+
         for (int i = 0; i < creatNpcs.Count; i++)
         {
             int npcId = creatNpcs[i].x;
@@ -168,7 +168,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
                 int y = GameRandom.RandomInt(gridRange.y, gridRange.z);
 
                 if (!prewarm)
-                { 
+                {
                     int2 coordinate = MapCellController.instance.GetRandomBehaviorCell(displayMap, BehaviorAreaType.创建).xy;
 
                     CreatTempCharacter creatTempCharacter = new CreatTempCharacter
@@ -192,7 +192,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
                         setValue = CreatTempCharacterSuccess
                     };
                     GameActionManager.instance.QueueAction(creatTempCharacter);
-                } 
+                }
 
                 void CreatTempCharacterSuccess(int characterId)
                 {
@@ -210,7 +210,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
         }
     }
 
-     
+
     private async System.Threading.Tasks.Task StartCreatTempCharacterAsync(StartCreatTempCharacter startCreatTempCharacter)
     {
         if (NowTempCharacterCreatData != null &&
@@ -222,7 +222,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
                 maxTempCount = NowTempCharacterCreatData.maxCharacterCount;
             return;
         }
-        
+
        // return;
         if (startCreatTempCharacter.clearAll)
         {
@@ -231,7 +231,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
             ClearTempCharacter clearTempCharacter = new ClearTempCharacter();
             GameActionManager.instance.QueueAction(clearTempCharacter, true);
         }
-        
+
         NowTempCharacterCreatData = await GameDataManager.instance.GetAsyncData<TempCharacterCreateData>(startCreatTempCharacter.creatDataId);
         if (NowTempCharacterCreatData == null)
         {
@@ -320,16 +320,16 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
         int2 nowTimeKey = GameTimeManager.instance.nowHourMinute;
         if (NowTempCharacterCreatData.gameTimeKeyIntDic.TryGetValue(nowTimeKey, out var cdRange))
         {
-            nowCd = GameRandom.RandomInt(cdRange) * 1000; 
+            nowCd = GameRandom.RandomInt(cdRange) * 1000;
         }
         nowCd += (int)(PlayerStoreManager.instance.GetCustomerCD()*1000);
         // Debug.Log($"creatCD:{nowCd}");
         creatTempDelegate = CreatTempCharacter;
-         
+
         GameTimerController.instance.DelayAction(nowCd, creatTempDelegate);
         if (totalCharacterCount < maxTempCount)
         {
             CreatCharacter(nowTimeKey, BehaviorAreaType.创建);
-        } 
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
@@ -106,7 +106,7 @@ public class CheckCharacterDistance : Action
     }
     TaskStatus taskStatus;
     public override TaskStatus OnUpdate()
-    { 
+    {
         return taskStatus;
     }
 }

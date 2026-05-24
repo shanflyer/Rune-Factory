@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -67,11 +67,11 @@ public class PasturePanel : GamePanel<MyListInt>
     void SetAnimalToPastureResult(bool result)
     {
         if (result)
-        { 
-            
+        {
+
             animalList.intList.Remove(animalId);
-            RefreshAnimalList(); 
-        } 
+            RefreshAnimalList();
+        }
     }
 
     public override void SetPanelUISerializeObj()
@@ -124,13 +124,13 @@ public class PasturePanel : GamePanel<MyListInt>
                 animalCaseText.text = "--/--";
                 SetButton.gameObject.SetActive(false);
             }
-         
+
         }
         else if(selectPasture==pasture)
         {
             SetButton.gameObject.SetActive(false);
         }
-       
+
 
     }
     public override Task InitData(string dataKey)
@@ -184,7 +184,7 @@ public class PasturePanel : GamePanel<MyListInt>
                     value = animalList.intList[i]
                 };
                 animalDatas.Add(myInt);
-            } 
+            }
         }
         // 动物列表刷新绑定牧场面板生命周期，关闭后旧刷新不再选中条目。
         RunLifecycleTask(async token =>
@@ -237,9 +237,9 @@ public class PasturePanel : GamePanel<MyListInt>
             var p = allPastures[i];
             if (p.index != 0)
             {
-                pastureInfos[p.index].InitData(p, SelectPasture); 
+                pastureInfos[p.index].InitData(p, SelectPasture);
             }
-        }  
+        }
         pastureInfos[0].SelectDefault();
     }
 }

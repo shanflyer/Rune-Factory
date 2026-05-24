@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -37,12 +37,12 @@ public class FormulaData : ScriptableObject, IGameData, IReferenceData
     {
         return id.ToString();
     }
-    
+
     public override string ToString()
     {
         return id.ToString();
     }
-   
+
     public void SetReferenceData()
     {
     }

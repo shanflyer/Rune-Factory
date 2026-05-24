@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Timers;
 
-public interface GameEvent 
-{ 
+public interface GameEvent
+{
     public int GetEventId();
     public bool IsAwake();
     public bool IsDead();
@@ -31,7 +31,7 @@ public struct WaitTimeEvent: GameEvent
         this.id = id;
         trigger = false;
         awake = false;
-        dead = false; 
+        dead = false;
 
         //this.waitTime = waitTime;
         timer = new Timer();

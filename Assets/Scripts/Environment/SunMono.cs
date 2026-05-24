@@ -34,5 +34,5 @@ public class SunMono : MonoBehaviour
             }
         }
     }
-     
+
 }

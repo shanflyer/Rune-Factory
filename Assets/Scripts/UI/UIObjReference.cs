@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public interface IReferenceData
-{ 
+{
     public bool Equals(IReferenceData other)
     {
         return this == other;
@@ -18,14 +18,14 @@ public delegate void SelectUIAction<T>(T t, bool selected = true) where T : Base
 
 public delegate void SelectAction<T>(T t, int index, bool selected = true);
 
-public class UIObjReference<T> : BaseReference 
+public class UIObjReference<T> : BaseReference
 {
     public Dictionary<string, Transform> objectDatas = new Dictionary<string, Transform>();
     public Selectable guideSelectable;
     public virtual void ClearData() { }
     public virtual void ClearSelect()
     {
-        
+
     }
     public virtual void Selected() { }
     public virtual void OnEnable()
@@ -148,10 +148,10 @@ public class UIObjReference<T> : BaseReference
                 {
 
                 }
-                
+
             }
         }
-        
+
     }
 
     public override void SetPanelUISerializeObj()

@@ -18,7 +18,7 @@ public class Audio2DPolygon : MonoBehaviour
         audioSource.mute = true;
         audioSource.volume = 0;
         audioSource.enabled = true;
-      
+
         EnvironmentManger.instance.AddAudio2DPolygon(this);
         audioSource.Play();
     }
@@ -29,7 +29,7 @@ public class Audio2DPolygon : MonoBehaviour
         {
             EnvironmentManger.instance.RemoveAudio2DPolygon(this);
         }
-       
+
     }
     public void RefreshAudio(Collider2D collider)
     {
@@ -39,7 +39,7 @@ public class Audio2DPolygon : MonoBehaviour
             var distance2D = polygonCollider.Distance(collider);
             if (distance2D.isValid)
             {
-                
+
                 float distanceValue = (distance2D.distance - distanceMap.x) / (distanceMap.y - distanceMap.x);
                 distanceValue = math.clamp(distanceValue, 0, 1);
                 audioSource.volume=math.lerp(volumeMap.x,volumeMap.y,distanceValue);
@@ -54,5 +54,5 @@ public class Audio2DPolygon : MonoBehaviour
             audioSource.volume = volumeMap.y;
         }
     }
-    
+
 }

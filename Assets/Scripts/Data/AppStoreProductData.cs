@@ -1,4 +1,4 @@
-﻿ 
+
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -10,7 +10,7 @@ public enum StoreType
 public class AppStoreProductData : ScriptableObject, IGameData,IReferenceData
 {
     public int id;
-   
+
     private string iconName;
     public Sprite icon;
     public string ProductName;

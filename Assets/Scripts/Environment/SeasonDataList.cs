@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Datas/季节数据")]

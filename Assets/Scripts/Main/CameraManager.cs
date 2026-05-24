@@ -1,4 +1,4 @@
-﻿using Unity.Cinemachine;
+using Unity.Cinemachine;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -7,7 +7,7 @@ using UnityEngine.Rendering.Universal;
 public class CameraManager : Singleton<CameraManager>
 {
     public Camera mainCamera { get; private set; }
-    public Camera uiCamera { get; private set; } 
+    public Camera uiCamera { get; private set; }
     UniversalAdditionalCameraData universalAdditionalCameraData;
     [SerializeField]
     private PixelPerfectCamera pixelPerfectCamera, UIPixelPerfectCamera;
@@ -31,7 +31,7 @@ public class CameraManager : Singleton<CameraManager>
     {
         DepthOfField.active = level != 0;
     }
-    
+
     public void RefreshDepthOfField()
     {
         if (DepthOfField != null)
@@ -44,7 +44,7 @@ public class CameraManager : Singleton<CameraManager>
         base.Init();
         hideLayer = LayerMask.NameToLayer("Hide");
         mainCamera = Camera.main;
-      
+
         volume= mainCamera.GetComponent<Volume>();
         volume.sharedProfile.TryGet<DepthOfField>(out DepthOfField);
         RefreshDepthOfField();
@@ -70,13 +70,13 @@ public class CameraManager : Singleton<CameraManager>
             mixingCamera.ChildCameras[1].GetComponent<CinemachineCameraOffset>(),
             mixingCamera.ChildCameras[2].GetComponent<CinemachineCameraOffset>()
         };
- 
-       
+
+
         GameActionManager.instance.AddListener<SetFixedPlayerShaderPos>(SetFixedPlayerShaderPos);
         GameActionManager.instance.AddListener<SetFixedCamera>(SetFixedCamera);
         GameActionManager.instance.AddListener<SetCameraPixelValue>(SetCameraPixelValue);
         GameActionManager.instance.AddListener<SetCameraConfiner2D>(SetCameraConfiner2D);
-         
+
     }
     void SetCameraConfiner2D(SetCameraConfiner2D SetCameraConfiner2D)
     {
@@ -88,7 +88,7 @@ public class CameraManager : Singleton<CameraManager>
                 confiner2D.InvalidateBoundingShapeCache();
                 confiner2D.InvalidateLensCache();
             }
-        } 
+        }
     }
     public void SetCameraListener(bool enable)
     {
@@ -182,7 +182,7 @@ public class CameraManager : Singleton<CameraManager>
             confiner2D.enabled = true;
             confiner2D.InvalidateBoundingShapeCache();
             confiner2D.InvalidateLensCache();
-        } 
+        }
     }
 
     public void SetCameraOffset(Vector2 offset)
@@ -206,7 +206,7 @@ public class CameraManager : Singleton<CameraManager>
             confiner2D.InvalidateBoundingShapeCache();
             confiner2D.InvalidateLensCache();
         }
-       
+
     }
 
     private void SetCameraPixelValue(SetCameraPixelValue setCameraPixelValue)
@@ -237,7 +237,7 @@ public class CameraManager : Singleton<CameraManager>
                 {
                     fixedCamera.transform.position = followCameras[0].transform.position;
                 }
-               
+
             }
             cameraOffset.Offset = setFixedCamera.offsetPos;
             confiner2D.enabled = false;
@@ -245,7 +245,7 @@ public class CameraManager : Singleton<CameraManager>
            // confiner2D.InvalidateLensCache();
         }
         else
-        { 
+        {
             fixedView = false;
             int flowCameraIndex = (int)setFixedCamera.flowCameraType;
             followCameras[flowCameraIndex].Follow = null;
@@ -276,7 +276,7 @@ public class CameraManager : Singleton<CameraManager>
                 confiner2D.enabled = true;
                 confiner2D.InvalidateBoundingShapeCache();
                 confiner2D.InvalidateLensCache();
-            } 
+            }
         }
     }
     void SetFixedPlayerShaderPos(SetFixedPlayerShaderPos setFixedPlayerShaderPos)
@@ -299,7 +299,7 @@ public class CameraManager : Singleton<CameraManager>
     }
 
     public void AddTestRender(Renderer renderer)
-    { 
+    {
         TestRenderers.TrySetValue(renderer,renderer.gameObject.layer);
     }
     public void RemoveTestRender(Renderer renderer)
@@ -333,17 +333,17 @@ public class CameraManager : Singleton<CameraManager>
             {
                 Shader.SetGlobalVector("_PlayerPos", fixedCamera.transform.position);
             }
-            
+
         }
-        
-         
+
+
         var planes = GeometryUtility.CalculateFrustumPlanes(Camera.main);
         for(int i = 0; i < TestRenderers.length; i++)
         {
             var renderer = TestRenderers.GetKeyForIndex(i);
             bool enable= GeometryUtility.TestPlanesAABB(planes, renderer.bounds);
             renderer.enabled = enable;
-            
+
             if (enable)
             {
                 renderer.gameObject.layer = TestRenderers[i];
@@ -354,7 +354,7 @@ public class CameraManager : Singleton<CameraManager>
             }
           //  renderer.gameObject.layer = 1;
           // renderer.enabled = GeometryUtility.TestPlanesAABB(planes, renderer.bounds);
-        } 
+        }
     }
 
 }

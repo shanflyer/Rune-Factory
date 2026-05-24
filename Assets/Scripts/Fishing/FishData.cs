@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -64,5 +64,5 @@ public class FishData:ScriptableObject,IGameData,IReferenceData
             }
         }
     }
-#endif 
+#endif
 }

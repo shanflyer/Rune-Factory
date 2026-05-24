@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
@@ -47,7 +47,7 @@ public class TempCharacterShowEmote:Action
 
     public override TaskStatus OnUpdate()
     {
-        
+
         return taskStatus;
     }
 }

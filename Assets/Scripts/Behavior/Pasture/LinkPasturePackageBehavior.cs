@@ -1,5 +1,5 @@
-﻿using BehaviorDesigner.Runtime;
-using BehaviorDesigner.Runtime.Tasks; 
+using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 using Unity.Mathematics;
 [TaskCategory("Game/牧场")]

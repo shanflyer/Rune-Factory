@@ -1,5 +1,5 @@
-﻿using BehaviorDesigner.Runtime;
-using BehaviorDesigner.Runtime.Tasks; 
+using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 
 [TaskCategory("Game/Character")]
@@ -45,7 +45,7 @@ public class SetCharacterMoveTarget : Action
             Character character = CharacterManager.instance.GetCharacter(characterId.Value);
             Debug.LogError($"{character.name}--behaviorTree:{Owner.ExternalBehavior.name}--{Owner.BehaviorName}-{e}");
         }
-        
+
     }
 
     public override TaskStatus OnUpdate()

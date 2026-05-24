@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime.Tasks.Unity.UnityAnimator;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityAnimator;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -47,7 +47,7 @@ public class PlantReference : UIObjReference<PlantData>
     public override async Task InitData(PlantData t, SelectAction<PlantData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         await base.InitData(t, SelectAction, toggleGroup);
-        toggle.group = toggleGroup; 
+        toggle.group = toggleGroup;
 
         if(GameDataSaveManager.instance.GetPlantFruitCount(t.id,out var count))
         {
@@ -74,6 +74,6 @@ public class PlantReference : UIObjReference<PlantData>
             Icon.SetNativeSize();
             fruitCount.SetADDText("收获数量:", 0);
         }
-       
+
     }
 }

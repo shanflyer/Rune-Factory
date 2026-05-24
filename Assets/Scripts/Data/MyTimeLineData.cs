@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -6,7 +6,7 @@ using UnityEngine.Playables;
 [CreateAssetMenu(menuName ="Data/演绎绑定")]
 public class MyTimeLineData : ScriptableObject,IGameData
 {
-    public PlayableAsset asset; 
+    public PlayableAsset asset;
     public List<BindData> bindDatas;
 #if UNITY_EDITOR
     public void SetReferenceData()

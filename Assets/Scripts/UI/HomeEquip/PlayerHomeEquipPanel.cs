@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Mathematics;
@@ -44,7 +44,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
     Transform CameraChange;
     [SerializeField]
     private TextMeshProUGUI cameraValue;
-   
+
     [SerializeField]
     private float infoOffsetY = 2;
 
@@ -64,7 +64,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         {
             if (SelectHomeEquip.mapInstance <= 0)
             {
-              
+
                 waiteSetHomeEquip = !waiteSetHomeEquip;
                 if (waiteSetHomeEquip)
                 {
@@ -90,9 +90,9 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 if (homeEquipmentData.canSetMaps == null || homeEquipmentData.canSetMaps.Count == 0 ||
                     homeEquipmentData.canSetMaps.Contains(CharacterManager.instance.controllerCharacter.mapInstance))
                 {
-                   
 
-                   
+
+
                     List<EventReferenceData> eventReferenceDatas = new List<EventReferenceData>
                     {
                         new EventReferenceData
@@ -227,7 +227,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
 
         animator = GetComponent<Animator>();
         TitleButton = FindChildGameObject<Button>("DisplayButton");
-        cameraChangeButton = FindChildGameObject<Button>("CameraChangeButton"); 
+        cameraChangeButton = FindChildGameObject<Button>("CameraChangeButton");
         CameraChange = FindChildGameObject("CameraChange");
 
         cancleSelectButton=FindChildGameObject<Button>("CancleSelectButton");
@@ -342,20 +342,20 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         {
             TitleButton.interactable = false;
         }
-        
+
 
         upState = true;
         animator.SetTrigger("UP");
 
         // InputManager.instance.AddInputActionDelegate(MyInputNameData.Other_CameraMove, CameraMove);
-     
+
     }
 
     private MapRoomData mapData;
 
     public override void Close()
     {
-        base.Close(); 
+        base.Close();
         if (SingletonType.Cleared)
         {
             return;
@@ -417,11 +417,11 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
 
             if (localPos.y > image.rect.min.y & localPos.y < image.rect.max.y)
             {
-              
+
             }
             else
-            { 
-                Vector2 mouseWorldPos = CameraManager.ScreenPointToWorldPoint(mousePos, 0); 
+            {
+                Vector2 mouseWorldPos = CameraManager.ScreenPointToWorldPoint(mousePos, 0);
                 if (waiteSetHomeEquip)
                 {
                     int2 coordinate = GameCommon.GetMapCoordinateInt(mouseWorldPos);
@@ -453,7 +453,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                                                 };
                                                 GameActionManager.instance.QueueAction(destoryTempMapItem, true);
                                             });
-                                        } 
+                                        }
                                     }
                                 };
 
@@ -468,7 +468,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                                         selectMapItemRuntimeObj.SetLayer(GameCommon.GreenObjLayer);
                                     }
                                 });
-                               
+
                                 SelectHomeEquip.mapInstance=WorldMapObjManager.instance.displayMap;
                                 SelectHomeEquip.coordinate=coordinate;
                                 EquipBoxs.SetSelectData(SelectHomeEquip, SelectEquip, EquipSelectGroup);
@@ -492,7 +492,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                                 SelectHomeEquip.mapItemInstance = instance;
                             }
                         }
-                        
+
                     };
                     GameActionManager.instance.QueueAction(trySetMapItem, true);
                 }
@@ -513,7 +513,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                         }
                     }
                     else if (selectMapItemRuntimeObj != null)
-                    { 
+                    {
                         int2 coordinate = GameCommon.GetMapCoordinateInt(mouseWorldPos);
                         TrySetMapItem trySetMapItem = new TrySetMapItem
                         {
@@ -552,7 +552,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                        // selectMapItemRuntimeObj.SetLayer(GameCommon.GreenObjLayer);
                     }
                     canMoveCamera = selectMapItemRuntimeObj == null;
-                }  
+                }
             }
         }
     }
@@ -568,7 +568,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 //  Debug.Log($"movePos:{movePos}--moveDelta:{moveDelta}");
                 CameraManager.instance.MoveFixedCamera(-moveDelta*0.01f);
             }
-            
+
         }
     }
     private  void SelectEquip(HomeEquip HomeEquip, int index, bool selected = true)
@@ -584,7 +584,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 waiteSetHomeEquip = false;
                 SelectHomeEquip = HomeEquip;
                 HomeEquipmentData homeEquipmentData = HomeEquip.homeEquipmentData;
-                ItemName.SetSWText(homeEquipmentData.equipmentName); 
+                ItemName.SetSWText(homeEquipmentData.equipmentName);
                 ActionName.SetSWText(HomeEquip.mapInstance <= 0 ? "布置" : "收回");
                 ActionImage.sprite = HomeEquip.mapInstance <= 0 ? setSprite : unSetSprite;
                 InfoButton.transform.localScale =  Vector3.one;
@@ -603,7 +603,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                     selectMapItemRuntimeObj.SetLayer(GameCommon.BlueObjLayer);
                     selectMapItemRuntimeObj = null;
                 }
-                SetActionState(); 
+                SetActionState();
             }
         }
         else if (HomeEquip.instanceId == SelectHomeEquip.instanceId)

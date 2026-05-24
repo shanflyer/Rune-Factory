@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
@@ -8,7 +8,7 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
 {
     [SerializeField]
     ItemBoxReference itemBoxReference;
-    [SerializeField] 
+    [SerializeField]
     TextMeshProUGUI sellItemName;
     [SerializeField]
     TextMeshProUGUI priceValue;
@@ -27,22 +27,22 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
         {
             int count = int.Parse(value);
             changeCount = count-storeCunterSetData.count;
-            RefreshChangeCount(); 
+            RefreshChangeCount();
         });
         addButton.onClick.AddListener(() =>
         {
             changeCount++;
-            RefreshChangeCount(); 
+            RefreshChangeCount();
         });
         reduceButton.onClick.AddListener(() =>
-        { 
+        {
             changeCount--;
             RefreshChangeCount();
         });
         topButton.onClick.AddListener(() =>
         {
-            changeCount = 99999; 
-            RefreshChangeCount(); 
+            changeCount = 99999;
+            RefreshChangeCount();
         });
 
         getItemDownButton.onClick.AddListener(GetItemDownAction);
@@ -62,7 +62,7 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
     {
         int packageId = CharacterManager.instance.controllerCharacter.characterPackage;
 
-        PackageData packageData = PackageManager.instance.GetPackageData(packageId); 
+        PackageData packageData = PackageManager.instance.GetPackageData(packageId);
 
         PackageList packageList = new PackageList
         {
@@ -110,12 +110,12 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
 
     async System.Threading.Tasks.Task SetItemCountActionAsync(System.Threading.CancellationToken cancellationToken)
     {
-         
+
         if (PlayerStoreManager.instance.GetRuntimeStoreCounter(storeCunterSetData.storeCounterId, out var runtimeStoreCounter))
         {
             int packageId = CharacterManager.instance.controllerCharacter.characterPackage;
             if (runtimeStoreCounter.itemData==null || runtimeStoreCounter.itemData.id == storeCunterSetData.itemId)
-            { 
+            {
                 if (changeCount < 0)
                 {
                     int maxChange = runtimeStoreCounter.count - storeCunterSetData.count;
@@ -146,7 +146,7 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
             }
             else
             {
-              
+
                 storeCunterSetData.count = changeCount;
                 if (PackageManager.instance.GetOutItenFromPackage(packageId, storeCunterSetData.itemId, storeCunterSetData.count))
                 {
@@ -162,10 +162,10 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
         }
         else
         {
-           
+
         }
         //changeCount = count - storeCunterSetData.count;
-        //RefreshChangeCount(); 
+        //RefreshChangeCount();
     }
     void GetItemDownAction()
     {
@@ -180,7 +180,7 @@ public class StoreCounterSetPanel : GamePanel<SetStoreCounterItem>
             if (PackageManager.instance.CheckPackageTryItemIn(packageId, storeCunterSetData.itemId,
                     runtimeStoreCounter.count))
             {
-              int count=await PackageManager.instance.SetItemInPackage(new Item { 
+              int count=await PackageManager.instance.SetItemInPackage(new Item {
                     dataId= storeCunterSetData.itemId,
                     count= runtimeStoreCounter.count
                 }, packageId);

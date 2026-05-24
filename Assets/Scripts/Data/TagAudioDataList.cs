@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName ="Data/tag对应音效")]
 public class TagAudioDataList : ScriptableObject
 {
-    public List<TagAudioData> tagAudioDatas; 
+    public List<TagAudioData> tagAudioDatas;
 }
 [Serializable]
 public struct TagAudioData

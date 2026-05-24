@@ -5,7 +5,7 @@ using UnityEngine;
 using System;
 using UnityEditor;
 #endif
- 
+
 public class SpriteBonePoseController : MonoBehaviour
 {
     public SpriteBonePose spriteBone;
@@ -43,9 +43,9 @@ public class SpriteBonePoseController : MonoBehaviour
             {
           //      group.gameObject.SetActive(false);
          //       return;
-            } 
+            }
             var children = group.GetComponentsInChildren<Transform>(true);
-          
+
             for (int i = 0; i < children.Length; i++)
             {
                 Transform child = children[i];
@@ -62,7 +62,7 @@ public class SpriteBonePoseController : MonoBehaviour
         AssetDatabase.SaveAssets();
 #endif
     }
-   
+
     string[] propertyNames = new string[]
     {
         "m_LocalPosition.x","m_LocalPosition.y","m_LocalPosition.z", "localEulerAnglesRaw.z",
@@ -71,7 +71,7 @@ public class SpriteBonePoseController : MonoBehaviour
     public void RecordAnimation()
     {
         float perFameTime = 1.0f / frameAnimationData.fps;
-        
+
         string path = AssetDatabase.GetAssetPath(animationClip);
         Dictionary<string,Dictionary<string, List<Vector2>>> AnimationDatas = new Dictionary<string, Dictionary<string, List<Vector2>>>();
         for(int i=0;i< frameAnimationData.bones.Count; i++)
@@ -97,7 +97,7 @@ public class SpriteBonePoseController : MonoBehaviour
                         animationDatas.Add(propertyName, animations);
                     }
 
-                    
+
 
                     switch (propertyName)
                     {
@@ -124,7 +124,7 @@ public class SpriteBonePoseController : MonoBehaviour
                             animations.Add(new Vector2(nowTime, bonePose.scale.z));
                             break;
                     }
-                     
+
                 }
             }
         }
@@ -189,9 +189,9 @@ public class SpriteBonePoseController : MonoBehaviour
             }
         }
 
- 
+
         try
-        {   
+        {
             for (int i = 0; i < spriteBone.DisplayBonePoses.Count; i++)
             {
                 var bonePose = spriteBone.DisplayBonePoses[i];
@@ -201,7 +201,7 @@ public class SpriteBonePoseController : MonoBehaviour
                     Undo.RecordObject(child, "Load Pose");
                     child.localEulerAngles = bonePose.angle;
                     child.localPosition = bonePose.position;
-                    child.localScale = bonePose.scale; 
+                    child.localScale = bonePose.scale;
                 }
             }
             for (int i = 0; i < spriteBone.LayerParts.Count; i++)
@@ -217,11 +217,11 @@ public class SpriteBonePoseController : MonoBehaviour
 
         }
         catch { }
-      
+
 #if UNITY_EDITOR
         // 结束录制
        // AnimationMode.StopAnimationMode();
-#endif 
+#endif
         /*
         if (gameObject.TryGetComponent(out Animator animator))
         {
@@ -267,7 +267,7 @@ public class SpriteBonePoseController : MonoBehaviour
         // 缩放
         RecordVector3(clip, type, "m_LocalScale", time, scale, path);
     }
-   
+
     private void RecordVector3(AnimationClip clip, Type type, string propertyPath, float time, Vector3 value, string path)
     {
         // X轴
@@ -309,11 +309,11 @@ public class SpriteBonePoseController : MonoBehaviour
         {
             keys = curve.keys.ToList();
         }
-       
+
 
         if (keys.Count==0)
         {
-            keys.Add(key); 
+            keys.Add(key);
         }
         else
         {

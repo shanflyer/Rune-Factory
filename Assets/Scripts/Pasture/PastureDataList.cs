@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -55,7 +55,7 @@ public class PastureDataList : ScriptableObject, IGameData,IDataArray<PastureDat
         }
         pastureDatas = pastureDataList.ToArray();
     }
-#endif 
+#endif
 }
 [Serializable]
 public struct PastureLevelData
@@ -90,7 +90,7 @@ public class PastureData : IReferenceData, IGameData
     public int productPackage;
     public int foodPackage;
     public int waterPackage;
-    
+
     public List<PastureLevelData> levelDatas;
 
     public string GetKey()
@@ -99,6 +99,6 @@ public class PastureData : IReferenceData, IGameData
     }
 
     public void SetReferenceData()
-    { 
+    {
     }
 }

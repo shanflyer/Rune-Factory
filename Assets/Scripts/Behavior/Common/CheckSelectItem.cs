@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 
 public enum CheckItemProperty
@@ -34,7 +34,7 @@ public class CheckSelectItem : Action
         var package = character.characterPackage;
         if (!characterId.IsNull())
         {
-            character = CharacterManager.instance.GetCharacter(characterId.Value); 
+            character = CharacterManager.instance.GetCharacter(characterId.Value);
         }
         if (character != null)
         {
@@ -43,7 +43,7 @@ public class CheckSelectItem : Action
             itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
             outSelectItem.SetValue(item.dataId);
             outSelectItemInstance.SetValue(item.instanceId);
-             
+
             if (itemData != null)
             {
                 switch (checkItemProperty)
@@ -118,11 +118,11 @@ public class CheckSelectItem : Action
         {
             taskStatus = TaskStatus.Failure;
         }
-         
+
     }
     TaskStatus taskStatus;
     public override TaskStatus OnUpdate()
     {
-        return taskStatus; 
+        return taskStatus;
     }
 }

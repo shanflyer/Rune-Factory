@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 
 public class UserGameSaveDataList : IReferenceData
 {
-    public CommonSaveData commonSaveData;  
+    public CommonSaveData commonSaveData;
     public UserGameSaveData nowSaveData;
     public List<UserGameSaveData> userGameSaveDatas = new List<UserGameSaveData>();
     public UserGameSaveDataList()
@@ -22,7 +22,7 @@ public class CommonSaveData
 [Serializable]
 public class UserGameSaveData : IReferenceData
 {
-    public UserGameSaveData() 
+    public UserGameSaveData()
     {
         otherSaveData = new OtherSaveData
         {
@@ -42,7 +42,7 @@ public class UserGameSaveData : IReferenceData
         playerData = new CharacterSaveData(userGameSaveData.playerData);
         otherSaveData = new OtherSaveData(userGameSaveData.otherSaveData);
         dateData = userGameSaveData.dateData;
-        characterSaveDatas.CopyData(userGameSaveData.characterSaveDatas); 
+        characterSaveDatas.CopyData(userGameSaveData.characterSaveDatas);
         packageSaveDatas.AddRange(userGameSaveData.packageSaveDatas);
         friendSaveData = userGameSaveData.friendSaveData;
         mapItemOperates.AddRange(userGameSaveData.mapItemOperates);
@@ -75,7 +75,7 @@ public class UserGameSaveData : IReferenceData
 
         openFormulas.AddRange(userGameSaveData.openFormulas);
 
-        NpcTimeData.AddRange(userGameSaveData.NpcTimeData); 
+        NpcTimeData.AddRange(userGameSaveData.NpcTimeData);
         endGuideFilmIndex = userGameSaveData.endGuideFilmIndex;
         playerStoreOpen = userGameSaveData.playerStoreOpen;
     }
@@ -92,7 +92,7 @@ public class UserGameSaveData : IReferenceData
     public OtherSaveData otherSaveData=new OtherSaveData();
     public GameDateSaveData dateData;
     public IntCharacterSaveDataDictionary characterSaveDatas = new IntCharacterSaveDataDictionary();
-    public List<PackageSaveData> packageSaveDatas = new List<PackageSaveData>(); 
+    public List<PackageSaveData> packageSaveDatas = new List<PackageSaveData>();
 
     public List<Weather> nowWeathers = new List<Weather>();
     public List<Weather> nextWeathers = new List<Weather>();
@@ -144,7 +144,7 @@ public class UserGameSaveData : IReferenceData
     private Dictionary<int, int2> animationStateMapItemsDic = new();
     private Dictionary<int, int3> changeMapItemsDic = new();
     private Dictionary<int, NpcTimeData> NpcTimeDataDic = new();
-    
+
     private HashSet<int> RemoveMapItemColliderSet = new HashSet<int>();
     private HashSet<int2> removeMapItemOperatesSet = new HashSet<int2>();
     private HashSet<int2> addMapItemOperatesSet = new HashSet<int2>();
@@ -231,7 +231,7 @@ public class UserGameSaveData : IReferenceData
             npcTimeData.Unpack();
             NpcTimeDataDic[npcTimeData.id] = npcTimeData;
         }
-        
+
         removeMapItemOperatesDic.Clear();
         mapItemOperates.Clear();
 
@@ -247,7 +247,7 @@ public class UserGameSaveData : IReferenceData
             var saveData = DataPacker.LongUnpackInt3(changeMapItems[i]);
             changeMapItemsDic.Add(saveData.z, saveData);
         }
-        
+
         removeMapItemOperatesSet.Clear();
         addMapItemOperatesSet.Clear();
         for (var i = 0; i < mapItemOperates.Count; i++)
@@ -271,10 +271,10 @@ public class UserGameSaveData : IReferenceData
                 else
                     removeMapItemOperatesDic.Add(value.x, new List<int> { value.y });
             }
-            
-           
+
+
         }
-        
+
         specialMapItem.Clear();
         for(int i = 0; i < specialMapItemList.Count; i++)
         {
@@ -300,7 +300,7 @@ public class UserGameSaveData : IReferenceData
             value.Pack();
             NpcTimeData.Add(value.packed);
         }
-        
+
         changeMapItems.Clear();
         foreach (var changeMapItem in changeMapItemsDic)
             changeMapItems.Add(DataPacker.Int3PackLong(changeMapItem.Value));
@@ -311,7 +311,7 @@ public class UserGameSaveData : IReferenceData
             removeCollider.Add(itemId);
         }
 
-        mapItemOperates.Clear(); 
+        mapItemOperates.Clear();
         foreach (var id in removeMapItemOperatesSet)
         {
             mapItemOperates.Add(-DataPacker.Int2PackInt(id));
@@ -443,7 +443,7 @@ public class UserGameSaveData : IReferenceData
             fields.Add(field.instanceId, fieldSaveData);
         }
     }
-    
+
     public void SetNpcBirthDay(int  npcId,Season season,int day)
     {
         if (!NpcTimeDataDic.TryGetValue(npcId, out var npcSaveData)) npcSaveData = new NpcTimeData();
@@ -473,7 +473,7 @@ public class UserGameSaveData : IReferenceData
             mapHomeEquips.Add(key, homeEquipSaveData);
         }
     }
-     
+
     public void SetManufature(Manufature manufature)
     {
         if (manufatures.TryGetValue(manufature.instanceId, out var manufatureSaveData))
@@ -487,20 +487,20 @@ public class UserGameSaveData : IReferenceData
         }
     }
 
- 
+
 
     public static UserGameSaveData CreatSaveData(int index)
     {
         OtherSaveData otherSaveData = new OtherSaveData
         {
             playerPackages = new List<int>(),
-            
+
         };
 
         UserGameSaveData userGameSaveData = new UserGameSaveData
         {
-            otherSaveData = otherSaveData, 
-            packageSaveDatas = new List<PackageSaveData>(), 
+            otherSaveData = otherSaveData,
+            packageSaveDatas = new List<PackageSaveData>(),
             index = index,
             endGuideFilmIndex=-1
         };
@@ -538,7 +538,7 @@ public class UserGameSaveData : IReferenceData
         if (editorKey.y == 0)
             return;
         specialMapItem[editorKey] = instanceId;
-        changeMapItemsDic[instanceId] = value; 
+        changeMapItemsDic[instanceId] = value;
     }
 }
 
@@ -697,7 +697,7 @@ public class AnimalSaveData
 
     public AnimalSaveData() { }
     public AnimalSaveData(AnimalSaveData animalSaveData)
-    { 
+    {
         name = animalSaveData.name;
         data1 = animalSaveData.data1;
         data2 = animalSaveData.data2;
@@ -827,8 +827,8 @@ public class ShopListSaveData
         binders.Clear();
         binders.AddRange(shopList.bindCharacters);
     }
-} 
- 
+}
+
 public class FieldSaveData
 {
     [NonSerialized]
@@ -939,7 +939,7 @@ public class FieldSaveData
         data1 = fieldSaveData.data1;
         data2 = fieldSaveData.data2;
         data3 = fieldSaveData.data3;
-        Unpack(); 
+        Unpack();
     }
     public FieldSaveData(Field field)
     {
@@ -1258,8 +1258,8 @@ public struct GameDateSaveData
 
     public override string ToString()
     {
-      return  LanguageManage.instance.GameTimeToString(year, season, day); 
-    } 
+      return  LanguageManage.instance.GameTimeToString(year, season, day);
+    }
 }
 
 public class ChapterSave
@@ -1297,7 +1297,7 @@ public class OtherSaveData
     public List<int> playerPackages;
     public bool isMarriedFood, isAnMo;
     public bool playerStoreOpen;
-    
+
     public int uid;
     public int newDayActionIndex, newWakeUpActionIndex;
     public List<int2> shortcutItems;
@@ -1307,7 +1307,7 @@ public class OtherSaveData
         uid = otherSaveData.uid;
         gold = otherSaveData.gold;
         playerStoreOpen = otherSaveData.playerStoreOpen;
-        
+
         playerPackages = new List<int>();
         playerPackages.AddRange(otherSaveData.playerPackages);
         isMarriedFood = otherSaveData.isMarriedFood;
@@ -1319,8 +1319,8 @@ public class OtherSaveData
             shortcutItems = new List<int2>();
             shortcutItems.AddRange(otherSaveData.shortcutItems);
         }
-      
-    } 
+
+    }
 }
 
 public struct FriendSaveData
@@ -1419,7 +1419,7 @@ public class CharacterSaveData : IReferenceData
         power = (int)((d4 >> 29) & 0x3FFF);
         sleepHour = (int)((d4 >> 43) & 0x7F);
     }
- 
+
     public CharacterSaveData(CharacterSaveData characterSaveData)
     {
         name = characterSaveData.name;
@@ -1448,7 +1448,7 @@ public class CharacterSaveData : IReferenceData
         {
             name = overrideName;
         }
-        
+
         instanceId = character.instanceId;
         dataId = character.dataId;
         level = character.Level;

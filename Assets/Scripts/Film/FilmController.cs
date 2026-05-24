@@ -1,11 +1,11 @@
- 
+
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Playables;
-using UnityEngine.Timeline; 
+using UnityEngine.Timeline;
 
 public class FilmController : Singleton<FilmController>
 {
@@ -25,7 +25,7 @@ public class FilmController : Singleton<FilmController>
     }
 
     async System.Threading.Tasks.Task PlayFilmAsync(PlayFilm playFilm)
-    { 
+    {
         if(!nowFilms.TryGetValue(playFilm.filmName,out Film film))
         {
            await CreatAndPlayFilm(playFilm.filmName,playFilm.assetName);
@@ -40,7 +40,7 @@ public class FilmController : Singleton<FilmController>
                 {
                     if (film.playableDirector.playableAsset != null)
                         assetData = filmData.GetTimeLineAsset(film.playableDirector.playableAsset.name);
-                 
+
                 }
                 UIManager.instance.SetFilmUI(assetData.needFilmUI);
                 if (assetData.hideCameraLimit)
@@ -56,12 +56,12 @@ public class FilmController : Singleton<FilmController>
                 if (film.playableDirector.playableAsset!=null&&!string.IsNullOrEmpty(playFilm.assetName)&&
                     playFilm.assetName != film.playableDirector.playableAsset.name)
                 {
-                    BindFilm(assetData, film.playableDirector); 
+                    BindFilm(assetData, film.playableDirector);
                 }
                 else
                 {
                     film.playableDirector.transform.localScale = Vector3.one;
-                    film.playableDirector.Play(); 
+                    film.playableDirector.Play();
                 }
             }
             else
@@ -95,8 +95,8 @@ public class FilmController : Singleton<FilmController>
                     continue;
                 }
 
-                Object sourceObject = playBindings.Current.sourceObject; 
-                
+                Object sourceObject = playBindings.Current.sourceObject;
+
                 Transform child =playableDirector.transform.Find(assetData.pathes[i]);
                 if (child != null)
                 {
@@ -117,16 +117,16 @@ public class FilmController : Singleton<FilmController>
                             if (child.gameObject.TryGetComponent(out Animator component))
                             {
                                 playableDirector.SetGenericBinding(sourceObject, component.gameObject);
-                            } 
+                            }
                         }
                     }
                     else
                     {
                         playableDirector.SetGenericBinding(sourceObject, playableDirector);
                     }
-                    
+
                 }
-                 
+
                 i++;
             }
         }
@@ -134,7 +134,7 @@ public class FilmController : Singleton<FilmController>
         //playableDirector.Stop();
         playableDirector.time = 0;
         playableDirector.Play();
-        
+
     }
     void DisplayFilm(DisplayFilm DisplayFilm)
     {
@@ -172,7 +172,7 @@ public class FilmController : Singleton<FilmController>
                     Transform child = film.playableDirector.transform.Find(hideFilm.path);
                     child.localScale = Vector3.zero;
                 }
-                
+
             }
         }
     }
@@ -189,16 +189,16 @@ public class FilmController : Singleton<FilmController>
             Track.muted = false;
         }
     }
-    void StopFilm(StopFilm stopFilm) 
+    void StopFilm(StopFilm stopFilm)
     {
         if (nowFilms.TryGetValue(stopFilm.filmName, out Film film))
         {
             film.playableDirector.Stop();
             DestoryFilm(stopFilm.filmName);
         }
-        
+
     }
-    void PauseFilm(PauseFilm pauseFilm) 
+    void PauseFilm(PauseFilm pauseFilm)
     {
         if (nowFilms.TryGetValue(pauseFilm.filmName, out Film film))
         {
@@ -218,7 +218,7 @@ public class FilmController : Singleton<FilmController>
                 GameObject filmObj = asyncInstantiateOperation.Result[0];
                 filmObj.transform.localPosition = Vector3.zero;
                 PlayableDirector playableDirector = filmObj.GetComponent<PlayableDirector>();
-                playableDirector.stopped += (PlayableDirector) => 
+                playableDirector.stopped += (PlayableDirector) =>
                 {
                     if (!SingletonType.Cleared)
                     {
@@ -229,12 +229,12 @@ public class FilmController : Singleton<FilmController>
                         GameActionManager.instance.QueueAction(timeRun);
                         if (UIManager.instance != null)
                             UIManager.instance.SetFilmUI(false);
-                         
+
                         GameActionManager.instance.QueueAction(refreshMapCamera);
-                    } 
+                    }
                 };
                 var assetData = filmData.GetTimeLineAsset(assetName);
-               
+
 
                 if (assetData.hideCameraLimit)
                 {
@@ -245,7 +245,7 @@ public class FilmController : Singleton<FilmController>
                     GameActionManager.instance.QueueAction(setCameraConfiner2D);
                 }
                 BindFilm(assetData, playableDirector);
-                
+
                 Film film = new Film
                 {
                     obj = filmObj,
@@ -263,7 +263,7 @@ public class FilmController : Singleton<FilmController>
                     };
                     GameActionManager.instance.QueueAction(timeRun);
                 }
-                
+
             }
         }
         else
@@ -276,7 +276,7 @@ public class FilmController : Singleton<FilmController>
                 await asyncInstantiateOperation;
                 var filmObj = asyncInstantiateOperation.Result[0];
                 PlayableDirector playableDirector = filmObj.GetComponent<PlayableDirector>();
-                playableDirector.stopped += (PlayableDirector) => 
+                playableDirector.stopped += (PlayableDirector) =>
                 {
                     UIManager.instance.SetFilmUI(false);
                     SetCharacterStopCreate setCharacterStopCreate = new SetCharacterStopCreate
@@ -290,7 +290,7 @@ public class FilmController : Singleton<FilmController>
                     };
                     GameActionManager.instance.QueueAction(setCameraConfiner2D);
                 };
-                 
+
                 Film film = new Film
                 {
                     obj = filmObj,
@@ -314,7 +314,7 @@ public class FilmController : Singleton<FilmController>
                     GameActionManager.instance.QueueAction(setCameraConfiner2D);
                 }*/
             }
-        } 
+        }
     }
     void DestoryFilm(string filmName)
     {
@@ -323,7 +323,7 @@ public class FilmController : Singleton<FilmController>
             GameObject.Destroy(film.obj);
             nowFilms.Remove(filmName);
         }
-        
+
     }
 
     public void SetParent(Transform filmParent)

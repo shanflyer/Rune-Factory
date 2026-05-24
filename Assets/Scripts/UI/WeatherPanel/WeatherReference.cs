@@ -25,7 +25,7 @@ public class WeatherReference : UIObjReference<WeatherReferenceData>
     {
         await base.InitData(t, SelectAction, toggleGroup);
         timeText.SetSWText( data.time);
-        
-        weatherIcon.sprite = WeatherManager.instance.GetWeatherIcon(data.weather,true,data.night); 
+
+        weatherIcon.sprite = WeatherManager.instance.GetWeatherIcon(data.weather,true,data.night);
     }
 }

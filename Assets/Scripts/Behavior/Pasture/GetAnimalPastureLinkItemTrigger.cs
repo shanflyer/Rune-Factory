@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
@@ -36,8 +36,8 @@ public class GetAnimalPastureLinkItemTrigger : Action
                         return TaskStatus.Success;
                     }
                 }
-             
-            } 
+
+            }
         }
 
         return TaskStatus.Failure;

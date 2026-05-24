@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,7 +31,7 @@ public class StoreProductReference : UIObjReference<AppStoreProductData>
     {
         base.ClearSelect();
         particle.localScale = Vector3.zero;
-    } 
+    }
     public override Task InitData(AppStoreProductData t, SelectAction<AppStoreProductData> SelectAction = null, ToggleGroup toggleGroup = null)
     {
         text.text = LanguageManage.SwitchStr(t.showName);

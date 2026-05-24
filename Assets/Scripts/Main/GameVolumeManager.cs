@@ -1,11 +1,11 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 using static UnityEngine.ParticleSystem;
 
- 
+
 public class GameVolumeManager : Singleton<GameVolumeManager>
 {
     public override bool NeedUpdate => true;
@@ -88,9 +88,9 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
     private float depthFieldValue = 1.0f;
     public float DepthFieldValue
     {
-        get { return depthFieldValue; } 
-        set 
-        { 
+        get { return depthFieldValue; }
+        set
+        {
             depthFieldValue = value;
             PlayerPrefs.SetFloat("DepthField", depthFieldValue);
             CameraManager.instance.RefreshDepthOfField();
@@ -99,12 +99,12 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
 
     private ParticleSystem footStep;
     public void EmitFootParticle(float angle,Vector3 pos,Color footStepColor,bool isLeftFoot)
-    { 
+    {
         pos.z = 0;
         if (!float.IsFinite(pos.x) || !float.IsFinite(pos.y) || !float.IsFinite(angle))
         {
             return;
-        } 
+        }
         EmitParams ep = new EmitParams();
         ep.startColor = footStepColor;
         ep.position = pos;
@@ -150,7 +150,7 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
         Vector2 cyclePos = new Vector2(screenPos.x / screenSize.x, screenPos.y / screenSize.y);
         cyclePos.x = math.clamp(cyclePos.x, 0, 1);
         cyclePos.y = math.clamp(cyclePos.y, 0, 1);
-        screenMat.SetVector("_Offset", cyclePos); 
+        screenMat.SetVector("_Offset", cyclePos);
        // Debug.Log($"screenPos:{screenPos}--screenSize:{screenSize}-LerpScreenCycleValue.cyclePos:{LerpScreenCycleValue.cyclePos}--{cyclePos}");
         float timeValue = 0;
         float minCycleValue = LerpScreenCycleValue.minCycleValue;
@@ -189,9 +189,9 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
         screenMat.SetFloat("_CycleValue", value);
     }
 
-  
+
     protected override void Update()
-    { 
+    {
         base.Update();
     }
 }

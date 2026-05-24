@@ -13,13 +13,13 @@ partial struct EmoteShowSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        
+
     }
 
     [BurstCompile]
     public void OnDestroy(ref SystemState state)
     {
-        
+
     }
 }
 

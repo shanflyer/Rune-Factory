@@ -89,13 +89,13 @@ public class InformationController : Singleton<InformationController>
             updateRunning = false;
         }
     }
- 
+
     public void AddInformation(string information,bool Show = true,bool PromptShow=false)
     {
         if (nowIndex >= 200)
         {
             nowIndex = 0;
-            
+
         }
         informations[nowIndex]=information;
         nowIndex++;

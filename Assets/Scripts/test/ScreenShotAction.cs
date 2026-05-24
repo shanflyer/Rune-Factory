@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -34,7 +34,7 @@ public class ScreenShotAction : MonoBehaviour
             {
                 StartCoroutine(AutoScreenShot());
             }
-       
+
         }
         else
         {
@@ -46,7 +46,7 @@ public class ScreenShotAction : MonoBehaviour
             ScreenCapture.CaptureScreenshot("Editor_Image/" + DateTime.Now.Day + DateTime.Now.Hour +
                                             DateTime.Now.Minute + DateTime.Now.Second + shotnum + ".png");
         }
-       
+
     }
 
     private IEnumerator AutoScreenShot()
@@ -90,11 +90,11 @@ public class ScreenShotAction : MonoBehaviour
     }
     // Update is called once per frame
     void Update()
-    { 
+    {
         if (Keyboard.current.f1Key.wasPressedThisFrame)
         {
             ScreenShot();
-        }; 
+        };
     }
 #endif
 

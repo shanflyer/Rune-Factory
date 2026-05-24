@@ -1,4 +1,4 @@
-﻿
+
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -62,8 +62,7 @@ public class WeatherIconData : ScriptableObject
             }
             cloudIconDic.TryGetValue(dayIndex * 10 + cloudIndex, out var Sprite);
             return Sprite;
-        }       
+        }
     }
 }
 
- 

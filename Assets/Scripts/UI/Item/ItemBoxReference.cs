@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -100,7 +100,7 @@ public class ItemBoxReference : UIObjReference<Item>
         if (item.dataId != 0)
         {
             itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
-        } 
+        }
         toggle.enabled = true;
 
         if (t.locked && LockMask)
@@ -129,13 +129,13 @@ public class ItemBoxReference : UIObjReference<Item>
                 }
                 else
                 {
-                    LockMask.transform.localScale = item.instanceId == -1 ? Vector3.one : Vector3.zero; 
-                } 
+                    LockMask.transform.localScale = item.instanceId == -1 ? Vector3.one : Vector3.zero;
+                }
             }
             else
             {
                 icon.color = (item.instanceId != -1) ? Color.white : new Color(1, 1, 1, 0.6f);
-            } 
+            }
             icon.enabled = true;
             icon.rectTransform.sizeDelta = GameCommon.SetImageSize(icon.sprite, new Vector2(32, 32));
             count.text = item.count.ToString();

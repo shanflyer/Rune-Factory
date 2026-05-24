@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -39,7 +39,7 @@ public class GameDate : IReferenceData, INativeData
         }
     }
 
-     
+
     public List<FestivalData> CustomFestival
     {
         get
@@ -53,12 +53,12 @@ public class GameDate : IReferenceData, INativeData
     }
     public  string ToString(int year)
     {
-        return LanguageManage.instance.GameTimeToString(year, season, date); 
+        return LanguageManage.instance.GameTimeToString(year, season, date);
     }
     public GameDate(Season _season, int _date)
     {
         season = _season;
-        date = _date; 
+        date = _date;
     }
 
     public void Dispose()
@@ -860,7 +860,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
     void TimeRun(TimeRun TimeRun)
     {
         runTime = TimeRun.run;
-         
+
     }
 
     void SetFixedSeason(SetFixedSeason SetFixedSeason)
@@ -1075,7 +1075,7 @@ public class GameTimeManager : Singleton<GameTimeManager>
             }
         }
     }
- 
+
 }
 
-  
+

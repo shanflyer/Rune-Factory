@@ -1,15 +1,15 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 
- 
+
 [TaskCategory("NewGame/Common")]
 [TaskName("检查快捷栏道具值")]
 public class CheckShortcutItemValue : Action
 {
     public SharedInt characterId;
-    public SharedInt checkValue; 
-    public SharedIntList checkItem; 
-   
+    public SharedInt checkValue;
+    public SharedIntList checkItem;
+
     public override TaskStatus OnUpdate()
     {
 
@@ -25,7 +25,7 @@ public class CheckShortcutItemValue : Action
                     return TaskStatus.Success;
                 }
             }
-          
+
         }
         return TaskStatus.Failure;
     }

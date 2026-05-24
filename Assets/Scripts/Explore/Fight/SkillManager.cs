@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.TextCore.Text;
 
 public class SkillManager : Singleton<SkillManager>
-{ 
+{
     SkillRuntime useItemRuntime;
     public override void Init()
     {
@@ -16,11 +16,11 @@ public class SkillManager : Singleton<SkillManager>
     {
         base.Clear();
     }
-   
+
     public async Task<SkillRuntime> CreateSkillRuntime(int skillId)
     {
         SkillData skillData=await GameDataManager.instance.GetAsyncData<SkillData>(skillId);
-        SkillRuntime skillRuntime = new SkillRuntime(skillData, ExploreManager.instance.NewUid); 
+        SkillRuntime skillRuntime = new SkillRuntime(skillData, ExploreManager.instance.NewUid);
         return skillRuntime;
     }
 
@@ -34,13 +34,13 @@ public class SkillManager : Singleton<SkillManager>
             BuffRuntime buffRuntime = new BuffRuntime(buffData, ExploreManager.instance.NewUid, fightCharacter.instanceId, overrideAddValue, overrideMulValue, overrideLifeTime);
             return buffRuntime;
         }
-        return null;      
+        return null;
     }
 }
 public class SkillRuntime
 {
     public int instanceId;
-    public SkillData skillData;  
+    public SkillData skillData;
     private int skillCd;
 
     public void ReBlindData(SkillData skillData)
@@ -54,21 +54,21 @@ public class SkillRuntime
         skillCd = skillData.cd;
     }
     public FightType fightType=>skillData.fightType;
-     
+
     public bool waiteCDEnd=> skillCd<=0;
 
     public float GetTimeValue()
     {
         return skillCd / (float)skillData.cd;
     }
-    
- 
+
+
     public void Reset()
     {
         skillCd = skillData.cd;
     }
     public void Update(int timeValue=1)
-    { 
+    {
         if (skillCd>0)
         {
             skillCd -= 1 ;
@@ -172,10 +172,10 @@ public class BuffRuntime
                     buffActionBehavior.PlayParticle();
                 }
             }
-            
-        } 
-    } 
-   
+
+        }
+    }
+
     public void Hide(bool hide)
     {
         if (buffActionBehavior)
@@ -183,7 +183,7 @@ public class BuffRuntime
             Vector3 localPos = buffActionBehavior.transform.localPosition;
             localPos.z = hide ? -999999 : 0;
             buffActionBehavior.transform.localPosition = localPos;
-        } 
+        }
     }
     void ParticleSystemStopAction()
     {
@@ -192,7 +192,7 @@ public class BuffRuntime
             GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
             runtimeObj = null;
             buffActionBehavior = null;
-        } 
+        }
     }
     public void RemoveBuff()
     {
@@ -230,12 +230,12 @@ public class BuffRuntime
 
                  TrueBuffAction();
                  // fightCharacter.fightStatus = FightStatus.准备;
-             }); 
+             });
         }
         else
         {
             TrueBuffAction();
         }
-       
+
     }
 }

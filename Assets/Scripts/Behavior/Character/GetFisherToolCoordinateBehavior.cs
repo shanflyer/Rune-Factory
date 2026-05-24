@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
@@ -9,11 +9,11 @@ public class GetFisherToolCoordinateBehavior : Action
 {
     public SharedInt characterId;
     [SerializeField]
-    private SharedInt3 coordinate;  
+    private SharedInt3 coordinate;
 
     public override void OnStart()
-    { 
-    } 
+    {
+    }
 
     public override TaskStatus OnUpdate()
     {
@@ -22,6 +22,6 @@ public class GetFisherToolCoordinateBehavior : Action
             coordinate.SetValue(_coordinate);
             return TaskStatus.Success;
         }
-        return TaskStatus.Failure; 
+        return TaskStatus.Failure;
     }
 }

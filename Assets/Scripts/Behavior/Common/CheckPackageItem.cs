@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 [TaskCategory("NewGame/Common")]
@@ -13,7 +13,7 @@ public class CheckPackageItem : Action
 
 	public override void OnStart()
 	{
-		
+
 	}
 
 	public override TaskStatus OnUpdate()

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
@@ -59,7 +59,7 @@ public class FishUIReference:UIObjReference<FishReferenceData>
             Icon.sprite = fishData.iconSprite;
             record.text = $"{data.record}cm";
         }
-        
+
     }
 
 }

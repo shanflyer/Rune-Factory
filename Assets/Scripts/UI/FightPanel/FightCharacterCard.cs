@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,9 +7,9 @@ public class FightCharacterCard : UIObjReference<FightCharacter>
     [SerializeField]
     private Image icon;
     [SerializeField]
-    private Image value; 
+    private Image value;
     [SerializeField]
-    private Transform ActionTips; 
+    private Transform ActionTips;
     public override void ClearData()
     {
         base.ClearData();
@@ -46,6 +46,6 @@ public class FightCharacterCard : UIObjReference<FightCharacter>
         if (data != null)
         {
             value.fillAmount = data.WaiteValue();
-        } 
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿ 
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,7 +57,7 @@ public class EquipBoxReference:UIObjReference<Equipment>
             NameText.enabled = true;
             equipMentIcon.enabled = true;
             itemValueBg.localScale = itemData.itemValue ? Vector3.one : Vector3.zero;
-           
+
         }
         else
         {

@@ -15,7 +15,7 @@ public class InformationShowPanel : GamePanel<IReferenceData>
         base.SetPanelUISerializeObj();
         info = FindChildGameObject<TextMeshProUGUI>("Info");
         display = FindChildGameObject<Button>("Display");
-        
+
     }
     protected override void Awake()
     {

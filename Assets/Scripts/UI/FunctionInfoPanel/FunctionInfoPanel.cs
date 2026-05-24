@@ -32,7 +32,7 @@ public class FunctionInfoPanel : GamePanel<FunctionInfoData>
         // 功能说明列表绑定面板生命周期，关闭后旧列表不再回写。
         RunLifecycleTask(token => functionInfoList.InitListData(v.DataList.ToList(), cancellationToken: token), nameof(InitReferenceData));
     }
- 
+
     public override Task InitData(string dataKey)
     {
         return base.InitData(dataKey);

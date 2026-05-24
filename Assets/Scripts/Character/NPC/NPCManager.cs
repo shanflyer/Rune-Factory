@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BehaviorDesigner.Runtime;
@@ -78,10 +78,10 @@ public class TempCharacter : Character
         nowArea = targetArea;
     }
 
-    public TempCharacter(CharacterData characterData, ProfessionData professionData, int instanceId, TempCharacterData tempCharacterData) : 
+    public TempCharacter(CharacterData characterData, ProfessionData professionData, int instanceId, TempCharacterData tempCharacterData) :
         base(characterData, professionData, instanceId,false)
     {
-        this.tempCharacterData = tempCharacterData; 
+        this.tempCharacterData = tempCharacterData;
         //templevel = 1;
     }
 
@@ -139,7 +139,7 @@ public class TempCharacter : Character
         }
         if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var characterRuntimeObj))
         {
-            characterRuntimeObj.SetEnableBehavior(instanceId, externalBehaviorTree); 
+            characterRuntimeObj.SetEnableBehavior(instanceId, externalBehaviorTree);
         }
         else
         {
@@ -158,7 +158,7 @@ public class TempCharacter : Character
 
 public class Player : Character
 {
-    public Player(CharacterData characterData, int instanceId, string playerName, ProfessionData professionData, int overridePackage = 0) : 
+    public Player(CharacterData characterData, int instanceId, string playerName, ProfessionData professionData, int overridePackage = 0) :
         base(characterData, professionData, instanceId,true, overridePackage)
     {
         name = playerName;
@@ -225,8 +225,8 @@ public class NPC : IReferenceData
         characterInstance = instanceId;
         npcData = nPCData;
         npcState = NPCState.正常;
-        
-        this.birthSeason = birthSeason; 
+
+        this.birthSeason = birthSeason;
         this.birthDay = birthDay;
         NPCTaskScheduleManager.instance.AddNPCBehavior(instanceId);
         this.startSleepHour = startSleepHour;
@@ -275,7 +275,7 @@ public class NPC : IReferenceData
         return CharacterInformationData;
     }
     public int friendLevel=>FriendManager.instance.GetFriendShipLevel(npcData.id);
-    
+
     public List<int> functions
     {
         get
@@ -306,7 +306,7 @@ public class NPC : IReferenceData
     public int playerOperateEventId => npcData.playerOperateEventId;
     public int nextTalkEventId => npcData.nextTalkEventId;
 
-    public NPCState npcState { get; set; } 
+    public NPCState npcState { get; set; }
     public NPCData npcData { get; private set; }
     public bool isActive;
 
@@ -335,7 +335,7 @@ public class NPC : IReferenceData
                 npcState = NPCState.正常;
             }
         }
-       
+
     }
     public bool CheckTeamFriend()
     {
@@ -347,7 +347,7 @@ public class NPC : IReferenceData
         {
             return false;
         }
-        else 
+        else
         {
             if (NPCTaskScheduleManager.instance.NowTaskName(characterInstance) == "看守柜台")
             {
@@ -402,7 +402,7 @@ public class NPC : IReferenceData
         likeItemSet = ItemManager.instance.GetItemsForTag(NPCBehaviorData.likeItem);
         unLikeItemSet = ItemManager.instance.GetItemsForTag(NPCBehaviorData.unLikeItem);
 
-      
+
         visitMaps.Clear();
         InitNowVisitMap();
         visitFriends.Clear();
@@ -424,10 +424,10 @@ public class NPC : IReferenceData
         if (NPCBehaviorData!=null)
         {
             NPCTaskScheduleManager.instance.SetNPCTaskScheduleTimeList(characterInstance,NPCBehaviorData.dailyTasks, NPCBehaviorData.externalBehavior);
-        } 
+        }
     }
 
-   
+
     public bool IsInHome()
     {
         if (Character != null)
@@ -596,7 +596,7 @@ public class NPC : IReferenceData
         return 0;
     }
 
-    
+
 
     public async Task<CharacterData> GetCharacterData()
     {
@@ -610,7 +610,7 @@ public class NPC : IReferenceData
         if (NPCBehaviorData != null && NPCBehaviorData.externalBehavior != null)
         {
             NPCTaskScheduleManager.instance.AddNpcBehavior(characterInstance, CharacterBehaviorManager.instance.backHomeExternalBehavior);
-        }  
+        }
     }
 
 
@@ -685,7 +685,7 @@ public class NPC : IReferenceData
                     displayFunction = false,
                     endAction = () =>
                     {
-                        CharacterManager.instance.controllerCharacter.SetNeighborhood(characterInstance); 
+                        CharacterManager.instance.controllerCharacter.SetNeighborhood(characterInstance);
                     }
                 };
                 GameActionManager.instance.QueueAction(talk);
@@ -719,8 +719,8 @@ public class NPCManager : Singleton<NPCManager>
     public override void Init()
     {
         base.Init();
-        npcs.Clear(); 
-        GameActionManager.instance.AddListener<GiveGift>(GiveGift); 
+        npcs.Clear();
+        GameActionManager.instance.AddListener<GiveGift>(GiveGift);
 
         GameActionManager.instance.AddListener<CheckNpcShopLink>(CheckNpcShopLink);
         GameActionManager.instance.AddListener<TryNPCJoinTeam>(TryNPCJoinTeam);
@@ -856,7 +856,7 @@ public class NPCManager : Singleton<NPCManager>
             }
         }
         checkNpcShopLink.setResult(false);
-    }  
+    }
     private void GiveGift(GiveGift giveGift)
     {
         if (GetNPCFormInstance(giveGift.receiveCharacter, out var npc))
@@ -948,7 +948,7 @@ public class NPCManager : Singleton<NPCManager>
                 }
             }
         }
-        var shopManager = ShopManager.instance; 
-         
+        var shopManager = ShopManager.instance;
+
     }
 }

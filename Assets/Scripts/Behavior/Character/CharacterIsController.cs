@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 
@@ -22,7 +22,7 @@ public class CharacterIsController : Action
         if (character != null && character.isController)
         {
             return TaskStatus.Success;
-        } 
+        }
         return TaskStatus.Failure;
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,7 +36,7 @@ public class ShopItemReference : UIObjReference<ShopItemData>
         moneyIcon = FindChildGameObject<Image>("MoneyIcon");
         moneyValue = FindChildGameObject<TextMeshProUGUI>("MoneyValue");
     }
-     
+
     private ShopItemData ShopItemData;
 
     public override async Task InitData(ShopItemData t, SelectAction<ShopItemData> SelectAction = null, ToggleGroup toggleGroup = null)

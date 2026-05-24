@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
 

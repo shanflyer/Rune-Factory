@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
@@ -47,7 +47,7 @@ public class FestivalManager : Singleton<FestivalManager>
     public  Dictionary<int2,List<FestivalData>> FestivalDatas;
 
     public Dictionary<int2, List<FestivalData>> customFestivalDatas;
-   
+
     void LoadBrothDay()
     {
         /*
@@ -69,9 +69,9 @@ public class FestivalManager : Singleton<FestivalManager>
             festivalDatas = new List<FestivalData>();
             FestivalDatas.Add(key, festivalDatas);
         }
-        festivalDatas.Add(festivalData0);  
+        festivalDatas.Add(festivalData0);
     }
-    
+
     public void AddNPCBrothDay(string name,Season season,int date,int id)
     {
         FestivalData festivalData = new FestivalData
@@ -87,7 +87,7 @@ public class FestivalManager : Singleton<FestivalManager>
             festivalDatas = new List<FestivalData>();
             FestivalDatas.Add(key, festivalDatas);
         }
-        festivalDatas.Add(festivalData); 
+        festivalDatas.Add(festivalData);
     }
-   
+
 }

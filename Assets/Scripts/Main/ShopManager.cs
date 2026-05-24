@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 
@@ -30,7 +30,7 @@ public class ShopManager : Singleton<ShopManager>
             }
         }
     }
-  
+
     public int2 GetShopMapItem(int shopId)
     {
         if(shopDic.TryGetValue(shopId,out var shop))
@@ -50,7 +50,7 @@ public class ShopManager : Singleton<ShopManager>
             shopList.bindCharacters.AddRange(shopListSaveData.binders);
         }
     }
- 
+
     async Task InitShopAsync()
     {
         shopListDic.Clear();
@@ -70,7 +70,7 @@ public class ShopManager : Singleton<ShopManager>
 
             for(int j = 0; j < shopGroupData.shopDatas.Count; j++)
             {
-                Shop shop = new Shop(shopGroupData.shopDatas[j],shopGroupData.bindCharacters); 
+                Shop shop = new Shop(shopGroupData.shopDatas[j],shopGroupData.bindCharacters);
                 shop.listName=shopGroupData.name;
                 shopList.shops.Add(shop.shopId,shop);
                 shopDic.Add(shop.shopId, shop);
@@ -103,7 +103,7 @@ public class ShopManager : Singleton<ShopManager>
                         await UIManager.instance.ShowGamePanel<ShopPanel, ShopList>(shopList1);
                     }
                 }
-                
+
             }
             else
             {
@@ -116,12 +116,12 @@ public class ShopManager : Singleton<ShopManager>
                     shopName = NPC.shopName;
                 }
             }
-            
-        } 
+
+        }
         if(shopListDic.TryGetValue(shopName, out var shopList))
         {
           await UIManager.instance.ShowGamePanel<ShopPanel, ShopList>(shopList);
-        } 
+        }
     }
 }
 public class ShopList : IReferenceData
@@ -131,10 +131,10 @@ public class ShopList : IReferenceData
     public int mapItemInstance;
     public MyDic<int,Shop> shops=new MyDic<int, Shop>();
     public List<int> bindCharacters = new List<int>();
-   
+
 }
 public class Shop:IReferenceData
-{ 
+{
     public string shopName=>shopData.shopName;
     public string listName;
     public int shopId=> shopData.shopId;
@@ -142,7 +142,7 @@ public class Shop:IReferenceData
     private MyDic<int, ShopItemData> openShopItems = new MyDic<int, ShopItemData>();
     private List<int> bindCharacters = new List<int>();
 
-    
+
     int friendLevel = 1;
     public void RefreshOpenItem(bool show = false)
     {
@@ -163,7 +163,7 @@ public class Shop:IReferenceData
             }
         }
         for (int i = shopItemDatas.length-1; i >=0; i--)
-        {  
+        {
             if (shopItemDatas[i].openFriendLevel <= friendLevel)
             {
                 int item = shopItemDatas[i].item;
@@ -183,9 +183,9 @@ public class Shop:IReferenceData
                         info0 = itemData.itemName,
                         info1 = $"{LanguageManage.SwitchStr(shopData.shopName)}{LanguageManage.SwitchStr("已经开始售卖!")}"
                     };
-                    GameNotificationManager.instance.ShowItemResultInfo(itemResultInfo); 
-                } 
-            } 
+                    GameNotificationManager.instance.ShowItemResultInfo(itemResultInfo);
+                }
+            }
         }
     }
     ShopData shopData;
@@ -207,7 +207,7 @@ public class Shop:IReferenceData
             }
         }
 
-        RefreshOpenItem(false); 
+        RefreshOpenItem(false);
     }
     public List<ShopItemData> GetOpenShopItem()
     {

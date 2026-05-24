@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using static UnityEngine.Rendering.ReloadAttribute;
@@ -40,7 +40,7 @@ public class CharacterRemoveItem : Action
 
                 }
             }
-         
+
 		}
 	}
 

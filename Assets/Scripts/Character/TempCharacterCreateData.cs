@@ -1,4 +1,4 @@
-﻿using Unity.Mathematics;
+using Unity.Mathematics;
 using UnityEngine;
 
 [System.Serializable]
@@ -44,7 +44,7 @@ public class TempCharacterCreateData : ScriptableObject, IGameData, IReferenceDa
             GameTimeKey gameTimeKey = new GameTimeKey
             {
                 minTime= tempCharacterSteps[i].startTime,
-                maxTime = tempCharacterSteps[i].endTime, 
+                maxTime = tempCharacterSteps[i].endTime,
             };
             int2 cd = tempCharacterSteps[i].cdRange;
             gameTimeKeyIntDic.Add(gameTimeKey, cd);
@@ -56,6 +56,6 @@ public class TempCharacterCreateData : ScriptableObject, IGameData, IReferenceDa
             };
             gameTimeKeyTempCharacterDic.Add(gameTimeTempKey, tempCharacterSteps[i].tempCharacter);
         }
-      
+
     }
 }

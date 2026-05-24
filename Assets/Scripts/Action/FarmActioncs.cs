@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 public struct RefreshField : GameAction
 {
@@ -94,7 +94,7 @@ public struct SetWaterField : GameAction
         this.setValue = setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
-    
+
 }
 
 public struct TryCreatPlant : GameAction
@@ -111,7 +111,7 @@ public struct TryCreatPlant : GameAction
         this.setValue = setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
-    
+
 }
 
 public struct TrySmoothField : GameAction
@@ -127,7 +127,7 @@ public struct TrySmoothField : GameAction
         this.setValue = setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
-    
+
 }
 public struct CheckPlant : GameAction
 {
@@ -137,7 +137,7 @@ public struct CheckPlant : GameAction
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
-       
+
         if (source != 0)
         {
             instanceId = source;
@@ -155,7 +155,7 @@ public struct CheckFieldState : GameAction
     public bool plantDeath;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
-        
+
         if (source != 0)
         {
             instanceid = source;
@@ -173,10 +173,10 @@ public struct TryCreateField : GameAction
     public void Clear() { this = default; }
     public int roomId;
     public int itemInstanceId;
-    public int editorInstanceId; 
+    public int editorInstanceId;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
-       
+
         if (parameters.Count > 0)
         {
             itemInstanceId = int.Parse(parameters[0].value);
@@ -195,7 +195,7 @@ public struct TryCreateField : GameAction
             editorInstanceId = target;
             roomId = value;
         }
-        
+
         this.setResult = setResult;
         this.setValue = setValue;
         GameActionManager.instance.QueueAction(this, immediately);

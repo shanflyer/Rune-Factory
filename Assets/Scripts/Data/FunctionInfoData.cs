@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,7 +34,7 @@ public class FunctionInfoData : ScriptableObject, IGameData, IReferenceData,IDat
         return id.ToString();
     }
     public void SetReferenceData()
-    { 
+    {
     }
 
     public bool isSingleGroup()
@@ -56,6 +56,6 @@ public struct InfoData : IGameData, IReferenceData
         return groupId.ToString();
     }
     public void SetReferenceData()
-    { 
+    {
     }
 }

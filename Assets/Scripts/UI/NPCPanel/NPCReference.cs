@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -69,7 +69,7 @@ public class NPCReference : UIObjReference<NPC>
 
         CharacterData characterData = await data.GetCharacterData();
         characterData.head.SetImageSprite(Icon,new Vector2(512,512));
-         
+
         NPCName.SetADDText("+ ", characterData.characterName," +");
 
         FriendValue.SetSWText(FriendManager.instance.GetFriendShipLevel(data.dataId));

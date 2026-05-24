@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -66,7 +66,7 @@ public struct MapBGSData
 public struct MapBGMData
 {
     public string name;
-    public List<BGM> BGMs; 
+    public List<BGM> BGMs;
     public AnimationCurve timeCurve;
     public AnimationCurve seasonCurve;
     public AnimationCurve weatherCurve;
@@ -105,7 +105,7 @@ public class MapRoomData : ScriptableObject, IGameData
     public List<MapBGSData> mapBGSDatas = new List<MapBGSData>();
     public string bgmTag;
     public List<MapBGMData> mapBGMDatas = new List<MapBGMData>();
-     
+
     public bool autoCreatTempNpc;
     public bool tempNpcPrewarm;
     public List<NpcBehaviorArea> npcBehaviorAreas = new List<NpcBehaviorArea>();
@@ -134,7 +134,7 @@ public class MapRoomData : ScriptableObject, IGameData
             float value=mapBGSDatas[i].GetValue(seasonValue, timeValue, waterFallValue);
             if (value > 0)
             {
-                bgs.Add(new float3((int)mapBGSDatas[i].bgs, value, 1)); 
+                bgs.Add(new float3((int)mapBGSDatas[i].bgs, value, 1));
             }
         }
         AudioController.instance.PlayAudio(bgs,AudioClearType.All,true,"Map");
@@ -152,7 +152,7 @@ public class MapRoomData : ScriptableObject, IGameData
 
     public void SetReferenceData()
     {
-       
+
     }
 
 #endif

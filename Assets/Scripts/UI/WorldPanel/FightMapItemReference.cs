@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +14,7 @@ public class FightMapItemReference : UIObjReference<MapItemReferenceData>
     Sprite defaultSprite;
     private void Awake()
     {
-        
+
     }
     public override void SetPanelUISerializeObj()
     {
@@ -36,7 +36,7 @@ public class FightMapItemReference : UIObjReference<MapItemReferenceData>
             if (itemData != null)
             {
                 Icon.color = Color.white;
-                Icon.sprite = itemData.icon; 
+                Icon.sprite = itemData.icon;
             }
         }
         Icon.SetNativeSize();

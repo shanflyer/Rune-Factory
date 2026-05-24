@@ -16,7 +16,7 @@ public class ScreenControllerPanel : GamePanel<IReferenceData>
     private Vector2 defaultPosition;
     [SerializeField]
     private RectTransform panelRect;
-   
+
     public void RefreshJoyStickColor()
     {
         MyJoyStick.RefreshJoyStickColor();
@@ -24,7 +24,7 @@ public class ScreenControllerPanel : GamePanel<IReferenceData>
     public override void InitReferenceData(IReferenceData v)
     {
         RefreshJoyStickColor();
-        base.InitReferenceData(v); 
+        base.InitReferenceData(v);
     }
     public override Task InitData(string dataKey)
     {
@@ -38,7 +38,7 @@ public class ScreenControllerPanel : GamePanel<IReferenceData>
         touchArea = FindChildGameObject<TouchArea>("TouchArea");
         defaultPosition = JoyStick.anchoredPosition;
         panelRect = transform as RectTransform;
-        MyJoyStick = FindChildGameObject<MyJoyStick>("Stick"); 
+        MyJoyStick = FindChildGameObject<MyJoyStick>("Stick");
     }
     protected override void Awake()
     {
@@ -46,13 +46,13 @@ public class ScreenControllerPanel : GamePanel<IReferenceData>
         touchArea.PointerDownDele = SetPointerDown;
         touchArea.PointerUpDele = SetPointerUp;
         touchArea.PointerDragDele = OnDrag;
-        
+
     }
     private void SetPointerDown(PointerEventData eventData)
     {
         JoyStick.position = CameraManager.ScreenPointToUIPoint(JoyStick, eventData.position);
-      
-        MyJoyStick.OnPointerDown(eventData); 
+
+        MyJoyStick.OnPointerDown(eventData);
     }
     void OnDrag(PointerEventData eventData)
     {
@@ -62,6 +62,6 @@ public class ScreenControllerPanel : GamePanel<IReferenceData>
     {
         JoyStick.anchoredPosition = defaultPosition;
         MyJoyStick.OnPointerUp(eventData);
-       
+
     }
 }

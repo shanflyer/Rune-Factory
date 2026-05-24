@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text; 
+using System.Text;
 using UnityEngine;
 
 public class PermissionDataList : ScriptableObject, IGameData, IDataArray<PermissionData>
@@ -18,7 +18,7 @@ public class PermissionDataList : ScriptableObject, IGameData, IDataArray<Permis
         return "PermissionDataList";
     }
     public void SetReferenceData()
-    { 
+    {
     }
 }
 public struct PermissionData :IGameData, IReferenceData
@@ -37,6 +37,6 @@ public struct PermissionData :IGameData, IReferenceData
         return id.ToString();
     }
     public void SetReferenceData()
-    { 
+    {
     }
 }

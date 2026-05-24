@@ -1,19 +1,19 @@
-﻿using System.Collections;
+using System.Collections;
 using Unity.Collections;
 
 public interface INativeData
 {
-    public void Dispose(); 
+    public void Dispose();
     public int Key { get; }
 }
 
 public struct MyNativeData<T> where T : unmanaged, INativeData
 {
     public NativeList<T> datas;
-    private NativeHashMap<int, int> itemIndexes; 
+    private NativeHashMap<int, int> itemIndexes;
     private int nowIndex;
     private T nullData;
-    
+
     public IEnumerator GetEnumerator()
     {
         foreach (var itemIndex in itemIndexes)
@@ -32,7 +32,7 @@ public struct MyNativeData<T> where T : unmanaged, INativeData
             }
 
             datas.Dispose();
-            itemIndexes.Dispose(); 
+            itemIndexes.Dispose();
         }
         catch { }
     }
@@ -40,7 +40,7 @@ public struct MyNativeData<T> where T : unmanaged, INativeData
     public void Init(int count)
     {
         datas = new NativeList<T>(count, Allocator.Persistent);
-        itemIndexes = new NativeHashMap<int, int>(count, Allocator.Persistent); 
+        itemIndexes = new NativeHashMap<int, int>(count, Allocator.Persistent);
     }
 
     public void AddData(T data)
@@ -55,12 +55,12 @@ public struct MyNativeData<T> where T : unmanaged, INativeData
     public bool RemoveData(int id)
     {
         if (itemIndexes.IsEmpty) return false;
-         
+
         if (itemIndexes.TryGetValue(id, out int index))
         {
             itemIndexes.Remove(id);
             if (index != datas.Length - 1)
-            { 
+            {
                 var data = datas[datas.Length - 1];
                 datas[index] = data;
                 itemIndexes[data.Key] = index;

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
@@ -73,7 +73,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
             };
             GameActionManager.instance.QueueAction(tryContinueBehavior);
         }
-     
+
         base.Close();
     }
 
@@ -161,7 +161,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
             return;
         }
         GameEventManager.instance.AddGameEvent(GameEventData, eventReferenceDatas);
-        
+
     }
 
     public override void InitReferenceData(NPCTalkOperateData v)
@@ -272,7 +272,7 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
 
                     talkerIcon.SetImageSprite(leftHead, headSize);
                     //leftHead.sprite = talkerIcon;
-                    //leftHead.SetNativeSize(); 
+                    //leftHead.SetNativeSize();
                     rightHead.color = new Color(0.5f, 0.5f, 0.5f);
                     leftHead.enabled = true;
                     rightHead.enabled = !talkData.clearTalkIcon;

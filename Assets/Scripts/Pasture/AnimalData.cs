@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using BehaviorDesigner.Runtime;
 using Unity.Mathematics;
 using UnityEngine;
@@ -6,7 +6,7 @@ using UnityEngine;
 #endif
 
 public class AnimalData : ScriptableObject, IGameData
-{ 
+{
     public string animalName;
     public int id;
     public int goodId;

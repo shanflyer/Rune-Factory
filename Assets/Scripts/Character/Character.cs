@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,18 +24,18 @@ public struct CharacterProperty
     public string GetItemProperty()
     {
         string result = "";
-       
+
         if (HP != 0)
         {
             string operatorStr = HP > 0 ? "+" : "-";
             result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.生命)}{operatorStr}{HP} ";
         }
-       
+
         if (MP != 0)
         {
             string operatorStr = MP > 0 ? "+" : "-";
             result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.法力)}{operatorStr}{MP}  ";
-        } 
+        }
         if (Power != 0)
         {
             string operatorStr = Power > 0 ? "+" : "-";
@@ -77,8 +77,8 @@ public struct CharacterProperty
                     result = $"{result}{LanguageManage.SwitchStr(CharacterPropertyType.敏捷)}{operatorStr}{Speed} ";
                 }
                 result = $"{result}{Other}{LanguageManage.SwitchStr("回合")}";
-            } 
-        } 
+            }
+        }
         return result;
     }
     public override string ToString()
@@ -354,7 +354,7 @@ public struct CharacterProperty
                 {
                     Power = Power > value ? Power : value;
                 }
-               
+
                 break;
 
             case CharacterPropertyType.生命:
@@ -592,7 +592,7 @@ public partial class Character
             oldOperateItem = value;
             if (oldOperateItem != 0) WorldMapObjManager.instance.TryDisplayMask(oldOperateItem);
         }
-    }  
+    }
 
     private int2 OldOperaCoordinate = new int2(int.MinValue);
 
@@ -684,19 +684,19 @@ public partial class Character
         OperateItem = -1;
     }
     public Character() { }
-    public Character(CharacterData characterData,ProfessionData professionData, int instanceId, 
+    public Character(CharacterData characterData,ProfessionData professionData, int instanceId,
         bool needCreatPackage,int overridePackage = 0)
     {
         this.characterData = characterData;
         this.instanceId = instanceId;
         dataId = characterData.id;
-        this.professionData = professionData; 
+        this.professionData = professionData;
         name = characterData.characterName;
 
         var packageInstancId = 0;
         var saveData = GameDataSaveManager.instance.GetCharacterSaveData(dataId);
         if (saveData != null)
-        { 
+        {
             name = saveData.name;
             packageInstancId = saveData.packageId;
             SetLevel(saveData.level, true);
@@ -721,11 +721,11 @@ public partial class Character
                 // 构造函数不能 await，角色背包创建失败时通过统一异步日志暴露。
                 AsyncTaskRunner.Run(CreatCharacterPackage(overridePackage, packageInstancId), nameof(CreatCharacterPackage));
             }
-            
+
         }
 
         //behavior = characterData.behavior;
-         
+
     }
 
     public void SetCellOffset(Vector2 offset)
@@ -784,10 +784,10 @@ public partial class Character
         defenceAttributeType = AttributeType.无;
         ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(oldItemId);
         if (oldItemData != null)
-        { 
+        {
             EquipmentProperty = EquipmentProperty - oldItemData.Property;
         }
-        
+
         GameActionManager.instance.QueueAction(new RefreshEquip
         {
             characterId = instanceId
@@ -814,11 +814,11 @@ public partial class Character
                 attackType = itemData.otherType;
                 break;
             case ItemType.防具:
-                defenceAttributeType = itemData.attributeType; 
-                equip.clothes = Equip;  
+                defenceAttributeType = itemData.attributeType;
+                equip.clothes = Equip;
                 break;
-            case ItemType.鞋子: 
-                equip.shoes = Equip; 
+            case ItemType.鞋子:
+                equip.shoes = Equip;
                 break;
             case ItemType.帽子:
                 equip.headgear = Equip;
@@ -861,15 +861,15 @@ public partial class Character
                 equip.headgear.y = 100;
                 break;
         }
-        ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(oldItemId); 
+        ItemData oldItemData = await GameDataManager.instance.GetAsyncData<ItemData>(oldItemId);
         if (oldItemData != null)
         {
             item.count = 1;
             item.dataId = oldItemData.id;
             EquipmentProperty = EquipmentProperty - oldItemData.Property;
         }
-         
-        
+
+
         if (item.dataId != 0)
         {
             await PackageManager.instance.SetItemInPackage(item, packageId);
@@ -919,7 +919,7 @@ public partial class Character
     public CharacterProperty CharacterProperty
     {
         get => (ProfessionProperty+EquipmentProperty+OtherAddProperty)*OtherMulProperty;
-        
+
     }
 
     private void CharacterPropertyTrigger()
@@ -1025,7 +1025,7 @@ public partial class Character
     public int instanceId;
     public Direction direction { private set; get; }
 
-     
+
 
     private float2 _moveDirection;
 
@@ -1056,8 +1056,8 @@ public partial class Character
                 direction = GameCommon.GetCharacterDirect(moveDirection, direction);
                 // Debug.Log($"direction:{moveDirection}--{direction}");
                 if (CharacterManager.instance.GetRuntimeCharacterObj(instanceId, out var runtimeObj))
-                { 
-                    runtimeObj.SetAnimationDirection(_moveDirection, direction); 
+                {
+                    runtimeObj.SetAnimationDirection(_moveDirection, direction);
                 }
             }
         }
@@ -1067,7 +1067,7 @@ public partial class Character
         this.direction = direction;
         moveDirection=GameCommon.GetDirectValue(direction);
     }
-  
+
     private float _nowSpeed;
 
     public float nowSpeed
@@ -1116,7 +1116,7 @@ public partial class Character
     }
     //public string behavior;
 
-    public GameObjectCurveController.MoveHandle moveHandle; 
+    public GameObjectCurveController.MoveHandle moveHandle;
 
     public bool CanMoveCrossMap = true;
 
@@ -1330,18 +1330,18 @@ public partial class Character
                         GameActionManager.instance.QueueAction(refreshOperateCharacter);
                         NeighborhoodCharacters.Add(character.instanceId);
                     }
-                  
+
                 }
             }
         }
-       
+
     }
 
     private void RefreshNeighborhood()
     {
         RefreshOperateCharacters refreshOperateCharacters = new RefreshOperateCharacters();
         var NeighborhoodCharacters1 = MapCellController.instance.GetCharacters(objCoordinate);
-        
+
         NeighborhoodCharacters1.Remove(instanceId);
         if (TeamManager.instance.playerTeam != null)
             NeighborhoodCharacters1.ExceptWith(TeamManager.instance.playerTeam.TeamCharacters);
@@ -1358,10 +1358,10 @@ public partial class Character
             }
         }
         NeighborhoodCharacters1.ExceptWith(sleepCharacters);
-        
+
         {
             refreshOperateCharacters.leaveCharacters = NeighborhoodCharacters.Except(NeighborhoodCharacters1).ToHashSet<int>();
-            refreshOperateCharacters.joinCharacters= NeighborhoodCharacters1.Except(NeighborhoodCharacters).ToHashSet<int>(); 
+            refreshOperateCharacters.joinCharacters= NeighborhoodCharacters1.Except(NeighborhoodCharacters).ToHashSet<int>();
         }
         NeighborhoodCharacters = NeighborhoodCharacters1;
         GameActionManager.instance.QueueAction(refreshOperateCharacters);
@@ -1420,11 +1420,11 @@ public partial class Character
                 {
                     eventReferenceData,targetReferenceData,NextTalkReferenceData
                 });
-             
+
         }
-         
+
     }
-     
+
 
     public void StopMove()
     {
@@ -1432,7 +1432,7 @@ public partial class Character
         if (GameObjectCurveController.instance.Pause(moveHandle))
         {
             CharacterManager.instance.SetCharacterAnimationSpeed(0, this);
-        }; 
+        };
     }
 
     public void RemoveMove()
@@ -1459,7 +1459,7 @@ public partial class Character
     public  void AddExp(int value)
     {
         bool levelUp = false;
-         
+
         while (exp.AddExp(value))
         {
             exp.nowLevelExp = professionData.GetLevelExp(level) - professionData.GetLevelExp(level - 1);
@@ -1484,12 +1484,12 @@ public partial class Character
             exp.totalExp = nowExp;
             exp.nowExp = nowExp;
         }
-        
+
     }
     public void SetLevel(int level, bool zero = false)
     {
         if (level != this.level)
-        { 
+        {
             //attributeType = profressionData.attributeType;
             if (professionData!=null)
             {
@@ -1502,8 +1502,8 @@ public partial class Character
                         if (skillId >0)
                         {
                             skills.Add(skillId);
-                        } 
-                    } 
+                        }
+                    }
                 }
                 else
                 {
@@ -1511,7 +1511,7 @@ public partial class Character
                     if (skillId >0)
                     {
                         skills.Add(skillId);
-                    } 
+                    }
                 }
                 ProfessionProperty = professionData.GetLevelProperty(level);
             }
@@ -1763,7 +1763,7 @@ public partial class Character
                     break;
             }
             int3 checkCoordinate = coordinate;
-        
+
 
             MapCellController.instance.CheckPlayerTriggerEvent(coordinate.z, oldOperaCoordinate, checkCoordinate.xy,
                 TriggerEventAction, false, OperateItem);
@@ -1787,7 +1787,7 @@ public partial class Character
             // 坐标同步不能等待表现层刷新，刷新任务异常统一记录。
             AsyncTaskRunner.Run(CharacterManager.instance.RefreshNpcRuntimeObj(this, isController, refreshMapTemp, fiexedDisplay), nameof(SetCoordinate));
         }
-       
+
         // ForwardTrigger(coordinate, direction);
     }
 
@@ -1837,7 +1837,7 @@ public partial class Character
     public MoveEndAction moveEndAction { get; private set; }
     public MoveEndAction changeCoordinateAction { get; private set; }
     public Int3Action failedMoveAction { get; private set; }
-  
+
     public bool TryMove(int2 targetCoordinate, MoveEndAction moveEndAction = null, MoveEndAction changeCoordinateAction = null,
         Int3Action failedMoveAction = null)
     {
@@ -1926,7 +1926,7 @@ public partial class Character
                 {
                     roomQueue.Enqueue(nowMap);
                     if (i < roomList.Count)
-                    { 
+                    {
                         nextMap = roomList[i];
                         var nowCoordinate = startCoordinate;
                         var endCoordinate = targetCoordinate;
@@ -1938,7 +1938,7 @@ public partial class Character
                                 out var changeCoordinate))
                         {
                             targetMapCell = changeCoordinate.zw;
-#if UNITY_EDITOR 
+#if UNITY_EDITOR
                             var mapRange = MapCellController.instance.GetRoomRange(nowMap);
                             if (startCoordinate.x < mapRange.x || startCoordinate.y < mapRange.y ||
                                 startCoordinate.x > mapRange.z || startCoordinate.y > mapRange.w)
@@ -1952,11 +1952,11 @@ public partial class Character
                             if (targetMapCell.x < nextMapRange.x || targetMapCell.y < nextMapRange.y ||
                                 targetMapCell.x > nextMapRange.z || targetMapCell.y > nextMapRange.w)
                                 Debug.Log("错误：起始超出地图范围！");
- 
- 
+
+
 #endif
 
-                           
+
                             MapCellJobController.instance.AddPathRequest(startCoordinate, changeCoordinate.xy, nowMap,
                                 MoveWithPath);
 
@@ -1996,8 +1996,8 @@ public partial class Character
                                 Move(true);
                             }
                         });
-                    } 
-                      
+                    }
+
                     nowMap = nextMap;
                     startCoordinate = targetMapCell;
                 }
@@ -2009,7 +2009,7 @@ public partial class Character
             {
                 return false;
             }
-            
+
             void Move(bool zero)
             {
                 if (roomQueue.Count > 0)
@@ -2025,7 +2025,7 @@ public partial class Character
                         }
                         if (!zero)
                         {
-                            var coordinate = path.Pop(); 
+                            var coordinate = path.Pop();
                             SetCoordinate(new int3(coordinate.xy, map));
                         }
                         PlayerMove(path, () =>
@@ -2063,11 +2063,11 @@ public partial class Character
                         failedMoveAction = null;
                     }
                 }
-            } 
+            }
         }
-         
+
     }
-     
+
 
     public void PlayerMove(Stack<int2> pathNodes, MoveEndAction endAction = null, MoveEndAction changeCoordinateAction = null,
         MoveEndAction failedMoveAction = null)
@@ -2079,7 +2079,7 @@ public partial class Character
         }
         else
         {
-          
+
             moveTarget = new int3(0, 0, 0);
             if (endAction != null)
             {

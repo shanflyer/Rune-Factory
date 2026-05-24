@@ -31,7 +31,7 @@ public class ItemResultPanel :GamePanel<ItemResultInfo>
     public override void Close()
     {
         base.Close();
-        
+
         icon.enabled=false;
         effect.SetActive(false);
 

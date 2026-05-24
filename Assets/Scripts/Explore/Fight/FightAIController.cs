@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 public enum FightType
@@ -22,7 +22,7 @@ public class FightAIController :Singleton<FightAIController>
         return readySkills;
     }
 
-   
+
 }
 [System.Serializable]
 public class SkillEstimateData

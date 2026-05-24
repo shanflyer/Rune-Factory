@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -39,11 +39,11 @@ public class EmoteRuntime
         {
             playableGraph = PlayableGraph.Create();
         }
-     
+
         var playableOutput = AnimationPlayableOutput.Create(playableGraph, "emote", animator);
         var clipPlayable = AnimationClipPlayable.Create(playableGraph, emote.animationClip);
         playableOutput.SetSourcePlayable(clipPlayable);
-        playableGraph.Play(); 
+        playableGraph.Play();
     }
     bool isRecycle = false;
     public void Recycle()
@@ -52,7 +52,7 @@ public class EmoteRuntime
             GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
         }
         if (waitAction != null)
-            GameTimerController.instance.RemoveWaiter(waitAction); 
+            GameTimerController.instance.RemoveWaiter(waitAction);
         if (playableGraph.IsValid())
         {
             playableGraph.Stop();
@@ -66,7 +66,7 @@ public class EmoteRuntime
     public void Dispose()
     {
         if (playableGraph.IsValid())
-        { 
+        {
             playableGraph.Destroy();
         }
     }
@@ -139,7 +139,7 @@ public class EmoteManager : Singleton<EmoteManager>
         {
             runtimeObj.Recycle();
             itemEmoteRuntimes.Remove(TryRecycleItemEmote.id);
-        } 
+        }
     }
     private void TryUpDataCharacterEmote(TryUpDataCharacterEmote tryUpDataCharacterEmote)
     {
@@ -193,7 +193,7 @@ public class EmoteManager : Singleton<EmoteManager>
                     {
                         emoteRuntime = new EmoteRuntime();
                         characterEmoteRuntimes[entityId] = emoteRuntime;
-                        emoteRuntime.runtimeObj = await GetEmote(emoteId, characterRuntimeObj.transform); 
+                        emoteRuntime.runtimeObj = await GetEmote(emoteId, characterRuntimeObj.transform);
                     }
                 }
                 break;
@@ -206,7 +206,7 @@ public class EmoteManager : Singleton<EmoteManager>
                     {
                         emoteRuntime = new EmoteRuntime();
                         itemEmoteRuntimes[entityId] = emoteRuntime;
-                        emoteRuntime.runtimeObj = await GetEmote(emoteId, itemRuntimeObj.transform); 
+                        emoteRuntime.runtimeObj = await GetEmote(emoteId, itemRuntimeObj.transform);
                     }
                 }
                 break;
@@ -219,7 +219,7 @@ public class EmoteManager : Singleton<EmoteManager>
                 {
                     runtimeObj.Recycle();
                     itemEmoteRuntimes.Remove(entityId);
-                } 
+                }
             }
             else
             {
@@ -228,7 +228,7 @@ public class EmoteManager : Singleton<EmoteManager>
                     runtimeObj.Recycle();
                     characterEmoteRuntimes.Remove(entityId);
                 }
-                    
+
             }
             emoteRuntime = null;
             return;
@@ -252,26 +252,26 @@ public class EmoteManager : Singleton<EmoteManager>
                 emoteRuntime.Recycle();
                 if (entityType == EntityType.地图道具)
                 {
-                    
+
                     if (itemEmoteRuntimes.TryGetValue(entityId, out var runtimeObj))
-                    { 
+                    {
                         itemEmoteRuntimes.Remove(entityId);
-                    } 
+                    }
                 }
                 else
                 {
                     if(characterEmoteRuntimes.TryGetValue(entityId, out var runtimeObj))
-                    { 
+                    {
                         characterEmoteRuntimes.Remove(entityId);
                     }
-                   
-                } 
+
+                }
             }
         }
 
     }
     private void ShowEmote(ShowEmote showEmote)
     {
-        ShowEmote(showEmote.emoteId, showEmote.entityType, showEmote.id, showEmote.showTime); 
+        ShowEmote(showEmote.emoteId, showEmote.entityType, showEmote.id, showEmote.showTime);
     }
 }

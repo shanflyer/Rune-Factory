@@ -10,11 +10,11 @@ using UnityEditor;
 [DisallowMultipleComponent]
 public class MySpriteMeshRender : MonoBehaviour
 {
-   
+
     [SerializeField]
     private MeshRenderer meshRenderer;
     [SerializeField]
-    private MeshFilter meshFilter; 
+    private MeshFilter meshFilter;
     public Sprite m_Sprite;
 
     public bool flip = false;
@@ -49,7 +49,7 @@ public class MySpriteMeshRender : MonoBehaviour
         {
             CreateMesh();
         }
-        
+
     }
     private void OnDisable()
     {
@@ -57,13 +57,13 @@ public class MySpriteMeshRender : MonoBehaviour
     }
     private void Awake()
     {
-        
+
     }
 
     void CreateMesh()
     {
         var outData = MySpriteMeshManager.instance.GetSpriteMesh(m_Sprite, m_Material);
-       
+
         this.mesh= meshFilter.sharedMesh = outData.mesh;
         meshRenderer.sharedMaterial = outData.material;
         nowSprite = m_Sprite;
@@ -73,7 +73,7 @@ public class MySpriteMeshRender : MonoBehaviour
     Sprite nowSprite;
     Material nowMaterial;
     Mesh mesh;
-    Color nowColor; 
+    Color nowColor;
 
     void SetMeshColor()
     {
@@ -101,7 +101,7 @@ public class MySpriteMeshRender : MonoBehaviour
         {
             meshFilter.sharedMesh.colors = colors;
         }
-      
+
         nowColor = m_Color;
     }
 
@@ -110,7 +110,7 @@ public class MySpriteMeshRender : MonoBehaviour
     {
         if (nowSprite != m_Sprite|| nowMaterial != m_Material)
         {
-            CreateMesh(); 
+            CreateMesh();
         }
         if (m_Color != nowColor)
         {
@@ -135,7 +135,7 @@ public class MySpriteMeshRender : MonoBehaviour
     {
         CreateMesh();
     }
-     
+
 }
 #if UNITY_EDITOR
 [CustomEditor(typeof(MySpriteMeshRender))]

@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
-using Unity.Mathematics; 
+using Unity.Mathematics;
 
 [TaskCategory("Game/PlayerStore")]
 [TaskName("获取消费者退出位置")]
@@ -9,7 +9,7 @@ public class GetTempCharacterExitPos : Action
 {
     private SharedInt characterId;
     public SharedInt3 targetCoordinate;
-    
+
     public override void OnStart()
     {
         if (characterId==null|| characterId.IsNull())

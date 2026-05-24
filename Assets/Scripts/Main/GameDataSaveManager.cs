@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -52,18 +52,18 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             {
                 if (loadingIndex == -1)
                 {
-                    return UserGameSaveDataList.nowSaveData; 
+                    return UserGameSaveDataList.nowSaveData;
                 }
                 if (loadingIndex < 3)
                 {
                     var saveData = userGameSaveDataList.userGameSaveDatas[loadingIndex];
                     return saveData;
-                } 
+                }
             }
-             
+
             return null;
         }
-    } 
+    }
     public void NewPlayerData()
     {
         UserGameSaveDataList.nowSaveData = new UserGameSaveData();
@@ -75,7 +75,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     public async Task InitLoadSaveData()
     {
         if (loadDataIsNotNull && CharacterManager.instance.controllerCharacter == null)
-        { 
+        {
             await PackageManager.instance.InitFromSaveData(loadGameSaveData.packageSaveDatas);
             PackageManager.instance.playerPackages.AddRange(loadGameSaveData.otherSaveData.playerPackages);
 
@@ -87,7 +87,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                 storeCounter.Unpack();
                 PlayerStoreManager.instance.CreatStoreCounter(storeCounter);
             }
-            
+
             using(var e = loadGameSaveData.manufatures.Values.GetEnumerator())
             {
                 while (e.MoveNext())
@@ -125,7 +125,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                                 Item = item
                             };
                             GameActionManager.instance.QueueAction(setShortcutItem);
-                        } 
+                        }
                     }
                     else
                     {
@@ -133,7 +133,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                         {
                             dataId = saveData.x,
                             count = PackageManager.instance.GetPackageItemCount(CharacterManager.instance.controllerCharacter.characterPackage, saveData.x)
-                        }; 
+                        };
                         SetShortcutItem setShortcutItem = new SetShortcutItem
                         {
                             characterId = CharacterManager.instance.controllerCharacter.instanceId,
@@ -144,7 +144,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                 }
             }
             ManufactureManager.instance.InitSaveOpenFormula(loadGameSaveData.openFormulas);
-             
+
         }
     }
     public void InitMapItemSaveData(int instanceId)
@@ -193,7 +193,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             {
                 ShopManager.instance.InitShopList(loadGameSaveData.shopList[i]);
             }
-          
+
             using(var e = loadGameSaveData.pastures.Values.GetEnumerator())
             {
                 while (e.MoveNext())
@@ -201,7 +201,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                     e.Current.Unpack();
                     PastureManager.instance.CreatPasture(e.Current);
                 }
-            } 
+            }
             using(var e = loadGameSaveData.animals.Values.GetEnumerator())
             {
                 while (e.MoveNext())
@@ -209,7 +209,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                     e.Current.Unpack();
                     PastureManager.instance.CreatAnimal(e.Current);
                 }
-            } 
+            }
             FriendManager.instance.InitFriendSaveData(loadGameSaveData.friendSaveData);
             WeatherManager.instance.InitSaveWeather(loadGameSaveData.nowWeathers, loadGameSaveData.nextWeathers);
 
@@ -225,11 +225,11 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     {
         if (loadDataIsNotNull && loadGameSaveData.dateData.season != Season.Default)
         {
-            GameTimeManager.instance.InitSaveDate(loadGameSaveData.dateData); 
+            GameTimeManager.instance.InitSaveDate(loadGameSaveData.dateData);
         }
-      
+
     }
-  
+
     public bool IsZeroGameSave
     {
         get
@@ -251,20 +251,20 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             if (loadGameSaveData.GetSpecialMapItem(key, out var value))
             {
                 return value;
-            } 
+            }
         }
         return 0;
     }
-   
+
     public int CheckMapLine(int id)
     {
         if (loadDataIsNotNull)
-        { 
+        {
             if(loadGameSaveData.mapLineSaveData.TryGetValue(id,out var value))
             {
                 return value;
             }
-            
+
         }
         return -1;
     }
@@ -543,7 +543,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             {
                 loadGameSaveData.playerData.Unpack();
                 return loadGameSaveData.playerData;
-            } 
+            }
         }
         return null;
     }
@@ -617,7 +617,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             }
             else
             {
-                UserGameSaveData.playerData.SetCharacter(characters[i], UserGameSaveData.playerData.name); 
+                UserGameSaveData.playerData.SetCharacter(characters[i], UserGameSaveData.playerData.name);
             }
         }
         //玩家数据
@@ -642,7 +642,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                 UserGameSaveData.otherSaveData.shortcutItems.Add(new int2(package.items[i].dataId,
                     package.items[i].instanceId));
         }
-       
+
 
         //玩家商店
         UserGameSaveData.storeCounters.Clear();
@@ -663,12 +663,12 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         UserGameSaveDataList.commonSaveData.diamond = diamond;
         CloudServices.SetInt("diamond", userGameSaveDataList.commonSaveData.diamond);
     }
-    
+
     public bool SetFishSaveData(int fish,int length,int place)
     {
         var saveData = UserGameSaveData;
         var fishDatas = saveData.fishSaveDatas;
-          
+
         if(fishDatas.TryGetValue(fish,out var fishSaveData))
         {
             bool newRecord = fishSaveData.length< length;
@@ -684,16 +684,16 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         else
         {
             fishSaveData = new FishSaveData();
-            
+
             fishSaveData.length = length;
             fishSaveData.dataId = fish;
             fishSaveData.places = new List<int> { place };
             fishDatas.Add(fish,fishSaveData);
 
             return true;
-        } 
+        }
     }
-   
+
     public FishSaveData GetFishDataSave(int id)
     {
         FishSaveData fishSaveData=null;
@@ -742,7 +742,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         }
         plantSaveData.fruitCount += count;
     }
-  
+
     List<FieldInfo> UserGameSaveDataIntFields;
     List<FieldInfo> UserGameSaveDataStringFields;
     List<FieldInfo> UserGameSaveDataJsonFields;
@@ -770,7 +770,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         Type strType=typeof(string);
         for (int i = 0; i < UserGameSaveDataFields.Length; i++)
         {
-            var field = UserGameSaveDataFields[i]; 
+            var field = UserGameSaveDataFields[i];
             if (field.FieldType == intType)
             {
                 UserGameSaveDataIntFields.Add(field);
@@ -846,7 +846,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         if (GameDataManager.instance.GlobalData.Encrypt)
         {
             strs = EncryptDES(strs);
-        } 
+        }
         string saveDataPath = $"{DataPath.gameSaveDataPath}{"/"}{userName}";
         File.WriteAllText(saveDataPath, strs);
 #elif UNITY_ANDROID || UNITY_IOS
@@ -1162,7 +1162,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                 {
                     try
                     {
-                      
+
                         object obj = JsonConvert.DeserializeObject(value, field.FieldType, JsonSerializerSettings);
                         field.SetValue(userData, obj);
                     }
@@ -1170,7 +1170,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                     {
                         Debug.LogError($"DeserializeObject{field.Name}-type{field.FieldType}-value:{value}");
                     }
-                   
+
                 }
                 else
                 {

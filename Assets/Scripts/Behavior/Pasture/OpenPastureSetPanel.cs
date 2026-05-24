@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +10,7 @@ public class OpenPastureSetPanel : Action
     [SerializeField]
     private SharedBool showTeam;
     [SerializeField]
-    private SharedIntList otherAnimals; 
+    private SharedIntList otherAnimals;
     public override void OnStart()
     {
         AsyncTaskRunner.Run(OnStartAsync, nameof(OpenPastureSetPanel));
@@ -18,12 +18,12 @@ public class OpenPastureSetPanel : Action
 
     private async System.Threading.Tasks.Task OnStartAsync()
     {
-         
+
         MyListInt myListInt = new MyListInt();
         List<int> ints = new List<int>();
         if (otherAnimals != null && otherAnimals.Value != null)
         {
-            var animals = otherAnimals.Value; 
+            var animals = otherAnimals.Value;
             for(int i = 0; i < animals.Count; i++)
             {
                 ints.Add(animals[i]);
@@ -40,7 +40,7 @@ public class OpenPastureSetPanel : Action
         }
         myListInt.intList = ints;
        await UIManager.instance.ShowGamePanel<PasturePanel, MyListInt>(myListInt);
-        
+
         taskStatus = TaskStatus.Success;
     }
 

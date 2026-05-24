@@ -18,7 +18,7 @@ public class MyLight : MonoBehaviour
 
 
     [SerializeField]
-    public AnimationCurve psCurve; 
+    public AnimationCurve psCurve;
     [SerializeField]
     MyLightBase[] myLightBase;
 
@@ -62,7 +62,7 @@ public class MyLight : MonoBehaviour
             {
 
             }
-            
+
         }
     }
 
@@ -82,8 +82,8 @@ public class MyLight : MonoBehaviour
                 weatherLight = EnvironmentManger.instance.weatherLight + EnvironmentManger.instance.lightningLight;
                 weatherLight *= GameTimeManager.instance.timeLightValue;
             }
-                
-            
+
+
             float trueValue= blendWeatherLight ? value * weatherLight : value;
             if (myLightBase != null)
             {
@@ -94,10 +94,10 @@ public class MyLight : MonoBehaviour
                         myLightBase[i].Value = trueValue;
                     }
                 }
-            } 
+            }
         }
 
-         
+
     }
 
    // [SerializeField]
@@ -105,18 +105,18 @@ public class MyLight : MonoBehaviour
     {
         get
         {
-            return _color;  
+            return _color;
         }
 
-        
+
         set
         {
             _color = value;
             float weatherLight = 0;
             if (Application.isPlaying)
                 weatherLight = EnvironmentManger.instance.weatherLight + EnvironmentManger.instance.lightningLight*0.4f;
-            
-           
+
+
             if (myLightBase != null)
             {
                 for(int i = 0; i < myLightBase.Length; i++)
@@ -124,13 +124,13 @@ public class MyLight : MonoBehaviour
                     if (myLightBase[i])
                     {
                         myLightBase[i].Color = blendWeatherLight ? value * weatherLight : value;
-                    } 
-                } 
+                    }
+                }
             }
             if (spriteRenderers!=null)
             {
-                
-                Color color1 = _color; 
+
+                Color color1 = _color;
                 color1*= weatherLight;
                 color1= blendWeatherLight ? color1 : _color;
                 if (!blendWeatherLight)
@@ -140,7 +140,7 @@ public class MyLight : MonoBehaviour
                 for (int i = 0; i < spriteRenderers.Length; i++)
                 {
                     spriteRenderers[i].color= color1;
-                } 
+                }
             }
 
         }
@@ -151,13 +151,13 @@ public class MyLight : MonoBehaviour
     private void OnEnable()
     {
 #if UNITY_EDITOR
-       
+
         if (ps == null)
         {
             ps = gameObject.GetComponentsInChildren<ParticleSystem>(true);
-         
+
         }
-#endif 
+#endif
         if (Application.isPlaying)
             EnvironmentManger.instance.AddMyLight(this);
     }
@@ -165,18 +165,18 @@ public class MyLight : MonoBehaviour
     public void Display(float value)
     {
         if (autoLerpColor)
-        { 
+        {
             if (myLightBase != null)
             {
                 for(int i = 0; i < myLightBase.Length; i++)
                 {
                     if (myLightBase[i])
-                        myLightBase[i].Color = lerpColor.Evaluate(value); 
+                        myLightBase[i].Color = lerpColor.Evaluate(value);
                 }
             }
 
             if (spriteRenderers != null)
-            { 
+            {
                 for (int i = 0; i < spriteRenderers.Length; i++)
                 {
                     spriteRenderers[i].color = lerpColor.Evaluate(value);
@@ -186,7 +186,7 @@ public class MyLight : MonoBehaviour
         }
        if(autoLerpValue)
         {
-             
+
             if (myLightBase != null)
             {
                 for (int i = 0; i < myLightBase.Length; i++)
@@ -211,16 +211,16 @@ public class MyLight : MonoBehaviour
                 mainModules[i] = main;
             }
         }
-      
+
     }
     private void OnDisable()
     {
         if (Application.isPlaying&&GameController.instance!=null&& !SingletonType.Cleared)
         {
             if (!SingletonType.Cleared)
-                EnvironmentManger.instance.RemoveMyLight(this); 
+                EnvironmentManger.instance.RemoveMyLight(this);
         }
-      
+
     }
     public void LerpTimeValue(float timeValue)
     {
@@ -230,8 +230,8 @@ public class MyLight : MonoBehaviour
             intensity = lerpCurve.Evaluate(timeValue);
         if (autoLerpColor)
             color = lerpColor.Evaluate(timeValue);
-        
-           
+
+
     }
 }
 #if UNITY_EDITOR

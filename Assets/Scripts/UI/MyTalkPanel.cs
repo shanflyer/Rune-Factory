@@ -100,7 +100,7 @@ public class MyTalkPanel : GamePanel<IReferenceData>
         Share = FindChildGameObject<Button>("Share");
         Committer = FindChildGameObject<Button>("Committer");
         Help0 = FindChildGameObject<Button>("Help0");
-        Help1 = FindChildGameObject<Button>("Help1"); 
+        Help1 = FindChildGameObject<Button>("Help1");
         Help2 = FindChildGameObject<Button>("Help2");
         about = FindChildGameObject<Button>("About");
         developer = FindChildGameObject<Button>("Developer");

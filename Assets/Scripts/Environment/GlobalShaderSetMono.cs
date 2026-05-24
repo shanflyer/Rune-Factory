@@ -213,21 +213,21 @@ public class GlobalShaderSetMono : MonoBehaviour
         void RefreshEnvironment(EnvironmentLightData natureLightData)
         {
             Color cloudColor = natureLightData.cloudColor;
-            float cloudColorA = cloudColor.a; 
+            float cloudColorA = cloudColor.a;
             cloudColor.a = cloudColorA;
 
             Color skyTopColor = natureLightData.skyTopColor;
-            float skyTopColorA = skyTopColor.a; 
+            float skyTopColorA = skyTopColor.a;
             skyTopColor.a = skyTopColorA;
 
             Color skyBottomColor = natureLightData.skyBottomColor;
-            float skyBottomColorA = skyBottomColor.a; 
+            float skyBottomColorA = skyBottomColor.a;
             skyBottomColor.a = skyBottomColorA;
 
-            Color flareColor = natureLightData.flareColor; 
+            Color flareColor = natureLightData.flareColor;
 
             Color sunColor = natureLightData.sunColor;
-            float sunColorA = sunColor.a; 
+            float sunColorA = sunColor.a;
             sunColor.a = sunColorA;
 
             Shader.SetGlobalColor("_CloudColor", cloudColor);
@@ -236,7 +236,7 @@ public class GlobalShaderSetMono : MonoBehaviour
             Shader.SetGlobalFloat("_SkyHalfValue", natureLightData.skyHalfValue);
             Shader.SetGlobalColor("_SunColor", sunColor);
             Shader.SetGlobalInt("_Sun", natureLightData.sunValue);
-           
+
 
 
             Shader.SetGlobalColor("_GlobalColor", natureLightData.globalColor);
@@ -261,7 +261,7 @@ public class GlobalShaderSetMono : MonoBehaviour
             {
                 var ScreenResolution = GameCommon.GetScreenResolution();
                 float screenScale = ScreenResolution.x / ScreenResolution.y;
-                float screenScaleX = 1f + screenScale; 
+                float screenScaleX = 1f + screenScale;
                 float screenScaleY = 1f + screenScale * 0.5f;
                 Vector2 sunPos = natureLightData.sunPos * new Vector2(screenScaleX, screenScaleY);
                 if (skyEnviromentMono.Sun)
@@ -269,8 +269,8 @@ public class GlobalShaderSetMono : MonoBehaviour
 
                     skyEnviromentMono.Sun.localScale = new Vector3(natureLightData.sunScale, natureLightData.sunScale, 1);
                     skyEnviromentMono.Sun.localPosition = sunPos;
-                } 
-                Shader.SetGlobalVector("_SunPos", skyEnviromentMono.Sun.position); 
+                }
+                Shader.SetGlobalVector("_SunPos", skyEnviromentMono.Sun.position);
 
             }
         }
@@ -282,7 +282,7 @@ public class GlobalShaderSetMono : MonoBehaviour
             MyLights[i].Display(dayValue);
         }
 
-        
+
     }
     SkyEnviromentMono skyEnviromentMono;
     public void TestGUID()

@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
-using Unity.Mathematics; 
+using Unity.Mathematics;
 
 [TaskCategory("Game/PlayerStore")]
 [TaskName("购买玩家上架商品")]
@@ -15,7 +15,7 @@ public class TempBuyPlayerGood : Action
         if (selectStoreCounterId==null|| selectStoreCounterId.IsNull())
         {
             selectStoreCounterId = (SharedInt)Owner.GetVariable("SelectStoreCounterId");
-             
+
         }
         if (characterId==null|| characterId.IsNull())
         {
@@ -33,7 +33,7 @@ public class TempBuyPlayerGood : Action
             setResult= BuySuccess
         };
         GameActionManager.instance.QueueAction(tryBuyPlayerGood);
-    } 
+    }
     void BuySuccess(bool success)
     {
         if (success)

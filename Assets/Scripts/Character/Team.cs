@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -85,7 +85,7 @@ public class TeamManager : Singleton<TeamManager>
             {
                 return teams[i];
             }
-        } 
+        }
         return null;
     }
 
@@ -102,8 +102,8 @@ public class TeamManager : Singleton<TeamManager>
             {
                 return teams[i];
             }
-        } 
-        
+        }
+
         return null;
     }
 
@@ -140,7 +140,7 @@ public class TeamManager : Singleton<TeamManager>
             team = teams[i];
             if (team.RemoveCharacter(characterId)) return true;
         }
-    
+
         return false;
     }
 
@@ -152,7 +152,7 @@ public class TeamManager : Singleton<TeamManager>
             {
                 return true;
             }
-        }   
+        }
         return false;
     }
 
@@ -170,7 +170,7 @@ public class TeamManager : Singleton<TeamManager>
         base.Init();
         GameActionManager.instance.AddListener<DestoryCharacter>(RemoveCharacter);
         GameActionManager.instance.AddListener<JoinTeam>(JoinTeam);
-        GameActionManager.instance.AddListener<TryTeamLeaderMove>(TryTeamLeaderMove); 
+        GameActionManager.instance.AddListener<TryTeamLeaderMove>(TryTeamLeaderMove);
         GameActionManager.instance.AddListener<LeaveTeam>(LeaveTeam);
         GameActionManager.instance.AddListener<CreatTeamPlayer>(CreateTeam);
         GameActionManager.instance.AddListener<CheckIsNotInTeam>(CheckInTeam);
@@ -201,8 +201,8 @@ public class TeamManager : Singleton<TeamManager>
         GameActionManager.instance.QueueAction(refreshTeam);
     }
 
-   
-   
+
+
 
     private void TryTeamLeaderMove(TryTeamLeaderMove tryTeamLeaderMove)
     {
@@ -221,7 +221,7 @@ public class TeamManager : Singleton<TeamManager>
         }
         if (teams.TryGetValue(id, out var team))
         {
-            team.Clear(); 
+            team.Clear();
         }
     }
     private void CreateTeam(CreatTeamPlayer createTeamPlayer)
@@ -286,7 +286,7 @@ public class TeamManager : Singleton<TeamManager>
                     joinTeam.setResult(result);
                 return;
             }
-        } 
+        }
         Character character = CharacterManager.instance.GetCharacter(joinTeam.teamCharacterId);
         if (character != null)
         {
@@ -317,9 +317,9 @@ public class TeamManager : Singleton<TeamManager>
     }
 
     protected override void Clear()
-    { 
+    {
         base.Clear();
-        teams.Clear(); 
+        teams.Clear();
     }
 }
 
@@ -333,7 +333,7 @@ public class Team
 
     private readonly RingQueue<Vector3> teamPositions = new(23);
     private readonly RingQueue<int2> teamCoordinates = new(23);
- 
+
     public CharacterInformationDataList GetTeamCharacterInfo()
     {
         CharacterInformationDataList characterInformationDataList = new CharacterInformationDataList
@@ -401,9 +401,9 @@ public class Team
             teamer.SetMoveTarget(teamPositions[0], teamCoordinates[0]);
 
             Teamers.Add(teamer);
-            teamer.character.JoinTeam(this); 
+            teamer.character.JoinTeam(this);
             StopCharacterBehavior(characterId);
-            GameActionManager.instance.QueueAction(default(RefreshTeam)); 
+            GameActionManager.instance.QueueAction(default(RefreshTeam));
             return true;
         }
         return false;
@@ -510,7 +510,7 @@ public class Teamer
         if (!holdDisplay)
         {
             await CharacterManager.instance.RefreshNpcRuntimeObj(character,RefreshMapTemp:false);
-        } 
+        }
     }
 
     public Teamer(Character character)
@@ -521,10 +521,10 @@ public class Teamer
         targetPos = character.pos;
     }
 
-     
+
     private Vector3 startPos;
     private float timeValue;
-  
+
     public const float perCellTime = GameCommon.cellSize * 2;
     private float timeSpeed = 1 / perCellTime;
 

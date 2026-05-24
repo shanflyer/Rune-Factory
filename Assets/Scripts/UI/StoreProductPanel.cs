@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using VoxelBusters.EssentialKit;
@@ -23,13 +23,13 @@ public class StoreProductPanel : GamePanel<IReferenceData>
         base.Awake();
         storeProductList = new DisplayList<StoreProductReference, AppStoreProductData>(productReference, productParent);
         closeBtn.onClick.AddListener(Close);
- 
+
     }
     public override void Close()
     {
         base.Close();
         storeProductList.ClearSelect();
-        GameActionManager.instance.RemoveListener<PayEndAction>(PayEndAction); 
+        GameActionManager.instance.RemoveListener<PayEndAction>(PayEndAction);
         gameObject.SetActive(false);
     }
     public override void SetPanelUISerializeObj()

@@ -83,7 +83,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         HPValue = FindChildGameObject<TextMeshProUGUI>("HPValue");
         RPValue = FindChildGameObject<TextMeshProUGUI>("RPValue");
     }
-    
+
     protected override void Awake()
     {
         base.Awake();
@@ -244,7 +244,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
         RPValue.text = $"{characterProperty.Power}/{characterProperty.MaxPower}";
         weather.sprite = WeatherManager.instance.GetWeatherIcon();
         RefreshPlayerGold(default(RefreshPlayerGold));
-        NewDay(default(NewDay)); 
+        NewDay(default(NewDay));
         return base.InitData(dataKay);
     }
 
@@ -257,7 +257,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
     {
         RefreshPlayerGold(default(RefreshPlayerGold));
         NewDay(default(NewDay));
-        base.InitReferenceData(v); 
+        base.InitReferenceData(v);
     }
 
     private void RefreshPlayerGold(RefreshPlayerGold updateMoney)

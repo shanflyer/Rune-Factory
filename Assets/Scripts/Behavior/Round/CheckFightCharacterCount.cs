@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using UnityEngine; 
+using System.Collections;
+using UnityEngine;
 using BehaviorDesigner.Runtime.Tasks;
 using BehaviorDesigner.Runtime;
 
@@ -10,7 +10,7 @@ public class CheckFightCharacterCount : Action
     public int checkCount;
     public CompareType compareType;
     [SerializeField]
-    SharedQueneInt fightCharacters; 
+    SharedQueneInt fightCharacters;
     public override void OnStart()
     {
         if (fightCharacters == null)

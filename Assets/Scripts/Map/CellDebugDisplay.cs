@@ -26,7 +26,7 @@ public class CellDebugDisplay : MonoBehaviour
         {
             var node = pathNodes[i];
             tilemap.SetTile(new Vector3Int(node.x, node.y, 0), tileBase);
-        } 
+        }
     }
 #if UNITY_EDITOR
     public void RefreshDisplayMapCell()
@@ -53,7 +53,7 @@ public class CellDebugDisplay : MonoBehaviour
                 var cell = cells[i];
                 tilemap.SetTile(new Vector3Int(cell.x, cell.y, +roomCoordinate.z), triggerTile);
             }
-        } 
+        }
         tilemap.RefreshAllTiles();
     }
 #endif
@@ -72,7 +72,7 @@ public class CellDebugDisplayEditor : Editor
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        if (GUILayout.Button("刷新格子显示"))
+        if (GUILayout.Button("鍒锋柊鏍煎瓙鏄剧ず"))
         {
             debugDisplay.RefreshDisplayMapCell();
         }

@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
@@ -17,7 +17,7 @@ public class GetEntityCoordinate : Action
     private SharedInt2 coordinate;
 
     [Header("个体id")]
-    public SharedInt entityId; 
+    public SharedInt entityId;
 
     public SharedInt2 itemEditorKey;
 

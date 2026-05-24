@@ -34,7 +34,7 @@ public class SavePanel : GamePanel<UserGameSaveDataList>
         Copy.onClick.AddListener(CopyData);
         Save.onClick.AddListener(SaveAction);
         Return.onClick.AddListener(() =>
-        { 
+        {
             Close();
         });
 
@@ -65,7 +65,7 @@ public class SavePanel : GamePanel<UserGameSaveDataList>
     {
         if (selected)
         {
-            selectGameSaveData = userGameSaveData; 
+            selectGameSaveData = userGameSaveData;
             bool dataIsNull = string.IsNullOrEmpty(userGameSaveData.saveTime);
             Copy.interactable = !dataIsNull;
         }

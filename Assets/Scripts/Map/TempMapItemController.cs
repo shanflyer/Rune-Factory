@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Mathematics;
 
@@ -213,7 +213,7 @@ public class TempMapItemController : Singleton<TempMapItemController>
             return;
         }
 
-        int mapItemInstanceId; 
+        int mapItemInstanceId;
         int2 mapItemCoordiante;
 
         Character character = CharacterManager.instance.GetCharacter(creatTempMapItem.characterId);
@@ -236,7 +236,7 @@ public class TempMapItemController : Singleton<TempMapItemController>
             mapItemInstanceId = creatTempMapItem.instanceId;
             mapItemCoordiante = character.coordinate + GameCommon.GetDirectionInt2(character.direction) * 4;
             mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(mapItemDataId);
-        } 
+        }
         TempMapItem tempMapItem = new TempMapItem
         {
             characterId = character.instanceId,
@@ -250,7 +250,7 @@ public class TempMapItemController : Singleton<TempMapItemController>
         for (int i = 0; i < cells.Count; i++)
         {
             tempMapItem.colliderCells.Add(cells[i]);
-        } 
+        }
         tempMapItem.offsetCoordinate = mapItemCoordiante - character.coordinate;
         tempMapItem.coordinate = mapItemCoordiante;
         //tempMapItems.SetData(tempMapItem);

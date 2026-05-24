@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 
@@ -7,7 +7,7 @@ using BehaviorDesigner.Runtime.Tasks;
 [TaskIcon("{SkinColor}SelectorIcon.png")]
 public class CheckCharacterCoordinateChange:Action
 {
-    public SharedInt characterId; 
+    public SharedInt characterId;
     public SharedInt3 coordinate;
     public bool continued;
 

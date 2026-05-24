@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
- 
+
 public enum BuffActionType
 {
     属性改变,伤害,回复
@@ -22,9 +22,9 @@ public class BuffData : ScriptableObject, IGameData
     public int2 addActionValue;
     public int2 mulActionValue;
     public Sprite icon;
-    [NonSerialized] 
-    private string iconName; 
-    [NonSerialized] 
+    [NonSerialized]
+    private string iconName;
+    [NonSerialized]
     private string buffObjName;
     public BuffActionBehavior buffObj;
 
@@ -34,7 +34,7 @@ public class BuffData : ScriptableObject, IGameData
     {
         return id.ToString();
     }
-    
+
     public string GetKey()
     {
         return id.ToString();

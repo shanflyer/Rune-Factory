@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 [TaskCategory("NewGame/Common")]
@@ -6,7 +6,7 @@ using BehaviorDesigner.Runtime.Tasks;
 public class CheckItemValueBehavior : Action
 {
     public SharedInt characterId;
-    public SharedInt packageId; 
+    public SharedInt packageId;
     public SharedInt itemDataId;
     public SharedInt itemValue;
 
@@ -25,7 +25,7 @@ public class CheckItemValueBehavior : Action
         CheckItemValue checkItemValue = new CheckItemValue
         {
             packageId = package,
-            itemDataId = itemDataId.Value, 
+            itemDataId = itemDataId.Value,
             itemValue = itemValue.Value,
             setResult=SetResult
         };
@@ -44,7 +44,7 @@ public class CheckItemValueBehavior : Action
     }
     TaskStatus taskStatus;
     public override TaskStatus OnUpdate()
-    { 
-        return taskStatus; 
+    {
+        return taskStatus;
     }
 }

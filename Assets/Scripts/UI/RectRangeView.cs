@@ -1,9 +1,9 @@
-﻿using Unity.Mathematics;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public delegate void Vector2Delegate(Vector2 value);
-public class RectRangeView : MonoBehaviour, IDragHandler 
+public class RectRangeView : MonoBehaviour, IDragHandler
 {
     [SerializeField]
     private Transform point;
@@ -34,21 +34,21 @@ public class RectRangeView : MonoBehaviour, IDragHandler
     }
     public Vector2Delegate vector2Delegate;
 
- 
+
 
     public void OnDrag(PointerEventData eventData)
     {
-        
-        RectTransform rectTransform = transform as RectTransform; 
+
+        RectTransform rectTransform = transform as RectTransform;
         var pos = eventData.position;
         CameraManager.ScreenPointToUILocalPoint(rectTransform, pos, out var localPos);
         //point.localPosition = localPos;
-        
+
         float x = localPos.x / rectTransform.sizeDelta.x + 0.5f;
         float y = localPos.y / rectTransform.sizeDelta.y + 0.5f;
         x=math.clamp(x, 0f, 1f);
         y = math.clamp(y, 0f, 1f);
         m_Value = new Vector2(x, y);
     }
-    
+
 }

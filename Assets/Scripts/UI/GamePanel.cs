@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading;
@@ -15,7 +15,7 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
     public Dictionary<string, Transform> objectDatas = new Dictionary<string, Transform>();
     public virtual void OnEnable()
     {
-        
+
     }
     public virtual void OnDisable()
     {
@@ -93,7 +93,7 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
 #if UNITY_EDITOR
         base.SetPanelUISerializeObj();
         InitChildObjData();
-     
+
         var uiObjReferences = gameObject.GetComponentsInChildren<BaseReference>(true);
         foreach (var uiObj in uiObjReferences)
         {
@@ -109,13 +109,13 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
 
 
     }
-    
-    protected virtual void Awake() 
+
+    protected virtual void Awake()
     {
         canvas = gameObject.GetComponent<Canvas>();
         graphicRaycaster=gameObject.GetComponent<GraphicRaycaster>();
         canvas.worldCamera = CameraManager.instance.uiCamera;
-        
+
     }
     protected V data;
     public virtual void InitReferenceData(V v)
@@ -137,7 +137,7 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
     {
         UIManager.instance.UIAudioForTag(tag);
         base.Show();
-        if (changeInputModel) 
+        if (changeInputModel)
         {
             InputManager.instance.SwitchInputMap(true);
         }
@@ -154,11 +154,11 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
         {
             gameObject.layer = UILayer;
         }
-       
+
 
 
         bool display = UIManager.instance.CheckPanelCanvas(this.GetType());
-        canvas.enabled = display; 
+        canvas.enabled = display;
         if (graphicRaycaster)
         {
             graphicRaycaster.enabled = display;
@@ -185,14 +185,14 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
         {
             if (!SingletonType.Cleared)
                 InputManager.instance.SwitchInputMap(false);
-        } 
+        }
         if (UIManager.IsPluralUI(this.GetType()))
         {
             if (this!=null&&gameObject!=null)
             {
                 Destroy(gameObject);
             }
-            
+
         }
         else if (gameObject)
         {
@@ -203,7 +203,7 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
             }
             objectDatas.Clear();
             enabled = false;
-        } 
-         
+        }
+
     }
 }

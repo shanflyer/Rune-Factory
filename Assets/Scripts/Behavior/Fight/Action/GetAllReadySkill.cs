@@ -5,7 +5,7 @@ using System;
 using Action = BehaviorDesigner.Runtime.Tasks.Action;
 
 [TaskCategory("NewGame")]
-[TaskName("»ñÈ¡¿ÉÓÃ¼¼ÄÜ")]
+[TaskName("è·å–å¯ç”¨æŠ€èƒ½")]
 public class GetAllReadySkill : Action
 {
     public FightType fightType;
@@ -25,7 +25,7 @@ public class GetAllReadySkill : Action
     }
 
     public override TaskStatus OnUpdate()
-    { 
+    {
 
         return TaskStatus.Success;
     }

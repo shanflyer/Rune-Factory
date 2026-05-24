@@ -22,5 +22,5 @@ public class MyReciver : MonoBehaviour,INotificationReceiver
         }
     }
 
-     
+
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -106,7 +106,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                 {
                     name = "NextTalkEventId",
                     value = nextTalkEventId
-                };  
+                };
                 bool temp = character is TempCharacter;
                await GameEventManager.instance.AddGameEvent(eventId, new List<EventReferenceData>
                 {
@@ -131,7 +131,7 @@ public class PlayerOperateManager : Singleton<PlayerOperateManager>
                 };
                 GameActionManager.instance.QueueAction(refreshOperateCharacter);
                 // CharacterManager.instance.controllerCharacter.SetNeighborhood(runtimMapItem.linkCharacter);
-            } 
+            }
         }
         UIManager.instance.CloseGamePanel<OperateButtonPanel>();
     }

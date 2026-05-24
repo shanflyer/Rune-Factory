@@ -1,5 +1,5 @@
-﻿using BehaviorDesigner.Runtime;
-using System.Collections.Generic; 
+using BehaviorDesigner.Runtime;
+using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -74,7 +74,7 @@ public class MultiNPCGroup
             {
                 Character character = CharacterManager.instance.GetCharacter(npcs[i]);
                 character.mulitGroup = 0;
-                NPCTaskScheduleManager.instance.SetNowBehaviorTree(npcs[i]); 
+                NPCTaskScheduleManager.instance.SetNowBehaviorTree(npcs[i]);
             }
         }
         npcBehaviorTempDatas.Clear();
@@ -166,7 +166,7 @@ public class MultiNPCGroup
             }
             else
             {
-                NPCTaskScheduleManager.instance.SetNowBehaviorTree(character.instanceId); 
+                NPCTaskScheduleManager.instance.SetNowBehaviorTree(character.instanceId);
             }
             npcBehaviorTempDatas.Remove(character.instanceId);
         }
@@ -188,7 +188,7 @@ public struct NPCBehaviorTempData
 }
 
 public class MultiNPCBehaviorManager : Singleton<MultiNPCBehaviorManager>
-{ 
+{
     private MyDic<int, MultiNPCGroup> mulitNpcGroups = new MyDic<int, MultiNPCGroup>();
     private GameObject obj;
 
@@ -200,7 +200,7 @@ public class MultiNPCBehaviorManager : Singleton<MultiNPCBehaviorManager>
         {
             obj = new GameObject("MultiNPCBehaviorManager");
         }
-         
+
         mulitNpcGroups.Clear();
         GameActionManager.instance.AddListener<JoinInMultiNPCBehaviorGroup>(JoinInMultiNPCBehaviorGroup);
         GameActionManager.instance.AddListener<LeaveMultiNPCBehaviorGroup>(LeaveMultiNPCBehaviorGroup);

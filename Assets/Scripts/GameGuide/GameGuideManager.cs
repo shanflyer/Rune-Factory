@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class GameGuideManager:Singleton<GameGuideManager>
 {
     Dictionary<int, Selectable> guidSelectableDic = new Dictionary<int, Selectable>();
-    HashSet<int> endGuide = new HashSet<int>(); 
+    HashSet<int> endGuide = new HashSet<int>();
     public int endGuideFilmIndex
     {
         get
@@ -63,13 +63,13 @@ public class GameGuideManager:Singleton<GameGuideManager>
         {
             hide = !data.displayCharacter
         };
-        GameActionManager.instance.QueueAction(setCharacterStopCreate); 
-         
+        GameActionManager.instance.QueueAction(setCharacterStopCreate);
+
         GameTimerController.instance.DelayAction(1000, () =>
         {
             GameActionDataManager.instance.Action(data.beforeEventId);
         });
-        
+
     }
     public override void Init()
     {
@@ -106,7 +106,7 @@ public class GameGuideManager:Singleton<GameGuideManager>
             {
                 CheckGameGuideAction.setResult(!endGuide.Contains(CheckGameGuideAction.guidKey));
             }
-           
+
         }
     }
 
@@ -118,7 +118,7 @@ public class GameGuideManager:Singleton<GameGuideManager>
             // 引导控件注册是同步入口，面板加载异常统一记录。
             AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<GameGuidePanel, GuidStepData>(guidStepData), nameof(SetIntAction));
         }
-        
+
     }
     void RemoveIntAction(int id,Selectable selectable)
     {
@@ -160,7 +160,7 @@ public class GameGuideManager:Singleton<GameGuideManager>
 
 
     int nowGuideSelectableId;
- 
+
     public void GuideButtonAction()
     {
         InitShowGuide();
@@ -170,14 +170,14 @@ public class GameGuideManager:Singleton<GameGuideManager>
     void InitShowGuide()
     {
         if (guidSelectableDic.TryGetValue(nowGuideSelectableId, out var selectable))
-        { 
+        {
             selectable.SetHideSelected(true);
             Debug.Log("指引点击01!!-");
             selectable.InvokeClick();
 
             ShowGuide();
         }
-         
+
     }
 
     public bool GetSelectRectTransform(int guid, out RectTransform guidRect)
@@ -202,7 +202,7 @@ public class GameGuideManager:Singleton<GameGuideManager>
             nowGuideSelectableId = guid;
             RectTransform rectTransform = selectable.transform as RectTransform;
             pos = rectTransform.position;
-            size = rectTransform.sizeDelta; 
+            size = rectTransform.sizeDelta;
             return true;
         }
         return false;

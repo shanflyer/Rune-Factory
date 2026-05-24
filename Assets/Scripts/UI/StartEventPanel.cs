@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 
 public class StartEventPanel : GamePanel<IReferenceData>
-{ 
+{
     [SerializeField]
     Button LetterButton;
     [SerializeField]
@@ -20,10 +20,10 @@ public class StartEventPanel : GamePanel<IReferenceData>
         base.SetPanelUISerializeObj();
 
         content = FindChildGameObject("Content");
-        LetterButton = FindChildGameObject<Button>("LetterButton"); 
+        LetterButton = FindChildGameObject<Button>("LetterButton");
         contentButton = FindChildGameObject<Button>("EndButton");
         texts = transform.GetComponentsInChildren<TextMeshProUGUI>(true);
-       
+
     }
     protected override void Awake()
     {
@@ -39,22 +39,22 @@ public class StartEventPanel : GamePanel<IReferenceData>
     }
 
     void ClickXinStart()
-    {  
+    {
         content.gameObject.SetActive(true);
     }
     void ClickXinEnd()
-    { 
+    {
         Close();
         GameActionManager.instance.QueueAction(new PlayFilm
         {
             filmName = "角色选择"
-        });       
-        
+        });
+
     }
 
-  
+
     // Update is called once per frame
     void Update () {
-       
+
 	}
 }

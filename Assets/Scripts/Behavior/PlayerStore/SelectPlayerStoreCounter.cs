@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
@@ -46,7 +46,7 @@ public class SelectPlayerStoreCounter : Action
 			selectStoreCounterId.SetValue(HaveGoodStoreCounters[index].instanceId);
 			taskStatus = TaskStatus.Success;
 			return;
-		} 
+		}
 		if (canSelectNullStoreCounter&&NoGoodStoreCounters.Count > 0)
 		{
             int index = GameRandom.RandomInt(0, NoGoodStoreCounters.Count);

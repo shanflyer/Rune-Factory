@@ -45,7 +45,7 @@ public class NPCPanel : GamePanel<NPCList>
         displayList = new DisplayList<NPCReference, NPC>(NPCReference, NPCParent);
     }
     void DelyDisplay(bool next)
-    { 
+    {
         nextButton.transform.localScale = Vector3.zero;
         frontButton.transform.localScale = Vector3.zero;
         NPCParent.localScale = Vector3.zero;
@@ -83,7 +83,7 @@ public class NPCPanel : GamePanel<NPCList>
             InitButton();
             DisplayNpc();
         });
-       
+
     }
     public override void SetPanelUISerializeObj()
     {

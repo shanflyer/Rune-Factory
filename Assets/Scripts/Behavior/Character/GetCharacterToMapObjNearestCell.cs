@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
@@ -29,9 +29,9 @@ public class GetCharacterToMapObjNearestCell : Action
                 targetCoordinate = new SharedInt3();
                 Owner.SetVariable("TargetCoordinate", targetCoordinate);
             }
-        } 
+        }
     }
-     
+
     public override TaskStatus OnUpdate()
     {
         var character = CharacterManager.instance.GetCharacter(characterId.Value);

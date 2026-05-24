@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 
@@ -35,7 +35,7 @@ public class TempCharacterTalkBehavior : Action
 
     public override void OnStart()
     {
-        var source = CharacterManager.instance.GetCharacter(characterId.Value); 
+        var source = CharacterManager.instance.GetCharacter(characterId.Value);
 
         if (source is TempCharacter tempCharacter)
         {
@@ -67,7 +67,7 @@ public class TempCharacterTalkBehavior : Action
                 characterId = characterId.Value,
                 endAction = isStopMove.Value ? CharacterStartMoveAction : null
             };
-          
+
             GameActionManager.instance.QueueAction(tempCharacterTalk);
 
             taskStatus = TaskStatus.Success;
@@ -77,7 +77,7 @@ public class TempCharacterTalkBehavior : Action
             taskStatus = TaskStatus.Failure;
         }
 
-      
+
     }
 
     private TaskStatus taskStatus;

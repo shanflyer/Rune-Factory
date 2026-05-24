@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Unity.Collections;
@@ -210,7 +210,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         }
     }
 
-    public int displayMap 
+    public int displayMap
     {
         get=>_displayMap;
         set
@@ -229,7 +229,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                     isAuto = value != GameCommon.MyPlayerStore
                 };
                 GameActionManager.instance.QueueAction(switchAutoStore);
-            } 
+            }
         }
     }
     int _displayMap;
@@ -286,8 +286,8 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         };
         GameActionManager.instance.QueueAction(setFixedCamera, true);
     }
-    
-   
+
+
     private async Task<RuntimeObj> CreatMapRunTime(MapRoomData mapRoomData, int instanceId)
     {
         if (mapRoomData != null)
@@ -344,7 +344,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         int2 mapEndCoordinate = mapRoomData.endCoordinate;
 
         var mapStartPos = GameCommon.GetMapPos(mapStartCoordinate);
-        var mapEndPos = GameCommon.GetMapPos(mapEndCoordinate); 
+        var mapEndPos = GameCommon.GetMapPos(mapEndCoordinate);
         DisplaySky displaySky = new DisplaySky
         {
             display = mapRoomData.displaySky,
@@ -388,7 +388,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
     }
 
     private async System.Threading.Tasks.Task DisplayMapAsync(DisplayMap displayMap)
-    { 
+    {
         await DisplayMap(displayMap.displayMap,displayMap.fixedDisplay);
         if (displayMap.actionId != 0)
         {
@@ -431,7 +431,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                 prewarm=DisplayMapRoomData.tempNpcPrewarm,
             };
             GameActionManager.instance.QueueAction(startCreatTempCharacter,true);
-            
+
             for(int i = 0; i < DisplayMapRoomData.specialNpcBehaviorAreas.Count; i++)
             {
                 var area = DisplayMapRoomData.specialNpcBehaviorAreas[i];
@@ -443,23 +443,23 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                 GameActionManager.instance.QueueAction(startCreatSpecialTempCharacter, true);
             }
         }
-       
+
         string dataId = DisplayMapRoomData.name;
         SetMapOverrideEnvirmentData(DisplayMapRoomData);
         if (!string.IsNullOrEmpty(dataId))
         {
             var coordinate = MapCellController.instance.GetRoomCoordinate(mapId);
             //Vector3 pos = GameCommon.GetMapPos(coordinate.x, coordinate.y) ;
-            mapDisplayCompleted.Add(0); 
+            mapDisplayCompleted.Add(0);
             // (nowMapRoomObj.obj as Transform).localPosition = new Vector3(GameCommon.cellSize, GameCommon.cellSize);
 
             List<int> mapItems = WorldMapManager.instance.GetMapItems(mapId);
-           
+
             for (int i = 0; i < mapItems.Count; i++)
             {
                 if (WorldMapManager.instance.GetRuntimeMapItem(mapItems[i], out RuntimeMapItem mapItem))
                 {
-                   mapDisplayCompleted.Add(mapItem.instanceId); 
+                   mapDisplayCompleted.Add(mapItem.instanceId);
                    await DisplayMapItem(mapItem);
                 }
             }
@@ -564,7 +564,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             };
 
             DeleteMapPackageItemRender(runTimeMapItemData.Key);
-            GameActionManager.instance.QueueAction(displayStoreCounter, true); 
+            GameActionManager.instance.QueueAction(displayStoreCounter, true);
             GameActionManager.instance.QueueAction(new TryRecycleItemEmote { id = runTimeMapItemData.Key }, true);
             runTimeMapItemData.Value.Recycle();
             manufatureObjs.Remove(runTimeMapItemData.Key);
@@ -579,9 +579,9 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         tempRuntimeMapItemObjs.Clear();
         MyAnimationController.instance.ClearAnimation();
 
-        GameTimerController.instance.DelayAction(1000, () => { Resources.UnloadUnusedAssets(); }); 
+        GameTimerController.instance.DelayAction(1000, () => { Resources.UnloadUnusedAssets(); });
     }
-   
+
     private void TryDeleteRoomObj(TryDeleteRoom deleteRoom)
     {
         if (displayMap == deleteRoom.roomId)
@@ -639,7 +639,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         {
             RuntimeObj.Recycle();
             nowRuntimeMapItemObjs.Remove(mapItemInstanceId);
-            GameActionManager.instance.QueueAction(new TryRecycleItemEmote { id = mapItemInstanceId },true); 
+            GameActionManager.instance.QueueAction(new TryRecycleItemEmote { id = mapItemInstanceId },true);
             manufatureObjs.Remove(mapItemInstanceId);
 
             RemoveRuntimePackage removeRuntimePackage = new RemoveRuntimePackage
@@ -671,7 +671,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         {
             if (refreshManufature.manufature.product.x == 0)
             {
-                GameActionManager.instance.QueueAction(new TryRecycleItemEmote { id = refreshManufature.manufature.instanceId }, true); 
+                GameActionManager.instance.QueueAction(new TryRecycleItemEmote { id = refreshManufature.manufature.instanceId }, true);
             }
             else if (refreshManufature.manufature.waitTime > GameTimeManager.instance.totalMinute)
             {
@@ -798,7 +798,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                 tempObj.Recycle();
                 tempRuntimeMapItemObjs.Remove(mapItemId);
             }
-             
+
 
             runtimeObj.Recycle();
             var newObj =await CreatMapItemRuntime(runtimeMapItem.mapItemData, runtimeMapItem.instanceId, runtimeMapItem.coordinate);

@@ -10,7 +10,7 @@ public class OtherFuntionPanel : GamePanel<FunctionButtonList>
     [SerializeField]
     Transform buttonParent;
     DisplayList<OtherFunctionButtonReference, FunctionButton> buttonList;
-    
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();

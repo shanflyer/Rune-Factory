@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.Mathematics;
 
 public struct SetMapEditorItemLinkCharacter : GameAction
@@ -7,7 +7,7 @@ public struct SetMapEditorItemLinkCharacter : GameAction
     public int mapItemEditorId;
     public int linkInstanceId;
     public SetValue setValue { get; set; }
-    public SetResult setResult { get; set; }  public void Clear(){this = default; } 
+    public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public void Init(List<Parameter> parameters, int source = int.MinValue, int target = int.MinValue, int value = int.MinValue,
         SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
@@ -101,7 +101,7 @@ public struct SetMapItemRightCharacter : GameAction
         this.setResult = setResult;
         GameActionManager.instance.QueueAction(this, immediately);
     }
-} 
+}
 public struct CheckMapItemLeftCharacter : GameAction
 {
     public int mapItemInstanceId;
@@ -168,7 +168,7 @@ public struct CheckMapItemRightCharacter : GameAction
 
 public struct RefreshMapTempCharacter : GameAction
 {
-    public int characterId; 
+    public int characterId;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 
@@ -179,12 +179,12 @@ public struct RefreshMapTempCharacter : GameAction
         {
             characterId = int.Parse(parameters[0].value);
         }
-        
+
         if (source != int.MinValue && source != 0)
         {
             characterId = source;
         }
-         
+
         this.setValue = setValue;
         this.setResult = setResult;
         GameActionManager.instance.QueueAction(this, immediately);
@@ -532,7 +532,7 @@ public struct CheckTempMapItemSet : GameAction
 public struct CreatControllerTempMapItem : GameAction
 {
     public int instanceId;
-    public int dataId; 
+    public int dataId;
     public int2 coordinate;
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
@@ -544,7 +544,7 @@ public struct CreatControllerTempMapItem : GameAction
         this.setValue = setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
- 
+
 }
 public struct CreatTempMapItem : GameAction
 {
@@ -870,7 +870,7 @@ public struct SetItemAnimation : GameAction
     public int keyX;
     public int keyY;
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
-    { 
+    {
         if (parameters.Count >= 4)
         {
             mapId = int.Parse(parameters[0].value);
@@ -1036,7 +1036,7 @@ public struct ResetOperateData : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
-    public int mapItemInstanceId; 
+    public int mapItemInstanceId;
     public List<int> operates;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
@@ -1216,7 +1216,7 @@ public struct TryUpDataCharacterEmote : GameAction
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {
-         
+
 
         if (setResult != null)
         {
@@ -1244,7 +1244,7 @@ public struct TryRecycleCharacterEmote : GameAction
         {
             id = int.Parse(parameters[0].value);
         }
-        
+
         if (setResult != null)
         {
             this.setResult = setResult;

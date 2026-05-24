@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,7 +32,7 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
     {
         base.ClearSelect();
         toggle.SetIsOnWithoutNotify(false);
-       
+
     }
     public override void SetPanelUISerializeObj()
     {
@@ -91,12 +91,12 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
         base.ClearData();
         data = default(ShortcutItem);
         icon.enabled = false;
-        count.enabled = false; 
+        count.enabled = false;
     }
     ItemData itemData;
     public override async Task InitData(ShortcutItem t, SelectAction<ShortcutItem> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-       await base.InitData(t, SelectAction, toggleGroup); 
+       await base.InitData(t, SelectAction, toggleGroup);
 
         toggle.group = toggleGroup;
         this.SelectAction = SelectAction;
@@ -128,12 +128,12 @@ public class ShortcutItemReference : UIObjReference<ShortcutItem>
         }
         else
         {
-            ItemValueBg.transform.localScale = Vector3.zero; 
+            ItemValueBg.transform.localScale = Vector3.zero;
             toggle.SetIsOnWithoutNotify(false);
             toggle.enabled = false;
             // toggle.graphic.enabled = false;
             icon.enabled = false;
-            count.enabled = false; 
+            count.enabled = false;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
@@ -17,7 +17,7 @@ public class RandomEmoteBehavior : Action
     private SharedInt2 showTime;
     [SerializeField]
     private bool needWait;
-       
+
     public override void OnStart()
     {
         var randomResult = GameRandom.instance.GetRandomValue(emoteRandomId.Value);

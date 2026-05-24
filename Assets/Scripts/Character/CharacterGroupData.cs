@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -6,7 +6,7 @@ using System;
 public class CharacterGroupData : ScriptableObject, IGameData
 {
     public int id;
-#if UNITY_EDITOR 
+#if UNITY_EDITOR
     [NonSerialized]
     public int character0, character1, character2, character3, character4, character5;
 #endif
@@ -35,7 +35,7 @@ public class CharacterGroupData : ScriptableObject, IGameData
 public struct CharacterGroup
 {
     public int id;
-    public List<int> characters; 
+    public List<int> characters;
 
     public List<int> GetFriends(int id)
     {
@@ -45,7 +45,7 @@ public struct CharacterGroup
             if (characters[i] != id)
             {
                 friends.Add(i);
-            } 
+            }
         }
         return friends;
     }

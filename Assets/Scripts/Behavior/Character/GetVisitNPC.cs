@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
@@ -10,7 +10,7 @@ public class GetVisitNPC : Action
 {
     [SerializeField]
     private SharedInt characterId;
-    [SerializeField] private SharedInt visitNPC; 
+    [SerializeField] private SharedInt visitNPC;
     public override void OnStart()
     {
         if (characterId == null || characterId.IsNull())
@@ -32,7 +32,7 @@ public class GetVisitNPC : Action
                 }
                 this.visitNPC.SetValue(npc1.Character.instanceId);
                 return TaskStatus.Success;
-            }  
+            }
         }
 
         return TaskStatus.Failure;

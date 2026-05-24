@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 
 [TaskCategory("Game/农场")]
@@ -6,10 +6,10 @@ using BehaviorDesigner.Runtime.Tasks;
 public class TryGetPlantFruitBeHavior : Action
 {
     public SharedInt fieldId;
-    public SharedInt characterId; 
+    public SharedInt characterId;
     public override void OnStart()
     {
-        
+
         taskStatus = TaskStatus.Running;
         TryGetPlantFruit tryGetPlantFruit = new TryGetPlantFruit
         {

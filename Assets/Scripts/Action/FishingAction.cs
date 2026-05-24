@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 public struct PlayFishWater : GameAction
 {
@@ -131,7 +131,7 @@ public struct StartFishing : GameAction
         if (target != 0 && target != int.MinValue)
         {
             mapItemId = target;
-        } 
+        }
 
         this.setValue = setValue;
         this.setResult = setResult;
@@ -143,7 +143,7 @@ public struct StartFishingGame : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
-  
+
     public int characterId;
     public int itemInstanceId;
 

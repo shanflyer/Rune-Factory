@@ -3,19 +3,19 @@ using Unity.Mathematics;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Playables;
-using UnityEngine.Audio; 
+using UnityEngine.Audio;
 
 [Serializable]
 public struct WindData
 {
-    public WindParticleData left, right; 
+    public WindParticleData left, right;
     public List<AudioClip> audios;
-     
+
     public void InitParticle()
     {
         left.InitParticle();
-        right.InitParticle();  
-         
+        right.InitParticle();
+
     }
 
     int nowIndex;
@@ -24,7 +24,7 @@ public struct WindData
     {
         nowIndex = math.clamp(index,0, audios.Count - 1);
         AudioController.instance.PlayAudioBGS(audios[nowIndex], audioClearType: AudioClearType.All, weight: math.abs(nowValue),
-            Group: BGSGroup.Wind.ToString()); 
+            Group: BGSGroup.Wind.ToString());
     }
     public void SetHide(bool hide)
     {
@@ -53,7 +53,7 @@ public struct WindData
         }
     }
     public void Clear()
-    { 
+    {
     }
 }
 [Serializable]
@@ -65,7 +65,7 @@ public struct WindParticleData
     ParticleSystem.EmissionModule springEmission,summerEmission,autumnEmission,winterEmission;
     ParticleSystem.EmissionModule smokeEmission;
 
-    float windValue, springValue,summerValue,autumnValue,winterValue, smokeValue; 
+    float windValue, springValue,summerValue,autumnValue,winterValue, smokeValue;
     public void InitParticle()
     {
         windEmission = wind.emission;
@@ -84,17 +84,17 @@ public struct WindParticleData
         smokeValue = smokeEmission.rateOverTime.constant;
 
         windEmission.enabled = false;
-        springEmission.enabled= false; 
-        summerEmission.enabled= false; 
+        springEmission.enabled= false;
+        summerEmission.enabled= false;
         autumnEmission.enabled= false;
-        winterEmission.enabled= false; 
+        winterEmission.enabled= false;
         smokeEmission.enabled = false;
 
 
     }
     public void SetHide(bool hide)
     {
-        windRenderer.enabled = springRenderer.enabled = summerRenderer.enabled 
+        windRenderer.enabled = springRenderer.enabled = summerRenderer.enabled
             = autumnRenderer.enabled= winterRenderer.enabled=smokeRenderer.enabled=!hide;
     }
     public void SetValue(float value, bool immediatelyStop = false)
@@ -130,22 +130,22 @@ public struct WindParticleData
         windEmission.enabled =  value > 0;
         windEmission.rateOverTime = math.lerp(0, windValue, value);
         smokeEmission.enabled = value >= 0.25f;
-        float _value = (value - 0.25f) * 1.334f; 
-        
+        float _value = (value - 0.25f) * 1.334f;
+
         smokeEmission.rateOverTime=math.lerp(0,smokeValue, _value);
-    } 
+    }
 }
 [Serializable]
 public struct RainParticleData
 {
     public ParticleSystem rain,drop,clouds;
-    public ParticleSystemRenderer rainRenderer, dropRenderer, cloudsRenderer; 
+    public ParticleSystemRenderer rainRenderer, dropRenderer, cloudsRenderer;
     ParticleSystem.EmissionModule rainEmission;
     ParticleSystem.EmissionModule dropEmission;
     ParticleSystem.EmissionModule cloudsEmission;
     ParticleSystem.VelocityOverLifetimeModule velocityOverLifetime;
     float rainValue, dropValue, cloudsValue;
-     
+
     public List<AudioClip> audios;
     int nowIndex;
     float nowValue;
@@ -153,7 +153,7 @@ public struct RainParticleData
     {
         nowIndex = math.clamp(index, 0, audios.Count - 1);
         AudioController.instance.PlayAudioBGS(audios[nowIndex], audioClearType: AudioClearType.All,weight: nowValue,
-            Group: BGSGroup.Rain.ToString()); 
+            Group: BGSGroup.Rain.ToString());
         //audioSource.resource = audios[index];
        /// audioSource.Play();
     }
@@ -172,9 +172,9 @@ public struct RainParticleData
         cloudsValue = cloudsEmission.rateOverTime.constant;
         velocityOverLifetime = rain.velocityOverLifetime;
         velocityOverLifetime.x = 0;
-        rainEmission.enabled = dropEmission.enabled = cloudsEmission.enabled = false; 
+        rainEmission.enabled = dropEmission.enabled = cloudsEmission.enabled = false;
        // audioSource.mute = true;
-       // audioSource.Stop(); 
+       // audioSource.Stop();
     }
     public void SetValue(float value, bool immediatelyStop = false)
     {
@@ -183,10 +183,10 @@ public struct RainParticleData
         rainEmission.rateOverTime = math.lerp(0, rainValue, value);
         dropEmission.rateOverTime=math.lerp(0, dropValue, value);
         cloudsEmission.rateOverTime=math.lerp(0,cloudsValue, value);
-        AudioController.instance.PlayAudioBGS(audios[nowIndex],weight:value, 
-            audioClearType: AudioClearType.All, Group: BGSGroup.Rain.ToString()); 
+        AudioController.instance.PlayAudioBGS(audios[nowIndex],weight:value,
+            audioClearType: AudioClearType.All, Group: BGSGroup.Rain.ToString());
 
-        // 
+        //
         // audioSource.Play();
     }
     public void SetWindValue(float value, bool immediatelyStop = false)
@@ -194,15 +194,15 @@ public struct RainParticleData
         velocityOverLifetime.x =- 3 * value;
     }
     public void Clear()
-    {  
+    {
     }
 }
 [Serializable]
 public struct FogParticleData
-{ 
+{
     public ParticleSystem fog;
     public ParticleSystemRenderer fogRenderer;
-    ParticleSystem.EmissionModule fogParticleEmission; 
+    ParticleSystem.EmissionModule fogParticleEmission;
     ParticleSystem.MainModule fogParticleMain;
     float mainColor_a;
 
@@ -214,7 +214,7 @@ public struct FogParticleData
     {
         fogParticleEmission.enabled = value > 0;
         float now_a=math.lerp(0,mainColor_a,value);
-        fogParticleMain.startColor = new Color(1, 1, 1, now_a); 
+        fogParticleMain.startColor = new Color(1, 1, 1, now_a);
     }
     public void InitParticle()
     {
@@ -266,7 +266,7 @@ public struct SnowParticleData
 public class WeatherMono : MonoBehaviour,IGameData
 {
     [SerializeField]
-    FogParticleData fogParticle; 
+    FogParticleData fogParticle;
     [SerializeField]
     SnowParticleData snowData;
     [SerializeField]
@@ -304,7 +304,7 @@ public class WeatherMono : MonoBehaviour,IGameData
         snowData.SetValue(snowValue);
         if (immediatelyStop && snowValue == 0)
         {
-            snowData.snow.Clear(true); 
+            snowData.snow.Clear(true);
         }
         else if (snowData.snow.isStopped)
         {
@@ -368,7 +368,7 @@ public class WeatherMono : MonoBehaviour,IGameData
             windData.left.autumn.Play();
             windData.right.autumn.Play();
         }
-        
+
     }
 
     public void Play()
@@ -393,7 +393,7 @@ public class WeatherMono : MonoBehaviour,IGameData
         var snow = transform.Find("Snow").GetComponent<ParticleSystem>();
         snowData.snow = snow;
         snowData.snowRenderer = snow.GetComponent<ParticleSystemRenderer>();
-         
+
         ParticleSystem left = transform.Find("Wind/Left").GetComponent<ParticleSystem>();
         windData.left.wind = left;
         windData.left.windRenderer = left.GetComponent<ParticleSystemRenderer>();
@@ -443,7 +443,7 @@ public class WeatherMono : MonoBehaviour,IGameData
         ParticleSystem rain = transform.Find("Rain").GetComponent<ParticleSystem>();
         rainParticle.rain = rain;
         rainParticle.rainRenderer = rain.GetComponent<ParticleSystemRenderer>();
-         
+
         ParticleSystem drop = transform.Find("Rain/Drop").GetComponent<ParticleSystem>();
         rainParticle.drop = drop;
         rainParticle.dropRenderer = drop.GetComponent<ParticleSystemRenderer>();
@@ -464,6 +464,6 @@ public class WeatherMono : MonoBehaviour,IGameData
 
         rainParticle.Clear();
         windData.Clear();
-    } 
- 
+    }
+
 }

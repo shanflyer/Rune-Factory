@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using BehaviorDesigner.Runtime;
 using Unity.Mathematics;
 using UnityEngine;
@@ -17,9 +17,9 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
         get
         {
             return base.transform;
-        } 
+        }
     }
-   
+
     public RuntimeObj runtimeObj
     {
         get
@@ -193,7 +193,7 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
             offset.z = 0;
             shadow.localPosition = offset;
         }
-       
+
 
         /*if(runtimeObj!=null)
             EnvironmentManger.instance.AddCharacterGetFootStep(runtimeObj.linkId, characterGetFootStep);*/
@@ -203,7 +203,7 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
         if (singlePlayableGraph.IsValid())
         {
             singlePlayableGraph.Destroy();
-        } 
+        }
     }
     private void OnDisable()
     {
@@ -278,7 +278,7 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
             }
         }
     }
-     
+
     private void PlayFootStep(bool isLeft)
     {
         if (se == SE.NULL)
@@ -302,26 +302,26 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
             }
         }
     }
-     
+
     Camera targetCamera;
     private void LateUpdate()
-    { 
+    {
         if (!targetCamera) targetCamera = Camera.main;
         if (!targetCamera) return;
 
         // 让Sprite平面与相机屏幕平行（垂直镜头射线）
         transform.rotation = targetCamera.transform.rotation;
-        
+
         if (isDisplayFootStep && speed > 0)
         {
             if (waitFootTime <= 0)
             {
                 float angle = GameCommon.VectorAngle(Vector2.up, moveDirection);
                 //
-              
+
                 Vector3 offSetPos = isLeftFoot ? leftFootPos : rightFootPos;
                 offSetPos.x *= moveDirection.y;
-                offSetPos.y *= -moveDirection.x; 
+                offSetPos.y *= -moveDirection.x;
                 var position = transform.position + offSetPos;
 
                 GameVolumeManager.instance.EmitFootParticle(angle, position, footStepColor, isLeftFoot);
@@ -341,9 +341,9 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
         equip = transform.Find("Equip");
         shadow = transform.Find("Shadow");
         myShadow = shadow.GetComponent<MyShadowPolygon>();
-        equipRenderer = equip.GetChild(1).GetComponent<MySpriteMeshRender>(); 
+        equipRenderer = equip.GetChild(1).GetComponent<MySpriteMeshRender>();
         behaviorTree = transform.GetComponent<BehaviorTree>();
-      
+
     }
 
 #endif

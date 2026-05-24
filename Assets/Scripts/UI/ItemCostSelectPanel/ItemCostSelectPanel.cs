@@ -19,7 +19,7 @@ public class ItemCostSelectPanel : GamePanel<ItemCostEventData>
     CostItem costItem;
     [SerializeField]
     Transform costParent;
-    DisplayList<CostItem,MyInt3> costItems; 
+    DisplayList<CostItem,MyInt3> costItems;
 
     public override void OnEnable()
     {
@@ -69,10 +69,10 @@ public class ItemCostSelectPanel : GamePanel<ItemCostEventData>
                     int3 costValue = itemCostEventData.items[i].value;
                     int itemId = costValue.x;
                     int costCount = costValue.y;
-                    PackageManager.instance.RemovePlayerPackageItem(itemId, costCount); 
+                    PackageManager.instance.RemovePlayerPackageItem(itemId, costCount);
                 }
             }
-            
+
             if (itemCostEventData.afterAction != null)
             {
                 itemCostEventData.afterAction(costSuccess);
@@ -86,9 +86,9 @@ public class ItemCostSelectPanel : GamePanel<ItemCostEventData>
         base.SetPanelUISerializeObj();
         TitleText = FindChildGameObject<TextMeshProUGUI>("Title");
         noticeText = FindChildGameObject<TextMeshProUGUI>("Notice");
-        moneyCountText = FindChildGameObject<TextMeshProUGUI>("MomeyTotal"); 
+        moneyCountText = FindChildGameObject<TextMeshProUGUI>("MomeyTotal");
         MoneyImage0 = FindChildGameObject<Image>("money0");
-        MoneyImage1 = FindChildGameObject<Image>("money1");  
+        MoneyImage1 = FindChildGameObject<Image>("money1");
         yesButton = FindChildGameObject<Button>("YesButton");
         noButton = FindChildGameObject<Button>("NoButton");
 

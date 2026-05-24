@@ -34,7 +34,7 @@ public class SceneInfoManager : Singleton<SceneInfoManager>
         initializationTask = Task.CompletedTask;
         base.Clear();
     }
-    
+
     public override void Init()
     {
         base.Init();

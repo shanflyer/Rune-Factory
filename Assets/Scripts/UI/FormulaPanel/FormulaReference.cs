@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -57,11 +57,11 @@ public class FormulaReference : UIObjReference<FormulaReferenceData>
         }
         else
         {
-            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(1); 
+            ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(1);
             Icon.sprite = itemData.icon;
-            FormulaName.SetSWText("????"); 
+            FormulaName.SetSWText("????");
         }
-       
+
     }
 }
 

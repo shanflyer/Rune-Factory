@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Burst;
@@ -152,14 +152,14 @@ public class GameRandom : Singleton<GameRandom>
     }
 
     public int GetSingleRandomValue(int id, int innerGroupCount = 0, int randomResultCount = 1, bool temp = false, float countValue = -1)
-    { 
+    {
         if (gameRandomDatas.TryGetValue(id, out var gameRandomData))
         {
             List<int2> result=GetRandomValue(gameRandomData, innerGroupCount, randomResultCount, countValue);
             if (result.Count > 0)
             {
                 return result[0].x;
-            } 
+            }
         }
         return -1;
     }

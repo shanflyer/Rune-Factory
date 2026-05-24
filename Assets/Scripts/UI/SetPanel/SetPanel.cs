@@ -1,4 +1,4 @@
- 
+
 using System.Threading.Tasks;
 using TMPro;
 using Unity.Mathematics;
@@ -16,7 +16,7 @@ public class SetPanel : GamePanel<IReferenceData>
     [SerializeField]
     private Toggle level0, level1, level2;
     [SerializeField]
-    private TMP_Dropdown dropdown; 
+    private TMP_Dropdown dropdown;
     [SerializeField]
     Button changeColorButton;
     [SerializeField]
@@ -43,7 +43,7 @@ public class SetPanel : GamePanel<IReferenceData>
 
     protected override void Awake()
     {
-        base.Awake(); 
+        base.Awake();
 
         returnButton.onClick.AddListener(() =>
         {
@@ -115,7 +115,7 @@ public class SetPanel : GamePanel<IReferenceData>
     {
         JoyStickColor.color = color;
         color.a = colorASlider.value;
-        
+
         UIManager.instance.SetJoyStickColor(color);
     }
     public override async Task InitData(string dataKey)
@@ -145,7 +145,7 @@ public class SetPanel : GamePanel<IReferenceData>
         colorASlider.SetValueWithoutNotify(UIManager.instance.JoyStickColor.a);
 
         cameraSlider.SetValueWithoutNotify(GameVolumeManager.instance.DepthFieldValue);
-    } 
+    }
     private void SaveSet()
     {
         RunLifecycleTask(_ => SaveSetAsync(), nameof(SaveSet));

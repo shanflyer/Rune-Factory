@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>  
-{  
+public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
+{
     Dictionary<string, Transform> objParents = new Dictionary<string, Transform>();
-    Dictionary<string, Dictionary<string, Stack<RuntimeObj>>> unusedRuntimeObjs = 
+    Dictionary<string, Dictionary<string, Stack<RuntimeObj>>> unusedRuntimeObjs =
         new Dictionary<string, Dictionary<string, Stack<RuntimeObj>>>();
     public override void Init()
     {
@@ -30,14 +30,14 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
         }
     }
     public void ClearRuntime<T>() where T : Enum
-    { 
+    {
         foreach (var type in typeof(T).GetEnumValues())
         {
-            string runtimeObjType = type.ToString(); 
+            string runtimeObjType = type.ToString();
             unusedRuntimeObjs.Remove(runtimeObjType);
 
             objParents.Remove(runtimeObjType);
-        } 
+        }
     }
     public void CreatParent<T>(Transform parent )where T:Enum
     {
@@ -56,7 +56,7 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
             objParents.Add(runtimeObjType, obj.transform);
         }
     }
-    
+
     bool GetRuntimeObj(string runtimeObjType,string key,out RuntimeObj runtimeObj)
     {
         if(unusedRuntimeObjs.TryGetValue(runtimeObjType,out Dictionary<string, Stack<RuntimeObj>> selectRuntimeObjs))
@@ -71,12 +71,12 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
                     return true;
                 }
 
-            } 
+            }
         }
         runtimeObj = null;
         return false;
     }
- 
+
     public async Task<RuntimeObj> CreatRuntimeObj<T>(string runtimeObjType,string key,T objPre,int linkId,
         Transform overrideParent=null,bool isActive=true)where T:Component
     {
@@ -100,8 +100,8 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
         }
         runtimeObj.linkId = linkId;
         try
-        { 
-            var obj = runtimeObj.obj as Component; 
+        {
+            var obj = runtimeObj.obj as Component;
             obj.transform.SetParent(parent, false);
             obj.gameObject.SetActive(isActive);
         }
@@ -109,8 +109,8 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
         {
             Debug.LogError(e);
         }
-         
-        
+
+
         runtimeObj.use = true;
         return runtimeObj;
     }
@@ -118,13 +118,13 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
     public void RecycleRuntimeObj(RuntimeObj runtimeObj, bool setActive = true, bool trueMove = false)
     {
         if(runtimeObj.obj != null)
-        {  
+        {
             runtimeObj.use = false;
             var component = runtimeObj.obj as Component;
 
             if (trueMove)
             {
-                GameObject.Destroy(component.gameObject); 
+                GameObject.Destroy(component.gameObject);
             }
             else
             {
@@ -151,7 +151,7 @@ public class GameRuntimeObjManager:Singleton<GameRuntimeObjManager>
                 else
                     GameObject.Destroy(component.gameObject);
             }
-             
+
         }
         //runtimeObj = null;
     }

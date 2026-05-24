@@ -26,11 +26,11 @@ public class CharacterButtonReference : UIObjReference<MyInt>
             }
 
         } );
-        
+
     }
     public override Task InitData(MyInt t, SelectAction<MyInt> SelectAction = null, ToggleGroup toggleGroup = null)
     {
-        
+
         Character character = CharacterManager.instance.GetCharacter(t.value);
         if(character != null)
         {
@@ -42,7 +42,7 @@ public class CharacterButtonReference : UIObjReference<MyInt>
             {
                 Debug.LogError($"errr:{character.name}");
             }
-           
+
         }
         return base.InitData(t, SelectAction, toggleGroup);
     }

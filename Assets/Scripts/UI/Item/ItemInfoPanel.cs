@@ -45,7 +45,7 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
         base.Awake();
         centerPos = center.transform.localPosition;
         CloseButton.onClick.AddListener(Close);
-        
+
         ActionButton.onClick.AddListener(() =>
         {
             if (action != null)
@@ -107,7 +107,7 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
         ItemInfo = v;
         switch (v.item.itemType)
         {
-           
+
             case ItemType.家具:
                 HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(v.item.dataId);
                 if (ShouldStopLifecycleTask(cancellationToken))
@@ -117,7 +117,7 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
 
                 Icon.sprite = homeEquipmentData.icon;
                 Name.SetSWText(homeEquipmentData.equipmentName);
-                type.SetSWText(homeEquipmentData.homeEquipType); 
+                type.SetSWText(homeEquipmentData.homeEquipType);
                 Icon.rectTransform.sizeDelta=GameCommon.SetImageSize(homeEquipmentData.icon, new Vector2(32, 32));
 
                 MoneyValue.text = "";
@@ -131,7 +131,7 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
                 roomList.Add(roomValueText);
                 if (homeEquipmentData.canSetMaps != null && homeEquipmentData.canSetMaps.Count > 0)
                 {
-                    roomList.Clear(); 
+                    roomList.Clear();
                     for (int i = 0; i < homeEquipmentData.canSetMaps.Count; i++)
                     {
                         int roomId = homeEquipmentData.canSetMaps[i];
@@ -141,7 +141,7 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
                             roomList.Add(",");
                         }
                     }
-                } 
+                }
                 Property.SetADDText("可布置地点:", roomList.ToArray());
                 break;
             default:
@@ -162,9 +162,9 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
                 InfoItemValue.fillAmount = v.item.value;
                 break;
         }
-       
+
         this.action = v.action;
-         
+
         if (string.IsNullOrEmpty(v.ActionName))
         {
             ActionButton.transform.localScale = Vector3.zero;
@@ -178,5 +178,5 @@ public class ItemInfoPanel : GamePanel<ItemInfo>
         center.localPosition = new Vector3(centerPos.x, centerPos.y + v.OffsetPos, centerPos.z);
         CloseObj.localScale = ItemInfo.showClose ? Vector3.one : Vector3.zero;
     }
-    
+
 }

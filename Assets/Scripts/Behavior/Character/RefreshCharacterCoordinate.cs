@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
@@ -10,13 +10,13 @@ public class RefreshCharacterCoordinate : Action
     [SerializeField]
     private SharedInt characterId;
     [SerializeField]
-    private SharedInt3 target; 
-      
+    private SharedInt3 target;
+
     Character character;
-      
+
     int oldCharacterId;
     public override void OnStart()
-    { 
+    {
         if (oldCharacterId != characterId.Value)
         {
             oldCharacterId = characterId.Value;
@@ -31,7 +31,7 @@ public class RefreshCharacterCoordinate : Action
             }
         }
         taskStatus = TaskStatus.Failure;
-        
+
     }
     TaskStatus taskStatus;
 

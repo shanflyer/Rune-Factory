@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -58,9 +58,9 @@ public struct Item : IReferenceData
         itemType = ItemType.Default;
         isFresh = false;
         locked = false;
-        value = 100; 
-    } 
-    
+        value = 100;
+    }
+
    public async Task<bool> IsSingleItem()
     {
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(dataId);
@@ -169,7 +169,7 @@ public class ItemManager:Singleton<ItemManager>
         return item;
     }
 
-   
+
 
     public async Task BuyActionAsync(ShopItemData selectShopItemData, int buyCount)
     {

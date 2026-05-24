@@ -1,9 +1,9 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks; 
+using System.Threading.Tasks;
 using UnityEngine;
 using System.Collections;
 
@@ -29,7 +29,7 @@ public class CloudDataManager:Singleton<CloudDataManager>
                 {
                     byte[] savedData = System.Text.Encoding.UTF8.GetBytes(this.dataStr);
                     this.SaveGame(game, savedData);
-                } 
+                }
             }
             else
             {
@@ -94,7 +94,7 @@ public class CloudDataManager:Singleton<CloudDataManager>
     {
         ISavedGameClient savedGameClient = PlayGamesPlatform.Instance.SavedGame;
         savedGameClient.ReadBinaryData(game, OnSavedGameDataRead);
-       
+
     }
 
     public void OnSavedGameDataRead(SavedGameRequestStatus status, byte[] data)
@@ -113,8 +113,8 @@ public class CloudDataManager:Singleton<CloudDataManager>
         }
     }
 
-      
-   
+
+
 
     private void SaveGame(ISavedGameMetadata game, byte[] savedData)
     {
@@ -127,6 +127,6 @@ public class CloudDataManager:Singleton<CloudDataManager>
         SavedGameMetadataUpdate updatedMetadata = builder.Build();
         savedGameClient.CommitUpdate(game, updatedMetadata, savedData, OnSavedGameWritten);
     }*/
- 
+
 
 }

@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -75,7 +75,7 @@ public class GetACoordinateForCharacter : Action
                 mapInstance = character.mapInstance;
                 break;
         }
-         
+
         if (MapCellController.instance.GetCoordinates(mapInstance, coordinate, minRange.Value, maxRange.Value, isWalkable.Value, out var rangeCoordinates))
         {
             if (rangeCoordinates.Count == 0)
@@ -93,7 +93,7 @@ public class GetACoordinateForCharacter : Action
             for (int i = 0; i < rangeCoordinates.Count; i++)
             {
                 RandomItem randomItem = new RandomItem
-                { 
+                {
                     itemValue = i,
                     randomValue = 10,
                     maxCount = 1,
@@ -102,7 +102,7 @@ public class GetACoordinateForCharacter : Action
                 gameRandomData.randomItems.Add(randomItem);
             }
             gameRandomData.Pretreatment();
-           
+
             var randomResults = GameRandom.instance.GetRandomValue(gameRandomData, randomResultCount: resultCount.Value);
             if (randomResults.Count == 0)
             {

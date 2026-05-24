@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 
@@ -64,7 +64,7 @@ public struct TryDeleteAnimal : GameAction
     public int animalId;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately=false)
-    { 
+    {
         if (source != 0 && source != int.MinValue)
         {
             animalId = source;
@@ -72,7 +72,7 @@ public struct TryDeleteAnimal : GameAction
         this.setResult = setResult;
         this.setValue=setValue;
         GameActionManager.instance.QueueAction(this, immediately);
-      
+
     }
 }
 
@@ -93,7 +93,7 @@ public struct GetAnimalOutFromPasture : GameAction
 }
 
 public struct RefreshAnimalPos : GameAction
-{ 
+{
     public int animalId;
     public bool refreshPos;
     public SetValue setValue { get; set; }
@@ -106,7 +106,7 @@ public struct RefreshAnimalPos : GameAction
         this.setValue = setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
-    
+
 }
 public struct SetAnimalToPasture : GameAction
 {
@@ -128,7 +128,7 @@ public struct SampleCreatAnimal : GameAction
 {
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }
-    public void Clear() { this = default; }  
+    public void Clear() { this = default; }
     public int dataId;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -367,7 +367,7 @@ public struct TrySetItemToPastureBox : GameAction
     }
 }
 public struct SetPastureIndex : GameAction
-{ 
+{
     public int pastureId;
     public int index;
     public SetValue setValue { get; set; }
@@ -383,7 +383,7 @@ public struct SetPastureIndex : GameAction
         {
             index = int.Parse(parameters[1].value);
         }
-         
+
         if (source != 0&&source!=int.MinValue)
         {
             pastureId = source;
@@ -391,7 +391,7 @@ public struct SetPastureIndex : GameAction
         if (target != 0 && target != int.MinValue)
         {
             index = target;
-        } 
+        }
         this.setResult = setResult;
         this.setValue = setValue;
         GameActionManager.instance.QueueAction(this, immediately);
@@ -402,7 +402,7 @@ public struct LinkPasturePackage : GameAction
 {
     public int pastureInstance;
     public int foodPackage, waterPackage, productPackage;
-    
+
     public SetValue setValue { get; set; }
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
 

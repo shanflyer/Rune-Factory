@@ -16,7 +16,7 @@ public class UIManager : Singleton<UIManager>
         Destroyed
     }
 
-    private readonly Dictionary<Type, BaseReference> gamePanels = new(); 
+    private readonly Dictionary<Type, BaseReference> gamePanels = new();
     private readonly Dictionary<Type, GamePanelLifecycleState> panelStates = new();
     private readonly Dictionary<Type, int> panelVersions = new();
     private readonly Dictionary<Type, CancellationTokenSource> panelCancellationSources = new();
@@ -159,7 +159,7 @@ public class UIManager : Singleton<UIManager>
                 ScreenControllerPanel.RefreshJoyStickColor();
             }
         }
-    } 
+    }
     public void SetJoyStickColor(Color color)
     {
         AsyncTaskRunner.Run(() => SetJoyStickColorAsync(color), nameof(SetJoyStickColor));
@@ -206,7 +206,7 @@ public class UIManager : Singleton<UIManager>
                         panel.canvas.enabled = false;
                     if (panel.raycaster)
                         panel.raycaster.enabled = false;
-                } 
+                }
             }
         }
         else
@@ -222,7 +222,7 @@ public class UIManager : Singleton<UIManager>
                 }
             }
         }
-          
+
     }
     public bool GamePanelIsShow<T>() where T : BaseReference
     {
@@ -385,7 +385,7 @@ public class UIManager : Singleton<UIManager>
             string path = $"{DataPath.UIPath}{type}";
             var gamePanelObj =  GameSourceManager.instance.GetPrefabImmediately(path);
             var _Panel = GameObject.Instantiate(gamePanelObj, parent == null ? canvasParent : parent);
-            
+
             var gamePanelComponent = _Panel.GetComponent(type);
             _Panel.transform.localPosition = Vector3.zero;
             GamePanel<V> gamePanel;
@@ -415,7 +415,7 @@ public class UIManager : Singleton<UIManager>
                 GameObject.Destroy(_Panel);
                 return null;
             }
-                 
+
             gamePanel.Show(layer);
             SetPanelState(type, GamePanelLifecycleState.Opened);
             gamePanel.InitReferenceData(data, cancellationToken);
@@ -517,7 +517,7 @@ public class UIManager : Singleton<UIManager>
             gamePanel.Show(layer);
             SetPanelState(type, GamePanelLifecycleState.Opened);
             gamePanel.InitReferenceData(data, cancellationToken);
-           
+
             return gamePanel;
         }
     }
@@ -558,7 +558,7 @@ public class UIManager : Singleton<UIManager>
 
     HashSet<Type> openedPanels = new HashSet<Type>();
     private async Task<BaseReference> ShowGamePanel(Type type, string dataKey = null, int layer = -1, Transform parent = null)
-    { 
+    {
         var panelOperation = BeginPanelOperation(type, GamePanelLifecycleState.Loading);
         int panelVersion = panelOperation.version;
         var cancellationToken = panelOperation.token;
@@ -572,8 +572,8 @@ public class UIManager : Singleton<UIManager>
             }
             var async = GameObject.InstantiateAsync(gamePanelObj, parent == null ? canvasParent : parent);
             await async;
-            
-            
+
+
 
             if (!Application.isPlaying||SingletonType.Cleared)
             {
@@ -662,7 +662,7 @@ public class UIManager : Singleton<UIManager>
             }
             throw;
         }
-      
+
         return gamePanel;
     }
 
@@ -792,11 +792,11 @@ public class UIManager : Singleton<UIManager>
                 gamePanel.Close();
             }
             SetPanelState(type, GamePanelLifecycleState.Closed);
-           
+
         }
     }
 
-    
+
 
     private void ClosePanel(ClosePanelAction closePanelEvent)
     {

@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.IO; 
-using UnityEngine; 
-using UnityEngine.Tilemaps;  
+using System.IO;
+using UnityEngine;
+using UnityEngine.Tilemaps;
 using System.Threading.Tasks;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -98,7 +98,7 @@ public class MapTexture:MonoBehaviour
         texture2D.ReadPixels(new Rect(0, 0, mainTex.width, mainTex.height), 0, 0);
         texture2D.Apply();
         SaveFileTexture1(path, texture2D, isSingleMap ? $"{tilemaps[0].transform.parent.name}-{tilemaps[0].name}" : tilemaps[0].transform.parent.name);
-        //rawImage.texture = texture2D; 
+        //rawImage.texture = texture2D;
 
         for (int i = 0; i < mainTextures.Count; i++)
         {
@@ -232,7 +232,7 @@ public class MapTexture:MonoBehaviour
             {
                 var sprite = tilemap.GetSprite(new Vector3Int(x, y, 0));
 
-               
+
 
                 if (sprite != null)
                 {
@@ -364,7 +364,7 @@ public class MapTexture:MonoBehaviour
 }
 
 #if UNITY_EDITOR
-[CustomEditor(typeof(MapTexture))] 
+[CustomEditor(typeof(MapTexture))]
 public class MapTextureEditor : Editor
 {
     public MapTexture mapTexture => target as MapTexture;

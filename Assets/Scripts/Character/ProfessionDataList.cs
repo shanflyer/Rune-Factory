@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using System;
@@ -24,7 +24,7 @@ public class ProfessionDataList : ScriptableObject, IGameData, IDataArray<Profes
                 professionData = new ProfessionData();
                 _professionDatas.Add(professionData);
                // if (professionData.id != 0)
-                  
+
                 professionData.skills = new List<int>();
                 professionData.exp = new List<int>();
                 professionData.propertys = new List<CharacterProperty>();
@@ -53,7 +53,7 @@ public class ProfessionDataList : ScriptableObject, IGameData, IDataArray<Profes
                 professionData.exp.Add(data.exp);
                 professionData.skills.Add(data.skill);
             }
-            
+
         }
         _professionDatas.Add(professionData);
 
@@ -74,7 +74,7 @@ public class ProfessionDataList : ScriptableObject, IGameData, IDataArray<Profes
 }
 [Serializable]
 public class ProfessionData:IGameData
-{ 
+{
     public string professionName;
     public int id;
     public int behaviorId;
@@ -106,7 +106,7 @@ public class ProfessionData:IGameData
         return propertys[level - 1];
     }
     public void SetReferenceData()
-    { 
+    {
     }
     public override string ToString()
     {
@@ -116,7 +116,7 @@ public class ProfessionData:IGameData
 
 #if UNITY_EDITOR
 public struct ProfessionEditorData
-{ 
+{
     public int HP, MP, Power, AT, DF, Lucky,Speed;
     public int id;
     public int Level;

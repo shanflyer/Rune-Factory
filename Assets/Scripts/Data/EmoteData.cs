@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 #if UNITY_EDITOR
 #endif
 public class EmoteData : ScriptableObject, IGameData, IReferenceData
@@ -29,7 +29,7 @@ public class EmoteData : ScriptableObject, IGameData, IReferenceData
 #if UNITY_EDITOR
     public void SetReferenceData()
     {
-        
+
     }
 #endif
 }

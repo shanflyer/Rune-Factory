@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class GameGuidePanel : GamePanel<GuidStepData>
@@ -46,7 +46,7 @@ public class GameGuidePanel : GamePanel<GuidStepData>
         // GameTimerController.instance.DelayAction(200, () =>
         {
             if (GameGuideManager.instance.GetSelectRectTransform(data.selectableId, out guidTransform))
-            { 
+            {
                 noLookupGuidStep = false;
                 icon.enabled = true;
             }

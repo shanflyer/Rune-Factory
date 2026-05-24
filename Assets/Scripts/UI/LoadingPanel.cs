@@ -10,8 +10,8 @@ public class LoadingPanel : GamePanel<IReferenceData>
     GameObject boy, girl;
     public override void InitReferenceData(IReferenceData v)
     {
-        boy = FindChildGameObject("Ö÷½ÇÄÐ").gameObject;
-        girl= FindChildGameObject("Ö÷½ÇÅ®").gameObject;
+        boy = FindChildGameObject("ä¸»è§’ç”·").gameObject;
+        girl= FindChildGameObject("ä¸»è§’å¥³").gameObject;
         playableDirector = FindChildGameObject<PlayableDirector>("Load");
         base.InitReferenceData(v);
     }

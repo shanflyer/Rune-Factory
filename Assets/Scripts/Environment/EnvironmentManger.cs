@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
@@ -9,9 +9,9 @@ public struct EnvironmentLightData
     public Color globalColor;
     public Color cloudColor;
     public Color skyTopColor,skyBottomColor;
-    public float skyHalfValue; 
+    public float skyHalfValue;
     public Color color;
-    public Vector3 direction; 
+    public Vector3 direction;
     public float shadowValue;
     public Vector2 sunPos;
     public float sunScale;
@@ -21,12 +21,12 @@ public struct EnvironmentLightData
 }
 public struct CharacterFootStep
 {
-    public Transform transform; 
+    public Transform transform;
     public SetValue FootStepAction;
-} 
+}
 public struct CharacterGetFootStep
 {
-    public Transform transform; 
+    public Transform transform;
     public SetFootStepAction SetFootStepAction;
 }
 
@@ -41,11 +41,11 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     public override Task InitializationTask => initializationTask;
     public override IReadOnlyList<System.Type> InitializationDependencies => new[] { typeof(GameDataManager), typeof(GameSourceManager), typeof(CameraManager), typeof(GameActionManager) };
     SkyEnviromentMono skyEnviromentMono;
-    
+
     public SkyEnviromentMono SkyEnviromentMono =>skyEnviromentMono;
     ProFlare flare => skyEnviromentMono.ProFlare;
     Transform sunTransform => skyEnviromentMono.Sun;
- 
+
 
     // Unity 6 使用 EntityId 作为对象稳定标识，避免继续依赖即将移除的 int InstanceID。
     MyDic<EntityId,MySpriteShadow> shadows = new MyDic<EntityId, MySpriteShadow>();
@@ -68,12 +68,12 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         {
             audio2DPolygon.RefreshAudio(null);
         }
-        
+
     }
     public void RemoveAudio2DPolygon(Audio2DPolygon audio2DPolygon)
     {
         EntityId instanceID = audio2DPolygon.GetEntityId();
-        audio2DPolygons.Remove(instanceID); 
+        audio2DPolygons.Remove(instanceID);
     }
     public void UpDataAudio2DPolygon()
     {
@@ -97,7 +97,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     public void RemoveMyShadow(MySpriteShadow mySpriteShadow)
     {
         EntityId instanceID = mySpriteShadow.GetEntityId();
-        shadows.Remove(instanceID); 
+        shadows.Remove(instanceID);
     }
 
     public void AddMyLight(MyLight myLight)
@@ -106,7 +106,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         if (!lightIds.Contains(instanceID))
         {
             lights.Add(instanceID, myLight);
-            lightIds.Add(instanceID); 
+            lightIds.Add(instanceID);
         }
         myLight.LerpTimeValue(timeValue);
 
@@ -142,9 +142,9 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         bool isSnow = nowWeather.IsSnow();
         bool waterFall = nowWeather.waterFall > 0.2f;
         int3 key = new int3(isOutSide ? 1 : 0, index, !isSnow ? (waterFall ? 1 :0) : 2);
-        return FootstepDataList.GetSource(key); 
+        return FootstepDataList.GetSource(key);
     }
-   
+
     Lightning lightning;
     public void GetNowFootStepData(CharacterGetFootStep characterGetFootStep,int2 coordinate,int mapInstance,int defaultGround)
     {
@@ -180,7 +180,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
                                 characterGetFootStep.SetFootStepAction(se, footstepSource.footStepColor);
                             }
                         }
-                        catch { } 
+                        catch { }
                     },
             };
             CharacterFootStepDic.Add(instanceId, characterFootStep);
@@ -193,7 +193,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
 
     MyDic<int, CharacterFootStep> CharacterFootStepDic = new MyDic<int, CharacterFootStep>();
 
-     
+
     public List<CharacterFootStep> GetCharacterFootSteps()
     {
        return CharacterFootStepDic.GetValueList(true);
@@ -240,7 +240,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             skyEnviromentMono.SetBgPos(CameraManager.instance.oldCameraPos);
            // GameObject.DontDestroyOnLoad(skyEnviromentMono.gameObject);
         }
-         
+
         GameActionManager.instance.AddListener<SetEnvironmentLight>(SetEnvironmentLight);
         GameActionManager.instance.AddListener<OverrideEnvironmentLight>(OverrideEnvironmentLight);
         GameActionManager.instance.AddListener<ClearOverrideEnvironmentLight>(ClearOverrideEnvironmentLight);
@@ -290,7 +290,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     {
         if (setWeather.noLerp)
         {
-          
+
             bool oldDamp = !nowWeather.IsSnow() && nowWeather.waterFall > 0;
             bool newDamp = !setWeather.weather.IsSnow() && setWeather.weather.waterFall > 0;
             nowWeather = setWeather.weather;
@@ -343,7 +343,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         {
             StartLerpWeather(setWeather.weather);
         }
-        
+
     }
 
     WeatherDisplayType weatherDisplayType;
@@ -361,12 +361,12 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             {
                 Shader.SetGlobalFloat("_DampValue", nowWeather.waterFall > 0 && !nowWeather.IsSnow() ? 1 : 0);
             }
-           
+
         }
 
         skyEnviromentMono.ChangeWeatherDisplayType(weatherDisplayType);
     }
-   
+
     void StartLerpWeather(Weather newWeather)
     {
         float timeValue = 0;
@@ -409,11 +409,11 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             {
                 Shader.SetGlobalFloat("_DampValue", 0);
             }
-            
+
 
             float weatherLightValue= nowWeather.GetWeatherLight();
             float flareLight = nowWeather.GetFlareLight();
-            RefreshEnvironment(weatherLightValue, flareLight); 
+            RefreshEnvironment(weatherLightValue, flareLight);
             timeValue += deltaTime;
             return timeValue <= 2;
         }, () => nowWeather = newWeather);
@@ -448,7 +448,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     }
     Vector2 _direction;
     void RefreshEnvironment(float weatherLightValue, float flareLight)
-    {  
+    {
         if (!overrideEnvironment)
         {
             Color cloudColor = natureLightData.cloudColor;
@@ -466,7 +466,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
             skyBottomColor *= weatherLightValue;
             skyBottomColor.a = skyBottomColorA;
 
-            Color flareColor = natureLightData.flareColor; 
+            Color flareColor = natureLightData.flareColor;
             flareColor *= weatherLightValue* flareLight;
 
             Color sunColor = natureLightData.sunColor;
@@ -508,7 +508,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
         }
         else
         {
-            Color directionColor = Color.Lerp(overrideLightData.color, lightning.lightningColor, lightning.lightningLight); 
+            Color directionColor = Color.Lerp(overrideLightData.color, lightning.lightningColor, lightning.lightningLight);
             Shader.SetGlobalVector("_Direction", overrideLightData.direction);
             direction = overrideLightData.direction;
             Vector2 directionValue = new Vector2(-overrideLightData.direction.x * math.PI * 0.5f, 1 - overrideLightData.direction.y);
@@ -558,7 +558,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
                 }
                 flare.GlobalTintColor = flareColor;
                 Shader.SetGlobalVector("_SunPos", sunPos);
-                
+
             }
             Shader.SetGlobalFloat("_ShadowValue", overrideLightData.shadowValue + lightning.lightningLight * 0.5f);
         }
@@ -566,7 +566,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     private void SetEnvironmentLight(SetEnvironmentLight SetEnvironmentLight)
     {
         natureLightData = SetEnvironmentLight.environmentLightData;
-        RefreshEnvironment(nowWeather.GetWeatherLight(),nowWeather.GetFlareLight()); 
+        RefreshEnvironment(nowWeather.GetWeatherLight(),nowWeather.GetFlareLight());
     }
 
     private void OverrideEnvironmentLight(OverrideEnvironmentLight OverrideEnvironmentLight)
@@ -579,7 +579,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
 
     private void ClearOverrideEnvironmentLight(ClearOverrideEnvironmentLight clearOverrideEnvironmentLight)
     {
-        overrideEnvironment = false; 
+        overrideEnvironment = false;
         Shader.SetGlobalVector("_Direction", natureLightData.direction);
         direction = natureLightData.direction;
         Vector2 directionValue = new Vector2(-natureLightData.direction.x * math.PI * 0.5f, 1 - natureLightData.direction.y);
@@ -604,7 +604,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
 
             sunTransform.localScale = new Vector3(natureLightData.sunScale, natureLightData.sunScale, 1);
             sunTransform.localPosition = sunPos;
-        } 
+        }
         Shader.SetGlobalVector("_SunPos", sunPos);
     }
 
@@ -633,9 +633,9 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
 
         void LightningAction()
         {
-           
+
             float lightningTime = GameRandom.RandomFloat(LightningData.lightningSpeed) * LightningData.LightningTime;
-            float waitSoundTime = (1 - lightning) * GameRandom.RandomFloat(LightningData.waitSoundTime)+ lightningTime; 
+            float waitSoundTime = (1 - lightning) * GameRandom.RandomFloat(LightningData.waitSoundTime)+ lightningTime;
             float timeValue = 0;
             GameObjectCurveController.instance.StartFrameTask((float deltaTime) =>
             {
@@ -661,13 +661,13 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
                 LightningCD = 0;
                 waitLightningTime = 0;
             });
-        } 
+        }
         LightningData LightningData;
         float waitLightningTime = 0;
         float LightningCD = 0;
         internal float lightning;
         internal void Update()
-        { 
+        {
             if (lightning > 0)
             {
                 if (LightningCD == 0)
@@ -681,14 +681,14 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
                     {
                         LightningAction();
                     }
-                } 
-            } 
+                }
+            }
         }
     }
 
-   
+
     protected override void Update()
-    { 
+    {
         if (lightning != null)
         {
             lightning.Update();

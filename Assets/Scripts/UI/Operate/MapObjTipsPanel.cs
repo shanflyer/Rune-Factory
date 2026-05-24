@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 
 public class MapObjTipsPanel : GamePanel<IReferenceData>
-{ 
+{
     public override bool changeInputModel => false;
     [SerializeField]
     TextMeshProUGUI infoText;
@@ -16,6 +16,6 @@ public class MapObjTipsPanel : GamePanel<IReferenceData>
     {
         infoText.SetSWText(dataKey);
         return base.InitData(dataKey);
-    }  
+    }
 
 }

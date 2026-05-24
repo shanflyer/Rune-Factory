@@ -6,7 +6,7 @@ public class WeatherPanel : GamePanel<IReferenceData>
 {
     [SerializeField]
     new Animation animation;
-    [SerializeField]   
+    [SerializeField]
     Transform nowWeatherParent, nextWeatherParent;
     DisplayList<WeatherReference, WeatherReferenceData> nowWeathers;
     DisplayList<WeatherReference, WeatherReferenceData> nextWeathers;
@@ -50,7 +50,7 @@ public class WeatherPanel : GamePanel<IReferenceData>
     public override void InitReferenceData(IReferenceData v)
     {
         base.InitReferenceData(v);
-        
+
     }
 
 }

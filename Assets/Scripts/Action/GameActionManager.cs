@@ -326,11 +326,11 @@ public class GameActionManager : Singleton<GameActionManager>
         if (GameDataManager.instance!=null&& GameDataManager.instance.GlobalData !=null&& GameDataManager.instance.GlobalData.immediatelyAction)
         {
             TriggerAction(gameAction); return;
-        } 
+        }
         if (immediately)
         {
             TriggerAction(gameAction);
-        } 
+        }
         else
         {
             Type type = typeof(T);

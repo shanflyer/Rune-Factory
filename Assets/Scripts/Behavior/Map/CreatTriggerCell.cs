@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
-using BehaviorDesigner.Runtime.Tasks; 
+using BehaviorDesigner.Runtime.Tasks;
 [TaskCategory("Game/Map")]
 [TaskName("创建触发格子")]
 public class CreatTriggerCell : Action

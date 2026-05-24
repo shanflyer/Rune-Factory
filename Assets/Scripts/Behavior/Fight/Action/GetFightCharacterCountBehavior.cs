@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 [TaskCategory("NewGame")]
@@ -7,7 +7,7 @@ public class GetFightCharacterCountBehavior : Action
 {
     [SerializeField]
     SharedInt fighterCount;
-    
+
     public override void OnStart()
     {
         fighterCount.Value = FightManager.instance.GetActiveFightCharacterCount();

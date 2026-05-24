@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using System.Collections;
 using UnityEngine;
@@ -23,13 +23,13 @@ public class CheckFightVictory : Action
     {
         if (FightResult.Value==isVictory)
         {
-            ExploreManager.instance.StepFightSucceed(); 
+            ExploreManager.instance.StepFightSucceed();
             return TaskStatus.Success;
         }
         else
         {
             ExploreManager.instance.FightFail();
             return TaskStatus.Failure;
-        } 
+        }
     }
 }

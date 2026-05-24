@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -6,10 +6,10 @@ using UnityEngine.Timeline;
 
 public class TimeLineManger : Singleton<TimeLineManger>
 {
-   
+
     public override bool NeedUpdate => true;
     struct RuntimePlayable
-    { 
+    {
         public List<Animator> animators;
         public List<List<AnimationParameter>> animationParameters;
         public PlayableDirector playableDirector;
@@ -23,21 +23,21 @@ public class TimeLineManger : Singleton<TimeLineManger>
         {
             animators = new List<Animator>();
             animationParameters = new List<List<AnimationParameter>>();
-            this.playableDirector = playableDirector; 
+            this.playableDirector = playableDirector;
             this.StopEvent = StopAction;
             this.source = source;
             animatorOverrideClips =
                 new Dictionary<RuntimeAnimatorController, Dictionary<AnimationClip, AnimationClip>>();
             BindPlayable(playableDirector, myTimeLineData,skillEstimateData,source);
-          
+
         }
         void BindPlayable(PlayableDirector playableDirector, MyTimeLineData myTimeLineData, SkillEstimateData skillEstimateData,
            int source = -1)
         {
             TimelineAsset timelineAsset = (TimelineAsset)playableDirector.playableAsset;
             int attackType = FightManager.instance.GetAttackType(source);
-            var bindDatas= myTimeLineData.bindDatas; 
-            
+            var bindDatas= myTimeLineData.bindDatas;
+
             using(var playBindings = timelineAsset.outputs.GetEnumerator())
             {
                 var targets = new List<Transform>();
@@ -54,7 +54,7 @@ public class TimeLineManger : Singleton<TimeLineManger>
                     var sourceObject = playBindings.Current.sourceObject;
                     var bindData = i < bindDatas.Count ? bindDatas[i] : default;
                     string streamName = playBindings.Current.streamName;
-                    Animator animator=null; 
+                    Animator animator=null;
                     if (streamName == bindData.outName)
                     {
                         switch (bindData.bindType)
@@ -73,10 +73,10 @@ public class TimeLineManger : Singleton<TimeLineManger>
                                 break;
                             case BindType.Default:
                                 break;
-                            
+
                         }
                         if(animator!=null)
-                        { 
+                        {
                             if (animator.runtimeAnimatorController!=null)
                             {
                                 if (animator.runtimeAnimatorController is AnimatorOverrideController animatorController)
@@ -126,10 +126,10 @@ public class TimeLineManger : Singleton<TimeLineManger>
 
                                 animators.Add(animator);
                             }
-                           
+
                             playableDirector.SetGenericBinding(sourceObject, animator.gameObject);
-                        } 
-                       
+                        }
+
                     }
 
                     var type = sourceObject.GetType();
@@ -252,8 +252,8 @@ public class TimeLineManger : Singleton<TimeLineManger>
                     i++;
                 }
             }
-             
-          
+
+
             playableDirector.stopped += StopAction;
         }
         public void Evaluate()
@@ -271,7 +271,7 @@ public class TimeLineManger : Singleton<TimeLineManger>
                     StopAction(this.playableDirector);
                 }
             }
-            
+
         }
         public void StopAction(PlayableDirector playableDirector)
         {
@@ -284,10 +284,10 @@ public class TimeLineManger : Singleton<TimeLineManger>
                 var animator= animators[i];
                 if (animator&&animator.runtimeAnimatorController!=null)
                 {
-                    
+
                    // animator.enabled = false;
                     //animator.enabled = true;
-                     
+
                     animator.playableGraph.SetTimeUpdateMode(DirectorUpdateMode.GameTime);
                     animator.Rebind();
                     animator.enabled = false;
@@ -306,14 +306,14 @@ public class TimeLineManger : Singleton<TimeLineManger>
                                 break;
                             case ParameterType.FLOAT:
                                 animator.SetFloat(animationParameter.parameter, animationParameter.floatValue.Value);
-                                break; 
+                                break;
                         }
                     }
 
                 }
             }
 
-             
+
 
             if (StopEvent != null)
             {
@@ -324,11 +324,11 @@ public class TimeLineManger : Singleton<TimeLineManger>
             playableDirector.stopped -= StopAction;
 
         }
-    } 
+    }
     Dictionary<PlayableDirector, RuntimePlayable> runtimePlayables = new Dictionary<PlayableDirector, RuntimePlayable>();
 
     private PlayableDirector defaultPlayableDirector;
-     
+
     public void PlaySkillTimeline(int source,SkillEstimateData skillEstimateData, MyTimeLineData myTimeLineData,
         Action endAction)
     {
@@ -350,7 +350,7 @@ public class TimeLineManger : Singleton<TimeLineManger>
         {
             RuntimePlayable.StopAction(playableDirector);
             runtimePlayables.Remove(playableDirector);
-        } 
+        }
         playableDirector.playableAsset = myTimeLineData.asset;
         RuntimePlayable runtimePlayable = new RuntimePlayable(playableDirector, myTimeLineData, skillEstimateData, () =>
         {
@@ -363,7 +363,7 @@ public class TimeLineManger : Singleton<TimeLineManger>
         },source);
         runtimePlayables[playableDirector] = runtimePlayable;
         playableDirector.Play();
-    } 
+    }
     public void Stop(PlayableDirector playableDirector)
     {
         if(runtimePlayables.TryGetValue(playableDirector,out RuntimePlayable runtimePlayable))
@@ -378,10 +378,10 @@ public class TimeLineManger : Singleton<TimeLineManger>
         defaultPlayableDirector.timeUpdateMode = DirectorUpdateMode.GameTime;
 
         GameActionManager.instance.AddAsyncListener<PlayCharacterTimeLine>(PlayCharacterTimeLineAsync, nameof(PlayCharacterTimeLine));
-       
+
         base.Init();
     }
-    
+
     async System.Threading.Tasks.Task PlayCharacterTimeLineAsync(PlayCharacterTimeLine playCharacterTimeLine)
     {
         var myTimeLineData = await GameDataManager.instance.GetAsyncData<MyTimeLineData>(playCharacterTimeLine.playName);
@@ -405,5 +405,5 @@ public class TimeLineManger : Singleton<TimeLineManger>
                 e.Current.Value.Evaluate();
             }
         }*/
-    } 
+    }
 }

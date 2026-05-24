@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
@@ -18,7 +18,7 @@ public class CharacterGroupEmote : Action
 
     private float startTime;
     private TaskStatus taskStatus;
-    private int index = 0; 
+    private int index = 0;
     public override void OnStart()
     {
         taskStatus = TaskStatus.Running;
@@ -49,7 +49,7 @@ public class CharacterGroupEmote : Action
         GameTimerController.instance.DelayAction((int)(waitDuration*1000), ShowCharacterEmote);
     }
     public override TaskStatus OnUpdate()
-    { 
+    {
         return taskStatus;
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEngine;
 #if UNITY_EDITOR
 #endif
@@ -28,7 +28,7 @@ public class LanguageSwitchDataList : ScriptableObject, IGameData
 
     public StringLanguageSwitchDataDictionary languageDatas = new StringLanguageSwitchDataDictionary();
 
-    
+
 }
 [Serializable]
 public class LanguageSwitchData

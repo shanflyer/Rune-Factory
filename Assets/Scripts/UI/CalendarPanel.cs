@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -42,7 +42,7 @@ public class CalendarPanel : GamePanel<IReferenceData>
 
         dateReferences = new DisplayList<DateReference, GameDate>(dateReference, DatesParent.transform);
         returnButton.onClick.AddListener(() =>
-        { 
+        {
             Close();
         });
 
@@ -63,17 +63,17 @@ public class CalendarPanel : GamePanel<IReferenceData>
         else
         {
             forwardMonthButton.gameObject.SetActive(true);
-        } 
-        
+        }
+
         return base.InitData(dataKay);
     }
-    
+
     void AfterDisplay()
     {
         date = GameTimeManager.instance.Day;
         DataTimeText.text = LanguageManage.instance.GameTimeToString(year, season);
-        
-         
+
+
         /* DatesParent.transform.GetChild(date - 1).GetComponentInChildren<Toggle>().isOn =
            true;*/
         dateReferences.SelectIndex(date - 1);
@@ -107,7 +107,7 @@ public class CalendarPanel : GamePanel<IReferenceData>
         }
         season = (Season)seasonId;
         CreatSeason(season);
-        AfterDisplay(); 
+        AfterDisplay();
     }
     void NextMonth()
     {
@@ -127,7 +127,7 @@ public class CalendarPanel : GamePanel<IReferenceData>
         season = (Season) seasonId;
         CreatSeason(season);
         AfterDisplay();
-    } 
+    }
     void CreatSeason(Season season)
     {
         RunLifecycleTask(token => CreatSeasonAsync(season, token), nameof(CreatSeason));
@@ -159,7 +159,7 @@ public class CalendarPanel : GamePanel<IReferenceData>
         if (value)
         {
             date = _gameDate.date;
-            DataTimeText.text=_gameDate.ToString(year);  
+            DataTimeText.text=_gameDate.ToString(year);
 
             List<string> festivalStr = new List<string>();
             if (_gameDate.FestivaList != null)
@@ -171,7 +171,7 @@ public class CalendarPanel : GamePanel<IReferenceData>
                     festivalStr.Add("\n");
                 }
             }
-            
+
             if (year == GameTimeManager.instance.Year)
             {
                 if (_gameDate.CustomFestival != null)
@@ -182,7 +182,7 @@ public class CalendarPanel : GamePanel<IReferenceData>
                         festivalStr.Add(festivalData.name);
                         festivalStr.Add("\n");
                     }
-                } 
+                }
             }
             if (festivalStr.Count > 0)
             {
@@ -192,8 +192,8 @@ public class CalendarPanel : GamePanel<IReferenceData>
             {
                 festivaltext.text="";
             }
-            
-        } 
+
+        }
     }
-	
+
 }

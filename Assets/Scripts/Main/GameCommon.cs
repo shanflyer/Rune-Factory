@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -315,7 +315,7 @@ public static class GameCommon
         { Direction.UP, new Vector2(0, 0.742f) },
         { Direction.DOWN, new Vector2(0f, -0.42f) }
     };
-  
+
     public const int AddATBuff = 11;
     public const int AddDFBuff = 12;
     public const int AddSpeedBuff = 13;
@@ -332,7 +332,7 @@ public static class GameCommon
     public const int RedObjLayer = 15;
 
     public const int ManufatureWorkingEmote = 72;
-    public const int ManufatureWorkendEnote = 14;      
+    public const int ManufatureWorkendEnote = 14;
 
     public const int PixelCameraDefaultValue = 200;
     public const int setTeamerFunctionId = 4;
@@ -365,7 +365,7 @@ public static class GameCommon
     public static List<int> zeroNPC = new List<int>
     {
         1001,2001
-    }; 
+    };
     //组队
     public const int TeamFull = 5002;//人太多
     public const int TeamHurt = 5003;//受伤
@@ -404,18 +404,18 @@ public static class GameCommon
     public const float dropItemFlyerSpeed = 3f;
     public const int SeasonDays = 30;
     public const float fightMapMovingSpeed = 1f;
- 
+
     public const float PromptTime = 2.0f;
     public const float cellWidth = 0.08f, cellHigh = 0.08f;
     public const float cellSize = 0.04f;
     public const float oneDividCellWidth = 12.5f, oneDividCellHigh = 12.5f;
     public const float slantValue = 0.707f;
 
-    public const float worldMapTileSize = 0.08f; 
- 
+    public const float worldMapTileSize = 0.08f;
+
 
     public const float mapChangeLerpTime = 0.4f;
- 
+
 
     public const int fishingGameTime = 15000;
 
@@ -423,7 +423,7 @@ public static class GameCommon
     public const string triggerRenferenceName = "Reference";
 
     public const string PlayerBoxId = "PlayerBoxId";
- 
+
 
     public static Vector2 GetScreenResolution()
     {
@@ -556,7 +556,7 @@ public static class GameCommon
         return cells;
     }
     public static List<int> CellToGrid(List<int2> cells)
-    { 
+    {
         List<int> result = new List<int>();
 
         HashSet<int2> allCellPoints = new HashSet<int2>();
@@ -715,8 +715,8 @@ public static class GameCommon
         return value;
     }
 
- 
- 
+
+
     public static int2 StringToInt2(string str)
     {
         int2 result = new int2();
@@ -822,27 +822,27 @@ public static class GameCommon
         int2 result = coordinate0 - coordinate1;
         return math.length(new float2(result.x * cellWidth, result.y * cellHigh));
     }
-  
+
     public static string AddString(string s0, string s1)
     {
         s1 = s1.Replace("_", "/");
         var span = s1.AsSpan();
-      
+
         var builder = new StringBuilder(s0);
         builder.Append(span);
         return builder.ToString();
     }
     public static string BlendString(string s0, params string[] args)
-    {  
+    {
         var builder = new StringBuilder(s0);
         for (int i = 0; i < args.Length; i++)
         {
             var span = args[i].ToString().AsSpan();
             builder.Append(span);
-        } 
+        }
         return builder.ToString();
     }
- 
+
 
     public static int CreateRandSeed()
     {
@@ -870,7 +870,7 @@ public static class GameCommon
         }
         return float2.zero;
     }
- 
+
     public static float VectorAngle(Vector2 from, Vector2 to)
     {
         float angle;
@@ -891,7 +891,7 @@ public static class GameCommon
     private static float2 RightUp = new float2(1, 1);
     private static float2 LeftDown = new float2(-1, -1);
     private static float2 RightDown = new float2(1, -1);
- 
+
     public static Direction GetCharacterDirect(float2 offset, Direction oldDirection = Direction.Default)
     {
         if (Mathf.Abs(offset.x) > Mathf.Abs(offset.y))
@@ -971,7 +971,7 @@ public static class GameCommon
         }
         return oldDirection;
     }
- 
+
 
     public static Vector3 GetMapPos(int x, int y)
     {
@@ -1063,13 +1063,13 @@ public static class GameCommon
 
         return new int2(x, y);
     }
- 
+
 }
-  
+
 public static class EditorDataPath
 {
     public const string itemIconPath = "Item/";
-   
+
     public const string npcBehaviorPath = "Assets/Resources/Behavior/NPC/";
     public const string outDataPath = "Assets/Resources/Data/";
     public const string groundSourcePath = "Assets/Texture/Map/Ground/";
@@ -1137,7 +1137,7 @@ public static class DataPath
         {typeof(NPCFunctionData), "Data/NPCFunctionData"},
         {typeof(NPCData),"Data/NPCData" },
         {typeof(FriendShipData),"Data/FriendShipData" },
-        {typeof(PlantData),"Data/PlantData" }, 
+        {typeof(PlantData),"Data/PlantData" },
         {typeof(PastureData),"Data/PastureData/PastureDataList" },
         {typeof(AnimalData),"Data/AnimalData" },
         {typeof(FishData),"Data/FishData" },

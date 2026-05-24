@@ -1,4 +1,4 @@
-﻿// 无锁、覆盖式、并发安全、哈希结构的 NativeOverwritingHashMap
+// 无锁、覆盖式、并发安全、哈希结构的 NativeOverwritingHashMap
 // 特点：
 // - 不需要状态位（总是写入成功）
 // - 后写覆盖前写

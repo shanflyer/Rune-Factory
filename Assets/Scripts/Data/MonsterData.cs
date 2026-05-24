@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -9,12 +9,12 @@ public class MonsterData : ScriptableObject, IGameData
 {
     public int id;
     public string monsterName;
-    public int HP, AT, DF, Lucky,Speed; 
+    public int HP, AT, DF, Lucky,Speed;
     public AttributeType attributeType;
     public string monsterDescription;
     [NonSerialized]
     [HideInInspector]
-    public string SpriteName; 
+    public string SpriteName;
     public SpriteResourceRenference monsterSprite;
     public int attackType;
     public float scale;
@@ -22,7 +22,7 @@ public class MonsterData : ScriptableObject, IGameData
     public int dropId;
     public int exp;
     public int behaviorId;
-#if UNITY_EDITOR 
+#if UNITY_EDITOR
     static Dictionary<string, SpriteResourceRenference> monsterSpriteResourceRenferenceDic = new Dictionary<string, SpriteResourceRenference>();
     public void SetReferenceData()
     {
@@ -57,7 +57,7 @@ public class MonsterData : ScriptableObject, IGameData
         {
             AssetDatabase.StopAssetEditing();
         }
-       
+
     }
 #endif
     public string GetKey()

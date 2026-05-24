@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -65,7 +65,7 @@ public class HomeEquipReference : UIObjReference<HomeEquip>
        await base.InitData(t, SelectAction, toggleGroup);
 
         toggle.group = toggleGroup;
-        HomeEquipmentData homeEquipmentData = data.homeEquipmentData; 
+        HomeEquipmentData homeEquipmentData = data.homeEquipmentData;
         toggle.enabled = true;
         setTips.gameObject.SetActive(data.mapInstance > 0);
         unSetTips.gameObject.SetActive(data.mapInstance <= 0);

@@ -51,7 +51,7 @@ public class SelectItemCountPanel :GamePanel<SelectItemData>
     {
         base.Awake();
         ActionButton.onClick.AddListener(()=> { selectItemData.rightSelectItemAction(itemData, selectCount); });
-        ReturnButton.onClick.AddListener(() => 
+        ReturnButton.onClick.AddListener(() =>
         {
             if (selectItemData.leftSelectItemAction != null)
             {
@@ -87,7 +87,7 @@ public class SelectItemCountPanel :GamePanel<SelectItemData>
     void RefreshInitSelectCount()
     {
         selectCount = math.clamp(selectCount, selectItemData.minCount, selectItemData.maxCount);
-         
+
         InputField.SetTextWithoutNotify(selectCount.ToString());
         AddButton.interactable = AddToMaxButton.interactable = selectCount < selectItemData.maxCount;
         ReduceButton.interactable = ReduceButton.interactable = selectCount < selectItemData.minCount;

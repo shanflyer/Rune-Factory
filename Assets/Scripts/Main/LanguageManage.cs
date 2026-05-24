@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -53,7 +53,7 @@ public class LanguageManage : Singleton<LanguageManage>
     private Dictionary<string, MyLanguage> LocalLanguages = new Dictionary<string, MyLanguage>();
     private Dictionary<MyLanguage,LanguageData> allLanguages=new Dictionary<MyLanguage, LanguageData>();
     private Dictionary<string,FieldInfo> languageFields=new Dictionary<string, FieldInfo>();
-     
+
     public static MyLanguage nowLanguage;
     FieldInfo nowFieldInfo;
     public bool isRTL = false;
@@ -130,7 +130,7 @@ public class LanguageManage : Singleton<LanguageManage>
           return  nowFieldInfo.GetValue(languageSwitchData).ToString();
         }
         return source;
-    } 
+    }
     public void SetLanguage(MyLanguage myLanguage)
     {
         PlayerPrefs.SetInt("MyLanguage", (int)myLanguage);
@@ -190,7 +190,7 @@ public class LanguageManage : Singleton<LanguageManage>
 
     public void SystemLanguageMatch(MyLanguage SetSystemLanguage = MyLanguage.NULL)
     {
-        GetLocalLanguage(SetSystemLanguage); 
+        GetLocalLanguage(SetSystemLanguage);
     }
     public static string SwitchStr(object source, params object[] args)
     {
@@ -256,14 +256,14 @@ public class LanguageManage : Singleton<LanguageManage>
         string s = obj.ToString();
         s = instance.SwitchString(s);
         return s;
-    }  
+    }
     public string GameTimeToString(int year,Season season,int day)
     {
         string result = "";
         if(allLanguages.TryGetValue(nowLanguage,out var languageData))
         {
             result=string.Format(languageData.timeStr,year, SwitchStr(season), day);
-        } 
+        }
         return result;
     }
     public string GameTimeToString(int year, Season season)

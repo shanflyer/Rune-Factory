@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 
@@ -25,8 +25,8 @@ public class CheckCharacterInHome : Action
             if (npc.IsInHome())
             {
                 return TaskStatus.Success;
-            } 
-        } 
+            }
+        }
         return TaskStatus.Failure;
     }
 }

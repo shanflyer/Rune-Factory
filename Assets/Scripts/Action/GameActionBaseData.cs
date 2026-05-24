@@ -2,7 +2,7 @@ using UnityEngine;
 
 /// <summary>
 /// GameAction 强类型基类 —— 替代旧的 GameActionData（字符串 typeName + List&lt;Parameter&gt;）
-/// 
+///
 /// 每个 GameAction struct 对应一个继承此类的 ScriptableObject 子类，
 /// 字段直接暴露在 Inspector 中，运行时通过 CreateAction() 零反射创建 struct。
 /// </summary>

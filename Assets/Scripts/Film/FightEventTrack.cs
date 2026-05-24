@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -20,7 +20,7 @@ public class FightEventTrack : TrackAsset
     }
 
     public void SetSkillEstimateData(SkillEstimateData skillEstimateData)
-    { 
+    {
         this.skillEstimateData=skillEstimateData;
         foreach (var clip in GetClips())
         {

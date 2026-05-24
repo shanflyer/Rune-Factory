@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
 using System;
- 
+
 public struct MyColor: IReferenceData
 {
     public Color color;

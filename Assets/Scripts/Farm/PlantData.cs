@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using System;
 #if UNITY_EDITOR
@@ -21,7 +21,7 @@ public class PlantData : ScriptableObject, IGameData
     public Sprite icon;
 
 #if UNITY_EDITOR
-    public string GrowthStageStr; 
+    public string GrowthStageStr;
 #endif
     public List<GrowthStage> growthStages = new List<GrowthStage>();
 
@@ -57,7 +57,7 @@ public class PlantData : ScriptableObject, IGameData
         for(int i = 0; i < strs.Length; i++)
         {
             var dataStr = strs[i].Split(',');
-            
+
             if (dataStr.Length >= 3)
             {
                 GrowthStage growthStage = new GrowthStage

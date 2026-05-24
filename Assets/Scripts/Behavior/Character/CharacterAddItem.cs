@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
- 
+
 
 [TaskCategory("Game/Character")]
 [TaskName("为角色增加道具")]
@@ -30,7 +30,7 @@ public class CharacterAddItem : Action
                 {
 					Debug.Log(e.ToString());
                 }
-				
+
             }
         }
 	}

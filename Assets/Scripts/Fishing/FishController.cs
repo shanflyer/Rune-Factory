@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Unity.Mathematics; 
+using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class FishController : Singleton<FishController>
@@ -35,7 +35,7 @@ public class FishController : Singleton<FishController>
     {
         if(Fishers.TryGetValue(startFishingGame.characterId,out var fisherRuntime))
         {
-          
+
             if (fisherRuntime != null && fisherRuntime.fishTool != null)
             {
                 fisherRuntime.fishTool.StartFishing();
@@ -43,7 +43,7 @@ public class FishController : Singleton<FishController>
 
         }
     }
-     
+
     void NPCFishingResult(NPCFishingResult nPCFishingResult)
     {
         if(Fishers.TryGetValue(nPCFishingResult.characterId,out var fisherRuntime))
@@ -96,9 +96,9 @@ public class FishController : Singleton<FishController>
                 fishValue=fisherRuntime.fishTool.FishValue,
                 pondData=fisherRuntime.fishPondData
             };
-            GameActionManager.instance.QueueAction(fishingIsSuccess); 
+            GameActionManager.instance.QueueAction(fishingIsSuccess);
         }
-       
+
     }
     void RecycleFisher(RecycleFisher recycleFisher)
     {
@@ -118,19 +118,19 @@ public class FishController : Singleton<FishController>
                 if (CharacterManager.instance.GetRuntimeCharacterObj(creatFisher.characterInstance, out var characterRuntimeObj))
                 {
                     RuntimeObj runtimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj<FishTool>(RuntimeObjType.FISHTOOL.ToString(), "Fisher", fishTool, creatFisher.characterInstance);
-                  
+
                     Vector3 pos = GameCommon.fishToolOffsets[character.direction];
                     pos += characterRuntimeObj.transform.position;
 
 
 
-                    FisherRuntime fisher = new FisherRuntime(runtimeObj, creatFisher.characterInstance, character.mapInstance,creatFisher.pondData); 
+                    FisherRuntime fisher = new FisherRuntime(runtimeObj, creatFisher.characterInstance, character.mapInstance,creatFisher.pondData);
                     fisher.SetToolPos(pos);
 
                     Fishers.Add(creatFisher.characterInstance, fisher);
                     Fishers[creatFisher.characterInstance] = fisher;
                 }
-             
+
             }
         }
     }
@@ -165,7 +165,7 @@ public class FishController : Singleton<FishController>
 
 public class FisherRuntime
 {
-    public int instanceId; 
+    public int instanceId;
     public int roomId;
 
     public RuntimeObj runtimeObj;
@@ -187,7 +187,7 @@ public class FisherRuntime
     }
     void FishNotGetChangeAction()
     {
-        TryRecycleCharacterEmote tryRecycleCharacterEmote = new TryRecycleCharacterEmote { id = instanceId}; 
+        TryRecycleCharacterEmote tryRecycleCharacterEmote = new TryRecycleCharacterEmote { id = instanceId};
         GameActionManager.instance.QueueAction(tryRecycleCharacterEmote, true);
     }
     public FisherRuntime(RuntimeObj runtimeObj, int characterId, int roomId, FishPondData fishPondData)
@@ -211,7 +211,7 @@ public class FisherRuntime
     {
         fishPondData = null;
         fishTool = null;
-        GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj); 
+        GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
     }
-   
+
 }

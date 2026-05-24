@@ -56,7 +56,7 @@ public class TeamerReference : UIObjReference<CharacterInformationData>
         {
             NPCName.SetSWText(data.name);
         }
-      
+
         toggle.group = toggleGroup;
     }
 }

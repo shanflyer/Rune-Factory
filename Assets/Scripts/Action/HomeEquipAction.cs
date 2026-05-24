@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.Mathematics;
 
 public struct UnSetHomeEquip : GameAction
@@ -33,7 +33,7 @@ public struct CreatHomeEquip : GameAction
 
         if (target != 0 && target != int.MinValue) equipDataId = target;
         GameActionManager.instance.QueueAction(this, immediately);
-    } 
+    }
 }
 
 public struct RemoveHomeEquip : GameAction
@@ -193,7 +193,7 @@ public struct ClearManufature : GameAction
     {
         if (parameters.Count > 1)
         {
-            manufatureId = int.Parse(parameters[0].value); 
+            manufatureId = int.Parse(parameters[0].value);
         }
         this.setResult = setResult;
         this.setValue=setValue;
@@ -231,7 +231,7 @@ public struct RefreshManufature : GameAction
         this.setValue = setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
-   
+
 }
 public struct UpdataManufature : GameAction
 {

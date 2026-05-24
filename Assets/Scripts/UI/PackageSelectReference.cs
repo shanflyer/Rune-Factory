@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,7 +32,7 @@ public class PackageSelectReference : UIObjReference<PackageData>
         });
     }
 
-    private PackageData PackageData; 
+    private PackageData PackageData;
 
     public override async Task InitData(PackageData t, SelectAction<PackageData> SelectAction = null, ToggleGroup toggleGroup = null)
     {

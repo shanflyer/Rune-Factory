@@ -99,8 +99,8 @@ public class OperateButtonPanel : GamePanel<OperateDataList>
         }
 
         operateDataList = v;
-      
-        
+
+
         OperateList1.ClearAll();
         otherListShow = false;
         if (v.OperateDatas.Count <= 4)

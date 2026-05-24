@@ -28,7 +28,7 @@ public class LanguageReference : UIObjReference<LanguageData>
                 }
             }
         });
-        
+
     }
     public override Task InitData(LanguageData t, SelectAction<LanguageData> SelectAction = null, ToggleGroup toggleGroup = null)
     {

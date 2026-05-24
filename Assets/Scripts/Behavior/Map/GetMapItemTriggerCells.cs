@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -10,7 +10,7 @@ public class GetMapItemTriggerCells : Action
 {
     public SharedInt2List cells;
 
-    public SharedInt  mapItemInstance; 
+    public SharedInt  mapItemInstance;
 
     public override void OnStart()
     {
@@ -19,7 +19,7 @@ public class GetMapItemTriggerCells : Action
     public override TaskStatus OnUpdate()
     {
 
-         
+
 
         return TaskStatus.Success;
     }

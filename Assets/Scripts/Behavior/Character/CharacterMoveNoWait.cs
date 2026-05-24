@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
@@ -10,12 +10,12 @@ public class CharacterMoveNoWait : Action
     [SerializeField]
     private SharedInt characterId;
     [SerializeField]
-    private SharedInt3 target;  
-      
+    private SharedInt3 target;
+
     Character character;
     TaskStatus taskStatus;
     public override void OnStart()
-    { 
+    {
         taskStatus = TaskStatus.Running;
         if (characterId == null || characterId.IsNull())
         {
@@ -29,7 +29,7 @@ public class CharacterMoveNoWait : Action
                 taskStatus = TaskStatus.Failure;
                 return;
             }
-        }  
+        }
         var targetCoordinate = target.Value;
         character = CharacterManager.instance.GetCharacter(characterId.Value);
         if (character != null)
@@ -37,7 +37,7 @@ public class CharacterMoveNoWait : Action
             character.StopMove();
             if (!character.TryMove(targetCoordinate.z, targetCoordinate.xy, null))
             {
-              
+
             }
             taskStatus = TaskStatus.Success;
         }
@@ -46,7 +46,7 @@ public class CharacterMoveNoWait : Action
             taskStatus = TaskStatus.Failure;
         }
     }
-     
+
     public override TaskStatus OnUpdate()
     {
         return taskStatus;

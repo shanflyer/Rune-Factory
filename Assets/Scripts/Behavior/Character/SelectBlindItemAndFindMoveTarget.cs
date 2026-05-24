@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
@@ -50,12 +50,12 @@ public class SelectBlindItemAndFindMoveTarget: Action
             {
                 int index = i;
                 CheckMapEditorItemLinkCharacter checkMapEditorItemLinkCharacter = new CheckMapEditorItemLinkCharacter
-                { 
+                {
                     mapId = checkItems[index].x,
                     itemEditorId = checkItems[index].y,
                     characterId=characterId.Value,
                     setResult = (bool value) =>
-                    { 
+                    {
                         if (value)
                         {
                             items.Add(checkItems[index]);
@@ -87,11 +87,11 @@ public class SelectBlindItemAndFindMoveTarget: Action
                         {
                             taskStatus = TaskStatus.Failure;
                         }
-                       
+
                     }
                 };
                 GameActionManager.instance.QueueAction(checkMapEditorItemLinkCharacter, true);
-            }  
+            }
         }
         else
         {
@@ -117,7 +117,7 @@ public class SelectBlindItemAndFindMoveTarget: Action
                     {
                         targetCoordinate.Value = new int3(cell, SelectItem.Value.x);
                         taskStatus = TaskStatus.Success;
-                        return; 
+                        return;
                     }
                 }
                 else
@@ -129,14 +129,14 @@ public class SelectBlindItemAndFindMoveTarget: Action
                         taskStatus = TaskStatus.Success;
                         return;
                     }
-                } 
-            } 
+                }
+            }
         }
         taskStatus = TaskStatus.Failure;
     }
     TaskStatus taskStatus= TaskStatus.Failure;
     public override TaskStatus OnUpdate()
-    { 
+    {
         return taskStatus;
     }
 }

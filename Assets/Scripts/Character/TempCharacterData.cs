@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using BehaviorDesigner.Runtime;
 using Unity.Mathematics;
@@ -8,7 +8,7 @@ using Unity.Mathematics;
 using UnityEditor;
 
 #endif
- 
+
 public class TempCharacterData : ScriptableObject, IGameData
 {
     public int id;
@@ -23,7 +23,7 @@ public class TempCharacterData : ScriptableObject, IGameData
     public int defaultTalk;
     public IntIntDictionary mapTalk;
     public IntIntDictionary areaTalk;
-     
+
     public int nextTalkEventId;
     public int tempTalkEventId;
 
@@ -53,7 +53,7 @@ public class TempCharacterData : ScriptableObject, IGameData
                         behaviorDic = new IntBehaviorDictionary();
                         levelMapBehaviors.Add(level, behaviorDic);
                     }
-                    behaviorDic[map] = behaviorTree; 
+                    behaviorDic[map] = behaviorTree;
                 }
             }
         }

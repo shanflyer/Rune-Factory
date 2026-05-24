@@ -20,7 +20,7 @@ public class PolygonOutMesh : MonoBehaviour
             AssetDatabase.CreateAsset(mesh, $"{outMeshPath}/{meshName}.asset");
         }
     }
-#endif 
+#endif
 }
 #if UNITY_EDITOR
 [CustomEditor(typeof(PolygonOutMesh))]

@@ -48,7 +48,7 @@ public class AdventureTeamerRenference : UIObjReference<FighterResult>
         {
             Name.text=(data.Character.name);
         }
-       
+
         Level.text = $"Lv.{data.Character.Level}";
     }
 }

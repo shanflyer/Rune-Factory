@@ -73,7 +73,7 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
             var dataIsNull = userGameSaveData == null || string.IsNullOrEmpty(userGameSaveData.saveTime) ||
                              userGameSaveData.playerData.gender == Gender.animal;
             Copy.interactable = !dataIsNull;
-            Delete.interactable = !dataIsNull && userGameSaveData.index >= 0; 
+            Delete.interactable = !dataIsNull && userGameSaveData.index >= 0;
             Start.interactable = !dataIsNull;
         }
     }
@@ -122,7 +122,7 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
                 data.userGameSaveDatas[selectedIndex] = UserGameSaveData.CreatSaveData(selectedIndex);
         }
         else
-        { 
+        {
             GameDataSaveManager.instance.loadingIndex = selectGameSaveData.index;
         }
 

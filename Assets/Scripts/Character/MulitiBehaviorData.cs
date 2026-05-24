@@ -1,5 +1,5 @@
-﻿using BehaviorDesigner.Runtime;
-using System; 
+using BehaviorDesigner.Runtime;
+using System;
 using UnityEngine;
 using Unity.Mathematics;
 #if UNITY_EDITOR

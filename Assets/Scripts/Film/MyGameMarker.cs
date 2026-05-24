@@ -23,7 +23,7 @@ public class MyGameMarker : Marker, INotification, INotificationOptionProvider
         set { m_EmitOnce = value; }
     }
     public List<GameActionAsset> gameActionDatas = new List<GameActionAsset>();
-   
+
     public PropertyName id => throw new System.NotImplementedException();
 
     public NotificationFlags flags
@@ -36,5 +36,5 @@ public class MyGameMarker : Marker, INotification, INotificationOptionProvider
         }
     }
 
-    
+
 }

@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
-using BehaviorDesigner.Runtime.Tasks; 
-using Unity.Mathematics; 
+using BehaviorDesigner.Runtime.Tasks;
+using Unity.Mathematics;
 
 [TaskCategory("Game/CharacterGroup")]
 [TaskName("组团角色彼此靠近")]
@@ -28,8 +28,8 @@ public class GroupCharacterMoveToEachOther : Action
             var character = characters[i]; character.StopMove();
             if (NPCTaskScheduleManager.instance.GetNPCHoldPos(character.instanceId))
             {
-               
-               
+
+
             }
             else
             {
@@ -38,7 +38,7 @@ public class GroupCharacterMoveToEachOther : Action
 
                 }
             }
-            
+
         }
         startTime = Time.time;
     }
@@ -50,12 +50,12 @@ public class GroupCharacterMoveToEachOther : Action
         int maxX = int.MinValue;
         int maxY = int.MinValue;
         int minX = int.MaxValue; int minY = int.MaxValue;
-         
+
         for (int i = 0; i < characters.length; i++)
-        { 
+        {
             Character character = characters[i];
             if (character != null)
-            { 
+            {
                 if (maxX < character.coordinate.x)
                     maxX = character.coordinate.x;
                 if (maxY < character.coordinate.y)
@@ -64,7 +64,7 @@ public class GroupCharacterMoveToEachOther : Action
                     minX = character.coordinate.x;
                 if (minY < character.coordinate.y)
                     minY = character.coordinate.y;
-                 
+
             }
         }
         int2 center = new int2(minX + (maxX - minX) / 2, minY + (maxY - minY) / 2);
@@ -77,7 +77,7 @@ public class GroupCharacterMoveToEachOther : Action
         nowCenter = center;
         for (int i = 0; i < characters.length; i++)
         {
-            var distance = math.abs(characters[i].coordinate.x - center.x) + 
+            var distance = math.abs(characters[i].coordinate.x - center.x) +
                 math.abs(characters[i].coordinate.y - center.y);
             if (distance > this.distance)
             {
@@ -87,14 +87,14 @@ public class GroupCharacterMoveToEachOther : Action
         }
         taskStatus = TaskStatus.Success;
     }
-    
+
     void UpDataCharacter()
     {
         var keys = characters.GetKeyList();
         for(int i = 0; i < keys.Count; i++)
-        { 
+        {
             if (!characterIds.Value.Contains(keys[i]))
-            { 
+            {
                 LeaveMultiNPCBehaviorGroup leaveMultiNPCBehaviorGroup = new LeaveMultiNPCBehaviorGroup
                 {
                     characterId = keys[i],
@@ -130,13 +130,13 @@ public class GroupCharacterMoveToEachOther : Action
                 var character = characters[i];
                 if(NPCTaskScheduleManager.instance.GetNPCHoldPos(character.instanceId))
                 {
-                    character.RemoveMove(); 
+                    character.RemoveMove();
                 }
                 else
                 {
                     character.RemoveMove();
                     character.TryMove(nowCenter);
-                } 
+                }
             }
             oldCenter = nowCenter;
         }

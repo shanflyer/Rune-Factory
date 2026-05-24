@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 
@@ -67,12 +67,12 @@ public enum FriendAddType
 }
 public class FriendManager : Singleton<FriendManager>
 {
-    
+
     public override void Init()
     {
         base.Init();
         NPCFriendShips.Clear();
-      
+
         GameActionManager.instance.AddListener<AddFriendShipValue>(AddFriendShipValue);
         GameActionManager.instance.AddAsyncListener<TryGiveGiftOpenPackage>(TryGiveGiftOpenPackageAsync, nameof(TryGiveGiftOpenPackage));
         GameActionManager.instance.AddAsyncListener<GiveGift>(GiveGiftAsync, nameof(GiveGift));
@@ -86,9 +86,9 @@ public class FriendManager : Singleton<FriendManager>
             friendLevel = zeroFriendShipLevel,
         };
         NPCFriendShips[npcId] = friendShip;
-        friendAdd[npcId] = GameCommon.friendAddCount; 
+        friendAdd[npcId] = GameCommon.friendAddCount;
     }
-   
+
     private void NewDay(NewDay newDay)
     {
         if (friendAdd.Count > 0)
@@ -99,7 +99,7 @@ public class FriendManager : Singleton<FriendManager>
                 friendAdd[key] = GameCommon.friendAddCount;
             }
         }
-       
+
     }
     private async System.Threading.Tasks.Task GiveGiftAsync(GiveGift giveGift)
     {
@@ -133,7 +133,7 @@ public class FriendManager : Singleton<FriendManager>
         };
 
         bool isAnimal = PastureManager.instance.GetAnimal(tryGiveGiftOpenPackage.toCharacterId, out var animal);
-       
+
 
         Character character = CharacterManager.instance.GetCharacter(tryGiveGiftOpenPackage.fromCharacterId);
         if (character != null)
@@ -151,7 +151,7 @@ public class FriendManager : Singleton<FriendManager>
                         packageData.items[i] = item;
                     }
                 }
-            } 
+            }
             packageList.packageDatas.Add(packageData);
 
             var warehousePanel = await UIManager.instance.ShowGamePanel<WarehousePanel, PackageList>(packageList);
@@ -203,7 +203,7 @@ public class FriendManager : Singleton<FriendManager>
         foreach(var friendShip in NPCFriendShips)
         {
             friendSaveData.friendShips.Add(new int3(friendShip.Value.characterId, friendShip.Value.friendLevel,
-                friendShip.Value.nowValue)); 
+                friendShip.Value.nowValue));
         }
         foreach(var friend in friendAdd)
         {
@@ -211,7 +211,7 @@ public class FriendManager : Singleton<FriendManager>
         }
         return friendSaveData;
     }
-    
+
     private Dictionary<int, FriendShip> NPCFriendShips = new Dictionary<int, FriendShip>();
 
     private Dictionary<int, int3> friendAdd = new Dictionary<int, int3>();
@@ -237,11 +237,11 @@ public class FriendManager : Singleton<FriendManager>
     }
 
     private void AddFriendShipValue(AddFriendShipValue addFriendShipValue)
-    { 
+    {
         if(!NPCManager.instance.GetNPCIdFromInstance(addFriendShipValue.characterId, out var characterId))
         {
             characterId = addFriendShipValue.characterId;
-        } 
+        }
 
         bool canAddFriendShip = true;
         if (addFriendShipValue.value > 0)
@@ -288,7 +288,7 @@ public class FriendManager : Singleton<FriendManager>
                     if (addFriendShipValue.value > 0)
                     {
                         string outStr = string.Format(LanguageManage.SwitchStr("与{0}的友谊值提升{1}"), LanguageManage.SwitchStr(npc.npcName), addFriendShipValue.value);
-                        InformationController.instance.AddInformation(outStr, true, true); 
+                        InformationController.instance.AddInformation(outStr, true, true);
                     }
                     if (addFriendShipValue.value < 0)
                     {
@@ -297,11 +297,11 @@ public class FriendManager : Singleton<FriendManager>
                     }
                 }
 
-               
+
             }
         }
     }
-  
+
     public void AddFriendShip(int characterId, int value)
     {
         if (NPCFriendShips.TryGetValue(characterId, out var friendShip))

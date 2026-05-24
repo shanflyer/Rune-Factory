@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using BehaviorDesigner.Runtime;
 using UnityEngine;
 
@@ -83,7 +83,7 @@ public class GameManager : Singleton<GameManager>
     }
 
     public async System.Threading.Tasks.Task ShowObjTipsAsync(string info, Transform parent)
-    { 
+    {
        await UIManager.instance.ShowGamePanel<MapObjTipsPanel>(info, parent: parent);
     }
 

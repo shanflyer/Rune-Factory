@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -28,10 +28,10 @@ public class GuideButton : GameButton
     /*
     public override void OnPointerClick(PointerEventData eventData)
     {
-        base.OnPointerClick(eventData); 
+        base.OnPointerClick(eventData);
         if(eventData.button == PointerEventData.InputButton.Left)
         {
             GameGuideManager.instance.GuideButtonAction(eventData);
-        } 
+        }
     }*/
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
@@ -23,7 +23,7 @@ public class RunGameActions : Action
 {
     public bool immediately;
     public SharedInt source, target;
-    public SharedInt sharedSetIntValue; 
+    public SharedInt sharedSetIntValue;
 
     [Header("动态填充数据")]
     public List<DynamicData> otherDatas;
@@ -121,7 +121,7 @@ public class RunGameActions : Action
                         setResult: waitResult ? SetActionResult : null, setValue: SetValue, immediately: immediately);
                 }
             }
-            
+
         }
     }
 

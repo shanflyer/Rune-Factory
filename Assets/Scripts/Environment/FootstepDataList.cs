@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -8,16 +8,16 @@ public class FootstepDataList : ScriptableObject, IGameData
 {
     public FootstepData[] footstepDatas;
 
-    Dictionary<int3, FootstepSource> audioDic = new Dictionary<int3, FootstepSource>(); 
+    Dictionary<int3, FootstepSource> audioDic = new Dictionary<int3, FootstepSource>();
 
     public void Init()
     {
-        audioDic.Clear(); 
+        audioDic.Clear();
         for(int i = 0; i < footstepDatas.Length; i++)
         {
             audioDic.Add(new int3(footstepDatas[i].isOutSide ? 1 : 0, footstepDatas[i].index, 0), footstepDatas[i].dryClip);
             audioDic.Add(new int3(footstepDatas[i].isOutSide ? 1 : 0, footstepDatas[i].index, 1), footstepDatas[i].wetClip);
-            audioDic.Add(new int3(footstepDatas[i].isOutSide ? 1 : 0, footstepDatas[i].index, 2), footstepDatas[i].snowClip); 
+            audioDic.Add(new int3(footstepDatas[i].isOutSide ? 1 : 0, footstepDatas[i].index, 2), footstepDatas[i].snowClip);
         }
     }
     public FootstepSource GetSource(int3 key)
@@ -35,7 +35,7 @@ public class FootstepDataList : ScriptableObject, IGameData
 
     public void SetReferenceData()
     {
-        
+
     }
 }
 [Serializable]

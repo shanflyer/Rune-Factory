@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Mathematics;
@@ -14,12 +14,12 @@ public enum ItemType
     武器 = 1,
     防具 = 2,
     食材 = 3,
-    食物 = 4, 
-    收集物 = 5,  
+    食物 = 4,
+    收集物 = 5,
     工具=6,
     鞋子=7,
     帽子=8,
-    家具 = 10, 
+    家具 = 10,
     动物=11,
     农作物=12
 }
@@ -84,7 +84,7 @@ public class ItemData : ScriptableObject, IGameData
                 else
                 {
                     return info;
-                } 
+                }
             case ItemType.防具:
                 if (attributeType != AttributeType.无)
                 {
@@ -98,7 +98,7 @@ public class ItemData : ScriptableObject, IGameData
             default:
                 return info;
         }
-       
+
     }
     public  string GetProperty()
     {
@@ -120,9 +120,9 @@ public class ItemData : ScriptableObject, IGameData
 
                     return property.GetItemProperty();
                 }
-               
+
         }
-       
+
     }
     int growHour = 0;
     int fruitHour = 0;
@@ -130,7 +130,7 @@ public class ItemData : ScriptableObject, IGameData
     int pickTimes = 0;
 
     int animalDay = 0;
-    
+
     public void Init()
     {
         // IGameData.Init 是同步接口，异步补充字段集中兜底，避免初始化异常丢失。
@@ -165,7 +165,7 @@ public class ItemData : ScriptableObject, IGameData
                 }
                 break;
         }
-         
+
     }
     public override string ToString()
     {
@@ -193,7 +193,7 @@ public class ItemData : ScriptableObject, IGameData
                 allSprites.Add(sprites[i].name, sprites[i]);
             }
         }
-      
+
         if (!allSprites.TryGetValue(iconName, out icon))
         {
             if (iconDatas.Count == 0)
@@ -202,7 +202,7 @@ public class ItemData : ScriptableObject, IGameData
                 for (int i = 0; i < sprites.Length; i++)
                 {
                     iconDatas.Add(sprites[i].name, sprites[i]);
-                } 
+                }
             }
             if(iconDatas.TryGetValue(iconName, out SpriteResourceRenference spriteResourceRenference))
             {
@@ -226,6 +226,6 @@ public class ItemData : ScriptableObject, IGameData
     public string GetKey()
     {
         return id.ToString();
-    } 
+    }
 }
 

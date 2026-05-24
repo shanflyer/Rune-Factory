@@ -7,7 +7,7 @@ using Unity.Mathematics;
 [TaskCategory("Game/PlayerStore")]
 [TaskName("获取柜台可行走范围坐标")]
 public class GetStoreCounterPos : Action
-{ 
+{
     public SharedInt3 targetCoordinate;
     public SharedInt selectStoreCounterId;
     public SharedInt2 faceTargetCoordinate;
@@ -42,7 +42,7 @@ public class GetStoreCounterPos : Action
         }
 
         SelectItemGrid();
-    } 
+    }
     void SelectItemGrid()
     {
         taskStatus = TaskStatus.Running;
@@ -71,12 +71,12 @@ public class GetStoreCounterPos : Action
                 int index = GameRandom.RandomInt(0, walkableCells.Count);
                 int2 coordinate = walkableCells[index] + runtimeMapItem.coordinate;
                 targetCoordinate.Value = new int3(coordinate.xy, mapInstance);
-                taskStatus = TaskStatus.Success; 
-            } 
+                taskStatus = TaskStatus.Success;
+            }
         }
         else
         {
-            taskStatus = TaskStatus.Failure; 
+            taskStatus = TaskStatus.Failure;
         }
     }
 

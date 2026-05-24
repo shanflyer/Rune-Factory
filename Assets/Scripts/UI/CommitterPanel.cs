@@ -1,4 +1,4 @@
-﻿
+
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -18,11 +18,11 @@ public  class CommitterPanel:GamePanel<IReferenceData>
     public override async Task InitData(string dataKey)
     {
         string text = await CloudRemoteConfig.instance.GetConfig("Committer");
-        info.text = text; 
+        info.text = text;
     }
     protected override void Awake()
     {
-        base.Awake(); 
+        base.Awake();
         CloseBtn.onClick.AddListener(Close);
     }
 }

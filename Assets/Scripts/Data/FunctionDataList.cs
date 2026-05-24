@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 [CreateAssetMenu(menuName = "Data/选择事件数据")]
 public class FunctionDataList : ScriptableObject, IGameData, IDataArray<FunctionData>

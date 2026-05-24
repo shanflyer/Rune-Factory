@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -21,7 +21,7 @@ public class FilmData : ScriptableObject, IGameData, IReferenceData
     public string FilmName;
     public GameObject FilmObj;
     public bool stopTimeRun;
-    
+
     [SerializeField]
     public List<TimelineAssetData> TimelineAssets;
     public StringTimelineAssetDataDictionary timelineAssets =new StringTimelineAssetDataDictionary();
@@ -45,7 +45,7 @@ public class FilmData : ScriptableObject, IGameData, IReferenceData
             {
                 return default(TimelineAssetData);
             }
-            
+
         }
         if( timelineAssets.TryGetValue(assetName, out var timelineAsset))
         {

@@ -14,10 +14,10 @@ public class InputTest : MonoBehaviour
         var moveValue = (Vector2)obj;
         Debug.Log($"Move:{moveValue}");
     }
-    
+
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,4 +12,4 @@ public struct EmoteComponent:IComponentData,IEnableableComponent
     public float currentTime;
     public EntityType entityType;
     public int entityId;
-} 
+}

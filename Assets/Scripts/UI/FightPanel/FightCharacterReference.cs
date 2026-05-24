@@ -47,12 +47,12 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
     public override void OnEnable()
     {
         base.OnEnable();
-       
+
     }
 
     public override void OnDisable()
     {
-        base.OnDisable(); 
+        base.OnDisable();
     }
     private void Awake()
     {
@@ -64,14 +64,14 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
         Mask.SetActive(!autoLock && !pauseBehavior);
     }
     void NoSelectSkillAction(NoSelectSkillAction noSelectSkillAction)
-    { 
+    {
         skillButton.interactable = true;
     }
     void SkillPauseAction(SkillPauseAction skillPauseAction)
     {
         pauseBehavior = skillPauseAction.pause;
         Mask.SetActive(!autoLock && !pauseBehavior);
-    } 
+    }
     bool pauseBehavior;
     bool autoLock;
     public override void ClearData()
@@ -87,7 +87,7 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
             GameActionManager.instance.RemoveListener<SkillAutoLock>(SkillAutoLock);
             GameActionManager.instance.RemoveListener<SetChapterFight>(SetChapterFight);
         }
-      
+
         base.ClearData();
     }
     void ActionSkill()
@@ -107,12 +107,12 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
                 {
                     pause = true,
                 };
-                Debug.Log($"…Ë÷√‘›Õ£true1");
+                Debug.Log($"ËÆæÁΩÆÊöÇÂÅútrue1");
                 GameActionManager.instance.QueueAction(skillPauseAction, true);
             }
-         
+
         }
-       
+
     }
     public override void SetPanelUISerializeObj()
     {
@@ -183,7 +183,7 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
     FightPlayer fightPlayer;
     SkillRuntime playerSkillRuntime;
     private void InitData()
-    { 
+    {
         if (fightPlayer != null)
         {
             var character = fightPlayer.character;
@@ -200,18 +200,18 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
             {
                 NameText.SetSWText(characterInformationData.name);
             }
-           
+
             LevelText.text = $"Lv.{characterInformationData.level}";
             HPText.text = $"HP,{characterProperty.HP}/{characterProperty.MaxHP}";
             MPText.text = $"MP,{characterProperty.MP}/{characterProperty.MaxMP}";
             ATText.text = $"AT.{characterProperty.AT}";
             DFText.text = $"DF.{characterProperty.DF}";
-            LuckyText.text = $"{LanguageManage.SwitchStr("–“‘À")}.{characterProperty.Lucky}";
+            LuckyText.text = $"{LanguageManage.SwitchStr("Âπ∏Ëøê")}.{characterProperty.Lucky}";
             ExpText.text = $"Exp.{characterInformationData.exp.nowExp}/{characterInformationData.exp.nowLevelExp}";
 
             int speed = characterProperty.Speed;
             speed = math.clamp(speed, 0, 1);
-            SpeedText.text = $"{LanguageManage.SwitchStr("√ÙΩ›")}.{speed}";
+            SpeedText.text = $"{LanguageManage.SwitchStr("ÊïèÊç∑")}.{speed}";
 
             HPSlider.fillAmount = (float)characterProperty.HP / characterProperty.MaxHP;
             MPSlider.fillAmount = (float)characterProperty.MP / characterProperty.MaxMP;
@@ -248,8 +248,8 @@ public class FightCharacterReference : UIObjReference<FightCharacter>
         if (playerSkillRuntime == null)
             return;
         float value = playerSkillRuntime.GetTimeValue();
-        value = Mathf.Clamp(value, 0, 1); 
-        skillValue.fillAmount =value; 
+        value = Mathf.Clamp(value, 0, 1);
+        skillValue.fillAmount =value;
 
         if (value <= 0)
         {

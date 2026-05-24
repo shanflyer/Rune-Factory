@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -49,7 +49,7 @@ public class TalkManager : Singleton<TalkManager>
         if(NPCManager.instance.GetNPCFormInstance(characterId,out var NPC))
         {
             functionIds = NPC.functions;
-          
+
         }else if (NPCManager.instance.GetNPC(characterId, out  NPC))
         {
             functionIds = NPC.functions;
@@ -59,7 +59,7 @@ public class TalkManager : Singleton<TalkManager>
             functionIds = animal.animalData.functionIds;
         }
 
-        bool[] functionCheckResult = null; 
+        bool[] functionCheckResult = null;
         if (fixedFunctions != null)
         {
             functionCheckResult = null;
@@ -74,7 +74,7 @@ public class TalkManager : Singleton<TalkManager>
             functionCheckResult = new bool[functionIds.Count];
             for (int i = 0; i < functionIds.Count; i++)
             {
-                int functionId = functionIds[i]; 
+                int functionId = functionIds[i];
                 if (functionId == GameCommon.setTeamerFunctionId && TeamManager.instance.playerTeam.CheckCharacter(characterId))
                 {
                     // continue;
@@ -102,14 +102,14 @@ public class TalkManager : Singleton<TalkManager>
                                 AsyncTaskRunner.Run(ShowTalkAsync(), nameof(ShowTalkAsync));
                             }, immediately: true);
                         }
-                    } 
+                    }
                     else
                     {
                         NPCTalkOperateData.npcFunctionDatas.Add(nPCFunctionData);
                         functionCheckResult[index] = true;
                         await ShowTalkAsync();
                     }
-                   
+
                 }
             }
         }
@@ -130,7 +130,7 @@ public class TalkManager : Singleton<TalkManager>
         {
             await UIManager.instance.ShowGamePanel<SimpleTalkPanel, NPCTalkOperateData>(NPCTalkOperateData);
         }
-        
-       
+
+
     }
 }

@@ -1,15 +1,15 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 
 [TaskCategory("NewGame/Common")]
 [TaskName("时间流逝满足条件")]
 public class GameTimePassCheck : Action
-{  
+{
     public SharedInt year;
     public SharedInt season;
     public SharedInt day;
     public SharedInt hour;
-    public SharedInt minute; 
+    public SharedInt minute;
 
 
     private int oldYear,oldSeason,oldDay,oldHour,oldMinute;

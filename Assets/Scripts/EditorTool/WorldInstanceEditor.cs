@@ -104,7 +104,7 @@ public class WorldInstanceEditor : MonoBehaviour
             mapLine.map1 = map1;
 
             mapLine.cells0.girds = new List<int>();
-            mapLine.cells0.targetCell = new int3(coordinate1.xy, map1); 
+            mapLine.cells0.targetCell = new int3(coordinate1.xy, map1);
 
             List<int2> cells = new List<int2>();
             for (int x = tilemap0.cellBounds.min.x; x<= tilemap0.cellBounds.max.x; x++)
@@ -114,7 +114,7 @@ public class WorldInstanceEditor : MonoBehaviour
                     if(tilemap0.GetTile(new Vector3Int(x, y, 0)) != null)
                     {
                         cells.Add(new int2(x, y)+ coordinate0);
-                    } 
+                    }
                 }
             }
             mapLine.cells0.girds = GameCommon.CellToGrid(cells);
@@ -140,7 +140,7 @@ public class WorldInstanceEditor : MonoBehaviour
     }
 
 
-   
+
     public void AddNewLink()
     {
         if (mapInstanceEditors.Count > 0)

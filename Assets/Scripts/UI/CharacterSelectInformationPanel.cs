@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -63,7 +63,7 @@ public class CharacterSelectInformationPanel : GamePanel<SelectCharacterData>
         Close();
         GameDataSaveManager.instance.loadingIndex = -1;
         GameDataSaveManager.instance.UserGameSaveDataList.nowSaveData = UserGameSaveData.CreatSaveData(-1);
-       
+
         var teamManager = TeamManager.instance;
         NPCManager.instance.CreateZeroNPC();
         UIManager.instance.CloseGamePanel<SelectCharacterPanel>();

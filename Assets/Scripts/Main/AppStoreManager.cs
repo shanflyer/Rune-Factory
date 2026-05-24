@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using VoxelBusters.CoreLibrary;
 using VoxelBusters.EssentialKit;
 
-public class AppStoreManager : MonoBehaviour 
+public class AppStoreManager : MonoBehaviour
 {
     const string projectName = "com.shanflyer.FantasyTown_EveryDay";
-    public static AppStoreManager instance; 
+    public static AppStoreManager instance;
 
     private MyDic<string, AppStoreProductData> appStoreProductDatas = new MyDic<string, AppStoreProductData>();
 
@@ -16,7 +16,7 @@ public class AppStoreManager : MonoBehaviour
     }
     void OnDisable()
     {
-#if !UNITY_EDITOR 
+#if !UNITY_EDITOR
             BillingServices.OnInitializeStoreComplete -= OnInitializeStoreComplete;
             BillingServices.OnTransactionStateChange -= OnTransactionStateChange;
             BillingServices.OnRestorePurchasesComplete -= OnRestorePurchasesComplete;
@@ -44,9 +44,9 @@ public class AppStoreManager : MonoBehaviour
 
     public void Awake()
     {
-       
+
     }
-     
+
    // public string goldProductId = "com.shanflyer.FantasyTown_EveryDay.diamond200";
     public string goldProductId = "diamond200";
 
@@ -66,7 +66,7 @@ public class AppStoreManager : MonoBehaviour
 #else
       var goldProductId = $"{appStoreProductData.ProductName}";
         BillingServices.BuyProduct(goldProductId,options:null);
-    
+
 #endif
 
     }

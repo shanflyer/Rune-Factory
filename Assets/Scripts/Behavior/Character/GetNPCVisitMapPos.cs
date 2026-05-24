@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
@@ -24,18 +24,18 @@ public class GetNPCVisitMapPos : Action
     public override TaskStatus OnUpdate()
     {
         if (NPCManager.instance.GetNPCFormInstance(characterId.Value,out var npc))
-        { 
+        {
             int visitMap = npc.GetVisitMap();
             this.visitMap.SetValue(visitMap);
             if (visitMap > 0)
             {
                 var cell = MapCellController.instance.GetRandomBehaviorCell(visitMap, BehaviorAreaType.聚集);
                 result.SetValue(new int3(cell.xy, visitMap));
-                
+
                 return TaskStatus.Success;
-            } 
-        } 
-         
+            }
+        }
+
         return TaskStatus.Failure;
     }
 }

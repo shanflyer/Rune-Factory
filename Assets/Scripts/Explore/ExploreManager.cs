@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using MyGame;
 using Unity.Mathematics;
 using UnityEngine;
@@ -11,7 +11,7 @@ public class FightChapter : IReferenceData
     public HashSet<int> findItems=new HashSet<int>();
     public List<int> haveItems=new List<int>();
     public int failureEventId;
-    public int successEventId; 
+    public int successEventId;
     public bool open;
     public bool completed;
     public FightMapData fightMapData;
@@ -34,11 +34,11 @@ public class ExploreManager : Singleton<ExploreManager>
     private int nowStep;
     public bool isExplore => NowChapter != 0;
     public FightChapter GetFightChapter(int id)
-    { 
+    {
         if(fightChapters.TryGetValue(id,out var fightChapter))
         {
             return fightChapter;
-        } 
+        }
         return null;
     }
 
@@ -66,7 +66,7 @@ public class ExploreManager : Singleton<ExploreManager>
                 successEventId = chapterData.successEventId,
                 fightMapData=chapterData,
             };
-           
+
 
             if (chapterData.items != null && chapterData.items.Count > 0)
             {
@@ -86,14 +86,14 @@ public class ExploreManager : Singleton<ExploreManager>
             {
                 FightChapter fightChapter;
                 if (fightChapters.TryGetValue(chapter.Value.mapId, out fightChapter))
-                { 
+                {
                     fightChapter.open = chapter.Value.open;
                     fightChapter.completed = chapter.Value.completed;
                     for (int j = 0; j < chapter.Value.findItems.Count; j++)
                     {
                         fightChapter.findItems.Add(chapter.Value.findItems[j]);
                     }
-                } 
+                }
             }
         }
         else
@@ -172,12 +172,12 @@ public class ExploreManager : Singleton<ExploreManager>
             {
                 enable = false
             };
-            GameActionManager.instance.QueueAction(SetCameraConfiner2D); 
+            GameActionManager.instance.QueueAction(SetCameraConfiner2D);
 
             FightController.instance.CreateFightMap(nowFightMapData);
             AudioController.instance.ClearBGM(AudioClearType.All, BGMGroup.Theme.ToString());
             AudioController.instance.PlayBGM(nowFightMapData.exploreBGM, Group: BGMGroup.Battle.ToString(), audioClearType: AudioClearType.All,isLerp:true);
-             
+
             AudioController.instance.SetBGMGroupValue(BGMGroup.Map.ToString(), 0);
             AudioController.instance.SetBGSGroupValue(BGMGroup.Map.ToString(), 0);
             AudioController.instance.SetBGSGroupValue(BGSGroup.Rain.ToString(), 0);
@@ -191,12 +191,12 @@ public class ExploreManager : Singleton<ExploreManager>
                 duskEnvironmentDataName = nowFightMapData.duskEnvironmentDataName,
                 nightEnvironmentDataName = nowFightMapData.nightEnvironmentDataName
             };
-            GameActionManager.instance.QueueAction(setMapOverrideEnvironment, true); 
+            GameActionManager.instance.QueueAction(setMapOverrideEnvironment, true);
             FightManager.instance.CreateFightPlayer();
-             
+
             GameTimerController.instance.DelayAction(100, async () =>
             {
-                await UIManager.instance.ShowGamePanel<FightPanel>(instance.NowChapter.ToString(), layer: 2); 
+                await UIManager.instance.ShowGamePanel<FightPanel>(instance.NowChapter.ToString(), layer: 2);
                 UIManager.instance.CloseGamePanel<PlayerTopPanel>();
                 UIManager.instance.CloseGamePanel<MainPanel>();
                 UIManager.instance.CloseGamePanel<ShortcutPanel>();
@@ -207,11 +207,11 @@ public class ExploreManager : Singleton<ExploreManager>
                     afterActionData.Action();
                 }
             });
-           
+
 
         });
 
-        
+
     }
     //探索阶段
     private async System.Threading.Tasks.Task ChapterStepActionAsync(ChapterStepAction chapterStepAction)
@@ -227,7 +227,7 @@ public class ExploreManager : Singleton<ExploreManager>
         }
         if (nowFightMapData.id != nowChapter)
         {
-            nowFightMapData = await GameDataManager.instance.GetAsyncData<FightMapData>(nowChapter); 
+            nowFightMapData = await GameDataManager.instance.GetAsyncData<FightMapData>(nowChapter);
         }
         if (nowFightMapData.monsterDeploys.Count > nowStep)
         {
@@ -251,7 +251,7 @@ public class ExploreManager : Singleton<ExploreManager>
                await FightManager.instance.CreateFightMonster(monsterDeploy);
             }
         }
-         
+
         SwitchFunctionButton switchFunctionButton = new SwitchFunctionButton
         {
             fight = true,
@@ -264,7 +264,7 @@ public class ExploreManager : Singleton<ExploreManager>
             TryStartAutoBehavior tryStartAutoBehavior = new TryStartAutoBehavior();
             GameActionManager.instance.QueueAction(tryStartAutoBehavior);
         });
-      
+
     }
 
     public void LerpExploreTime(float waitTime)
@@ -314,7 +314,7 @@ public class ExploreManager : Singleton<ExploreManager>
         float value = nowStep / (float)nowFightMapData.monsterDeploys.Count;
         float itemValue = fightChapter.findItems.Count / (float)fightChapter.haveItems.Count;
 
-        fightChapter.completeValue = (int)(value * 50)+ (int)(itemValue * 50); 
+        fightChapter.completeValue = (int)(value * 50)+ (int)(itemValue * 50);
 
         EndNowRoundFight endNowRoundFight = new EndNowRoundFight { };
         GameActionManager.instance.QueueAction(endNowRoundFight, true);
@@ -368,7 +368,7 @@ public class ExploreManager : Singleton<ExploreManager>
         if (gameEventData != null)
         {
             GameEventManager.instance.AddGameEvent(gameEventData, null);
-        } 
+        }
     }
 
     private void ExploreSuccessful()
@@ -389,7 +389,7 @@ public class ExploreManager : Singleton<ExploreManager>
         if (gameEventData != null)
         {
             GameEventManager.instance.AddGameEvent(gameEventData, null);
-        } 
+        }
     }
 
     protected override void Clear()

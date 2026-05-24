@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.Mathematics;
 
 public struct SetChapterFight : GameAction
@@ -27,7 +27,7 @@ public struct ManualSkillAction : GameAction
         this.setValue = setValue;
         GameActionManager.instance.QueueAction(this, immediately);
     }
-    
+
 }
 public struct SkillAutoLock : GameAction
 {

@@ -21,7 +21,7 @@ public struct EventReferenceData
 public struct MapItemEventReferenceData
 {
     public string name;
-    public int value;  
+    public int value;
 }
 
 public enum ReferenceValueType
@@ -228,11 +228,11 @@ public class GameEventManager : Singleton<GameEventManager>
         {
             behaviorTrees[gameEventData.id] = behaviorTree;
         }
-       
+
     }
 
     public void RemoveGameEvent(int id)
-    { 
+    {
         if (behaviorTrees.TryGetValue(id, out BehaviorTree behaviorTree))
         {
             GameObject.Destroy(behaviorTree);

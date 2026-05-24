@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using BehaviorDesigner.Runtime;
@@ -27,7 +27,7 @@ public class RuntimeObjMoveEvent : Action
             taskStatus = TaskStatus.Failure;
             return;
         }
-         
+
         switch (entityType)
         {
             case EntityType.地图道具:
@@ -40,10 +40,10 @@ public class RuntimeObjMoveEvent : Action
                 {
                     taskStatus = TaskStatus.Failure;
                 }
-               
+
                 break;
             case EntityType.角色:
-                
+
                 if (CharacterManager.instance.GetRuntimeCharacterObj(objId.Value, out CharacterRuntimeObj characterRuntimeObj))
                 {
                     runtimeObjTransform = characterRuntimeObj.transform;
@@ -85,7 +85,7 @@ public class RuntimeObjMoveEvent : Action
     void SetObjPos(Vector3 pos)
     {
         if (runtimeObjTransform != null && runtimeObjTransform.gameObject.activeSelf)
-        { 
+        {
             runtimeObjTransform.position = GameCommon.SetMapPosZ(pos);
         }
         else

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -18,14 +18,14 @@ public class StoreCounterDataList : ScriptableObject, IGameData, IDataArray<Stor
         return "StoreCounterDataList";
     }
     public void SetReferenceData()
-    { 
+    {
     }
 }
 [System.Serializable]
 public class StoreCounterData :  IGameData
 {
     public string counterName;
-    public int id;  
+    public int id;
     public Vector3 offset;
     public List<int> itemTypes;
     public string GetKey()
@@ -37,6 +37,6 @@ public class StoreCounterData :  IGameData
         return id.ToString();
     }
     public void SetReferenceData()
-    { 
+    {
     }
 }

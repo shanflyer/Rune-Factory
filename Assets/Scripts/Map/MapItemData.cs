@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -57,7 +57,7 @@ public class MapItemData : ScriptableObject, IGameData
         {
             objName = itemObj.name;
         }
-    } 
+    }
 
 #endif
     public string GetKey()

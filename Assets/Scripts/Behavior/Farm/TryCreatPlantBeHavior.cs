@@ -1,13 +1,13 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using static UnityEngine.Rendering.ReloadAttribute;
 
 [TaskCategory("Game/农场")]
 [TaskName("尝试种植")]
-public class TryCreatPlantBeHavior : Action 
+public class TryCreatPlantBeHavior : Action
 {
-    public SharedInt characterId; 
+    public SharedInt characterId;
     public SharedInt fieldId;
     public SharedInt seedId;
 
@@ -35,7 +35,7 @@ public class TryCreatPlantBeHavior : Action
             taskStatus = TaskStatus.Failure;
         }
         else
-        { 
+        {
             TryCreatPlant tryCreatPlant = new TryCreatPlant
             {
                 fieldId = fieldId.Value,
@@ -45,7 +45,7 @@ public class TryCreatPlantBeHavior : Action
             GameActionManager.instance.QueueAction(tryCreatPlant);
         }
 
-        
+
     }
     void CheckState(bool value)
     {

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 public class GameTimeEventManager : Singleton<GameTimeEventManager>
 {
@@ -100,7 +100,7 @@ public class GameTimeEventManager : Singleton<GameTimeEventManager>
         foreach (var  gameTimeEvent in wakeUpTimeEvents.Values)
         {
             if (gameTimeEvent.triggerValue == newWakeUpActionIndex)
-            { 
+            {
                await GameEventManager.instance.AddGameEvent(gameTimeEvent.actionValue);
                 gameTimeEvent.nowActionIndex = newWakeUpActionIndex;
                 deathEvents.Add(gameTimeEvent.id);
@@ -122,7 +122,7 @@ public class GameTimeEventManager : Singleton<GameTimeEventManager>
         return true;
     }
 
-    public class GameTimeEvent 
+    public class GameTimeEvent
     {
         public int id;
         public TimeEventType timeEventType;

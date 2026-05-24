@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,14 +26,13 @@ public class ObjPackageAnimationData : ScriptableObject, IGameData
         {
             if (itemAnimationDataList[i].x == itemData&& itemAnimationDataList[i].y>count)
             {
-                key.xy = itemAnimationDataList[i].zw; 
+                key.xy = itemAnimationDataList[i].zw;
                 break;
             }
         }
         return key;
     }
     public void SetReferenceData()
-    { 
+    {
     }
 }
- 

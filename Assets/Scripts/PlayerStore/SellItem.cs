@@ -1,4 +1,4 @@
-﻿using TMPro;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -88,8 +88,8 @@ public class SellItem : GamePanel<Item>
         item = v;
         ShopItemDisplayData shopItemDisplayData = await GameDataManager.instance.GetAsyncData<ShopItemDisplayData>(item.dataId);
         if (shopItemDisplayData == null)
-        { 
-            transform.localPosition = defaultOffset; 
+        {
+            transform.localPosition = defaultOffset;
             ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
             icon.size = new Vector2(0.32f, 0.32f);
             if (itemData != null)
@@ -98,9 +98,9 @@ public class SellItem : GamePanel<Item>
             }
         }
         else
-        { 
+        {
             Vector3 offsetPos = shopItemDisplayData.offset;
-            transform.localPosition = offsetPos; 
+            transform.localPosition = offsetPos;
             if (shopItemDisplayData.itemCounts == null || shopItemDisplayData.itemCounts.Count == 0)
             {
                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);

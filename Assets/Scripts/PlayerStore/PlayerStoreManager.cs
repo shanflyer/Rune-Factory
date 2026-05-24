@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -171,11 +171,11 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
             }
             else
             {
-                StopTempCharacterCreat stopTempCharacterCreat = new StopTempCharacterCreat(); 
+                StopTempCharacterCreat stopTempCharacterCreat = new StopTempCharacterCreat();
                 GameActionManager.instance.QueueAction(stopTempCharacterCreat, true);
             }
-            
-        }  
+
+        }
     }
     private  void TryBuyPlayerGood(TryBuyPlayerGood buyPlayerGood)
     {
@@ -202,12 +202,12 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
             {
                 runtimeStoreCounter.itemData=null;
                 runtimeStoreCounter.count = 0;
-            } 
+            }
             if (runtimeObj!=null&&runtimeObj.obj != null)
             {
                 (runtimeObj.obj as SellItem).SetItemCount(runtimeStoreCounter.count);
             }
- 
+
             if (buyPlayerGood.setResult != null)
                 buyPlayerGood.setResult(true);
         }
@@ -232,7 +232,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
 
             runtimeStoreCounter.count--;
             if (runtimeStoreCounter.count > 0)
-            { 
+            {
                 if (runtimeObj.obj != null)
                 {
                     (runtimeObj.obj as SellItem).AddItemCount(-1);
@@ -244,12 +244,12 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
             else
             {
                 runtimeStoreCounter.itemData = null;
-                runtimeStoreCounter.count = 0; 
+                runtimeStoreCounter.count = 0;
                 if (runtimeObj.obj != null)
                 {
                     GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
                 }
-            } 
+            }
         }
     }
 
@@ -266,7 +266,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
             else
             {
                 OpenStoreCounter(setStoreCounter.storeCounterId);
-            } 
+            }
         }
     }
 
@@ -274,7 +274,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
     private async System.Threading.Tasks.Task StoreCounterSetSelectItemActionAsync(StoreCounterSetSelectItemAction storeCounterSetSelectItemAction)
     {
         if (runtimeStoreCounters.TryGetValue(storeCounterSetSelectItemAction.targetObj,out var runtimeStoreCounter))
-        { 
+        {
             var storeData = runtimeStoreCounter.storeCounterData;
             var itemMatchData = new ItemMatchData
             {
@@ -294,7 +294,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                  },
                 itemMatchData = itemMatchData
             };
-             
+
             WarehousePanel warehousePanel = await UIManager.instance.ShowGamePanel<WarehousePanel,PackageList>(packageList);
             warehousePanel.SetSelectItemAction((Item item, int index, bool select) =>
             {
@@ -338,7 +338,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         };
         if (runtimeStoreCounters.TryGetValue(storeId, out var runtimeStoreCounter))
         {
-            setStoreCounterItem.count = runtimeStoreCounter.count; 
+            setStoreCounterItem.count = runtimeStoreCounter.count;
         }
        await UIManager.instance.ShowGamePanel<StoreCounterSetPanel, SetStoreCounterItem>(setStoreCounterItem);
     }
@@ -352,7 +352,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
             if (runtimeStoreCounter.count == 0)
             {
                 runtimeStoreCounter.itemData=null;
-            } 
+            }
 
             if (nowRuntimeStoreCounterObjs.TryGetValue(setStoreCounterItem.storeCounterId, out var runtimeObj))
             {
@@ -366,7 +366,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                     });
                 }
             }
- 
+
         }
     }
     public void CreatStoreCounter(StoreCounterSaveData storeCounterSaveData)
@@ -405,16 +405,16 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 {
                     instanceId = creatStoreCounter.itemInstanceId,
                     storeCounterData = storeData,
-                     
+
                 };
                 runtimeStoreCounters.Add(creatStoreCounter.itemInstanceId,runtimeStoreCounter);
- 
+
             }
         }
     }
 
     private async System.Threading.Tasks.Task DisplayStoreCounterAsync(DisplayStoreCounter displayStoreCounter)
-    { 
+    {
         if (runtimeStoreCounters.TryGetValue(displayStoreCounter.itemInstanceId, out var runtimeStoreCounter))
         {
             if (displayStoreCounter.display)
@@ -428,7 +428,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 if (!nowRuntimeStoreCounterObjs.TryGetValue(displayStoreCounter.itemInstanceId, out var runtimeObj))
                 {
                     runtimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.STOREITEM.ToString(), "STOREITEM",
-                        sellItem, displayStoreCounter.itemInstanceId); 
+                        sellItem, displayStoreCounter.itemInstanceId);
                     nowRuntimeStoreCounterObjs.Add(displayStoreCounter.itemInstanceId, runtimeObj);
                 }
                 SellItem nowSellItem = runtimeObj.obj as SellItem;
@@ -448,7 +448,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 transform.gameObject.SetActive(true);
                 transform.SetParent(displayStoreCounter.transform, false);
                 // transform.localPosition = storeCounterData.offset;
-                // 
+                //
             }
             else
             {
@@ -458,7 +458,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                     nowRuntimeStoreCounterObjs.Remove(displayStoreCounter.itemInstanceId);
                 }
             }
- 
+
         }
     }
 
@@ -470,7 +470,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
             {
                 GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
                 nowRuntimeStoreCounterObjs.Remove(deleteMapItem.mapItemInstanceId);
-            } 
+            }
         }
     }
 
@@ -480,10 +480,10 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
     }
 }
 
-public class RuntimeStoreCounter  
+public class RuntimeStoreCounter
 {
     public int instanceId;
     public StoreCounterData storeCounterData;
     public ItemData itemData;
-    public int count; 
+    public int count;
 }

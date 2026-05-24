@@ -13,7 +13,7 @@ public class IOSTest : MonoBehaviour
 
     void Start()
     {
-        
+
         imagePath = Application.persistentDataPath + "/001.png";
     }
 
@@ -34,7 +34,7 @@ public class IOSTest : MonoBehaviour
            // GameComponentData.gameData.gameManager.ShareSuccess();
         }
 
-       
+
     }
     /*
     void OnGUI()
@@ -90,7 +90,7 @@ public class IOSTest : MonoBehaviour
 
 
     }
-  
+
     [DllImport("__Internal")]
     private static extern void SocialSharing(string body, string url, string imageDataString, string subject);
     [DllImport("__Internal")]

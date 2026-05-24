@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using BehaviorDesigner.Runtime.Tasks;
 using BehaviorDesigner.Runtime;
@@ -23,21 +23,21 @@ public class RoundStartFight : Action
         {
             nowFightCharacter=(SharedInt)Owner.GetVariable("nowFightCharacter");
         }
-      
-    } 
+
+    }
     public override TaskStatus OnUpdate()
-    {  
+    {
         if(fightCharacter == null||fightCharacter.fightStatus==FightStatus.准备)
         {
             if (fightCharacters.Value.Count > 0)
             {
                 int characterId = fightCharacters.Value.Dequeue();
                 if (FightManager.instance.GetFightCharacter(characterId,out fightCharacter))
-                { 
+                {
                     nowFightCharacter.Value = characterId;
-                    FightManager.instance.cdTimeMoving = false; 
+                    FightManager.instance.cdTimeMoving = false;
                     FightController.instance.RunFightCharacter(characterId);
-                } 
+                }
             }
             else
             {
@@ -46,7 +46,7 @@ public class RoundStartFight : Action
             }
         }
 
-        return TaskStatus.Running; 
-         
+        return TaskStatus.Running;
+
     }
 }

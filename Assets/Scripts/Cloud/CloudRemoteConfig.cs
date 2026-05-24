@@ -47,9 +47,9 @@ public class CloudRemoteConfig:Singleton<CloudRemoteConfig>
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
         }
     }
- 
+
     void ApplyRemoteSettings(ConfigResponse configResponse)
-    { 
+    {
         if (GameDataManager.instance.GlobalData.debug)
             Debug.Log("RemoteConfigService.Instance.appConfig fetched: " + RemoteConfigService.Instance.appConfig.config.ToString());
     }

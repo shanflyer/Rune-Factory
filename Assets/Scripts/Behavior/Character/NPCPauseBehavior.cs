@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
@@ -8,7 +8,7 @@ using UnityEngine;
 public class NPCPauseBehavior : Action
 {
     [SerializeField]
-    private SharedInt characterId; 
+    private SharedInt characterId;
 
     Character character;
     TaskStatus taskStatus;
@@ -19,7 +19,7 @@ public class NPCPauseBehavior : Action
         {
             characterId = (SharedInt)Owner.GetVariable("CharacterId");
         }
-        
+
         character = CharacterManager.instance.GetCharacter(characterId.Value);
         if (character != null)
         {

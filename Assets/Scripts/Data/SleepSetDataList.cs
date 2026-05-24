@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-[CreateAssetMenu(menuName = "Datas/Ë¯ÃßÉèÖÃÊı¾İ")]
+[CreateAssetMenu(menuName = "Datas/ç¡çœ è®¾ç½®æ•°æ®")]
 public class SleepSetDataList : ScriptableObject, IGameData, IDataArray<SleepSetData>
 {
     [SerializeField]
@@ -48,7 +48,7 @@ public class SleepSetDataList : ScriptableObject, IGameData, IDataArray<SleepSet
                     nowSleepSetDatas.Add(sleepSetData);
                 }
             }
-            
+
         }
         return nowSleepSetDatas;
     }
@@ -71,7 +71,7 @@ public struct SleepSetData : IReferenceData, IGameData
     public bool SleepToTime;
     public int gameDay;
     public int hour;
-    public int minute; 
+    public int minute;
     public string iconName;
     public Sprite icon;
     public int startHour, endHour;

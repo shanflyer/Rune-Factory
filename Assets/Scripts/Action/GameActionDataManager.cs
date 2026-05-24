@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -15,7 +15,7 @@ public class GameActionDataManager : Singleton<GameActionDataManager>
        //Debug.Log($"GameAction:{typeName}");
         if (gameActionDataDelegates.TryGetValue(typeName, out var actionInit))
         {
-             (actionInit.Target as GameAction).Clear(); 
+             (actionInit.Target as GameAction).Clear();
             actionInit.Invoke(parameters, source, target, value, setResult, setValue);
         }
         else
@@ -45,7 +45,7 @@ public class GameActionDataManager : Singleton<GameActionDataManager>
             {
                 Debug.LogError($"{typeName}-{e}");
             }
-         
+
         }
     }
 

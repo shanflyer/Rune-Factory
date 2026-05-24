@@ -39,7 +39,7 @@ public class MapLinkEditor : MonoBehaviour
         endPos = endPoint.position;
         lineRenderer = GetComponent<LineRenderer>();
         SetLineCoordinatePos();
-    } 
+    }
     public MapLine mapLine;
     private MapInstanceEditor mapInstance0, mapInstance1;
 
@@ -63,7 +63,7 @@ public class MapLinkEditor : MonoBehaviour
             == mapId;
     }
     public void InitLinkData(MapLine mapLine)
-    { 
+    {
         if (mapLine.instanceId == 0)
         {
             var id = $"{mapLine.map0}{mapLine.map1}";
@@ -195,7 +195,7 @@ public class MapLinkEditor : MonoBehaviour
         if (!WorldInstanceEditor.Instance.InitLinkMap(startCoordinate, endCoordinate,tilemap0,tilemap1,
             mapInstance0.coordinate,mapInstance1.coordinate,
              ref mapLine))
-        { 
+        {
 
 
             DestroyImmediate(gameObject);
@@ -206,7 +206,7 @@ public class MapLinkEditor : MonoBehaviour
             var id = $"{mapLine.map0}{mapLine.map1}";
             mapLine.instanceId = int.Parse(id);
         }
-       
+
     }
     // Update is called once per frame
     void Update1()
@@ -229,8 +229,8 @@ public class MapLinkEditor : MonoBehaviour
             endPos = endPoint.position;
             SetLinePoint();
 
-            if (!WorldInstanceEditor.Instance.InitLinkMap(startCoordinate, endCoordinate, tilemap0, tilemap1, 
-            mapInstance0.coordinate, mapInstance1.coordinate, 
+            if (!WorldInstanceEditor.Instance.InitLinkMap(startCoordinate, endCoordinate, tilemap0, tilemap1,
+            mapInstance0.coordinate, mapInstance1.coordinate,
              ref mapLine))
             {
                 DestroyImmediate(gameObject);

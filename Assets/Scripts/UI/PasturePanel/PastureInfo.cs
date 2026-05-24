@@ -38,7 +38,7 @@ public class PastureInfo : UIObjReference<Pasture>
         {
            if(PastureManager.instance.GetPasture(data.instanceId,out data))
             {
-                P0.enabled = P1.enabled = P2.enabled = false; 
+                P0.enabled = P1.enabled = P2.enabled = false;
                 switch (data.level)
                 {
                     case 0:
@@ -91,7 +91,7 @@ public class PastureInfo : UIObjReference<Pasture>
                     break;
             }
         }
-       
+
         return base.InitData(t, SelectAction, toggleGroup);
     }
 

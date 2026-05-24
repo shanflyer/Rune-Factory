@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 
@@ -24,20 +24,20 @@ public class CheckCharacterPropertyChange:Action
         {
             if (characterPropertyTrigger.characterId == source.characterId.Value)
             {
-                sourceValue = characterPropertyTrigger.characterProperty.GetValue(source.propertyType); 
+                sourceValue = characterPropertyTrigger.characterProperty.GetValue(source.propertyType);
             }
         }
         if (target.propertyType != CharacterPropertyType.自定义值)
         {
             if (characterPropertyTrigger.characterId == target.characterId.Value)
-            { 
+            {
                 targetValue = characterPropertyTrigger.characterProperty.GetValue(target.propertyType);
             }
         }
 		switch (compareType)
 		{
 			case CompareType.等于:
-				result = sourceValue == targetValue; 
+				result = sourceValue == targetValue;
 				break;
 			case CompareType.不等于:
 				result = sourceValue != targetValue;

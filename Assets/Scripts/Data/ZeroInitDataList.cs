@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic; 
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -13,7 +13,7 @@ public class ZeroInitDataList : ScriptableObject, IGameData
 {
     public List<string> types = new List<string>();
 
-    public List<InitDataPath> datas = new List<InitDataPath>(); 
+    public List<InitDataPath> datas = new List<InitDataPath>();
     public string GetKey()
     {
         return "ZeroInitDataList";

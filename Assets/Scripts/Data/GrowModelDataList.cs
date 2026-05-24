@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,7 +19,7 @@ public class GrowModelDataList: ScriptableObject, IDataArray<GrowModelData>
 public struct GrowModelData : IGameData
 {
     public string name;
-    public int id; 
+    public int id;
     public AnimationCurve curve;
 #if UNITY_EDITOR
     public void SetReferenceData()

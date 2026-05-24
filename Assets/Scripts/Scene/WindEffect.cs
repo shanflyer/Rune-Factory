@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using Unity.Mathematics;
 using UnityEngine;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 
 [Serializable]
 public class WindEffectData
@@ -12,14 +12,14 @@ public class WindEffectData
     private int maxParticle;
     public bool valueCurve;
     private ParticleSystem.VelocityOverLifetimeModule VelocityOverLifetimeModule;
-    bool isInit; 
+    bool isInit;
     public void Init()
     {
         if (!isInit)
         {
-            isInit = true; 
+            isInit = true;
             VelocityOverLifetimeModule = particleSystem.velocityOverLifetime;
-            
+
             maxParticle = particleSystem.main.maxParticles;
             if (!valueCurve)
             {
@@ -31,9 +31,9 @@ public class WindEffectData
                 particleSystem.SetParticles(new ParticleSystem.Particle[0], 0);
             }
 
-            
+
         }
-           
+
     }
     public void SetWindValue(float windValue)
     {
@@ -42,7 +42,7 @@ public class WindEffectData
         float speed = math.lerp(windSpeed.x, windSpeed.y, value);
         if (valueCurve)
         {
-          
+
             var curve = VelocityOverLifetimeModule.x.curve;
             var keys = curve.keys;
             keys[0].value = speed;
@@ -58,7 +58,7 @@ public class WindEffectData
         {
             particleSystem.Play();
         }
-        
+
     }
     public void SetSeason(float seasonValue)
     {
@@ -89,7 +89,7 @@ public class WindEffectData
             particleSystem.Play();
         }
 
-       
+
     }
 }
 public enum AnimatorWindType
@@ -112,7 +112,7 @@ public class WindEffect : MonoBehaviour
     float4 seasonRemap;
     [SerializeField]
     bool seasomBlend;
-   
+
     private void Awake()
     {
         for(int i = 0; i < effects.Count; i++)
@@ -134,7 +134,7 @@ public class WindEffect : MonoBehaviour
 
     }
     private void OnEnable()
-    { 
+    {
         if (Application.isPlaying)
             EnvironmentManger.instance.AddWindEffect(this);
     }
@@ -159,14 +159,14 @@ public class WindEffect : MonoBehaviour
                 seasomValue = seasomValue0;
             }
             for (int i = 0; i < effects.Count; i++)
-            { 
+            {
                 if (seasomBlend)
                 {
                     effects[i].SetSeason(seasomValue);
                 }
             }
         }
-      
+
     }
     public void SetWindValue(float windValue)
     {
@@ -182,7 +182,7 @@ public class WindEffect : MonoBehaviour
             for (int i = 0; i < effects.Count; i++)
             {
                 effects[i].SetWindValue(windValue);
-                
+
             }
             switch (AnimatorWindType)
             {
@@ -195,7 +195,7 @@ public class WindEffect : MonoBehaviour
                 case AnimatorWindType.动画速度:
                     for (int i = 0; i < animators.Count; i++)
                     {
-                        animators[i].speed = math.abs(windValue); 
+                        animators[i].speed = math.abs(windValue);
                     }
                     break;
                 case AnimatorWindType.混合:
@@ -206,7 +206,7 @@ public class WindEffect : MonoBehaviour
                     }
                     break;
             }
-            
+
             SetSeasonValue();
         }
         if (audioSource)
@@ -214,5 +214,5 @@ public class WindEffect : MonoBehaviour
             audioSource.pitch = audioCurve.Evaluate(windValue);
         }
     }
-    
+
 }

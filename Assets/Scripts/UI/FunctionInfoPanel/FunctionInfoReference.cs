@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Threading.Tasks;
 using TMPro;
-using UnityEngine.UI; 
+using UnityEngine.UI;
 
 public class FunctionInfoReference:UIObjReference<InfoData>
 {
@@ -12,7 +12,7 @@ public class FunctionInfoReference:UIObjReference<InfoData>
         base.InitChildObjData();
         text = GetComponentInChildren<TextMeshProUGUI>();
     }
- 
+
     public override Task InitData(string dataKey)
     {
         text.SetSWText(dataKey);

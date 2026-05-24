@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using System.Collections.Generic;
 using Unity.Mathematics;
 
@@ -23,16 +23,16 @@ public class NPCBehaviorData : ScriptableObject, IGameData
     public int likeTalk, unlikeTalk, likeEmote, unlikeEmote, defaultTalk, defaultEmote;
     private string behaviorName;
 
-    public List<int> dailyTasks = new List<int>(); 
+    public List<int> dailyTasks = new List<int>();
     public List<int2> beds = new List<int2>();
     public List<int2> workItems = new List<int2>();
 
     private int[] gameTimeRanges;
-    private int[] visitMaps; 
-    public ExternalBehaviorTree externalBehavior; 
-    public GameTimeKeyIntDataDictionary gameTimeKeyVisitMapDic; 
+    private int[] visitMaps;
+    public ExternalBehaviorTree externalBehavior;
+    public GameTimeKeyIntDataDictionary gameTimeKeyVisitMapDic;
     public List<int2> npcFriends=new List<int2>();
-   
+
     public override string ToString()
     {
         return id.ToString();
@@ -42,7 +42,7 @@ public class NPCBehaviorData : ScriptableObject, IGameData
     {
         return id.ToString();
     }
-     
+
 #if UNITY_EDITOR
 
     public void SetReferenceData()
@@ -59,12 +59,12 @@ public class NPCBehaviorData : ScriptableObject, IGameData
                 GameTimeKey gameTimeKey = new GameTimeKey
                 {
                     minTime=new int2(gameTimeRanges[index], gameTimeRanges[index + 1]),
-                    maxTime = new int2(gameTimeRanges[index+2], gameTimeRanges[index + 3]), 
+                    maxTime = new int2(gameTimeRanges[index+2], gameTimeRanges[index + 3]),
                 };
                 gameTimeKeyVisitMapDic.Add(gameTimeKey, visitMaps[i]);
             }
         }
-       
+
     }
 
 #endif

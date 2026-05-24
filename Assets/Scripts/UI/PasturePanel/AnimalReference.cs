@@ -41,6 +41,6 @@ public class AnimalReference : UIObjReference<MyInt>
         await base.InitData(t, SelectAction, toggleGroup);
         toggle.group = toggleGroup;
         Character character = CharacterManager.instance.GetCharacter(data.value);
-        character.characterData.head.SetImageSprite(icon, iconSize,Vector2.zero); 
+        character.characterData.head.SetImageSprite(icon, iconSize,Vector2.zero);
     }
 }

@@ -1,23 +1,23 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using System.Collections.Generic;
 using Unity.Mathematics;
-using UnityEngine; 
+using UnityEngine;
 
 [TaskCategory("Game/Map")]
 [TaskName("获取周围特定格子")]
 public class GetCellsForCell : Action
-{ 
+{
     public SharedInt2List cells;
 
-    public SharedInt2 centerCell; 
+    public SharedInt2 centerCell;
 
     [Header("最小范围")]
     public SharedInt minRange;
 
     [Header("最大范围")]
     public SharedInt maxRange;
-      
+
 
     [Header("获取的结果")]
     public SharedInt3 result;
@@ -25,7 +25,7 @@ public class GetCellsForCell : Action
 
     public override void OnStart()
     {
-        
+
     }
 
     public override TaskStatus OnUpdate()
@@ -47,14 +47,14 @@ public class GetCellsForCell : Action
             if (length <= maxRange.Value && length >= minRange.Value)
             {
                 RandomItem randomItem = new RandomItem
-                { 
+                {
                     itemValue = i,
                     randomValue = 10,
                     maxCount = 1,
                     minCount = 1
                 };
                 gameRandomData.randomItems.Add(randomItem);
-            } 
+            }
         }
         gameRandomData.Pretreatment();
 
@@ -68,6 +68,6 @@ public class GetCellsForCell : Action
             result.SetValue(new int3(cellList[randomResults[0].x],room.Value));
         }
 
-        return TaskStatus.Success; 
+        return TaskStatus.Success;
     }
 }

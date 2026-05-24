@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
@@ -9,7 +9,7 @@ public class PastureManager : Singleton<PastureManager>
     private Dictionary<int, Pasture> pastures = new Dictionary<int, Pasture>();
     private Dictionary<int, Animal> animals = new Dictionary<int, Animal>();
 
-    private Dictionary<int, int> pastureLinkItems = new Dictionary<int, int>(); 
+    private Dictionary<int, int> pastureLinkItems = new Dictionary<int, int>();
 
     protected override void Clear()
     {
@@ -284,7 +284,7 @@ public class PastureManager : Singleton<PastureManager>
                     }
                 }
 
-             
+
 
                 InformationController.instance.AddInformation($"+{LanguageManage.SwitchStr(animal.name)}+{LanguageManage.SwitchStr("已经分配到对应牧场")}", PromptShow: true);
             }
@@ -616,14 +616,14 @@ public class PastureManager : Singleton<PastureManager>
     {
         AnimalData animalData = await GameDataManager.instance.GetAsyncData<AnimalData>(animalSaveData.dataId);
         Animal animal = new Animal(animalData,animalSaveData.instaceId, animalSaveData.name,animalSaveData.linkCharacterData)
-        {  
+        {
             animalState = animalSaveData.animalState,
-            animalData = animalData, 
+            animalData = animalData,
             pasture= animalSaveData.pasture,
             growthStage = animalSaveData.growthStage,
             growthDay=animalSaveData.growthDay,
             setFood=animalSaveData.setFood,
-            nowCD =animalSaveData.nowCD, 
+            nowCD =animalSaveData.nowCD,
         };
         if (pastures.TryGetValue(animal.pasture, out var pasture))
          {
@@ -676,14 +676,14 @@ public class PastureManager : Singleton<PastureManager>
         {
             animal.InitBehavior();
         }
-       
+
     }
     private async System.Threading.Tasks.Task SampleCreatAnimalAsync(SampleCreatAnimal sampleCreatAnimal)
     {
         AnimalData animalData = await GameDataManager.instance.GetAsyncData<AnimalData>(sampleCreatAnimal.dataId);
         Animal animal = new Animal(animalData,MyInstance.instance.Uid);
 
-   
+
         animals.Add(animal.instanceId, animal);
         CreatCharacter creatCharacter = new CreatCharacter
         {
@@ -740,8 +740,8 @@ public class PastureManager : Singleton<PastureManager>
         void SetAnimalInstanceId(int value)
         {
             if (value != 0)
-            { 
-              
+            {
+
                 if (pasture!=null&&pasture.pastureData != null)
                 {
                     pasture.animals.Add(animal.instanceId);
@@ -885,7 +885,7 @@ public class Animal
         }
         NPCTaskScheduleManager.instance.AddNPCBehavior(instanceId);
     }
-    
+
     public void InitBehavior()
     {
         NPCTaskScheduleManager.instance.SetNPCTaskScheduleTimeList(instanceId, animalData.dailyTasks, animalData.externalBehavior);
@@ -926,10 +926,10 @@ public class Animal
             nowCD++;
              Team team = TeamManager.instance.GetTeam(instanceId);
             if (animalState != AnimalState.饥饿&& nowCD >= animalData.productCD)
-            { 
+            {
                 if (team != null)
                 {
-                    if(growthStateData.productValue != 0) 
+                    if(growthStateData.productValue != 0)
                     {
                         AddPackageItem addPackageItem = new AddPackageItem
                         {
@@ -940,7 +940,7 @@ public class Animal
                         GameActionManager.instance.QueueAction(addPackageItem);
                         nowCD=0;
                     }
-                   
+
                 }
                 else if(growthStateData.productValue != 0)
                 {
@@ -977,7 +977,7 @@ public class Animal
                 GameActionManager.instance.QueueAction(animalCostFood, true);
             }
         }
-        growthDay++; 
+        growthDay++;
         if (growthDay >= growthStateData.growthHour)
         {
             int index = growthStage + 1;

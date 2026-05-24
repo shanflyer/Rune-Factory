@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
@@ -40,7 +40,7 @@ public class GetRandomMapCell : Action
             // areaId.SetValue(cell.z);
             return TaskStatus.Success;
         }
-       
+
 
         if (characterId != null)
         {

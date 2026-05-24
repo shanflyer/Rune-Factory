@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
@@ -9,7 +9,7 @@ using Unity.Mathematics;
 public class GetNPCHomePos : Action
 {
     [SerializeField]
-    private SharedInt characterId; 
+    private SharedInt characterId;
     [SerializeField]
     private SharedInt3 result;
     public override void OnStart()
@@ -28,7 +28,7 @@ public class GetNPCHomePos : Action
 
             if (visitMap > 0)
             {
-                int areaId = npc.GetHomeArea(); 
+                int areaId = npc.GetHomeArea();
                 if (areaId == 0)
                 {
                     try

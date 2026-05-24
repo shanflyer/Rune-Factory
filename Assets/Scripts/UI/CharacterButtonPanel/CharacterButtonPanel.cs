@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +11,7 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
     CharacterButtonReference CharacterButtonReference;
     [SerializeField]
     Transform characterButtonParent;
-    
+
     DisplayList<CharacterButtonReference,MyInt> characterButtons;
     private bool actionListenersRegistered;
     protected override void Awake()
@@ -99,7 +99,7 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
             {
                // return;
             }
-           
+
             if (!PastureManager.instance.TalkAnimal(character.instanceId))
             {
                 EventReferenceData eventReferenceData = new EventReferenceData
@@ -152,7 +152,7 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
                 }
             }
 
-           
+
         }
     }
 
@@ -163,10 +163,10 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
 
     private async System.Threading.Tasks.Task RefreshOperateCharactersAsync(RefreshOperateCharacters refreshOperateCharacters, System.Threading.CancellationToken cancellationToken)
     {
-        bool refresh = false; 
-        refreshOperateCharacters.joinCharacters.ExceptWith(TeamManager.instance.playerTeam.TeamCharacters); 
+        bool refresh = false;
+        refreshOperateCharacters.joinCharacters.ExceptWith(TeamManager.instance.playerTeam.TeamCharacters);
         if (refreshOperateCharacters.joinCharacters != null)
-        { 
+        {
             refresh = true;
             characters.UnionWith(refreshOperateCharacters.joinCharacters);
         }
@@ -189,7 +189,7 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
         {
             nowCharacters.Clear();
             using (var e = characters.GetEnumerator())
-            { 
+            {
                 while (e.MoveNext())
                 {
                     if (CharacterManager.instance.IsTempCharacter(e.Current))
@@ -234,7 +234,7 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
                         CharacterButtonReference.transform.localScale = Vector3.zero;
                         MultiCharacterButton.transform.localScale = Vector3.one;
                     }
-                   
+
                     break;
             }
         }
@@ -258,7 +258,7 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
             {
                 characters.Add(refreshOperateCharacter.characterId);
             }
-           
+
         }
         else
         {
@@ -272,7 +272,7 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
             if (simpleTalkPanel != null) simpleTalkPanel.TryClose(refreshOperateCharacter.characterId);
         }
         if (characters.Count != oldCount)
-        { 
+        {
             nowCharacters.Clear();
             using (var e = characters.GetEnumerator())
             {
@@ -315,7 +315,7 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
                         MultiCharacterButton.transform.localScale = Vector3.one;
                     }
                     break;
-            } 
+            }
         }
     }
     public override void SetPanelUISerializeObj()

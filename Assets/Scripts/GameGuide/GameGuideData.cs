@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -42,12 +42,12 @@ public class GameGuideData : ScriptableObject,IGameData
         return id.ToString();
     }
     public void SetReferenceData()
-    { 
+    {
     }
 }
 [Serializable]
 public class GuidStepData:IReferenceData
 {
     public int selectableId;
-    public string showText; 
+    public string showText;
 }

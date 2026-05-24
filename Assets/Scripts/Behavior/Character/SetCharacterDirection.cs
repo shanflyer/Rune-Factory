@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using UnityEngine;
 
@@ -17,10 +17,10 @@ public class SetCharacterDirection : Action
     [SerializeField]
     private SharedInt3 faceTargetCoordinate;
     [SerializeField]
-    private SharedInt characterId; 
+    private SharedInt characterId;
     public override void OnStart()
     {
-       
+
         if (faceItem)
         {
             bool getItem =false;
@@ -91,7 +91,7 @@ public class SetCharacterDirection : Action
     }
     TaskStatus taskStatus;
     public override TaskStatus OnUpdate()
-    { 
+    {
         return taskStatus;
     }
 }

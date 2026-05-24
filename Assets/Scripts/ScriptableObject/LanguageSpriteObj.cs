@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,11 +35,11 @@ public class LanguageSpriteObj : ScriptableObject
         {
             return sprite;
         }
-        return defaultSprite; 
+        return defaultSprite;
     }
     public Sprite GetSprite(MyLanguage systemLanguage)
     {
-        TryInitLanguageData(); 
+        TryInitLanguageData();
         if (LanguageSpriteDic.TryGetValue(systemLanguage, out Sprite sprite))
         {
             return sprite;

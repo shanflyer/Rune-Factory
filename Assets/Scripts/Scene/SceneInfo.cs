@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class SceneInfo : MonoBehaviour
 {
     [SerializeField]
-    TextMeshProUGUI info;  
+    TextMeshProUGUI info;
     [SerializeField]
     new Animation animation;
 
@@ -17,5 +17,5 @@ public class SceneInfo : MonoBehaviour
         info.SetSWText(str);
         animation.Play();
     }
-    
+
 }

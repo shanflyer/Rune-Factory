@@ -22,7 +22,7 @@ public class TouchArea :MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
         if (PointerDownDele != null)
         {
             PointerDownDele(eventData);
-        } 
+        }
         //Debug.Log($"Down position:{eventData.position}--pressPosition:{eventData.pressPosition}");
     }
 
@@ -33,5 +33,5 @@ public class TouchArea :MonoBehaviour, IPointerDownHandler, IPointerUpHandler, I
             PointerUpDele(eventData);
         }
         //Debug.Log($"Up position:{eventData.position}--pressPosition:{eventData.pressPosition}");
-    } 
+    }
 }

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using BehaviorDesigner.Runtime;
 using BehaviorDesigner.Runtime.Tasks;
 using Unity.Mathematics;
@@ -10,9 +10,9 @@ public class NPCDefaultTalkBehavior : Action
 {
     [SerializeField]
     private SharedInt characterId;
-    public SharedInt TargetCharacter; 
+    public SharedInt TargetCharacter;
     public SharedInt nextTalkEventId;
-    public SharedBool displayFunction; 
+    public SharedBool displayFunction;
     public SharedBool isStopMove;
     public SharedBool faceTarget;
     private void CharacterStartMoveAction()
@@ -41,7 +41,7 @@ public class NPCDefaultTalkBehavior : Action
             characterId = (SharedInt)Owner.GetVariable("CharacterId");
         }
         if (NPCManager.instance.GetNPCFormInstance(characterId.Value, out var npc))
-        { 
+        {
             int talkId = npc.GetTalkId();
             if (faceTarget.Value && TargetCharacter != null)
             {
@@ -74,7 +74,7 @@ public class NPCDefaultTalkBehavior : Action
                 endAction = isStopMove.Value ? () =>
                 {
                     CharacterStartMoveAction();
-                    RemoveEvent(); 
+                    RemoveEvent();
                 }
                 :
                     () => { RemoveEvent(); }
@@ -87,7 +87,7 @@ public class NPCDefaultTalkBehavior : Action
     private TaskStatus taskStatus;
     public override TaskStatus OnUpdate()
     {
-      
+
 
         return taskStatus;
     }

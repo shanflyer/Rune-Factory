@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Mathematics;
@@ -11,7 +11,7 @@ using UnityEditor;
 [CreateAssetMenu(menuName ="Data/随机数据")]
 public class GameRandomDataList : ScriptableObject
 {
-#if UNITY_EDITOR 
+#if UNITY_EDITOR
     private GameRandomDataEditor[] gameRandomDataEditors;
 
     public void SetReferenceData()
@@ -28,10 +28,10 @@ public class GameRandomDataList : ScriptableObject
                     {
                         Pretreatment(ref gameRandomData);
                     }
-                   
+
                     gameRandomDatas.Add(gameRandomData);
                 }
-                gameRandomData = new GameRandomData 
+                gameRandomData = new GameRandomData
                 {
                     id=editorData.id,
                     text=editorData.text,
@@ -41,7 +41,7 @@ public class GameRandomDataList : ScriptableObject
                 };
             }
             RandomItem randomItem = new RandomItem
-            { 
+            {
                 isGroup = editorData.isGroup,
                 text = editorData.itemText,
                 itemValue = editorData.itemValue,
@@ -100,7 +100,7 @@ public class GameRandomDataList : ScriptableObject
                 int fillValue = fillRamdomItems[fillIndex].y - value;
 
                 int baseWeight = (int)(baseRamdomItems[i].y * 10000 / (float)averageValue);
-                int3 weightBarrel = new int3(baseRamdomItems[i].x, baseWeight, fillRamdomItems[fillIndex].x); 
+                int3 weightBarrel = new int3(baseRamdomItems[i].x, baseWeight, fillRamdomItems[fillIndex].x);
                 barrels[i] = weightBarrel;
 
                 if (fillValue > averageValue)
@@ -118,11 +118,11 @@ public class GameRandomDataList : ScriptableObject
         {
             for (int i = 0; i < barrels.Length; i++)
             {
-                int3 weightBarrel = new int3(baseRamdomItems[i].x, 10000, 0); 
+                int3 weightBarrel = new int3(baseRamdomItems[i].x, 10000, 0);
                 barrels[i] = weightBarrel;
             }
         }
-      
+
 
         gameRandomData.barrels = barrels.ToList();
 
@@ -130,23 +130,23 @@ public class GameRandomDataList : ScriptableObject
 #endif
 
     public List<GameRandomData> gameRandomDatas = new List<GameRandomData>();
-   
 
-    
+
+
     public override string ToString()
     {
         return "GameRandomDataList";
     }
-     
+
 }
 
-#if UNITY_EDITOR 
+#if UNITY_EDITOR
 public struct GameRandomDataEditor
 {
     public string text;
     public int id;
     public bool weightRandom;
-     
+
     public string itemText;
     public bool isGroup;
     public int itemValue;
@@ -217,7 +217,7 @@ public class GameRandomData
             {
                 if (fillRamdomItems.Count > 0 && fillIndex >= fillRamdomItems.Count)
                 {
-                    int3 endBarrel = new int3(baseRamdomItems[i].x, 10000, -1); 
+                    int3 endBarrel = new int3(baseRamdomItems[i].x, 10000, -1);
                     barrels[i] = endBarrel;
                     break;
                 }
@@ -233,7 +233,7 @@ public class GameRandomData
                 int baseWeight = (int)(baseRamdomItems[i].y * 10000 / (float)averageValue);
 
                 int3 weightBarrel = new int3(baseRamdomItems[i].x, baseWeight, fillRamdomItems.Count > fillIndex ? fillRamdomItems[fillIndex].x : baseRamdomItems[i].x);
-              
+
                 barrels[i] = weightBarrel;
                 if (baseWeight == 10000)
                 {
@@ -257,7 +257,7 @@ public class GameRandomData
         {
             for (int i = 0; i < barrels.Length; i++)
             {
-                int3 weightBarrel = new int3(baseRamdomItems[i].x, 10000, 0); 
+                int3 weightBarrel = new int3(baseRamdomItems[i].x, 10000, 0);
                 barrels[i] = weightBarrel;
             }
         }
@@ -272,8 +272,8 @@ public class GameRandomData
 [System.Serializable]
 
 public class RandomItem
-{ 
-    public string text; 
+{
+    public string text;
     public bool isGroup;
     public int itemValue;
     public int randomValue;

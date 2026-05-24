@@ -213,7 +213,7 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
             material = CreateMaterialInstance(template, sprite);
             _materialCache[materialKey]=( material);
         }
-        
+
         return material;
     }
 
@@ -259,7 +259,7 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
         {
 
         }
-       
+
     }
 
     #endregion Material Management
@@ -277,7 +277,7 @@ public class MySpriteMeshManager : Singleton<MySpriteMeshManager>
         _materialCache.Clear();
         _meshCache.Clear();
     }
-    
+
 
     #endregion Cleanup
 }

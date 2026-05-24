@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -47,10 +47,10 @@ public class Singleton<T> : IStartupManager where T : Singleton<T>
                 {
                     _instance = Activator.CreateInstance<T>();
                     _instance.Init();
-                   
+
                 }
             }
-           
+
             return _instance;
         }
     }
@@ -114,7 +114,7 @@ public class Singleton<T> : IStartupManager where T : Singleton<T>
 
         if (NeedFixedUpdate) SingletonType.instance.RemoveFixedUpdateAction(_instance.FixedUpdate);
         _instance = null;
-    } 
+    }
 }
 public delegate void SingletonClear();
 public class SingletonType : Singleton<SingletonType>
@@ -167,7 +167,7 @@ public class SingletonType : Singleton<SingletonType>
         }
     }
     public void AddType(SingletonClear typeClear)
-    { 
+    {
         TypeClears.Add(typeClear);
     }
     public static bool Cleared { get; private set; }
@@ -188,9 +188,9 @@ public class SingletonType : Singleton<SingletonType>
             {
                 Debug.LogError(e.ToString());
             }
-            
+
         }
-       
+
         TypeClears.Clear();
         Clear();
     }
