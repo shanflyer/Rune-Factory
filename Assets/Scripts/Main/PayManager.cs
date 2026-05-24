@@ -6,6 +6,7 @@ public class PayManager : Singleton<PayManager>
 {
     private Task initializationTask = Task.CompletedTask;
     public override Task InitializationTask => initializationTask;
+    public override System.Collections.Generic.IReadOnlyList<System.Type> InitializationDependencies => new[] { typeof(GameSourceManager) };
 
     public override void Init()
     {

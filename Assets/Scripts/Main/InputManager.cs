@@ -23,6 +23,7 @@ public class InputManager :Singleton<InputManager>
     private Dictionary<string, InputActionDelegate> cancelDelegates = new Dictionary<string, InputActionDelegate>();
     private Task initializationTask = Task.CompletedTask;
     public override Task InitializationTask => initializationTask;
+    public override IReadOnlyList<Type> InitializationDependencies => new[] { typeof(GameSourceManager) };
 
     public InputManager()
     {

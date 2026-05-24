@@ -12,6 +12,7 @@ public class UIManager : Singleton<UIManager>
     private CanvasGroup canvasGroup;
     private Task initializationTask = Task.CompletedTask;
     public override Task InitializationTask => initializationTask;
+    public override IReadOnlyList<Type> InitializationDependencies => new[] { typeof(GameSourceManager) };
 
     public Color JoyStickColor=>joyStickColor;
     private  Color joyStickColor=new Color(0.03f,0.87f,1.0f,0.15f);

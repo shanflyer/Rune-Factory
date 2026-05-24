@@ -14,6 +14,7 @@ public class FightManager : Singleton<FightManager>
     public override bool NeedUpdate => true;
     private Task initializationTask = Task.CompletedTask;
     public override Task InitializationTask => initializationTask;
+    public override IReadOnlyList<Type> InitializationDependencies => new[] { typeof(GameDataManager), typeof(GameSourceManager), typeof(GameRandom) };
     private Dictionary<int, FightCharacter> fightCharacters = new Dictionary<int, FightCharacter>();
     private List<int> fightPlayers = new List<int>();
     private List<int> fightMonsters = new List<int>();

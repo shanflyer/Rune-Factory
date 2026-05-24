@@ -59,6 +59,7 @@ public class LanguageManage : Singleton<LanguageManage>
     public bool isRTL = false;
     private Task initializationTask = Task.CompletedTask;
     public override Task InitializationTask => initializationTask;
+    public override IReadOnlyList<Type> InitializationDependencies => new[] { typeof(GameDataManager) };
 
     public bool IsRTL()
     {

@@ -337,6 +337,12 @@ if (result.Success)
             return false;
         }
 
+        var startupCompletedManagers = new HashSet<System.Type>
+        {
+            typeof(GameDataManager),
+            typeof(GameSourceManager)
+        };
+
         if (!Application.isPlaying || SingletonType.Cleared)
         {
             return false;
@@ -373,17 +379,17 @@ if (result.Success)
         var uiManager = UIManager.instance;
         var inputManager = InputManager.instance;
 
-        if (!await WaitForStartupManager(payManager, nameof(PayManager))) return false;
-        if (!await WaitForStartupManager(gameVolumeManager, nameof(GameVolumeManager))) return false;
-        if (!await WaitForStartupManager(gameRandom, nameof(GameRandom))) return false;
-        if (!await WaitForStartupManager(exploreManger, nameof(ExploreManager))) return false;
-        if (!await WaitForStartupManager(fightManager, nameof(FightManager))) return false;
-        if (!await WaitForStartupManager(festivalManager, nameof(FestivalManager))) return false;
-        if (!await WaitForStartupManager(gameTimeEventManager, nameof(GameTimeEventManager))) return false;
-        if (!await WaitForStartupManager(audioController, nameof(AudioController))) return false;
-        if (!await WaitForStartupManager(languageManage, nameof(LanguageManage))) return false;
-        if (!await WaitForStartupManager(uiManager, nameof(UIManager))) return false;
-        if (!await WaitForStartupManager(inputManager, nameof(InputManager))) return false;
+        if (!await WaitForStartupManager(payManager, nameof(PayManager), startupCompletedManagers)) return false;
+        if (!await WaitForStartupManager(gameVolumeManager, nameof(GameVolumeManager), startupCompletedManagers)) return false;
+        if (!await WaitForStartupManager(gameRandom, nameof(GameRandom), startupCompletedManagers)) return false;
+        if (!await WaitForStartupManager(exploreManger, nameof(ExploreManager), startupCompletedManagers)) return false;
+        if (!await WaitForStartupManager(fightManager, nameof(FightManager), startupCompletedManagers)) return false;
+        if (!await WaitForStartupManager(festivalManager, nameof(FestivalManager), startupCompletedManagers)) return false;
+        if (!await WaitForStartupManager(gameTimeEventManager, nameof(GameTimeEventManager), startupCompletedManagers)) return false;
+        if (!await WaitForStartupManager(audioController, nameof(AudioController), startupCompletedManagers)) return false;
+        if (!await WaitForStartupManager(languageManage, nameof(LanguageManage), startupCompletedManagers)) return false;
+        if (!await WaitForStartupManager(uiManager, nameof(UIManager), startupCompletedManagers)) return false;
+        if (!await WaitForStartupManager(inputManager, nameof(InputManager), startupCompletedManagers)) return false;
 
         GameTimeManager.instance.ZeroGameTime();
 
@@ -405,11 +411,13 @@ if (result.Success)
         return true;
     }
 
-    private async Task<bool> WaitForStartupManager<T>(Singleton<T> manager, string managerName) where T : Singleton<T>
+    private async Task<bool> WaitForStartupManager<T>(Singleton<T> manager, string managerName, HashSet<System.Type> completedManagers) where T : Singleton<T>
     {
         try
         {
+            ValidateStartupDependencies(manager, managerName, completedManagers);
             await manager.WaitForInitialization();
+            completedManagers.Add(typeof(T));
             return true;
         }
         catch (System.Exception e)
@@ -418,6 +426,20 @@ if (result.Success)
             Debug.LogException(e);
             GameManager.instance.ShowTwoSelectAction("Error", $"{managerName} 初始化失败，请退出游戏后重试", Application.Quit, Application.Quit);
             return false;
+        }
+    }
+
+    private void ValidateStartupDependencies<T>(Singleton<T> manager, string managerName, HashSet<System.Type> completedManagers) where T : Singleton<T>
+    {
+        var dependencies = manager.InitializationDependencies;
+        for (int i = 0; i < dependencies.Count; i++)
+        {
+            var dependency = dependencies[i];
+            if (!completedManagers.Contains(dependency))
+            {
+                // 启动依赖只做顺序诊断，不主动创建依赖，避免隐藏初始化顺序错误。
+                Debug.LogWarning($"Startup manager dependency is not completed before wait: manager={managerName}, dependency={dependency.Name}");
+            }
         }
     }
     void ZeroSetCloudGlobal()

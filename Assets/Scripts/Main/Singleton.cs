@@ -77,6 +77,8 @@ public class Singleton<T> where T : Singleton<T>
 
     public virtual Task InitializationTask => Task.CompletedTask;
 
+    public virtual IReadOnlyList<Type> InitializationDependencies => Array.Empty<Type>();
+
     public virtual async Task WaitForInitialization()
     {
         await InitializationTask;

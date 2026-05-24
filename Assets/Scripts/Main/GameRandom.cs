@@ -66,6 +66,7 @@ public class GameRandom : Singleton<GameRandom>
 
     private Task initializationTask = Task.CompletedTask;
     public override Task InitializationTask => initializationTask;
+    public override IReadOnlyList<Type> InitializationDependencies => new[] { typeof(GameDataManager) };
 
     public override void Init()
     {

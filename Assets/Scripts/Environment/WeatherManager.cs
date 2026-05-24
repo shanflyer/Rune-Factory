@@ -110,6 +110,7 @@ public class WeatherManager : Singleton<WeatherManager>
     WeatherIconData weatherIconData;
     private Task initializationTask = Task.CompletedTask;
     public override Task InitializationTask => initializationTask;
+    public override IReadOnlyList<Type> InitializationDependencies => new[] { typeof(GameSourceManager), typeof(GameDataManager), typeof(GameRandom) };
 
     public override void Init()
     {

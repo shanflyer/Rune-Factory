@@ -23,6 +23,7 @@ public class ExploreManager : Singleton<ExploreManager>
     private Dictionary<int,FightChapter> fightChapters = new Dictionary<int, FightChapter>();
     private System.Threading.Tasks.Task initializationTask = System.Threading.Tasks.Task.CompletedTask;
     public override System.Threading.Tasks.Task InitializationTask => initializationTask;
+    public override System.Collections.Generic.IReadOnlyList<System.Type> InitializationDependencies => new[] { typeof(GameDataManager) };
 
     public int NowChapter => nowChapter;
 
