@@ -63,7 +63,12 @@ public class GameActionDataManager : Singleton<GameActionDataManager>
         // var types = assembly.GetTypes().Where(t => t.IsSubclassOf(baseType));
     }
 
-    public async void Action(int dataId, SetResult setResult = null, bool immediately = false)
+    public void Action(int dataId, SetResult setResult = null, bool immediately = false)
+    {
+        AsyncTaskRunner.Run(() => ActionAsync(dataId, setResult, immediately), nameof(GameActionDataManager.Action));
+    }
+
+    private async System.Threading.Tasks.Task ActionAsync(int dataId, SetResult setResult = null, bool immediately = false)
     {
         var gameActionData = await GameDataManager.instance.GetAsyncData<GameActionAsset>(dataId);
         if (gameActionData == null)

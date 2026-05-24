@@ -32,6 +32,20 @@ public static class AsyncTaskRunner
         _ = RunAsync(task, context);
     }
 
+    public static void Run(Func<Task> taskFactory, string context)
+    {
+        try
+        {
+            Run(taskFactory(), context);
+        }
+        catch (Exception e)
+        {
+            // 异步任务创建阶段也可能抛错，统一记录，避免同步回调静默失败。
+            Debug.LogError($"Async task failed before scheduling: {context}");
+            Debug.LogException(e);
+        }
+    }
+
     private static async Task RunAsync(Task task, string context)
     {
         try

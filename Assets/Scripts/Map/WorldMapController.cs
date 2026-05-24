@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
@@ -58,8 +58,8 @@ public class WorldMapController : MonoBehaviour
 
     public void Init()
     {
-        // MonoBehaviour 事件入口保持同步签名，实际异步流程集中到 InitAsync 里捕获异常。
-        _ = InitAsync();
+        // MonoBehaviour 入口保持同步签名，实际异步流程统一进入兜底器。
+        AsyncTaskRunner.Run(InitAsync, nameof(WorldMapController.Init));
     }
 
     private async Task InitAsync()

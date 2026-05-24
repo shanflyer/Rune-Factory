@@ -15,7 +15,12 @@ public class PackageManager : Singleton<PackageManager>
         }
     }
 
-    public async void ShowPlayerBagUse(bool close, ItemMatchData itemMatchData)
+    public void ShowPlayerBagUse(bool close, ItemMatchData itemMatchData)
+    {
+        AsyncTaskRunner.Run(() => ShowPlayerBagUseAsync(close, itemMatchData), nameof(ShowPlayerBagUse));
+    }
+
+    private async Task ShowPlayerBagUseAsync(bool close, ItemMatchData itemMatchData)
     {
         Character character = CharacterManager.instance.controllerCharacter;
         PackageList packageList = new PackageList
@@ -37,7 +42,12 @@ public class PackageManager : Singleton<PackageManager>
             }
         }, "使用");
     }
-    public async void ShowFightPlayerBagUse(bool close, ItemMatchData itemMatchData)
+    public void ShowFightPlayerBagUse(bool close, ItemMatchData itemMatchData)
+    {
+        AsyncTaskRunner.Run(() => ShowFightPlayerBagUseAsync(close, itemMatchData), nameof(ShowFightPlayerBagUse));
+    }
+
+    private async Task ShowFightPlayerBagUseAsync(bool close, ItemMatchData itemMatchData)
     {
         Character character = CharacterManager.instance.controllerCharacter;
         PackageList packageList = new PackageList
@@ -72,7 +82,13 @@ public class PackageManager : Singleton<PackageManager>
         GameActionManager.instance.QueueAction(itemUseAction, true);
     }
 
-    public async void ShowAllPlayerPackage(SelectAction<Item> selectItemAction, string actionName,
+    public void ShowAllPlayerPackage(SelectAction<Item> selectItemAction, string actionName,
+        int ManufactureId)
+    {
+        AsyncTaskRunner.Run(() => ShowAllPlayerPackageAsync(selectItemAction, actionName, ManufactureId), nameof(ShowAllPlayerPackage));
+    }
+
+    private async Task ShowAllPlayerPackageAsync(SelectAction<Item> selectItemAction, string actionName,
         int ManufactureId)
     {
         PackageList packageList = new PackageList
@@ -159,27 +175,27 @@ public class PackageManager : Singleton<PackageManager>
     {
         base.Init();
         LoadObjPackageAnimationData();
-        GameActionManager.instance.AddListener<ItemUseAction>(UsetItem);
-        GameActionManager.instance.AddListener<CreatRuntimePackage>(CreatRuntimePackage);
+        GameActionManager.instance.AddAsyncListener<ItemUseAction>(UsetItemAsync, nameof(UsetItemAsync));
+        GameActionManager.instance.AddAsyncListener<CreatRuntimePackage>(CreatRuntimePackageAsync, nameof(CreatRuntimePackage));
         GameActionManager.instance.AddListener<RemoveRuntimePackage>(RemoveRuntimePackage);
-        GameActionManager.instance.AddListener<AddPackageItem>(AddPackageItemAction);
-        GameActionManager.instance.AddListener<OpenPackage>(OpenPackage);
-        GameActionManager.instance.AddListener<GiveGift>(GiveGift);
+        GameActionManager.instance.AddAsyncListener<AddPackageItem>(AddPackageItemActionAsync, nameof(AddPackageItemActionAsync));
+        GameActionManager.instance.AddAsyncListener<OpenPackage>(OpenPackageAsync, nameof(OpenPackage));
+        GameActionManager.instance.AddAsyncListener<GiveGift>(GiveGiftAsync, nameof(GiveGift));
         GameActionManager.instance.AddListener<CheckItemValue>(CheckItemValue);
-        GameActionManager.instance.AddListener<CreatPackage>(CreatPackage);
+        GameActionManager.instance.AddAsyncListener<CreatPackage>(CreatPackageAsync, nameof(CreatPackage));
         GameActionManager.instance.AddListener<RemovePackage>(RemovePackage);
         GameActionManager.instance.AddListener<RemovePackageItem>(RemovePackageItemAction);
-        GameActionManager.instance.AddListener<ShowMultiPackagePanel>(ShowMultiPackagePanel);
+        GameActionManager.instance.AddAsyncListener<ShowMultiPackagePanel>(ShowMultiPackagePanelAsync, nameof(ShowMultiPackagePanel));
         GameActionManager.instance.AddListener<SetPackageSelectItem>(SetPackageSelectItem);
         GameActionManager.instance.AddListener<RemovePlayerPackageItem>(RemovePlayerPackageItem);
-        GameActionManager.instance.AddListener<AddItemValue>(AddItemValue);
-        GameActionManager.instance.AddListener<SetItemValue>(SetItemValue);
+        GameActionManager.instance.AddAsyncListener<AddItemValue>(AddItemValueAsync, nameof(AddItemValue));
+        GameActionManager.instance.AddAsyncListener<SetItemValue>(SetItemValueAsync, nameof(SetItemValue));
         GameActionManager.instance.AddListener<CheckCharacterItemValue>(CheckCharacterItemValue);
         GameActionManager.instance.AddListener<CheckCharacterPackageFull>(CheckCharacterPackageFull);
         GameActionManager.instance.AddListener<ChangePackageInnstance>(ChangePackageInnstance);
         GameActionManager.instance.AddListener<RefreshShortcut>(RefreshShortcut);
         GameActionManager.instance.AddListener<RemovePackageItemInstance>(RemovePackageItemInstance);
-        GameActionManager.instance.AddListener<AddPackageItemList>(AddPackageItemList);
+        GameActionManager.instance.AddAsyncListener<AddPackageItemList>(AddPackageItemListAsync, nameof(AddPackageItemList));
         GameActionManager.instance.AddListener<SortPackageItem>(SortPackageItem);
     }
     void SortPackageItem(SortPackageItem sortPackageItem)
@@ -287,7 +303,7 @@ public class PackageManager : Singleton<PackageManager>
         return default(Item);
     }
 
-    private async void AddItemValue(AddItemValue addItemValue)
+    private async Task AddItemValueAsync(AddItemValue addItemValue)
     {
         Character character = CharacterManager.instance.GetCharacter(addItemValue.characterId);
         if (character != null)
@@ -319,7 +335,7 @@ public class PackageManager : Singleton<PackageManager>
         }
     }
 
-    private async void SetItemValue(SetItemValue setItemValue)
+    private async Task SetItemValueAsync(SetItemValue setItemValue)
     {
         Character character = CharacterManager.instance.GetCharacter(setItemValue.characterId);
         if (character != null)
@@ -359,7 +375,7 @@ public class PackageManager : Singleton<PackageManager>
         }
     }
 
-    private async void ShowMultiPackagePanel(ShowMultiPackagePanel showMultiPackagePanel)
+    private async Task ShowMultiPackagePanelAsync(ShowMultiPackagePanel showMultiPackagePanel)
     {
         PackageData packageData0 = GetPackageData(showMultiPackagePanel.packageId0);
         PackageData packageData1 = GetPackageData(showMultiPackagePanel.packageId1);
@@ -374,7 +390,7 @@ public class PackageManager : Singleton<PackageManager>
        await UIManager.instance.ShowGamePanel<MultiPackagePanel, PackageList>(packageList);
     }
 
-    private async void CreatPackage(CreatPackage creatPackage)
+    private async Task CreatPackageAsync(CreatPackage creatPackage)
     { 
         int instanceId = await CreatGamePackage(creatPackage.packageDataId, creatPackage.level, creatPackage.instanceId);
         if (instanceId == -1)
@@ -476,7 +492,7 @@ public class PackageManager : Singleton<PackageManager>
         }
     }
 
-    private async void GiveGift(GiveGift giveGift)
+    private async Task GiveGiftAsync(GiveGift giveGift)
     {
         Character receiveCharacter = CharacterManager.instance.GetCharacter(giveGift.receiveCharacter);
         if (receiveCharacter != null)
@@ -567,7 +583,7 @@ public class PackageManager : Singleton<PackageManager>
         return default(PackageData);
     }
 
-    private async void OpenPackage(OpenPackage openPackage)
+    private async Task OpenPackageAsync(OpenPackage openPackage)
     {
         PackageList packageList = new PackageList
         {
@@ -864,7 +880,7 @@ public class PackageManager : Singleton<PackageManager>
             });
         }
     }
-    private async void AddPackageItemList(AddPackageItemList addPackageItem)
+    private async Task AddPackageItemListAsync(AddPackageItemList addPackageItem)
     {
         if (addPackageItem.packageId == 0)
         {
@@ -901,7 +917,7 @@ public class PackageManager : Singleton<PackageManager>
         }
     }
    
-    private async void AddPackageItemAction(AddPackageItem addPackageItem)
+    private async Task AddPackageItemActionAsync(AddPackageItem addPackageItem)
     {
         if (addPackageItem.packageId == 0)
         {
@@ -943,7 +959,7 @@ public class PackageManager : Singleton<PackageManager>
         }
     }
 
-    private async void CreatRuntimePackage(CreatRuntimePackage creatRuntimePackage)
+    private async Task CreatRuntimePackageAsync(CreatRuntimePackage creatRuntimePackage)
     {
         int instanceId = creatRuntimePackage.instanceId;
         if (instanceId < 0)
@@ -1068,7 +1084,7 @@ public class PackageManager : Singleton<PackageManager>
         return false;
     }
 
-    private async void UsetItem(ItemUseAction itemUseEvent)
+    private async Task UsetItemAsync(ItemUseAction itemUseEvent)
     {
         if (gamePackages.TryGetValue(itemUseEvent.packageId, out GamePackage gamePackage))
         {

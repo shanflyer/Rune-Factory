@@ -60,6 +60,12 @@ public class GameActionManager : Singleton<GameActionManager>
         }
     }
 
+    public void AddAsyncListener<T>(Func<T, System.Threading.Tasks.Task> del, string context, bool once = false) where T : GameAction
+    {
+        // Action 总线仍保持同步派发，异步监听器通过统一入口承接异常。
+        AddListener<T>(action => AsyncTaskRunner.Run(() => del(action), context), once);
+    }
+
     private static bool ContainsDelegate<T>(ActionDelegate<T> source, ActionDelegate<T> target) where T : GameAction
     {
         foreach (var item in source.GetInvocationList())
