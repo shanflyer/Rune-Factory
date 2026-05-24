@@ -13,8 +13,6 @@ using VoxelBusters.EssentialKit;
 public class GameDataSaveManager : Singleton<GameDataSaveManager>
 {
     private const int CurrentSaveVersion = 1;
-    private const string BackupSaveExtension = ".bak";
-    private const string TempSaveExtension = ".tmp";
 
     private UserGameSaveDataList userGameSaveDataList;
     private string currentUserName;
@@ -276,7 +274,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
 
     private UserGameSaveDataList LoadUserGameSaveData(string userName, string clundDataStr = null)
     {
-        string saveDataPath = GetLocalSaveDataPath(userName);
+        string saveDataPath = GameSaveFileStore.GetLocalSaveDataPath(userName);
         UserGameSaveDataList localSaveData = null;
         UserGameSaveDataList cloudSaveData = null;
 
@@ -303,27 +301,18 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         }
 
         // 主存档损坏时回退到上一份完整写入的备份，避免单次写盘失败直接丢档。
-        return TryLoadLocalSaveCandidate(GetBackupSaveDataPath(saveDataPath), "本地备份存档", out saveDataList);
+        return TryLoadLocalSaveCandidate(GameSaveFileStore.GetBackupSaveDataPath(saveDataPath), "本地备份存档", out saveDataList);
     }
 
     private static bool TryLoadLocalSaveCandidate(string saveDataPath, string source, out UserGameSaveDataList saveDataList)
     {
         saveDataList = null;
-        if (!File.Exists(saveDataPath))
+        if (!GameSaveFileStore.TryReadAllText(saveDataPath, source, out var dataStr))
         {
             return false;
         }
 
-        try
-        {
-            return TryLoadSaveDataList(File.ReadAllText(saveDataPath), source, out saveDataList);
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"Read {source} failed: {saveDataPath}");
-            Debug.LogException(e);
-            return false;
-        }
+        return TryLoadSaveDataList(dataStr, source, out saveDataList);
     }
 
     private static UserGameSaveDataList CreateEmptySaveDataList()
@@ -769,21 +758,6 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         return true;
     }
 
-    private static string GetLocalSaveDataPath(string userName)
-    {
-        return $"{DataPath.gameSaveDataPath}{"/"}{userName}";
-    }
-
-    private static string GetBackupSaveDataPath(string saveDataPath)
-    {
-        return saveDataPath + BackupSaveExtension;
-    }
-
-    private static string GetTempSaveDataPath(string saveDataPath)
-    {
-        return saveDataPath + TempSaveExtension;
-    }
-
     private void WriteLocalSaveDataTransactional(string userName)
     {
         if (string.IsNullOrEmpty(userName))
@@ -791,24 +765,9 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             return;
         }
 
-        string saveDataPath = GetLocalSaveDataPath(userName);
-        string directory = Path.GetDirectoryName(saveDataPath);
-        if (!string.IsNullOrEmpty(directory))
-        {
-            Directory.CreateDirectory(directory);
-        }
-
-        string tempPath = GetTempSaveDataPath(saveDataPath);
-        string backupPath = GetBackupSaveDataPath(saveDataPath);
+        string saveDataPath = GameSaveFileStore.GetLocalSaveDataPath(userName);
         string dataStr = SerializeSaveDataList(userGameSaveDataList);
-
-        File.WriteAllText(tempPath, dataStr);
-        if (File.Exists(saveDataPath))
-        {
-            File.Copy(saveDataPath, backupPath, true);
-        }
-        File.Copy(tempPath, saveDataPath, true);
-        File.Delete(tempPath);
+        GameSaveFileStore.WriteTransactional(saveDataPath, dataStr);
     }
 
     private void RollbackLocalSaveData(string userName)
@@ -818,12 +777,8 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             return;
         }
 
-        string saveDataPath = GetLocalSaveDataPath(userName);
-        string backupPath = GetBackupSaveDataPath(saveDataPath);
-        if (File.Exists(backupPath))
-        {
-            File.Copy(backupPath, saveDataPath, true);
-        }
+        string saveDataPath = GameSaveFileStore.GetLocalSaveDataPath(userName);
+        GameSaveFileStore.Rollback(saveDataPath);
     }
 
     private static string SerializeSaveDataList(UserGameSaveDataList saveDataList)
@@ -1099,4 +1054,71 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                saveDataList.userGameSaveDatas.Count > 2 && !string.IsNullOrEmpty(saveDataList.userGameSaveDatas[2]?.saveTime);
     }
 
+}
+
+internal static class GameSaveFileStore
+{
+    private const string BackupSaveExtension = ".bak";
+    private const string TempSaveExtension = ".tmp";
+
+    public static string GetLocalSaveDataPath(string userName)
+    {
+        return $"{DataPath.gameSaveDataPath}{"/"}{userName}";
+    }
+
+    public static string GetBackupSaveDataPath(string saveDataPath)
+    {
+        return saveDataPath + BackupSaveExtension;
+    }
+
+    public static bool TryReadAllText(string saveDataPath, string source, out string data)
+    {
+        data = null;
+        if (!File.Exists(saveDataPath))
+        {
+            return false;
+        }
+
+        try
+        {
+            data = File.ReadAllText(saveDataPath);
+            return true;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Read {source} failed: {saveDataPath}");
+            Debug.LogException(e);
+            return false;
+        }
+    }
+
+    public static void WriteTransactional(string saveDataPath, string dataStr)
+    {
+        string directory = Path.GetDirectoryName(saveDataPath);
+        if (!string.IsNullOrEmpty(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+
+        string tempPath = saveDataPath + TempSaveExtension;
+        string backupPath = GetBackupSaveDataPath(saveDataPath);
+
+        // 先写临时文件，再刷新备份，最后覆盖正式文件，保证失败时至少保留上一份完整存档。
+        File.WriteAllText(tempPath, dataStr);
+        if (File.Exists(saveDataPath))
+        {
+            File.Copy(saveDataPath, backupPath, true);
+        }
+        File.Copy(tempPath, saveDataPath, true);
+        File.Delete(tempPath);
+    }
+
+    public static void Rollback(string saveDataPath)
+    {
+        string backupPath = GetBackupSaveDataPath(saveDataPath);
+        if (File.Exists(backupPath))
+        {
+            File.Copy(backupPath, saveDataPath, true);
+        }
+    }
 }
