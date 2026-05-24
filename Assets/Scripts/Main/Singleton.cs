@@ -85,7 +85,12 @@ public class Singleton<T> where T : Singleton<T>
     }
 
     protected virtual void Clear()
-    { 
+    {
+        if (typeof(T) != typeof(GameActionManager))
+        {
+            // Manager 清理时按实例目标移除全局 Action 监听，避免场景重载后旧实例重复响应。
+            GameActionManager.instance?.RemoveListenersForTarget(_instance);
+        }
         if (NeedUpdate)
         {
             SingletonType.instance.RemoveUpdateAction(_instance.Update);

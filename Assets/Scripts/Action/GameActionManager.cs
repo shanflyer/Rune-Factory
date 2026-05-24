@@ -87,6 +87,101 @@ public class GameActionManager : Singleton<GameActionManager>
         asyncDelegateWrappers.Remove(del);
     }
 
+    public void RemoveListenersForTarget(object target)
+    {
+        if (target == null)
+        {
+            return;
+        }
+
+        RemoveAsyncWrappersForTarget(target);
+
+        var types = new List<Type>(delegates.Keys);
+        for (int i = 0; i < types.Count; i++)
+        {
+            Type type = types[i];
+            if (!delegates.TryGetValue(type, out var source))
+            {
+                continue;
+            }
+
+            Delegate kept = null;
+            foreach (var item in source.GetInvocationList())
+            {
+                if (item.Target == target)
+                {
+                    onceDelegates.Remove(item);
+                    continue;
+                }
+
+                kept = kept == null ? item : Delegate.Combine(kept, item);
+            }
+
+            if (kept == null)
+            {
+                delegates.Remove(type);
+            }
+            else
+            {
+                delegates[type] = kept;
+            }
+        }
+    }
+
+    private void RemoveAsyncWrappersForTarget(object target)
+    {
+        var asyncDelegates = new List<Delegate>(asyncDelegateWrappers.Keys);
+        for (int i = 0; i < asyncDelegates.Count; i++)
+        {
+            Delegate asyncDelegate = asyncDelegates[i];
+            if (asyncDelegate.Target != target)
+            {
+                continue;
+            }
+
+            if (asyncDelegateWrappers.TryGetValue(asyncDelegate, out var wrapper))
+            {
+                RemoveWrappedDelegate(wrapper);
+            }
+
+            asyncDelegateWrappers.Remove(asyncDelegate);
+        }
+    }
+
+    private void RemoveWrappedDelegate(Delegate wrapper)
+    {
+        var types = new List<Type>(delegates.Keys);
+        for (int i = 0; i < types.Count; i++)
+        {
+            Type type = types[i];
+            if (!delegates.TryGetValue(type, out var source))
+            {
+                continue;
+            }
+
+            Delegate kept = null;
+            foreach (var item in source.GetInvocationList())
+            {
+                if (item == wrapper)
+                {
+                    onceDelegates.Remove(item);
+                    continue;
+                }
+
+                kept = kept == null ? item : Delegate.Combine(kept, item);
+            }
+
+            if (kept == null)
+            {
+                delegates.Remove(type);
+            }
+            else
+            {
+                delegates[type] = kept;
+            }
+        }
+    }
+
     private static bool ContainsDelegate<T>(ActionDelegate<T> source, ActionDelegate<T> target) where T : GameAction
     {
         foreach (var item in source.GetInvocationList())
