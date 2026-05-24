@@ -53,6 +53,8 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
     [SerializeField]
     private Vector2 headSize = new Vector2(448, 512);
     private bool actionListenersRegistered;
+    private const float FpsRefreshInterval = 0.25f;
+    private float fpsRefreshTimer;
 
     public override void SetPanelUISerializeObj()
     {
@@ -189,8 +191,21 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
     }
     private void LateUpdate()
     {
-        if (FPSText.gameObject.activeSelf && FPSText.enabled)
-            FPSText.text = $"FPS{1.0f / Time.smoothDeltaTime}"; 
+        if (!FPSText.gameObject.activeSelf || !FPSText.enabled)
+        {
+            return;
+        }
+
+        fpsRefreshTimer += Time.unscaledDeltaTime;
+        if (fpsRefreshTimer < FpsRefreshInterval)
+        {
+            return;
+        }
+
+        // FPS 只是调试展示，限频刷新可以减少顶栏常驻时的字符串分配。
+        fpsRefreshTimer = 0f;
+        float smoothDeltaTime = Mathf.Max(Time.smoothDeltaTime, 0.0001f);
+        FPSText.text = $"FPS{1.0f / smoothDeltaTime:0.0}";
     }
 
     private void NewHour(NewHour newHour)

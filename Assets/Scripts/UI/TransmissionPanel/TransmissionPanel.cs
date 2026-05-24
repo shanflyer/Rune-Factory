@@ -9,7 +9,7 @@ public class GridSimData
     public List<RectTransform> items;
     public bool needRefresh;
 
-    public void RemoveItem(RectTransform item)
+    public bool RemoveItem(RectTransform item)
     {
         for (var i = items.Count - 1; i >= 0; i--)
         {
@@ -17,12 +17,11 @@ public class GridSimData
             {
                 items[i] = items[items.Count - 1];
                 items.RemoveAt(items.Count - 1);
-                break;
+                return true;
             }
-          
         }
 
-        needRefresh = true;
+        return false;
     }
 }
 public class TransmissionPanel : GamePanel<IReferenceData>
@@ -47,6 +46,7 @@ public class TransmissionPanel : GamePanel<IReferenceData>
     private Dictionary<int, Vector2> mapParentPosDic;
 
     private readonly Dictionary<int, GridSimData> childMapRectDic = new();
+    private int dirtyChildMapCount;
     protected override void Awake()
     {
         base.Awake();
@@ -97,16 +97,30 @@ public class TransmissionPanel : GamePanel<IReferenceData>
     private void ChangeUIMapNPCReference(int oldMap, int newMap, RectTransform rectTransform)
     {
         if (childMapRectDic.TryGetValue(oldMap, out var oldRect))
-        { 
-            oldRect.RemoveItem(rectTransform);
-            oldRect.needRefresh = true;
+        {
+            if (oldRect.RemoveItem(rectTransform))
+            {
+                MarkChildMapDirty(oldRect);
+            }
         }
 
         if (childMapRectDic.TryGetValue(newMap, out var newRect))
-        { 
+        {
             newRect.items.Add(rectTransform);
-            newRect.needRefresh = true;
+            MarkChildMapDirty(newRect);
         }
+    }
+
+    private void MarkChildMapDirty(GridSimData gridSimData)
+    {
+        if (gridSimData.needRefresh)
+        {
+            return;
+        }
+
+        // NPC 位置变化才需要重新排版，LateUpdate 用计数器避免每帧扫描全部地图格。
+        gridSimData.needRefresh = true;
+        dirtyChildMapCount++;
     }
     
     public override async Task InitData(string dataKey)
@@ -174,19 +188,30 @@ public class TransmissionPanel : GamePanel<IReferenceData>
 
     private void LateUpdate()
     {
+        if (dirtyChildMapCount <= 0)
+        {
+            return;
+        }
+
         foreach (var childMapRect in childMapRectDic.Values)
         {
             if (childMapRect.needRefresh)
             {
                 RefreshChild(childMapRect.layoutGroup.transform, childMapRect.items.Count);
                 childMapRect.needRefresh = false;
+                dirtyChildMapCount--;
                 for (var i = 0; i < childMapRect.items.Count; i++)
                 {
                     var itemTransform = childMapRect.items[i];
                     itemTransform.position = childMapRect.layoutGroup.transform.GetChild(i).position;
                 }
+
+                if (dirtyChildMapCount <= 0)
+                {
+                    break;
+                }
             }
-        } 
+        }
     }
  
 }
