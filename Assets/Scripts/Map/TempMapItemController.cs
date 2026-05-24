@@ -17,8 +17,8 @@ public class TempMapItemController : Singleton<TempMapItemController>
         GameActionManager.instance.AddListener<CheckTempMapItemSet>(CheckTempMapItemSet);
         GameActionManager.instance.AddListener<RefreshTempMapItemCoordinate>(RefreshTempMapItemCoordinate);
         GameActionManager.instance.AddListener<DestoryTempMapItem>(DestoryTempMapItem);
-        GameActionManager.instance.AddListener<CreatTempMapItem>(CreatTempMapItem);
-        GameActionManager.instance.AddListener<CreatControllerTempMapItem>(CreatControllerTempMapItem);
+        GameActionManager.instance.AddAsyncListener<CreatTempMapItem>(CreatTempMapItemAsync, nameof(CreatTempMapItem));
+        GameActionManager.instance.AddAsyncListener<CreatControllerTempMapItem>(CreatControllerTempMapItemAsync, nameof(CreatControllerTempMapItem));
         GameActionManager.instance.AddListener<SetTempMapItemCoordinate>(SetTempMapItemCoordinate);
         // InputManager.instance.AddInputActionDelegate(MyInputNameData.Player_ClickPos, Test);
     }
@@ -175,7 +175,7 @@ public class TempMapItemController : Singleton<TempMapItemController>
         }
     }
 
-    private async void CreatControllerTempMapItem(CreatControllerTempMapItem creatControllerTempMapItem)
+    private async System.Threading.Tasks.Task CreatControllerTempMapItemAsync(CreatControllerTempMapItem creatControllerTempMapItem)
     {
         MapItemData mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(creatControllerTempMapItem.dataId);
         TempMapItem tempMapItem = new TempMapItem
@@ -198,7 +198,7 @@ public class TempMapItemController : Singleton<TempMapItemController>
             creatControllerTempMapItem.setResult(true);
     }
 
-    private async void CreatTempMapItem(CreatTempMapItem creatTempMapItem)
+    private async System.Threading.Tasks.Task CreatTempMapItemAsync(CreatTempMapItem creatTempMapItem)
     {
         if (characterTempMapItems.ContainsKey(creatTempMapItem.characterId))
         {

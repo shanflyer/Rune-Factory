@@ -1160,7 +1160,7 @@ public partial class MapCellController : Singleton<MapCellController>
             if (direction == Direction.Default|| DirectionMask.Has(mapLinkCell.directionValue, direction))
             {
                 ChangeMap();
-                async void ChangeMap()
+                void ChangeMap()
                 {
                     action.Invoke(mapLinkCell.targetCell, mapLinkCell.afterAction);
                     /*

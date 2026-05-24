@@ -20,7 +20,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         GameActionManager.instance.AddListener<TryDeleteRoom>(TryDeleteRoomObj);
         GameActionManager.instance.AddListener<DeleteMapItem>(DeleteMapItem);
         GameActionManager.instance.AddListener<DestoryTempMapItem>(DestoryTempMapItem);
-        GameActionManager.instance.AddListener<DisplayMap>(DisplayMap);
+        GameActionManager.instance.AddAsyncListener<DisplayMap>(DisplayMapAsync, nameof(DisplayMap));
         GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
         GameActionManager.instance.AddListener<RefreshManufature>(RefreshManufature);
         GameActionManager.instance.AddListener<RefreshMapPackageItemRender>(RefreshMapPackageItemRender);
@@ -85,7 +85,12 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         }
     }
 
-    private async void RefreshMapPackageItemRender(int id)
+    private void RefreshMapPackageItemRender(int id)
+    {
+        AsyncTaskRunner.Run(() => RefreshMapPackageItemRenderAsync(id), nameof(RefreshMapPackageItemRender));
+    }
+
+    private async System.Threading.Tasks.Task RefreshMapPackageItemRenderAsync(int id)
     {
         if (mapPackageItemRenders.TryGetValue(id, out var spriteRenderers))
         {
@@ -164,7 +169,12 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         }
     }
 
-    private async void CreatTempMapObjItem(TempMapItem tempMapItem)
+    private void CreatTempMapObjItem(TempMapItem tempMapItem)
+    {
+        AsyncTaskRunner.Run(() => CreatTempMapObjItemAsync(tempMapItem), nameof(CreatTempMapObjItem));
+    }
+
+    private async System.Threading.Tasks.Task CreatTempMapObjItemAsync(TempMapItem tempMapItem)
     {
         Transform overrideParent = null;
         if (CharacterManager.instance.GetRuntimeCharacterObj(tempMapItem.characterId, out var characterRuntimeObj))
@@ -377,7 +387,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         }
     }
 
-    private async void DisplayMap(DisplayMap displayMap)
+    private async System.Threading.Tasks.Task DisplayMapAsync(DisplayMap displayMap)
     { 
         await DisplayMap(displayMap.displayMap,displayMap.fixedDisplay);
         if (displayMap.actionId != 0)
@@ -584,7 +594,12 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
     /// 已经显示的物体播放动画
     /// </summary>
     /// <param name="runtimeMapItem"></param>
-    public async void SetItemAnimation(RuntimeMapItem runtimeMapItem)
+    public void SetItemAnimation(RuntimeMapItem runtimeMapItem)
+    {
+        AsyncTaskRunner.Run(() => SetItemAnimationAsync(runtimeMapItem), nameof(SetItemAnimation));
+    }
+
+    public async System.Threading.Tasks.Task SetItemAnimationAsync(RuntimeMapItem runtimeMapItem)
     {
         if (nowRuntimeMapItemObjs.ContainsKey(runtimeMapItem.instanceId))
         {
@@ -769,7 +784,12 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         }
     }
 
-    public async void ChangeMapItemDisplay(int mapItemId, int newId, int2 animationKey, RuntimeMapItem runtimeMapItem)
+    public void ChangeMapItemDisplay(int mapItemId, int newId, int2 animationKey, RuntimeMapItem runtimeMapItem)
+    {
+        AsyncTaskRunner.Run(() => ChangeMapItemDisplayAsync(mapItemId, newId, animationKey, runtimeMapItem), nameof(ChangeMapItemDisplay));
+    }
+
+    public async System.Threading.Tasks.Task ChangeMapItemDisplayAsync(int mapItemId, int newId, int2 animationKey, RuntimeMapItem runtimeMapItem)
     {
         if (nowRuntimeMapItemObjs.TryGetValue(mapItemId, out MapItemRuntimeObj runtimeObj))
         {
@@ -885,7 +905,12 @@ public class MapItemRuntimeObj
 
     private RuntimeObj MaskObj;
 
-    public async void TryDisplayMask()
+    public void TryDisplayMask()
+    {
+        AsyncTaskRunner.Run(TryDisplayMaskAsync, nameof(TryDisplayMask));
+    }
+
+    public async System.Threading.Tasks.Task TryDisplayMaskAsync()
     {
         if (MaskObj != null)
         {

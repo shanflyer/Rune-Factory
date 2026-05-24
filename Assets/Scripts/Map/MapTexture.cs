@@ -18,7 +18,12 @@ public class MapTexture:MonoBehaviour
     public bool isSingleMap;
     RenderTexture renderTexture;
 
-    public async void CreateTexture()
+    public void CreateTexture()
+    {
+        AsyncTaskRunner.Run(CreateTextureAsync, nameof(CreateTexture));
+    }
+
+    private async Task CreateTextureAsync()
     {
         Vector4[] offsets = new Vector4[tilemaps.Count];
 

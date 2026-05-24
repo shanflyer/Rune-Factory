@@ -83,12 +83,12 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
         GameActionManager.instance.AddListener<RemoveMapItemCollider>(RemoveMapItemCollider);
         GameActionManager.instance.AddListener<ReSetMapItemCollider>(ReSetMapItemCollider);
-        GameActionManager.instance.AddListener<AddMapItem>(AddMapItem);
+        GameActionManager.instance.AddAsyncListener<AddMapItem>(AddMapItemAsync, nameof(AddMapItem));
         GameActionManager.instance.AddListener<DeleteMapItem>(DeleteMapItem);
-        GameActionManager.instance.AddListener<ChangeMapItem>(ChangeMapItem);
+        GameActionManager.instance.AddAsyncListener<ChangeMapItem>(ChangeMapItemAsync, nameof(ChangeMapItem));
         GameActionManager.instance.AddListener<SetItemAnimation>(SetItemAnimation);
-        GameActionManager.instance.AddListener<ChangeWorld>(ChangeWorld);
-        GameActionManager.instance.AddListener<TryCreatRoom>(TryCreatRoom);
+        GameActionManager.instance.AddAsyncListener<ChangeWorld>(ChangeWorldAsync, nameof(ChangeWorld));
+        GameActionManager.instance.AddAsyncListener<TryCreatRoom>(TryCreatRoomAsync, nameof(TryCreatRoom));
         GameActionManager.instance.AddListener<TryDeleteRoom>(TryDeleteRoom);
         GameActionManager.instance.AddListener<MoveMapItem>(MoveMapItem);
         GameActionManager.instance.AddListener<RemoveMapItemOperate>(RemoveMapItemOperate);
@@ -438,7 +438,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         return cell;
     }
 
-    private async void TryCreatRoom(TryCreatRoom creatRoom)
+    private async System.Threading.Tasks.Task TryCreatRoomAsync(TryCreatRoom creatRoom)
     {
         int instanceId = creatRoom.instance;
         if (instanceId == 0)
@@ -485,7 +485,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
             deleteRoom.setResult(false);
     }
 
-    private async void ChangeWorld(ChangeWorld changeWorld)
+    private async System.Threading.Tasks.Task ChangeWorldAsync(ChangeWorld changeWorld)
     { 
         await InitWorldData(changeWorld.worldName, changeWorld.displayMap);
     }
@@ -750,7 +750,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         return runtimeMapItem.instanceId;
     }
 
-    private async void AddMapItem(AddMapItem addMapItem)
+    private async System.Threading.Tasks.Task AddMapItemAsync(AddMapItem addMapItem)
     {
         if (addMapItem.mapId>0&&!MapCellController.instance.ContainsRoom(addMapItem.mapId))
         {
@@ -941,7 +941,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 setValue=LinkHomeEquipId,
                 setResult=moveMapItem.setResult
             };
-            AddMapItem(addMapItem);
+            AsyncTaskRunner.Run(() => AddMapItemAsync(addMapItem), nameof(AddMapItem));
             void LinkHomeEquipId(int instance)
             {
                 if (moveMapItem.setValue != null)
@@ -1151,7 +1151,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
       
     }
 
-    private async void ChangeMapItem(ChangeMapItem changeMapItem)
+    private async System.Threading.Tasks.Task ChangeMapItemAsync(ChangeMapItem changeMapItem)
     {
         if (GetRuntimeMapItem(changeMapItem.itemId, out RuntimeMapItem runtimeMapItem))
         {
@@ -1230,7 +1230,12 @@ public class RuntimeMapItem : INativeData
     public List<int> operateDatas;
     public Dictionary<string, int> EventReferenceData;
 
-    public async void RefreshItemOperate()
+    public void RefreshItemOperate()
+    {
+        AsyncTaskRunner.Run(RefreshItemOperateAsync, nameof(RefreshItemOperate));
+    }
+
+    public async System.Threading.Tasks.Task RefreshItemOperateAsync()
     {
         //物体交互
         int operateDataLength =operateDatas.Count;
