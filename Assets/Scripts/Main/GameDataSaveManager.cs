@@ -12,7 +12,12 @@ using VoxelBusters.EssentialKit;
 
 public class GameDataSaveManager : Singleton<GameDataSaveManager>
 {
+    private const int CurrentSaveVersion = 1;
+    private const string BackupSaveExtension = ".bak";
+    private const string TempSaveExtension = ".tmp";
+
     private UserGameSaveDataList userGameSaveDataList;
+    private string currentUserName;
 
     public UserGameSaveDataList UserGameSaveDataList
     {
@@ -265,26 +270,17 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
 
     public void InitUserSaveData(string userName, string clundDataStr = null)
     {
+        currentUserName = userName;
         userGameSaveDataList = LoadUserGameSaveData(userName, clundDataStr);
     }
 
     private UserGameSaveDataList LoadUserGameSaveData(string userName, string clundDataStr = null)
     {
-        string saveDataPath = $"{DataPath.gameSaveDataPath}{"/"}{userName}";
+        string saveDataPath = GetLocalSaveDataPath(userName);
         UserGameSaveDataList localSaveData = null;
         UserGameSaveDataList cloudSaveData = null;
-        if (File.Exists(saveDataPath))
-        {
-            try
-            {
-                TryLoadSaveDataList(File.ReadAllText(saveDataPath), "本地存档", out localSaveData);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"Read local save failed: {saveDataPath}");
-                Debug.LogException(e);
-            }
-        }
+
+        TryLoadLocalSaveDataList(saveDataPath, out localSaveData);
 
         if (!string.IsNullOrEmpty(clundDataStr))
         {
@@ -296,6 +292,38 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             return SelectLatestSaveDataList(localSaveData, cloudSaveData);
         }
         return cloudSaveData ?? localSaveData ?? CreateEmptySaveDataList();
+    }
+
+    private static bool TryLoadLocalSaveDataList(string saveDataPath, out UserGameSaveDataList saveDataList)
+    {
+        saveDataList = null;
+        if (TryLoadLocalSaveCandidate(saveDataPath, "本地存档", out saveDataList))
+        {
+            return true;
+        }
+
+        // 主存档损坏时回退到上一份完整写入的备份，避免单次写盘失败直接丢档。
+        return TryLoadLocalSaveCandidate(GetBackupSaveDataPath(saveDataPath), "本地备份存档", out saveDataList);
+    }
+
+    private static bool TryLoadLocalSaveCandidate(string saveDataPath, string source, out UserGameSaveDataList saveDataList)
+    {
+        saveDataList = null;
+        if (!File.Exists(saveDataPath))
+        {
+            return false;
+        }
+
+        try
+        {
+            return TryLoadSaveDataList(File.ReadAllText(saveDataPath), source, out saveDataList);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Read {source} failed: {saveDataPath}");
+            Debug.LogException(e);
+            return false;
+        }
     }
 
     private static UserGameSaveDataList CreateEmptySaveDataList()
@@ -314,9 +342,30 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
 
     private static UserGameSaveDataList SelectLatestSaveDataList(UserGameSaveDataList localSaveData, UserGameSaveDataList cloudSaveData)
     {
-        var localTime = GetSaveTime(localSaveData.nowSaveData);
-        var cloudTime = GetSaveTime(cloudSaveData.nowSaveData);
+        // 云、本地冲突时比较所有槽位中最新的保存时间，避免只看自动存档导致误选旧数据。
+        var localTime = GetLatestSaveTime(localSaveData);
+        var cloudTime = GetLatestSaveTime(cloudSaveData);
         return cloudTime >= localTime ? cloudSaveData : localSaveData;
+    }
+
+    private static DateTime GetLatestSaveTime(UserGameSaveDataList saveDataList)
+    {
+        var latest = GetSaveTime(saveDataList?.nowSaveData);
+        if (saveDataList?.userGameSaveDatas == null)
+        {
+            return latest;
+        }
+
+        for (int i = 0; i < saveDataList.userGameSaveDatas.Count; i++)
+        {
+            var saveTime = GetSaveTime(saveDataList.userGameSaveDatas[i]);
+            if (saveTime > latest)
+            {
+                latest = saveTime;
+            }
+        }
+
+        return latest;
     }
 
     private static DateTime GetSaveTime(UserGameSaveData saveData)
@@ -372,6 +421,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         }
 
         saveDataList.commonSaveData ??= new CommonSaveData();
+        MigrateSaveDataList(saveDataList);
         saveDataList.nowSaveData ??= UserGameSaveData.CreatSaveData(-1);
         saveDataList.nowSaveData.index = -1;
         saveDataList.nowSaveData.Init();
@@ -387,6 +437,15 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             saveDataList.userGameSaveDatas[i] ??= UserGameSaveData.CreatSaveData(i);
             saveDataList.userGameSaveDatas[i].index = i;
             saveDataList.userGameSaveDatas[i].Init();
+        }
+    }
+
+    private static void MigrateSaveDataList(UserGameSaveDataList saveDataList)
+    {
+        if (saveDataList.commonSaveData.saveVersion < CurrentSaveVersion)
+        {
+            // 当前版本只需要补齐缺失字段；后续字段迁移统一放在这里按版本递增处理。
+            saveDataList.commonSaveData.saveVersion = CurrentSaveVersion;
         }
     }
 
@@ -669,6 +728,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                 userGameSaveDataList.userGameSaveDatas[selectSaveIndex].index = selectSaveIndex;
             }
 
+            WriteLocalSaveDataTransactional(currentUserName);
             SaveCloudData(selectSaveIndex);
             CloudServices.Synchronize();
         }
@@ -685,6 +745,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             {
                 userGameSaveDataList.userGameSaveDatas[selectSaveIndex] = selectedSaveDataBackup;
             }
+            RollbackLocalSaveData(currentUserName);
             return false;
         }
         /*
@@ -701,6 +762,73 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
       SaveCloudData(selectSaveIndex);
 #endif */
         return true;
+    }
+
+    private static string GetLocalSaveDataPath(string userName)
+    {
+        return $"{DataPath.gameSaveDataPath}{"/"}{userName}";
+    }
+
+    private static string GetBackupSaveDataPath(string saveDataPath)
+    {
+        return saveDataPath + BackupSaveExtension;
+    }
+
+    private static string GetTempSaveDataPath(string saveDataPath)
+    {
+        return saveDataPath + TempSaveExtension;
+    }
+
+    private void WriteLocalSaveDataTransactional(string userName)
+    {
+        if (string.IsNullOrEmpty(userName))
+        {
+            return;
+        }
+
+        string saveDataPath = GetLocalSaveDataPath(userName);
+        string directory = Path.GetDirectoryName(saveDataPath);
+        if (!string.IsNullOrEmpty(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+
+        string tempPath = GetTempSaveDataPath(saveDataPath);
+        string backupPath = GetBackupSaveDataPath(saveDataPath);
+        string dataStr = SerializeSaveDataList(userGameSaveDataList);
+
+        File.WriteAllText(tempPath, dataStr);
+        if (File.Exists(saveDataPath))
+        {
+            File.Copy(saveDataPath, backupPath, true);
+        }
+        File.Copy(tempPath, saveDataPath, true);
+        File.Delete(tempPath);
+    }
+
+    private void RollbackLocalSaveData(string userName)
+    {
+        if (string.IsNullOrEmpty(userName))
+        {
+            return;
+        }
+
+        string saveDataPath = GetLocalSaveDataPath(userName);
+        string backupPath = GetBackupSaveDataPath(saveDataPath);
+        if (File.Exists(backupPath))
+        {
+            File.Copy(backupPath, saveDataPath, true);
+        }
+    }
+
+    private static string SerializeSaveDataList(UserGameSaveDataList saveDataList)
+    {
+        string dataStr = JsonConvert.SerializeObject(saveDataList, JsonSerializerSettings);
+        if (GameDataManager.instance != null && GameDataManager.instance.GlobalData != null && GameDataManager.instance.GlobalData.Encrypt)
+        {
+            dataStr = EncryptDES(dataStr);
+        }
+        return dataStr;
     }
 
     public void DeleteSaveData(UserGameSaveData userGameSaveData)

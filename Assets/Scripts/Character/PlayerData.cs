@@ -16,6 +16,7 @@ public class UserGameSaveDataList : IReferenceData
 
 public class CommonSaveData
 {
+    public int saveVersion;
     public int diamond;
 }
 [Serializable]
