@@ -53,12 +53,12 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
             return;
         }
         runtimeStoreCounters=new Dictionary<int, RuntimeStoreCounter>();
-        GameActionManager.instance.AddListener<CreatStoreCounter>(CreatStoreCounter);
-        GameActionManager.instance.AddListener<DisplayStoreCounter>(DisplayStoreCounter);
+        GameActionManager.instance.AddAsyncListener<CreatStoreCounter>(CreatStoreCounterAsync, nameof(CreatStoreCounter));
+        GameActionManager.instance.AddAsyncListener<DisplayStoreCounter>(DisplayStoreCounterAsync, nameof(DisplayStoreCounter));
         GameActionManager.instance.AddListener<DeleteMapItem>(DeleteStoreCounter);
-        GameActionManager.instance.AddListener<StoreCounterSetSelectItemAction>(StoreCounterSetSelectItemAction);
-        GameActionManager.instance.AddListener<SetStoreCounterItem>(SetStoreCounterItem);
-        GameActionManager.instance.AddListener<SetStoreCounter>(SetStoreCounter);
+        GameActionManager.instance.AddAsyncListener<StoreCounterSetSelectItemAction>(StoreCounterSetSelectItemActionAsync, nameof(StoreCounterSetSelectItemAction));
+        GameActionManager.instance.AddAsyncListener<SetStoreCounterItem>(SetStoreCounterItemAsync, nameof(SetStoreCounterItem));
+        GameActionManager.instance.AddAsyncListener<SetStoreCounter>(SetStoreCounterAsync, nameof(SetStoreCounter));
         GameActionManager.instance.AddListener<BuyPlayerGood>(BuyPlayerGood);
         GameActionManager.instance.AddListener<TryBuyPlayerGood>(TryBuyPlayerGood);
         GameActionManager.instance.AddListener<SetPlayerStoreOpen>(SetPlayerStoreOpen);
@@ -253,7 +253,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         }
     }
 
-    private async void SetStoreCounter(SetStoreCounter setStoreCounter)
+    private async System.Threading.Tasks.Task SetStoreCounterAsync(SetStoreCounter setStoreCounter)
     {
         int characterId = setStoreCounter.playerId;
         if (runtimeStoreCounters.TryGetValue(setStoreCounter.storeCounterId, out var runtimeStoreCounter))
@@ -271,7 +271,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
     }
 
     //设置背包界面物体Action
-    private async void StoreCounterSetSelectItemAction(StoreCounterSetSelectItemAction storeCounterSetSelectItemAction)
+    private async System.Threading.Tasks.Task StoreCounterSetSelectItemActionAsync(StoreCounterSetSelectItemAction storeCounterSetSelectItemAction)
     {
         if (runtimeStoreCounters.TryGetValue(storeCounterSetSelectItemAction.targetObj,out var runtimeStoreCounter))
         { 
@@ -304,7 +304,12 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         }
     }
 
-    private async void OpenStoreCounter(int storeId)
+    private void OpenStoreCounter(int storeId)
+    {
+        AsyncTaskRunner.Run(() => OpenStoreCounterAsync(storeId), nameof(OpenStoreCounter));
+    }
+
+    private async System.Threading.Tasks.Task OpenStoreCounterAsync(int storeId)
     {
         if (runtimeStoreCounters.TryGetValue(storeId, out var runtimeStoreCounter))
         {
@@ -319,7 +324,12 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         }
     }
 
-    private async void OpenSetItemPanel(int storeId, Item item)
+    private void OpenSetItemPanel(int storeId, Item item)
+    {
+        AsyncTaskRunner.Run(() => OpenSetItemPanelAsync(storeId, item), nameof(OpenSetItemPanel));
+    }
+
+    private async System.Threading.Tasks.Task OpenSetItemPanelAsync(int storeId, Item item)
     {
         SetStoreCounterItem setStoreCounterItem = new SetStoreCounterItem
         {
@@ -333,7 +343,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
        await UIManager.instance.ShowGamePanel<StoreCounterSetPanel, SetStoreCounterItem>(setStoreCounterItem);
     }
 
-    private async void SetStoreCounterItem(SetStoreCounterItem setStoreCounterItem)
+    private async System.Threading.Tasks.Task SetStoreCounterItemAsync(SetStoreCounterItem setStoreCounterItem)
     {
         if (runtimeStoreCounters.TryGetValue(setStoreCounterItem.storeCounterId, out var runtimeStoreCounter))
         {
@@ -359,7 +369,12 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
  
         }
     }
-    public async void CreatStoreCounter(StoreCounterSaveData storeCounterSaveData)
+    public void CreatStoreCounter(StoreCounterSaveData storeCounterSaveData)
+    {
+        AsyncTaskRunner.Run(() => CreatStoreCounterAsync(storeCounterSaveData), nameof(CreatStoreCounter));
+    }
+
+    public async System.Threading.Tasks.Task CreatStoreCounterAsync(StoreCounterSaveData storeCounterSaveData)
     {
         var storeData = await GameDataManager.instance.GetAsyncData<StoreCounterData>(storeCounterSaveData.dataId);
         if (storeData != null)
@@ -378,7 +393,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         }
     }
 
-    private async void CreatStoreCounter(CreatStoreCounter creatStoreCounter)
+    private async System.Threading.Tasks.Task CreatStoreCounterAsync(CreatStoreCounter creatStoreCounter)
     {
         if (!runtimeStoreCounters.ContainsKey(creatStoreCounter.itemInstanceId))
         {
@@ -398,7 +413,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         }
     }
 
-    private async void DisplayStoreCounter(DisplayStoreCounter displayStoreCounter)
+    private async System.Threading.Tasks.Task DisplayStoreCounterAsync(DisplayStoreCounter displayStoreCounter)
     { 
         if (runtimeStoreCounters.TryGetValue(displayStoreCounter.itemInstanceId, out var runtimeStoreCounter))
         {

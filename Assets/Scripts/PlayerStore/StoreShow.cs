@@ -26,7 +26,7 @@ public class StoreShow:Singleton<StoreShow>
             Debug.LogError($"StoreShow init failed: missing coin prefab '{DataPath.StoreCoinPrefab}'.");
             return;
         }
-        GameActionManager.instance.AddListener<ShowCoin>(ShowCoin);
+        GameActionManager.instance.AddAsyncListener<ShowCoin>(ShowCoinAsync, nameof(ShowCoin));
     }
 
     protected override void Clear()
@@ -34,7 +34,7 @@ public class StoreShow:Singleton<StoreShow>
         initializationTask = Task.CompletedTask;
         base.Clear();
     }
-    public async void ShowCoin(ShowCoin ShowCoin)
+    public async System.Threading.Tasks.Task ShowCoinAsync(ShowCoin ShowCoin)
     {
         var coinRuntimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj<Animation>(RuntimeObjType.STOREITEM.ToString(), "Coin", CoinPrefab, 0);
         Animation animation = coinRuntimeObj.obj as Animation;
