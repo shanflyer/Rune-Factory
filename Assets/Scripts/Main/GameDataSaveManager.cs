@@ -417,6 +417,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         MigrateSaveDataList(saveDataList);
         saveDataList.nowSaveData ??= UserGameSaveData.CreatSaveData(-1);
         saveDataList.nowSaveData.index = -1;
+        NormalizeUserGameSaveData(saveDataList.nowSaveData, -1);
         saveDataList.nowSaveData.Init();
 
         saveDataList.userGameSaveDatas ??= new List<UserGameSaveData>();
@@ -429,16 +430,102 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         {
             saveDataList.userGameSaveDatas[i] ??= UserGameSaveData.CreatSaveData(i);
             saveDataList.userGameSaveDatas[i].index = i;
+            NormalizeUserGameSaveData(saveDataList.userGameSaveDatas[i], i);
             saveDataList.userGameSaveDatas[i].Init();
         }
     }
 
     private static void MigrateSaveDataList(UserGameSaveDataList saveDataList)
     {
-        if (saveDataList.commonSaveData.saveVersion < CurrentSaveVersion)
+        int version = saveDataList.commonSaveData.saveVersion;
+        if (version > CurrentSaveVersion)
         {
-            // 当前版本只需要补齐缺失字段；后续字段迁移统一放在这里按版本递增处理。
-            saveDataList.commonSaveData.saveVersion = CurrentSaveVersion;
+            Debug.LogWarning($"Save data version is newer than client. saveVersion={version}, current={CurrentSaveVersion}");
+            return;
+        }
+
+        while (version < CurrentSaveVersion)
+        {
+            switch (version)
+            {
+                case 0:
+                    MigrateSaveDataListFrom0To1(saveDataList);
+                    version = 1;
+                    break;
+
+                default:
+                    throw new InvalidDataException($"Unsupported save data migration version: {version}");
+            }
+        }
+
+        saveDataList.commonSaveData.saveVersion = CurrentSaveVersion;
+    }
+
+    private static void MigrateSaveDataListFrom0To1(UserGameSaveDataList saveDataList)
+    {
+        // v1 迁移只做结构兜底：旧存档缺字段时先补齐集合，避免后续 Init/Unpack 半路失败。
+        saveDataList.nowSaveData ??= UserGameSaveData.CreatSaveData(-1);
+        saveDataList.userGameSaveDatas ??= new List<UserGameSaveData>();
+        NormalizeUserGameSaveData(saveDataList.nowSaveData, -1);
+        for (int i = 0; i < saveDataList.userGameSaveDatas.Count; i++)
+        {
+            if (saveDataList.userGameSaveDatas[i] != null)
+            {
+                NormalizeUserGameSaveData(saveDataList.userGameSaveDatas[i], i);
+            }
+        }
+    }
+
+    private static void NormalizeUserGameSaveData(UserGameSaveData saveData, int index)
+    {
+        saveData.index = index;
+        saveData.playerData ??= new CharacterSaveData();
+        saveData.otherSaveData ??= new OtherSaveData();
+        saveData.otherSaveData.playerPackages ??= new List<int>();
+        saveData.otherSaveData.shortcutItems ??= new List<int2>();
+        saveData.packageSaveDatas ??= new List<PackageSaveData>();
+        RemoveNullEntries(saveData.packageSaveDatas);
+        for (int i = 0; i < saveData.packageSaveDatas.Count; i++)
+        {
+            saveData.packageSaveDatas[i].items ??= new List<ulong>();
+        }
+
+        saveData.friendSaveData.friendShips ??= new List<int3>();
+        saveData.friendSaveData.friendAdds ??= new List<int4>();
+        saveData.characterSaveDatas ??= new IntCharacterSaveDataDictionary();
+        saveData.nowWeathers ??= new List<Weather>();
+        saveData.nextWeathers ??= new List<Weather>();
+        saveData.NpcTimeData ??= new List<int>();
+        saveData.chapters ??= new IntChapterSaveDictionary();
+        saveData.mapLineSaveData ??= new IntIntDictionary();
+        saveData.plantSaveDatas ??= new IntPlantSaveDataDictionary();
+        saveData.fishSaveDatas ??= new IntFishSaveDataDataDictionary();
+        saveData.mapHomeEquips ??= new IntHomeEquipSaveDataDictionary();
+        saveData.animals ??= new IntAnimalSaveDataDictionary();
+        saveData.pastures ??= new IntPastureSaveDataDictionary();
+        saveData.manufatures ??= new IntManufatureSaveDataDictionary();
+        saveData.storeCounters ??= new List<StoreCounterSaveData>();
+        RemoveNullEntries(saveData.storeCounters);
+        saveData.fields ??= new IntFieldSaveDataDictionary();
+        saveData.shopList ??= new List<ShopListSaveData>();
+        RemoveNullEntries(saveData.shopList);
+        saveData.mapItemCoordinates ??= new List<ulong>();
+        saveData.openFormulas ??= new List<int>();
+        saveData.changeMapItems ??= new List<long>();
+        saveData.animationStateMapItems ??= new List<int>();
+        saveData.removeCollider ??= new List<int>();
+        saveData.mapItemOperates ??= new List<int>();
+        saveData.specialMapItemList ??= new List<long>();
+    }
+
+    private static void RemoveNullEntries<T>(List<T> list) where T : class
+    {
+        for (int i = list.Count - 1; i >= 0; i--)
+        {
+            if (list[i] == null)
+            {
+                list.RemoveAt(i);
+            }
         }
     }
 
@@ -511,6 +598,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
 
     private void SaveUserGameSaveData()
     {
+        UserGameSaveDataList.commonSaveData.saveVersion = CurrentSaveVersion;
         UserGameSaveData.otherSaveData.uid = MyInstance.instance.MaxUid;
 
         //包裹数据
