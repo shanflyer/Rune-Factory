@@ -30,7 +30,11 @@ public class BaseReference : MonoBehaviour
         gameObject.TryGetComponent(out raycaster);
     }
     public virtual void Show(int layer = -1) { show = true; }
-    public virtual void Close() { show = false; } 
+    public virtual void Close()
+    {
+        show = false;
+        CancelLifecycleTasks();
+    }
     public virtual Task InitData(string dataKey)
     {
         // 默认面板没有异步数据，派生类可覆盖为真正的加载流程。
@@ -51,6 +55,12 @@ public class BaseReference : MonoBehaviour
     public void SetLifecycleCancellationToken(CancellationToken cancellationToken)
     {
         lifecycleCancellationToken = cancellationToken;
+    }
+
+    protected void CancelLifecycleTasks()
+    {
+        // 有些面板会直接调用 Close，不经过 UIManager.CloseGamePanel，这里兜底取消旧异步回调。
+        lifecycleCancellationToken = new CancellationToken(true);
     }
 
     protected bool ShouldStopLifecycleTask(CancellationToken cancellationToken)

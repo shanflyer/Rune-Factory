@@ -40,7 +40,7 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
     public override void OnDisable()
     {
         base.OnDisable();
-        if (!SingletonType.Cleared)
+        if (!SingletonType.Cleared && GameActionManager.HasInstance)
             GameActionManager.instance.RemoveListener<RefreshGameSaveData>(RefreshGameSaveData);
     }
 
@@ -84,15 +84,25 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
     public override void InitReferenceData(UserGameSaveDataList v)
     {
         base.InitReferenceData(v);
-        // 面板引用数据入口保持同步，存档列表加载异常统一进入日志。
-        AsyncTaskRunner.Run(InitReferenceDataAsync(v), nameof(InitReferenceData));
+        // 存档列表刷新绑定面板生命周期，关闭或重开后旧结果不再覆盖新状态。
+        RunLifecycleTask(token => InitReferenceDataAsync(v, token), nameof(InitReferenceData));
     }
 
-    private async System.Threading.Tasks.Task InitReferenceDataAsync(UserGameSaveDataList v)
+    private async System.Threading.Tasks.Task InitReferenceDataAsync(UserGameSaveDataList v, System.Threading.CancellationToken cancellationToken)
     {
         selectGameSaveData = v.nowSaveData;
-        await SaveReference.InitData(v.nowSaveData, SelectAction, toggleGroup);
-        await saveList.InitListData(v.userGameSaveDatas, SelectAction, toggleGroup);
+        await SaveReference.InitData(v.nowSaveData, SelectAction, toggleGroup, cancellationToken);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
+        await saveList.InitListData(v.userGameSaveDatas, SelectAction, toggleGroup, cancellationToken: cancellationToken);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         SaveReference.SelectDefault();
     }
 
@@ -131,16 +141,26 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
 
     private void CopyDataAsync()
     {
-        AsyncTaskRunner.Run(CopyDataTaskAsync, nameof(CopyDataAsync));
+        RunLifecycleTask(CopyDataTaskAsync, nameof(CopyDataAsync));
     }
 
-    private async System.Threading.Tasks.Task CopyDataTaskAsync()
+    private async System.Threading.Tasks.Task CopyDataTaskAsync(System.Threading.CancellationToken cancellationToken)
     {
         if (selectGameSaveData != null && !string.IsNullOrEmpty(selectGameSaveData.saveTime))
         {
             GameDataSaveManager.instance.CopySaveData(selectGameSaveData);
-            await SaveReference.InitData(data.nowSaveData, SelectAction, toggleGroup);
-            await saveList.InitListData(data.userGameSaveDatas, SelectAction, toggleGroup);
+            await SaveReference.InitData(data.nowSaveData, SelectAction, toggleGroup, cancellationToken);
+            if (ShouldStopLifecycleTask(cancellationToken))
+            {
+                return;
+            }
+
+            await saveList.InitListData(data.userGameSaveDatas, SelectAction, toggleGroup, cancellationToken: cancellationToken);
+            if (ShouldStopLifecycleTask(cancellationToken))
+            {
+                return;
+            }
+
             SaveReference.SelectDefault();
         }
         else
@@ -150,14 +170,24 @@ public class SelectLoadPanel : GamePanel<UserGameSaveDataList>
 
     private void DeleteData()
     {
-        AsyncTaskRunner.Run(DeleteDataAsync, nameof(DeleteData));
+        RunLifecycleTask(DeleteDataAsync, nameof(DeleteData));
     }
 
-    private async System.Threading.Tasks.Task DeleteDataAsync()
+    private async System.Threading.Tasks.Task DeleteDataAsync(System.Threading.CancellationToken cancellationToken)
     {
         GameDataSaveManager.instance.DeleteSaveData(selectGameSaveData);
-        await SaveReference.InitData(data.nowSaveData, SelectAction, toggleGroup);
-        await saveList.InitListData(data.userGameSaveDatas, SelectAction, toggleGroup);
+        await SaveReference.InitData(data.nowSaveData, SelectAction, toggleGroup, cancellationToken);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
+        await saveList.InitListData(data.userGameSaveDatas, SelectAction, toggleGroup, cancellationToken: cancellationToken);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         SaveReference.SelectDefault();
     }
 }

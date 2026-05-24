@@ -50,7 +50,7 @@ public class SavePanel : GamePanel<UserGameSaveDataList>
     public override void OnDisable()
     {
         base.OnDisable();
-        if (!SingletonType.Cleared)
+        if (!SingletonType.Cleared && GameActionManager.HasInstance)
             GameActionManager.instance.RemoveListener<RefreshGameSaveData>(RefreshGameSaveData);
     }
 
@@ -74,14 +74,19 @@ public class SavePanel : GamePanel<UserGameSaveDataList>
     public override void InitReferenceData(UserGameSaveDataList v)
     {
         base.InitReferenceData(v);
-        // 面板引用数据入口保持同步，存档列表加载异常统一进入日志。
-        AsyncTaskRunner.Run(InitReferenceDataAsync(v), nameof(InitReferenceData));
+        // 存档面板重开时取消旧列表刷新，避免旧 SaveReference 再次抢选中态。
+        RunLifecycleTask(token => InitReferenceDataAsync(v, token), nameof(InitReferenceData));
     }
 
-    private async System.Threading.Tasks.Task InitReferenceDataAsync(UserGameSaveDataList v)
+    private async System.Threading.Tasks.Task InitReferenceDataAsync(UserGameSaveDataList v, System.Threading.CancellationToken cancellationToken)
     {
         //selectGameSaveData = null;
-       await saveList.InitListData(v.userGameSaveDatas, SelectAction, toggleGroup);
+       await saveList.InitListData(v.userGameSaveDatas, SelectAction, toggleGroup, cancellationToken: cancellationToken);
+       if (ShouldStopLifecycleTask(cancellationToken))
+       {
+           return;
+       }
+
        saveList.SelectDefault();
     }
 

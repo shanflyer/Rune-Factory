@@ -61,12 +61,17 @@ public class MiniPackagePanel : GamePanel<PackageList>
 
     private void TryPackageLevelUp()
     {
-        AsyncTaskRunner.Run(TryPackageLevelUpAsync, nameof(TryPackageLevelUp));
+        RunLifecycleTask(TryPackageLevelUpAsync, nameof(TryPackageLevelUp));
     }
 
-    private async System.Threading.Tasks.Task TryPackageLevelUpAsync()
+    private async System.Threading.Tasks.Task TryPackageLevelUpAsync(System.Threading.CancellationToken cancellationToken)
     {
         PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(selectPackageData.dataId);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         if (packageSetData && packageSetData.canLevelUp)
         {
             int cost = packageSetData.levelUpCost * selectPackageData.caseCount;
@@ -104,7 +109,7 @@ public class MiniPackagePanel : GamePanel<PackageList>
     public override void OnDisable()
     {
         base.OnDisable();
-        if (!SingletonType.Cleared)
+        if (!SingletonType.Cleared && GameActionManager.HasInstance)
         {
             GameActionManager.instance.RemoveListener<RefreshPackage>(RefreshPackage);
             GameActionManager.instance.RemoveListener<RefreshShortcut>(RefreshShortcut);
@@ -128,10 +133,10 @@ public class MiniPackagePanel : GamePanel<PackageList>
     }
     private void SelectPackageItem(Item item, int index, bool selected = true)
     {
-        AsyncTaskRunner.Run(() => SelectPackageItemAsync(item, index, selected), nameof(SelectPackageItem));
+        RunLifecycleTask(token => SelectPackageItemAsync(item, index, selected, token), nameof(SelectPackageItem));
     }
 
-    private async System.Threading.Tasks.Task SelectPackageItemAsync(Item item, int index, bool selected = true)
+    private async System.Threading.Tasks.Task SelectPackageItemAsync(Item item, int index, bool selected, System.Threading.CancellationToken cancellationToken)
     {
         if (selected)
         {
@@ -151,6 +156,10 @@ public class MiniPackagePanel : GamePanel<PackageList>
                     OffsetPos=infoOffsetY
                 };
                 await UIManager.instance.ShowGamePanel<ItemInfoPanel, ItemInfo>(itemInfo);
+                if (ShouldStopLifecycleTask(cancellationToken))
+                {
+                    return;
+                }
 
                 if (otherSelectItemAction != null)
                 {
@@ -196,10 +205,10 @@ public class MiniPackagePanel : GamePanel<PackageList>
     }
     private void RefreshPackage()
     {
-        AsyncTaskRunner.Run(RefreshPackageAsync, nameof(RefreshPackage));
+        RunLifecycleTask(RefreshPackageAsync, nameof(RefreshPackage));
     }
 
-    private async System.Threading.Tasks.Task RefreshPackageAsync()
+    private async System.Threading.Tasks.Task RefreshPackageAsync(System.Threading.CancellationToken cancellationToken)
     {
         //selectPackageData = packageList.packageDatas[selectIndex];
         if (selectPackageData.dataId == 0)
@@ -219,6 +228,11 @@ public class MiniPackagePanel : GamePanel<PackageList>
                 {
                     var item = selectPackageData.items[i];
                     item.locked = !await packageList.itemMatchData.MatchAction(item);
+                    if (ShouldStopLifecycleTask(cancellationToken))
+                    {
+                        return;
+                    }
+
                     items.Add(item);
                 }
             }
@@ -229,9 +243,19 @@ public class MiniPackagePanel : GamePanel<PackageList>
             items.Add(default(Item));
         }
         PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(selectPackageData.dataId);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         Title.SetSWText(packageSetData.packageName);
 
-        await itemBoxs.InitListData(items, SelectPackageItem, toggleGroup: itemSelectGroup);
+        await itemBoxs.InitListData(items, SelectPackageItem, toggleGroup: itemSelectGroup, cancellationToken: cancellationToken);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         itemBoxs.ClearSelect();
 
         caseCount.text = $"{selectPackageData.items.Count}/{selectPackageData.caseCount}";

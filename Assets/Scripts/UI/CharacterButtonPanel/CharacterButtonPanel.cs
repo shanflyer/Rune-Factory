@@ -34,8 +34,8 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
                     }
                 }
 
-                // 角色按钮刷新来自同步 UI 回调，列表初始化异常统一记录。
-                AsyncTaskRunner.Run(characterButtons.InitListData(nowCharacters, SelectAction), nameof(Awake));
+                // 角色按钮刷新绑定当前面板生命周期，关闭后旧列表初始化不再写回 UI。
+                RunLifecycleTask(token => characterButtons.InitListData(nowCharacters, SelectAction, cancellationToken: token), nameof(Awake));
             }
         });
     }
@@ -81,11 +81,15 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
     HashSet<int> characters = new HashSet<int>();
     void SelectAction(MyInt seletCharacter, int index, bool selected = true)
     {
-        AsyncTaskRunner.Run(() => SelectActionAsync(seletCharacter, index, selected), nameof(SelectAction));
+        RunLifecycleTask(token => SelectActionAsync(seletCharacter, index, selected, token), nameof(SelectAction));
     }
 
-    async System.Threading.Tasks.Task SelectActionAsync(MyInt seletCharacter, int index, bool selected = true)
+    async System.Threading.Tasks.Task SelectActionAsync(MyInt seletCharacter, int index, bool selected, System.Threading.CancellationToken cancellationToken)
     {
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
 
         Character character = CharacterManager.instance.GetCharacter(seletCharacter.value);
 
@@ -142,6 +146,10 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
                 {
                     eventReferenceData,targetReferenceData,NextTalkReferenceData
                 });
+                if (ShouldStopLifecycleTask(cancellationToken))
+                {
+                    return;
+                }
             }
 
            
@@ -150,10 +158,10 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
 
     private void RefreshOperateCharacters(RefreshOperateCharacters refreshOperateCharacters)
     {
-        AsyncTaskRunner.Run(() => RefreshOperateCharactersAsync(refreshOperateCharacters), nameof(RefreshOperateCharacters));
+        RunLifecycleTask(token => RefreshOperateCharactersAsync(refreshOperateCharacters, token), nameof(RefreshOperateCharacters));
     }
 
-    private async System.Threading.Tasks.Task RefreshOperateCharactersAsync(RefreshOperateCharacters refreshOperateCharacters)
+    private async System.Threading.Tasks.Task RefreshOperateCharactersAsync(RefreshOperateCharacters refreshOperateCharacters, System.Threading.CancellationToken cancellationToken)
     {
         bool refresh = false; 
         refreshOperateCharacters.joinCharacters.ExceptWith(TeamManager.instance.playerTeam.TeamCharacters); 
@@ -165,6 +173,11 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
         if (refreshOperateCharacters.leaveCharacters != null)
         {
             var simpleTalkPanel = await UIManager.instance.GetGamePanel<SimpleTalkPanel>();
+            if (ShouldStopLifecycleTask(cancellationToken))
+            {
+                return;
+            }
+
             if (simpleTalkPanel != null)
                 foreach (var leaveCharacter in refreshOperateCharacters.leaveCharacters)
                     simpleTalkPanel.TryClose(leaveCharacter);
@@ -199,13 +212,22 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
                     characterButtonParent.gameObject.SetActive(false);
                     CharacterButtonReference.transform.localScale = Vector3.one;
                     MultiCharacterButton.transform.localScale = Vector3.zero;
-                    await CharacterButtonReference.InitData(nowCharacters[0], SelectAction);
-                    CharacterButtonReference.enabled = true; 
+                    await CharacterButtonReference.InitData(nowCharacters[0], SelectAction, null, cancellationToken);
+                    if (ShouldStopLifecycleTask(cancellationToken))
+                    {
+                        return;
+                    }
+
+                    CharacterButtonReference.enabled = true;
                     break;
                 default:
                     if (characterButtonParent.gameObject.activeSelf)
                     {
-                        await characterButtons.InitListData(nowCharacters, SelectAction);
+                        await characterButtons.InitListData(nowCharacters, SelectAction, cancellationToken: cancellationToken);
+                        if (ShouldStopLifecycleTask(cancellationToken))
+                        {
+                            return;
+                        }
                     }
                     else
                     {
@@ -220,10 +242,10 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
 
     private void RefreshOperateCharacter(RefreshOperateCharacter refreshOperateCharacter)
     {
-        AsyncTaskRunner.Run(() => RefreshOperateCharacterAsync(refreshOperateCharacter), nameof(RefreshOperateCharacter));
+        RunLifecycleTask(token => RefreshOperateCharacterAsync(refreshOperateCharacter, token), nameof(RefreshOperateCharacter));
     }
 
-    private async System.Threading.Tasks.Task RefreshOperateCharacterAsync(RefreshOperateCharacter refreshOperateCharacter)
+    private async System.Threading.Tasks.Task RefreshOperateCharacterAsync(RefreshOperateCharacter refreshOperateCharacter, System.Threading.CancellationToken cancellationToken)
     {
         if (CharacterManager.instance.IsTempCharacter(refreshOperateCharacter.characterId))
         {
@@ -242,6 +264,11 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
         {
             characters.Remove(refreshOperateCharacter.characterId);
             var simpleTalkPanel = await UIManager.instance.GetGamePanel<SimpleTalkPanel>();
+            if (ShouldStopLifecycleTask(cancellationToken))
+            {
+                return;
+            }
+
             if (simpleTalkPanel != null) simpleTalkPanel.TryClose(refreshOperateCharacter.characterId);
         }
         if (characters.Count != oldCount)
@@ -267,12 +294,20 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
                     CharacterButtonReference.transform.localScale = Vector3.one;
                     CharacterButtonReference.enabled = true;
                     MultiCharacterButton.transform.localScale = Vector3.zero;
-                    await CharacterButtonReference.InitData(nowCharacters[0], SelectAction);
+                    await CharacterButtonReference.InitData(nowCharacters[0], SelectAction, null, cancellationToken);
+                    if (ShouldStopLifecycleTask(cancellationToken))
+                    {
+                        return;
+                    }
                     break;
                 default:
                     if (characterButtonParent.gameObject.activeSelf)
                     {
-                        await characterButtons.InitListData(nowCharacters, SelectAction);
+                        await characterButtons.InitListData(nowCharacters, SelectAction, cancellationToken: cancellationToken);
+                        if (ShouldStopLifecycleTask(cancellationToken))
+                        {
+                            return;
+                        }
                     }
                     else
                     {

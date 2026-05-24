@@ -132,10 +132,10 @@ public class AllItemPanel : GamePanel<IReferenceData>
 
     private void SelectPackageItem(Item item, int index, bool selected = true)
     {
-        AsyncTaskRunner.Run(() => SelectPackageItemAsync(item, index, selected), nameof(SelectPackageItem));
+        RunLifecycleTask(token => SelectPackageItemAsync(item, index, selected, token), nameof(SelectPackageItem));
     }
 
-    private async System.Threading.Tasks.Task SelectPackageItemAsync(Item item, int index, bool selected = true)
+    private async System.Threading.Tasks.Task SelectPackageItemAsync(Item item, int index, bool selected, System.Threading.CancellationToken cancellationToken)
     {
         if (selected)
         {
@@ -149,6 +149,11 @@ public class AllItemPanel : GamePanel<IReferenceData>
                 ItemInformation.localScale = Vector3.one;
                 SelectItem = item;
                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
+                if (ShouldStopLifecycleTask(cancellationToken))
+                {
+                    return;
+                }
+
                 ItemIcon.sprite = itemData.icon;
                 ItemIcon.enabled = true;
                 //ItemIcon.SetNativeSize();
@@ -171,14 +176,19 @@ public class AllItemPanel : GamePanel<IReferenceData>
  
     private void RefreshPackage()
     {
-        AsyncTaskRunner.Run(RefreshPackageAsync, nameof(RefreshPackage));
+        RunLifecycleTask(RefreshPackageAsync, nameof(RefreshPackage));
     }
 
-    private async System.Threading.Tasks.Task RefreshPackageAsync()
+    private async System.Threading.Tasks.Task RefreshPackageAsync(System.Threading.CancellationToken cancellationToken)
     {
-        
+
         List<Item> items = new List<Item>();
         var itemDatas=await GameDataManager.instance.GetAllAsyncData<ItemData>();
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         for(int i = 0; i < itemDatas.Count; i++)
         {
             if (string.IsNullOrEmpty(keyStr))
@@ -201,9 +211,14 @@ public class AllItemPanel : GamePanel<IReferenceData>
                 };
                 items.Add(item);
             }
-           
-        } 
-        await itemBoxs.InitListData(items, SelectPackageItem, toggleGroup: itemSelectGroup);
+
+        }
+        await itemBoxs.InitListData(items, SelectPackageItem, toggleGroup: itemSelectGroup, cancellationToken: cancellationToken);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         // if(items.Count>0) { SelectPackageItem(items[0]); }
         itemBoxs.ClearSelect();
         ItemInformation.localScale = Vector3.zero; 
