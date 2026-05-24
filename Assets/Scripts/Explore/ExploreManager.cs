@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using MyGame;
 using Unity.Mathematics;
 using UnityEngine;
@@ -139,17 +140,37 @@ public class ExploreManager : Singleton<ExploreManager>
 
     public void EnterChapter(int id)
     {
-        AsyncTaskRunner.Run(() => EnterChapterAsync(id), nameof(EnterChapter));
+        AsyncTaskRunner.RunLatest(nameof(EnterChapter), token => EnterChapterAsync(id, token), nameof(EnterChapter));
     }
 
-    public async System.Threading.Tasks.Task EnterChapterAsync(int id)
+    public async System.Threading.Tasks.Task EnterChapterAsync(int id, CancellationToken cancellationToken = default)
     {
         nowChapter = id;
         nowFightMapData = await GameDataManager.instance.GetAsyncData<FightMapData>(id.ToString());
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return;
+        }
+
         var beforeActionData = await GameDataManager.instance.GetAsyncData<GameActionAsset>(nowFightMapData.beforeActionId);
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return;
+        }
+
         var afterActionData = await GameDataManager.instance.GetAsyncData<GameActionAsset>(nowFightMapData.afterActionId);
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return;
+        }
+
         SceneManager.instance.SwitchScene("Fight", () =>
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+
             if (beforeActionData != null)
             {
                 beforeActionData.Action();
@@ -157,6 +178,11 @@ public class ExploreManager : Singleton<ExploreManager>
         },
          () =>
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+
             WorldMapObjManager.instance.RecycleMap();
             CharacterManager.instance.RecycleCharacter();
 
@@ -194,9 +220,19 @@ public class ExploreManager : Singleton<ExploreManager>
             GameActionManager.instance.QueueAction(setMapOverrideEnvironment, true);
             FightManager.instance.CreateFightPlayer();
 
-            GameTimerController.instance.DelayAction(100, async () =>
+            GameTimerController.instance.DelayActionAsync(100, async token =>
             {
+                if (token.IsCancellationRequested || cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+
                 await UIManager.instance.ShowGamePanel<FightPanel>(instance.NowChapter.ToString(), layer: 2);
+                if (token.IsCancellationRequested || cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+
                 UIManager.instance.CloseGamePanel<PlayerTopPanel>();
                 UIManager.instance.CloseGamePanel<MainPanel>();
                 UIManager.instance.CloseGamePanel<ShortcutPanel>();
@@ -206,7 +242,7 @@ public class ExploreManager : Singleton<ExploreManager>
                 {
                     afterActionData.Action();
                 }
-            });
+            }, nameof(EnterChapter), nameof(EnterChapter));
 
 
         });

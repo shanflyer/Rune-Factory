@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
@@ -99,96 +100,98 @@ public class WorldMapController : MonoBehaviour
 
     public void Init()
     {
-        // MonoBehaviour 入口保持同步签名，实际异步流程统一进入兜底器。
-        AsyncTaskRunner.Run(InitAsync, nameof(WorldMapController.Init));
+        // 世界初始化只保留最后一次请求，场景重载或重复 StartWorldInit 会取消旧链路。
+        AsyncTaskRunner.RunLatest(nameof(WorldMapController.Init), InitAsync, nameof(WorldMapController.Init));
     }
 
-    private async Task InitAsync()
+    private async Task InitAsync(CancellationToken cancellationToken)
     {
         int version = ++initVersion;
         GameTimerController.instance.RemoveWaiter(AutoSave);
 
         try
         {
-            await EnsureCameraAsync();
+            await EnsureCameraAsync(cancellationToken);
             if (!IsInitCurrent(version)) return;
 
             await GameDataSaveManager.instance.InitLoadSaveData();
+            if (cancellationToken.IsCancellationRequested) return;
             if (!IsInitCurrent(version)) return;
 
-            await InitWorldFlowAsync(version);
+            await InitWorldFlowAsync(version, cancellationToken);
         }
         catch (Exception e)
         {
-            if (IsInitCurrent(version))
+            if (!cancellationToken.IsCancellationRequested && IsInitCurrent(version))
             {
                 Debug.LogException(e);
             }
         }
     }
 
-    private async Task EnsureCameraAsync()
+    private async Task EnsureCameraAsync(CancellationToken cancellationToken)
     {
         if (Camera.main != null) return;
 
         var cameraPrefab = await GameSourceManager.instance.GetPrefab(DataPath.cameraPrefabPath);
+        if (cancellationToken.IsCancellationRequested) return;
         if (cameraPrefab == null) return;
 
         var async = InstantiateAsync(cameraPrefab);
         await async;
     }
 
-    private async Task InitWorldFlowAsync(int version)
+    private async Task InitWorldFlowAsync(int version, CancellationToken cancellationToken)
     {
         _ = GameDataSaveManager.instance.loadGameSaveData;
         if (GameGuideManager.instance.endGuideFilmIndex > 0)
         {
             await UIManager.instance.ShowGamePanel<LoadingPanel>();
-            if (!IsInitCurrent(version)) return;
+            if (cancellationToken.IsCancellationRequested || !IsInitCurrent(version)) return;
         }
 
-        if (!await InitSingletonAsync<TeamManager>(version)) return;
-        if (!await InitSingletonAsync<ShortcutManager>(version)) return;
-        if (!await InitSingletonAsync<MapCellController>(version)) return;
-        if (!await InitSingletonAsync<ItemManager>(version)) return;
-        if (!await InitSingletonAsync<CharacterBehaviorManager>(version)) return;
-        if (!await InitSingletonAsync<NPCTaskScheduleManager>(version)) return;
-        if (!await InitSingletonAsync<EnvironmentManger>(version)) return;
-        if (!await InitSingletonAsync<NPCManager>(version)) return;
-        if (!await InitSingletonAsync<GameEventManager>(version)) return;
-        if (!await InitSingletonAsync<TempCharacterManager>(version)) return;
-        if (!await InitSingletonAsync<CharacterManager>(version)) return;
-        if (!await InitSingletonAsync<GameManager>(version)) return;
-        if (!await InitSingletonAsync<PlayerStoreManager>(version)) return;
-        if (!await InitSingletonAsync<TalkManager>(version)) return;
-        if (!await InitSingletonAsync<FarmManager>(version)) return;
-        if (!await InitSingletonAsync<TempMapItemController>(version)) return;
-        if (!await InitSingletonAsync<FestivalManager>(version)) return;
-        if (!await InitSingletonAsync<GameTimeEventManager>(version)) return;
-        if (!await InitSingletonAsync<GameVolumeManager>(version)) return;
-        if (!await InitSingletonAsync<TimeLineManger>(version)) return;
-        if (!await InitSingletonAsync<EmoteManager>(version)) return;
-        if (!await InitSingletonAsync<SceneInfoManager>(version)) return;
-        if (!await InitSingletonAsync<HomeEquipManager>(version)) return;
-        if (!await InitSingletonAsync<ManufactureManager>(version)) return;
-        if (!await InitSingletonAsync<PastureManager>(version)) return;
-        if (!await InitSingletonAsync<FishingManager>(version)) return;
-        if (!await InitSingletonAsync<FishController>(version)) return;
-        if (!await InitSingletonAsync<WeatherManager>(version)) return;
+        if (!await InitSingletonAsync<TeamManager>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<ShortcutManager>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<MapCellController>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<ItemManager>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<CharacterBehaviorManager>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<NPCTaskScheduleManager>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<EnvironmentManger>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<NPCManager>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<GameEventManager>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<TempCharacterManager>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<CharacterManager>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<GameManager>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<PlayerStoreManager>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<TalkManager>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<FarmManager>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<TempMapItemController>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<FestivalManager>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<GameTimeEventManager>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<GameVolumeManager>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<TimeLineManger>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<EmoteManager>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<SceneInfoManager>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<HomeEquipManager>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<ManufactureManager>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<PastureManager>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<FishingManager>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<FishController>(version, cancellationToken)) return;
+        if (!await InitSingletonAsync<WeatherManager>(version, cancellationToken)) return;
 
         AudioController.instance.ClearBGM(AudioClearType.All, BGMGroup.Theme.ToString());
-        if (!await YieldInitFrame(version)) return;
+        if (!await YieldInitFrame(version, cancellationToken)) return;
 
         InputManager.instance.SwitchInputMap(false);
         GameActionManager.instance.QueueAction(new InitInputAction());
         GameTimeManager.instance.ZeroGameTime();
-        if (!await YieldInitFrame(version)) return;
+        if (!await YieldInitFrame(version, cancellationToken)) return;
 
         GameDataSaveManager.instance.InitSaveDate();
-        if (!await YieldInitFrame(version)) return;
+        if (!await YieldInitFrame(version, cancellationToken)) return;
 
         QueueInitialWorldActions();
-        if (!await YieldInitFrame(version)) return;
+        if (!await YieldInitFrame(version, cancellationToken)) return;
 
         if (GameController.instance.startPlay)
         {
@@ -196,17 +199,19 @@ public class WorldMapController : MonoBehaviour
             GameActionManager.instance.QueueAction(new SwitchInputMap { UI = false });
         }
 
-        if (!await YieldInitFrame(version)) return;
-        if (!await YieldInitFrame(version)) return;
+        if (!await YieldInitFrame(version, cancellationToken)) return;
+        if (!await YieldInitFrame(version, cancellationToken)) return;
 
         GameTimeManager.instance.runTime = true;
 
-        if (!await YieldInitFrame(version)) return;
+        if (!await YieldInitFrame(version, cancellationToken)) return;
         await UIManager.instance.ShowGamePanel<MainPanel>();
 
-        if (!await YieldInitFrame(version)) return;
+        if (!await YieldInitFrame(version, cancellationToken)) return;
         await UIManager.instance.ShowGamePanel<ScreenControllerPanel>();
+        if (cancellationToken.IsCancellationRequested || !IsInitCurrent(version)) return;
         await UIManager.instance.ShowGamePanel<PlayerTopPanel>();
+        if (cancellationToken.IsCancellationRequested || !IsInitCurrent(version)) return;
         await UIManager.instance.ShowGamePanel<ShortcutPanel>();
 
         ScheduleAutoSave();
@@ -256,17 +261,17 @@ public class WorldMapController : MonoBehaviour
         }
     }
 
-    private async Task<bool> YieldInitFrame(int version)
+    private async Task<bool> YieldInitFrame(int version, CancellationToken cancellationToken)
     {
         await Task.Yield();
-        return IsInitCurrent(version);
+        return !cancellationToken.IsCancellationRequested && IsInitCurrent(version);
     }
 
-    private async Task<bool> InitSingletonAsync<T>(int version) where T : Singleton<T>
+    private async Task<bool> InitSingletonAsync<T>(int version, CancellationToken cancellationToken) where T : Singleton<T>
     {
         var manager = Singleton<T>.instance;
         await manager.WaitForInitialization();
-        return await YieldInitFrame(version);
+        return await YieldInitFrame(version, cancellationToken);
     }
 
     private bool IsInitCurrent(int version)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using MyGame;
 using Unity.Mathematics;
@@ -1214,10 +1215,12 @@ public class CharacterManager : Singleton<CharacterManager>
 
     private void ChangeMapAction(Character character, int3 newMap, int afterAction)
     {
-        AsyncTaskRunner.Run(() => ChangeMapActionAsync(character, newMap, afterAction), nameof(ChangeMapAction));
+        AsyncTaskRunner.RunLatest($"{nameof(ChangeMapAction)}:{character.instanceId}",
+            token => ChangeMapActionAsync(character, newMap, afterAction, token), nameof(ChangeMapAction));
     }
 
-    private async System.Threading.Tasks.Task ChangeMapActionAsync(Character character, int3 newMap, int afterAction)
+    private async System.Threading.Tasks.Task ChangeMapActionAsync(Character character, int3 newMap, int afterAction,
+        CancellationToken cancellationToken)
     {
         int targetMap = newMap.z;
         var targetCoordinate = new int2(newMap.x, newMap.y);
@@ -1236,11 +1239,25 @@ public class CharacterManager : Singleton<CharacterManager>
             };
             GameActionManager.instance.QueueAction(lerpScreenCycleValue, true);
 
-            GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), async () =>
+            GameTimerController.instance.DelayActionAsync((int)(GameCommon.mapChangeLerpTime * 1000), async token =>
             {
+                if (token.IsCancellationRequested || cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+
                 character.SetCoordinate(new int3(targetCoordinate, targetMap), false);
                 await SetPlayerPos(character,true);
+                if (token.IsCancellationRequested || cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
+
                 await WorldMapObjManager.instance.DisplayMap(targetMap);
+                if (token.IsCancellationRequested || cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
 
 
                 GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), () =>
@@ -1256,15 +1273,25 @@ public class CharacterManager : Singleton<CharacterManager>
                     //EnvironmentManger.instance.SkyEnviromentMono.PlayWeather();
                     void AfterLerpScreenCycle(bool value)
                     {
-                        AsyncTaskRunner.Run(() => AfterLerpScreenCycleAsync(value), nameof(AfterLerpScreenCycle));
+                        AsyncTaskRunner.RunLatest($"{nameof(AfterLerpScreenCycle)}:{character.instanceId}",
+                            token => AfterLerpScreenCycleAsync(value, token), nameof(AfterLerpScreenCycle));
                     }
 
-                    async System.Threading.Tasks.Task AfterLerpScreenCycleAsync(bool value)
+                    async System.Threading.Tasks.Task AfterLerpScreenCycleAsync(bool value, CancellationToken token)
                     {
+                        if (token.IsCancellationRequested || cancellationToken.IsCancellationRequested)
+                        {
+                            return;
+                        }
 
                         if (afterAction != 0)
                         {
                             var dataAction = await GameDataManager.instance.GetAsyncData<GameActionAsset>(afterAction);
+                            if (token.IsCancellationRequested || cancellationToken.IsCancellationRequested)
+                            {
+                                return;
+                            }
+
                             if (dataAction)
                             {
                                 dataAction.Action();
@@ -1272,12 +1299,16 @@ public class CharacterManager : Singleton<CharacterManager>
                         }
 
                         await SetPlayerPos(character, true);
+                        if (token.IsCancellationRequested || cancellationToken.IsCancellationRequested)
+                        {
+                            return;
+                        }
 
                         character.canMove = true;
                     }
                     GameActionManager.instance.QueueAction(lerpScreenCycleValue, true);
                 });
-            });
+            }, nameof(ChangeMapAction), $"{nameof(ChangeMapAction)}:{character.instanceId}:delay");
 
         }
         else if (!(character is TempCharacter))

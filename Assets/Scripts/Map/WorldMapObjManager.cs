@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Unity.Collections;
 using Unity.Jobs;
@@ -61,7 +62,8 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             }
             else
             {
-                AsyncTaskRunner.Run(DisplayMapItem(refreshMapItemDisplay.runtimeMapItem), nameof(DisplayMapItem));
+                AsyncTaskRunner.RunLatest($"{nameof(DisplayMapItem)}:{refreshMapItemDisplay.runtimeMapItem.instanceId}",
+                    token => DisplayMapItem(refreshMapItemDisplay.runtimeMapItem, token), nameof(DisplayMapItem));
             }
         }
     }
@@ -87,10 +89,11 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
 
     private void RefreshMapPackageItemRender(int id)
     {
-        AsyncTaskRunner.Run(() => RefreshMapPackageItemRenderAsync(id), nameof(RefreshMapPackageItemRender));
+        AsyncTaskRunner.RunLatest($"{nameof(RefreshMapPackageItemRender)}:{id}",
+            token => RefreshMapPackageItemRenderAsync(id, token), nameof(RefreshMapPackageItemRender));
     }
 
-    private async System.Threading.Tasks.Task RefreshMapPackageItemRenderAsync(int id)
+    private async System.Threading.Tasks.Task RefreshMapPackageItemRenderAsync(int id, CancellationToken cancellationToken)
     {
         if (mapPackageItemRenders.TryGetValue(id, out var spriteRenderers))
         {
@@ -105,6 +108,11 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                     for (int i = 0; i < items.Count; i++)
                     {
                         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(items[i].x);
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            return;
+                        }
+
                         spriteRenderers[i].m_Sprite = itemData.icon;
                         spriteRenderers[i].enabled = true;
                     }
@@ -114,6 +122,11 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
                     for (int i = 0; i < spriteRenderers.Length; i++)
                     {
                         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(items[i].x);
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            return;
+                        }
+
                         spriteRenderers[i].m_Sprite = itemData.icon;
                         spriteRenderers[i].enabled = true;
                     }
@@ -171,10 +184,11 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
 
     private void CreatTempMapObjItem(TempMapItem tempMapItem)
     {
-        AsyncTaskRunner.Run(() => CreatTempMapObjItemAsync(tempMapItem), nameof(CreatTempMapObjItem));
+        AsyncTaskRunner.RunLatest($"{nameof(CreatTempMapObjItem)}:{tempMapItem.instanceId}",
+            token => CreatTempMapObjItemAsync(tempMapItem, token), nameof(CreatTempMapObjItem));
     }
 
-    private async System.Threading.Tasks.Task CreatTempMapObjItemAsync(TempMapItem tempMapItem)
+    private async System.Threading.Tasks.Task CreatTempMapObjItemAsync(TempMapItem tempMapItem, CancellationToken cancellationToken)
     {
         Transform overrideParent = null;
         if (CharacterManager.instance.GetRuntimeCharacterObj(tempMapItem.characterId, out var characterRuntimeObj))
@@ -194,6 +208,12 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
         }
         var itemObj =await GameRuntimeObjManager.instance.CreatRuntimeObj<Transform>(RuntimeObjType.MAPITEM.ToString(),
                 tempMapItem.MapItemData.id.ToString(), ProfabTransform, -1, overrideParent);
+        if (cancellationToken.IsCancellationRequested)
+        {
+            GameRuntimeObjManager.instance.RecycleRuntimeObj(itemObj);
+            return;
+        }
+
         var tempMapItemObj = new MapItemRuntimeObj(itemObj, tempMapItem.instanceId, tempMapItem.MapItemData,
             tempMapItem.coordinate);
         tempMapItemObj.SetDefaultLayer();
@@ -596,14 +616,20 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
     /// <param name="runtimeMapItem"></param>
     public void SetItemAnimation(RuntimeMapItem runtimeMapItem)
     {
-        AsyncTaskRunner.Run(() => SetItemAnimationAsync(runtimeMapItem), nameof(SetItemAnimation));
+        AsyncTaskRunner.RunLatest($"{nameof(SetItemAnimation)}:{runtimeMapItem.instanceId}",
+            token => SetItemAnimationAsync(runtimeMapItem, token), nameof(SetItemAnimation));
     }
 
-    public async System.Threading.Tasks.Task SetItemAnimationAsync(RuntimeMapItem runtimeMapItem)
+    public async System.Threading.Tasks.Task SetItemAnimationAsync(RuntimeMapItem runtimeMapItem,
+        CancellationToken cancellationToken = default)
     {
         if (nowRuntimeMapItemObjs.ContainsKey(runtimeMapItem.instanceId))
         {
             await SetItemAimation(runtimeMapItem.animationKey, runtimeMapItem.mapItemData.id, runtimeMapItem.instanceId);
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
         }
     }
 
@@ -740,16 +766,26 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
 
     private Dictionary<int, Manufature> manufatureObjs = new Dictionary<int, Manufature>();
 
-    public async Task DisplayMapItem(RuntimeMapItem runtimeMapItem)
+    public async Task DisplayMapItem(RuntimeMapItem runtimeMapItem, CancellationToken cancellationToken = default)
     {
         if (!nowRuntimeMapItemObjs.ContainsKey(runtimeMapItem.instanceId))
         {
             var runtimeObj =await CreatMapItemRuntime(runtimeMapItem.mapItemData, runtimeMapItem.instanceId, runtimeMapItem.coordinate);
+            if (cancellationToken.IsCancellationRequested)
+            {
+                GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
+                return;
+            }
 
             var MapItemRuntimeObj = new MapItemRuntimeObj(runtimeObj, runtimeMapItem.instanceId,
                 runtimeMapItem.mapItemData, runtimeMapItem.coordinate);
             nowRuntimeMapItemObjs[runtimeMapItem.instanceId] = MapItemRuntimeObj;
             await RuntimeMapItemPlay(runtimeMapItem, runtimeObj);
+            if (cancellationToken.IsCancellationRequested)
+            {
+                RecycleMapItem(runtimeMapItem.instanceId);
+                return;
+            }
 
             RemoveMapDisplayCompeted(runtimeMapItem.instanceId);
 
@@ -786,10 +822,13 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
 
     public void ChangeMapItemDisplay(int mapItemId, int newId, int2 animationKey, RuntimeMapItem runtimeMapItem)
     {
-        AsyncTaskRunner.Run(() => ChangeMapItemDisplayAsync(mapItemId, newId, animationKey, runtimeMapItem), nameof(ChangeMapItemDisplay));
+        AsyncTaskRunner.RunLatest($"{nameof(ChangeMapItemDisplay)}:{mapItemId}",
+            token => ChangeMapItemDisplayAsync(mapItemId, newId, animationKey, runtimeMapItem, token),
+            nameof(ChangeMapItemDisplay));
     }
 
-    public async System.Threading.Tasks.Task ChangeMapItemDisplayAsync(int mapItemId, int newId, int2 animationKey, RuntimeMapItem runtimeMapItem)
+    public async System.Threading.Tasks.Task ChangeMapItemDisplayAsync(int mapItemId, int newId, int2 animationKey,
+        RuntimeMapItem runtimeMapItem, CancellationToken cancellationToken = default)
     {
         if (nowRuntimeMapItemObjs.TryGetValue(mapItemId, out MapItemRuntimeObj runtimeObj))
         {
@@ -800,8 +839,15 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             }
 
 
-            runtimeObj.Recycle();
             var newObj =await CreatMapItemRuntime(runtimeMapItem.mapItemData, runtimeMapItem.instanceId, runtimeMapItem.coordinate);
+            if (cancellationToken.IsCancellationRequested)
+            {
+                GameRuntimeObjManager.instance.RecycleRuntimeObj(newObj);
+                return;
+            }
+
+            // 新物体创建成功后再替换旧显示，避免取消时留下已回收对象的旧索引。
+            runtimeObj.Recycle();
             var MapItemRuntimeObj = new MapItemRuntimeObj(newObj, runtimeMapItem.instanceId, runtimeMapItem.mapItemData,
                 runtimeMapItem.coordinate);
             nowRuntimeMapItemObjs[mapItemId] = MapItemRuntimeObj;
@@ -813,9 +859,16 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             {
                 MyAnimationController.instance.AddItemAnimation(mapItemId, animator, newId.ToString());
                 await SetItemAimation(animationKey, newId, mapItemId);
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    return;
+                }
             }
 
-            TryAddMapPackageItemRender(runtimeObj.animator.transform, runtimeMapItem.instanceId);
+            if (animator)
+            {
+                TryAddMapPackageItemRender(animator.transform, runtimeMapItem.instanceId);
+            }
         }
     }
 
@@ -907,10 +960,10 @@ public class MapItemRuntimeObj
 
     public void TryDisplayMask()
     {
-        AsyncTaskRunner.Run(TryDisplayMaskAsync, nameof(TryDisplayMask));
+        AsyncTaskRunner.RunLatest($"{nameof(TryDisplayMask)}:{instanceId}", TryDisplayMaskAsync, nameof(TryDisplayMask));
     }
 
-    public async System.Threading.Tasks.Task TryDisplayMaskAsync()
+    public async System.Threading.Tasks.Task TryDisplayMaskAsync(CancellationToken cancellationToken)
     {
         if (MaskObj != null)
         {
@@ -923,11 +976,23 @@ public class MapItemRuntimeObj
             var maskPro =
                 await GameSourceManager.instance.GetPrefab(GameCommon.BlendString(DataPath.otherPrefabPath,
                     mapItemData.maskObj));
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+
             if (maskPro != null)
             {
                 MaskObj = await GameRuntimeObjManager.instance.CreatRuntimeObj(RuntimeObjType.OTHER.ToString(),
                     "mapItemData.maskObj"
                     , maskPro.transform, instanceId);
+                if (cancellationToken.IsCancellationRequested)
+                {
+                    GameRuntimeObjManager.instance.RecycleRuntimeObj(MaskObj);
+                    MaskObj = null;
+                    return;
+                }
+
                 MaskObj.obj.transform.position = transform.position;
             }
         }

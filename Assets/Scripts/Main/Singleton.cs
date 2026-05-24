@@ -174,6 +174,8 @@ public class SingletonType : Singleton<SingletonType>
     public void ClearAll()
     {
         Cleared = true;
+        // 场景或存档重载时先取消未完成异步任务，避免旧流程在 Manager 清理后继续回写状态。
+        AsyncTaskRunner.CancelAll();
         singleUpdates.Clear();
         foreach (var typeClear in TypeClears)
         {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
@@ -27,9 +28,42 @@ public delegate void SetResult(bool value);
 
 public static class AsyncTaskRunner
 {
+    private static readonly object SyncRoot = new object();
+    private static readonly HashSet<Task> RunningTasks = new HashSet<Task>();
+    private static readonly Dictionary<string, CancellationTokenSource> LatestTaskTokens = new Dictionary<string, CancellationTokenSource>();
+    private static readonly Dictionary<string, Task> SerialTasks = new Dictionary<string, Task>();
+    private static CancellationTokenSource globalCancellationSource = new CancellationTokenSource();
+
+    public static CancellationToken GlobalToken
+    {
+        get
+        {
+            lock (SyncRoot)
+            {
+                return globalCancellationSource.Token;
+            }
+        }
+    }
+
+    public static int RunningTaskCount
+    {
+        get
+        {
+            lock (SyncRoot)
+            {
+                return RunningTasks.Count;
+            }
+        }
+    }
+
     public static void Run(Task task, string context)
     {
-        _ = RunAsync(task, context);
+        if (task == null)
+        {
+            return;
+        }
+
+        Track(RunAsync(task, context));
     }
 
     public static void Run(Func<Task> taskFactory, string context)
@@ -46,17 +80,179 @@ public static class AsyncTaskRunner
         }
     }
 
+    public static void Run(Func<CancellationToken, Task> taskFactory, string context)
+    {
+        if (taskFactory == null)
+        {
+            return;
+        }
+
+        Run(() => taskFactory(GlobalToken), context);
+    }
+
+    public static void RunLatest(string key, Func<CancellationToken, Task> taskFactory, string context)
+    {
+        if (string.IsNullOrEmpty(key) || taskFactory == null)
+        {
+            return;
+        }
+
+        CancellationTokenSource cancellationTokenSource;
+        lock (SyncRoot)
+        {
+            if (LatestTaskTokens.TryGetValue(key, out var oldTokenSource))
+            {
+                oldTokenSource.Cancel();
+            }
+
+            cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(globalCancellationSource.Token);
+            LatestTaskTokens[key] = cancellationTokenSource;
+        }
+
+        Track(RunLatestAsync(key, taskFactory, context, cancellationTokenSource));
+    }
+
+    public static void RunSerial(string key, Func<CancellationToken, Task> taskFactory, string context)
+    {
+        if (string.IsNullOrEmpty(key) || taskFactory == null)
+        {
+            return;
+        }
+
+        Task serialTask;
+        lock (SyncRoot)
+        {
+            SerialTasks.TryGetValue(key, out var previousTask);
+            serialTask = RunSerialAsync(previousTask ?? Task.CompletedTask, taskFactory, context, GlobalToken);
+            SerialTasks[key] = serialTask;
+        }
+
+        Track(serialTask);
+        Track(ClearSerialTaskAsync(key, serialTask));
+    }
+
+    public static void CancelAll()
+    {
+        List<CancellationTokenSource> latestTokens;
+        lock (SyncRoot)
+        {
+            globalCancellationSource.Cancel();
+            globalCancellationSource = new CancellationTokenSource();
+            latestTokens = new List<CancellationTokenSource>(LatestTaskTokens.Values);
+            LatestTaskTokens.Clear();
+            SerialTasks.Clear();
+        }
+
+        for (int i = 0; i < latestTokens.Count; i++)
+        {
+            latestTokens[i].Cancel();
+        }
+    }
+
     private static async Task RunAsync(Task task, string context)
     {
         try
         {
             await task;
         }
+        catch (OperationCanceledException)
+        {
+            // 场景清理或 latest 任务被新任务替换时属于正常取消。
+        }
         catch (Exception e)
         {
             // 同步回调里无法直接 await 的任务统一走这里，避免异步异常静默丢失。
             Debug.LogError($"Async task failed: {context}");
             Debug.LogException(e);
+        }
+    }
+
+    private static async Task RunLatestAsync(string key, Func<CancellationToken, Task> taskFactory, string context,
+        CancellationTokenSource cancellationTokenSource)
+    {
+        try
+        {
+            if (!cancellationTokenSource.IsCancellationRequested)
+            {
+                await taskFactory(cancellationTokenSource.Token);
+            }
+        }
+        catch (OperationCanceledException) when (cancellationTokenSource.IsCancellationRequested)
+        {
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Async latest task failed: {context}");
+            Debug.LogException(e);
+        }
+        finally
+        {
+            lock (SyncRoot)
+            {
+                if (LatestTaskTokens.TryGetValue(key, out var current) && current == cancellationTokenSource)
+                {
+                    LatestTaskTokens.Remove(key);
+                }
+            }
+
+            cancellationTokenSource.Dispose();
+        }
+    }
+
+    private static async Task RunSerialAsync(Task previousTask, Func<CancellationToken, Task> taskFactory, string context,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            await previousTask;
+            cancellationToken.ThrowIfCancellationRequested();
+            await taskFactory(cancellationToken);
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Async serial task failed: {context}");
+            Debug.LogException(e);
+        }
+    }
+
+    private static async Task ClearSerialTaskAsync(string key, Task serialTask)
+    {
+        await serialTask;
+
+        lock (SyncRoot)
+        {
+            if (SerialTasks.TryGetValue(key, out var current) && current == serialTask)
+            {
+                SerialTasks.Remove(key);
+            }
+        }
+    }
+
+    private static void Track(Task task)
+    {
+        lock (SyncRoot)
+        {
+            RunningTasks.Add(task);
+        }
+
+        _ = UntrackAsync(task);
+    }
+
+    private static async Task UntrackAsync(Task task)
+    {
+        try
+        {
+            await task;
+        }
+        finally
+        {
+            lock (SyncRoot)
+            {
+                RunningTasks.Remove(task);
+            }
         }
     }
 }

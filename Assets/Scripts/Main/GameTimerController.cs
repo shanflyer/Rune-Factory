@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class GameTimerController : Singleton<GameTimerController>
@@ -66,6 +68,17 @@ public class GameTimerController : Singleton<GameTimerController>
         }
 
         DelayOrReplace(action, delay * 0.001f, action);
+    }
+
+    public TimerHandle DelayActionAsync(int delay, Func<CancellationToken, Task> action, string context, object key = null)
+    {
+        if (action == null)
+        {
+            return default;
+        }
+
+        // 延迟回调只能接同步 Action，异步逻辑统一转给 AsyncTaskRunner，避免 async void 回调丢异常。
+        return DelayOrReplace(key ?? action, delay * 0.001f, () => AsyncTaskRunner.Run(action, context));
     }
 
     public TimerHandle Delay(float delaySeconds, Action action, bool useUnscaledTime = false)
