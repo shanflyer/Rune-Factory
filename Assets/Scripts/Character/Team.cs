@@ -498,7 +498,12 @@ public class Teamer
 
     public bool MoveEnd => character.coordinate.x == targetCoordinate.x && character.coordinate.y == targetCoordinate.y;
 
-    public async void SetNowCoordinate(int2 nowCoordinate, bool holdDisplay)
+    public void SetNowCoordinate(int2 nowCoordinate, bool holdDisplay)
+    {
+        AsyncTaskRunner.Run(() => SetNowCoordinateAsync(nowCoordinate, holdDisplay), nameof(SetNowCoordinate));
+    }
+
+    public async System.Threading.Tasks.Task SetNowCoordinateAsync(int2 nowCoordinate, bool holdDisplay)
     {
         character.SetCoordinate(nowCoordinate, !holdDisplay);
         this.holdDisplay = holdDisplay;

@@ -204,7 +204,7 @@ public class MultiNPCBehaviorManager : Singleton<MultiNPCBehaviorManager>
         mulitNpcGroups.Clear();
         GameActionManager.instance.AddListener<JoinInMultiNPCBehaviorGroup>(JoinInMultiNPCBehaviorGroup);
         GameActionManager.instance.AddListener<LeaveMultiNPCBehaviorGroup>(LeaveMultiNPCBehaviorGroup);
-        GameActionManager.instance.AddListener<CreatMultiNPCBehaviorGroup>(CreatMultiNPCBehaviorGroup);
+        GameActionManager.instance.AddAsyncListener<CreatMultiNPCBehaviorGroup>(CreatMultiNPCBehaviorGroupAsync, nameof(CreatMultiNPCBehaviorGroup));
         GameActionManager.instance.AddListener<DestoryMultiNPCBehaviorGroup>(DestoryMultiNPCBehaviorGroup);
     }
 
@@ -229,7 +229,7 @@ public class MultiNPCBehaviorManager : Singleton<MultiNPCBehaviorManager>
         }
     }
 
-    private async void CreatMultiNPCBehaviorGroup(CreatMultiNPCBehaviorGroup creatMultiNPCBehaviorGroup)
+    private async System.Threading.Tasks.Task CreatMultiNPCBehaviorGroupAsync(CreatMultiNPCBehaviorGroup creatMultiNPCBehaviorGroup)
     {
         List<int> characters = creatMultiNPCBehaviorGroup.characters;
         int multiDataId = creatMultiNPCBehaviorGroup.dataId;

@@ -907,7 +907,12 @@ public class NPCManager : Singleton<NPCManager>
         return nPCList;
     }
 
-    public async void CreateZeroNPC()
+    public void CreateZeroNPC()
+    {
+        AsyncTaskRunner.Run(CreateZeroNPCAsync, nameof(CreateZeroNPC));
+    }
+
+    public async System.Threading.Tasks.Task CreateZeroNPCAsync()
     {
         var NPCDatas = await GameDataManager.instance.GetAllAsyncData<NPCData>();
         for (int i = 0; i < NPCDatas.Count; i++)

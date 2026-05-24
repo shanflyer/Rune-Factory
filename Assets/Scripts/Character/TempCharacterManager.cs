@@ -20,7 +20,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
         base.Init();
         GameActionManager.instance.AddListener<DestoryCharacter>(DestoryCharacter);
         GameActionManager.instance.AddListener<ClearTempCharacter>(ClearTempCharacter);
-        GameActionManager.instance.AddListener<StartCreatTempCharacter>(StartCreatTempCharacter);
+        GameActionManager.instance.AddAsyncListener<StartCreatTempCharacter>(StartCreatTempCharacterAsync, nameof(StartCreatTempCharacter));
         GameActionManager.instance.AddListener<StartCreatSpecialTempCharacter>(StartCreateSpecialTempCharacter);
         GameActionManager.instance.AddListener<StopTempCharacterCreat>(StopTempCharacterCreat);
         level = 1;
@@ -211,7 +211,7 @@ public class TempCharacterManager : Singleton<TempCharacterManager>
     }
 
      
-    private async void StartCreatTempCharacter(StartCreatTempCharacter startCreatTempCharacter)
+    private async System.Threading.Tasks.Task StartCreatTempCharacterAsync(StartCreatTempCharacter startCreatTempCharacter)
     {
         if (NowTempCharacterCreatData != null &&
             NowTempCharacterCreatData.id == startCreatTempCharacter.creatDataId && creatTempDelegate != null)

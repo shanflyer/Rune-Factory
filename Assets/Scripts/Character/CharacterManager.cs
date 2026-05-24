@@ -128,10 +128,10 @@ public class CharacterManager : Singleton<CharacterManager>
 
         GameActionManager.instance.AddListener<SetCharacterProperty>(SetCharacterValue);
         GameActionManager.instance.AddListener<ChangeCharacterProperty>(ChangeCharacterValue);
-        GameActionManager.instance.AddListener<SetCharacterCoordinate>(SetCharacterCoordinate);
+        GameActionManager.instance.AddAsyncListener<SetCharacterCoordinate>(SetCharacterCoordinateAsync, nameof(SetCharacterCoordinate));
 
-        GameActionManager.instance.AddListener<CreatCharacter>(CreateCharacter);
-        GameActionManager.instance.AddListener<CreatTempCharacter>(CreateTempCharacter);
+        GameActionManager.instance.AddAsyncListener<CreatCharacter>(CreateCharacterAsync, nameof(CreateCharacterAsync));
+        GameActionManager.instance.AddAsyncListener<CreatTempCharacter>(CreateTempCharacterAsync, nameof(CreateTempCharacterAsync));
         GameActionManager.instance.AddListener<DestoryCharacter>(DestroyCharacter);
          
         GameActionManager.instance.AddListener<SetCharacterAnimator>(SetCharacterAnimator);
@@ -145,9 +145,9 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<StartCharacterMove>(StartCharacterMove);
         GameActionManager.instance.AddListener<StopCharacterMove>(StopCharacterMove);
         GameActionManager.instance.AddListener<RemoveCharacterMove>(RemoveCharacterMove);
-        GameActionManager.instance.AddListener<ChangeEquip>(ChangeEquip);
-        GameActionManager.instance.AddListener<ClearEquip>(ClearEquip);
-        GameActionManager.instance.AddListener<ChangeCharacter>(ChangeCharacter);
+        GameActionManager.instance.AddAsyncListener<ChangeEquip>(ChangeEquipAsync, nameof(ChangeEquip));
+        GameActionManager.instance.AddAsyncListener<ClearEquip>(ClearEquipAsync, nameof(ClearEquip));
+        GameActionManager.instance.AddAsyncListener<ChangeCharacter>(ChangeCharacterAsync, nameof(ChangeCharacter));
         GameActionManager.instance.AddListener<DisplayOrHideCharacter>(DisplayOrHideCharacter);
 
         GameActionManager.instance.AddListener<SetCharacterTempPos>(SetCharacterTempPos);
@@ -157,7 +157,7 @@ public class CharacterManager : Singleton<CharacterManager>
         GameActionManager.instance.AddListener<RefreshCharacterPos>(RefreshCharacterPos);
 
         GameActionManager.instance.AddListener<VisitNPC>(VisitNPC);
-        GameActionManager.instance.AddListener<DisplayCharacterItemRenderer>(DisplayCharacterItemRenderer);
+        GameActionManager.instance.AddAsyncListener<DisplayCharacterItemRenderer>(DisplayCharacterItemRendererAsync, nameof(DisplayCharacterItemRenderer));
         GameActionManager.instance.AddListener<ClearTempCharacter>(ClearTempCharacter);
 
         GameActionManager.instance.AddListener<TempCharacterTalk>(TempCharacterTalk);
@@ -231,7 +231,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    private async void DisplayCharacterItemRenderer(DisplayCharacterItemRenderer displayCharacterItemRenderer)
+    private async System.Threading.Tasks.Task DisplayCharacterItemRendererAsync(DisplayCharacterItemRenderer displayCharacterItemRenderer)
     {
         Character character = GetCharacter(displayCharacterItemRenderer.characterId);
         if (character != null)
@@ -397,7 +397,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    private async void ChangeCharacter(ChangeCharacter ChangeCharacter)
+    private async System.Threading.Tasks.Task ChangeCharacterAsync(ChangeCharacter ChangeCharacter)
     {
         if (characters.TryGetValue(ChangeCharacter.instanceId, out var character))
         {
@@ -416,7 +416,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    private async void ClearEquip(ClearEquip clearEquip)
+    private async System.Threading.Tasks.Task ClearEquipAsync(ClearEquip clearEquip)
     {
         if (characters.TryGetValue(clearEquip.characterId, out var character))
         {
@@ -446,7 +446,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
     }
 
-    private async void ChangeEquip(ChangeEquip changeEquip)
+    private async System.Threading.Tasks.Task ChangeEquipAsync(ChangeEquip changeEquip)
     {
         if (characters.TryGetValue(changeEquip.characterId, out var character))
         {
@@ -686,7 +686,7 @@ public class CharacterManager : Singleton<CharacterManager>
     /// 创建消费者
     /// </summary>
     /// <param name="creatTempCharacter"></param>
-    private async void CreateTempCharacter(CreatTempCharacter creatTempCharacter)
+    private async System.Threading.Tasks.Task CreateTempCharacterAsync(CreatTempCharacter creatTempCharacter)
     {
         var tempCharacterData = await GameDataManager.instance.GetAsyncData<TempCharacterData>(creatTempCharacter.characterId);
         var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(tempCharacterData.linkCharacterId);
@@ -709,7 +709,7 @@ public class CharacterManager : Singleton<CharacterManager>
     {
 
     }
-    private async void CreateCharacter(CreatCharacter creatCharacter)
+    private async System.Threading.Tasks.Task CreateCharacterAsync(CreatCharacter creatCharacter)
     {
         Character character;
         if (creatCharacter.isPlayer)
@@ -852,7 +852,7 @@ public class CharacterManager : Singleton<CharacterManager>
             }
     }
 
-    private async void SetCharacterCoordinate(SetCharacterCoordinate setCharacterCoordinate)
+    private async System.Threading.Tasks.Task SetCharacterCoordinateAsync(SetCharacterCoordinate setCharacterCoordinate)
     {
         Character character = GetCharacter(setCharacterCoordinate.characterId);
        
@@ -1209,7 +1209,12 @@ public class CharacterManager : Singleton<CharacterManager>
         ChangeMapAction(character, coordinate, 0);
     }
 
-    private async void ChangeMapAction(Character character, int3 newMap, int afterAction)
+    private void ChangeMapAction(Character character, int3 newMap, int afterAction)
+    {
+        AsyncTaskRunner.Run(() => ChangeMapActionAsync(character, newMap, afterAction), nameof(ChangeMapAction));
+    }
+
+    private async System.Threading.Tasks.Task ChangeMapActionAsync(Character character, int3 newMap, int afterAction)
     {
         int targetMap = newMap.z;
         var targetCoordinate = new int2(newMap.x, newMap.y);
@@ -1246,7 +1251,12 @@ public class CharacterManager : Singleton<CharacterManager>
                         setResult = AfterLerpScreenCycle
                     };
                     //EnvironmentManger.instance.SkyEnviromentMono.PlayWeather();
-                    async void AfterLerpScreenCycle(bool value)
+                    void AfterLerpScreenCycle(bool value)
+                    {
+                        AsyncTaskRunner.Run(() => AfterLerpScreenCycleAsync(value), nameof(AfterLerpScreenCycle));
+                    }
+
+                    async System.Threading.Tasks.Task AfterLerpScreenCycleAsync(bool value)
                     {
                         
                         if (afterAction != 0)

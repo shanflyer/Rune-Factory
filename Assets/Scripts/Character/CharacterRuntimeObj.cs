@@ -253,7 +253,12 @@ public class CharacterRuntimeObj : MonoBehaviour, IGameData
     private Color footStepColor;
     private readonly Dictionary<SE, int> audioClipIndex = new();
 
-    private async void SetFootStepAction(SE se, Color color)
+    private void SetFootStepAction(SE se, Color color)
+    {
+        AsyncTaskRunner.Run(() => SetFootStepActionAsync(se, color), nameof(SetFootStepAction));
+    }
+
+    private async System.Threading.Tasks.Task SetFootStepActionAsync(SE se, Color color)
     {
         footStepColor = color;
         if (this.se != se)

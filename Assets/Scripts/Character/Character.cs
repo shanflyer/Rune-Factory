@@ -753,7 +753,12 @@ public partial class Character
     }
 
     public int attackType;
-    public async void ClearEquip(ItemType itemType)
+    public void ClearEquip(ItemType itemType)
+    {
+        AsyncTaskRunner.Run(() => ClearEquipAsync(itemType), nameof(ClearEquip));
+    }
+
+    public async System.Threading.Tasks.Task ClearEquipAsync(ItemType itemType)
     {
         int oldItemId = 0;
         switch (itemType)
@@ -789,7 +794,12 @@ public partial class Character
         },true);
         attackType = 0;
     }
-    async void SetEquip(ItemType itemType,int2 Equip)
+    void SetEquip(ItemType itemType,int2 Equip)
+    {
+        AsyncTaskRunner.Run(() => SetEquipAsync(itemType, Equip), nameof(SetEquip));
+    }
+
+    async System.Threading.Tasks.Task SetEquipAsync(ItemType itemType,int2 Equip)
     {
         if (Equip.x == 0)
         {
@@ -816,7 +826,12 @@ public partial class Character
         }
         EquipmentProperty = EquipmentProperty + itemData.Property;
     }
-    public async void ChangeEquip(ItemData itemData, int packageId)
+    public void ChangeEquip(ItemData itemData, int packageId)
+    {
+        AsyncTaskRunner.Run(() => ChangeEquipAsync(itemData, packageId), nameof(ChangeEquip));
+    }
+
+    public async System.Threading.Tasks.Task ChangeEquipAsync(ItemData itemData, int packageId)
     {
         Item item = default(Item);
         int oldItemId = 0;
@@ -869,7 +884,12 @@ public partial class Character
         },true);
     }
 
-    public async void ChangeData(int dataId)
+    public void ChangeData(int dataId)
+    {
+        AsyncTaskRunner.Run(() => ChangeDataAsync(dataId), nameof(ChangeData));
+    }
+
+    public async System.Threading.Tasks.Task ChangeDataAsync(int dataId)
     {
         if (this.dataId != dataId)
         {
@@ -1349,7 +1369,12 @@ public partial class Character
         EnvironmentManger.instance.UpDataAudio2DPolygon();
     }
 
-    public async void SetNeighborhood(int characterId)
+    public void SetNeighborhood(int characterId)
+    {
+        AsyncTaskRunner.Run(() => SetNeighborhoodAsync(characterId), nameof(SetNeighborhood));
+    }
+
+    public async System.Threading.Tasks.Task SetNeighborhoodAsync(int characterId)
     {
         Character character = CharacterManager.instance.GetCharacter(characterId);
         if (character != null)
@@ -1557,7 +1582,12 @@ public partial class Character
     /// <param name="eventid">事件id</param>
     /// <param name="reference">数据id</param>
     /// <param name="enter">是否进入事件</param>
-    private async void TriggerEventAction(int eventid, int reference, bool enter, bool controller = false)
+    private void TriggerEventAction(int eventid, int reference, bool enter, bool controller = false)
+    {
+        AsyncTaskRunner.Run(() => TriggerEventActionAsync(eventid, reference, enter, controller), nameof(TriggerEventAction));
+    }
+
+    private async System.Threading.Tasks.Task TriggerEventActionAsync(int eventid, int reference, bool enter, bool controller = false)
     {
         if (team!=null && this != CharacterManager.instance.controllerCharacter)
         {

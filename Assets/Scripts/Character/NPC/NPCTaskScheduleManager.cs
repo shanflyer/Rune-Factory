@@ -147,7 +147,12 @@ public class NPCTaskScheduleManager:Singleton<NPCTaskScheduleManager>
             endBehavior = true;
             behaviorCanBreak = false;
         }
-        internal async void SetNPCTaskScheduleTimeList(List<int> dailyTasks, ExternalBehaviorTree externalBehavior)
+        internal void SetNPCTaskScheduleTimeList(List<int> dailyTasks, ExternalBehaviorTree externalBehavior)
+        {
+            AsyncTaskRunner.Run(() => SetNPCTaskScheduleTimeListAsync(dailyTasks, externalBehavior), nameof(SetNPCTaskScheduleTimeList));
+        }
+
+        internal async System.Threading.Tasks.Task SetNPCTaskScheduleTimeListAsync(List<int> dailyTasks, ExternalBehaviorTree externalBehavior)
         {
             List<TaskScheduleModelData> taskSheduleModelDatas = new List<TaskScheduleModelData>();
             for (int i = 0; i < dailyTasks.Count; i++)
