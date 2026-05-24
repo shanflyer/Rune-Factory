@@ -52,6 +52,7 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
     private Button playerButton,MapButton;
     [SerializeField]
     private Vector2 headSize = new Vector2(448, 512);
+    private bool actionListenersRegistered;
 
     public override void SetPanelUISerializeObj()
     {
@@ -112,13 +113,6 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
             AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<TransmissionPanel>(), nameof(TransmissionPanel));
         });
 
-        GameActionManager.instance.AddListener<NewDay>(NewDay);
-        GameActionManager.instance.AddListener<RefreshPlayerGold>(RefreshPlayerGold);
-        GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
-        GameActionManager.instance.AddListener<CharacterPropertyTrigger>(RefreshCharacterProperty);
-        GameActionManager.instance.AddListener<SetWeather>(SetWeather);
-        GameActionManager.instance.AddListener<NewHour>(NewHour);
-        GameActionManager.instance.AddListener<SaveGuideFilmIndexAction>(SaveGuideFilmIndexAction);
         AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<CharacterButtonPanel>(), nameof(CharacterButtonPanel));
 
         if (GameController.instance.startPlay || GameGuideManager.instance.IsEndGuide())
@@ -131,6 +125,53 @@ public class PlayerTopPanel : GamePanel<IReferenceData>
             GoldAdd_Image.enabled = false;
             goldAdd.enabled = false;
         }
+    }
+
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        RegisterActionListeners();
+    }
+
+    public override void OnDisable()
+    {
+        UnregisterActionListeners();
+        base.OnDisable();
+    }
+
+    private void RegisterActionListeners()
+    {
+        if (actionListenersRegistered || SingletonType.Cleared)
+        {
+            return;
+        }
+
+        GameActionManager.instance.AddListener<NewDay>(NewDay);
+        GameActionManager.instance.AddListener<RefreshPlayerGold>(RefreshPlayerGold);
+        GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
+        GameActionManager.instance.AddListener<CharacterPropertyTrigger>(RefreshCharacterProperty);
+        GameActionManager.instance.AddListener<SetWeather>(SetWeather);
+        GameActionManager.instance.AddListener<NewHour>(NewHour);
+        GameActionManager.instance.AddListener<SaveGuideFilmIndexAction>(SaveGuideFilmIndexAction);
+        actionListenersRegistered = true;
+    }
+
+    private void UnregisterActionListeners()
+    {
+        if (!actionListenersRegistered || SingletonType.Cleared || !GameActionManager.HasInstance)
+        {
+            return;
+        }
+
+        // 顶栏可被隐藏再打开，解绑后重开重新注册，避免跨场景或热重启重复刷新。
+        GameActionManager.instance.RemoveListener<NewDay>(NewDay);
+        GameActionManager.instance.RemoveListener<RefreshPlayerGold>(RefreshPlayerGold);
+        GameActionManager.instance.RemoveListener<UpdateGameTime>(UpdateGameTime);
+        GameActionManager.instance.RemoveListener<CharacterPropertyTrigger>(RefreshCharacterProperty);
+        GameActionManager.instance.RemoveListener<SetWeather>(SetWeather);
+        GameActionManager.instance.RemoveListener<NewHour>(NewHour);
+        GameActionManager.instance.RemoveListener<SaveGuideFilmIndexAction>(SaveGuideFilmIndexAction);
+        actionListenersRegistered = false;
     }
 
     private void SaveGuideFilmIndexAction(SaveGuideFilmIndexAction SaveGuideFilmIndexAction)

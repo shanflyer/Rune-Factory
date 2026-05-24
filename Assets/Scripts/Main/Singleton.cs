@@ -55,6 +55,7 @@ public class Singleton<T> : IStartupManager where T : Singleton<T>
         }
     }
     private static T _instance;
+    public static bool HasInstance => _instance != null;
 
     public virtual bool NeedUpdate
     {

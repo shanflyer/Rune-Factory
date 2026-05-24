@@ -73,4 +73,15 @@ public class BaseReference : MonoBehaviour
         }, context);
     }
 
+    protected virtual void OnDestroy()
+    {
+        if (SingletonType.Cleared || !GameActionManager.HasInstance)
+        {
+            return;
+        }
+
+        // UI 或子引用被销毁时清掉以当前对象为目标的全局监听，避免旧回调跨场景残留。
+        GameActionManager.instance.RemoveListenersForTarget(this);
+    }
+
 }

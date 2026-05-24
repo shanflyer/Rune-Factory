@@ -30,6 +30,7 @@ public class WorldMapController : MonoBehaviour
     int characterId;
 
     private int initVersion;
+    private bool actionListenersRegistered;
 
     private void OnEnable()
     {
@@ -40,8 +41,48 @@ public class WorldMapController : MonoBehaviour
             eventSystemObj.SetActive(false);
         }
 
+        RegisterActionListeners();
+    }
+
+    private void OnDisable()
+    {
+        initVersion++;
+        if (instance == this)
+        {
+            instance = null;
+        }
+
+        if (!SingletonType.Cleared && GameTimerController.HasInstance)
+        {
+            GameTimerController.instance.RemoveWaiter(AutoSave);
+        }
+
+        UnregisterActionListeners();
+    }
+
+    private void RegisterActionListeners()
+    {
+        if (actionListenersRegistered || SingletonType.Cleared)
+        {
+            return;
+        }
+
         GameActionManager.instance.AddListener<StartWorldInit>(StartWorldInit);
         GameActionManager.instance.AddListener<LoadMapCompleted>(LoadMapCompleted);
+        actionListenersRegistered = true;
+    }
+
+    private void UnregisterActionListeners()
+    {
+        if (!actionListenersRegistered || SingletonType.Cleared || !GameActionManager.HasInstance)
+        {
+            return;
+        }
+
+        // 场景卸载或对象禁用时解绑世界初始化监听，防止旧场景控制器继续响应。
+        GameActionManager.instance.RemoveListener<StartWorldInit>(StartWorldInit);
+        GameActionManager.instance.RemoveListener<LoadMapCompleted>(LoadMapCompleted);
+        actionListenersRegistered = false;
     }
 
     void StartWorldInit(StartWorldInit startWorldInit)

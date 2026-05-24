@@ -13,6 +13,7 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
     Transform characterButtonParent;
     
     DisplayList<CharacterButtonReference,MyInt> characterButtons;
+    private bool actionListenersRegistered;
     protected override void Awake()
     {
         base.Awake();
@@ -37,10 +38,45 @@ public class CharacterButtonPanel :GamePanel<MyListInt>
                 AsyncTaskRunner.Run(characterButtons.InitListData(nowCharacters, SelectAction), nameof(Awake));
             }
         });
+    }
+
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        RegisterActionListeners();
+    }
+
+    public override void OnDisable()
+    {
+        UnregisterActionListeners();
+        base.OnDisable();
+    }
+
+    private void RegisterActionListeners()
+    {
+        if (actionListenersRegistered || SingletonType.Cleared)
+        {
+            return;
+        }
 
         GameActionManager.instance.AddListener<RefreshOperateCharacters>(RefreshOperateCharacters);
         GameActionManager.instance.AddListener<RefreshOperateCharacter>(RefreshOperateCharacter);
+        actionListenersRegistered = true;
     }
+
+    private void UnregisterActionListeners()
+    {
+        if (!actionListenersRegistered || SingletonType.Cleared || !GameActionManager.HasInstance)
+        {
+            return;
+        }
+
+        // 面板隐藏时主动解绑，避免再次打开后同一对象重复响应角色操作刷新。
+        GameActionManager.instance.RemoveListener<RefreshOperateCharacters>(RefreshOperateCharacters);
+        GameActionManager.instance.RemoveListener<RefreshOperateCharacter>(RefreshOperateCharacter);
+        actionListenersRegistered = false;
+    }
+
     List<MyInt> nowCharacters = new List<MyInt>();
     HashSet<int> characters = new HashSet<int>();
     void SelectAction(MyInt seletCharacter, int index, bool selected = true)
