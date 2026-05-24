@@ -15,6 +15,7 @@ public class GameVolumeManager : Singleton<GameVolumeManager>
     Dictionary<string, ParticleSystem> singleParticleDic = new Dictionary<string, ParticleSystem>();
     private Task initializationTask = Task.CompletedTask;
     public override Task InitializationTask => initializationTask;
+    public override System.Collections.Generic.IReadOnlyList<System.Type> InitializationDependencies => new[] { typeof(GameActionManager) };
 
     public override void Init()
     {

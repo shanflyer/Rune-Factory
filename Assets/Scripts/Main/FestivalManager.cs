@@ -9,6 +9,7 @@ public class FestivalManager : Singleton<FestivalManager>
 {
     private Task initializationTask = Task.CompletedTask;
     public override Task InitializationTask => initializationTask;
+    public override System.Collections.Generic.IReadOnlyList<System.Type> InitializationDependencies => new[] { typeof(GameDataManager), typeof(LanguageManage), typeof(GameTimeManager) };
 
     public override void Init()
     {

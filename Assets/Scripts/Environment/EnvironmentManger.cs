@@ -39,6 +39,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
     public override bool NeedUpdate => true;
     private Task initializationTask = Task.CompletedTask;
     public override Task InitializationTask => initializationTask;
+    public override IReadOnlyList<System.Type> InitializationDependencies => new[] { typeof(GameDataManager), typeof(CameraManager), typeof(GameActionManager) };
     SkyEnviromentMono skyEnviromentMono;
     
     public SkyEnviromentMono SkyEnviromentMono =>skyEnviromentMono;

@@ -7,11 +7,15 @@ public class ShopManager : Singleton<ShopManager>
     Dictionary<int2, ShopList> _shopListDic = new Dictionary<int2, ShopList>();
     Dictionary<string, ShopList> shopListDic = new Dictionary<string, ShopList>();
     Dictionary<int, Shop> shopDic = new Dictionary<int, Shop>();
+    private Task initializationTask = Task.CompletedTask;
+    public override Task InitializationTask => initializationTask;
+    public override System.Collections.Generic.IReadOnlyList<System.Type> InitializationDependencies => new[] { typeof(GameDataManager), typeof(GameActionManager) };
+
     public override void Init()
     {
         base.Init();
-        // 管理器初始化入口保持同步，异步加载异常统一进入日志。
-        AsyncTaskRunner.Run(InitShopAsync(), nameof(InitShop));
+        // 商店数据属于启动链路，必须暴露 InitializationTask 让自动初始化等待完成。
+        initializationTask = InitShopAsync();
         GameActionManager.instance.AddAsyncListener<TryVisitShop>(TryVisitShopAsync, nameof(TryVisitShop));
         GameActionManager.instance.AddListener<RefreshShopLevel>(RefreshShopLevel);
     }
@@ -47,11 +51,6 @@ public class ShopManager : Singleton<ShopManager>
         }
     }
  
-    Task InitShop()
-    {
-        return InitShopAsync();
-    }
-
     async Task InitShopAsync()
     {
         shopListDic.Clear();
@@ -80,6 +79,16 @@ public class ShopManager : Singleton<ShopManager>
             shopListDic.Add(shopGroupData.name, shopList);
         }
     }
+
+    protected override void Clear()
+    {
+        initializationTask = Task.CompletedTask;
+        shopListDic.Clear();
+        _shopListDic.Clear();
+        shopDic.Clear();
+        base.Clear();
+    }
+
     async System.Threading.Tasks.Task TryVisitShopAsync(TryVisitShop tryVisitShop)
     {
         string shopName = tryVisitShop.ShopName;

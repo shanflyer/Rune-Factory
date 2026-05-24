@@ -8,6 +8,7 @@ public class GameTimeEventManager : Singleton<GameTimeEventManager>
     private Dictionary<int, GameTimeEvent> wakeUpTimeEvents=new Dictionary<int, GameTimeEvent>();
     private System.Threading.Tasks.Task initializationTask = System.Threading.Tasks.Task.CompletedTask;
     public override System.Threading.Tasks.Task InitializationTask => initializationTask;
+    public override System.Collections.Generic.IReadOnlyList<System.Type> InitializationDependencies => new[] { typeof(GameDataManager), typeof(GameActionManager) };
     private int newDayActionIndex
     {
         get => GameDataSaveManager.instance.UserGameSaveData.otherSaveData.newDayActionIndex;

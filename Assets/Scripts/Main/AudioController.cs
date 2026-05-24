@@ -132,6 +132,7 @@ public class AudioController : Singleton<AudioController>
 
     public override bool NeedUpdate => true;
     public override Task InitializationTask => initializationTask;
+    public override IReadOnlyList<Type> InitializationDependencies => new[] { typeof(GameSourceManager) };
 
     public override void Init()
     {
