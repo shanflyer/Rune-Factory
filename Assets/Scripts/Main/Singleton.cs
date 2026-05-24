@@ -3,7 +3,15 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class Singleton<T> where T : Singleton<T>
+public interface IStartupManager
+{
+    Type ManagerType { get; }
+    string ManagerName { get; }
+    IReadOnlyList<Type> InitializationDependencies { get; }
+    Task WaitForInitialization();
+}
+
+public class Singleton<T> : IStartupManager where T : Singleton<T>
 {
     public static T instance
     {
@@ -58,6 +66,9 @@ public class Singleton<T> where T : Singleton<T>
     {
         get;
     }
+
+    public Type ManagerType => typeof(T);
+    public string ManagerName => typeof(T).Name;
 
     protected virtual void FixedUpdate()
     {
