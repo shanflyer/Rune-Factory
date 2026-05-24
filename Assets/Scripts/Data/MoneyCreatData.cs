@@ -23,6 +23,6 @@ public class MoneyCreatData : ScriptableObject, IGameData, IReferenceData
 
     public void SetReferenceData()
     {
-        Icon = Resources.Load<SpriteResourceRenference>($"Reference/{IconName}");
+        Icon = ExtensionsResources.LoadResource<SpriteResourceRenference>($"Reference/{IconName}");
     }
-} 
+}

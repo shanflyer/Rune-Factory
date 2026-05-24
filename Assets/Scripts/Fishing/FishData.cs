@@ -35,13 +35,13 @@ public class FishData:ScriptableObject,IGameData,IReferenceData
     public void SetReferenceData()
     {
         string fishObjPath = "Prefabs/Fish/";
-        showObj = Resources.Load<GameObject>($"{fishObjPath}{showObjName}");
-        externalBehavior = Resources.Load<ExternalBehaviorTree>($"Behavior/NPC/{behaviorName}");
+        showObj = ExtensionsResources.LoadResource<GameObject>($"{fishObjPath}{showObjName}");
+        externalBehavior = ExtensionsResources.LoadResource<ExternalBehaviorTree>($"Behavior/NPC/{behaviorName}");
 
 
         if (allSprites.Count == 0)
         {
-            var sprites = Resources.LoadAll<Sprite>(EditorDataPath.itemIconPath);
+            var sprites = ExtensionsResources.LoadAllResource<Sprite>(EditorDataPath.itemIconPath);
             for (int i = 0; i < sprites.Length; i++)
             {
                 allSprites.Add(sprites[i].name, sprites[i]);
@@ -52,7 +52,7 @@ public class FishData:ScriptableObject,IGameData,IReferenceData
         {
             if (iconDatas.Count == 0)
             {
-                var sprites = Resources.LoadAll<SpriteResourceRenference>("Reference/");
+                var sprites = ExtensionsResources.LoadAllResource<SpriteResourceRenference>("Reference/");
                 for (int i = 0; i < sprites.Length; i++)
                 {
                     iconDatas.Add(sprites[i].name, sprites[i]);

@@ -13,9 +13,9 @@ public class CharacterData : ScriptableObject, IGameData
     public string headName;
 
 
-    public SpriteResourceRenference head => Resources.Load<SpriteResourceRenference>(headName);
-    public CharacterRuntimeObj obj => Resources.Load<CharacterRuntimeObj>(objName);
-    public Sprite icon => Resources.Load<Sprite>(iconName);
+    public SpriteResourceRenference head => ExtensionsResources.LoadResource<SpriteResourceRenference>(headName);
+    public CharacterRuntimeObj obj => ExtensionsResources.LoadResource<CharacterRuntimeObj>(objName);
+    public Sprite icon => ExtensionsResources.LoadResource<Sprite>(iconName);
     public int profession;
     public int level;
     public string fightBehavior;

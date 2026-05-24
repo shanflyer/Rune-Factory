@@ -12,7 +12,7 @@ public class EmoteData : ScriptableObject, IGameData, IReferenceData
         get
         {
             var sourcePath = "Animation/emotes/";
-            return Resources.Load<AnimationClip>($"{sourcePath}{animationName}");
+            return ExtensionsResources.LoadResource<AnimationClip>($"{sourcePath}{animationName}");
         }
     }
     public int X, Y;

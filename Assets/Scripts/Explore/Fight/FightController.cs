@@ -245,7 +245,7 @@ public class FightController : MonoBehaviour
         // controllerBehavior = GetComponent<BehaviorTree>();
         var sceneInfoManager = SceneInfoManager.instance;
 
-        monsterObj = Resources.Load<GameObject>(DataPath.monsterPrefabPath).transform;
+        monsterObj = ExtensionsResources.LoadResource<GameObject>(DataPath.monsterPrefabPath).transform;
 
         playerSelectMaskerDic.Clear();
         var playerMaskers = playerMaskParent.GetComponentsInChildren<SelectMasker>();
@@ -829,7 +829,7 @@ public class FightController : MonoBehaviour
         footStep = fightMapData.footStep;
         if (!string.IsNullOrEmpty(fightMapData.fightMapObjName))
         {
-            var fightMapObj = Resources.Load<GameObject>($"Prefabs/FightMap/{fightMapData.fightMapObjName}");
+            var fightMapObj = ExtensionsResources.LoadResource<GameObject>($"Prefabs/FightMap/{fightMapData.fightMapObjName}");
             var mapRuntimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.FIGHTMAP.ToString(),
                 fightMapData.id.ToString(), fightMapObj.transform, 0);
 

@@ -27,7 +27,7 @@ public class AppStoreManager : MonoBehaviour
     private void OnEnable()
     {
         instance = this;
-        var allProductDatas = Resources.LoadAll<AppStoreProductData>(DataPath.dataPathDic[typeof(AppStoreProductData)]);
+        var allProductDatas = ExtensionsResources.LoadAllResource<AppStoreProductData>(DataPath.dataPathDic[typeof(AppStoreProductData)]);
         for (int i = 0; i < allProductDatas.Length; i++)
         {
             appStoreProductDatas.Add($"{allProductDatas[i].ProductName}", allProductDatas[i]);

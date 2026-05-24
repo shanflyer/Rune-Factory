@@ -23,6 +23,7 @@ public class GameSourceManager : Singleton<GameSourceManager>
         audioClipCache.Clear();
         scriptableObjectCache.Clear();
         behaviorCache.Clear();
+        ExtensionsResources.ClearCache();
         base.Clear();
     }
 
@@ -106,7 +107,7 @@ public class GameSourceManager : Singleton<GameSourceManager>
             return obj;
         }
 
-        obj = Resources.Load<GameObject>(path);
+        obj = ExtensionsResources.LoadResource<GameObject>(path);
         CacheLoadedAsset(prefabCache, path, obj);
         return obj;
     }

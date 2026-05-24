@@ -47,7 +47,7 @@ public class ShopItemDisplayData : ScriptableObject, IGameData, IReferenceData
     {
         if (allSprites.Count == 0)
         {
-            var sprites = Resources.LoadAll<Sprite>(EditorDataPath.itemIconPath);
+            var sprites = ExtensionsResources.LoadAllResource<Sprite>(EditorDataPath.itemIconPath);
             for (int i = 0; i < sprites.Length; i++)
             {
                 allSprites.Add(sprites[i].name, sprites[i]);

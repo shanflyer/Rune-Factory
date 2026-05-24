@@ -26,7 +26,7 @@ public class TaskScheduleModelDataList : ScriptableObject, IGameData,IDataArray<
     TaskScheduleModelEditorData[] TaskScheduleModelEditorDatas;
     public void SetReferenceData()
     {
-        var growModelDataList = Resources.Load<GrowModelDataList>(DataPath.GetDataPath(typeof(GrowModelData)));
+        var growModelDataList = ExtensionsResources.LoadResource<GrowModelDataList>(DataPath.GetDataPath(typeof(GrowModelData)));
         Dictionary<int, GrowModelData> GrowModelDataDic = new Dictionary<int, GrowModelData>();
         for(int i = 0; i < growModelDataList.DataList.Length; i++)
         {

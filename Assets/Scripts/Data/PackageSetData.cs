@@ -41,6 +41,6 @@ public class PackageSetData : ScriptableObject, IGameData, IReferenceData
 
     public void SetReferenceData()
     {
-        icon = Resources.Load<SpriteResourceRenference>($"Reference/{iconName}");
+        icon = ExtensionsResources.LoadResource<SpriteResourceRenference>($"Reference/{iconName}");
     }
 }

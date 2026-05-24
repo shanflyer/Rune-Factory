@@ -28,7 +28,7 @@ public class AppStoreProductData : ScriptableObject, IGameData,IReferenceData
     public void SetReferenceData()
     {
 #if UNITY_EDITOR
-       var iconData = Resources.Load<SpriteResourceRenference>($"Reference/{iconName}");
+       var iconData = ExtensionsResources.LoadResource<SpriteResourceRenference>($"Reference/{iconName}");
         if (iconData != null)
         {
             icon = iconData.sprite;

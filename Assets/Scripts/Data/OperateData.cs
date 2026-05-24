@@ -46,10 +46,10 @@ public class OperateData : ScriptableObject, IGameData, IReferenceData
     public void SetReferenceData()
     {
         string actionDataPath = $"{DataPath.GetDataPath(typeof(GameActionAsset))}/{actionId}";
-        gameActionData = Resources.Load<GameActionAsset>(actionDataPath);
+        gameActionData = ExtensionsResources.LoadResource<GameActionAsset>(actionDataPath);
 
         string eventDataPath = $"{DataPath.GetDataPath(typeof(GameEventData))}/{eventId}";
-        gameEventData = Resources.Load<GameEventData>(eventDataPath);
+        gameEventData = ExtensionsResources.LoadResource<GameEventData>(eventDataPath);
     }
 #endif
 

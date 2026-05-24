@@ -33,7 +33,7 @@ public class ZeroInitDataList : ScriptableObject, IGameData
             string parentPath = DataPath.GetDataPath(type);
             if (!string.IsNullOrEmpty(parentPath))
             {
-                var all = Resources.LoadAll(parentPath);
+                var all = ExtensionsResources.LoadAllResource<UnityEngine.Object>(parentPath);
                 foreach (var data in all)
                 {
                     if (datas.Count<=i)
@@ -49,4 +49,4 @@ public class ZeroInitDataList : ScriptableObject, IGameData
             }
         }
     }
-} 
+}

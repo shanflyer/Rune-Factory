@@ -89,7 +89,7 @@ public class MapRoomData : ScriptableObject, IGameData
 
     public List<MapItem> mapItems = new List<MapItem>();
     public int2 startCoordinate, endCoordinate;
-    public GameObject mapObj => Resources.Load<GameObject>($"Prefabs/Ground/{roomName}");
+    public GameObject mapObj => ExtensionsResources.LoadResource<GameObject>($"Prefabs/Ground/{roomName}");
     public string dayEnvironmentDataName, duskEnvironmentDataName, dawnEnvironmentDataName, nightEnvironmentDataName;
     public bool displaySky = true;
     public bool displaySunlight = false;

@@ -30,7 +30,7 @@ public class NPCFunctionData : ScriptableObject, IGameData,IReferenceData
     public void SetReferenceData()
     {
         string path = $"Reference/{iconName}";
-       var spriteRenference= Resources.Load<SpriteResourceRenference>(path);
+       var spriteRenference= ExtensionsResources.LoadResource<SpriteResourceRenference>(path);
         icon = spriteRenference.sprite;
     }
 #endif

@@ -23,7 +23,7 @@ public class AnimalData : ScriptableObject, IGameData
     public List<int> dailyTasks = new List<int>();
     public string behavior;
 
-    public ExternalBehaviorTree externalBehavior => Resources.Load<ExternalBehaviorTree>(GameCommon.BlendString(
+    public ExternalBehaviorTree externalBehavior => ExtensionsResources.LoadResource<ExternalBehaviorTree>(GameCommon.BlendString(
         DataPath.npcBehaviorPath,
         behavior));
 

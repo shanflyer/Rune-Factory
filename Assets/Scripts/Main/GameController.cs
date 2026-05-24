@@ -300,7 +300,7 @@ if (result.Success)
         var filmParent = transform.Find("FilmController");
         if (Camera.main == null)
         {
-            var cameraPrefab = Resources.Load<GameObject>(DataPath.cameraPrefabPath);
+            var cameraPrefab = ExtensionsResources.LoadResource<GameObject>(DataPath.cameraPrefabPath);
             if (cameraPrefab != null)
             {
                 Instantiate(cameraPrefab);

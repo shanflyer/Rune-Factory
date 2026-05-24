@@ -50,7 +50,7 @@ public class TalkData : ScriptableObject, IGameData, IReferenceData
         {
             var strs = talkerIconPath.Split("/");
             var sourcePath = talkerIconPath.Substring(0, talkerIconPath.Length - strs[strs.Length - 1].Length);
-            var allSources = Resources.LoadAll<SpriteResourceRenference>(sourcePath);
+            var allSources = ExtensionsResources.LoadAllResource<SpriteResourceRenference>(sourcePath);
             for (int i = 0; i < allSources.Length; i++)
             {
                 sources[$"{sourcePath}{allSources[i].name}"] = allSources[i];

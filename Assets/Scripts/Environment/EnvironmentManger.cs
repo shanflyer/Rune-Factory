@@ -220,7 +220,7 @@ public class EnvironmentManger : Singleton<EnvironmentManger>
 
         if (skyEnviromentMono == null)
         {
-            var _skyEnviromentMono = Resources.Load<SkyEnviromentMono>("Prefabs/Environment");
+            var _skyEnviromentMono = ExtensionsResources.LoadResource<SkyEnviromentMono>("Prefabs/Environment");
             if (_skyEnviromentMono == null)
             {
                 Debug.LogError("EnvironmentManger init failed: missing Prefabs/Environment.");

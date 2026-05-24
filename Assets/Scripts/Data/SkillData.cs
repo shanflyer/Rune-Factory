@@ -56,11 +56,11 @@ public class SkillData : ScriptableObject, IGameData
  
     public void SetReferenceData()
     {
-        myTimeLineData = Resources.Load<MyTimeLineData>($"{DataPath.GetDataPath(typeof(MyTimeLineData))}/{myTimeLineDataName}");
-        nextTimeLineData = Resources.Load<MyTimeLineData>($"{DataPath.GetDataPath(typeof(MyTimeLineData))}/{nextTimeLineDataName}");
+        myTimeLineData = ExtensionsResources.LoadResource<MyTimeLineData>($"{DataPath.GetDataPath(typeof(MyTimeLineData))}/{myTimeLineDataName}");
+        nextTimeLineData = ExtensionsResources.LoadResource<MyTimeLineData>($"{DataPath.GetDataPath(typeof(MyTimeLineData))}/{nextTimeLineDataName}");
         if (allSprites.Count == 0)
         {
-            var sprites = Resources.LoadAll<Sprite>($"Icon/{iconName}");
+            var sprites = ExtensionsResources.LoadAllResource<Sprite>($"Icon/{iconName}");
             for (int i = 0; i < sprites.Length; i++)
             {
                 allSprites.Add(sprites[i].name, sprites[i]);

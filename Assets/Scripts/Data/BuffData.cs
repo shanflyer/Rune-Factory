@@ -48,11 +48,11 @@ public class BuffData : ScriptableObject, IGameData
 
     public void SetReferenceData()
     {
-        myTimeLineData = Resources.Load<MyTimeLineData>($"{DataPath.GetDataPath(typeof(MyTimeLineData))}/{actionTimeLineDataName}");
-        buffObj = Resources.Load<BuffActionBehavior>($"Prefabs/Effect/{buffObjName}");
+        myTimeLineData = ExtensionsResources.LoadResource<MyTimeLineData>($"{DataPath.GetDataPath(typeof(MyTimeLineData))}/{actionTimeLineDataName}");
+        buffObj = ExtensionsResources.LoadResource<BuffActionBehavior>($"Prefabs/Effect/{buffObjName}");
         if (allSprites.Count == 0)
         {
-            var sprites = Resources.LoadAll<Sprite>($"Icon/{iconName}");
+            var sprites = ExtensionsResources.LoadAllResource<Sprite>($"Icon/{iconName}");
             for (int i = 0; i < sprites.Length; i++)
             {
                 allSprites.Add(sprites[i].name, sprites[i]);

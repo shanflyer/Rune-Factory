@@ -11,7 +11,22 @@ using Object = UnityEngine.Object;
 
 public  static class ExtensionsResources
 {
+    private static readonly Dictionary<string, Object> ResourceCache = new Dictionary<string, Object>();
+    private static readonly Dictionary<string, Object[]> ResourceAllCache = new Dictionary<string, Object[]>();
+
     public static ResourceRequestAwaiter GetAwaiter(this ResourceRequest request) => new ResourceRequestAwaiter(request);
+
+    public static void ClearCache()
+    {
+        ResourceCache.Clear();
+        ResourceAllCache.Clear();
+    }
+
+    private static string GetResourceCacheKey(Type type, string path)
+    {
+        return $"{type.FullName}:{path}";
+    }
+
     public static async Task<T> LoadResourceAsync<T>(string path)where T : UnityEngine.Object
     {
         if (string.IsNullOrEmpty(path))
@@ -20,9 +35,17 @@ public  static class ExtensionsResources
             return null;
         }
 
-        var gres = Resources.LoadAsync(path);
+        var cacheKey = GetResourceCacheKey(typeof(T), path);
+        if (ResourceCache.TryGetValue(cacheKey, out var cachedAsset))
+        {
+            return cachedAsset as T;
+        }
+
+        var gres = Resources.LoadAsync(path, typeof(T));
         await gres;
-        return gres.asset as T;
+        var asset = gres.asset as T;
+        CacheResource(cacheKey, asset);
+        return asset;
     }
     public static T LoadResource<T>(string path) where T : UnityEngine.Object
     {
@@ -32,7 +55,15 @@ public  static class ExtensionsResources
             return null;
         }
 
-        return Resources.Load<T>(path);
+        var cacheKey = GetResourceCacheKey(typeof(T), path);
+        if (ResourceCache.TryGetValue(cacheKey, out var cachedAsset))
+        {
+            return cachedAsset as T;
+        }
+
+        var asset = Resources.Load<T>(path);
+        CacheResource(cacheKey, asset);
+        return asset;
     }
     public static T LoadIGameData<T>(string path) where T : IGameData
     {
@@ -42,7 +73,13 @@ public  static class ExtensionsResources
             return default(T);
         }
 
-        var asset = Resources.Load(path);
+        var cacheKey = GetResourceCacheKey(typeof(T), path);
+        if (!ResourceCache.TryGetValue(cacheKey, out var asset))
+        {
+            asset = Resources.Load(path);
+            CacheResource(cacheKey, asset);
+        }
+
         if (asset is T gameData)
         {
             return gameData;
@@ -62,8 +99,15 @@ public  static class ExtensionsResources
             return default(T);
         }
 
+        var cacheKey = GetResourceCacheKey(typeof(T), path);
+        if (ResourceCache.TryGetValue(cacheKey, out var cachedAsset))
+        {
+            return cachedAsset is T cachedGameData ? cachedGameData : default(T);
+        }
+
         var gres = Resources.LoadAsync(path);
         await gres;
+        CacheResource(cacheKey, gres.asset);
         if(gres.asset is T gameData)
         {
             return gameData;
@@ -83,7 +127,13 @@ public  static class ExtensionsResources
             return new List<T>();
         }
 
-        var gres = Resources.LoadAll(path);
+        var cacheKey = GetResourceCacheKey(typeof(T), path);
+        if (!ResourceAllCache.TryGetValue(cacheKey, out var gres))
+        {
+            // LoadAll 的结果统一缓存，数据展开仍每次返回新 List，避免调用方误改共享集合。
+            gres = Resources.LoadAll(path);
+            ResourceAllCache[cacheKey] = gres;
+        }
         List<T> ts = new List<T>();
         try
         {
@@ -123,8 +173,15 @@ public  static class ExtensionsResources
 
     public static T[] LoadAllResource<T>(string path) where T : UnityEngine.Object
     {
-        var gres = Resources.LoadAll<T>(path);
-        return gres;
+        var cacheKey = GetResourceCacheKey(typeof(T), path);
+        if (ResourceAllCache.TryGetValue(cacheKey, out var cachedAssets) && cachedAssets is T[] typedCachedAssets)
+        {
+            return typedCachedAssets;
+        }
+
+        var assets = Resources.LoadAll<T>(path);
+        ResourceAllCache[cacheKey] = assets;
+        return assets;
     }
     public static async Task<Object> LoadResourceAsync(string path)
     {
@@ -134,8 +191,15 @@ public  static class ExtensionsResources
             return null;
         }
 
+        var cacheKey = GetResourceCacheKey(typeof(Object), path);
+        if (ResourceCache.TryGetValue(cacheKey, out var cachedAsset))
+        {
+            return cachedAsset;
+        }
+
         var gres = Resources.LoadAsync(path);
         await gres;
+        CacheResource(cacheKey, gres.asset);
         return gres.asset;
     }
     public static async Task<Object> LoadResourceAsync(Type type,string path)
@@ -146,9 +210,24 @@ public  static class ExtensionsResources
             return null;
         }
 
+        var cacheKey = GetResourceCacheKey(type, path);
+        if (ResourceCache.TryGetValue(cacheKey, out var cachedAsset))
+        {
+            return cachedAsset;
+        }
+
         var gres = Resources.LoadAsync(path,type);
         await gres;
+        CacheResource(cacheKey, gres.asset);
         return gres.asset;
+    }
+
+    private static void CacheResource(string cacheKey, Object asset)
+    {
+        if (asset != null)
+        {
+            ResourceCache[cacheKey] = asset;
+        }
     }
 
     public static async Task<UnityEngine.Object[]> LoadAsyncBundle(string url)
