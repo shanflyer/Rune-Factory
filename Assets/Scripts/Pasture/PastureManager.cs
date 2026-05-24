@@ -25,16 +25,16 @@ public class PastureManager : Singleton<PastureManager>
         animals.Clear();
         pastureLinkItems = new Dictionary<int, int>();
 
-        GameActionManager.instance.AddListener<TryCreatPasture>(TryCreatPasture);
+        GameActionManager.instance.AddAsyncListener<TryCreatPasture>(TryCreatPastureAsync, nameof(TryCreatPasture));
         GameActionManager.instance.AddListener<TryDeletePasture>(TryDeletePasture);
-        GameActionManager.instance.AddListener<TryCreatAnimal>(TryCreatAnimal);
+        GameActionManager.instance.AddAsyncListener<TryCreatAnimal>(TryCreatAnimalAsync, nameof(TryCreatAnimal));
         GameActionManager.instance.AddListener<TryDeleteAnimal>(TryDeleteAnimal);
-        GameActionManager.instance.AddListener<TrySetAnimalFoodToPasture>(TrySetAnimalFoodToPasture);
+        GameActionManager.instance.AddAsyncListener<TrySetAnimalFoodToPasture>(TrySetAnimalFoodToPastureAsync, nameof(TrySetAnimalFoodToPasture));
         GameActionManager.instance.AddListener<TryGetAnimalFoodFromPasture>(TryGetAnimalFoodFromPasture);
-        GameActionManager.instance.AddListener<AnimalCostFood>(AnimalCostFood);
-        GameActionManager.instance.AddListener<SampleCreatAnimal>(SampleCreatAnimal);
+        GameActionManager.instance.AddAsyncListener<AnimalCostFood>(AnimalCostFoodAsync, nameof(AnimalCostFood));
+        GameActionManager.instance.AddAsyncListener<SampleCreatAnimal>(SampleCreatAnimalAsync, nameof(SampleCreatAnimal));
         GameActionManager.instance.AddListener<GetPastureLevel>(GetPastureLevel);
-        GameActionManager.instance.AddListener<TryUpPastureLevel>(TryUpPastureLevel);
+        GameActionManager.instance.AddAsyncListener<TryUpPastureLevel>(TryUpPastureLevelAsync, nameof(TryUpPastureLevel));
         GameActionManager.instance.AddListener<SetAnimalToPasture>(SetAnimalToPasture);
         GameActionManager.instance.AddListener<SetPastureIndex>(SetPastureIndex);
         GameActionManager.instance.AddListener<RefreshAnimalPos>(RefreshAnimalPos);
@@ -111,7 +111,7 @@ public class PastureManager : Singleton<PastureManager>
         return animals.TryGetValue(id, out animal);
     }
 
-    private async void TryUpPastureLevel(TryUpPastureLevel tryUpPastureLevel)
+    private async System.Threading.Tasks.Task TryUpPastureLevelAsync(TryUpPastureLevel tryUpPastureLevel)
     {
         if (!pastureLinkItems.TryGetValue(tryUpPastureLevel.itemInstance, out var pastureId))
         {
@@ -310,7 +310,7 @@ public class PastureManager : Singleton<PastureManager>
         }
     }
 
-    private async void AnimalCostFood(AnimalCostFood animalCostFood)
+    private async System.Threading.Tasks.Task AnimalCostFoodAsync(AnimalCostFood animalCostFood)
     {
         if (pastures.TryGetValue(animalCostFood.pastureId, out var pasture))
         {
@@ -352,7 +352,7 @@ public class PastureManager : Singleton<PastureManager>
         }
     }
 
-    private async void TrySetAnimalFoodToPasture(TrySetAnimalFoodToPasture trySetAnimalFoodToPasture)
+    private async System.Threading.Tasks.Task TrySetAnimalFoodToPastureAsync(TrySetAnimalFoodToPasture trySetAnimalFoodToPasture)
     {
         if (pastures.TryGetValue(trySetAnimalFoodToPasture.pastureId, out var pasture))
         {
@@ -405,7 +405,12 @@ public class PastureManager : Singleton<PastureManager>
         }
     }
 
-    public async void CreatPasture(PastureSaveData pastureSaveData)
+    public void CreatPasture(PastureSaveData pastureSaveData)
+    {
+        AsyncTaskRunner.Run(() => CreatPastureAsync(pastureSaveData), nameof(CreatPasture));
+    }
+
+    public async System.Threading.Tasks.Task CreatPastureAsync(PastureSaveData pastureSaveData)
     {
         PastureData pastureData = await GameDataManager.instance.GetAsyncData<PastureData>(pastureSaveData.dataId);
         PastureLevelData pastureLevelData = pastureData.levelDatas[0];
@@ -444,7 +449,7 @@ public class PastureManager : Singleton<PastureManager>
         GameActionManager.instance.QueueAction(setItemAnimation);
     }
 
-    private async void TryCreatPasture(TryCreatPasture tryCreatPasture)
+    private async System.Threading.Tasks.Task TryCreatPastureAsync(TryCreatPasture tryCreatPasture)
     {
         if (WorldMapManager.instance.GetMapItemPos(tryCreatPasture.itemInstanceId, out var objCoordinate))
         {
@@ -602,7 +607,12 @@ public class PastureManager : Singleton<PastureManager>
         tryDeletePasture.setResult(false);
     }
 
-    public async void CreatAnimal(AnimalSaveData animalSaveData)
+    public void CreatAnimal(AnimalSaveData animalSaveData)
+    {
+        AsyncTaskRunner.Run(() => CreatAnimalAsync(animalSaveData), nameof(CreatAnimal));
+    }
+
+    public async System.Threading.Tasks.Task CreatAnimalAsync(AnimalSaveData animalSaveData)
     {
         AnimalData animalData = await GameDataManager.instance.GetAsyncData<AnimalData>(animalSaveData.dataId);
         Animal animal = new Animal(animalData,animalSaveData.instaceId, animalSaveData.name,animalSaveData.linkCharacterData)
@@ -668,7 +678,7 @@ public class PastureManager : Singleton<PastureManager>
         }
        
     }
-    private async void SampleCreatAnimal(SampleCreatAnimal sampleCreatAnimal)
+    private async System.Threading.Tasks.Task SampleCreatAnimalAsync(SampleCreatAnimal sampleCreatAnimal)
     {
         AnimalData animalData = await GameDataManager.instance.GetAsyncData<AnimalData>(sampleCreatAnimal.dataId);
         Animal animal = new Animal(animalData,MyInstance.instance.Uid);
@@ -707,7 +717,7 @@ public class PastureManager : Singleton<PastureManager>
         }
         GameActionManager.instance.QueueAction(creatCharacter);
     }
-    private async void TryCreatAnimal(TryCreatAnimal tryCreatAnimal)
+    private async System.Threading.Tasks.Task TryCreatAnimalAsync(TryCreatAnimal tryCreatAnimal)
     {
         AnimalData animalData = await GameDataManager.instance.GetAsyncData<AnimalData>(tryCreatAnimal.dataId);
         Animal animal = new Animal(animalData, MyInstance.instance.Uid);
