@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -83,6 +84,16 @@ public class UIObjReference<T> : BaseReference
 
         // 基础引用初始化是同步赋值，派生类仍可覆盖为异步加载。
         return Task.CompletedTask;
+    }
+
+    public virtual Task InitData(T t, SelectAction<T> SelectAction, ToggleGroup toggleGroup, CancellationToken cancellationToken)
+    {
+        SetLifecycleCancellationToken(cancellationToken);
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return Task.CompletedTask;
+        }
+        return InitData(t, SelectAction, toggleGroup);
     }
 
     public virtual void InitChildObjData()

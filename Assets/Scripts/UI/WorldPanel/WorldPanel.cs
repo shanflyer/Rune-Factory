@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -100,11 +101,16 @@ public class WorldPanel : GamePanel<MyInt>
 
     private void SelectFightChapter(UIFightChapterData uIFightChapterData, int index, bool selected)
     {
-        AsyncTaskRunner.Run(() => SelectFightChapterAsync(uIFightChapterData, index, selected), nameof(SelectFightChapter));
+        RunLifecycleTask(token => SelectFightChapterAsync(uIFightChapterData, index, selected, token), nameof(SelectFightChapter));
     }
 
-    private async System.Threading.Tasks.Task SelectFightChapterAsync(UIFightChapterData uIFightChapterData, int index, bool selected)
+    private async System.Threading.Tasks.Task SelectFightChapterAsync(UIFightChapterData uIFightChapterData, int index, bool selected, CancellationToken cancellationToken)
     {
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         if (selected)
         {
             selectFightChapterId = uIFightChapterData.fightChapterId;
@@ -124,7 +130,11 @@ public class WorldPanel : GamePanel<MyInt>
                 };
                 list.Add(mapItemReferenceData);
             }
-            await fightMapItems.InitListData(list);
+            await fightMapItems.InitListData(list, cancellationToken: cancellationToken);
+            if (ShouldStopLifecycleTask(cancellationToken))
+            {
+                return;
+            }
             exploreButton.interactable =
 #if UNITY_EDITOR
                 GameController.instance.test ? true :
@@ -145,12 +155,16 @@ public class WorldPanel : GamePanel<MyInt>
 
     private void RefreshUI(Season selectSeason)
     {
-        AsyncTaskRunner.Run(() => RefreshUIAsync(selectSeason), nameof(RefreshUI));
+        RunLifecycleTask(token => RefreshUIAsync(selectSeason, token), nameof(RefreshUI));
     }
 
-    private async System.Threading.Tasks.Task RefreshUIAsync(Season selectSeason)
+    private async System.Threading.Tasks.Task RefreshUIAsync(Season selectSeason, CancellationToken cancellationToken)
     {
         var fightMapDatas = await GameDataManager.instance.GetAllAsyncData<FightMapData>();
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
 
         Dictionary<Season, Queue<int>> seasonQueue = new Dictionary<Season, Queue<int>>();
         Queue<int> seasonIndex = new Queue<int>();
@@ -167,6 +181,11 @@ public class WorldPanel : GamePanel<MyInt>
          
         for (int i = 0; i < fightMapDatas.Count; i++)
         {
+            if (ShouldStopLifecycleTask(cancellationToken))
+            {
+                return;
+            }
+
             var fightMapData = fightMapDatas[i];
             if (string.IsNullOrEmpty(fightMapData.fightMapObjName))
             {
@@ -186,7 +205,7 @@ public class WorldPanel : GamePanel<MyInt>
 #endif  
                         fightMapData.season == selectSeason
                     };
-                    await seasonFightChapterList[index].InitData(data, SelectFightChapter);
+                    await seasonFightChapterList[index].InitData(data, SelectFightChapter, null, cancellationToken);
 #if UNITY_EDITOR
                     if (GameController.instance.test)
                     {

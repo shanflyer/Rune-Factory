@@ -418,7 +418,7 @@ public class UIManager : Singleton<UIManager>
                  
             gamePanel.Show(layer);
             SetPanelState(type, GamePanelLifecycleState.Opened);
-            gamePanel.InitReferenceData(data);
+            gamePanel.InitReferenceData(data, cancellationToken);
             return gamePanel;
         }
         else
@@ -435,7 +435,7 @@ public class UIManager : Singleton<UIManager>
             }
             gamePanel.Show(layer);
             SetPanelState(type, GamePanelLifecycleState.Opened);
-            gamePanel.InitReferenceData(data);
+            gamePanel.InitReferenceData(data, cancellationToken);
             return gamePanel;
         }
     }
@@ -498,7 +498,7 @@ public class UIManager : Singleton<UIManager>
             gamePanel.gameObject.SetActive(true);
             gamePanel.Show(layer);
             SetPanelState(type, GamePanelLifecycleState.Opened);
-            gamePanel.InitReferenceData(data);
+            gamePanel.InitReferenceData(data, cancellationToken);
             return gamePanel;
         }
         else
@@ -516,7 +516,7 @@ public class UIManager : Singleton<UIManager>
             gamePanel.gameObject.SetActive(true);
             gamePanel.Show(layer);
             SetPanelState(type, GamePanelLifecycleState.Opened);
-            gamePanel.InitReferenceData(data);
+            gamePanel.InitReferenceData(data, cancellationToken);
            
             return gamePanel;
         }

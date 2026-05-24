@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ public class BaseReference : MonoBehaviour
     private CancellationToken lifecycleCancellationToken = CancellationToken.None;
     public CancellationToken LifecycleCancellationToken => lifecycleCancellationToken;
     public virtual bool changeInputModel { get=>true; }
+    protected bool LifecycleCanceled => lifecycleCancellationToken.IsCancellationRequested || SingletonType.Cleared || this == null;
     public virtual void SetPanelUISerializeObj()
     {
         gameObject.TryGetComponent(out canvas);
@@ -38,12 +40,37 @@ public class BaseReference : MonoBehaviour
     public virtual Task InitData(string dataKey, CancellationToken cancellationToken)
     {
         // UIManager 会在新打开或关闭面板时取消旧 token，派生类可读取该 token 中断更细的异步刷新。
-        lifecycleCancellationToken = cancellationToken;
+        SetLifecycleCancellationToken(cancellationToken);
         if (cancellationToken.IsCancellationRequested)
         {
             return Task.CompletedTask;
         }
         return InitData(dataKey);
+    }
+
+    public void SetLifecycleCancellationToken(CancellationToken cancellationToken)
+    {
+        lifecycleCancellationToken = cancellationToken;
+    }
+
+    protected bool ShouldStopLifecycleTask(CancellationToken cancellationToken)
+    {
+        return cancellationToken.IsCancellationRequested || lifecycleCancellationToken.IsCancellationRequested ||
+               SingletonType.Cleared || this == null;
+    }
+
+    protected void RunLifecycleTask(Func<CancellationToken, Task> taskFactory, string context)
+    {
+        var cancellationToken = lifecycleCancellationToken;
+        AsyncTaskRunner.Run(async () =>
+        {
+            if (ShouldStopLifecycleTask(cancellationToken))
+            {
+                return;
+            }
+
+            await taskFactory(cancellationToken);
+        }, context);
     }
 
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -81,20 +82,30 @@ public class DisplayList<T, V> where T : UIObjReference<V>
         }
         return null;
     }
-    public void SetSelectData(V v, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null)
+    public void SetSelectData(V v, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null, CancellationToken cancellationToken = default)
     {
         for (int i = 0; i < list.Count; i++)
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+
             if (list[i].t.Equals(v))
             {
                 // 同步选中刷新不能 await，引用刷新异常走统一异步日志。
-                AsyncTaskRunner.Run(list[i].InitData(v, SelectAction, toggleGroup), nameof(SetSelectData));
+                AsyncTaskRunner.Run(list[i].InitData(v, SelectAction, toggleGroup, cancellationToken), nameof(SetSelectData));
             }
         }
     }
     static Vector3 zero = new Vector3(0, 1, 1);
-    public async Task InitListData(V[] componentData, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null, bool Async = true)
+    public async Task InitListData(V[] componentData, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null, bool Async = true, CancellationToken cancellationToken = default)
     {
+
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return;
+        }
 
         if (componentData == null || componentData.Length == 0)
         {
@@ -117,11 +128,16 @@ public class DisplayList<T, V> where T : UIObjReference<V>
 
         for (int i = 0; i < componentData.Length; i++)
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+
             if (list.Count > i)
             {
                 list[i].enabled = true;
                 list[i].transform.localScale = Vector3.one;
-                await list[i].InitData(componentData[i], SelectAction, toggleGroup);
+                await list[i].InitData(componentData[i], SelectAction, toggleGroup, cancellationToken);
             }
             else
             {
@@ -144,7 +160,7 @@ public class DisplayList<T, V> where T : UIObjReference<V>
                     t.transform.SetParent(parent);
                     t.transform.localScale = Vector3.one;
                     t.index = i;
-                    await t.InitData(componentData[i], SelectAction, toggleGroup);
+                    await t.InitData(componentData[i], SelectAction, toggleGroup, cancellationToken);
                     list.Add(t);
                 }
                 catch (Exception e)
@@ -193,8 +209,12 @@ public class DisplayList<T, V> where T : UIObjReference<V>
         list.Add(t);
     }
 
-    public void AddListData(V componentData, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null)
+    public void AddListData(V componentData, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null, CancellationToken cancellationToken = default)
     {
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return;
+        }
 
         if (componentData == null)
         {
@@ -213,7 +233,7 @@ public class DisplayList<T, V> where T : UIObjReference<V>
             list[_dataCount].enabled = true;
             list[_dataCount].transform.localScale = Vector3.one;
             // AddListData 是同步增量接口，单项初始化异常统一记录。
-            AsyncTaskRunner.Run(list[_dataCount].InitData(componentData, SelectAction, toggleGroup), nameof(AddListData));
+            AsyncTaskRunner.Run(list[_dataCount].InitData(componentData, SelectAction, toggleGroup, cancellationToken), nameof(AddListData));
             _dataCount++;
         }
         else
@@ -237,7 +257,7 @@ public class DisplayList<T, V> where T : UIObjReference<V>
                 t.transform.SetParent(parent);
                 t.transform.localScale = Vector3.one;
                 t.index = _dataCount;
-                AsyncTaskRunner.Run(t.InitData(componentData, SelectAction, toggleGroup), nameof(AddListData));
+                AsyncTaskRunner.Run(t.InitData(componentData, SelectAction, toggleGroup, cancellationToken), nameof(AddListData));
                 list.Add(t);
                 _dataCount++;
             }
@@ -250,8 +270,13 @@ public class DisplayList<T, V> where T : UIObjReference<V>
 
         LayoutRebuilder.MarkLayoutForRebuild(parent as RectTransform);
     }
-    public async Task InitListData(List<V> componentData, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null, bool Async = true)
+    public async Task InitListData(List<V> componentData, SelectAction<V> SelectAction = null, ToggleGroup toggleGroup = null, bool Async = true, CancellationToken cancellationToken = default)
     {
+
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return;
+        }
 
         if (componentData == null || componentData.Count == 0)
         {
@@ -274,11 +299,16 @@ public class DisplayList<T, V> where T : UIObjReference<V>
 
         for (int i = 0; i < componentData.Count; i++)
         {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return;
+            }
+
             if (list.Count > i)
             {
                 list[i].enabled = true;
                 list[i].transform.localScale = Vector3.one;
-                await list[i].InitData(componentData[i], SelectAction, toggleGroup);
+                await list[i].InitData(componentData[i], SelectAction, toggleGroup, cancellationToken);
             }
             else
             {
@@ -300,7 +330,7 @@ public class DisplayList<T, V> where T : UIObjReference<V>
                     t.enabled = true;
                     t.transform.SetParent(parent);
                     t.transform.localScale = Vector3.one;
-                    await t.InitData(componentData[i], SelectAction, toggleGroup);
+                    await t.InitData(componentData[i], SelectAction, toggleGroup, cancellationToken);
                     list.Add(t);
                     t.name = i.ToString();
                 }

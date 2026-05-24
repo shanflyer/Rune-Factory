@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -78,30 +79,52 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
 
     private void NextAction()
     {
-        AsyncTaskRunner.Run(NextActionAsync, nameof(NextAction));
+        RunLifecycleTask(NextActionAsync, nameof(NextAction));
     }
 
-    private async System.Threading.Tasks.Task NextActionAsync()
+    private async System.Threading.Tasks.Task NextActionAsync(CancellationToken cancellationToken)
     {
        // Debug.Log("Talk:NextAction!!!");
-        nextButton.interactable = false;
-        var actionData = await GameDataManager.instance.GetAsyncData<GameActionAsset>(talkData.actionId.ToString());
-        if (actionData != null)
+        if (ShouldStopLifecycleTask(cancellationToken))
         {
-            actionData.Action();
+            return;
         }
-        talkData = await GameDataManager.instance.GetAsyncData<TalkData>(talkData.nexTalkId);
-        await TalkAction();
-        nextButton.interactable = true;
+        nextButton.interactable = false;
+        try
+        {
+            var actionData = await GameDataManager.instance.GetAsyncData<GameActionAsset>(talkData.actionId.ToString());
+            if (ShouldStopLifecycleTask(cancellationToken))
+            {
+                return;
+            }
+            if (actionData != null)
+            {
+                actionData.Action();
+            }
+            talkData = await GameDataManager.instance.GetAsyncData<TalkData>(talkData.nexTalkId);
+            await TalkAction(cancellationToken);
+        }
+        finally
+        {
+            if (!ShouldStopLifecycleTask(cancellationToken))
+            {
+                nextButton.interactable = true;
+            }
+        }
     }
 
     private void SelectNPCFunctionData(NPCFunctionData NPCFunctionData, int index, bool selected = true)
     {
-        AsyncTaskRunner.Run(() => SelectNPCFunctionDataAsync(NPCFunctionData, index, selected), nameof(SelectNPCFunctionData));
+        RunLifecycleTask(token => SelectNPCFunctionDataAsync(NPCFunctionData, index, selected, token), nameof(SelectNPCFunctionData));
     }
 
-    private async System.Threading.Tasks.Task SelectNPCFunctionDataAsync(NPCFunctionData NPCFunctionData, int index, bool selected = true)
+    private async System.Threading.Tasks.Task SelectNPCFunctionDataAsync(NPCFunctionData NPCFunctionData, int index, bool selected, CancellationToken cancellationToken)
     {
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         switch (NPCFunctionData.closeTalk)
         {
             case 0:
@@ -133,6 +156,10 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
         };
         eventReferenceDatas.Add(targetReferenceData);
         var GameEventData = await GameDataManager.instance.GetAsyncData<GameEventData>(NPCFunctionData.OperateAction);
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
         GameEventManager.instance.AddGameEvent(GameEventData, eventReferenceDatas);
         
     }
@@ -147,15 +174,15 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
         if (v.displayFunction)
         {
             // 对话功能按钮由同步引用数据入口刷新，异常统一记录。
-            AsyncTaskRunner.Run(NPCFunctionList.InitListData(v.npcFunctionDatas, SelectNPCFunctionData), nameof(InitReferenceData));
+            RunLifecycleTask(token => NPCFunctionList.InitListData(v.npcFunctionDatas, SelectNPCFunctionData, cancellationToken: token), nameof(InitReferenceData));
         }
         else
         {
-            AsyncTaskRunner.Run(NPCFunctionList.InitListData(new List<NPCFunctionData>()), nameof(InitReferenceData));
+            RunLifecycleTask(token => NPCFunctionList.InitListData(new List<NPCFunctionData>(), cancellationToken: token), nameof(InitReferenceData));
         }
 
         // 对话初始化入口保持同步，后续事件推进异常统一进入日志。
-        AsyncTaskRunner.Run(InitDataAsync(), nameof(InitData));
+        RunLifecycleTask(InitDataAsync, nameof(InitData));
     }
 
     private bool runNextTalkEvent = false;
@@ -167,8 +194,13 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
     }
 #endif
 
-    async Task TalkAction()
+    async Task TalkAction(CancellationToken cancellationToken)
     {
+        if (ShouldStopLifecycleTask(cancellationToken))
+        {
+            return;
+        }
+
         if (talkData == null)
         {
             if (!runNextTalkEvent)
@@ -185,6 +217,10 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
                 eventReferenceDatas.Add(eventReferenceData1);
                 bool nextEvent = await GameEventManager.instance.AddGameEvent(NPCTalkOperateData.nextTalkEventId,
                     eventReferenceDatas, true);
+                if (ShouldStopLifecycleTask(cancellationToken))
+                {
+                    return;
+                }
                 if (!nextEvent)
                 {
                     Close();
@@ -270,7 +306,12 @@ public class TalkPanel : GamePanel<NPCTalkOperateData>
     }
     private async Task InitDataAsync()
     {
-        await TalkAction();
+        await TalkAction(LifecycleCancellationToken);
+    }
+
+    private async Task InitDataAsync(CancellationToken cancellationToken)
+    {
+        await TalkAction(cancellationToken);
     }
 
     public override void SetPanelUISerializeObj()

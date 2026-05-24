@@ -409,7 +409,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                     {
                         InformationController.instance.AddInformation(LanguageManage.SwitchStr("空间不足，部分物体没有获得"));
                     }*/
-                    AsyncTaskRunner.Run(InitDisplayAsync(), nameof(InitDisplayAsync));
+                    RunLifecycleTask(_ => InitDisplayAsync(), nameof(InitDisplayAsync));
                     PackageManager.instance.RemovePlayerPackageItem(costItem.dataId, costItem.count);
                     
                     AutoSelect.interactable = false;
@@ -428,7 +428,7 @@ public class ManufacturePanel : GamePanel<Manufature>
 
     private void RefreshFormulaSelect()
     {
-        AsyncTaskRunner.Run(RefreshFormulaSelectAsync, nameof(RefreshFormulaSelect));
+        RunLifecycleTask(_ => RefreshFormulaSelectAsync(), nameof(RefreshFormulaSelect));
     }
 
     private System.Threading.Tasks.Task RefreshFormulaSelectAsync()
@@ -498,7 +498,7 @@ public class ManufacturePanel : GamePanel<Manufature>
 
     private void ClearFormulaItemBoxReferences(bool clearOutBox = true)
     {
-        AsyncTaskRunner.Run(() => ClearFormulaItemBoxReferencesAsync(clearOutBox), nameof(ClearFormulaItemBoxReferences));
+        RunLifecycleTask(_ => ClearFormulaItemBoxReferencesAsync(clearOutBox), nameof(ClearFormulaItemBoxReferences));
     }
 
     private async System.Threading.Tasks.Task ClearFormulaItemBoxReferencesAsync(bool clearOutBox = true)
@@ -518,11 +518,16 @@ public class ManufacturePanel : GamePanel<Manufature>
 
     private void RefreshRPCostAndOut()
     {
-        AsyncTaskRunner.Run(RefreshRPCostAndOutAsync, nameof(RefreshRPCostAndOut));
+        RunLifecycleTask(_ => RefreshRPCostAndOutAsync(), nameof(RefreshRPCostAndOut));
     }
 
     private async System.Threading.Tasks.Task RefreshRPCostAndOutAsync()
     {
+        if (LifecycleCanceled)
+        {
+            return;
+        }
+
         matchFormula = CheckFormula();
         formulaCost = 0;
 
@@ -618,7 +623,11 @@ public class ManufacturePanel : GamePanel<Manufature>
         {
             outItem.dataId = manufature.product.x;
         }
-       await OutItemBoxReference.InitData(outItem, null, FormulaItemBoxGroup);
+       await OutItemBoxReference.InitData(outItem, null, FormulaItemBoxGroup, LifecycleCancellationToken);
+        if (LifecycleCanceled)
+        {
+            return;
+        }
         OutItemBoxReference.SelectUIAction = DisplayItem;
         RefreshCost();
         creatButtonName.SetSWText(LanguageManage.SwitchStr("制作"));
@@ -649,7 +658,11 @@ public class ManufacturePanel : GamePanel<Manufature>
                 instanceId = 1
             };
             CostItemBoxReference.transform.localScale = Vector3.one;
-           await CostItemBoxReference.InitData(costItem, null, FormulaItemBoxGroup);
+           await CostItemBoxReference.InitData(costItem, null, FormulaItemBoxGroup, LifecycleCancellationToken);
+            if (LifecycleCanceled)
+            {
+                return;
+            }
             CostItemBoxReference.SelectUIAction= DisplayItem;
 
             int nowCount = PackageManager.instance.GetPlayerItemCount(costItem.dataId);
@@ -684,7 +697,7 @@ public class ManufacturePanel : GamePanel<Manufature>
 
     private void DisplayFormula()
     {
-        AsyncTaskRunner.Run(DisplayFormulaAsync, nameof(DisplayFormula));
+        RunLifecycleTask(_ => DisplayFormulaAsync(), nameof(DisplayFormula));
     }
 
     private async System.Threading.Tasks.Task DisplayFormulaAsync()
@@ -723,7 +736,7 @@ public class ManufacturePanel : GamePanel<Manufature>
     //自动选择材料
     private void AutoSelectMaterials()
     {
-        AsyncTaskRunner.Run(AutoSelectMaterialsAsync, nameof(AutoSelectMaterials));
+        RunLifecycleTask(_ => AutoSelectMaterialsAsync(), nameof(AutoSelectMaterials));
     }
 
     private async System.Threading.Tasks.Task AutoSelectMaterialsAsync()
@@ -793,14 +806,24 @@ public class ManufacturePanel : GamePanel<Manufature>
 
     private async Task InitDisplayAsync()
     {
+        if (LifecycleCanceled)
+        {
+            return;
+        }
+
         Item defaultItem = default(Item);
         defaultItem.instanceId = -1;
         
         for (int i = 0; i < manufature.materials.Length; i++)
         {
+            if (LifecycleCanceled)
+            {
+                return;
+            }
+
             if (manufature.materials[i].x == 0)
             {
-                await FormulaItemBoxReferences[i].InitData(defaultItem, null, FormulaItemBoxGroup);
+                await FormulaItemBoxReferences[i].InitData(defaultItem, null, FormulaItemBoxGroup, LifecycleCancellationToken);
             }
             else
             {
@@ -809,7 +832,7 @@ public class ManufacturePanel : GamePanel<Manufature>
                     dataId = manufature.materials[i].x,
                     instanceId = manufature.materials[i].y
                 };
-                await FormulaItemBoxReferences[i].InitData(item, null, FormulaItemBoxGroup);
+                await FormulaItemBoxReferences[i].InitData(item, null, FormulaItemBoxGroup, LifecycleCancellationToken);
             }
             FormulaItemBoxReferences[i].SelectUIAction = DisplayItem;
         }
@@ -828,8 +851,12 @@ public class ManufacturePanel : GamePanel<Manufature>
                 count = manufature.product.y,
                 instanceId = 1
             };
-          await  OutItemBoxReference.InitData(item, null, FormulaItemBoxGroup);
-            OutItemBoxReference.SelectUIAction = DisplayItem; 
+          await  OutItemBoxReference.InitData(item, null, FormulaItemBoxGroup, LifecycleCancellationToken);
+            if (LifecycleCanceled)
+            {
+                return;
+            }
+            OutItemBoxReference.SelectUIAction = DisplayItem;
             
         }
         //FormulaDropdown.SetValueWithoutNotify()
@@ -846,6 +873,10 @@ public class ManufacturePanel : GamePanel<Manufature>
         if (manufature!=null)
         { 
             await InitDataAsync(manufature);
+            if (LifecycleCanceled)
+            {
+                return;
+            }
             if (manufactureData.needItem != null && manufactureData.needItem.Count > 0)
             {
                 var shortcutPackage = ShortcutManager.instance.playerShortcutPackage;
@@ -917,7 +948,7 @@ public class ManufacturePanel : GamePanel<Manufature>
 
     private void CreatProduct()
     {
-        AsyncTaskRunner.Run(CreatProductAsync, nameof(CreatProduct));
+        RunLifecycleTask(_ => CreatProductAsync(), nameof(CreatProduct));
     }
 
     private async System.Threading.Tasks.Task CreatProductAsync()
@@ -943,7 +974,7 @@ public class ManufacturePanel : GamePanel<Manufature>
         if (manufature.instanceId == refreshManufature.manufature.instanceId)
         {
             // 刷新事件入口保持同步，制造数据重载异常统一进入日志。
-            AsyncTaskRunner.Run(InitDataAsync(refreshManufature.manufature), nameof(RefreshManufature));
+            RunLifecycleTask(_ => InitDataAsync(refreshManufature.manufature), nameof(RefreshManufature));
         }
     }
 
@@ -951,7 +982,7 @@ public class ManufacturePanel : GamePanel<Manufature>
     {
         base.InitReferenceData(v);
         // 面板引用数据入口保持同步，制造数据加载异常统一进入日志。
-        AsyncTaskRunner.Run(InitDataAsync(v), nameof(InitData));
+        RunLifecycleTask(_ => InitDataAsync(v), nameof(InitData));
 
         bool selectOpenFormula = selectFormula != null && selectFormula.opened;
         AutoSelect.transform.localScale = selectOpenFormula ? Vector3.one : Vector3.zero;
@@ -959,11 +990,20 @@ public class ManufacturePanel : GamePanel<Manufature>
 
     private async System.Threading.Tasks.Task InitDataAsync(Manufature v)
     {
+        if (LifecycleCanceled)
+        {
+            return;
+        }
+
         SelectItemBoxRefrence = null;
         InformationObj.transform.localScale = Vector3.zero;
         outEffect.Stop();
         manufature = v;
         manufactureData = await GameDataManager.instance.GetAsyncData<ManufactureData>(v.dataId);
+        if (LifecycleCanceled)
+        {
+            return;
+        }
         title.SetSWText(manufactureData.manufactureName);
         CreatButton.interactable = false;
         AutoSelect.interactable = false;
@@ -996,15 +1036,15 @@ public class ManufacturePanel : GamePanel<Manufature>
                 nowSelectFormulaTypes.Add(formulaType);
             }
             // 配方类型列表在同步面板初始化中刷新，异常统一记录。
-            AsyncTaskRunner.Run(this.formulaTypes.InitListData(formulaTypeDatas, SelectFormulaTypeData), nameof(InitReferenceData));
+            RunLifecycleTask(token => this.formulaTypes.InitListData(formulaTypeDatas, SelectFormulaTypeData, cancellationToken: token), nameof(InitReferenceData));
         }
         else
         {
-            AsyncTaskRunner.Run(this.formulaTypes.InitListData(new List<FormulaTypeData>(), SelectFormulaTypeData), nameof(InitReferenceData));
+            RunLifecycleTask(token => this.formulaTypes.InitListData(new List<FormulaTypeData>(), SelectFormulaTypeData, cancellationToken: token), nameof(InitReferenceData));
         }
 
         RefreshFormulaSelect();
-        AsyncTaskRunner.Run(InitDisplayAsync(), nameof(InitDisplayAsync));
+        RunLifecycleTask(_ => InitDisplayAsync(), nameof(InitDisplayAsync));
         if (WorldMapObjManager.instance.GetRuntimeMapItemObj(v.instanceId, out var runtimeObj))
         {
             Vector2 pos = runtimeObj.transform.position;
@@ -1050,7 +1090,7 @@ public class ManufacturePanel : GamePanel<Manufature>
 
     private void GetOutProduct()
     {
-        AsyncTaskRunner.Run(GetOutProductAsync, nameof(GetOutProduct));
+        RunLifecycleTask(_ => GetOutProductAsync(), nameof(GetOutProduct));
     }
 
     private async System.Threading.Tasks.Task GetOutProductAsync()
@@ -1106,7 +1146,7 @@ public class ManufacturePanel : GamePanel<Manufature>
 
     void SetFormulaItem(Item item, int index, bool select)
     {
-        AsyncTaskRunner.Run(() => SetFormulaItemAsync(item, index, select), nameof(SetFormulaItem));
+        RunLifecycleTask(_ => SetFormulaItemAsync(item, index, select), nameof(SetFormulaItem));
     }
 
     async System.Threading.Tasks.Task SetFormulaItemAsync(Item item, int index, bool select)
@@ -1123,7 +1163,7 @@ public class ManufacturePanel : GamePanel<Manufature>
     }
     void ClearFormulaItem()
     {
-        AsyncTaskRunner.Run(ClearFormulaItemAsync, nameof(ClearFormulaItem));
+        RunLifecycleTask(_ => ClearFormulaItemAsync(), nameof(ClearFormulaItem));
     }
 
     async System.Threading.Tasks.Task ClearFormulaItemAsync()
@@ -1157,7 +1197,7 @@ public class ManufacturePanel : GamePanel<Manufature>
     }
     private void DisplayItem(ItemBoxReference itemBoxReference, bool selected = true)
     {
-        AsyncTaskRunner.Run(() => DisplayItemAsync(itemBoxReference, selected), nameof(DisplayItem));
+        RunLifecycleTask(_ => DisplayItemAsync(itemBoxReference, selected), nameof(DisplayItem));
     }
 
     private async System.Threading.Tasks.Task DisplayItemAsync(ItemBoxReference itemBoxReference, bool selected = true)

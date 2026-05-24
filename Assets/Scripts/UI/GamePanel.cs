@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 #if UNITY_EDITOR
@@ -117,12 +118,20 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
         
     }
     protected V data;
-    public virtual void InitReferenceData(V v) 
+    public virtual void InitReferenceData(V v)
     {
         data = v;
     }
 
-   
+    public virtual void InitReferenceData(V v, CancellationToken cancellationToken)
+    {
+        SetLifecycleCancellationToken(cancellationToken);
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return;
+        }
+        InitReferenceData(v);
+    }
 
     public override void Show(int layer = -1)
     {
@@ -197,4 +206,4 @@ public class GamePanel<V> : BaseReference where V:IReferenceData
         } 
          
     }
-} 
+}
