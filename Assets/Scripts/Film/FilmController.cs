@@ -19,7 +19,12 @@ public class FilmController : Singleton<FilmController>
     private Dictionary<string, Film> nowFilms = new Dictionary<string, Film>();
     private Transform filmParent;
 
-    async void PlayFilm(PlayFilm playFilm) 
+    System.Threading.Tasks.Task PlayFilm(PlayFilm playFilm)
+    {
+        return PlayFilmAsync(playFilm);
+    }
+
+    async System.Threading.Tasks.Task PlayFilmAsync(PlayFilm playFilm)
     { 
         if(!nowFilms.TryGetValue(playFilm.filmName,out Film film))
         {
@@ -328,7 +333,7 @@ public class FilmController : Singleton<FilmController>
     public override void Init()
     {
         base.Init();
-        GameActionManager.instance.AddListener<PlayFilm>(PlayFilm);
+        GameActionManager.instance.AddAsyncListener<PlayFilm>(PlayFilmAsync, nameof(PlayFilm));
         GameActionManager.instance.AddListener<StopFilm>(StopFilm);
         GameActionManager.instance.AddListener<PauseFilm>(PauseFilm);
         GameActionManager.instance.AddListener<JumpFilm>(JumpFilm);

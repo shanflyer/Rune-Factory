@@ -128,7 +128,7 @@ public class WeatherManager : Singleton<WeatherManager>
         }
 
         weatherIconData.InitData();
-        GameActionManager.instance.AddListener<CreatWeather>(CreatWeather);
+        GameActionManager.instance.AddAsyncListener<CreatWeather>(CreatWeatherAsync, nameof(CreatWeather));
     }
 
     protected override void Clear()
@@ -181,7 +181,7 @@ public class WeatherManager : Singleton<WeatherManager>
         this.nextDayWeathers = nextDayWeathers;
     }
 
-    private async void CreatWeather(CreatWeather creatWeather)
+    private async System.Threading.Tasks.Task CreatWeatherAsync(CreatWeather creatWeather)
     {
         if (creatWeather.nowWeathers != null && creatWeather.nowWeathers.Count > 0)
         {

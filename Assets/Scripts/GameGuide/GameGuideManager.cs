@@ -31,7 +31,12 @@ public class GameGuideManager:Singleton<GameGuideManager>
         }
         return null;
     }
-    public async void SetGameGuidFilmDataAction(int characterId,string worldName)
+    public void SetGameGuidFilmDataAction(int characterId,string worldName)
+    {
+        AsyncTaskRunner.Run(() => SetGameGuidFilmDataActionAsync(characterId, worldName), nameof(SetGameGuidFilmDataAction));
+    }
+
+    public async System.Threading.Tasks.Task SetGameGuidFilmDataActionAsync(int characterId,string worldName)
     {
         var data=await GetGameGuideFilmData();
 
@@ -73,7 +78,7 @@ public class GameGuideManager:Singleton<GameGuideManager>
         SelectableGuideRegistry.RemoveIntAction = RemoveIntAction;
         endGuide.Clear();
 
-        GameActionManager.instance.AddListener<GameGuideAction>(GameGuideAction);
+        GameActionManager.instance.AddAsyncListener<GameGuideAction>(GameGuideActionAsync, nameof(GameGuideAction));
         GameActionManager.instance.AddListener<CheckGameGuideAction>(CheckGameGuideAction);
         GameActionManager.instance.AddListener<SaveGuideFilmIndexAction>(SaveGuideFilmIndexAction);
         GameActionManager.instance.AddListener<CheckGuideFilmIndex>(CheckGuideFilmIndex);
@@ -120,7 +125,7 @@ public class GameGuideManager:Singleton<GameGuideManager>
         guidSelectableDic.Remove(id);
     }
 
-    async void GameGuideAction(GameGuideAction gameGuideAction)
+    async System.Threading.Tasks.Task GameGuideActionAsync(GameGuideAction gameGuideAction)
     {
         nowGameGuideData = await GameDataManager.instance.GetAsyncData<GameGuideData>(gameGuideAction.guidKey);
         nowGameGuideData.Zero();

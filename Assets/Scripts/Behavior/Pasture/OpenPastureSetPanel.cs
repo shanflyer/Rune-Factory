@@ -11,7 +11,12 @@ public class OpenPastureSetPanel : Action
     private SharedBool showTeam;
     [SerializeField]
     private SharedIntList otherAnimals; 
-    public override async void OnStart()
+    public override void OnStart()
+    {
+        AsyncTaskRunner.Run(OnStartAsync, nameof(OpenPastureSetPanel));
+    }
+
+    private async System.Threading.Tasks.Task OnStartAsync()
     {
          
         MyListInt myListInt = new MyListInt();

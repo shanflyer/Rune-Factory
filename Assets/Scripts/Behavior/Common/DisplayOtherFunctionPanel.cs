@@ -11,9 +11,10 @@ public class DisplayOtherFunctionPanel : Action
 
     public override void OnStart()
     {
-        DisplayPanel();
+        AsyncTaskRunner.Run(DisplayPanelAsync, nameof(DisplayOtherFunctionPanel));
     }
-    async void DisplayPanel()
+
+    private async System.Threading.Tasks.Task DisplayPanelAsync()
     {
         FunctionButtonList FunctionButtonList = new FunctionButtonList
         {

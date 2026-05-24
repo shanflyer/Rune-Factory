@@ -61,8 +61,8 @@ public class GameTimeEventManager : Singleton<GameTimeEventManager>
             }
         }
 
-        GameActionManager.instance.AddListener<NewDay>(CheckGameTimeEventNewDay);
-        GameActionManager.instance.AddListener<PlayerWakeUp>(PlayerWakeUp);
+        GameActionManager.instance.AddAsyncListener<NewDay>(CheckGameTimeEventNewDayAsync, nameof(CheckGameTimeEventNewDayAsync));
+        GameActionManager.instance.AddAsyncListener<PlayerWakeUp>(PlayerWakeUpAsync, nameof(PlayerWakeUp));
     }
 
     protected override void Clear()
@@ -73,7 +73,7 @@ public class GameTimeEventManager : Singleton<GameTimeEventManager>
         wakeUpTimeEvents.Clear();
     }
 
-    private async void CheckGameTimeEventNewDay(NewDay NewDay)
+    private async System.Threading.Tasks.Task CheckGameTimeEventNewDayAsync(NewDay NewDay)
     {
         newDayActionIndex++;
         List<int> deathEvents = new List<int>();
@@ -92,7 +92,7 @@ public class GameTimeEventManager : Singleton<GameTimeEventManager>
         }
     }
 
-    private async void PlayerWakeUp(PlayerWakeUp PlayerWakeUp)
+    private async System.Threading.Tasks.Task PlayerWakeUpAsync(PlayerWakeUp PlayerWakeUp)
     {
         newWakeUpActionIndex++;
         List<int> deathEvents = new List<int>();

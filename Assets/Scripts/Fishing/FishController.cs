@@ -19,7 +19,7 @@ public class FishController : Singleton<FishController>
     private async System.Threading.Tasks.Task InitAsync()
     {
         GameActionManager.instance.AddListener<PlayFishWater>(PlayFishWater);
-        GameActionManager.instance.AddListener<CreatFisher>(CreatFisher);
+        GameActionManager.instance.AddAsyncListener<CreatFisher>(CreatFisherAsync, nameof(CreatFisher));
         GameActionManager.instance.AddListener<RecycleFisher>(RecycleFisher);
         GameActionManager.instance.AddListener<TryGetFish>(TryGetFish);
         GameActionManager.instance.AddListener<NPCFishingResult>(NPCFishingResult);
@@ -108,7 +108,7 @@ public class FishController : Singleton<FishController>
             Fishers.Remove(recycleFisher.characterInstance);
         }
     }
-    async void CreatFisher(CreatFisher creatFisher)
+    async System.Threading.Tasks.Task CreatFisherAsync(CreatFisher creatFisher)
     {
         if (!Fishers.ContainsKey(creatFisher.characterInstance))
         {

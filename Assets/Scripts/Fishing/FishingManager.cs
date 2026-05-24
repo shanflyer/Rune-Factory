@@ -23,7 +23,7 @@ public class FishingManager : Singleton<FishingManager>
             var data = allData[i];
             fishPondDatas[data.linkMapItem] = data;
         }
-        GameActionManager.instance.AddListener<FishingIsSuccess>(FishingIsSuccess);
+        GameActionManager.instance.AddAsyncListener<FishingIsSuccess>(FishingIsSuccessAsync, nameof(FishingIsSuccess));
         GameActionManager.instance.AddListener<StopFishing>(StopFishing);
         GameActionManager.instance.AddListener<StartFishing>(StartFishing);
         GameActionManager.instance.AddListener<DisplayMap>(DisplayMap);
@@ -36,7 +36,7 @@ public class FishingManager : Singleton<FishingManager>
         initializationTask = System.Threading.Tasks.Task.CompletedTask;
         if (!SingletonType.Cleared)
         {
-            GameActionManager.instance.RemoveListener<FishingIsSuccess>(FishingIsSuccess);
+            GameActionManager.instance.RemoveAsyncListener<FishingIsSuccess>(FishingIsSuccessAsync);
             GameActionManager.instance.RemoveListener<StopFishing>(StopFishing);
             GameActionManager.instance.RemoveListener<StartFishing>(StartFishing);
             GameActionManager.instance.RemoveListener<DisplayMap>(DisplayMap);
@@ -44,7 +44,7 @@ public class FishingManager : Singleton<FishingManager>
         }
     }
 
-    private async void FishingIsSuccess(FishingIsSuccess fishingIsSuccess)
+    private async System.Threading.Tasks.Task FishingIsSuccessAsync(FishingIsSuccess fishingIsSuccess)
     {
         TryRecycleCharacterEmote tryRecycleCharacterEmote = new TryRecycleCharacterEmote
         {

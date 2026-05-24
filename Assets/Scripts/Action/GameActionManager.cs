@@ -15,6 +15,7 @@ public class GameActionManager : Singleton<GameActionManager>
 
     private Queue<ActionBus> ActionQueue = new Queue<ActionBus>();
     private Dictionary<Type, Delegate> delegates = new Dictionary<Type, Delegate>();
+    private Dictionary<Delegate, Delegate> asyncDelegateWrappers = new Dictionary<Delegate, Delegate>();
     private HashSet<Delegate> onceDelegates = new HashSet<Delegate>();
     private int immediateActionDepth;
 
@@ -22,6 +23,7 @@ public class GameActionManager : Singleton<GameActionManager>
     {
         base.Init();
         delegates.Clear();
+        asyncDelegateWrappers.Clear();
         onceDelegates.Clear();
     }
 
@@ -29,6 +31,7 @@ public class GameActionManager : Singleton<GameActionManager>
     {
         base.Clear();
         delegates.Clear();
+        asyncDelegateWrappers.Clear();
         onceDelegates.Clear();
         ActionQueue.Clear();
     }
@@ -63,7 +66,25 @@ public class GameActionManager : Singleton<GameActionManager>
     public void AddAsyncListener<T>(Func<T, System.Threading.Tasks.Task> del, string context, bool once = false) where T : GameAction
     {
         // Action 总线仍保持同步派发，异步监听器通过统一入口承接异常。
-        AddListener<T>(action => AsyncTaskRunner.Run(() => del(action), context), once);
+        if (!asyncDelegateWrappers.TryGetValue(del, out var wrapperDelegate))
+        {
+            ActionDelegate<T> wrapper = action => AsyncTaskRunner.Run(() => del(action), context);
+            asyncDelegateWrappers[del] = wrapper;
+            wrapperDelegate = wrapper;
+        }
+
+        AddListener<T>((ActionDelegate<T>)wrapperDelegate, once);
+    }
+
+    public void RemoveAsyncListener<T>(Func<T, System.Threading.Tasks.Task> del) where T : GameAction
+    {
+        if (!asyncDelegateWrappers.TryGetValue(del, out var wrapperDelegate))
+        {
+            return;
+        }
+
+        RemoveListener<T>((ActionDelegate<T>)wrapperDelegate);
+        asyncDelegateWrappers.Remove(del);
     }
 
     private static bool ContainsDelegate<T>(ActionDelegate<T> source, ActionDelegate<T> target) where T : GameAction

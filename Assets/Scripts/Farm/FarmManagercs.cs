@@ -31,7 +31,7 @@ public class FarmManager : Singleton<FarmManager>
         GameActionManager.instance.AddListener<TryCreateField>(TryCreateField);
         GameActionManager.instance.AddListener<CheckFieldState>(CheckFieldState);
         GameActionManager.instance.AddListener<TrySmoothField>(TrySmoothField);
-        GameActionManager.instance.AddListener<TryCreatPlant>(TryCreatPlant);
+        GameActionManager.instance.AddAsyncListener<TryCreatPlant>(TryCreatPlantAsync, nameof(TryCreatPlant));
         GameActionManager.instance.AddListener<SetWaterField>(SetWaterField);
         GameActionManager.instance.AddListener<NewDay>(NewDay);
         GameActionManager.instance.AddListener<NewHour>(NewHour);
@@ -76,7 +76,12 @@ public class FarmManager : Singleton<FarmManager>
             field.RefreshField();
         }
     }
-    public async void CreatField(FieldSaveData fieldSaveData)
+    public void CreatField(FieldSaveData fieldSaveData)
+    {
+        AsyncTaskRunner.Run(() => CreatFieldAsync(fieldSaveData), nameof(CreatField));
+    }
+
+    public async System.Threading.Tasks.Task CreatFieldAsync(FieldSaveData fieldSaveData)
     {
         int instanceId = fieldSaveData.instanceId;
         if (!fields.TryGetValue(instanceId,out var field))
@@ -223,7 +228,7 @@ public class FarmManager : Singleton<FarmManager>
         }
     }
 
-    private async void TryCreatPlant(TryCreatPlant creatPlant)
+    private async System.Threading.Tasks.Task TryCreatPlantAsync(TryCreatPlant creatPlant)
     {
         PlantData plantData = await GameDataManager.instance.GetAsyncData<PlantData>(creatPlant.plantId);
         if (plantData == null)
@@ -353,7 +358,12 @@ public class Field
         this.waterHour = waterHour;
         RefreshField();
     } 
-    public async void CreatePlant(int instanceId,int dataId,float growthHour,int growthStage, PlantState plantState,int nowCycle,bool setWater)
+    public void CreatePlant(int instanceId,int dataId,float growthHour,int growthStage, PlantState plantState,int nowCycle,bool setWater)
+    {
+        AsyncTaskRunner.Run(() => CreatePlantAsync(instanceId, dataId, growthHour, growthStage, plantState, nowCycle, setWater), nameof(CreatePlant));
+    }
+
+    public async System.Threading.Tasks.Task CreatePlantAsync(int instanceId,int dataId,float growthHour,int growthStage, PlantState plantState,int nowCycle,bool setWater)
     {
         var PlantData = await GameDataManager.instance.GetAsyncData<PlantData>(dataId);
         _plant = new Plant(instanceId, PlantData, this.instanceId, setWater, plantState, nowCycle);

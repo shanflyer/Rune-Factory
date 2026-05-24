@@ -6,7 +6,12 @@ using BehaviorDesigner.Runtime.Tasks;
 public class GameEventAdd : Action
 {
 	public SharedInt gameEventId; 
-	public override async void OnStart()
+	public override void OnStart()
+	{
+		AsyncTaskRunner.Run(OnStartAsync, nameof(GameEventAdd));
+	}
+
+	private async System.Threading.Tasks.Task OnStartAsync()
 	{
 	  await	GameEventManager.instance.AddGameEvent(gameEventId.Value);
 	}

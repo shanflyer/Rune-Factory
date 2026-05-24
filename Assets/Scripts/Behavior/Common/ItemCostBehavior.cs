@@ -17,7 +17,12 @@ public class ItemCostBehavior : Action
     public int money;
     public List<int2> costItems = new List<int2>();
 
-    public override async void OnStart()
+    public override void OnStart()
+    {
+        AsyncTaskRunner.Run(OnStartAsync, nameof(ItemCostBehavior));
+    }
+
+    private async System.Threading.Tasks.Task OnStartAsync()
     {
         taskStatus = TaskStatus.Running;
         List<MyInt3> items = new List<MyInt3>();

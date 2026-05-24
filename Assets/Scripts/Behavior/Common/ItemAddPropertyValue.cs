@@ -13,7 +13,12 @@ public class ItemAddPropertyValue : Action
     SharedInt characterId;
     [SerializeField]
     SharedInt itemId; 
-    public override async void OnStart()
+    public override void OnStart()
+    {
+        AsyncTaskRunner.Run(OnStartAsync, nameof(ItemAddPropertyValue));
+    }
+
+    private async System.Threading.Tasks.Task OnStartAsync()
     {
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(itemId.Value);
       

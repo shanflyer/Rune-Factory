@@ -104,8 +104,8 @@ public class ExploreManager : Singleton<ExploreManager>
             }
         }
 
-        GameActionManager.instance.AddListener<EnterChapter>(EnterChapter);
-        GameActionManager.instance.AddListener<ChapterStepAction>(ChapterStepAction);
+        GameActionManager.instance.AddAsyncListener<EnterChapter>(enterChapter => EnterChapterAsync(enterChapter.id), nameof(EnterChapter));
+        GameActionManager.instance.AddAsyncListener<ChapterStepAction>(ChapterStepActionAsync, nameof(ChapterStepAction));
         GameActionManager.instance.AddListener<ExploreEnd>(ExploreEnd);
         GameActionManager.instance.AddListener<OpenChapter>(OpenChapter);
     }
@@ -137,7 +137,12 @@ public class ExploreManager : Singleton<ExploreManager>
         EnterChapter(enterChapter.id);
     }
 
-    public async void EnterChapter(int id)
+    public void EnterChapter(int id)
+    {
+        AsyncTaskRunner.Run(() => EnterChapterAsync(id), nameof(EnterChapter));
+    }
+
+    public async System.Threading.Tasks.Task EnterChapterAsync(int id)
     {
         nowChapter = id;
         nowFightMapData = await GameDataManager.instance.GetAsyncData<FightMapData>(id.ToString());
@@ -209,7 +214,7 @@ public class ExploreManager : Singleton<ExploreManager>
         
     }
     //探索阶段
-    private async void ChapterStepAction(ChapterStepAction chapterStepAction)
+    private async System.Threading.Tasks.Task ChapterStepActionAsync(ChapterStepAction chapterStepAction)
     {
         Debug.Log("ChapterStepAction!!!");
         UIManager.instance.CloseGamePanel<WarehousePanel>();
@@ -345,7 +350,12 @@ public class ExploreManager : Singleton<ExploreManager>
         }
     }
 
-    private async void ExploreFailed()
+    private void ExploreFailed()
+    {
+        AsyncTaskRunner.Run(ExploreFailedAsync, nameof(ExploreFailed));
+    }
+
+    private async System.Threading.Tasks.Task ExploreFailedAsync()
     {
         EndNowRoundFight endNowRoundFight = new EndNowRoundFight { };
         GameActionManager.instance.QueueAction(endNowRoundFight, true);
@@ -361,7 +371,12 @@ public class ExploreManager : Singleton<ExploreManager>
         } 
     }
 
-    private async void ExploreSuccessful()
+    private void ExploreSuccessful()
+    {
+        AsyncTaskRunner.Run(ExploreSuccessfulAsync, nameof(ExploreSuccessful));
+    }
+
+    private async System.Threading.Tasks.Task ExploreSuccessfulAsync()
     {
         EndNowRoundFight endNowRoundFight = new EndNowRoundFight { };
         GameActionManager.instance.QueueAction(endNowRoundFight, true);

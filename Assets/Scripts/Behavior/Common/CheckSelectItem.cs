@@ -22,7 +22,12 @@ public class CheckSelectItem : Action
     private ItemData itemData;
     private Character character;
     private Item item;
-    public override async void OnStart()
+    public override void OnStart()
+    {
+        AsyncTaskRunner.Run(OnStartAsync, nameof(CheckSelectItem));
+    }
+
+    private async System.Threading.Tasks.Task OnStartAsync()
     {
         taskStatus = TaskStatus.Running;
         character = CharacterManager.instance.controllerCharacter;

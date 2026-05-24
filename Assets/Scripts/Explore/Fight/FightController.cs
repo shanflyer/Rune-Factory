@@ -220,8 +220,8 @@ public class FightController : MonoBehaviour
         GameActionManager.instance.AddListener<ExploreEnd>(ExploreEnd);
         GameActionManager.instance.AddListener<SetFightCharacterAnimator>(SetFightCharacterAnimator);
         // GameActionManager.instance.AddListener<PlayerFight>(PlayerFight);
-        GameActionManager.instance.AddListener<CreatFightPlayer>(CreateFightPlayer);
-        GameActionManager.instance.AddListener<CreatFightPlayerInstance>(CreatFightPlayerInstance);
+        GameActionManager.instance.AddAsyncListener<CreatFightPlayer>(CreateFightPlayerAsync, nameof(CreateFightPlayerAsync));
+        GameActionManager.instance.AddAsyncListener<CreatFightPlayerInstance>(CreatFightPlayerInstanceAsync, nameof(CreatFightPlayerInstance));
         GameActionManager.instance.AddListener<SetAutoExplore>(SetAutoExplore);
         GameActionManager.instance.AddListener<SwitchAutoExplore>(SwitchAutoExplore);
         GameActionManager.instance.AddListener<TryStartAutoBehavior>(TryStartAutoBehavior);
@@ -342,7 +342,12 @@ public class FightController : MonoBehaviour
 
     private TargetRangeType nowDisplayTargetRangeType;
 
-    private async void DisplayMask(TargetRangeType targetRangeType)
+    private void DisplayMask(TargetRangeType targetRangeType)
+    {
+        AsyncTaskRunner.Run(() => DisplayMaskAsync(targetRangeType), nameof(DisplayMask));
+    }
+
+    private async System.Threading.Tasks.Task DisplayMaskAsync(TargetRangeType targetRangeType)
     {
         nowDisplayTargetRangeType = targetRangeType;
         var allFightMonsters = FightManager.instance.GetAllFightMonster();
@@ -627,8 +632,8 @@ public class FightController : MonoBehaviour
         GameActionManager.instance.RemoveListener<ExploreEnd>(ExploreEnd);
         GameActionManager.instance.RemoveListener<SetFightCharacterAnimator>(SetFightCharacterAnimator);
         // GameActionManager.instance.RemoveListener<PlayerFight>(PlayerFight);
-        GameActionManager.instance.RemoveListener<CreatFightPlayer>(CreateFightPlayer);
-        GameActionManager.instance.RemoveListener<CreatFightPlayerInstance>(CreatFightPlayerInstance);
+        GameActionManager.instance.RemoveAsyncListener<CreatFightPlayer>(CreateFightPlayerAsync);
+        GameActionManager.instance.RemoveAsyncListener<CreatFightPlayerInstance>(CreatFightPlayerInstanceAsync);
         GameActionManager.instance.RemoveListener<SetAutoExplore>(SetAutoExplore);
         GameActionManager.instance.RemoveListener<SwitchAutoExplore>(SwitchAutoExplore);
         GameActionManager.instance.RemoveListener<TryStartAutoBehavior>(TryStartAutoBehavior);
@@ -680,7 +685,12 @@ public class FightController : MonoBehaviour
     /// <summary>
     /// 展示掉落
     /// </summary>
-    public async void DisplayDropItem(List<int2> items, int characterId)
+    public void DisplayDropItem(List<int2> items, int characterId)
+    {
+        AsyncTaskRunner.Run(() => DisplayDropItemAsync(items, characterId), nameof(DisplayDropItem));
+    }
+
+    public async System.Threading.Tasks.Task DisplayDropItemAsync(List<int2> items, int characterId)
     {
         if (fightMonsterRuntimes.TryGetValue(characterId, out var fightMonsterRuntime))
         {
@@ -809,7 +819,12 @@ public class FightController : MonoBehaviour
 
     AudioClip footStepAudioClip;
     private string footStep = "";
-    public async void CreateFightMap(FightMapData fightMapData)
+    public void CreateFightMap(FightMapData fightMapData)
+    {
+        AsyncTaskRunner.Run(() => CreateFightMapAsync(fightMapData), nameof(CreateFightMap));
+    }
+
+    public async System.Threading.Tasks.Task CreateFightMapAsync(FightMapData fightMapData)
     {
         footStep = fightMapData.footStep;
         if (!string.IsNullOrEmpty(fightMapData.fightMapObjName))
@@ -842,7 +857,7 @@ public class FightController : MonoBehaviour
         Shader.SetGlobalVector("_PlayerPos", playerPos[0].position);
         //EnvironmentManger.instance.ChangeWeatherDisplayType(WeatherDisplayType.Inside);
     }
-    private async void CreatFightPlayerInstance(CreatFightPlayerInstance createFightPlayerInstance)
+    private async System.Threading.Tasks.Task CreatFightPlayerInstanceAsync(CreatFightPlayerInstance createFightPlayerInstance)
     {
         for (int i = 0; i < createFightPlayerInstance.players.Count; i++)
         {
@@ -882,7 +897,7 @@ public class FightController : MonoBehaviour
 
         chapterFight = false;
     }
-    private async void CreateFightPlayer(CreatFightPlayer createFightPlayer)
+    private async System.Threading.Tasks.Task CreateFightPlayerAsync(CreatFightPlayer createFightPlayer)
     {
         for (int i = 0; i < createFightPlayer.players.Count; i++)
         {
@@ -923,7 +938,12 @@ public class FightController : MonoBehaviour
     }
 
     /*
-    public async void CreatFightPlayer(int dataId,int instanceId,int index)
+    public void CreatFightPlayer(int dataId,int instanceId,int index)
+    {
+        AsyncTaskRunner.Run(() => CreatFightPlayerAsync(dataId, instanceId, index), nameof(CreatFightPlayer));
+    }
+
+    public async System.Threading.Tasks.Task CreatFightPlayerAsync(int dataId,int instanceId,int index)
     {
         index = math.clamp(index, 0, 2);
         CharacterData characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(dataId);
@@ -948,7 +968,12 @@ public class FightController : MonoBehaviour
         }
     }*/
 
-    public async void CreateFightMonster(MonsterData characterData, int instanceId, int2 pos)
+    public void CreateFightMonster(MonsterData characterData, int instanceId, int2 pos)
+    {
+        AsyncTaskRunner.Run(() => CreateFightMonsterAsync(characterData, instanceId, pos), nameof(CreateFightMonster));
+    }
+
+    public async System.Threading.Tasks.Task CreateFightMonsterAsync(MonsterData characterData, int instanceId, int2 pos)
     {
         int index = pos.x * 3 + pos.y + 1;
         index = math.clamp(index, 0, 5);
@@ -1082,7 +1107,12 @@ public class FightController : MonoBehaviour
         return null;
     }
 
-    public async void StartSkillAction(SkillEstimateData skillEstimateData, int characterId, bool manualSkill = false, bool _isEquipSkill = false, bool overrideEquipSkill = false)
+    public void StartSkillAction(SkillEstimateData skillEstimateData, int characterId, bool manualSkill = false, bool _isEquipSkill = false, bool overrideEquipSkill = false)
+    {
+        AsyncTaskRunner.Run(() => StartSkillActionAsync(skillEstimateData, characterId, manualSkill, _isEquipSkill, overrideEquipSkill), nameof(StartSkillAction));
+    }
+
+    public async System.Threading.Tasks.Task StartSkillActionAsync(SkillEstimateData skillEstimateData, int characterId, bool manualSkill = false, bool _isEquipSkill = false, bool overrideEquipSkill = false)
     {
         FightPlayerRuntime fightPlayerRuntime;
         if (!fightPlayerRuntimes.TryGetValue(characterId, out fightPlayerRuntime))
@@ -1301,7 +1331,12 @@ public class FightController : MonoBehaviour
         this.ActionCharacter = 0;
         DisplayMask(TargetRangeType.Null);
     }
-    public async void SelectMask(Transform selectMask)
+    public void SelectMask(Transform selectMask)
+    {
+        AsyncTaskRunner.Run(() => SelectMaskAsync(selectMask), nameof(SelectMask));
+    }
+
+    public async System.Threading.Tasks.Task SelectMaskAsync(Transform selectMask)
     {
         SelectTransform = selectMask;
         selectValue = int2.zero;

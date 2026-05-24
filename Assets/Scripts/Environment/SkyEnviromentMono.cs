@@ -110,7 +110,7 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
     MainModule farMain, nearMain;
     private void Awake()
     {
-        GameActionManager.instance.AddListener<DisplaySky>(DisplaySky);
+        GameActionManager.instance.AddAsyncListener<DisplaySky>(DisplaySkyAsync, nameof(DisplaySky));
         GameActionManager.instance.AddListener<UpdateGameTime>(UpdateGameTime);
        
         farVelocity = farCloud.velocityOverLifetime;
@@ -137,7 +137,7 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
         }
 
         // 场景环境对象销毁时解除事件监听，避免旧实例继续响应全局 Action。
-        GameActionManager.instance.RemoveListener<DisplaySky>(DisplaySky);
+        GameActionManager.instance.RemoveAsyncListener<DisplaySky>(DisplaySkyAsync);
         GameActionManager.instance.RemoveListener<UpdateGameTime>(UpdateGameTime);
     }
 
@@ -172,7 +172,7 @@ public class SkyEnviromentMono : MonoBehaviour, IGameData
         float dateValue = dateStarRange.Evaluate(updateGameTime.day/30.0f);
         starEmission.rateOverTime = timeValue * dateValue;
     }
-    async void DisplaySky(DisplaySky displaySky)
+    async System.Threading.Tasks.Task DisplaySkyAsync(DisplaySky displaySky)
     {
         displayCloud = !(!displaySky.display && !displaySky.displaySunlight);
         bgOffset =float4.zero;

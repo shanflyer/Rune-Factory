@@ -14,7 +14,12 @@ public class CheckShortcutItem : Action
     private SharedInt resultItem;
     private Character character;
     private ShortcutPackage shortcutPackage;
-    public override async void OnStart()
+    public override void OnStart()
+    {
+        AsyncTaskRunner.Run(OnStartAsync, nameof(CheckShortcutItem));
+    }
+
+    private async System.Threading.Tasks.Task OnStartAsync()
     {
         character = CharacterManager.instance.controllerCharacter;
         

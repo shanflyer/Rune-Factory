@@ -329,7 +329,13 @@ public class TimeLineManger : Singleton<TimeLineManger>
 
     private PlayableDirector defaultPlayableDirector;
      
-    public async void PlaySkillTimeline(int source,SkillEstimateData skillEstimateData, MyTimeLineData myTimeLineData,
+    public void PlaySkillTimeline(int source,SkillEstimateData skillEstimateData, MyTimeLineData myTimeLineData,
+        Action endAction)
+    {
+        AsyncTaskRunner.Run(() => PlaySkillTimelineAsync(source, skillEstimateData, myTimeLineData, endAction), nameof(PlaySkillTimeline));
+    }
+
+    public async System.Threading.Tasks.Task PlaySkillTimelineAsync(int source,SkillEstimateData skillEstimateData, MyTimeLineData myTimeLineData,
         Action endAction)
     {
         var runtimeObj =await GameRuntimeObjManager.instance.CreatRuntimeObj(FightRuntimeObjType.PLAYABLEDIRECTOR.ToString(), "default", defaultPlayableDirector, 0);
@@ -371,12 +377,12 @@ public class TimeLineManger : Singleton<TimeLineManger>
         defaultPlayableDirector.playOnAwake = false;
         defaultPlayableDirector.timeUpdateMode = DirectorUpdateMode.GameTime;
 
-        GameActionManager.instance.AddListener<PlayCharacterTimeLine>(PlayCharacterTimeLine);
+        GameActionManager.instance.AddAsyncListener<PlayCharacterTimeLine>(PlayCharacterTimeLineAsync, nameof(PlayCharacterTimeLine));
        
         base.Init();
     }
     
-    async void PlayCharacterTimeLine(PlayCharacterTimeLine playCharacterTimeLine)
+    async System.Threading.Tasks.Task PlayCharacterTimeLineAsync(PlayCharacterTimeLine playCharacterTimeLine)
     {
         var myTimeLineData = await GameDataManager.instance.GetAsyncData<MyTimeLineData>(playCharacterTimeLine.playName);
         if (myTimeLineData)

@@ -220,7 +220,12 @@ public class FightCharacter : IReferenceData
         buffRuntime.RemoveBuff();
     }
 
-    public async void CreateBuffRuntime(int buffId, int2 overrideAddValue, int2 overrideMulValue, int overrideLifeTime = -1)
+    public void CreateBuffRuntime(int buffId, int2 overrideAddValue, int2 overrideMulValue, int overrideLifeTime = -1)
+    {
+        AsyncTaskRunner.Run(() => CreateBuffRuntimeAsync(buffId, overrideAddValue, overrideMulValue, overrideLifeTime), nameof(CreateBuffRuntime));
+    }
+
+    public async System.Threading.Tasks.Task CreateBuffRuntimeAsync(int buffId, int2 overrideAddValue, int2 overrideMulValue, int overrideLifeTime = -1)
     {
         var buffRuntime = await SkillManager.instance.CreateBuffRuntime(buffId, this, overrideAddValue, overrideMulValue, overrideLifeTime);
         if (buffRuntime == null)
@@ -401,7 +406,12 @@ public class FightPlayer : FightCharacter
         return results;
     }
 
-    public override async void CreatSkillRuntime(IGameData gameData = null)
+    public override void CreatSkillRuntime(IGameData gameData = null)
+    {
+        AsyncTaskRunner.Run(() => CreatSkillRuntimeAsync(gameData), nameof(CreatSkillRuntime));
+    }
+
+    public async System.Threading.Tasks.Task CreatSkillRuntimeAsync(IGameData gameData = null)
     {
         Character character = CharacterManager.instance.GetCharacter(instanceId);
         skillRuntimes = new Dictionary<int, SkillRuntime>();
@@ -519,7 +529,12 @@ public class FightMonster : FightCharacter
         return false;
     }
 
-    public override async void CreatSkillRuntime(IGameData gameData)
+    public override void CreatSkillRuntime(IGameData gameData)
+    {
+        AsyncTaskRunner.Run(() => CreatMonsterSkillRuntimeAsync(gameData), nameof(CreatSkillRuntime));
+    }
+
+    public async System.Threading.Tasks.Task CreatMonsterSkillRuntimeAsync(IGameData gameData)
     {
         MonsterData monsterData = gameData as MonsterData;
         if (monsterData != null)

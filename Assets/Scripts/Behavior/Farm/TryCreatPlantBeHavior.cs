@@ -11,7 +11,12 @@ public class TryCreatPlantBeHavior : Action
     public SharedInt fieldId;
     public SharedInt seedId;
 
-    public override async void OnStart()
+    public override void OnStart()
+    {
+        AsyncTaskRunner.Run(OnStartAsync, nameof(TryCreatPlantBeHavior));
+    }
+
+    private async System.Threading.Tasks.Task OnStartAsync()
     {
         taskStatus = TaskStatus.Running;
 

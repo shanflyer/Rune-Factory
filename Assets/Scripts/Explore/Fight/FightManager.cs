@@ -25,7 +25,12 @@ public class FightManager : Singleton<FightManager>
 
     private SkillRuntime useItemSkillRuntime;
     private Item nowUsedItem;
-    public async void TryUseItem(Item item)
+    public void TryUseItem(Item item)
+    {
+        AsyncTaskRunner.Run(() => TryUseItemAsync(item), nameof(TryUseItem));
+    }
+
+    public async Task TryUseItemAsync(Item item)
     {
         nowUsedItem = item;
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
@@ -93,7 +98,12 @@ public class FightManager : Singleton<FightManager>
     {
         nowUsedItem = default(Item);
     }
-    async void CreateUseItemSkill()
+    void CreateUseItemSkill()
+    {
+        AsyncTaskRunner.Run(CreateUseItemSkillAsync, nameof(CreateUseItemSkill));
+    }
+
+    async Task CreateUseItemSkillAsync()
     {
         int skillId = 1000;
         useItemSkillRuntime = await SkillManager.instance.CreateSkillRuntime(skillId);
