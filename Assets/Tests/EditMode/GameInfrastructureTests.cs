@@ -46,6 +46,48 @@ public sealed class GameInfrastructureTests
     }
 
     [Test]
+    public void GameGuideData_ReturnsStepByRuntimeIndex()
+    {
+        var data = ScriptableObject.CreateInstance<GameGuideData>();
+        try
+        {
+            data.id = 1;
+            data.guidStepDatas.Add(new GuidStepData { selectableId = 10, showText = "first" });
+            data.guidStepDatas.Add(new GuidStepData { selectableId = 20, showText = "second" });
+
+            Assert.That(data.GetGuidStepData(0, out var firstStep), Is.True);
+            Assert.That(firstStep.selectableId, Is.EqualTo(10));
+            Assert.That(data.GetGuidStepData(1, out var secondStep), Is.True);
+            Assert.That(secondStep.selectableId, Is.EqualTo(20));
+            Assert.That(data.GetGuidStepData(2, out _), Is.False);
+        }
+        finally
+        {
+            Object.DestroyImmediate(data);
+        }
+    }
+
+    [Test]
+    public void GameGuideData_ReportsInvalidGuideSteps()
+    {
+        var data = ScriptableObject.CreateInstance<GameGuideData>();
+        try
+        {
+            data.id = 1;
+            data.guidStepDatas.Add(new GuidStepData { selectableId = 0 });
+
+            var errors = data.GetValidationErrors();
+
+            Assert.That(errors, Has.Count.EqualTo(1));
+            Assert.That(errors[0], Does.Contain("selectableId"));
+        }
+        finally
+        {
+            Object.DestroyImmediate(data);
+        }
+    }
+
+    [Test]
     public void SaveEncryption_RoundTripsPlainText()
     {
         const string raw = "{\"save\":\"ok\"}";

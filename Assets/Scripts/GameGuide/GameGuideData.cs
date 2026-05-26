@@ -37,20 +37,47 @@ public class GameGuideData : ScriptableObject,IGameData
 
     public bool HasValidGuideSteps()
     {
+        return GetValidationErrors().Count == 0;
+    }
+
+    public List<string> GetValidationErrors()
+    {
+        var errors = new List<string>();
+        CollectValidationErrors(errors);
+        return errors;
+    }
+
+    public void CollectValidationErrors(List<string> errors)
+    {
+        if (errors == null)
+        {
+            return;
+        }
+
+        if (id <= 0)
+        {
+            errors.Add($"{name}: id must be greater than 0.");
+        }
+
         if (guidStepDatas == null || guidStepDatas.Count == 0)
         {
-            return false;
+            errors.Add($"{name}: guide steps are empty.");
+            return;
         }
 
         for (int i = 0; i < guidStepDatas.Count; i++)
         {
-            if (guidStepDatas[i] == null || guidStepDatas[i].selectableId <= 0)
+            if (guidStepDatas[i] == null)
             {
-                return false;
+                errors.Add($"{name}: step {i} is null.");
+                continue;
+            }
+
+            if (guidStepDatas[i].selectableId <= 0)
+            {
+                errors.Add($"{name}: step {i} selectableId must be greater than 0.");
             }
         }
-
-        return true;
     }
 
     public string GetKey()
@@ -64,6 +91,41 @@ public class GameGuideData : ScriptableObject,IGameData
     public void SetReferenceData()
     {
     }
+
+#if UNITY_EDITOR
+    [UnityEditor.MenuItem("Tools/Game Guide/Validate GameGuideData")]
+    static void ValidateGameGuideDataAssets()
+    {
+        string[] guids = UnityEditor.AssetDatabase.FindAssets("t:GameGuideData");
+        int errorCount = 0;
+
+        for (int i = 0; i < guids.Length; i++)
+        {
+            string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[i]);
+            var data = UnityEditor.AssetDatabase.LoadAssetAtPath<GameGuideData>(path);
+            if (data == null)
+            {
+                continue;
+            }
+
+            var errors = data.GetValidationErrors();
+            errorCount += errors.Count;
+            for (int j = 0; j < errors.Count; j++)
+            {
+                Debug.LogError($"GameGuideData validation failed: {path}: {errors[j]}", data);
+            }
+        }
+
+        if (errorCount == 0)
+        {
+            Debug.Log($"GameGuideData validation passed: checked {guids.Length} assets.");
+        }
+        else
+        {
+            Debug.LogError($"GameGuideData validation failed: {errorCount} errors in {guids.Length} assets.");
+        }
+    }
+#endif
 }
 [Serializable]
 public class GuidStepData:IReferenceData
