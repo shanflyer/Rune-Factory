@@ -76,7 +76,7 @@ public struct CheckGameGuideAction : GameAction
         {
             guidKey = int.Parse(parameters[0].value);
             if (parameters.Count > 1)
-                isEnd = bool.Parse(parameters[0].value);
+                isEnd = bool.Parse(parameters[1].value);
         }
         else
         {

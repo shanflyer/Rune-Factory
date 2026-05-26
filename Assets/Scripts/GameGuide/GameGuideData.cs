@@ -9,27 +9,24 @@ public class GameGuideData : ScriptableObject,IGameData
     public string guideName;
     public List<GuidStepData> guidStepDatas = new List<GuidStepData>();
     public int endAction;
-    int stepIndex = 0;
-    public void Zero()
-    {
-        stepIndex = 0;
-    }
-    public bool GetGuidStepData(out  GuidStepData stepData)
+
+    public bool GetGuidStepData(int stepIndex, out GuidStepData stepData)
     {
         stepData = null;
-        if (stepIndex >= guidStepDatas.Count)
+        if (guidStepDatas == null || stepIndex < 0 || stepIndex >= guidStepDatas.Count)
         {
-            if (endAction != 0)
-            {
-                GameActionDataManager.instance.Action(endAction);
-            }
             return false;
         }
-        else
+
+        stepData = guidStepDatas[stepIndex];
+        return true;
+    }
+
+    public void TriggerEndAction()
+    {
+        if (endAction != 0)
         {
-            stepData= guidStepDatas[stepIndex];
-            stepIndex++;
-            return true;
+            GameActionDataManager.instance.Action(endAction);
         }
     }
 

@@ -39,6 +39,11 @@ public class GameGuideManager:Singleton<GameGuideManager>
     public async System.Threading.Tasks.Task SetGameGuidFilmDataActionAsync(int characterId,string worldName)
     {
         var data=await GetGameGuideFilmData();
+        if (data == null)
+        {
+            Debug.LogWarning($"Game guide film data not found: {endGuideFilmIndex}");
+            return;
+        }
 
         GameActionManager.instance.QueueAction(new ChangeWorld
         {
@@ -115,6 +120,7 @@ public class GameGuideManager:Singleton<GameGuideManager>
         guidSelectableDic[id] = selectable;
         if (waitGuide != 0 && waitGuide == id)
         {
+            waitGuide = 0;
             // 引导控件注册是同步入口，面板加载异常统一记录。
             AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<GameGuidePanel, GuidStepData>(guidStepData), nameof(SetIntAction));
         }
@@ -122,13 +128,27 @@ public class GameGuideManager:Singleton<GameGuideManager>
     }
     void RemoveIntAction(int id,Selectable selectable)
     {
-        guidSelectableDic.Remove(id);
+        if (guidSelectableDic.TryGetValue(id, out var current) && current == selectable)
+        {
+            guidSelectableDic.Remove(id);
+        }
+
+        if (hiddenSelectable == selectable)
+        {
+            RestoreHiddenSelectable();
+        }
     }
 
     async System.Threading.Tasks.Task GameGuideActionAsync(GameGuideAction gameGuideAction)
     {
         nowGameGuideData = await GameDataManager.instance.GetAsyncData<GameGuideData>(gameGuideAction.guidKey);
-        nowGameGuideData.Zero();
+        if (nowGameGuideData == null)
+        {
+            Debug.LogWarning($"Game guide data not found: {gameGuideAction.guidKey}");
+            return;
+        }
+
+        nowGuideStepIndex = 0;
         ShowGuide();
     }
     void ShowGuide()
@@ -138,8 +158,9 @@ public class GameGuideManager:Singleton<GameGuideManager>
         {
             return;
         }
-        if(nowGameGuideData.GetGuidStepData(out guidStepData))
+        if(nowGameGuideData.GetGuidStepData(nowGuideStepIndex, out guidStepData))
         {
+            nowGuideStepIndex++;
             nowGuideSelectableId = guidStepData.selectableId;
             if (guidSelectableDic.TryGetValue(nowGuideSelectableId, out var selectable))
                 AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<GameGuidePanel, GuidStepData>(guidStepData), nameof(ShowGuide));
@@ -148,15 +169,19 @@ public class GameGuideManager:Singleton<GameGuideManager>
         }
         else
         {
+            nowGameGuideData.TriggerEndAction();
             endGuide.Add(nowGameGuideData.id);
             nowGameGuideData = null;
             guidStepData = null;
+            nowGuideStepIndex = 0;
+            RestoreHiddenSelectable();
             UIManager.instance.CloseGamePanel<GameGuidePanel>();
         }
     }
 
     GameGuideData nowGameGuideData;
     GuidStepData guidStepData;
+    int nowGuideStepIndex;
 
 
     int nowGuideSelectableId;
@@ -171,13 +196,38 @@ public class GameGuideManager:Singleton<GameGuideManager>
     {
         if (guidSelectableDic.TryGetValue(nowGuideSelectableId, out var selectable))
         {
-            selectable.SetHideSelected(true);
-            Debug.Log("指引点击01!!-");
-            selectable.InvokeClick();
+            SetHiddenSelectable(selectable);
+            try
+            {
+                Debug.Log("指引点击01!!-");
+                selectable.InvokeClick();
+            }
+            finally
+            {
+                RestoreHiddenSelectable();
+            }
 
             ShowGuide();
         }
 
+    }
+
+    Selectable hiddenSelectable;
+
+    void SetHiddenSelectable(Selectable selectable)
+    {
+        RestoreHiddenSelectable();
+        hiddenSelectable = selectable;
+        hiddenSelectable.SetHideSelected(true);
+    }
+
+    void RestoreHiddenSelectable()
+    {
+        if (hiddenSelectable != null)
+        {
+            hiddenSelectable.SetHideSelected(false);
+            hiddenSelectable = null;
+        }
     }
 
     public bool GetSelectRectTransform(int guid, out RectTransform guidRect)
