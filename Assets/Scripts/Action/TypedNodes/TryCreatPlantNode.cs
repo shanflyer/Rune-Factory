@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class TryCreatPlantNode : ActionNode
 {
         public int fieldId;

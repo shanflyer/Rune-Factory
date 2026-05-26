@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class ManualSkillActionNode : ContainerNode
 {
     public override GameAction CreateAction(

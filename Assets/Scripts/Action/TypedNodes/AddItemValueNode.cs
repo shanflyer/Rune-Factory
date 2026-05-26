@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class AddItemValueNode : ActionNode
 {
         public int characterId;

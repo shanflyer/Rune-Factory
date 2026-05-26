@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class CharacterCoordinateTriggerNode : ActionNode
 {
         public int characterId;

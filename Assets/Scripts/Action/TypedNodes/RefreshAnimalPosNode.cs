@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class RefreshAnimalPosNode : ActionNode
 {
         public int animalId;

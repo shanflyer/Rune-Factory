@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class SetChapterFightNode : ActionNode
 {
         public bool isInFight;

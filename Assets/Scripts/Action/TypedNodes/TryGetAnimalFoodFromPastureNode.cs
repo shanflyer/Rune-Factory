@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class TryGetAnimalFoodFromPastureNode : ActionNode
 {
         public int pastureId;

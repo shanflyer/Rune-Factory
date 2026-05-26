@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class SetCameraConfiner2DNode : ActionNode
 {
         public bool enable;

@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class RemoveShortcutItemNode : ActionNode
 {
         public int characterId;

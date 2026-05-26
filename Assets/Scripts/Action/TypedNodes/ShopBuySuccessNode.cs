@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class ShopBuySuccessNode : ActionNode
 {
         public int buyCount;

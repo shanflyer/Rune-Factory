@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class EndPlayerRoundNode : ContainerNode
 {
     public override GameAction CreateAction(

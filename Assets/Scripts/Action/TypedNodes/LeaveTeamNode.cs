@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class LeaveTeamNode : ActionNode
 {
         public int teamCharacterId;

@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class SetCreateTempCharacterLevelNode : ActionNode
 {
         public int level;

@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class UpdataManufatureNode : ActionNode
 {
         public int manufatureId;

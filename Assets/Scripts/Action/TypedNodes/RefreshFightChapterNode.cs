@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class RefreshFightChapterNode : ActionNode
 {
         public int id;

@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class TriggerEnterNode : ActionNode
 {
         public int eventId;

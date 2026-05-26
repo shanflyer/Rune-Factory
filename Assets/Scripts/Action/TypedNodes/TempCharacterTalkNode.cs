@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class TempCharacterTalkNode : ActionNode
 {
         public int characterId;

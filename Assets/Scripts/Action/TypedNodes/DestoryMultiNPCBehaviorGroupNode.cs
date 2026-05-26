@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class DestoryMultiNPCBehaviorGroupNode : ActionNode
 {
         public int groupId;

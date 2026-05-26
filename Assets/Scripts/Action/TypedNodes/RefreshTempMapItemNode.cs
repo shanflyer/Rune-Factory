@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class RefreshTempMapItemNode : ActionNode
 {
         public int instanceId;

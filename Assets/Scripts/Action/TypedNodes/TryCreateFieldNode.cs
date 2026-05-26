@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class TryCreateFieldNode : ActionNode
 {
         public int itemInstanceId;

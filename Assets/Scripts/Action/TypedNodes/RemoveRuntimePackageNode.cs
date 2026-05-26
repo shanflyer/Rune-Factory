@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class RemoveRuntimePackageNode : ActionNode
 {
         public Vector2Int key;

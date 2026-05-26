@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class StopAllCharacterAutoFightNode : ContainerNode
 {
     public override GameAction CreateAction(

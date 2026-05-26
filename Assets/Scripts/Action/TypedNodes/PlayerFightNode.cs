@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class PlayerFightNode : ContainerNode
 {
     public override GameAction CreateAction(

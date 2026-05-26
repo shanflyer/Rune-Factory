@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class CheckGameGuideActionNode : ActionNode
 {
         public int guidKey;

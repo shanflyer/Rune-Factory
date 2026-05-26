@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class DestroyTeamNode : ActionNode
 {
         public int teamCharacterId;

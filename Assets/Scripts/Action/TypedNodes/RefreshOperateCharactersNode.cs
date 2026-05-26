@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class RefreshOperateCharactersNode : ContainerNode
 {
     public override GameAction CreateAction(

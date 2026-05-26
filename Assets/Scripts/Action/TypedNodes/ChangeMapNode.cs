@@ -3,6 +3,7 @@ using System;
 using Unity.Mathematics;
 using UnityEngine;
 
+[Serializable]
 public class ChangeMapNode : ActionNode
 {
         public int3 mapValue;

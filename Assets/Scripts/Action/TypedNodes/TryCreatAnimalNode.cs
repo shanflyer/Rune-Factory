@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class TryCreatAnimalNode : ActionNode
 {
         public int roomId;

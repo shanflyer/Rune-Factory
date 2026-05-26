@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class SetFilmUINode : ActionNode
 {
         public bool display;

@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class HideFightSceneNode : ContainerNode
 {
     public override GameAction CreateAction(

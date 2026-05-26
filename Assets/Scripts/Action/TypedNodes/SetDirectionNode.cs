@@ -3,6 +3,7 @@ using System;
 using Unity.Mathematics;
 using UnityEngine;
 
+[Serializable]
 public class SetDirectionNode : ActionNode
 {
         public int characterId;

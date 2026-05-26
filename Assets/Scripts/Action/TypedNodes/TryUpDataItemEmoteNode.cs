@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class TryUpDataItemEmoteNode : ActionNode
 {
         public int id;

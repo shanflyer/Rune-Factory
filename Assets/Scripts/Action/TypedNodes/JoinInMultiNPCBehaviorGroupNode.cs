@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class JoinInMultiNPCBehaviorGroupNode : ActionNode
 {
         public int characterId;

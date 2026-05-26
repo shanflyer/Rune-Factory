@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class RefreshMapItemDisplayNode : ContainerNode
 {
     public override GameAction CreateAction(

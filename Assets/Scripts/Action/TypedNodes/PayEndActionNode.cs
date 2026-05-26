@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class PayEndActionNode : ContainerNode
 {
     public override GameAction CreateAction(

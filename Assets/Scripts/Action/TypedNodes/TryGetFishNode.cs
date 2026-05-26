@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class TryGetFishNode : ActionNode
 {
         public int characterInstance;

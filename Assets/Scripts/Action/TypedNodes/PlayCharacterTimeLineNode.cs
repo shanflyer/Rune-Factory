@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class PlayCharacterTimeLineNode : ActionNode
 {
         public int characterId;

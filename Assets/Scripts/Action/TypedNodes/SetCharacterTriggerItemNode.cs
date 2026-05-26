@@ -3,6 +3,7 @@ using System;
 using Unity.Mathematics;
 using UnityEngine;
 
+[Serializable]
 public class SetCharacterTriggerItemNode : ActionNode
 {
         public int characterId;

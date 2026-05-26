@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class NewHourNode : ContainerNode
 {
     public override GameAction CreateAction(

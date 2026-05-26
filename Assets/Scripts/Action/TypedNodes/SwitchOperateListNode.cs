@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class SwitchOperateListNode : ContainerNode
 {
     public override GameAction CreateAction(

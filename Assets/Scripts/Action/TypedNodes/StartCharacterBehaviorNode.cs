@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class StartCharacterBehaviorNode : ActionNode
 {
         public int characterId;

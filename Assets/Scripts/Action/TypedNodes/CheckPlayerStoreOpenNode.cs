@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class CheckPlayerStoreOpenNode : ContainerNode
 {
     public override GameAction CreateAction(

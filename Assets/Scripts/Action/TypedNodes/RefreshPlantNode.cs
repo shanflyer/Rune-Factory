@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class RefreshPlantNode : ActionNode
 {
         public int mapId;

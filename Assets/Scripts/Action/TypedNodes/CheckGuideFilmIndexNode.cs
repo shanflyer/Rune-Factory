@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class CheckGuideFilmIndexNode : ActionNode
 {
         public int id;

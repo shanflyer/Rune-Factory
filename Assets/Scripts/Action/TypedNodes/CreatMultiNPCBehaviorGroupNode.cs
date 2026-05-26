@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class CreatMultiNPCBehaviorGroupNode : ActionNode
 {
         public int dataId;

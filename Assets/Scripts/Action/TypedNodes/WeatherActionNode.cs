@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class WeatherActionNode : ActionNode
 {
         public int weatherDataId;

@@ -3,6 +3,7 @@ using System;
 using Unity.Mathematics;
 using UnityEngine;
 
+[Serializable]
 public class SetCharacterRandomCoordinateNode : ActionNode
 {
         public int characterId;

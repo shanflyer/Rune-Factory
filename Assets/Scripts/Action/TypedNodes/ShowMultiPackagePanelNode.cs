@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class ShowMultiPackagePanelNode : ActionNode
 {
         public int packageId0;

@@ -2,6 +2,7 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class RefreshEquipNode : ActionNode
 {
         public int characterId;
