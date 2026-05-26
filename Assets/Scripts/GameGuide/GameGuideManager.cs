@@ -5,22 +5,85 @@ using UnityEngine.UI;
 
 public class GameGuideManager:Singleton<GameGuideManager>
 {
-    Dictionary<int, Selectable> guidSelectableDic = new Dictionary<int, Selectable>();
-    HashSet<int> endGuide = new HashSet<int>();
-    ActiveGuideSession activeGuideSession;
-    int guideSessionVersion;
-
-    class ActiveGuideSession
-    {
-        public int Version;
-        public GameGuideData Data;
-        public int StepIndex;
-        public GuidStepData CurrentStep;
-        public int WaitingSelectableId;
-        public bool IsAdvancing;
-    }
+    readonly GameGuideFilmService filmService = new GameGuideFilmService();
+    readonly GameGuideUiFlow uiFlow = new GameGuideUiFlow();
 
     public int endGuideFilmIndex
+    {
+        get => filmService.EndGuideFilmIndex;
+        set => filmService.EndGuideFilmIndex = value;
+    }
+
+    public bool IsEndGuide()
+    {
+        return filmService.IsEndGuide();
+    }
+
+    public Task<GameGuideFilmData> GetGameGuideFilmData()
+    {
+        return filmService.GetGameGuideFilmData();
+    }
+
+    public void SetGameGuidFilmDataAction(int characterId,string worldName)
+    {
+        AsyncTaskRunner.Run(() => filmService.SetGameGuidFilmDataActionAsync(characterId, worldName), nameof(SetGameGuidFilmDataAction));
+    }
+
+    public override void Init()
+    {
+        base.Init();
+        SelectableGuideRegistry.SetIntAction = uiFlow.RegisterSelectable;
+        SelectableGuideRegistry.RemoveIntAction = uiFlow.UnregisterSelectable;
+        uiFlow.ClearCompletedGuides();
+
+        GameActionManager.instance.AddAsyncListener<GameGuideAction>(GameGuideActionAsync, nameof(GameGuideAction));
+        GameActionManager.instance.AddListener<CheckGameGuideAction>(CheckGameGuideAction);
+        GameActionManager.instance.AddListener<SaveGuideFilmIndexAction>(SaveGuideFilmIndexAction);
+        GameActionManager.instance.AddListener<CheckGuideFilmIndex>(CheckGuideFilmIndex);
+    }
+
+    void CheckGuideFilmIndex(CheckGuideFilmIndex checkGuideFilmIndex)
+    {
+        if (checkGuideFilmIndex.setResult != null)
+        {
+            checkGuideFilmIndex.setResult(endGuideFilmIndex > checkGuideFilmIndex.id);
+        }
+    }
+
+    void SaveGuideFilmIndexAction(SaveGuideFilmIndexAction saveGuideFilmIndexAction)
+    {
+        endGuideFilmIndex = saveGuideFilmIndexAction.id;
+    }
+
+    void CheckGameGuideAction(CheckGameGuideAction checkGameGuideAction)
+    {
+        uiFlow.SetCheckResult(checkGameGuideAction);
+    }
+
+    Task GameGuideActionAsync(GameGuideAction gameGuideAction)
+    {
+        return uiFlow.StartGuideAsync(gameGuideAction.guidKey);
+    }
+
+    public void GuideButtonAction()
+    {
+        uiFlow.AdvanceFromGuideButton();
+    }
+
+    public bool GetSelectRectTransform(int guid, out RectTransform guidRect)
+    {
+        return uiFlow.GetSelectRectTransform(guid, out guidRect);
+    }
+
+    public bool GetSelectableSize(int guid,out Vector3 pos,out Vector2 size)
+    {
+        return uiFlow.GetSelectableSize(guid, out pos, out size);
+    }
+}
+
+class GameGuideFilmService
+{
+    public int EndGuideFilmIndex
     {
         get
         {
@@ -34,27 +97,24 @@ public class GameGuideManager:Singleton<GameGuideManager>
 
     public bool IsEndGuide()
     {
-        return endGuideFilmIndex >= GameDataManager.instance.GlobalData.endGuideIndex;
+        return EndGuideFilmIndex >= GameDataManager.instance.GlobalData.endGuideIndex;
     }
+
     public async Task<GameGuideFilmData> GetGameGuideFilmData()
     {
-        if (endGuideFilmIndex >= 0)
+        if (EndGuideFilmIndex >= 0)
         {
-            return await GameDataManager.instance.GetAsyncData<GameGuideFilmData>(endGuideFilmIndex);
+            return await GameDataManager.instance.GetAsyncData<GameGuideFilmData>(EndGuideFilmIndex);
         }
         return null;
     }
-    public void SetGameGuidFilmDataAction(int characterId,string worldName)
-    {
-        AsyncTaskRunner.Run(() => SetGameGuidFilmDataActionAsync(characterId, worldName), nameof(SetGameGuidFilmDataAction));
-    }
 
-    public async System.Threading.Tasks.Task SetGameGuidFilmDataActionAsync(int characterId,string worldName)
+    public async Task SetGameGuidFilmDataActionAsync(int characterId, string worldName)
     {
-        var data=await GetGameGuideFilmData();
+        var data = await GetGameGuideFilmData();
         if (data == null)
         {
-            Debug.LogWarning($"Game guide film data not found: {endGuideFilmIndex}");
+            Debug.LogWarning($"Game guide film data not found: {EndGuideFilmIndex}");
             return;
         }
 
@@ -64,89 +124,84 @@ public class GameGuideManager:Singleton<GameGuideManager>
             displayMap = data.fixedMap.z
         }, true);
 
-        SetFixedTime setFixedTime = new SetFixedTime
+        GameActionManager.instance.QueueAction(new SetFixedTime
         {
             date = data.fixedDate,
             hour = data.fixedHour,
-        };
-        GameActionManager.instance.QueueAction(setFixedTime);
-        var setCharacterCoordinate = new SetCharacterCoordinate
+        });
+
+        GameActionManager.instance.QueueAction(new SetCharacterCoordinate
         {
             characterId = characterId,
             coordinate = data.fixedMap
-        };
-        GameActionManager.instance.QueueAction(setCharacterCoordinate);
+        });
 
-        var setCharacterStopCreate = new SetCharacterStopCreate
+        GameActionManager.instance.QueueAction(new SetCharacterStopCreate
         {
             hide = !data.displayCharacter
-        };
-        GameActionManager.instance.QueueAction(setCharacterStopCreate);
+        });
 
         GameTimerController.instance.DelayAction(1000, () =>
         {
             GameActionDataManager.instance.Action(data.beforeEventId);
         });
-
     }
-    public override void Init()
-    {
-        base.Init();
-        SelectableGuideRegistry.SetIntAction = SetIntAction;
-        SelectableGuideRegistry.RemoveIntAction = RemoveIntAction;
-        endGuide.Clear();
+}
 
-        GameActionManager.instance.AddAsyncListener<GameGuideAction>(GameGuideActionAsync, nameof(GameGuideAction));
-        GameActionManager.instance.AddListener<CheckGameGuideAction>(CheckGameGuideAction);
-        GameActionManager.instance.AddListener<SaveGuideFilmIndexAction>(SaveGuideFilmIndexAction);
-        GameActionManager.instance.AddListener<CheckGuideFilmIndex>(CheckGuideFilmIndex);
-    }
-    void CheckGuideFilmIndex(CheckGuideFilmIndex checkGuideFilmIndex)
+class GameGuideUiFlow
+{
+    readonly Dictionary<int, Selectable> guideSelectableById = new Dictionary<int, Selectable>();
+    readonly HashSet<int> completedGuides = new HashSet<int>();
+
+    ActiveGuideSession activeGuideSession;
+    Selectable hiddenSelectable;
+    int guideSessionVersion;
+
+    class ActiveGuideSession
     {
-        if (checkGuideFilmIndex.setResult != null)
+        public int Version;
+        public GameGuideData Data;
+        public int StepIndex;
+        public GuidStepData CurrentStep;
+        public int WaitingSelectableId;
+        public bool IsAdvancing;
+    }
+
+    public void ClearCompletedGuides()
+    {
+        completedGuides.Clear();
+    }
+
+    public void SetCheckResult(CheckGameGuideAction action)
+    {
+        if (action.setResult == null)
         {
-            checkGuideFilmIndex.setResult(endGuideFilmIndex > checkGuideFilmIndex.id);
+            return;
         }
-    }
-    void SaveGuideFilmIndexAction(SaveGuideFilmIndexAction saveGuideFilmIndexAction)
-    {
-        endGuideFilmIndex = saveGuideFilmIndexAction.id;
-    }
-    void CheckGameGuideAction(CheckGameGuideAction CheckGameGuideAction)
-    {
-        if (CheckGameGuideAction.setResult != null)
-        {
-            if (CheckGameGuideAction.isEnd)
-            {
-                CheckGameGuideAction.setResult(endGuide.Contains(CheckGameGuideAction.guidKey));
-            }
-            else
-            {
-                CheckGameGuideAction.setResult(!endGuide.Contains(CheckGameGuideAction.guidKey));
-            }
 
-        }
+        bool isCompleted = completedGuides.Contains(action.guidKey);
+        action.setResult(action.isEnd ? isCompleted : !isCompleted);
     }
 
-    private void SetIntAction(int id, Selectable selectable)
+    public void RegisterSelectable(int id, Selectable selectable)
     {
-        guidSelectableDic[id] = selectable;
+        guideSelectableById[id] = selectable;
         if (activeGuideSession != null &&
             activeGuideSession.WaitingSelectableId == id &&
             activeGuideSession.CurrentStep != null &&
             activeGuideSession.CurrentStep.selectableId == id)
         {
             activeGuideSession.WaitingSelectableId = 0;
-            TryShowCurrentStep(activeGuideSession, nameof(SetIntAction));
+            TryShowCurrentStep(activeGuideSession, nameof(RegisterSelectable));
         }
-
     }
-    void RemoveIntAction(int id,Selectable selectable)
+
+    public void UnregisterSelectable(int id, Selectable selectable)
     {
         bool removedCurrent = false;
-        if (guidSelectableDic.TryGetValue(id, out var current) && current == selectable)
+        if (guideSelectableById.TryGetValue(id, out var current) && current == selectable)
         {
-            guidSelectableDic.Remove(id);
+            guideSelectableById.Remove(id);
             removedCurrent = true;
         }
 
@@ -165,12 +220,12 @@ public class GameGuideManager:Singleton<GameGuideManager>
         }
     }
 
-    async System.Threading.Tasks.Task GameGuideActionAsync(GameGuideAction gameGuideAction)
+    public async Task StartGuideAsync(int guideId)
     {
         int sessionVersion = ++guideSessionVersion;
         ClearActiveGuide(true);
 
-        var gameGuideData = await GameDataManager.instance.GetAsyncData<GameGuideData>(gameGuideAction.guidKey);
+        var gameGuideData = await GameDataManager.instance.GetAsyncData<GameGuideData>(guideId);
         if (sessionVersion != guideSessionVersion)
         {
             return;
@@ -178,7 +233,7 @@ public class GameGuideManager:Singleton<GameGuideManager>
 
         if (gameGuideData == null)
         {
-            Debug.LogWarning($"Game guide data not found: {gameGuideAction.guidKey}");
+            Debug.LogWarning($"Game guide data not found: {guideId}");
             return;
         }
 
@@ -188,6 +243,70 @@ public class GameGuideManager:Singleton<GameGuideManager>
             Data = gameGuideData
         };
         AdvanceToNextStep(activeGuideSession);
+    }
+
+    public void AdvanceFromGuideButton()
+    {
+        var session = activeGuideSession;
+        if (!IsActiveSession(session) || session.CurrentStep == null || session.IsAdvancing)
+        {
+            return;
+        }
+
+        int sessionVersion = session.Version;
+        int selectableId = session.CurrentStep.selectableId;
+        if (!guideSelectableById.TryGetValue(selectableId, out var selectable))
+        {
+            session.WaitingSelectableId = selectableId;
+            UIManager.instance.CloseGamePanel<GameGuidePanel>();
+            return;
+        }
+
+        session.IsAdvancing = true;
+        SetHiddenSelectable(selectable);
+        try
+        {
+            selectable.InvokeClick();
+        }
+        finally
+        {
+            RestoreHiddenSelectable();
+            if (IsActiveSession(sessionVersion))
+            {
+                session.IsAdvancing = false;
+            }
+        }
+
+        if (IsActiveSession(sessionVersion))
+        {
+            AdvanceToNextStep(session);
+        }
+    }
+
+    public bool GetSelectRectTransform(int guideId, out RectTransform guideRect)
+    {
+        if (guideSelectableById.TryGetValue(guideId, out var selectable))
+        {
+            guideRect = selectable.transform as RectTransform;
+            return true;
+        }
+
+        guideRect = null;
+        return false;
+    }
+
+    public bool GetSelectableSize(int guideId, out Vector3 pos, out Vector2 size)
+    {
+        pos = Vector3.zero;
+        size = Vector3.zero;
+        if(guideSelectableById.TryGetValue(guideId, out var selectable))
+        {
+            RectTransform rectTransform = selectable.transform as RectTransform;
+            pos = rectTransform.position;
+            size = rectTransform.sizeDelta;
+            return true;
+        }
+        return false;
     }
 
     void AdvanceToNextStep(ActiveGuideSession session)
@@ -218,7 +337,7 @@ public class GameGuideManager:Singleton<GameGuideManager>
         }
 
         int selectableId = session.CurrentStep.selectableId;
-        if (guidSelectableDic.ContainsKey(selectableId))
+        if (guideSelectableById.ContainsKey(selectableId))
         {
             session.WaitingSelectableId = 0;
             AsyncTaskRunner.Run(ShowGuidePanelAsync(session.Version, session.CurrentStep, sourceName), sourceName);
@@ -262,51 +381,8 @@ public class GameGuideManager:Singleton<GameGuideManager>
         }
 
         session.Data.TriggerEndAction();
-        endGuide.Add(session.Data.id);
+        completedGuides.Add(session.Data.id);
         ClearActiveGuide(true);
-    }
-
-    public void GuideButtonAction()
-    {
-        AdvanceFromGuideButton();
-    }
-
-    void AdvanceFromGuideButton()
-    {
-        var session = activeGuideSession;
-        if (!IsActiveSession(session) || session.CurrentStep == null || session.IsAdvancing)
-        {
-            return;
-        }
-
-        int sessionVersion = session.Version;
-        int selectableId = session.CurrentStep.selectableId;
-        if (!guidSelectableDic.TryGetValue(selectableId, out var selectable))
-        {
-            session.WaitingSelectableId = selectableId;
-            UIManager.instance.CloseGamePanel<GameGuidePanel>();
-            return;
-        }
-
-        session.IsAdvancing = true;
-        SetHiddenSelectable(selectable);
-        try
-        {
-            selectable.InvokeClick();
-        }
-        finally
-        {
-            RestoreHiddenSelectable();
-            if (IsActiveSession(sessionVersion))
-            {
-                session.IsAdvancing = false;
-            }
-        }
-
-        if (IsActiveSession(sessionVersion))
-        {
-            AdvanceToNextStep(session);
-        }
     }
 
     bool IsActiveSession(ActiveGuideSession session)
@@ -334,7 +410,6 @@ public class GameGuideManager:Singleton<GameGuideManager>
         }
     }
 
-    Selectable hiddenSelectable;
     void SetHiddenSelectable(Selectable selectable)
     {
         RestoreHiddenSelectable();
@@ -349,31 +424,5 @@ public class GameGuideManager:Singleton<GameGuideManager>
             hiddenSelectable.SetHideSelected(false);
             hiddenSelectable = null;
         }
-    }
-
-    public bool GetSelectRectTransform(int guid, out RectTransform guidRect)
-    {
-        if (guidSelectableDic.TryGetValue(guid, out var selectable))
-        {
-            guidRect = selectable.transform as RectTransform;
-
-            return true;
-        }
-
-        guidRect = null;
-        return false;
-    }
-    public bool GetSelectableSize(int guid,out Vector3 pos,out Vector2 size)
-    {
-        pos = Vector3.zero;
-        size = Vector3.zero;
-        if(guidSelectableDic.TryGetValue(guid,out var selectable))
-        {
-            RectTransform rectTransform = selectable.transform as RectTransform;
-            pos = rectTransform.position;
-            size = rectTransform.sizeDelta;
-            return true;
-        }
-        return false;
     }
 }
