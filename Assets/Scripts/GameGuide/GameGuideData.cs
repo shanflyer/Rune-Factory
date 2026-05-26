@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName ="Data/指引数据")]
+[CreateAssetMenu(menuName = "Data/引导数据")]
 public class GameGuideData : ScriptableObject,IGameData
 {
     public int id;
@@ -28,6 +28,29 @@ public class GameGuideData : ScriptableObject,IGameData
         {
             GameActionDataManager.instance.Action(endAction);
         }
+    }
+
+    public bool IsValidStepIndex(int stepIndex)
+    {
+        return guidStepDatas != null && stepIndex >= 0 && stepIndex < guidStepDatas.Count;
+    }
+
+    public bool HasValidGuideSteps()
+    {
+        if (guidStepDatas == null || guidStepDatas.Count == 0)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < guidStepDatas.Count; i++)
+        {
+            if (guidStepDatas[i] == null || guidStepDatas[i].selectableId <= 0)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public string GetKey()

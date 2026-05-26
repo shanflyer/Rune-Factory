@@ -121,7 +121,6 @@ public class GameGuideManager:Singleton<GameGuideManager>
         if (waitGuide != 0 && waitGuide == id)
         {
             waitGuide = 0;
-            // 引导控件注册是同步入口，面板加载异常统一记录。
             AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<GameGuidePanel, GuidStepData>(guidStepData), nameof(SetIntAction));
         }
 
@@ -199,7 +198,6 @@ public class GameGuideManager:Singleton<GameGuideManager>
             SetHiddenSelectable(selectable);
             try
             {
-                Debug.Log("指引点击01!!-");
                 selectable.InvokeClick();
             }
             finally
