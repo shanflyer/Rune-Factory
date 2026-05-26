@@ -46,7 +46,8 @@ public class GameEventManager : Singleton<GameEventManager>
     }
 
     private GameObject obj;
-    private Dictionary<int, BehaviorTree> behaviorTrees = new Dictionary<int, BehaviorTree>();
+    private readonly Dictionary<int, BehaviorTreeRunner> behaviorRunners = new Dictionary<int, BehaviorTreeRunner>();
+    private readonly List<BehaviorTreeRunner> activeRunners = new List<BehaviorTreeRunner>();
     void SampleGameEvent(SampleGameEvent sampleGameEvent)
     {
         AsyncTaskRunner.Run(SampleGameEventAsync(sampleGameEvent), nameof(SampleGameEvent));
@@ -66,10 +67,9 @@ public class GameEventManager : Singleton<GameEventManager>
 
     private void ResetGameEvent(ResetGameEvent resetGameEvent)
     {
-        if (behaviorTrees.TryGetValue(resetGameEvent.eventId, out BehaviorTree behaviorTree))
+        if (behaviorRunners.TryGetValue(resetGameEvent.eventId, out var runner))
         {
-            behaviorTree.enabled = false;
-            behaviorTree.enabled = true;
+            RestartBehavior(runner.tree);
         }
     }
 
@@ -77,14 +77,13 @@ public class GameEventManager : Singleton<GameEventManager>
     {
         if (restEvent)
         {
-            if (behaviorTrees.TryGetValue(eventId, out BehaviorTree behaviorTree))
+            if (behaviorRunners.TryGetValue(eventId, out var runner))
             {
                 if (eventReferenceDatas != null)
                 {
-                    SetBehaviorTreeReference(behaviorTree, eventReferenceDatas);
+                    SetBehaviorTreeReference(runner.tree, eventReferenceDatas);
                 }
-                behaviorTree.enabled = false;
-                behaviorTree.enabled = true;
+                RestartBehavior(runner.tree);
                 return true;
             }
         }
@@ -199,53 +198,161 @@ public class GameEventManager : Singleton<GameEventManager>
 
     public void AddGameEvent(GameEventData gameEventData, List<EventReferenceData> eventReferenceDatas = null)
     {
-        BehaviorTree behaviorTree = obj.AddComponent<BehaviorTree>();
-        SharedInt idShared = new SharedInt();
-        idShared.Name = "ID";
-        idShared.SetValue(gameEventData.id);
-        behaviorTree.SetVariable("ID", idShared);
-
-        behaviorTree.ExternalBehavior = gameEventData.behaviorTree;
-        if (gameEventData.eventReferenceDatas != null)
+        if (gameEventData == null)
         {
-            if (eventReferenceDatas != null)
-            {
-                eventReferenceDatas.AddRange(gameEventData.eventReferenceDatas);
-            }
-            else
-            {
-                eventReferenceDatas = gameEventData.eventReferenceDatas;
-            }
+            Debug.LogError("AddGameEvent failed: gameEventData is null.");
+            return;
         }
 
-        if (eventReferenceDatas != null)
+        if (gameEventData.behaviorTree == null)
         {
-            SetBehaviorTreeReference(behaviorTree, eventReferenceDatas);
+            Debug.LogError($"AddGameEvent failed: eventId={gameEventData.id}, eventName={gameEventData.eventName}, behaviorTree is null.");
+            return;
+        }
+
+        if (gameEventData.bindEvent && behaviorRunners.ContainsKey(gameEventData.id))
+        {
+            RemoveGameEvent(gameEventData.id);
+        }
+
+        var runner = BehaviorTreeRunner.Create(obj, BehaviorRunnerType.Event, gameEventData.id, gameEventData.eventName);
+        runner.bound = gameEventData.bindEvent;
+        activeRunners.Add(runner);
+
+        BehaviorTree behaviorTree = runner.tree;
+        behaviorTree.BehaviorName = $"Event_{gameEventData.id}_{gameEventData.eventName}";
+        behaviorTree.RestartWhenComplete = false;
+        SharedInt idShared = new SharedInt();
+        idShared.Name = BehaviorVariableNames.EventId;
+        idShared.SetValue(gameEventData.id);
+        behaviorTree.SetVariable(BehaviorVariableNames.EventId, idShared);
+
+        behaviorTree.ExternalBehavior = gameEventData.behaviorTree;
+        var references = MergeReferenceData(eventReferenceDatas, gameEventData.eventReferenceDatas);
+        if (references != null)
+        {
+            SetBehaviorTreeReference(behaviorTree, references);
         }
 
         behaviorTree.enabled = gameEventData.defaultAwake;
+        if (gameEventData.defaultAwake)
+        {
+            behaviorTree.EnableBehavior();
+        }
+
+        behaviorTree.OnBehaviorEnd += behavior =>
+        {
+            if (!runner.bound)
+            {
+                RemoveRunner(runner);
+            }
+        };
+
         if (gameEventData.bindEvent)
         {
-            behaviorTrees[gameEventData.id] = behaviorTree;
+            behaviorRunners[gameEventData.id] = runner;
         }
 
     }
 
     public void RemoveGameEvent(int id)
     {
-        if (behaviorTrees.TryGetValue(id, out BehaviorTree behaviorTree))
+        if (behaviorRunners.TryGetValue(id, out var runner))
         {
-            GameObject.Destroy(behaviorTree);
+            RemoveRunner(runner);
         }
-        behaviorTrees.Remove(id);
+    }
+
+    public void RemoveGameEvent(BehaviorTree behaviorTree)
+    {
+        if (behaviorTree == null)
+        {
+            return;
+        }
+
+        for (int i = activeRunners.Count - 1; i >= 0; i--)
+        {
+            var runner = activeRunners[i];
+            if (runner.tree == behaviorTree)
+            {
+                RemoveRunner(runner);
+                return;
+            }
+        }
     }
 
     public void SetGameEventAwake(int id, bool awake, bool pause)
     {
-        if (behaviorTrees.TryGetValue(id, out BehaviorTree behaviorTree))
+        if (behaviorRunners.TryGetValue(id, out var runner))
         {
-            behaviorTree.PauseWhenDisabled = pause;
-            behaviorTree.enabled = awake;
+            runner.tree.PauseWhenDisabled = pause;
+            runner.tree.enabled = awake;
+            if (awake)
+            {
+                runner.tree.EnableBehavior();
+            }
         }
+    }
+
+    protected override void Clear()
+    {
+        for (int i = activeRunners.Count - 1; i >= 0; i--)
+        {
+            activeRunners[i].Destroy();
+        }
+        activeRunners.Clear();
+        behaviorRunners.Clear();
+        base.Clear();
+    }
+
+    private static List<EventReferenceData> MergeReferenceData(List<EventReferenceData> runtimeReferences, List<EventReferenceData> dataReferences)
+    {
+        if ((runtimeReferences == null || runtimeReferences.Count == 0) && (dataReferences == null || dataReferences.Count == 0))
+        {
+            return null;
+        }
+
+        var result = new List<EventReferenceData>();
+        if (runtimeReferences != null)
+        {
+            result.AddRange(runtimeReferences);
+        }
+
+        if (dataReferences != null)
+        {
+            result.AddRange(dataReferences);
+        }
+
+        return result;
+    }
+
+    private void RemoveRunner(BehaviorTreeRunner runner)
+    {
+        if (runner == null)
+        {
+            return;
+        }
+
+        if (runner.bound)
+        {
+            behaviorRunners.Remove(runner.ownerId);
+        }
+
+        activeRunners.Remove(runner);
+        runner.Destroy();
+    }
+
+    private static void RestartBehavior(BehaviorTree behaviorTree)
+    {
+        if (behaviorTree == null)
+        {
+            return;
+        }
+
+        behaviorTree.StopAllTaskCoroutines();
+        behaviorTree.DisableBehavior();
+        behaviorTree.enabled = false;
+        behaviorTree.enabled = true;
+        behaviorTree.EnableBehavior();
     }
 }

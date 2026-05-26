@@ -1,7 +1,6 @@
 using BehaviorDesigner.Runtime;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 using static BehaviorDesigner.Runtime.Behavior;
 
 public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
@@ -28,12 +27,16 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
         GameActionManager.instance.AddListener<StartCharacterBehavior>(StartCharacterBehavior);
         GameActionManager.instance.AddListener<ReStartCharacterBehavior>(ReStartCharacterBehavior);
         GameActionManager.instance.AddListener<PauseCharacterBehavior>(PauseCharacterBehavior);
-       // Object.DontDestroyOnLoad(obj);
     }
 
     protected override void Clear()
     {
         initializationTask = System.Threading.Tasks.Task.CompletedTask;
+        foreach (var runner in behaviorRunners.Values)
+        {
+            runner.Destroy();
+        }
+        behaviorRunners.Clear();
         behaviorTrees.Clear();
         behaviorHandlers.Clear();
         base.Clear();
@@ -43,16 +46,19 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
 
     private GameObject obj;
     private Dictionary<int, BehaviorTree> behaviorTrees = new Dictionary<int, BehaviorTree>();
+    private Dictionary<int, BehaviorTreeRunner> behaviorRunners = new Dictionary<int, BehaviorTreeRunner>();
     private Dictionary<int, BehaviorHandler> behaviorHandlers = new Dictionary<int, BehaviorHandler>();
+
     public BehaviorHandler EventStopCharacterBehavior(int characterId)
     {
-        if(behaviorTrees.TryGetValue(characterId,out var behaviorTree))
+        if (behaviorTrees.TryGetValue(characterId, out var behaviorTree))
         {
-            if(behaviorHandlers.TryGetValue(characterId,out var behaviorHandler))
+            if (behaviorHandlers.TryGetValue(characterId, out var behaviorHandler))
             {
                 behaviorHandlers.Remove(characterId);
                 return behaviorHandler;
             }
+
             behaviorTree.StopAllTaskCoroutines();
             behaviorTree.enabled = false;
         }
@@ -61,33 +67,34 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
 
     public BehaviorTree GetCharacterBehaviorTree(int characterId)
     {
-        if(behaviorTrees.TryGetValue(characterId,out var behaviorTree))
+        if (behaviorTrees.TryGetValue(characterId, out var behaviorTree))
         {
             return behaviorTree;
         }
         return null;
     }
-    void PauseCharacterBehavior(PauseCharacterBehavior pauseCharacterBehavior)
+
+    private void PauseCharacterBehavior(PauseCharacterBehavior pauseCharacterBehavior)
     {
-        if (behaviorTrees.TryGetValue(pauseCharacterBehavior.characterId, out BehaviorTree behaviorTree))
+        if (behaviorTrees.TryGetValue(pauseCharacterBehavior.characterId, out var behaviorTree))
         {
             behaviorTree.DisableBehavior(true);
         }
     }
-    void ReStartCharacterBehavior(ReStartCharacterBehavior reStartCharacterBehavior)
+
+    private void ReStartCharacterBehavior(ReStartCharacterBehavior reStartCharacterBehavior)
     {
-        if (behaviorTrees.TryGetValue(reStartCharacterBehavior.characterId, out BehaviorTree behaviorTree))
+        if (behaviorTrees.TryGetValue(reStartCharacterBehavior.characterId, out var behaviorTree))
         {
             behaviorTree.StopAllTaskCoroutines();
-            // Stop the behavior tree
             behaviorTree.DisableBehavior();
-            // Start the behavior tree back up
             behaviorTree.EnableBehavior();
         }
     }
+
     private void StopCharacterBehavior(StopCharacterBehavior stopCharacterBehavior)
     {
-        if (behaviorTrees.TryGetValue(stopCharacterBehavior.characterId, out BehaviorTree behaviorTree))
+        if (behaviorTrees.TryGetValue(stopCharacterBehavior.characterId, out var behaviorTree))
         {
             behaviorTree.StopAllTaskCoroutines();
             behaviorTree.enabled = false;
@@ -96,7 +103,7 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
 
     private void StartCharacterBehavior(StartCharacterBehavior startCharacterBehavior)
     {
-        if (behaviorTrees.TryGetValue(startCharacterBehavior.characterId, out BehaviorTree behaviorTree))
+        if (behaviorTrees.TryGetValue(startCharacterBehavior.characterId, out var behaviorTree))
         {
             behaviorTree.enabled = true;
             behaviorTree.EnableBehavior();
@@ -107,31 +114,53 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
         }
     }
 
-    public void AddBehavior(int characterId, ExternalBehavior externalBehavior, BehaviorHandler behaviorHandler=null,
-        bool PauseWhenDisabled = false,string behaviorName="")
+    public void AddBehavior(int characterId, ExternalBehavior externalBehavior, BehaviorHandler behaviorHandler = null,
+        bool PauseWhenDisabled = false, string behaviorName = "")
     {
+        if (externalBehavior == null)
+        {
+            Debug.LogError($"AddBehavior failed: characterId={characterId}, externalBehavior is null.");
+            return;
+        }
 
         Character character = CharacterManager.instance.GetCharacter(characterId);
-       // Debug.Log($"AddBehavior:{character.name}--{externalBehavior.name}");
-        if (!behaviorTrees.TryGetValue(characterId, out BehaviorTree behaviorTree))
+        if (!behaviorTrees.TryGetValue(characterId, out var behaviorTree))
         {
-            behaviorTree = obj.AddComponent<BehaviorTree>();
+            var runnerName = !string.IsNullOrEmpty(behaviorName) ? behaviorName : character?.name;
+            var runner = BehaviorTreeRunner.Create(obj, BehaviorRunnerType.Character, characterId, runnerName);
+            behaviorRunners[characterId] = runner;
+            behaviorTree = runner.tree;
+            behaviorTree.OnBehaviorEnd += behavior => OnBehaviorEnd(characterId, behavior);
             behaviorTrees[characterId] = behaviorTree;
-            if (behaviorHandler != null)
-            {
-                behaviorTree.OnBehaviorEnd += CallBack;
-            }
         }
         else
         {
-            character.RemoveMove();
+            character?.RemoveMove();
+            if (behaviorRunners.TryGetValue(characterId, out var runner) && !string.IsNullOrEmpty(behaviorName))
+            {
+                runner.Rename(behaviorName);
+            }
         }
 
-        behaviorHandlers[characterId] = behaviorHandler;
+        if (behaviorHandler != null)
+        {
+            behaviorHandlers[characterId] = behaviorHandler;
+        }
+        else
+        {
+            behaviorHandlers.Remove(characterId);
+        }
+
+        if (behaviorTree.ExternalBehavior != null || behaviorTree.enabled)
+        {
+            behaviorTree.StopAllTaskCoroutines();
+            behaviorTree.DisableBehavior();
+            behaviorTree.enabled = false;
+        }
+
         behaviorTree.ExternalBehavior = externalBehavior;
-        behaviorTree.SetVariable("CharacterId", new SharedInt { Value = characterId });
+        behaviorTree.SetVariable(BehaviorVariableNames.CharacterId, new SharedInt { Value = characterId });
         behaviorTree.RestartWhenComplete = false;
-        //behaviorTree.r
         behaviorTree.PauseWhenDisabled = PauseWhenDisabled;
         behaviorTree.enabled = true;
         behaviorTree.EnableBehavior();
@@ -139,40 +168,41 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
         {
             behaviorTree.BehaviorName = behaviorName;
         }
-
-        void CallBack(Behavior behavior)
-        {
-            if(behavior is  BehaviorTree tree)
-            {
-                tree.StopAllTaskCoroutines();
-                tree.DisableBehavior();
-                behaviorTree.enabled = false;
-                //  tree.SaveResetValues();
-               // Debug.Log($"CallBack:{character.name}--{characterId}");
-                if (SingletonType.Cleared)
-                {
-                    return;
-                }
-                if (behaviorHandlers.TryGetValue(characterId, out var result))
-                {
-                    result(behavior);
-                }
-                else
-                {
-                    Debug.Log($"没有行为回调:{character.name}");
-                }
-            }
-
-        }
     }
 
     public void DestroyBehavior(int characterId)
     {
-        if (behaviorTrees.TryGetValue(characterId, out BehaviorTree behaviorTree))
+        if (behaviorRunners.TryGetValue(characterId, out var runner))
         {
-            GameObject.Destroy(behaviorTree);
+            runner.Destroy();
+            behaviorRunners.Remove(characterId);
             behaviorHandlers.Remove(characterId);
             behaviorTrees.Remove(characterId);
+        }
+    }
+
+    private void OnBehaviorEnd(int characterId, Behavior behavior)
+    {
+        if (behavior is BehaviorTree tree)
+        {
+            tree.StopAllTaskCoroutines();
+            tree.DisableBehavior();
+            tree.enabled = false;
+        }
+
+        if (SingletonType.Cleared)
+        {
+            return;
+        }
+
+        if (behaviorHandlers.TryGetValue(characterId, out var result) && result != null)
+        {
+            result(behavior);
+        }
+        else
+        {
+            var character = CharacterManager.instance.GetCharacter(characterId);
+            Debug.Log($"No behavior callback:{character?.name ?? characterId.ToString()}");
         }
     }
 }

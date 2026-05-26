@@ -7,6 +7,7 @@ public class MultiNPCGroup
 {
     public int instanceId;
     public MulitiBehaviorData mulitiBehaviorData;
+    public BehaviorTreeRunner behaviorRunner;
     public BehaviorTree behaviorTree;
     public MyDic<int, NPCBehaviorTempData> npcBehaviorTempDatas;
 
@@ -18,16 +19,18 @@ public class MultiNPCGroup
         this.mulitiBehaviorData = mulitiBehaviorData;
     }
 
-    public void InitBehavior(BehaviorTree behaviorTree, MyDic<int, NPCBehaviorTempData> npcBehaviorTempDatas)
+    public void InitBehavior(BehaviorTreeRunner behaviorRunner, MyDic<int, NPCBehaviorTempData> npcBehaviorTempDatas)
     {
         this.npcBehaviorTempDatas = npcBehaviorTempDatas;
-        this.behaviorTree = behaviorTree;
+        this.behaviorRunner = behaviorRunner;
+        this.behaviorTree = behaviorRunner.tree;
+        behaviorTree.ExternalBehavior = mulitiBehaviorData.externalBehavior;
         SharedIntList sharedList = new SharedIntList();
         sharedList.SetValue(npcBehaviorTempDatas.GetKeyList());
-        behaviorTree.SetVariable("GroupCharacters", sharedList);
+        behaviorTree.SetVariable(BehaviorVariableNames.GroupCharacters, sharedList);
         SharedInt sharedInt = new SharedInt();
         sharedInt.SetValue(instanceId);
-        behaviorTree.SetVariable("GroupID", sharedInt);
+        behaviorTree.SetVariable(BehaviorVariableNames.GroupId, sharedInt);
 
         behaviorTree.OnBehaviorEnd += BehaviorEndAction;
         behaviorTree.Start();
@@ -78,7 +81,8 @@ public class MultiNPCGroup
             }
         }
         npcBehaviorTempDatas.Clear();
-        GameObject.Destroy(behaviorTree);
+        behaviorRunner?.Destroy();
+        behaviorTree = null;
         MultiNPCBehaviorManager.instance.RemoveMulitGroup(instanceId);
     }
 
@@ -139,7 +143,7 @@ public class MultiNPCGroup
 
             SharedIntList sharedList = new SharedIntList();
             sharedList.SetValue(npcBehaviorTempDatas.GetKeyList());
-            behaviorTree.SetVariable("GroupCharacters", sharedList);
+            behaviorTree.SetVariable(BehaviorVariableNames.GroupCharacters, sharedList);
         }
     }
 
@@ -206,6 +210,17 @@ public class MultiNPCBehaviorManager : Singleton<MultiNPCBehaviorManager>
         GameActionManager.instance.AddListener<LeaveMultiNPCBehaviorGroup>(LeaveMultiNPCBehaviorGroup);
         GameActionManager.instance.AddAsyncListener<CreatMultiNPCBehaviorGroup>(CreatMultiNPCBehaviorGroupAsync, nameof(CreatMultiNPCBehaviorGroup));
         GameActionManager.instance.AddListener<DestoryMultiNPCBehaviorGroup>(DestoryMultiNPCBehaviorGroup);
+    }
+
+    protected override void Clear()
+    {
+        var groups = mulitNpcGroups.GetValueList();
+        for (int i = 0; i < groups.Count; i++)
+        {
+            groups[i].Destory();
+        }
+        mulitNpcGroups.Clear();
+        base.Clear();
     }
 
     public bool IsInMulitGroup(int characterId)
@@ -298,14 +313,22 @@ public class MultiNPCBehaviorManager : Singleton<MultiNPCBehaviorManager>
             }
         }
 
-        var behaviorTree = obj.AddComponent<BehaviorTree>();
+        if (mulitiBehaviorData == null || mulitiBehaviorData.externalBehavior == null)
+        {
+            Debug.LogError($"Create multi NPC behavior failed: dataId={multiDataId}, externalBehavior is null.");
+            return;
+        }
+
+        var runner = BehaviorTreeRunner.Create(obj, BehaviorRunnerType.MultiNPC, groupInstance, mulitiBehaviorData.behaviorName);
+        var behaviorTree = runner.tree;
         behaviorTree.RestartWhenComplete = false;
         behaviorTree.PauseWhenDisabled = false;
         behaviorTree.StartWhenEnabled = false;
+        behaviorTree.BehaviorName = $"MultiNPC_{groupInstance}_{mulitiBehaviorData.behaviorName}";
         MultiNPCGroup multiNPCGroup = new MultiNPCGroup(groupInstance, mulitiBehaviorData);
         // multiNPCGroup.mapInstance = mapInstance;
         // multiNPCGroup.center = center;
-        multiNPCGroup.InitBehavior(behaviorTree, npcBehaviorTempDatas);
+        multiNPCGroup.InitBehavior(runner, npcBehaviorTempDatas);
 
         mulitNpcGroups.Add(groupInstance, multiNPCGroup);
     }

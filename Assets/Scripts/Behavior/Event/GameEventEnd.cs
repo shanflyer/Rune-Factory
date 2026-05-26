@@ -14,9 +14,16 @@ public class GameEventEnd : Action
 			gameEventId = (SharedInt)behavior.GetVariable("ID");
         }
 
-		GameEventManager.instance.RemoveGameEvent(gameEventId.Value);
-		if(Owner)
-            GameObject.Destroy(Owner);
+		if (Owner is BehaviorTree behaviorTree)
+		{
+			GameEventManager.instance.RemoveGameEvent(behaviorTree);
+		}
+		else
+		{
+			GameEventManager.instance.RemoveGameEvent(gameEventId.Value);
+			if(Owner)
+				GameObject.Destroy(Owner);
+		}
     }
 
 	public override TaskStatus OnUpdate()
