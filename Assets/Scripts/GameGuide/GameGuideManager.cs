@@ -7,6 +7,19 @@ public class GameGuideManager:Singleton<GameGuideManager>
 {
     Dictionary<int, Selectable> guidSelectableDic = new Dictionary<int, Selectable>();
     HashSet<int> endGuide = new HashSet<int>();
+    ActiveGuideSession activeGuideSession;
+    int guideSessionVersion;
+
+    class ActiveGuideSession
+    {
+        public int Version;
+        public GameGuideData Data;
+        public int StepIndex;
+        public GuidStepData CurrentStep;
+        public int WaitingSelectableId;
+        public bool IsAdvancing;
+    }
+
     public int endGuideFilmIndex
     {
         get
@@ -118,100 +131,210 @@ public class GameGuideManager:Singleton<GameGuideManager>
     private void SetIntAction(int id, Selectable selectable)
     {
         guidSelectableDic[id] = selectable;
-        if (waitGuide != 0 && waitGuide == id)
+        if (activeGuideSession != null &&
+            activeGuideSession.WaitingSelectableId == id &&
+            activeGuideSession.CurrentStep != null &&
+            activeGuideSession.CurrentStep.selectableId == id)
         {
-            waitGuide = 0;
-            AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<GameGuidePanel, GuidStepData>(guidStepData), nameof(SetIntAction));
+            activeGuideSession.WaitingSelectableId = 0;
+            TryShowCurrentStep(activeGuideSession, nameof(SetIntAction));
         }
 
     }
     void RemoveIntAction(int id,Selectable selectable)
     {
+        bool removedCurrent = false;
         if (guidSelectableDic.TryGetValue(id, out var current) && current == selectable)
         {
             guidSelectableDic.Remove(id);
+            removedCurrent = true;
         }
 
         if (hiddenSelectable == selectable)
         {
             RestoreHiddenSelectable();
         }
+
+        if (removedCurrent &&
+            activeGuideSession != null &&
+            activeGuideSession.CurrentStep != null &&
+            activeGuideSession.CurrentStep.selectableId == id)
+        {
+            activeGuideSession.WaitingSelectableId = id;
+            UIManager.instance.CloseGamePanel<GameGuidePanel>();
+        }
     }
 
     async System.Threading.Tasks.Task GameGuideActionAsync(GameGuideAction gameGuideAction)
     {
-        nowGameGuideData = await GameDataManager.instance.GetAsyncData<GameGuideData>(gameGuideAction.guidKey);
-        if (nowGameGuideData == null)
+        int sessionVersion = ++guideSessionVersion;
+        ClearActiveGuide(true);
+
+        var gameGuideData = await GameDataManager.instance.GetAsyncData<GameGuideData>(gameGuideAction.guidKey);
+        if (sessionVersion != guideSessionVersion)
+        {
+            return;
+        }
+
+        if (gameGuideData == null)
         {
             Debug.LogWarning($"Game guide data not found: {gameGuideAction.guidKey}");
             return;
         }
 
-        nowGuideStepIndex = 0;
-        ShowGuide();
+        activeGuideSession = new ActiveGuideSession
+        {
+            Version = sessionVersion,
+            Data = gameGuideData
+        };
+        AdvanceToNextStep(activeGuideSession);
     }
-    void ShowGuide()
+
+    void AdvanceToNextStep(ActiveGuideSession session)
     {
-        waitGuide = 0;
-        if (nowGameGuideData == null)
+        if (!IsActiveSession(session))
         {
             return;
         }
-        if(nowGameGuideData.GetGuidStepData(nowGuideStepIndex, out guidStepData))
+
+        session.WaitingSelectableId = 0;
+        if(session.Data.GetGuidStepData(session.StepIndex, out var stepData))
         {
-            nowGuideStepIndex++;
-            nowGuideSelectableId = guidStepData.selectableId;
-            if (guidSelectableDic.TryGetValue(nowGuideSelectableId, out var selectable))
-                AsyncTaskRunner.Run(UIManager.instance.ShowGamePanel<GameGuidePanel, GuidStepData>(guidStepData), nameof(ShowGuide));
-            else
-                waitGuide = nowGuideSelectableId;
+            session.StepIndex++;
+            session.CurrentStep = stepData;
+            TryShowCurrentStep(session, nameof(AdvanceToNextStep));
         }
         else
         {
-            nowGameGuideData.TriggerEndAction();
-            endGuide.Add(nowGameGuideData.id);
-            nowGameGuideData = null;
-            guidStepData = null;
-            nowGuideStepIndex = 0;
-            RestoreHiddenSelectable();
+            CompleteGuide(session);
+        }
+    }
+
+    void TryShowCurrentStep(ActiveGuideSession session, string sourceName)
+    {
+        if (!IsActiveSession(session) || session.CurrentStep == null)
+        {
+            return;
+        }
+
+        int selectableId = session.CurrentStep.selectableId;
+        if (guidSelectableDic.ContainsKey(selectableId))
+        {
+            session.WaitingSelectableId = 0;
+            AsyncTaskRunner.Run(ShowGuidePanelAsync(session.Version, session.CurrentStep, sourceName), sourceName);
+        }
+        else
+        {
+            session.WaitingSelectableId = selectableId;
             UIManager.instance.CloseGamePanel<GameGuidePanel>();
         }
     }
 
-    GameGuideData nowGameGuideData;
-    GuidStepData guidStepData;
-    int nowGuideStepIndex;
+    async Task ShowGuidePanelAsync(int sessionVersion, GuidStepData stepData, string sourceName)
+    {
+        if (!IsActiveSession(sessionVersion, stepData))
+        {
+            return;
+        }
 
+        await UIManager.instance.ShowGamePanel<GameGuidePanel, GuidStepData>(stepData);
+        if (IsActiveSession(sessionVersion, stepData))
+        {
+            return;
+        }
 
-    int nowGuideSelectableId;
+        var currentSession = activeGuideSession;
+        if (currentSession != null && currentSession.CurrentStep != null)
+        {
+            TryShowCurrentStep(currentSession, sourceName);
+        }
+        else
+        {
+            UIManager.instance.CloseGamePanel<GameGuidePanel>();
+        }
+    }
+
+    void CompleteGuide(ActiveGuideSession session)
+    {
+        if (!IsActiveSession(session))
+        {
+            return;
+        }
+
+        session.Data.TriggerEndAction();
+        endGuide.Add(session.Data.id);
+        ClearActiveGuide(true);
+    }
 
     public void GuideButtonAction()
     {
-        InitShowGuide();
+        AdvanceFromGuideButton();
     }
 
-    private int waitGuide;
-    void InitShowGuide()
+    void AdvanceFromGuideButton()
     {
-        if (guidSelectableDic.TryGetValue(nowGuideSelectableId, out var selectable))
+        var session = activeGuideSession;
+        if (!IsActiveSession(session) || session.CurrentStep == null || session.IsAdvancing)
         {
-            SetHiddenSelectable(selectable);
-            try
-            {
-                selectable.InvokeClick();
-            }
-            finally
-            {
-                RestoreHiddenSelectable();
-            }
-
-            ShowGuide();
+            return;
         }
 
+        int sessionVersion = session.Version;
+        int selectableId = session.CurrentStep.selectableId;
+        if (!guidSelectableDic.TryGetValue(selectableId, out var selectable))
+        {
+            session.WaitingSelectableId = selectableId;
+            UIManager.instance.CloseGamePanel<GameGuidePanel>();
+            return;
+        }
+
+        session.IsAdvancing = true;
+        SetHiddenSelectable(selectable);
+        try
+        {
+            selectable.InvokeClick();
+        }
+        finally
+        {
+            RestoreHiddenSelectable();
+            if (IsActiveSession(sessionVersion))
+            {
+                session.IsAdvancing = false;
+            }
+        }
+
+        if (IsActiveSession(sessionVersion))
+        {
+            AdvanceToNextStep(session);
+        }
+    }
+
+    bool IsActiveSession(ActiveGuideSession session)
+    {
+        return session != null && activeGuideSession == session && session.Version == guideSessionVersion;
+    }
+
+    bool IsActiveSession(int sessionVersion)
+    {
+        return activeGuideSession != null && activeGuideSession.Version == sessionVersion && guideSessionVersion == sessionVersion;
+    }
+
+    bool IsActiveSession(int sessionVersion, GuidStepData stepData)
+    {
+        return IsActiveSession(sessionVersion) && activeGuideSession.CurrentStep == stepData;
+    }
+
+    void ClearActiveGuide(bool closePanel)
+    {
+        activeGuideSession = null;
+        RestoreHiddenSelectable();
+        if (closePanel)
+        {
+            UIManager.instance.CloseGamePanel<GameGuidePanel>();
+        }
     }
 
     Selectable hiddenSelectable;
-
     void SetHiddenSelectable(Selectable selectable)
     {
         RestoreHiddenSelectable();
@@ -232,7 +355,6 @@ public class GameGuideManager:Singleton<GameGuideManager>
     {
         if (guidSelectableDic.TryGetValue(guid, out var selectable))
         {
-            nowGuideSelectableId = guid;
             guidRect = selectable.transform as RectTransform;
 
             return true;
@@ -247,7 +369,6 @@ public class GameGuideManager:Singleton<GameGuideManager>
         size = Vector3.zero;
         if(guidSelectableDic.TryGetValue(guid,out var selectable))
         {
-            nowGuideSelectableId = guid;
             RectTransform rectTransform = selectable.transform as RectTransform;
             pos = rectTransform.position;
             size = rectTransform.sizeDelta;
