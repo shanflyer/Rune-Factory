@@ -669,6 +669,9 @@
     <Compile Include="Assets\Scripts\Character\Character.cs" />
     <Compile Include="Assets\Scripts\Character\Character.Interaction.cs" />
     <Compile Include="Assets\Scripts\Character\Character.Movement.cs" />
+    <Compile Include="Assets\Scripts\Character\Character.Debug.cs" />
+    <Compile Include="Assets\Scripts\Character\CharacterDebugSettings.cs" />
+    <Compile Include="Assets\Scripts\Character\CharacterDebugSnapshot.cs" />
     <Compile Include="Assets\Scripts\Character\Character.Stats.cs" />
     <Compile Include="Assets\Scripts\Behavior\PlayerStore\CheckPlayerStore.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\RefreshMapCameraNode.cs" />
@@ -1204,6 +1207,7 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetLinearVelocity.cs" />
     <Compile Include="Assets\Scripts\Behavior\Variables\SharedInt2.cs" />
     <Compile Include="Assets\Scripts\Character\CharacterData.cs" />
+    <Compile Include="Assets\Scripts\Character\CharacterDataValidator.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\SphereCollider\SetRadius.cs" />
     <Compile Include="Assets\OtherPackage\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
     <Compile Include="Assets\Scripts\Behavior\PlayerStore\SelectPlayerStoreCounter.cs" />
@@ -1345,6 +1349,7 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Animator\GetStringToHash.cs" />
     <Compile Include="Assets\Scripts\Character\CharacterManager.cs" />
     <Compile Include="Assets\Scripts\Character\CharacterManager.Factory.cs" />
+    <Compile Include="Assets\Scripts\Character\CharacterManager.Debug.cs" />
     <Compile Include="Assets\Scripts\Character\CharacterManager.RuntimeView.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetAcceleration.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\CharacterController\SetCenter.cs" />

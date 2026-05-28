@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
+using UnityEngine;
 
 public class UserGameSaveDataList : IReferenceData
 {
@@ -19,6 +20,36 @@ public class CommonSaveData
     public int saveVersion;
     public int diamond;
 }
+
+public class SaveDataValidationReport
+{
+    private readonly List<string> warnings = new List<string>();
+
+    public SaveDataValidationReport(string context)
+    {
+        Context = context;
+    }
+
+    public string Context { get; }
+    public IReadOnlyList<string> Warnings => warnings;
+    public bool HasWarnings => warnings.Count > 0;
+
+    public void AddWarning(string warning)
+    {
+        warnings.Add(warning);
+    }
+
+    public void LogWarnings()
+    {
+        if (!HasWarnings)
+        {
+            return;
+        }
+
+        Debug.LogWarning($"SaveDataValidation context={Context} warnings={warnings.Count}\n{string.Join("\n", warnings)}");
+    }
+}
+
 [Serializable]
 public class UserGameSaveData : IReferenceData
 {
@@ -281,10 +312,14 @@ public class UserGameSaveData : IReferenceData
             var value = DataPacker.LongUnpackInt3(specialMapItemList[i]);
             specialMapItem[value.xy] = value.z;
         }
+
+        ValidatePackedData(nameof(Init)).LogWarnings();
     }
 
     public void SaveData()
     {
+        ValidatePackedData("BeforeSaveData").LogWarnings();
+
         animationStateMapItems.Clear();
         foreach (var animationData in animationStateMapItemsDic)
             animationStateMapItems.Add(DataPacker.Int2PackInt(new int2(animationData.Key,
@@ -326,6 +361,78 @@ public class UserGameSaveData : IReferenceData
             specialMapItemList.Add(DataPacker.Int3PackLong(new int3(e.Key, e.Value)));
         }
         saveTime = DateTime.Now.ToString("s");
+        ValidatePackedData(nameof(SaveData)).LogWarnings();
+    }
+
+    public SaveDataValidationReport ValidatePackedData(string context = null)
+    {
+        var report = new SaveDataValidationReport(string.IsNullOrEmpty(context) ? nameof(UserGameSaveData) : context);
+        ValidateCharacterSaveData(playerData, "playerData", report);
+
+        foreach (var characterSaveData in characterSaveDatas)
+        {
+            ValidateCharacterSaveData(characterSaveData.Value, $"characterSaveDatas[{characterSaveData.Key}]", report);
+        }
+
+        foreach (var npcTimeData in NpcTimeDataDic.Values)
+        {
+            ValidateNpcTimeData(npcTimeData, $"NpcTimeDataDic[{npcTimeData.id}]", report);
+        }
+
+        for (int i = 0; i < NpcTimeData.Count; i++)
+        {
+            var npcTimeData = new NpcTimeData
+            {
+                packed = NpcTimeData[i]
+            };
+            npcTimeData.Unpack();
+            ValidateNpcTimeData(npcTimeData, $"NpcTimeData[{i}]", report);
+        }
+
+        return report;
+    }
+
+    private static void ValidateCharacterSaveData(CharacterSaveData saveData, string label,
+        SaveDataValidationReport report)
+    {
+        if (saveData == null)
+        {
+            report.AddWarning($"{label}: null character save data.");
+            return;
+        }
+
+        saveData.Unpack();
+        WarnOutOfRange(report, label, nameof(saveData.instanceId), saveData.instanceId, 0, 999999);
+        WarnOutOfRange(report, label, nameof(saveData.dataId), saveData.dataId, 0, 9999);
+        WarnOutOfRange(report, label, nameof(saveData.level), saveData.level, 0, 100);
+        WarnOutOfRange(report, label, nameof(saveData.exp), saveData.exp, 0, 134217727);
+        WarnOutOfRange(report, label, nameof(saveData.packageId), saveData.packageId, 0, 999999);
+        WarnOutOfRange(report, label, nameof(saveData.hp), saveData.hp, 0, 9999);
+        WarnOutOfRange(report, label, nameof(saveData.mp), saveData.mp, 0, 9999);
+        WarnOutOfRange(report, label, nameof(saveData.power), saveData.power, 0, 9999);
+    }
+
+    private static void ValidateNpcTimeData(NpcTimeData npcTimeData, string label, SaveDataValidationReport report)
+    {
+        if (npcTimeData == null)
+        {
+            report.AddWarning($"{label}: null npc time data.");
+            return;
+        }
+
+        WarnOutOfRange(report, label, nameof(npcTimeData.id), npcTimeData.id, 0, 9999);
+        WarnOutOfRange(report, label, nameof(npcTimeData.birthSeason), npcTimeData.birthSeason, 0, 3);
+        WarnOutOfRange(report, label, nameof(npcTimeData.birthDay), npcTimeData.birthDay, 0, 31);
+        WarnOutOfRange(report, label, nameof(npcTimeData.sleepTime), npcTimeData.sleepTime, -1, 24);
+    }
+
+    private static void WarnOutOfRange(SaveDataValidationReport report, string label, string fieldName, int value,
+        int min, int max)
+    {
+        if (value < min || value > max)
+        {
+            report.AddWarning($"{label}.{fieldName}={value} outside [{min},{max}].");
+        }
     }
 
     public void SetMapLineData(int id,bool isInit)

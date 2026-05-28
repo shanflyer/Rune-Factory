@@ -74,6 +74,21 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
         return null;
     }
 
+    public string GetCharacterBehaviorName(int characterId)
+    {
+        if (behaviorTrees.TryGetValue(characterId, out var behaviorTree))
+        {
+            if (!string.IsNullOrEmpty(behaviorTree.BehaviorName))
+            {
+                return behaviorTree.BehaviorName;
+            }
+
+            return behaviorTree.ExternalBehavior != null ? behaviorTree.ExternalBehavior.name : null;
+        }
+
+        return null;
+    }
+
     private void PauseCharacterBehavior(PauseCharacterBehavior pauseCharacterBehavior)
     {
         if (behaviorTrees.TryGetValue(pauseCharacterBehavior.characterId, out var behaviorTree))
@@ -124,6 +139,7 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
         }
 
         Character character = CharacterManager.instance.GetCharacter(characterId);
+        var previousBehaviorName = GetCharacterBehaviorName(characterId);
         if (!behaviorTrees.TryGetValue(characterId, out var behaviorTree))
         {
             var runnerName = !string.IsNullOrEmpty(behaviorName) ? behaviorName : character?.name;
@@ -168,6 +184,8 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
         {
             behaviorTree.BehaviorName = behaviorName;
         }
+
+        LogBehaviorChange(characterId, character?.name, previousBehaviorName, externalBehavior.name, PauseWhenDisabled);
     }
 
     public void DestroyBehavior(int characterId)
@@ -204,5 +222,16 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
             var character = CharacterManager.instance.GetCharacter(characterId);
             Debug.Log($"No behavior callback:{character?.name ?? characterId.ToString()}");
         }
+    }
+
+    private void LogBehaviorChange(int characterId, string characterName, string previousBehaviorName,
+        string nextBehaviorName, bool pauseWhenDisabled)
+    {
+        if (!CharacterDebugSettings.EnableBehaviorLogs)
+        {
+            return;
+        }
+
+        Debug.Log($"CharacterBehaviorChange characterId={characterId} character={characterName ?? "null"} previous={previousBehaviorName ?? "null"} next={nextBehaviorName ?? "null"} pauseWhenDisabled={pauseWhenDisabled}");
     }
 }

@@ -328,6 +328,7 @@ public class NPCTaskScheduleManager:Singleton<NPCTaskScheduleManager>
                 CharacterBehaviorManager.instance.AddBehavior(characterInstance, externalBehavior,
                                       ResetBehaviorState, PauseWhenDisabled, character.name);
                 endBehavior = false;
+                LogScheduleBehaviorChange(externalBehavior, PauseWhenDisabled);
             }
             catch
             {
@@ -366,6 +367,16 @@ public class NPCTaskScheduleManager:Singleton<NPCTaskScheduleManager>
             behaviorCanBreak = false;
             pauseWhenDisabled = false;
             return null;
+        }
+
+        private void LogScheduleBehaviorChange(ExternalBehavior externalBehavior, bool pauseWhenDisabled)
+        {
+            if (!CharacterDebugSettings.EnableScheduleLogs)
+            {
+                return;
+            }
+
+            Debug.Log($"NPCScheduleBehaviorChange characterId={characterInstance} character={character?.name ?? "null"} task={NowTaskName ?? "null"} state={behaviorState} behavior={externalBehavior?.name ?? "null"} canBreak={behaviorCanBreak} holdPos={holdPos} pauseWhenDisabled={pauseWhenDisabled}");
         }
     }
 

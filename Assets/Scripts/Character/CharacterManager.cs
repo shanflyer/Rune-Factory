@@ -38,6 +38,7 @@ public partial class CharacterManager : Singleton<CharacterManager>
         RecycleCharacter();
         characterDataToInstances.Clear();
         characters.Clear();
+        ClearCharacterFactoryCache();
     }
     //角色运行显示实体
     private Dictionary<Character, CharacterRuntimeObj> characterRuntionObjs = new Dictionary<Character, CharacterRuntimeObj>();

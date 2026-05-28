@@ -105,64 +105,19 @@ public struct GameTimeKey : IEquatable<int2>, IEquatable<GameTimeKey>
         }
         else if (obj is int2 time)
         {
-            if (time.x > minTime.x)
-            {
-                if (time.x < maxTime.x)
-                {
-                    return true;
-                }
-                else if (time.y < maxTime.y)
-                {
-                    return true;
-                }
-            }
-            else if (time.x == minTime.x && time.y >= minTime.y)
-            {
-                return true;
-            }
-            return false;
+            return Contains(time);
         }
         return false;
     }
 
     public static bool operator ==(GameTimeKey gameTimeKey, int2 timeKey)
     {
-        if (timeKey.x > gameTimeKey.minTime.x)
-        {
-            if (timeKey.x < gameTimeKey.maxTime.x)
-            {
-                return true;
-            }
-            else if (timeKey.y < gameTimeKey.maxTime.y)
-            {
-                return true;
-            }
-        }
-        else if (timeKey.x == gameTimeKey.minTime.x && timeKey.y >= gameTimeKey.minTime.y)
-        {
-            return true;
-        }
-        return false;
+        return gameTimeKey.Contains(timeKey);
     }
 
     public static bool operator !=(GameTimeKey gameTimeKey, int2 timeKey)
     {
-        if (timeKey.x > gameTimeKey.minTime.x)
-        {
-            if (timeKey.x < gameTimeKey.maxTime.x)
-            {
-                return false;
-            }
-            else if (timeKey.y < gameTimeKey.maxTime.y)
-            {
-                return false;
-            }
-        }
-        else if (timeKey.x == gameTimeKey.minTime.x && timeKey.y >= gameTimeKey.minTime.y)
-        {
-            return false;
-        }
-        return true;
+        return !gameTimeKey.Contains(timeKey);
     }
 
     public override int GetHashCode()
@@ -180,27 +135,40 @@ public struct GameTimeKey : IEquatable<int2>, IEquatable<GameTimeKey>
 
     public bool Equals(int2 time)
     {
-        if (time.x > minTime.x)
+        return Contains(time);
+    }
+
+    public bool Contains(int2 time)
+    {
+        int startMinute = minTime.x * 60 + minTime.y;
+        int endMinute = maxTime.x * 60 + maxTime.y;
+        int minute = time.x * 60 + time.y;
+
+        if (startMinute == endMinute)
         {
-            if (time.x < maxTime.x)
-            {
-                return true;
-            }
-            else if (time.y < maxTime.y)
-            {
-                return true;
-            }
+            return minute == startMinute;
         }
-        else if (time.x == minTime.x && time.y >= minTime.y)
-        {
-            return true;
-        }
-        return false;
+
+        return minute >= startMinute && minute < endMinute;
     }
 
     public bool Equals(GameTimeKey timeKey)
     {
+        return SameRange(timeKey);
+    }
+
+    public bool SameRange(GameTimeKey timeKey)
+    {
         return timeKey.minTime.x == minTime.x && timeKey.minTime.y == minTime.y &&
                timeKey.maxTime.x == maxTime.x && timeKey.maxTime.y == maxTime.y;
+    }
+
+    public bool HasValidRange()
+    {
+        return minTime.x >= 0 && minTime.x <= 23 &&
+               maxTime.x >= 0 && maxTime.x <= 24 &&
+               minTime.y >= 0 && minTime.y <= 59 &&
+               maxTime.y >= 0 && maxTime.y <= 59 &&
+               (maxTime.x > minTime.x || maxTime.x == minTime.x && maxTime.y >= minTime.y);
     }
 }

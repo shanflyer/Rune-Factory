@@ -24,7 +24,7 @@ public class GameTimeKeyIntDataDictionary : SerializableDictionary<GameTimeKey, 
     {
         foreach (var kvp in this)
         {
-            if (kvp.Key == testKey)
+            if (kvp.Key.Contains(testKey))
             {
                 value = kvp.Value;
                 return true;
@@ -42,7 +42,7 @@ public class GameTimeKeyInt2DataDictionary : SerializableDictionary<GameTimeKey,
     {
         foreach (var kvp in this)
         {
-            if (kvp.Key == testKey)
+            if (kvp.Key.Contains(testKey))
             {
                 value = kvp.Value;
                 return true;
