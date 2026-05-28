@@ -444,150 +444,133 @@ public partial class PackageManager
             }
 
             ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
-            if (itemData!=null)
+            if (itemData == null)
             {
-                if(instanceId== CharacterManager.instance.controllerCharacter.characterPackage)
-                {
-                    if (itemData.type == ItemType.种子|| itemData.type ==ItemType.农作物)
-                    {
-                        GameDataSaveManager.instance.SetPlantFruitCount(itemData.typeValue, 0);
-                    }
-                }
-
-                if (packageType == PackageType.鲜活 && !itemData.isFresh)
-                {
-                    return item.count;
-                }
-                if (packageType == PackageType.非鲜活 && itemData.isFresh)
-                {
-                    return item.count;
-                }
-                int groupCount = singleCase ? 1 : itemData.groupCount;
-
-                if (groupCount > 1)//物体堆叠数量
-                {
-                    int index ;//空物体位置
-                    if (!TryGetStackSlotWithSpace(itemData.id, itemData.groupCount, out index))
-                    {
-                        if (caseCount <= itemCount)
-                        {
-                            return item.count;
-                        }
-
-                        index = TakeEmptySlot();//空物体位置
-                        Item newItem = new Item
-                        {
-                            instanceId = MyInstance.instance.Uid,
-                            dataId = itemData.id,
-                            packageId = instanceId,
-                            isFresh = itemData.isFresh,
-                            itemType = itemData.type,
-                            count = 0
-                        };
-                        newItem=await Item.SetValue(newItem,item.value);
-                        SetSlot(index, newItem);
-                        AddItemIndex(itemData.id, index);
-                        if (!packageItemCounts.ContainsKey(itemData.id))
-                        {
-                            packageItemCounts.Add(itemData.id, 0);
-                        }
-                    }
-
-                    int inCount = item.count;//要放入的数量
-                    while (inCount > 0)
-                    {
-                        Item setItem = items[index];
-                        int setCount = itemData.groupCount - setItem.count;//填充一个消耗数量
-
-                        if (inCount - setCount > 0)//剩余的数量大于0
-                        {
-                            setItem.count = itemData.groupCount;
-                            items[index] = setItem;
-
-                            ChangeItemCount(itemData.id, setCount);
-                        }
-                        else
-                        {
-                            setItem.count += inCount;
-                            items[index] = setItem;
-
-                            ChangeItemCount(itemData.id, inCount);
-                            break;
-                        }
-
-                        inCount -= setCount;//当前剩余数量
-                        if (caseCount <= itemCount)//背包格子是否还有空白
-                        {
-                            //oldCount += setCount - inCount;//????
-                            // packageItemCounts[itemData.id] = oldCount;
-
-                            if (display)
-                            {
-                                InformationController.instance.AddInformation($"{LanguageManage.SwitchStr("获得")}[{LanguageManage.SwitchStr(itemData.name)}] {item.count - inCount}{LanguageManage.SwitchStr("个")}");
-                            }
-                            return inCount;
-                        }
-                        index = TakeEmptySlot();
-                        //index = itemData.groupCount - setItem.count;
-                        Item item1 = new Item
-                        {
-                            instanceId = MyInstance.instance.Uid,
-                            dataId = itemData.id,
-                            packageId = instanceId,
-                            isFresh = itemData.isFresh,
-                            itemType = itemData.type,
-                            count = 0
-                        };
-                        item1=await Item.SetValue(item1,item.value);
-
-                        SetSlot(index, item1);
-                        AddItemIndex(itemData.id, index);
-                    }
-                }
-                else
-                {
-                    int addCount = 0;
-                    for (int i = 0; i < item.count; i++)
-                    {
-                        if (caseCount <= itemCount)
-                        {
-                            break;
-                        }
-
-                        Item item1 = new Item
-                        {
-                            instanceId = MyInstance.instance.Uid,
-                            dataId = itemData.id,
-                            packageId = instanceId,
-                            isFresh = itemData.isFresh,
-                            itemType = itemData.type,
-                            count = 1
-                        };
-                        item1 = await Item.SetValue(item1, item.value);
-                        int index = TakeEmptySlot();
-                        SetSlot(index, item1);
-                        addCount++;
-                        AddItemIndex(itemData.id, index);
-                    }
-                    // packageItemIndexDatas.Add(itemData.id, indexDatas);
-                    if (addCount > 0)
-                    {
-                        ChangeItemCount(itemData.id, addCount);
-                    }
-
-                    int outCount= item.count - addCount;
-                    if (display)
-                    {
-                        InformationController.instance.AddInformation($"{LanguageManage.SwitchStr("获得")}[{LanguageManage.SwitchStr(itemData.name)}] {outCount}{LanguageManage.SwitchStr("个")}");
-                    }
-                    return outCount;
-                }
+                return item.count;
             }
+
+            TrackPlantFruitPickup(itemData);
+
+            if (!CanAcceptItem(itemData))
+            {
+                return item.count;
+            }
+
+            int groupCount = singleCase ? 1 : itemData.groupCount;
+            int remaining = groupCount > 1
+                ? await PutStackableItem(item, itemData, groupCount)
+                : await PutSingleItems(item, itemData);
+
             if (display)
             {
-                InformationController.instance.AddInformation($"{LanguageManage.SwitchStr("获得")}[{LanguageManage.SwitchStr(itemData.name)}] {item.count}{LanguageManage.SwitchStr("个")}");
+                DisplayItemInPackage(itemData, item.count - remaining);
             }
-            return 0;
+
+            ValidateIndexes();
+            return remaining;
+        }
+
+        private bool CanAcceptItem(ItemData itemData)
+        {
+            if (packageType == PackageType.\u9c9c\u6d3b && !itemData.isFresh)
+            {
+                return false;
+            }
+            if (packageType == PackageType.\u975e\u9c9c\u6d3b && itemData.isFresh)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private void TrackPlantFruitPickup(ItemData itemData)
+        {
+            if (CharacterManager.instance == null || CharacterManager.instance.controllerCharacter == null)
+            {
+                return;
+            }
+
+            if (instanceId == CharacterManager.instance.controllerCharacter.characterPackage)
+            {
+                if (itemData.type == ItemType.\u79cd\u5b50 || itemData.type == ItemType.\u519c\u4f5c\u7269)
+                {
+                    GameDataSaveManager.instance.SetPlantFruitCount(itemData.typeValue, 0);
+                }
+            }
+        }
+
+        private async Task<int> PutStackableItem(Item item, ItemData itemData, int groupCount)
+        {
+            int remaining = item.count;
+            while (remaining > 0)
+            {
+                int index;
+                if (!TryGetStackSlotWithSpace(itemData.id, groupCount, out index))
+                {
+                    if (caseCount <= itemCount)
+                    {
+                        return remaining;
+                    }
+
+                    index = await CreateItemSlot(itemData, item.value, 0);
+                }
+
+                Item setItem = items[index];
+                int space = groupCount - setItem.count;
+                if (space <= 0)
+                {
+                    Debug.LogError($"Package {instanceId} stack slot {index} has no remaining space.");
+                    return remaining;
+                }
+
+                int addCount = remaining < space ? remaining : space;
+                setItem.count += addCount;
+                items[index] = setItem;
+                ChangeItemCount(itemData.id, addCount);
+                remaining -= addCount;
+            }
+
+            return remaining;
+        }
+
+        private async Task<int> PutSingleItems(Item item, ItemData itemData)
+        {
+            int remaining = item.count;
+            while (remaining > 0 && caseCount > itemCount)
+            {
+                await CreateItemSlot(itemData, item.value, 1);
+                ChangeItemCount(itemData.id, 1);
+                remaining--;
+            }
+
+            return remaining;
+        }
+
+        private async Task<int> CreateItemSlot(ItemData itemData, int value, int count)
+        {
+            int index = TakeEmptySlot();
+            Item item = new Item
+            {
+                instanceId = MyInstance.instance.Uid,
+                dataId = itemData.id,
+                packageId = instanceId,
+                isFresh = itemData.isFresh,
+                itemType = itemData.type,
+                count = count
+            };
+            item = await Item.SetValue(item, value);
+            SetSlot(index, item);
+            AddItemIndex(itemData.id, index);
+            return index;
+        }
+
+        private void DisplayItemInPackage(ItemData itemData, int count)
+        {
+            if (count > 0)
+            {
+                InformationController.instance.AddInformation($"{LanguageManage.SwitchStr("\u83b7\u5f97")}[{LanguageManage.SwitchStr(itemData.name)}] {count}{LanguageManage.SwitchStr("\u4e2a")}");
+            }
         }
 
         public List<Item> GetItemFromDataId(int itemDataId)
