@@ -278,6 +278,7 @@ public class CharacterManager : Singleton<CharacterManager>
             {
                 setCharacterRandomCoordinate.setResult(true);
             }
+            return;
         }
         if (setCharacterRandomCoordinate.setResult != null)
         {
@@ -305,6 +306,7 @@ public class CharacterManager : Singleton<CharacterManager>
             {
                 SetCharacterRandomPos.setResult(true);
             }
+            return;
         }
         if (SetCharacterRandomPos.setResult != null)
         {

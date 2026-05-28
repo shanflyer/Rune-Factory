@@ -43,7 +43,7 @@ public class MultiNPCGroup
 
     private void BehaviorEndAction(Behavior behavior)
     {
-        if (mulitiBehaviorData.endAction == 0)
+        if (mulitiBehaviorData.endAction != 0)
         {
             GameActionDataManager.instance.Action(mulitiBehaviorData.endAction);
         }

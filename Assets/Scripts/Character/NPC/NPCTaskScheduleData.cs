@@ -101,29 +101,7 @@ public struct GameTimeKey : IEquatable<int2>, IEquatable<GameTimeKey>
     {
         if (obj is GameTimeKey timeKey)
         {
-            if (timeKey.maxTime.x== timeKey.minTime.x && timeKey.maxTime.y== timeKey.minTime.y)
-            {
-                if (timeKey.maxTime.x > minTime.x)
-                {
-                    if (timeKey.maxTime.x < maxTime.x)
-                    {
-                        return true;
-                    }
-                    else if (timeKey.maxTime.y < maxTime.y)
-                    {
-                        return true;
-                    }
-                }
-                else if (timeKey.maxTime.x == minTime.x && timeKey.maxTime.y >= minTime.y)
-                {
-                    return true;
-                }
-                return false;
-            }
-            else
-            {
-                return timeKey.minTime.x == minTime.x && timeKey.minTime.y == minTime.y && timeKey.maxTime.x == maxTime.x && timeKey.maxTime.y == maxTime.y;
-            }
+            return Equals(timeKey);
         }
         else if (obj is int2 time)
         {
@@ -189,7 +167,15 @@ public struct GameTimeKey : IEquatable<int2>, IEquatable<GameTimeKey>
 
     public override int GetHashCode()
     {
-        return 0;
+        unchecked
+        {
+            int hash = 17;
+            hash = hash * 31 + minTime.x;
+            hash = hash * 31 + minTime.y;
+            hash = hash * 31 + maxTime.x;
+            hash = hash * 31 + maxTime.y;
+            return hash;
+        }
     }
 
     public bool Equals(int2 time)
@@ -214,28 +200,7 @@ public struct GameTimeKey : IEquatable<int2>, IEquatable<GameTimeKey>
 
     public bool Equals(GameTimeKey timeKey)
     {
-        if (timeKey.maxTime.x == timeKey.minTime.x && timeKey.maxTime.y == timeKey.minTime.y)
-        {
-            if (timeKey.maxTime.x > minTime.x)
-            {
-                if (timeKey.maxTime.x < maxTime.x)
-                {
-                    return true;
-                }
-                else if (timeKey.maxTime.y < maxTime.y)
-                {
-                    return true;
-                }
-            }
-            else if (timeKey.maxTime.x == minTime.x && timeKey.maxTime.y >= minTime.y)
-            {
-                return true;
-            }
-            return false;
-        }
-        else
-        {
-            return timeKey.minTime.x == minTime.x && timeKey.minTime.y == minTime.y && timeKey.maxTime.x == maxTime.x && timeKey.maxTime.y == maxTime.y;
-        }
+        return timeKey.minTime.x == minTime.x && timeKey.minTime.y == minTime.y &&
+               timeKey.maxTime.x == maxTime.x && timeKey.maxTime.y == maxTime.y;
     }
 }

@@ -44,7 +44,7 @@ public struct CharacterGroup
         {
             if (characters[i] != id)
             {
-                friends.Add(i);
+                friends.Add(characters[i]);
             }
         }
         return friends;

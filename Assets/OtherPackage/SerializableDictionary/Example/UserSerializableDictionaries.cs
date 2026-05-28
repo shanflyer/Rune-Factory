@@ -1,4 +1,4 @@
-﻿using BehaviorDesigner.Runtime;
+using BehaviorDesigner.Runtime;
 using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -22,7 +22,16 @@ public class GameTimeKeyIntDataDictionary : SerializableDictionary<GameTimeKey, 
 {
     internal bool TryGetValue(int2 testKey, out int value)
     {
-        return TryGetValue((GameTimeKey)testKey, out value);
+        foreach (var kvp in this)
+        {
+            if (kvp.Key == testKey)
+            {
+                value = kvp.Value;
+                return true;
+            }
+        }
+        value = default(int);
+        return false;
     }
 }
 
@@ -31,7 +40,16 @@ public class GameTimeKeyInt2DataDictionary : SerializableDictionary<GameTimeKey,
 {
     internal bool TryGetValue(int2 testKey, out int2 value)
     {
-        return TryGetValue((GameTimeKey)testKey, out value);
+        foreach (var kvp in this)
+        {
+            if (kvp.Key == testKey)
+            {
+                value = kvp.Value;
+                return true;
+            }
+        }
+        value = default(int2);
+        return false;
     }
 }
 

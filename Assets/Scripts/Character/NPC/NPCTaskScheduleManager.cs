@@ -217,9 +217,9 @@ public class NPCTaskScheduleManager:Singleton<NPCTaskScheduleManager>
         }
 
 
-        internal string NowTaskName => nowScheduleData.taskName;
+        internal string NowTaskName => nowScheduleData != null ? nowScheduleData.taskName : null;
         private NPCTaskScheduleData nowScheduleData;
-        internal NPCBehaviorState behaviorState => nowScheduleData.behaviorState;
+        internal NPCBehaviorState behaviorState => nowScheduleData != null ? nowScheduleData.behaviorState : NPCBehaviorState.NULL;
 
         internal bool holdPos
         {
@@ -231,7 +231,7 @@ public class NPCTaskScheduleManager:Singleton<NPCTaskScheduleManager>
                 }
                 else
                 {
-                    return nowScheduleData.holdPos;
+                    return nowScheduleData != null && nowScheduleData.holdPos;
                 }
             }
         }
@@ -264,7 +264,7 @@ public class NPCTaskScheduleManager:Singleton<NPCTaskScheduleManager>
             if (behaviorIsPause)
             {
                 behaviorIsPause = false;
-                if (Time.time - pauseTime > nowScheduleData.maxPauseTime)
+                if (nowScheduleData == null || Time.time - pauseTime > nowScheduleData.maxPauseTime)
                 {
                     SetNowBehaviorTree();
                 }
@@ -285,7 +285,8 @@ public class NPCTaskScheduleManager:Singleton<NPCTaskScheduleManager>
             {
                 if (nPCTaskScheduleTimeList != null)
                 {
-                    if (nPCTaskScheduleTimeList.GetTaskScheduleDataOrder(GameTimeManager.instance.nowHourMinute, ref nowScheduleData))
+                    if (nPCTaskScheduleTimeList.GetTaskScheduleDataOrder(GameTimeManager.instance.nowHourMinute, ref nowScheduleData)
+                        && nowScheduleData != null)
                     {
                         behaviorCanBreak = nowScheduleData.canBreak;
                         PauseWhenDisabled = nowScheduleData.PauseWhenDisabled;
@@ -355,7 +356,8 @@ public class NPCTaskScheduleManager:Singleton<NPCTaskScheduleManager>
                 pauseWhenDisabled = false;
                 return null;
             }
-            if (nPCTaskScheduleTimeList.GetTaskScheduleDataOrder(new int2(UpdateGameTime.hour, UpdateGameTime.minute), ref nowScheduleData))
+            if (nPCTaskScheduleTimeList.GetTaskScheduleDataOrder(new int2(UpdateGameTime.hour, UpdateGameTime.minute), ref nowScheduleData)
+                && nowScheduleData != null)
             {
                 behaviorCanBreak = nowScheduleData.canBreak;
                 pauseWhenDisabled = nowScheduleData.PauseWhenDisabled;
@@ -387,6 +389,16 @@ public class NPCTaskScheduleTimeList
 
     public bool GetTaskScheduleDataOrder(int2 time, ref NPCTaskScheduleData nPCTaskScheduleData)
     {
+        if (taskScheduleModelDatas == null || taskScheduleModelDatas.Count == 0)
+        {
+            nPCTaskScheduleData = null;
+            return false;
+        }
+        if (nowTimeKeyIndex >= taskScheduleModelDatas.Count)
+        {
+            nowTimeKeyIndex = 0;
+        }
+
         if (taskScheduleModelDatas[nowTimeKeyIndex].gameTimeKey != time)
         {
             for (int i = 0; i < taskScheduleModelDatas.Count; i++)
@@ -404,7 +416,7 @@ public class NPCTaskScheduleTimeList
         }
         nPCTaskScheduleData = GetTaskSheduleData(time);
 
-        return true;
+        return nPCTaskScheduleData != null;
     }
 
     private NPCTaskScheduleData GetTaskSheduleData(int2 time)
