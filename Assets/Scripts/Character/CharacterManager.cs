@@ -14,7 +14,7 @@ public struct TeamerEquipAndProperty : IReferenceData
     public CharacterEquipAndPropertyData[] characterEquipAndPropertyDatas;
 }
 
-public class CharacterManager : Singleton<CharacterManager>
+public partial class CharacterManager : Singleton<CharacterManager>
 {
     public override bool NeedUpdate => true;
 
@@ -100,11 +100,7 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
                 audioListener.enabled = true;
                 CameraManager.instance.SetCameraListener(false);
-                RefreshMapTempCharacter refreshMapTempCharacter = new RefreshMapTempCharacter
-                {
-                    characterId = character.instanceId,
-                };
-                GameActionManager.instance.QueueAction(refreshMapTempCharacter, true);
+                QueueRefreshMapTempCharacter(character.instanceId, true);
             }
             else if (NPCManager.instance.GetNPCFormInstance(character.instanceId, out var npc))
             {
@@ -289,7 +285,7 @@ public class CharacterManager : Singleton<CharacterManager>
     private  void SetCharacterRandomPos(SetCharacterRandomPos SetCharacterRandomPos)
     {
         Character character = GetCharacter(SetCharacterRandomPos.characterId);
-        if (character != null && characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
+        if (character != null && TryGetRuntimeView(character, out var characterRuntimeObj))
         {
             int2 coordinate = GameCommon.GetMapCoordinateInt(SetCharacterRandomPos.pos);
             int2 targetCoordinate = MapCellController.instance.GetRandomWalkable(new int3(coordinate.xy, character.mapInstance), SetCharacterRandomPos.range);
@@ -317,7 +313,7 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         if (characters.TryGetValue(RefreshCharacterPos.characterId, out var character))
         {
-            if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
+            if (TryGetRuntimeView(character, out var characterRuntimeObj))
             {
                 var pos = GameCommon.GetMapPos(character.coordinate);
                 if (GameDataManager.instance.GlobalData.debug)
@@ -330,11 +326,12 @@ public class CharacterManager : Singleton<CharacterManager>
                 }
 
                 characterRuntimeObj.transform.position = pos;
+                character.StopMove();
                 if (RefreshCharacterPos.setResult != null)
                 {
                     RefreshCharacterPos.setResult(true);
                 }
-                character.StopMove();
+                return;
             }
         }
         if (RefreshCharacterPos.setResult != null)
@@ -347,7 +344,7 @@ public class CharacterManager : Singleton<CharacterManager>
     {
         if (characters.TryGetValue(setCharacterTempPos.characterId, out var character))
         {
-            if (characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
+            if (TryGetRuntimeView(character, out var characterRuntimeObj))
             {
                 if (GameDataManager.instance.GlobalData.debug)
                 {
@@ -365,6 +362,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
                 Debug.Log($" character:{character.name} setTemp StopMove!");
                 character.StopMove();
+                return;
             }
         }
 
@@ -390,7 +388,7 @@ public class CharacterManager : Singleton<CharacterManager>
             }
         }
 
-        if (character!=null&&characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
+        if (character!=null&&TryGetRuntimeView(character, out var characterRuntimeObj))
         {
             characterRuntimeObj.gameObject.SetActive(displayOrHideCharacter.display);
             if (character == controllerCharacter)
@@ -691,11 +689,8 @@ public class CharacterManager : Singleton<CharacterManager>
     /// <param name="creatTempCharacter"></param>
     private async System.Threading.Tasks.Task CreateTempCharacterAsync(CreatTempCharacter creatTempCharacter)
     {
-        var tempCharacterData = await GameDataManager.instance.GetAsyncData<TempCharacterData>(creatTempCharacter.characterId);
-        var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(tempCharacterData.linkCharacterId);
         int level = TempCharacterManager.instance.level;
-        var professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(characterData.profession);
-        TempCharacter character = new TempCharacter(characterData, professionData, MyInstance.instance.TempUid, tempCharacterData);
+        TempCharacter character = await CreateTempCharacterInstanceAsync(creatTempCharacter.characterId, MyInstance.instance.TempUid);
 
         AddCharacter(character);
         character.SetObjCoordinate(creatTempCharacter.mapInstance,
@@ -727,9 +722,7 @@ public class CharacterManager : Singleton<CharacterManager>
             {
                 instanceId = MyInstance.instance.CharacterId;
             }
-            var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(creatCharacter.characterId);
-            var professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(characterData.profession);
-            character = new Character(characterData, professionData, instanceId,true);
+            character = await CreateCharacterInstanceAsync(creatCharacter.characterId, instanceId);
             AddCharacter(character,creatCharacter.hideData);
         }
         if (creatCharacter.mapInstance != 0)
@@ -1363,9 +1356,7 @@ public class CharacterManager : Singleton<CharacterManager>
 
             if (!characters.TryGetValue(npc.characterInstance, out var character))
             {
-                var characterData = await GameDataManager.instance.GetAsyncData<CharacterData>(mapNpcData.dataId);
-                var professionData = await GameDataManager.instance.GetAsyncData<ProfessionData>(characterData.profession);
-                character = new Character(characterData, professionData, npc.characterInstance, true);
+                character = await CreateCharacterInstanceAsync(mapNpcData.dataId, npc.characterInstance);
                 characters.Add(npc.characterInstance, character);
                 characterDataToInstances[character.dataId] = character.instanceId;
             }
@@ -1442,10 +1433,9 @@ public class CharacterManager : Singleton<CharacterManager>
 
         //Debug.Log($"RefreshNpcRuntimeObj:{character.name}");
 
-        if (characterRuntionObjs.TryGetValue(character, out characterRuntimeObj))
+        if (TryGetRuntimeView(character, out characterRuntimeObj))
         {
-            if (character.mapInstance != WorldMapObjManager.instance.displayMap
-                || ExploreManager.instance.isExplore)
+            if (!ShouldDisplayCharacter(character))
             {
                 RecycleCharacterObj(character);
                 if (character == controllerCharacter)
@@ -1460,26 +1450,14 @@ public class CharacterManager : Singleton<CharacterManager>
                 var transform = characterRuntimeObj.transform;
                 Vector3 oldPos = transform.position;
                 pos.z = oldPos.z;
-                if (GameDataManager.instance.GlobalData.debug)
-                {
-                    float dX = math.abs(characterRuntimeObj.transform.position.x - pos.x);
-                    if (dX >= 1.5)
-                    {
-                        Debug.Log($"Waring:{character.name}--oldPos{characterRuntimeObj.transform.position}--newPos{pos}");
-                    }
-                }
-                characterRuntimeObj.SetPosition(pos);
+                RefreshRuntimePosition(character, characterRuntimeObj, pos);
                 if (controller)
                 {
                     CameraManager.instance.SetFollowTarget(transform);
                 }
                 if (RefreshMapTemp)
                 {
-                    RefreshMapTempCharacter refreshMapTempCharacter = new RefreshMapTempCharacter
-                    {
-                        characterId = character.instanceId,
-                    };
-                    GameActionManager.instance.QueueAction(refreshMapTempCharacter);
+                    QueueRefreshMapTempCharacter(character.instanceId);
                 }
 
 
@@ -1488,8 +1466,7 @@ public class CharacterManager : Singleton<CharacterManager>
         }
         else
         {
-            if (fixedDisplay || (character.mapInstance == WorldMapObjManager.instance.displayMap
-                                 && !ExploreManager.instance.isExplore))
+            if (ShouldDisplayCharacter(character, fixedDisplay))
             {
                 if(character is TempCharacter)
                 {
@@ -1529,9 +1506,9 @@ public class CharacterManager : Singleton<CharacterManager>
         for(int i = characters.length-1; i >=0; i--)
         {
             var character = characters[i];
-            if (character.mapInstance != WorldMapObjManager.instance.displayMap||ExploreManager.instance.isExplore)
+            if (!ShouldDisplayCharacter(character))
             {
-                if(characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
+                if(TryGetRuntimeView(character, out var characterRuntimeObj))
                 {
                     RecycleCharacterObj(character);
                 }
@@ -1542,7 +1519,7 @@ public class CharacterManager : Singleton<CharacterManager>
             }
             else if(!displayCharacters.Contains(character))
             {
-                if (!characterRuntionObjs.TryGetValue(character, out var characterRuntimeObj))
+                if (!TryGetRuntimeView(character, out var characterRuntimeObj))
                 {
                     await CreateCharacterObjAsync(character);
                 }

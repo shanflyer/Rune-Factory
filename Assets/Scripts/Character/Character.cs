@@ -1440,11 +1440,7 @@ public partial class Character
         GameObjectCurveController.instance.Cancel(moveHandle);
         CharacterManager.instance.SetCharacterAnimationSpeed(0, this);
         moveHandle = default;
-
-        moveTarget = int3.zero;
-        this.moveEndAction = null;
-        this.changeCoordinateAction = null;
-        this.failedMoveAction = null;
+        moveState.Clear();
     }
 
     public void StartMove()
@@ -1548,7 +1544,7 @@ public partial class Character
         if (Other >= 0)
             professionProperty.Other = Other;
         if (Speed >= 0)
-            professionProperty.Speed = Other;
+            professionProperty.Speed = Speed;
 
         this.ProfessionProperty = professionProperty;
     }
@@ -1833,10 +1829,11 @@ public partial class Character
         coordinate.xy += offsetCoordinate;
     }
 
-    public int3 moveTarget { get; private set; }
-    public MoveEndAction moveEndAction { get; private set; }
-    public MoveEndAction changeCoordinateAction { get; private set; }
-    public Int3Action failedMoveAction { get; private set; }
+    private CharacterMoveState moveState;
+    public int3 moveTarget => moveState.Target;
+    public MoveEndAction moveEndAction => moveState.MoveEndAction;
+    public MoveEndAction changeCoordinateAction => moveState.ChangeCoordinateAction;
+    public Int3Action failedMoveAction => moveState.FailedMoveAction;
 
     public bool TryMove(int2 targetCoordinate, MoveEndAction moveEndAction = null, MoveEndAction changeCoordinateAction = null,
         Int3Action failedMoveAction = null)
@@ -1849,31 +1846,39 @@ public partial class Character
         if (targetMap == 948 && targetCoordinate.x == 0 && targetCoordinate.y == 0) Debug.Log("Error");
         if (targetMap == mapInstance && targetCoordinate.x == coordinate.x && targetCoordinate.y == coordinate.y)
         {
-            if (moveEndAction != null)
-            {
-                moveEndAction.Invoke();
-            }
+            moveEndAction?.Invoke();
             return true;
         }
-        this.moveEndAction = moveEndAction;
-        this.changeCoordinateAction = changeCoordinateAction;
-        this.failedMoveAction = failedMoveAction;
         if (!CanMoveCrossMap)
         {
             Debug.Log($"NoCanMoveCrossMap");
+            failedMoveAction?.Invoke(new int3(targetCoordinate.xy, targetMap));
             return false;
         }
+
+        moveState.Begin(new int3(targetCoordinate.xy, targetMap), moveEndAction, changeCoordinateAction, failedMoveAction);
+
         void FailedMoveAction()
         {
-            moveTarget = new int3(-1, -1, -1);
-            if (failedMoveAction != null)
-            {
-                failedMoveAction(new int3(targetCoordinate.xy, targetMap));
-            }
-            moveEndAction = null;
-            changeCoordinateAction = null;
-            failedMoveAction = null;
+            moveState.Fail(new int3(targetCoordinate.xy, targetMap));
         }
+
+        void CompleteMove()
+        {
+            moveState.Complete();
+        }
+
+        void CompleteMoveAfterMapLerp()
+        {
+            canMove = false;
+            GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), CompleteMove);
+        }
+
+        void ChangeCoordinateAction()
+        {
+            moveState.ChangeCoordinate();
+        }
+
         if (targetMap== objCoordinate.z)
         {
             MapCellJobController.instance.AddPathRequest(objCoordinate.xy, targetCoordinate, targetMap,
@@ -1884,29 +1889,13 @@ public partial class Character
                     // Debug.Log($"character:{name}--MovePathEnd");
                     if (this == CharacterManager.instance.controllerCharacter)
                     {
-                        canMove = false;
-                        GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), () =>
-                        {
-                            if (this.moveEndAction != null)
-                            {
-                                this.moveEndAction.Invoke();
-                                moveEndAction = null;
-                                changeCoordinateAction = null;
-                                failedMoveAction = null;
-                            }
-                        });
+                        CompleteMoveAfterMapLerp();
                     }
                     else
                     {
-                        if (this.moveEndAction != null)
-                        {
-                            this.moveEndAction.Invoke();
-                            moveEndAction = null;
-                            changeCoordinateAction = null;
-                            failedMoveAction = null;
-                        }
+                        CompleteMove();
                     }
-                }, changeCoordinateAction, FailedMoveAction);
+                }, ChangeCoordinateAction, FailedMoveAction);
             });
 
             return true;
@@ -2007,6 +1996,7 @@ public partial class Character
             }
             else
             {
+                FailedMoveAction();
                 return false;
             }
 
@@ -2033,35 +2023,19 @@ public partial class Character
                             //Debug.Log($"character:{name}--PlayerMovePathEnd");
                             if (this == CharacterManager.instance.controllerCharacter)
                             {
-                                canMove = false;
-                                GameTimerController.instance.DelayAction((int)(GameCommon.mapChangeLerpTime * 1000), () =>
-                                {
-                                    if (this.moveEndAction != null)
-                                    {
-                                        this.moveEndAction.Invoke();
-                                        moveEndAction = null;
-                                        changeCoordinateAction = null;
-                                        failedMoveAction = null;
-                                    }
-                                });
+                                CompleteMoveAfterMapLerp();
                             }
                             else
                             {
                                 Move(false);
                             }
-                        }, changeCoordinateAction, FailedMoveAction);
+                        }, ChangeCoordinateAction, FailedMoveAction);
                     }
 
                 }
                 else
                 {
-                    if (this.moveEndAction != null)
-                    {
-                        this.moveEndAction.Invoke();
-                        moveEndAction = null;
-                        changeCoordinateAction = null;
-                        failedMoveAction = null;
-                    }
+                    CompleteMove();
                 }
             }
         }
@@ -2080,14 +2054,8 @@ public partial class Character
         else
         {
 
-            moveTarget = new int3(0, 0, 0);
-            if (endAction != null)
-            {
-                endAction.Invoke();
-            }
-            this.moveEndAction = null;
-            this.changeCoordinateAction = null;
-            this.failedMoveAction = null;
+            endAction?.Invoke();
+            moveState.Clear();
         }
     }
 }
