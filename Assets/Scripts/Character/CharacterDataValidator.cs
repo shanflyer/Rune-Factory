@@ -8,13 +8,7 @@ public static class CharacterDataValidator
     [MenuItem("Tools/Character/Validate Character Data")]
     public static void ValidateCharacterData()
     {
-        var warnings = new List<string>();
-
-        ValidateAssets<CharacterData>(warnings, ValidateCharacterDataAsset);
-        ValidateAssets<NPCData>(warnings, ValidateNpcDataAsset);
-        ValidateAssets<NPCBehaviorData>(warnings, ValidateNpcBehaviorDataAsset);
-        ValidateAssets<NPCTaskScheduleData>(warnings, ValidateNpcTaskScheduleDataAsset);
-        ValidateAssets<TaskScheduleModelDataList>(warnings, ValidateTaskScheduleModelDataListAsset);
+        var warnings = CollectWarnings();
 
         if (warnings.Count == 0)
         {
@@ -23,6 +17,36 @@ public static class CharacterDataValidator
         }
 
         Debug.LogWarning($"CharacterDataValidator completed with {warnings.Count} warnings.\n{string.Join("\n", warnings)}");
+    }
+
+    public static List<string> CollectWarnings()
+    {
+        var warnings = new List<string>();
+        var npcDataById = LoadAssetMap<NPCData>();
+
+        ValidateAssets<CharacterData>(warnings, ValidateCharacterDataAsset);
+        ValidateAssets<NPCData>(warnings, ValidateNpcDataAsset);
+        ValidateAssets<NPCBehaviorData>(warnings,
+            (data, path, list) => ValidateNpcBehaviorDataAsset(data, path, list, npcDataById));
+        ValidateAssets<NPCTaskScheduleData>(warnings, ValidateNpcTaskScheduleDataAsset);
+        ValidateAssets<TaskScheduleModelDataList>(warnings, ValidateTaskScheduleModelDataListAsset);
+
+        return warnings;
+    }
+
+    private static Dictionary<int, NPCData> LoadAssetMap<T>() where T : Object, IGameData
+    {
+        var map = new Dictionary<int, NPCData>();
+        foreach (var guid in AssetDatabase.FindAssets($"t:{typeof(T).Name}"))
+        {
+            var path = AssetDatabase.GUIDToAssetPath(guid);
+            if (AssetDatabase.LoadAssetAtPath<T>(path) is NPCData npcData)
+            {
+                map[npcData.id] = npcData;
+            }
+        }
+
+        return map;
     }
 
     private static void ValidateAssets<T>(List<string> warnings, System.Action<T, string, List<string>> validate)
@@ -60,11 +84,15 @@ public static class CharacterDataValidator
             warnings, path, "functionIds and friendLevels count mismatch.");
     }
 
-    private static void ValidateNpcBehaviorDataAsset(NPCBehaviorData data, string path, List<string> warnings)
+    private static void ValidateNpcBehaviorDataAsset(NPCBehaviorData data, string path, List<string> warnings,
+        Dictionary<int, NPCData> npcDataById)
     {
         WarnIf(data.id <= 0, warnings, path, "id must be positive.");
-        WarnIf(data.dailyTasks == null || data.dailyTasks.Count == 0, warnings, path, "dailyTasks is empty.");
-        WarnIf(data.externalBehavior == null, warnings, path, "externalBehavior is missing.");
+        bool hasNoSchedule = data.dailyTasks == null || data.dailyTasks.Count == 0;
+        bool isHiddenStaticNpc = npcDataById.TryGetValue(data.id, out var npcData) && npcData.hide && hasNoSchedule;
+
+        WarnIf(hasNoSchedule && !isHiddenStaticNpc, warnings, path, "dailyTasks is empty.");
+        WarnIf(data.externalBehavior == null && !isHiddenStaticNpc, warnings, path, "externalBehavior is missing.");
     }
 
     private static void ValidateNpcTaskScheduleDataAsset(NPCTaskScheduleData data, string path, List<string> warnings)

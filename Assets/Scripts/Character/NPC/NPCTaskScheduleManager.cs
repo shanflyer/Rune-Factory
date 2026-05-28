@@ -155,9 +155,21 @@ public class NPCTaskScheduleManager:Singleton<NPCTaskScheduleManager>
         internal async System.Threading.Tasks.Task SetNPCTaskScheduleTimeListAsync(List<int> dailyTasks, ExternalBehaviorTree externalBehavior)
         {
             List<TaskScheduleModelData> taskSheduleModelDatas = new List<TaskScheduleModelData>();
+            if (dailyTasks == null || dailyTasks.Count == 0)
+            {
+                LogScheduleWarning("dailyTasks is empty.");
+                dailyTasks = new List<int>();
+            }
+
             for (int i = 0; i < dailyTasks.Count; i++)
             {
                 var taskSheduleModelData = await GameDataManager.instance.GetAsyncData<TaskScheduleModelData>(dailyTasks[i]);
+                if (taskSheduleModelData == null)
+                {
+                    LogScheduleWarning($"missing TaskScheduleModelData id={dailyTasks[i]}.");
+                    continue;
+                }
+
                 taskSheduleModelDatas.Add(taskSheduleModelData);
             }
             nPCTaskScheduleTimeList = new NPCTaskScheduleTimeList(taskSheduleModelDatas);
@@ -298,8 +310,10 @@ public class NPCTaskScheduleManager:Singleton<NPCTaskScheduleManager>
                     Debug.Log($"{character.characterData.characterName}-无nPCTaskScheduleTimeList");
                 }
             }
-            catch
+            catch (Exception e)
             {
+                LogScheduleWarning($"GetNowTaskScheduleBehavior failed. error={e.Message}");
+                Debug.LogException(e);
             }
 
             behaviorCanBreak = false;
@@ -330,9 +344,10 @@ public class NPCTaskScheduleManager:Singleton<NPCTaskScheduleManager>
                 endBehavior = false;
                 LogScheduleBehaviorChange(externalBehavior, PauseWhenDisabled);
             }
-            catch
+            catch (Exception e)
             {
-                Debug.LogError($"NPCbehavior:{character.characterData.characterName}!!!!");
+                Debug.LogError($"NPCbehavior failed: characterId={characterInstance}, character={character?.characterData?.characterName ?? "null"}, task={NowTaskName ?? "null"}, behavior={externalBehavior?.name ?? "null"}");
+                Debug.LogException(e);
             }
         }
 
@@ -371,12 +386,22 @@ public class NPCTaskScheduleManager:Singleton<NPCTaskScheduleManager>
 
         private void LogScheduleBehaviorChange(ExternalBehavior externalBehavior, bool pauseWhenDisabled)
         {
-            if (!CharacterDebugSettings.EnableScheduleLogs)
-            {
-                return;
-            }
+            CharacterDebugSettings.RecordEvent(
+                CharacterDebugEventType.ScheduleChange,
+                characterInstance,
+                character?.name,
+                $"task={NowTaskName ?? "null"} state={behaviorState} behavior={externalBehavior?.name ?? "null"} canBreak={behaviorCanBreak} holdPos={holdPos} pauseWhenDisabled={pauseWhenDisabled}",
+                CharacterDebugSettings.EnableScheduleLogs);
+        }
 
-            Debug.Log($"NPCScheduleBehaviorChange characterId={characterInstance} character={character?.name ?? "null"} task={NowTaskName ?? "null"} state={behaviorState} behavior={externalBehavior?.name ?? "null"} canBreak={behaviorCanBreak} holdPos={holdPos} pauseWhenDisabled={pauseWhenDisabled}");
+        private void LogScheduleWarning(string message)
+        {
+            CharacterDebugSettings.RecordEvent(
+                CharacterDebugEventType.ScheduleWarning,
+                characterInstance,
+                character?.name,
+                message,
+                CharacterDebugSettings.EnableScheduleLogs);
         }
     }
 
@@ -389,11 +414,14 @@ public enum NPCBehaviorState
 public class NPCTaskScheduleTimeList
 {
     private List<TaskScheduleModelData> taskScheduleModelDatas = new List<TaskScheduleModelData>();
+    private const int MinutesPerDay = 24 * 60;
+    private readonly int[] minuteToScheduleIndex = new int[MinutesPerDay];
 
     public NPCTaskScheduleTimeList(List<TaskScheduleModelData> taskScheduleModelDatas)
     {
-        this.taskScheduleModelDatas = taskScheduleModelDatas;
+        this.taskScheduleModelDatas = taskScheduleModelDatas ?? new List<TaskScheduleModelData>();
         nowTimeKeyIndex = 0;
+        BuildMinuteIndex();
     }
 
     private int nowTimeKeyIndex;
@@ -405,25 +433,22 @@ public class NPCTaskScheduleTimeList
             nPCTaskScheduleData = null;
             return false;
         }
-        if (nowTimeKeyIndex >= taskScheduleModelDatas.Count)
+        int minute = ToMinute(time);
+        if (minute < 0 || minute >= MinutesPerDay)
         {
-            nowTimeKeyIndex = 0;
+            nPCTaskScheduleData = null;
+            return false;
         }
 
-        if (taskScheduleModelDatas[nowTimeKeyIndex].gameTimeKey != time)
+        if (nowTimeKeyIndex >= taskScheduleModelDatas.Count ||
+            !taskScheduleModelDatas[nowTimeKeyIndex].gameTimeKey.Contains(time))
         {
-            for (int i = 0; i < taskScheduleModelDatas.Count; i++)
-            {
-                if (taskScheduleModelDatas[i].gameTimeKey == time)
-                {
-                    nowTimeKeyIndex = i;
-                    break;
-                }
-            }
+            nowTimeKeyIndex = minuteToScheduleIndex[minute];
         }
-        if (nowTimeKeyIndex >= taskScheduleModelDatas.Count)
+        if (nowTimeKeyIndex < 0 || nowTimeKeyIndex >= taskScheduleModelDatas.Count)
         {
-            nowTimeKeyIndex = 0;
+            nPCTaskScheduleData = null;
+            return false;
         }
         nPCTaskScheduleData = GetTaskSheduleData(time);
 
@@ -440,8 +465,14 @@ public class NPCTaskScheduleTimeList
         int startM = taskScheduleModelData.gameTimeKey.minTime.x * 60 + taskScheduleModelData.gameTimeKey.minTime.y;
         int endM = taskScheduleModelData.gameTimeKey.maxTime.x * 60 + taskScheduleModelData.gameTimeKey.maxTime.y;
         int nowM = time.x * 60 + time.y;
+        int duration = endM - startM;
+        if (duration <= 0)
+        {
+            Debug.LogWarning($"NPCTaskScheduleTimeList invalid range: id={taskScheduleModelData.id}, range={taskScheduleModelData.gameTimeKey}");
+            return null;
+        }
 
-        float e_value = (nowM - startM) / (float)(endM - startM);
+        float e_value = (nowM - startM) / (float)duration;
 
         GameRandomData gameRandomData = new GameRandomData
         {
@@ -495,5 +526,37 @@ public class NPCTaskScheduleTimeList
             }
         }
         return null;
+    }
+
+    private void BuildMinuteIndex()
+    {
+        for (int i = 0; i < minuteToScheduleIndex.Length; i++)
+        {
+            minuteToScheduleIndex[i] = -1;
+        }
+
+        for (int i = 0; i < taskScheduleModelDatas.Count; i++)
+        {
+            var schedule = taskScheduleModelDatas[i];
+            if (schedule == null || !schedule.gameTimeKey.HasValidRange())
+            {
+                continue;
+            }
+
+            int start = ToMinute(schedule.gameTimeKey.minTime);
+            int end = math.min(ToMinute(schedule.gameTimeKey.maxTime), MinutesPerDay);
+            for (int minute = start; minute < end; minute++)
+            {
+                if (minuteToScheduleIndex[minute] < 0)
+                {
+                    minuteToScheduleIndex[minute] = i;
+                }
+            }
+        }
+    }
+
+    private static int ToMinute(int2 time)
+    {
+        return time.x * 60 + time.y;
     }
 }

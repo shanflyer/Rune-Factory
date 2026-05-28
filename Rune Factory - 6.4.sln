@@ -23,8 +23,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoxelBusters.EssentialKit.i
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.RenderPipelines.Universal.Runtime", "Unity.RenderPipelines.Universal.Runtime.csproj", "{1d055b86-1624-ae5e-7a7e-45df8cd80255}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SingularityGroup.HotReload.Editor", "SingularityGroup.HotReload.Editor.csproj", "{4f3b894c-0c86-4dae-0d84-ab04c223ca36}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoxelBusters.EssentialKit.Editor", "VoxelBusters.EssentialKit.Editor.csproj", "{dc68f94e-8c7b-43a7-e0ae-73f18ac04f62}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoxelBusters.EssentialKit.Demo", "VoxelBusters.EssentialKit.Demo.csproj", "{ae58d0db-a8a2-fb96-6966-c9435290ca0c}"
@@ -57,8 +55,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocCodeExamples", "DocCodeE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CFXREditor", "CFXREditor.csproj", "{ea2fe112-bd72-78cb-e99d-9eac3098cb41}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SingularityGroup.HotReload.Runtime", "SingularityGroup.HotReload.Runtime.csproj", "{6fbe5c53-6992-15bd-6702-660ff41ad613}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoxelBusters.CoreLibrary.NativePlugins.AndroidModule", "VoxelBusters.CoreLibrary.NativePlugins.AndroidModule.csproj", "{984deffd-d8f8-9d93-d239-2f22d26fe916}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.RenderPipelines.Universal.Runtime.Tests", "Unity.RenderPipelines.Universal.Runtime.Tests.csproj", "{f4714afb-7e20-a670-c684-8a00d2885a29}"
@@ -66,8 +62,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.2D.Tilemap.Extras.Placeholder.EditorTests", "Unity.2D.Tilemap.Extras.Placeholder.EditorTests.csproj", "{a468ce6c-56e6-5dab-6f70-3432d17d27dd}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CFXRDemo", "CFXRDemo.csproj", "{825d2950-662f-0028-f727-2b58001790d4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SingularityGroup.HotReload.Runtime.Public", "SingularityGroup.HotReload.Runtime.Public.csproj", "{62d76efd-0d90-b3c4-8aa0-47031e837a25}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VoxelBusters.CoreLibrary.Parser", "VoxelBusters.CoreLibrary.Parser.csproj", "{6b92a837-51c0-54a1-9367-7dfd865ee601}"
 EndProject
@@ -120,8 +114,6 @@ Global
 		{e48bb54a-e112-e740-8d3f-c9815a0bdb1d}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1d055b86-1624-ae5e-7a7e-45df8cd80255}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1d055b86-1624-ae5e-7a7e-45df8cd80255}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4f3b894c-0c86-4dae-0d84-ab04c223ca36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4f3b894c-0c86-4dae-0d84-ab04c223ca36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{dc68f94e-8c7b-43a7-e0ae-73f18ac04f62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{dc68f94e-8c7b-43a7-e0ae-73f18ac04f62}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ae58d0db-a8a2-fb96-6966-c9435290ca0c}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -154,8 +146,6 @@ Global
 		{35d54beb-0b38-e832-838a-af5552949d39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ea2fe112-bd72-78cb-e99d-9eac3098cb41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ea2fe112-bd72-78cb-e99d-9eac3098cb41}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6fbe5c53-6992-15bd-6702-660ff41ad613}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6fbe5c53-6992-15bd-6702-660ff41ad613}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{984deffd-d8f8-9d93-d239-2f22d26fe916}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{984deffd-d8f8-9d93-d239-2f22d26fe916}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{f4714afb-7e20-a670-c684-8a00d2885a29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -164,8 +154,6 @@ Global
 		{a468ce6c-56e6-5dab-6f70-3432d17d27dd}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{825d2950-662f-0028-f727-2b58001790d4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{825d2950-662f-0028-f727-2b58001790d4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{62d76efd-0d90-b3c4-8aa0-47031e837a25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{62d76efd-0d90-b3c4-8aa0-47031e837a25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6b92a837-51c0-54a1-9367-7dfd865ee601}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6b92a837-51c0-54a1-9367-7dfd865ee601}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ac0ea5c8-add6-a9f6-2daf-c0bb4adedcad}.Debug|Any CPU.ActiveCfg = Debug|Any CPU

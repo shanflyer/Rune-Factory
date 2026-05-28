@@ -294,6 +294,7 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedInt.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\GetCharacterToMapObjNearestCell.cs" />
     <Compile Include="Assets\Scripts\Main\GameController.cs" />
+    <Compile Include="Assets\Scripts\Main\ManagerStartupRegistry.cs" />
     <Compile Include="Assets\Scripts\Map\MapCellJobController.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Composites\Parallel.cs" />
     <Compile Include="Assets\OtherPackage\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
@@ -1071,6 +1072,7 @@
     <Compile Include="Assets\Scripts\Map\SpecialMapLink.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetVelocity.cs" />
     <Compile Include="Assets\Scripts\Main\GameDataManager.cs" />
+    <Compile Include="Assets\Scripts\Main\DataResourceRegistry.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Timeline\Resume.cs" />
     <Compile Include="Assets\Scripts\Action\HomeEquipAction.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\SphereCollider\SetCenter.cs" />
@@ -1618,7 +1620,6 @@
     <None Include="Assets\Render\Shader\MyColorMask.shader" />
     <None Include="Assets\Render\Shader\MyShadowMask.shader" />
     <None Include="Assets\MyLight\Material\MyEyeMul.shader" />
-    <None Include="Packages\com.singularitygroup.hotreload\package.json" />
     <None Include="Assets\Render\Shader\MyTest.shader" />
     <None Include="Assets\OtherPackage\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\Effect\Epic Toon FX\Prefabs\Interactive\Interactive FX.txt" />
@@ -2913,10 +2914,6 @@
     <ProjectReference Include="Unity.PlayableGraphVisualizer.Editor.csproj">
       <Project>{71e46554-4202-aec1-eca5-4a869a46e1fe}</Project>
       <Name>Unity.PlayableGraphVisualizer.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="SingularityGroup.HotReload.Runtime.Public.csproj">
-      <Project>{62d76efd-0d90-b3c4-8aa0-47031e837a25}</Project>
-      <Name>SingularityGroup.HotReload.Runtime.Public</Name>
     </ProjectReference>
     <ProjectReference Include="Unity.RenderPipelines.Universal.2D.Editor.Overrides.csproj">
       <Project>{368a2661-1bf0-6cdd-98a8-bac576e1a8ac}</Project>

@@ -433,6 +433,8 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             NormalizeUserGameSaveData(saveDataList.userGameSaveDatas[i], i);
             saveDataList.userGameSaveDatas[i].Init();
         }
+
+        ValidateNormalizedSaveDataList(saveDataList);
     }
 
     private static void MigrateSaveDataList(UserGameSaveDataList saveDataList)
@@ -516,6 +518,20 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         saveData.removeCollider ??= new List<int>();
         saveData.mapItemOperates ??= new List<int>();
         saveData.specialMapItemList ??= new List<long>();
+    }
+
+    private static void ValidateNormalizedSaveDataList(UserGameSaveDataList saveDataList)
+    {
+        saveDataList.nowSaveData?.ValidatePackedData("NormalizeSaveDataList.nowSaveData").LogWarnings();
+        if (saveDataList.userGameSaveDatas == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < saveDataList.userGameSaveDatas.Count; i++)
+        {
+            saveDataList.userGameSaveDatas[i]?.ValidatePackedData($"NormalizeSaveDataList.userGameSaveDatas[{i}]").LogWarnings();
+        }
     }
 
     private static void RemoveNullEntries<T>(List<T> list) where T : class

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEngine;
 
 public partial class PackageManager
 {
@@ -13,9 +14,10 @@ public partial class PackageManager
         public int level;
         public bool itemPackage;
         private List<Item> items;
-        public int itemCount => items.Count - nullItems.Count;
+        public int itemCount => items.Count - emptySlots.Count;
         public PackageType packageType => packageSetData != null ? packageSetData.packageType : default(PackageType);
-        private Queue<int> nullItems;
+        private Queue<int> emptySlotQueue;
+        private HashSet<int> emptySlots;
 
         public Dictionary<int, int> PackageItemCounts => packageItemCounts;
 
@@ -35,18 +37,10 @@ public partial class PackageManager
 
                 int oldIndex = list[list.Count - 1];
                 Item item = items[oldIndex];
-                if (nullItems.Contains(index))
+                if (emptySlots.Contains(index))
                 {
-                    Queue<int> newNullItems = new Queue<int>();
-                    foreach(var i in nullItems)
-                    {
-                        if (i != index)
-                        {
-                            newNullItems.Enqueue(i);
-                        }
-                    }
-                    newNullItems.Enqueue(oldIndex);
-                    nullItems = newNullItems;
+                    emptySlots.Remove(index);
+                    ReleaseSlot(oldIndex);
                     items[oldIndex] = default(Item);
                 }
                 else
@@ -58,6 +52,7 @@ public partial class PackageManager
                 }
                 items[index] = item;
                 list[list.Count - 1] = index;
+                ValidateIndexes();
             }
         }
         public void InitSaveItemList(List<Item> items)
@@ -65,7 +60,8 @@ public partial class PackageManager
             this.items = new List<Item>();
             packageItemCounts.Clear();
             packageItemIndexDatas.Clear();
-            nullItems.Clear();
+            emptySlotQueue.Clear();
+            emptySlots.Clear();
             for(int i = 0; i < items.Count; i++)
             {
                 if (items[i].count == 0)
@@ -78,6 +74,7 @@ public partial class PackageManager
                 AddItemIndex(items[i].dataId, index);
                 this.items.Add(items[i]);
             }
+            ValidateIndexes();
         }
         public Item GetItemFromInstanceId(int itemInstanceId)
         {
@@ -136,7 +133,8 @@ public partial class PackageManager
             packageItemCounts = new Dictionary<int, int>();
             packageItemIndexDatas = new Dictionary<int, List<int>>();
             itemPackage = false;
-            nullItems = new Queue<int>();
+            emptySlotQueue = new Queue<int>();
+            emptySlots = new HashSet<int>();
             SelectItem = 0;
         }
 
@@ -153,11 +151,21 @@ public partial class PackageManager
 
         private int TakeEmptySlot()
         {
-            return nullItems.Count != 0 ? nullItems.Dequeue() : items.Count;
+            while (emptySlotQueue.Count != 0)
+            {
+                int slot = emptySlotQueue.Dequeue();
+                if (emptySlots.Remove(slot))
+                {
+                    return slot;
+                }
+            }
+
+            return items.Count;
         }
 
         private void SetSlot(int index, Item item)
         {
+            emptySlots.Remove(index);
             if (items.Count <= index)
             {
                 items.Add(item);
@@ -212,9 +220,9 @@ public partial class PackageManager
                 return;
             }
 
-            if (!nullItems.Contains(index))
+            if (emptySlots.Add(index))
             {
-                nullItems.Enqueue(index);
+                emptySlotQueue.Enqueue(index);
             }
 
             items[index] = default(Item);
@@ -239,6 +247,90 @@ public partial class PackageManager
             }
 
             return false;
+        }
+
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
+        [System.Diagnostics.Conditional("DEVELOPMENT_BUILD")]
+        private void ValidateIndexes()
+        {
+            Dictionary<int, int> actualCounts = new Dictionary<int, int>();
+            Dictionary<int, HashSet<int>> actualIndexes = new Dictionary<int, HashSet<int>>();
+
+            foreach (int slot in emptySlots)
+            {
+                if (slot < 0 || slot >= items.Count)
+                {
+                    Debug.LogError($"Package {instanceId} has invalid empty slot index {slot}.");
+                }
+                else if (items[slot].count != 0 || items[slot].dataId != 0)
+                {
+                    Debug.LogError($"Package {instanceId} empty slot {slot} still contains item {items[slot].dataId}.");
+                }
+            }
+
+            for (int i = 0; i < items.Count; i++)
+            {
+                if (emptySlots.Contains(i))
+                {
+                    continue;
+                }
+
+                Item item = items[i];
+                if (item.count <= 0)
+                {
+                    Debug.LogError($"Package {instanceId} slot {i} has non-positive item count.");
+                    continue;
+                }
+
+                actualCounts.TryGetValue(item.dataId, out int count);
+                actualCounts[item.dataId] = count + item.count;
+
+                if (!actualIndexes.TryGetValue(item.dataId, out var indexes))
+                {
+                    indexes = new HashSet<int>();
+                    actualIndexes.Add(item.dataId, indexes);
+                }
+
+                indexes.Add(i);
+            }
+
+            foreach (var count in actualCounts)
+            {
+                if (!packageItemCounts.TryGetValue(count.Key, out int indexedCount) || indexedCount != count.Value)
+                {
+                    Debug.LogError($"Package {instanceId} item {count.Key} count index mismatch. actual={count.Value}, indexed={indexedCount}");
+                }
+            }
+
+            foreach (var count in packageItemCounts)
+            {
+                if (!actualCounts.ContainsKey(count.Key))
+                {
+                    Debug.LogError($"Package {instanceId} item {count.Key} count index exists without slots.");
+                }
+            }
+
+            foreach (var indexData in actualIndexes)
+            {
+                if (!packageItemIndexDatas.TryGetValue(indexData.Key, out var indexedSlots))
+                {
+                    Debug.LogError($"Package {instanceId} item {indexData.Key} missing slot index list.");
+                    continue;
+                }
+
+                if (indexedSlots.Count != indexData.Value.Count)
+                {
+                    Debug.LogError($"Package {instanceId} item {indexData.Key} slot index count mismatch.");
+                }
+
+                for (int i = 0; i < indexedSlots.Count; i++)
+                {
+                    if (!indexData.Value.Contains(indexedSlots[i]))
+                    {
+                        Debug.LogError($"Package {instanceId} item {indexData.Key} has stale slot index {indexedSlots[i]}.");
+                    }
+                }
+            }
         }
 
         public async Task<int> SetItemValue(int instanceId, int value)
@@ -283,7 +375,7 @@ public partial class PackageManager
             bool isHavelSelectItem = false;
             for (int i = 0; i < items.Count; i++)
             {
-                if (!nullItems.Contains(i))
+                if (!emptySlots.Contains(i))
                 {
                     if (items[i].instanceId == SelectItem)
                     {
@@ -296,7 +388,7 @@ public partial class PackageManager
             {
                 for (int i = 0; i < items.Count; i++)
                 {
-                    if (!nullItems.Contains(i))
+                    if (!emptySlots.Contains(i))
                     {
                         if (items[i].dataId == SelectItem)
                         {
@@ -317,7 +409,7 @@ public partial class PackageManager
             List<Item> results = new List<Item>();
             for (int i = 0; i < items.Count; i++)
             {
-                if (!nullItems.Contains(i))
+                if (!emptySlots.Contains(i))
                 {
                     results.Add(items[i]);
                 }
@@ -337,6 +429,7 @@ public partial class PackageManager
                 packageItemCounts.Remove(itemDataId);
             }
             RefreshSelectItem();
+            ValidateIndexes();
         }
 
         public async Task<int> SetItemInPackage(Item item, bool display = false)
@@ -546,6 +639,7 @@ public partial class PackageManager
                     }
                 }
                 RefreshSelectItem();
+                ValidateIndexes();
                 return nowCount;
             }
             RefreshSelectItem();
@@ -584,6 +678,7 @@ public partial class PackageManager
                     }
 
                     RefreshSelectItem();
+                    ValidateIndexes();
                     return true;
                 }
             }
@@ -606,6 +701,7 @@ public partial class PackageManager
                 RemoveItemIndex(item.dataId, index);
                 ReleaseSlot(index);
                 RefreshSelectItem();
+                ValidateIndexes();
             }
         }
 

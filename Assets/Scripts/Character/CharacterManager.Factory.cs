@@ -65,10 +65,15 @@ public partial class CharacterManager
         return tempCharacterData;
     }
 
-    private void ClearCharacterFactoryCache()
+    public void InvalidateFactoryCache()
     {
         characterDataCache.Clear();
         professionDataCache.Clear();
         tempCharacterDataCache.Clear();
+    }
+
+    private void ClearCharacterFactoryCache()
+    {
+        InvalidateFactoryCache();
     }
 }

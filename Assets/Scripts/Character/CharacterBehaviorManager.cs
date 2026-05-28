@@ -227,11 +227,11 @@ public class CharacterBehaviorManager : Singleton<CharacterBehaviorManager>
     private void LogBehaviorChange(int characterId, string characterName, string previousBehaviorName,
         string nextBehaviorName, bool pauseWhenDisabled)
     {
-        if (!CharacterDebugSettings.EnableBehaviorLogs)
-        {
-            return;
-        }
-
-        Debug.Log($"CharacterBehaviorChange characterId={characterId} character={characterName ?? "null"} previous={previousBehaviorName ?? "null"} next={nextBehaviorName ?? "null"} pauseWhenDisabled={pauseWhenDisabled}");
+        CharacterDebugSettings.RecordEvent(
+            CharacterDebugEventType.BehaviorChange,
+            characterId,
+            characterName,
+            $"previous={previousBehaviorName ?? "null"} next={nextBehaviorName ?? "null"} pauseWhenDisabled={pauseWhenDisabled}",
+            CharacterDebugSettings.EnableBehaviorLogs);
     }
 }
