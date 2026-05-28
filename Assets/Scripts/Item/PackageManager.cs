@@ -1182,12 +1182,12 @@ public class PackageManager : Singleton<PackageManager>
         public int instanceId;
         public PackageSetData packageSetData;
         public int caseCount;
-        public bool singleCase=>packageSetData.singleCase;
+        public bool singleCase => packageSetData != null && packageSetData.singleCase;
         public int level;
         public bool itemPackage;
         private List<Item> items;
         public int itemCount => items.Count - nullItems.Count;
-        public PackageType packageType=>packageSetData.packageType;
+        public PackageType packageType => packageSetData != null ? packageSetData.packageType : default(PackageType);
         private Queue<int> nullItems;
 
         public Dictionary<int, int> PackageItemCounts => packageItemCounts;
@@ -1215,7 +1215,7 @@ public class PackageManager : Singleton<PackageManager>
                     {
                         if (i != index)
                         {
-                            nullItems.Enqueue(i);
+                            newNullItems.Enqueue(i);
                         }
                     }
                     newNullItems.Enqueue(oldIndex);
@@ -1291,23 +1291,32 @@ public class PackageManager : Singleton<PackageManager>
             {
                 caseCount = caseCount,
                 instanceId = instanceId,
-                dataId = packageSetData.id,
+                dataId = packageSetData != null ? packageSetData.id : 0,
                 name = name,
                 level = level,
+                packageType = packageType,
                 items = GetItems(),
             };
             return packageData;
         }
 
-        public GamePackage() { }
+        public GamePackage()
+        {
+            InitCollections();
+        }
 
         public GamePackage(int caseCount, string name, int instanceId, PackageSetData packageSetData, int level = 0 )
         {
+            InitCollections();
             this.instanceId = instanceId;
             this.packageSetData= packageSetData;
             this.level = level;
             this.name = name;
             this.caseCount = caseCount;
+        }
+
+        private void InitCollections()
+        {
             items = new List<Item>();
             packageItemCounts = new Dictionary<int, int>();
             packageItemIndexDatas = new Dictionary<int, List<int>>();
@@ -1718,6 +1727,11 @@ public class PackageManager : Singleton<PackageManager>
         public void GetItemOutPackage(int itemInstanceId)
         {
             int index= items.FindIndex(item => item.instanceId == itemInstanceId);
+            if (index < 0)
+            {
+                return;
+            }
+
             if (packageItemCounts.TryGetValue(items[index].dataId, out int itemCount))
             {
                 int nowCount = itemCount - items[index].count;
@@ -1725,7 +1739,7 @@ public class PackageManager : Singleton<PackageManager>
                 {
                     packageItemCounts[items[index].dataId] = nowCount;
                     var indexDatas = packageItemIndexDatas[items[index].dataId];
-                    indexDatas.RemoveAt(index);
+                    indexDatas.Remove(index);
                 }
                 else
                 {
