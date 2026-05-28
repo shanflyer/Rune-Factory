@@ -17,6 +17,8 @@ public struct Item : IReferenceData
 
     public (ulong, ulong) Pack()
     {
+        ValidatePackRange();
+
         ulong d1, d2;
         d1 = d2 = 0;
 
@@ -33,6 +35,33 @@ public struct Item : IReferenceData
         d2 |= (locked ? 1UL : 0UL) << 13; // 1
 
         return (d1, d2);
+    }
+
+    [System.Diagnostics.Conditional("UNITY_EDITOR")]
+    [System.Diagnostics.Conditional("DEVELOPMENT_BUILD")]
+    private void ValidatePackRange()
+    {
+        ValidateUnsignedPackField(nameof(instanceId), instanceId, 0xFFFFF);
+        ValidateUnsignedPackField(nameof(packageId), packageId, 0xFFFFF);
+        ValidateUnsignedPackField(nameof(dataId), dataId, 0x3FFF);
+        ValidateUnsignedPackField(nameof(count), count, 0x7F);
+        ValidateUnsignedPackField(nameof(value), value, 0x7F);
+
+        int itemTypeValue = (int)itemType;
+        if (itemTypeValue < -1 || itemTypeValue > 0x1F)
+        {
+            UnityEngine.Debug.LogError($"Item pack field {nameof(itemType)} is out of range: {itemTypeValue}. Allowed range is -1..31.");
+        }
+    }
+
+    [System.Diagnostics.Conditional("UNITY_EDITOR")]
+    [System.Diagnostics.Conditional("DEVELOPMENT_BUILD")]
+    private static void ValidateUnsignedPackField(string fieldName, int fieldValue, int maxValue)
+    {
+        if (fieldValue < 0 || fieldValue > maxValue)
+        {
+            UnityEngine.Debug.LogError($"Item pack field {fieldName} is out of range: {fieldValue}. Allowed range is 0..{maxValue}.");
+        }
     }
 
 
