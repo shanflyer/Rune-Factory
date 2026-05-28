@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class PackageManager : Singleton<PackageManager>
+public partial class PackageManager : Singleton<PackageManager>
 {
     public List<int> playerPackages = new List<int>();
 
@@ -262,12 +262,7 @@ public class PackageManager : Singleton<PackageManager>
         {
             gamePackage.GetItemOutPackage(removePackageItemInstance.itemInstanceId);
             //gamePackages[removePackageItemInstance.packageId] = gamePackage;
-            RefreshPackageMapDisplay(gamePackage.caseCount, gamePackage.itemCount, gamePackage.instanceId);
-
-            GameActionManager.instance.QueueAction(new RefreshShortcut
-            {
-                packageId = gamePackage.instanceId
-            },true);
+            RefreshPackageChanged(gamePackage, true);
         }
     }
     private void ChangePackageInnstance(ChangePackageInnstance changePackageInnstance)
@@ -847,11 +842,7 @@ public class PackageManager : Singleton<PackageManager>
                 {
                     removePlayerPackageItem.setResult(result);
                 }
-                RefreshPackageMapDisplay(gamePackage.caseCount, gamePackage.itemCount, gamePackage.instanceId);
-                GameActionManager.instance.QueueAction(new RefreshShortcut
-                {
-                    packageId = gamePackage.instanceId
-                });
+                RefreshPackageChanged(gamePackage);
             }
         }
         else
@@ -873,11 +864,7 @@ public class PackageManager : Singleton<PackageManager>
             {
                 removePackageItem.setResult(result);
             }
-            RefreshPackageMapDisplay(gamePackage.caseCount, gamePackage.itemCount, gamePackage.instanceId);
-            GameActionManager.instance.QueueAction(new RefreshShortcut
-            {
-                packageId = gamePackage.instanceId
-            });
+            RefreshPackageChanged(gamePackage);
         }
     }
     private async Task AddPackageItemListAsync(AddPackageItemList addPackageItem)
@@ -909,11 +896,7 @@ public class PackageManager : Singleton<PackageManager>
                 addPackageItem.setResult(success);
             }
 
-            RefreshPackageMapDisplay(gamePackage.caseCount, gamePackage.itemCount, gamePackage.instanceId);
-            GameActionManager.instance.QueueAction(new RefreshShortcut
-            {
-                packageId = gamePackage.instanceId
-            });
+            RefreshPackageChanged(gamePackage);
         }
     }
 
@@ -938,11 +921,7 @@ public class PackageManager : Singleton<PackageManager>
                 addPackageItem.setValue(count);
             }
 
-            RefreshPackageMapDisplay(gamePackage.caseCount, gamePackage.itemCount, gamePackage.instanceId);
-            GameActionManager.instance.QueueAction(new RefreshShortcut
-            {
-                packageId = gamePackage.instanceId
-            });
+            RefreshPackageChanged(gamePackage);
         }
 
     }
@@ -1048,11 +1027,7 @@ public class PackageManager : Singleton<PackageManager>
         {
             bool result = gamePackage.GetItemOutPackage(itemid, count);
             //gamePackages[packageId] = gamePackage;
-            RefreshPackageMapDisplay(gamePackage.caseCount, gamePackage.itemCount, gamePackage.instanceId);
-            GameActionManager.instance.QueueAction(new RefreshShortcut
-            {
-                packageId = gamePackage.instanceId
-            });
+            RefreshPackageChanged(gamePackage);
             return result;
         }
         return false;
@@ -1064,11 +1039,7 @@ public class PackageManager : Singleton<PackageManager>
         {
             int result = await gamePackage.SetItemInPackage(item);
             //gamePackages[packageId] = gamePackage;
-            RefreshPackageMapDisplay(gamePackage.caseCount, gamePackage.itemCount, gamePackage.instanceId);
-            GameActionManager.instance.QueueAction(new RefreshShortcut
-            {
-                packageId = gamePackage.instanceId
-            }, true);
+            RefreshPackageChanged(gamePackage, true);
             return result;
         }
 
@@ -1092,11 +1063,7 @@ public class PackageManager : Singleton<PackageManager>
             {
                 gamePackage.GetItemOutPackage(itemUseEvent.itemId, itemUseEvent.itemCount);
                 //gamePackages[itemUseEvent.packageId] = gamePackage;
-                RefreshPackageMapDisplay(gamePackage.caseCount, gamePackage.itemCount, gamePackage.instanceId);
-                GameActionManager.instance.QueueAction(new RefreshShortcut
-                {
-                    packageId = gamePackage.instanceId
-                });
+                RefreshPackageChanged(gamePackage);
             }
             else
             {
