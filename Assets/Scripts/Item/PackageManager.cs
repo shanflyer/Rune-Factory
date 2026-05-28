@@ -1199,7 +1199,7 @@ public class PackageManager : Singleton<PackageManager>
 
         public void SortItem(int itemId,int index)
         {
-            if(index< items.Count && packageItemIndexDatas.TryGetValue(itemId,out var list))
+            if(index >= 0 && index< items.Count && packageItemIndexDatas.TryGetValue(itemId,out var list))
             {
                 if (list.Contains(index))
                 {
@@ -1220,13 +1220,13 @@ public class PackageManager : Singleton<PackageManager>
                     }
                     newNullItems.Enqueue(oldIndex);
                     nullItems = newNullItems;
+                    items[oldIndex] = default(Item);
                 }
                 else
                 {
                     Item item0 = items[index];
-                    var list0 = packageItemIndexDatas[item0.dataId];
-                    list0.Remove(index);
-                    list0.Add(oldIndex);
+                    RemoveItemIndex(item0.dataId, index);
+                    AddItemIndex(item0.dataId, oldIndex);
                     items[oldIndex] = item0;
                 }
                 items[index] = item;
@@ -1236,31 +1236,19 @@ public class PackageManager : Singleton<PackageManager>
         public void InitSaveItemList(List<Item> items)
         {
             this.items = new List<Item>();
+            packageItemCounts.Clear();
+            packageItemIndexDatas.Clear();
+            nullItems.Clear();
             for(int i = 0; i < items.Count; i++)
             {
                 if (items[i].count == 0)
                 {
                     continue;
                 }
-                if (packageItemCounts.TryGetValue(items[i].dataId,out var count))
-                {
-                    count += items[i].count;
-                }else
-                {
-                    count = items[i].count;
-                }
 
-                packageItemCounts[items[i].dataId] = count;
-                if (packageItemIndexDatas.TryGetValue(items[i].dataId,out var indexs))
-                {
-                    indexs.Add(i);
-                }
-                else
-                {
-                    indexs = new List<int>();
-                    indexs.Add(i);
-                    packageItemIndexDatas.Add(items[i].dataId, indexs);
-                }
+                int index = this.items.Count;
+                ChangeItemCount(items[i].dataId, items[i].count);
+                AddItemIndex(items[i].dataId, index);
                 this.items.Add(items[i]);
             }
         }
@@ -1323,6 +1311,107 @@ public class PackageManager : Singleton<PackageManager>
             itemPackage = false;
             nullItems = new Queue<int>();
             SelectItem = 0;
+        }
+
+        private List<int> GetOrCreateItemIndexes(int itemDataId)
+        {
+            if (!packageItemIndexDatas.TryGetValue(itemDataId, out var indexDatas))
+            {
+                indexDatas = new List<int>();
+                packageItemIndexDatas.Add(itemDataId, indexDatas);
+            }
+
+            return indexDatas;
+        }
+
+        private int TakeEmptySlot()
+        {
+            return nullItems.Count != 0 ? nullItems.Dequeue() : items.Count;
+        }
+
+        private void SetSlot(int index, Item item)
+        {
+            if (items.Count <= index)
+            {
+                items.Add(item);
+            }
+            else
+            {
+                items[index] = item;
+            }
+        }
+
+        private void AddItemIndex(int itemDataId, int index)
+        {
+            var indexDatas = GetOrCreateItemIndexes(itemDataId);
+            if (!indexDatas.Contains(index))
+            {
+                indexDatas.Add(index);
+            }
+        }
+
+        private void RemoveItemIndex(int itemDataId, int index)
+        {
+            if (!packageItemIndexDatas.TryGetValue(itemDataId, out var indexDatas))
+            {
+                return;
+            }
+
+            indexDatas.Remove(index);
+            if (indexDatas.Count == 0)
+            {
+                packageItemIndexDatas.Remove(itemDataId);
+            }
+        }
+
+        private void ChangeItemCount(int itemDataId, int delta)
+        {
+            packageItemCounts.TryGetValue(itemDataId, out int count);
+            count += delta;
+            if (count > 0)
+            {
+                packageItemCounts[itemDataId] = count;
+            }
+            else
+            {
+                packageItemCounts.Remove(itemDataId);
+            }
+        }
+
+        private void ReleaseSlot(int index)
+        {
+            if (index < 0 || index >= items.Count)
+            {
+                return;
+            }
+
+            if (!nullItems.Contains(index))
+            {
+                nullItems.Enqueue(index);
+            }
+
+            items[index] = default(Item);
+        }
+
+        private bool TryGetStackSlotWithSpace(int itemDataId, int groupCount, out int index)
+        {
+            index = -1;
+            if (!packageItemIndexDatas.TryGetValue(itemDataId, out var indexDatas))
+            {
+                return false;
+            }
+
+            for (int i = indexDatas.Count - 1; i >= 0; i--)
+            {
+                int slot = indexDatas[i];
+                if (slot >= 0 && slot < items.Count && items[slot].count < groupCount)
+                {
+                    index = slot;
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public async Task<int> SetItemValue(int instanceId, int value)
@@ -1415,7 +1504,7 @@ public class PackageManager : Singleton<PackageManager>
             {
                 for (int i = 0; i < indexs.Count; i++)
                 {
-                    nullItems.Enqueue(indexs[i]);
+                    ReleaseSlot(indexs[i]);
                 }
                 packageItemIndexDatas.Remove(itemDataId);
                 packageItemCounts.Remove(itemDataId);
@@ -1455,23 +1544,17 @@ public class PackageManager : Singleton<PackageManager>
                 }
                 int groupCount = singleCase ? 1 : itemData.groupCount;
 
-                List<int> indexDatas = new List<int>();
-                if (!packageItemIndexDatas.TryGetValue(item.dataId, out indexDatas))
-                {
-                    indexDatas = new List<int>();
-                    packageItemIndexDatas.Add(item.dataId, indexDatas);
-                }// 如果背包内没有同类物体，则新建索引
-
                 if (groupCount > 1)//物体堆叠数量
                 {
                     int index ;//空物体位置
-                    if (indexDatas.Count > 0)
+                    if (!TryGetStackSlotWithSpace(itemData.id, itemData.groupCount, out index))
                     {
-                        index = indexDatas[indexDatas.Count - 1];//旧物体最后一个未填满的位置
-                    }
-                    else
-                    {
-                        index = nullItems.Count != 0 ? nullItems.Dequeue() : items.Count;//空物体位置
+                        if (caseCount <= itemCount)
+                        {
+                            return item.count;
+                        }
+
+                        index = TakeEmptySlot();//空物体位置
                         Item newItem = new Item
                         {
                             instanceId = MyInstance.instance.Uid,
@@ -1482,21 +1565,15 @@ public class PackageManager : Singleton<PackageManager>
                             count = 0
                         };
                         newItem=await Item.SetValue(newItem,item.value);
-                        if (items.Count <= index)
+                        SetSlot(index, newItem);
+                        AddItemIndex(itemData.id, index);
+                        if (!packageItemCounts.ContainsKey(itemData.id))
                         {
-                            items.Add(newItem);
+                            packageItemCounts.Add(itemData.id, 0);
                         }
-                        else
-                        {
-                            items[index] = newItem;
-                        }
-                        indexDatas.Add(index);
-                        packageItemCounts.Add(itemData.id, 0);
                     }
 
                     int inCount = item.count;//要放入的数量
-                    int oldCount = 0;
-                    packageItemCounts.TryGetValue(itemData.id, out oldCount);//旧有数量
                     while (inCount > 0)
                     {
                         Item setItem = items[index];
@@ -1507,16 +1584,14 @@ public class PackageManager : Singleton<PackageManager>
                             setItem.count = itemData.groupCount;
                             items[index] = setItem;
 
-                            oldCount += setCount;
-                            packageItemCounts[itemData.id] = oldCount;
+                            ChangeItemCount(itemData.id, setCount);
                         }
                         else
                         {
                             setItem.count += inCount;
                             items[index] = setItem;
 
-                            oldCount += inCount;
-                            packageItemCounts[itemData.id] = oldCount;
+                            ChangeItemCount(itemData.id, inCount);
                             break;
                         }
 
@@ -1532,7 +1607,7 @@ public class PackageManager : Singleton<PackageManager>
                             }
                             return inCount;
                         }
-                        index = nullItems.Count != 0 ? nullItems.Dequeue() : items.Count;
+                        index = TakeEmptySlot();
                         //index = itemData.groupCount - setItem.count;
                         Item item1 = new Item
                         {
@@ -1545,17 +1620,9 @@ public class PackageManager : Singleton<PackageManager>
                         };
                         item1=await Item.SetValue(item1,item.value);
 
-                        if (items.Count <= index)
-                        {
-                            items.Add(item1);
-                        }
-                        else
-                        {
-                            items[index] = item1;
-                        }
-                        indexDatas.Add(index);
+                        SetSlot(index, item1);
+                        AddItemIndex(itemData.id, index);
                     }
-                    packageItemIndexDatas[itemData.id] = indexDatas;
                 }
                 else
                 {
@@ -1577,25 +1644,15 @@ public class PackageManager : Singleton<PackageManager>
                             count = 1
                         };
                         item1 = await Item.SetValue(item1, item.value);
-                        int index = items.Count;
-                        if (nullItems.Count > 0)
-                        {
-                            index = nullItems.Dequeue();
-                            items[index] = item1;
-                        }
-                        else
-                        {
-                            items.Add(item1);
-                        }
+                        int index = TakeEmptySlot();
+                        SetSlot(index, item1);
                         addCount++;
-                        indexDatas.Add(index);
+                        AddItemIndex(itemData.id, index);
                     }
                     // packageItemIndexDatas.Add(itemData.id, indexDatas);
                     if (addCount > 0)
                     {
-                        packageItemCounts.TryGetValue(itemData.id, out int count);
-                        count += addCount;
-                        packageItemCounts[itemData.id] = count;
+                        ChangeItemCount(itemData.id, addCount);
                     }
 
                     int outCount= item.count - addCount;
@@ -1638,34 +1695,26 @@ public class PackageManager : Singleton<PackageManager>
                     count = itemCount;
                 }
 
-                int _count=itemCount - count;
-                if (_count > 0)
-                {
-                    packageItemCounts[itemDataId] = _count;
-                }
-                else
-                {
-                    packageItemCounts.Remove(itemDataId);
-                }
+                ChangeItemCount(itemDataId, -count);
 
                 List<int> indexDatas = packageItemIndexDatas[itemDataId];
                 int index = indexDatas.Count - 1;
 
                 while (count > 0)
                 {
-                    Item nowItem = items[indexDatas[index]];
+                    int slot = indexDatas[index];
+                    Item nowItem = items[slot];
                     if (nowItem.count > count)
                     {
                         nowItem.count -= count;
-                        items[indexDatas[index]] = nowItem;
+                        items[slot] = nowItem;
                         count = 0;
                     }
                     else
                     {
                         count -= nowItem.count;
-                        nullItems.Enqueue(indexDatas[index]);
-                        itemCount--;
-                        indexDatas.RemoveAt(index);
+                        ReleaseSlot(slot);
+                        RemoveItemIndex(itemDataId, slot);
                         index--;
                     }
                 }
@@ -1683,39 +1732,30 @@ public class PackageManager : Singleton<PackageManager>
                 if (itemCount >= count)
                 {
                     int nowCount = itemCount - count;
-                    if (nowCount > 0)
-                    {
-                        packageItemCounts[itemDataId] = nowCount;
-                    }
-                    else
-                    {
-                        packageItemCounts.Remove(itemDataId);
-                    }
+                    ChangeItemCount(itemDataId, -count);
 
                     List<int> indexDatas = packageItemIndexDatas[itemDataId];
                     int index = indexDatas.Count - 1;
 
                     while (count > 0)
                     {
-                        Item nowItem = items[indexDatas[index]];
+                        int slot = indexDatas[index];
+                        Item nowItem = items[slot];
                         if (nowItem.count > count)
                         {
                             nowItem.count -= count;
-                            items[indexDatas[index]] = nowItem;
+                            items[slot] = nowItem;
                             count = 0;
                         }
                         else
                         {
                             count -= nowItem.count;
-                            nullItems.Enqueue(indexDatas[index]);
-                            itemCount -= nowItem.count;
-                            items[indexDatas[index]] = default(Item);
-                            indexDatas.RemoveAt(index);
+                            ReleaseSlot(slot);
+                            RemoveItemIndex(itemDataId, slot);
                             index--;
                         }
                     }
 
-                    if (nowCount <= 0) packageItemIndexDatas.Remove(itemDataId);
                     RefreshSelectItem();
                     return true;
                 }
@@ -1732,23 +1772,12 @@ public class PackageManager : Singleton<PackageManager>
                 return;
             }
 
-            if (packageItemCounts.TryGetValue(items[index].dataId, out int itemCount))
+            Item item = items[index];
+            if (packageItemCounts.ContainsKey(item.dataId))
             {
-                int nowCount = itemCount - items[index].count;
-                if (nowCount > 0)
-                {
-                    packageItemCounts[items[index].dataId] = nowCount;
-                    var indexDatas = packageItemIndexDatas[items[index].dataId];
-                    indexDatas.Remove(index);
-                }
-                else
-                {
-                    packageItemCounts.Remove(items[index].dataId);
-                    packageItemIndexDatas.Remove(items[index].dataId);
-                }
-
-                nullItems.Enqueue(index);
-                items[index] = default(Item);
+                ChangeItemCount(item.dataId, -item.count);
+                RemoveItemIndex(item.dataId, index);
+                ReleaseSlot(index);
                 RefreshSelectItem();
             }
         }
