@@ -50,6 +50,219 @@ public class SaveDataValidationReport
     }
 }
 
+public enum SaveEntityKind
+{
+    None = 0,
+    Package = 1,
+    Item = 2,
+    Character = 3,
+    Animal = 4,
+    Pasture = 5,
+    Field = 6,
+    Plant = 7,
+    HomeEquip = 8,
+    Manufacture = 9,
+    StoreCounter = 10,
+    DynamicMapItem = 11
+}
+
+[Serializable]
+public struct SaveEntityRef : IEquatable<SaveEntityRef>
+{
+    public SaveEntityKind kind;
+    public int saveId;
+
+    public SaveEntityRef(SaveEntityKind kind, int saveId)
+    {
+        this.kind = kind;
+        this.saveId = saveId;
+    }
+
+    public bool IsValid => kind != SaveEntityKind.None && saveId > 0;
+
+    public bool Equals(SaveEntityRef other)
+    {
+        return kind == other.kind && saveId == other.saveId;
+    }
+
+    public override bool Equals(object obj)
+    {
+        return obj is SaveEntityRef other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return ((int)kind * 397) ^ saveId;
+    }
+}
+
+[Serializable]
+public struct MapItemSaveRef : IEquatable<MapItemSaveRef>
+{
+    public int mapId;
+    public int editorInstanceId;
+    public int dynamicSaveId;
+
+    public bool IsEditor => mapId != 0 && editorInstanceId != 0;
+    public bool IsDynamic => dynamicSaveId > 0;
+    public bool IsValid => IsEditor || IsDynamic;
+
+    public static MapItemSaveRef Editor(int mapId, int editorInstanceId)
+    {
+        return new MapItemSaveRef
+        {
+            mapId = mapId,
+            editorInstanceId = editorInstanceId
+        };
+    }
+
+    public static MapItemSaveRef Dynamic(int saveId)
+    {
+        return new MapItemSaveRef
+        {
+            dynamicSaveId = saveId
+        };
+    }
+
+    public bool Equals(MapItemSaveRef other)
+    {
+        return mapId == other.mapId && editorInstanceId == other.editorInstanceId && dynamicSaveId == other.dynamicSaveId;
+    }
+
+    public override bool Equals(object obj)
+    {
+        return obj is MapItemSaveRef other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            int hashCode = mapId;
+            hashCode = (hashCode * 397) ^ editorInstanceId;
+            hashCode = (hashCode * 397) ^ dynamicSaveId;
+            return hashCode;
+        }
+    }
+}
+
+public class SaveRuntimeResolver : Singleton<SaveRuntimeResolver>
+{
+    private readonly Dictionary<SaveEntityRef, int> saveToRuntime = new Dictionary<SaveEntityRef, int>();
+    private readonly Dictionary<int2, int> runtimeToSave = new Dictionary<int2, int>();
+    private readonly Dictionary<int2, int> editorMapItemToRuntime = new Dictionary<int2, int>();
+    private readonly Dictionary<int, int2> runtimeToEditorMapItem = new Dictionary<int, int2>();
+
+    protected override void Clear()
+    {
+        saveToRuntime.Clear();
+        runtimeToSave.Clear();
+        editorMapItemToRuntime.Clear();
+        runtimeToEditorMapItem.Clear();
+        base.Clear();
+    }
+
+    public void BeginLoad(UserGameSaveData saveData)
+    {
+        saveToRuntime.Clear();
+        runtimeToSave.Clear();
+        editorMapItemToRuntime.Clear();
+        runtimeToEditorMapItem.Clear();
+        saveData?.EnsureSaveIdCounters();
+    }
+
+    public int EnsureSaveId(SaveEntityKind kind, int saveId)
+    {
+        if (saveId > 0)
+        {
+            return saveId;
+        }
+
+        return GameDataSaveManager.instance.UserGameSaveData.CreateSaveId(kind);
+    }
+
+    public void Bind(SaveEntityKind kind, int saveId, int runtimeId)
+    {
+        if (kind == SaveEntityKind.None || saveId <= 0 || runtimeId == 0)
+        {
+            return;
+        }
+
+        var saveRef = new SaveEntityRef(kind, saveId);
+        saveToRuntime[saveRef] = runtimeId;
+        runtimeToSave[new int2((int)kind, runtimeId)] = saveId;
+        GameDataSaveManager.instance.UserGameSaveData.EnsureSaveIdCounter(kind, saveId);
+    }
+
+    public bool TryResolve(SaveEntityKind kind, int saveId, out int runtimeId)
+    {
+        return saveToRuntime.TryGetValue(new SaveEntityRef(kind, saveId), out runtimeId);
+    }
+
+    public int Resolve(SaveEntityKind kind, int saveId)
+    {
+        return TryResolve(kind, saveId, out int runtimeId) ? runtimeId : 0;
+    }
+
+    public bool TryGetSaveId(SaveEntityKind kind, int runtimeId, out int saveId)
+    {
+        saveId = 0;
+        if (!runtimeToSave.TryGetValue(new int2((int)kind, runtimeId), out saveId))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    public int GetSaveId(SaveEntityKind kind, int runtimeId)
+    {
+        return TryGetSaveId(kind, runtimeId, out int saveId) ? saveId : 0;
+    }
+
+    public void BindEditorMapItem(int mapId, int editorInstanceId, int runtimeId)
+    {
+        if (mapId == 0 || editorInstanceId == 0 || runtimeId == 0)
+        {
+            return;
+        }
+
+        var key = new int2(mapId, editorInstanceId);
+        editorMapItemToRuntime[key] = runtimeId;
+        runtimeToEditorMapItem[runtimeId] = key;
+    }
+
+    public bool TryResolveMapItem(MapItemSaveRef mapItemRef, out int runtimeId)
+    {
+        runtimeId = 0;
+        if (!mapItemRef.IsValid)
+        {
+            return false;
+        }
+
+        if (mapItemRef.IsEditor)
+        {
+            return editorMapItemToRuntime.TryGetValue(new int2(mapItemRef.mapId, mapItemRef.editorInstanceId), out runtimeId);
+        }
+
+        return TryResolve(SaveEntityKind.DynamicMapItem, mapItemRef.dynamicSaveId, out runtimeId);
+    }
+
+    public MapItemSaveRef GetMapItemSaveRef(int runtimeId)
+    {
+        if (runtimeToEditorMapItem.TryGetValue(runtimeId, out var editorKey))
+        {
+            return MapItemSaveRef.Editor(editorKey.x, editorKey.y);
+        }
+
+        if (TryGetSaveId(SaveEntityKind.DynamicMapItem, runtimeId, out int saveId))
+        {
+            return MapItemSaveRef.Dynamic(saveId);
+        }
+
+        return default;
+    }
+}
+
 [Serializable]
 public class UserGameSaveData : IReferenceData
 {
@@ -107,6 +320,7 @@ public class UserGameSaveData : IReferenceData
         openFormulas.AddRange(userGameSaveData.openFormulas);
 
         NpcTimeData.AddRange(userGameSaveData.NpcTimeData);
+        saveIdCounters.AddRange(userGameSaveData.saveIdCounters);
         endGuideFilmIndex = userGameSaveData.endGuideFilmIndex;
         playerStoreOpen = userGameSaveData.playerStoreOpen;
     }
@@ -152,6 +366,7 @@ public class UserGameSaveData : IReferenceData
     public List<int> removeCollider = new();
     public List<int> mapItemOperates = new();
     public List<long> specialMapItemList = new();
+    public List<int2> saveIdCounters = new();
 
     public Dictionary<int, int2> AnimationStateMapItemsDic
     {
@@ -313,7 +528,121 @@ public class UserGameSaveData : IReferenceData
             specialMapItem[value.xy] = value.z;
         }
 
+        EnsureSaveIdCounters();
+
         ValidatePackedData(nameof(Init)).LogWarnings();
+    }
+
+    public int CreateSaveId(SaveEntityKind kind)
+    {
+        int kindValue = (int)kind;
+        for (int i = 0; i < saveIdCounters.Count; i++)
+        {
+            if (saveIdCounters[i].x == kindValue)
+            {
+                int next = math.max(1, saveIdCounters[i].y);
+                saveIdCounters[i] = new int2(kindValue, next + 1);
+                return next;
+            }
+        }
+
+        saveIdCounters.Add(new int2(kindValue, 2));
+        return 1;
+    }
+
+    public void EnsureSaveIdCounter(SaveEntityKind kind, int usedSaveId)
+    {
+        if (kind == SaveEntityKind.None || usedSaveId <= 0)
+        {
+            return;
+        }
+
+        int kindValue = (int)kind;
+        int next = usedSaveId + 1;
+        for (int i = 0; i < saveIdCounters.Count; i++)
+        {
+            if (saveIdCounters[i].x == kindValue)
+            {
+                if (saveIdCounters[i].y < next)
+                {
+                    saveIdCounters[i] = new int2(kindValue, next);
+                }
+
+                return;
+            }
+        }
+
+        saveIdCounters.Add(new int2(kindValue, next));
+    }
+
+    public void EnsureSaveIdCounters()
+    {
+        if (packageSaveDatas != null)
+        {
+            foreach (var packageSaveData in packageSaveDatas)
+            {
+                if (packageSaveData == null)
+                {
+                    continue;
+                }
+
+                packageSaveData.Unpack();
+                EnsureSaveIdCounter(SaveEntityKind.Package, packageSaveData.id);
+                if (packageSaveData.items == null)
+                {
+                    continue;
+                }
+
+                for (int i = 0; i + 1 < packageSaveData.items.Count; i += 2)
+                {
+                    var item = new Item(packageSaveData.items[i], packageSaveData.items[i + 1]);
+                    EnsureSaveIdCounter(SaveEntityKind.Item, item.saveId);
+                }
+            }
+        }
+
+        if (mapHomeEquips != null)
+            foreach (var saveData in mapHomeEquips.Values)
+            {
+                saveData?.Unpack();
+                EnsureSaveIdCounter(SaveEntityKind.HomeEquip, saveData?.instanceId ?? 0);
+            }
+
+        if (animals != null)
+            foreach (var saveData in animals.Values)
+            {
+                saveData?.Unpack();
+                EnsureSaveIdCounter(SaveEntityKind.Animal, saveData?.instaceId ?? 0);
+            }
+
+        if (pastures != null)
+            foreach (var saveData in pastures.Values)
+            {
+                saveData?.Unpack();
+                EnsureSaveIdCounter(SaveEntityKind.Pasture, saveData?.instanceId ?? 0);
+            }
+
+        if (fields != null)
+            foreach (var saveData in fields.Values)
+            {
+                saveData?.Unpack();
+                EnsureSaveIdCounter(SaveEntityKind.Field, saveData?.instanceId ?? 0);
+                EnsureSaveIdCounter(SaveEntityKind.Plant, saveData?.PlantinstaceId ?? 0);
+            }
+
+        if (manufatures != null)
+            foreach (var saveData in manufatures.Values)
+            {
+                saveData?.Unpack();
+                EnsureSaveIdCounter(SaveEntityKind.Manufacture, saveData?.instanceId ?? 0);
+            }
+
+        if (storeCounters != null)
+            foreach (var saveData in storeCounters)
+            {
+                saveData?.Unpack();
+                EnsureSaveIdCounter(SaveEntityKind.StoreCounter, saveData?.instanceId ?? 0);
+            }
     }
 
     public void SaveData()

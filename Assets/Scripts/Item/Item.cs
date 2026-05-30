@@ -7,6 +7,8 @@ public struct Item : IReferenceData
 {
     [NonSerialized] public int instanceId; // ≤999999
     [NonSerialized] public int packageId; // ≤999999
+    [NonSerialized] public int saveId;
+    [NonSerialized] public int packageSaveId;
     [NonSerialized] public int dataId; // ≤9999
     [NonSerialized] public int count; // ≤100
     [NonSerialized] public int value; // ≤100
@@ -17,14 +19,16 @@ public struct Item : IReferenceData
 
     public (ulong, ulong) Pack()
     {
-        ValidatePackRange();
+        int packedSaveId = saveId != 0 ? saveId : instanceId;
+        int packedPackageSaveId = packageSaveId != 0 ? packageSaveId : packageId;
+        ValidatePackRange(packedSaveId, packedPackageSaveId);
 
         ulong d1, d2;
         d1 = d2 = 0;
 
         // d1
-        d1 |= (ulong)(instanceId & 0xFFFFF) << 0; // 20
-        d1 |= (ulong)(packageId & 0xFFFFF) << 20; // 20
+        d1 |= (ulong)(packedSaveId & 0xFFFFF) << 0; // 20
+        d1 |= (ulong)(packedPackageSaveId & 0xFFFFF) << 20; // 20
         d1 |= (ulong)(dataId & 0x3FFF) << 40; // 14
         d1 |= (ulong)(count & 0x7F) << 54; // 7
 
@@ -39,10 +43,10 @@ public struct Item : IReferenceData
 
     [System.Diagnostics.Conditional("UNITY_EDITOR")]
     [System.Diagnostics.Conditional("DEVELOPMENT_BUILD")]
-    private void ValidatePackRange()
+    private void ValidatePackRange(int packedSaveId, int packedPackageSaveId)
     {
-        ValidateUnsignedPackField(nameof(instanceId), instanceId, 0xFFFFF);
-        ValidateUnsignedPackField(nameof(packageId), packageId, 0xFFFFF);
+        ValidateUnsignedPackField(nameof(saveId), packedSaveId, 0xFFFFF);
+        ValidateUnsignedPackField(nameof(packageSaveId), packedPackageSaveId, 0xFFFFF);
         ValidateUnsignedPackField(nameof(dataId), dataId, 0x3FFF);
         ValidateUnsignedPackField(nameof(count), count, 0x7F);
         ValidateUnsignedPackField(nameof(value), value, 0x7F);
@@ -67,8 +71,10 @@ public struct Item : IReferenceData
 
     public Item(ulong d1, ulong d2)
     {
-        instanceId = (int)((d1 >> 0) & 0xFFFFF);
-        packageId = (int)((d1 >> 20) & 0xFFFFF);
+        saveId = (int)((d1 >> 0) & 0xFFFFF);
+        packageSaveId = (int)((d1 >> 20) & 0xFFFFF);
+        instanceId = saveId;
+        packageId = packageSaveId;
         dataId = (int)((d1 >> 40) & 0x3FFF);
         count = (int)((d1 >> 54) & 0x7F);
 
@@ -84,6 +90,8 @@ public struct Item : IReferenceData
         this.count = count;
         instanceId = 0;
         this.packageId = packageId;
+        saveId = 0;
+        packageSaveId = 0;
         itemType = ItemType.Default;
         isFresh = false;
         locked = false;

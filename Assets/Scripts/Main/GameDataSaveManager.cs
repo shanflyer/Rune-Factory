@@ -12,7 +12,7 @@ using VoxelBusters.EssentialKit;
 
 public class GameDataSaveManager : Singleton<GameDataSaveManager>
 {
-    private const int CurrentSaveVersion = 1;
+    private const int CurrentSaveVersion = 2;
     private const string CloudCommitValue = "committed";
     private const string CloudCommitMetaName = "__commit";
     private const string CloudChecksumMetaName = "__checksum";
@@ -656,6 +656,11 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                     version = 1;
                     break;
 
+                case 1:
+                    MigrateSaveDataListFrom1To2(saveDataList);
+                    version = 2;
+                    break;
+
                 default:
                     throw new InvalidDataException($"Unsupported save data migration version: {version}");
             }
@@ -677,6 +682,23 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                 NormalizeUserGameSaveData(saveDataList.userGameSaveDatas[i], i);
             }
         }
+    }
+
+    private static void MigrateSaveDataListFrom1To2(UserGameSaveDataList saveDataList)
+    {
+        int diamond = saveDataList.commonSaveData?.diamond ?? 0;
+        saveDataList.commonSaveData = new CommonSaveData
+        {
+            diamond = diamond,
+            saveVersion = 2
+        };
+        saveDataList.nowSaveData = UserGameSaveData.CreatSaveData(-1);
+        saveDataList.userGameSaveDatas = new List<UserGameSaveData>
+        {
+            UserGameSaveData.CreatSaveData(0),
+            UserGameSaveData.CreatSaveData(1),
+            UserGameSaveData.CreatSaveData(2)
+        };
     }
 
     private static void NormalizeUserGameSaveData(UserGameSaveData saveData, int index)
@@ -719,6 +741,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         saveData.removeCollider ??= new List<int>();
         saveData.mapItemOperates ??= new List<int>();
         saveData.specialMapItemList ??= new List<long>();
+        saveData.saveIdCounters ??= new List<int2>();
     }
 
     private static void ValidateNormalizedSaveDataList(UserGameSaveDataList saveDataList)
