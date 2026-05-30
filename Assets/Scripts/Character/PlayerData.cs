@@ -1891,11 +1891,15 @@ public class CharacterSaveData : IReferenceData
             name = overrideName;
         }
 
-        instanceId = character.instanceId;
+        instanceId = character.dataId;
         dataId = character.dataId;
         level = character.Level;
         exp = character.exp.nowExp;
-        packageId = character.characterPackage;
+        packageId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Package, character.characterPackage);
+        if (packageId == 0)
+        {
+            packageId = character.characterPackage;
+        }
         weapon = character.Equip.weapon;
         clothes = character.Equip.clothes;
         shoe = character.Equip.shoes;

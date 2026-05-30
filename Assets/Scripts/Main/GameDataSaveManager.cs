@@ -280,7 +280,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             await PackageManager.instance.InitFromSaveData(loadGameSaveData.packageSaveDatas);
             PackageManager.instance.LoadPlayerPackagesFromSaveIds(loadGameSaveData.otherSaveData.playerPackages);
 
-            await CharacterManager.instance.CreatePlayer((int)loadGameSaveData.playerData.gender,loadGameSaveData.playerData.name, 0, loadGameSaveData.playerData.instanceId);
+            await CharacterManager.instance.CreatePlayer((int)loadGameSaveData.playerData.gender,loadGameSaveData.playerData.name, 0);
 
             for (var i = 0; i < loadGameSaveData.storeCounters.Count; i++)
             {
@@ -852,6 +852,11 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         UserGameSaveData.characterSaveDatas.Clear();
         for (int i=0;i<characters.Count; i++)
         {
+            if (PastureManager.instance.CheckAnimal(characters[i].instanceId))
+            {
+                continue;
+            }
+
             if (characters[i].characterData.id != UserGameSaveData.playerData.dataId)
             {
                 CharacterSaveData characterSaveData = new CharacterSaveData(characters[i]);

@@ -755,6 +755,7 @@ public partial class CharacterManager : Singleton<CharacterManager>
             if (!(character is TempCharacter))
             {
                 characterDataToInstances.Add(character.dataId, character.instanceId);
+                SaveRuntimeResolver.instance.Bind(SaveEntityKind.Character, character.dataId, character.instanceId);
             }
         }
 
