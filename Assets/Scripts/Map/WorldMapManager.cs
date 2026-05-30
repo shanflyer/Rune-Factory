@@ -635,6 +635,22 @@ public class WorldMapManager : Singleton<WorldMapManager>
     private async Task<int> AddMapItem(MapItem mapItem, int mapId,int fixedInstance=0)
     {
         int instanceId = 0;
+        int homeEquipSaveId = 0;
+        if (mapItem.blindHomeEquipment != 0 && mapItem.instanceId != 0 &&
+            GameDataSaveManager.instance.UserGameSaveData.TryGetHomeEquipSaveDataByMapItem(mapId, mapItem.instanceId, mapItem.blindHomeEquipment, out var homeEquipSaveData))
+        {
+            homeEquipSaveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.HomeEquip, homeEquipSaveData.instanceId);
+            if (fixedInstance == 0)
+            {
+                fixedInstance = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.HomeEquip, homeEquipSaveId);
+                if (fixedInstance == 0)
+                {
+                    fixedInstance = MyInstance.instance.Uid;
+                }
+            }
+            SaveRuntimeResolver.instance.Bind(SaveEntityKind.HomeEquip, homeEquipSaveId, fixedInstance);
+        }
+
         if (fixedInstance == 0)
         {
             int2 itemkey = new int2(mapId, mapItem.instanceId);
@@ -664,6 +680,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
         RuntimeMapItem runtimeMapItem = new RuntimeMapItem(instanceId, mapItem.instanceId, await GameDataManager.instance.GetAsyncData<MapItemData>(mapItem.id),
             mapId, mapItem.coordinate, mapItem.animationKey);
+        SaveRuntimeResolver.instance.BindEditorMapItem(runtimeMapItem.mapInstanceId, runtimeMapItem.editorInstanceId, runtimeMapItem.instanceId);
         if (GameDataSaveManager.instance.UserGameSaveData.ChangeMapItemCoordinate.TryGetValue(instanceId,
                 out var mapItemData))
         {
@@ -686,6 +703,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 characterId = CharacterManager.instance.controllerCharacter.instanceId,
                 equipDataId = mapItem.blindHomeEquipment,
                 instanceId = instanceId,
+                saveId = homeEquipSaveId,
                 setResult = (bool value) =>
                 {
                     SetHomeEquipCoordinate setHomeEquipCoordinate = new SetHomeEquipCoordinate

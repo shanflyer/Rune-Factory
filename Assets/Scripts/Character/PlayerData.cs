@@ -815,7 +815,8 @@ public class UserGameSaveData : IReferenceData
 
     public void ReMoveHomeEquip(int id)
     {
-        mapHomeEquips.Remove(id);
+        int saveId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.HomeEquip, id);
+        mapHomeEquips.Remove(saveId != 0 ? saveId : id);
     }
 
     public void SetFightChapter(FightChapter fightChapter)
@@ -923,30 +924,71 @@ public class UserGameSaveData : IReferenceData
     }
     public void SetMapHomeEquipData(HomeEquip homeEquip)
     {
-        int key = homeEquip.instanceId;
+        int saveId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.HomeEquip, homeEquip.instanceId);
+        if (saveId == 0)
+        {
+            saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.HomeEquip, homeEquip.saveId);
+            SaveRuntimeResolver.instance.Bind(SaveEntityKind.HomeEquip, saveId, homeEquip.instanceId);
+        }
+        homeEquip.saveId = saveId;
 
-        if (mapHomeEquips.TryGetValue(key, out var homeEquipSaveData))
+        if (mapHomeEquips.TryGetValue(saveId, out var homeEquipSaveData))
         {
             homeEquipSaveData.SetHomeEquip(homeEquip);
         }
         else
         {
             homeEquipSaveData = new HomeEquipSaveData(homeEquip);
-            mapHomeEquips.Add(key, homeEquipSaveData);
+            mapHomeEquips.Add(saveId, homeEquipSaveData);
         }
     }
 
     public void SetManufature(Manufature manufature)
     {
-        if (manufatures.TryGetValue(manufature.instanceId, out var manufatureSaveData))
+        int saveId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Manufacture, manufature.instanceId);
+        if (saveId == 0)
+        {
+            saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Manufacture, manufature.saveId);
+            SaveRuntimeResolver.instance.Bind(SaveEntityKind.Manufacture, saveId, manufature.instanceId);
+        }
+        manufature.saveId = saveId;
+
+        if (manufatures.TryGetValue(saveId, out var manufatureSaveData))
         {
             manufatureSaveData.SetManufature(manufature);
         }
         else
         {
             manufatureSaveData = new ManufatureSaveData(manufature);
-            manufatures.Add(manufature.instanceId, manufatureSaveData);
+            manufatures.Add(saveId, manufatureSaveData);
         }
+    }
+
+    public bool TryGetHomeEquipSaveDataByMapItem(int mapInstance, int mapEditorInstance, int equipDataId, out HomeEquipSaveData homeEquipSaveData)
+    {
+        homeEquipSaveData = null;
+        if (mapHomeEquips == null || mapEditorInstance == 0)
+        {
+            return false;
+        }
+
+        foreach (var saveData in mapHomeEquips.Values)
+        {
+            if (saveData == null)
+            {
+                continue;
+            }
+
+            saveData.Unpack();
+            if (saveData.mapInstance == mapInstance && saveData.mapEditorInstance == mapEditorInstance &&
+                (equipDataId == 0 || saveData.equipDataId == equipDataId))
+            {
+                homeEquipSaveData = saveData;
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
@@ -1502,8 +1544,15 @@ public class StoreCounterSaveData
 
     public void SetStoreCounterSaveData(RuntimeStoreCounter runtimeStoreCounter)
     {
-        instanceId = runtimeStoreCounter.instanceId;
+        instanceId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.StoreCounter, runtimeStoreCounter.instanceId);
+        if (instanceId == 0)
+        {
+            instanceId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.StoreCounter, runtimeStoreCounter.saveId);
+            SaveRuntimeResolver.instance.Bind(SaveEntityKind.StoreCounter, instanceId, runtimeStoreCounter.instanceId);
+        }
+        runtimeStoreCounter.saveId = instanceId;
         dataId = runtimeStoreCounter.storeCounterData.id;
+        itemDataId = 0;
         if (runtimeStoreCounter.itemData != null)
         {
             itemDataId = runtimeStoreCounter.itemData.id;
@@ -1617,12 +1666,19 @@ public class ManufatureSaveData
 
     public void SetManufature(Manufature manufature)
     {
-        instanceId = manufature.instanceId;
+        instanceId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Manufacture, manufature.instanceId);
+        if (instanceId == 0)
+        {
+            instanceId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Manufacture, manufature.saveId);
+            SaveRuntimeResolver.instance.Bind(SaveEntityKind.Manufacture, instanceId, manufature.instanceId);
+        }
+        manufature.saveId = instanceId;
         dataId = manufature.dataId;
-        materials = manufature.materials.ToArray();
+        materials = manufature.materials != null ? manufature.materials.ToArray() : new int2[4];
         product = manufature.product;
         waitTime = manufature.waitTime;
         startTime = manufature.startTime;
+        matchFormula = manufature.matchFormula != null ? manufature.matchFormula.id : 0;
         Pack();
     }
 }
@@ -1698,11 +1754,26 @@ public class HomeEquipSaveData
 
     public void SetHomeEquip(HomeEquip homeEquip)
     {
-        instanceId = homeEquip.instanceId;
+        instanceId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.HomeEquip, homeEquip.instanceId);
+        if (instanceId == 0)
+        {
+            instanceId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.HomeEquip, homeEquip.saveId);
+            SaveRuntimeResolver.instance.Bind(SaveEntityKind.HomeEquip, instanceId, homeEquip.instanceId);
+        }
+        homeEquip.saveId = instanceId;
         equipDataId = homeEquip.equipDataId;
         mapEditorInstance = homeEquip.mapEditorInstance; mapInstance = homeEquip.mapInstance;
         coordinate = homeEquip.coordinate;
-        characterId = homeEquip.characterId;
+        characterId = 0;
+        if (CharacterManager.instance.controllerCharacter == null ||
+            homeEquip.characterId != CharacterManager.instance.controllerCharacter.instanceId)
+        {
+            characterId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Character, homeEquip.characterId);
+            if (characterId == 0)
+            {
+                characterId = homeEquip.characterId;
+            }
+        }
         Pack();
     }
 }

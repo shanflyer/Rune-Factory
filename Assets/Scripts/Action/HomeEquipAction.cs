@@ -23,6 +23,7 @@ public struct CreatHomeEquip : GameAction
     public int characterId;
     public int equipDataId;
     public int instanceId;
+    public int saveId;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
         SetResult setResult = null, SetValue setValue = null, bool immediately = false)
@@ -167,6 +168,7 @@ public struct CreatManufature : GameAction
     public SetResult setResult { get; set; }  public void Clear(){this = default; }
     public int manufatureId;
     public int instanceId;
+    public int saveId;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1, SetResult setResult = null, SetValue setValue = null, bool immediately = false)
     {

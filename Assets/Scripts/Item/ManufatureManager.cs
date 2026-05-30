@@ -145,9 +145,22 @@ public class ManufactureManager : Singleton<ManufactureManager>
 
     public void CreatManufature(ManufatureSaveData manufatureSaveData)
     {
+        int saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Manufacture, manufatureSaveData.instanceId);
+        int instanceId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Manufacture, saveId);
+        if (instanceId == 0)
+        {
+            instanceId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.HomeEquip, saveId);
+        }
+        if (instanceId == 0)
+        {
+            instanceId = MyInstance.instance.Uid;
+        }
+        SaveRuntimeResolver.instance.Bind(SaveEntityKind.Manufacture, saveId, instanceId);
+
         Manufature manufature = new Manufature
         {
-            instanceId = manufatureSaveData.instanceId,
+            instanceId = instanceId,
+            saveId = saveId,
             dataId = manufatureSaveData.dataId,
             waitTime = manufatureSaveData.waitTime,
             startTime = manufatureSaveData.startTime,
@@ -160,22 +173,48 @@ public class ManufactureManager : Singleton<ManufactureManager>
         for (var i = 0; i < manufatureSaveData.materials.Length; i++)
             manufature.materials[i] = manufatureSaveData.materials[i];
 
-        Manufactures.Add(manufatureSaveData.instanceId, manufature);
+        Manufactures[instanceId] = manufature;
     }
 
     private async System.Threading.Tasks.Task CreatManufatureAsync(CreatManufature creatManufature)
     {
         var manufatureData = await GameDataManager.instance.GetAsyncData<ManufactureData>(creatManufature.manufatureId);
-        if (!Manufactures.ContainsKey(creatManufature.instanceId))
+        int instanceId = creatManufature.instanceId;
+        int saveId = creatManufature.saveId;
+        if (saveId == 0 && instanceId != 0)
+        {
+            saveId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Manufacture, instanceId);
+        }
+        if (saveId == 0 && instanceId != 0)
+        {
+            saveId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.HomeEquip, instanceId);
+        }
+        saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Manufacture, saveId);
+        if (instanceId == 0)
+        {
+            instanceId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Manufacture, saveId);
+        }
+        if (instanceId == 0)
+        {
+            instanceId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.HomeEquip, saveId);
+        }
+        if (instanceId == 0)
+        {
+            instanceId = MyInstance.instance.Uid;
+        }
+        SaveRuntimeResolver.instance.Bind(SaveEntityKind.Manufacture, saveId, instanceId);
+
+        if (!Manufactures.ContainsKey(instanceId))
         {
             Manufature manufature = new Manufature
             {
-                instanceId = creatManufature.instanceId,
+                instanceId = instanceId,
+                saveId = saveId,
                 dataId = creatManufature.manufatureId,
                 materials = new int2[4],
                 open = false
             };
-            Manufactures.Add(creatManufature.instanceId, manufature);
+            Manufactures.Add(instanceId, manufature);
             for (int i = 0; i < manufatureData.linkFormulas.Count; i++)
             {
 
@@ -209,6 +248,7 @@ public class ManufactureManager : Singleton<ManufactureManager>
 public class Manufature :  IReferenceData
 {
     public int instanceId;
+    public int saveId;
     public int dataId;
     public bool open;
     public int2[] materials;

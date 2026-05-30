@@ -65,6 +65,65 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         return homeEquipList;
     }
 
+    private int ResolveCharacterRuntimeId(int saveCharacterId)
+    {
+        if (saveCharacterId == 0)
+        {
+            return CharacterManager.instance.controllerCharacter.instanceId;
+        }
+
+        int runtimeId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Character, saveCharacterId);
+        return runtimeId != 0 ? runtimeId : saveCharacterId;
+    }
+
+    private int ResolveLinkedRuntimeId(int saveId, HomeEquipmentData homeEquipmentData)
+    {
+        int runtimeId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.HomeEquip, saveId);
+        if (runtimeId != 0)
+        {
+            return runtimeId;
+        }
+
+        switch ((int)homeEquipmentData.homeEquipFunc)
+        {
+            case 2:
+                return SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Package, saveId);
+            case 3:
+                return SaveRuntimeResolver.instance.Resolve(SaveEntityKind.StoreCounter, saveId);
+            case 4:
+                return SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Manufacture, saveId);
+            default:
+                return 0;
+        }
+    }
+
+    private void AddCharacterHomeEquip(HomeEquip homeEquip)
+    {
+        if (!characterHomeEquips.TryGetValue(homeEquip.characterId, out var ints))
+        {
+            ints = new List<int>();
+            characterHomeEquips.Add(homeEquip.characterId, ints);
+        }
+
+        if (!ints.Contains(homeEquip.instanceId))
+        {
+            ints.Add(homeEquip.instanceId);
+        }
+
+        int count = 1;
+        if (!characterHomeEquipCountData.TryGetValue(homeEquip.characterId, out var equipCountData))
+        {
+            equipCountData = new Dictionary<int, int>();
+            characterHomeEquipCountData.Add(homeEquip.characterId, equipCountData);
+        }
+        else if (equipCountData.TryGetValue(homeEquip.equipDataId, out var oldCount))
+        {
+            count = oldCount + 1;
+        }
+
+        equipCountData[homeEquip.equipDataId] = count;
+    }
+
     private void UnSetHomeEquip(UnSetHomeEquip unSetHomeEquip)
     {
         if (homeEquips.TryGetValue(unSetHomeEquip.instanceId, out var homeEquip))
@@ -82,47 +141,67 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
     {
         var homeEquipmentData =
             GameDataManager.instance.GetData<HomeEquipmentData>(homeEquipSaveData.equipDataId.ToString());
+        int saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.HomeEquip, homeEquipSaveData.instanceId);
+        int instanceId = 0;
+        if (homeEquipSaveData.mapEditorInstance != 0 &&
+            WorldMapManager.instance.GetRuntimeMapItem(new int2(homeEquipSaveData.mapInstance, homeEquipSaveData.mapEditorInstance), out var runtimeMapItem))
+        {
+            instanceId = runtimeMapItem.instanceId;
+        }
+        if (instanceId == 0)
+        {
+            instanceId = ResolveLinkedRuntimeId(saveId, homeEquipmentData);
+        }
+        if (instanceId == 0)
+        {
+            instanceId = MyInstance.instance.Uid;
+        }
+        SaveRuntimeResolver.instance.Bind(SaveEntityKind.HomeEquip, saveId, instanceId);
+        int characterId = ResolveCharacterRuntimeId(homeEquipSaveData.characterId);
         HomeEquip homeEquip =
-            new HomeEquip(homeEquipSaveData.instanceId, homeEquipSaveData.instanceId,
-            homeEquipSaveData.characterId, homeEquipmentData);
+            new HomeEquip(instanceId, instanceId, characterId, homeEquipmentData)
+            {
+                saveId = saveId
+            };
         homeEquip.mapEditorInstance = homeEquipSaveData.mapEditorInstance;
-        homeEquips.Add(homeEquip.instanceId, homeEquip);
+        homeEquips[homeEquip.instanceId] = homeEquip;
         homeEquip.mapInstance = homeEquipSaveData.mapInstance;
         homeEquip.coordinate = homeEquipSaveData.coordinate;
-        if (!characterHomeEquips.TryGetValue(homeEquipSaveData.characterId, out var ints))
-        {
-            ints = new List<int>();
-            characterHomeEquips.Add(homeEquipSaveData.characterId, ints);
-        }
-        ints.Add(homeEquip.instanceId);
-
-        int count = 1;
-        if (!characterHomeEquipCountData.TryGetValue(homeEquipSaveData.characterId, out var equipCountData))
-        {
-            equipCountData = new Dictionary<int, int>();
-            characterHomeEquipCountData.Add(homeEquipSaveData.characterId, equipCountData);
-        }
-        else
-        {
-            if (equipCountData.TryGetValue(homeEquipSaveData.equipDataId, out var _count))
-            {
-                count = _count + 1;
-            }
-        }
-        equipCountData[homeEquipSaveData.equipDataId] = count;
+        AddCharacterHomeEquip(homeEquip);
     }
     private async System.Threading.Tasks.Task CreatHomeEquipAsync(CreatHomeEquip creatHomeEquip)
     {
-        if (homeEquips.ContainsKey(creatHomeEquip.instanceId))
-        {
-            return;
-        }
-
         var characterId = creatHomeEquip.characterId;
         if (characterId == 0) characterId = CharacterManager.instance.controllerCharacter.instanceId;
         HomeEquipmentData homeEquipmentData = await GameDataManager.instance.GetAsyncData<HomeEquipmentData>(creatHomeEquip.equipDataId);
-        int instanceId = creatHomeEquip.instanceId == 0 ? MyInstance.instance.Uid : creatHomeEquip.instanceId;
-        var homeEquip = new HomeEquip(instanceId, instanceId, characterId, homeEquipmentData);
+        int instanceId = creatHomeEquip.instanceId;
+        int saveId = creatHomeEquip.saveId;
+        if (saveId == 0 && instanceId != 0)
+        {
+            saveId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.HomeEquip, instanceId);
+        }
+        saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.HomeEquip, saveId);
+        if (instanceId == 0)
+        {
+            instanceId = ResolveLinkedRuntimeId(saveId, homeEquipmentData);
+        }
+        if (instanceId == 0)
+        {
+            instanceId = MyInstance.instance.Uid;
+        }
+        SaveRuntimeResolver.instance.Bind(SaveEntityKind.HomeEquip, saveId, instanceId);
+
+        if (homeEquips.ContainsKey(instanceId))
+        {
+            creatHomeEquip.setResult?.Invoke(true);
+            creatHomeEquip.setValue?.Invoke(instanceId);
+            return;
+        }
+
+        var homeEquip = new HomeEquip(instanceId, instanceId, characterId, homeEquipmentData)
+        {
+            saveId = saveId
+        };
 
         if (creatHomeEquip.instanceId == 0)
         {
@@ -136,27 +215,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
             GameActionManager.instance.QueueAction(addMapItem);
         }
 
-        if (!characterHomeEquips.TryGetValue(creatHomeEquip.characterId, out var ints))
-        {
-            ints = new List<int>();
-            characterHomeEquips.Add(creatHomeEquip.characterId, ints);
-        }
-        ints.Add(homeEquip.instanceId);
-
-        int count = 1;
-        if (!characterHomeEquipCountData.TryGetValue(creatHomeEquip.characterId, out var equipCountData))
-        {
-            equipCountData = new Dictionary<int, int>();
-            characterHomeEquipCountData.Add(creatHomeEquip.characterId, equipCountData);
-        }
-        else
-        {
-            if (equipCountData.TryGetValue(creatHomeEquip.equipDataId, out var _count))
-            {
-                count = _count + 1;
-            }
-        }
-        equipCountData[creatHomeEquip.equipDataId] = count;
+        AddCharacterHomeEquip(homeEquip);
 
         switch (homeEquipmentData.homeEquipFunc)
         {
@@ -169,7 +228,8 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
                     {
                         packageDataId = homeEquipmentData.homeEquipFuncValue,
                         level = 0,
-                        instanceId=homeEquip.instanceId
+                        instanceId=homeEquip.instanceId,
+                        saveId = saveId
                     };
                     GameActionManager.instance.QueueAction(creatPackage);
                 }
@@ -180,7 +240,8 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
                     CreatStoreCounter creatStoreCounter = new CreatStoreCounter
                     {
                         itemInstanceId = homeEquip.instanceId,
-                        storeDataId = homeEquipmentData.homeEquipFuncValue
+                        storeDataId = homeEquipmentData.homeEquipFuncValue,
+                        saveId = saveId
                     };
                     GameActionManager.instance.QueueAction(creatStoreCounter);
                 }
@@ -191,7 +252,8 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
                     CreatManufature creatManufature = new CreatManufature
                     {
                         instanceId = homeEquip.instanceId,
-                        manufatureId = homeEquipmentData.homeEquipFuncValue
+                        manufatureId = homeEquipmentData.homeEquipFuncValue,
+                        saveId = saveId
                     };
                     GameActionManager.instance.QueueAction(creatManufature);
                 }
@@ -454,6 +516,7 @@ public struct HomeEquipList : IReferenceData
 public class HomeEquip : INativeData, IReferenceData
 {
     public int instanceId;
+    public int saveId;
     public int mapItemInstance;
     public HomeEquipmentData homeEquipmentData;
     public int2 coordinate;

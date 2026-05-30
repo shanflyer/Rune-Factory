@@ -379,13 +379,25 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         var storeData = await GameDataManager.instance.GetAsyncData<StoreCounterData>(storeCounterSaveData.dataId);
         if (storeData != null)
         {
+            int saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.StoreCounter, storeCounterSaveData.instanceId);
+            int instanceId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.StoreCounter, saveId);
+            if (instanceId == 0)
+            {
+                instanceId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.HomeEquip, saveId);
+            }
+            if (instanceId == 0)
+            {
+                instanceId = MyInstance.instance.Uid;
+            }
+            SaveRuntimeResolver.instance.Bind(SaveEntityKind.StoreCounter, saveId, instanceId);
             RuntimeStoreCounter runtimeStoreCounter = new RuntimeStoreCounter
             {
-                instanceId = storeCounterSaveData.instanceId,
+                instanceId = instanceId,
+                saveId = saveId,
                 storeCounterData = storeData,
 
             };
-            runtimeStoreCounters.Add(storeCounterSaveData.instanceId, runtimeStoreCounter);
+            runtimeStoreCounters[instanceId] = runtimeStoreCounter;
 
             ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(storeCounterSaveData.itemDataId);
             runtimeStoreCounter.itemData = itemData;
@@ -395,7 +407,32 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
 
     private async System.Threading.Tasks.Task CreatStoreCounterAsync(CreatStoreCounter creatStoreCounter)
     {
-        if (!runtimeStoreCounters.ContainsKey(creatStoreCounter.itemInstanceId))
+        int instanceId = creatStoreCounter.itemInstanceId;
+        int saveId = creatStoreCounter.saveId;
+        if (saveId == 0 && instanceId != 0)
+        {
+            saveId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.StoreCounter, instanceId);
+        }
+        if (saveId == 0 && instanceId != 0)
+        {
+            saveId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.HomeEquip, instanceId);
+        }
+        saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.StoreCounter, saveId);
+        if (instanceId == 0)
+        {
+            instanceId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.StoreCounter, saveId);
+        }
+        if (instanceId == 0)
+        {
+            instanceId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.HomeEquip, saveId);
+        }
+        if (instanceId == 0)
+        {
+            instanceId = MyInstance.instance.Uid;
+        }
+        SaveRuntimeResolver.instance.Bind(SaveEntityKind.StoreCounter, saveId, instanceId);
+
+        if (!runtimeStoreCounters.ContainsKey(instanceId))
         {
             var storeData = await GameDataManager.instance.GetAsyncData<StoreCounterData>(creatStoreCounter.storeDataId);
 
@@ -403,11 +440,12 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
             {
                 RuntimeStoreCounter runtimeStoreCounter = new RuntimeStoreCounter
                 {
-                    instanceId = creatStoreCounter.itemInstanceId,
+                    instanceId = instanceId,
+                    saveId = saveId,
                     storeCounterData = storeData,
 
                 };
-                runtimeStoreCounters.Add(creatStoreCounter.itemInstanceId,runtimeStoreCounter);
+                runtimeStoreCounters.Add(instanceId,runtimeStoreCounter);
 
             }
         }
@@ -483,6 +521,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
 public class RuntimeStoreCounter
 {
     public int instanceId;
+    public int saveId;
     public StoreCounterData storeCounterData;
     public ItemData itemData;
     public int count;
