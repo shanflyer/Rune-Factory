@@ -833,37 +833,55 @@ public class UserGameSaveData : IReferenceData
 
     public void SetPastureData(Pasture pasture)
     {
-        if (pastures.TryGetValue(pasture.instanceId, out var pastureSaveData))
+        int saveId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Pasture, pasture.instanceId);
+        if (saveId == 0)
+        {
+            saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Pasture, pasture.saveId);
+            SaveRuntimeResolver.instance.Bind(SaveEntityKind.Pasture, saveId, pasture.instanceId);
+        }
+        pasture.saveId = saveId;
+
+        if (pastures.TryGetValue(saveId, out var pastureSaveData))
         {
             pastureSaveData.SetParture(pasture);
         }
         else
         {
             pastureSaveData = new PastureSaveData(pasture);
-            pastures.Add(pastureSaveData.instanceId, pastureSaveData);
+            pastures.Add(saveId, pastureSaveData);
         }
     }
 
     public void DeletePasture(int id)
     {
-        pastures.Remove(id);
+        int saveId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Pasture, id);
+        pastures.Remove(saveId != 0 ? saveId : id);
     }
 
     public void DeleteAnimal(int id)
     {
-        animals.Remove(id);
+        int saveId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Animal, id);
+        animals.Remove(saveId != 0 ? saveId : id);
     }
 
     public void SetAnimalData(Animal animal)
     {
-        if (animals.TryGetValue(animal.instanceId, out var animalSaveData))
+        int saveId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Animal, animal.instanceId);
+        if (saveId == 0)
+        {
+            saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Animal, animal.saveId);
+            SaveRuntimeResolver.instance.Bind(SaveEntityKind.Animal, saveId, animal.instanceId);
+        }
+        animal.saveId = saveId;
+
+        if (animals.TryGetValue(saveId, out var animalSaveData))
         {
             animalSaveData.SetAnimal(animal);
         }
         else
         {
             animalSaveData = new AnimalSaveData(animal);
-            animals.Add(animal.instanceId, animalSaveData);
+            animals.Add(saveId, animalSaveData);
         }
     }
 
@@ -1146,9 +1164,13 @@ public class AnimalSaveData
 
     public void SetAnimal(Animal animal)
     {
-        instaceId = animal.instanceId;
+        instaceId = animal.saveId;
         name = animal.name;
-        pasture = animal.pasture;
+        pasture = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Pasture, animal.pasture);
+        if (pasture == 0)
+        {
+            pasture = animal.pasture;
+        }
         growthStage = animal.growthStage;
         growthDay = animal.growthDay;
         setFood = animal.setFood;
@@ -1232,14 +1254,22 @@ public class PastureSaveData
     public void SetParture(Pasture pasture)
     {
         name = pasture.name;
-        instanceId = pasture.instanceId;
+        instanceId = pasture.saveId;
         level = pasture.level;
         index = pasture.index;
         linkItem = pasture.linkItem;
         pastureState = pasture.pastureState;
         dataId = pasture.pastureData.id;
-        foodPackage = pasture.foodPackage;
-        productPackage = pasture.productPackage;
+        foodPackage = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Package, pasture.foodPackage);
+        if (foodPackage == 0)
+        {
+            foodPackage = pasture.foodPackage;
+        }
+        productPackage = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Package, pasture.productPackage);
+        if (productPackage == 0)
+        {
+            productPackage = pasture.productPackage;
+        }
         linkRoom = pasture.linkRoom;
         Pack();
     }

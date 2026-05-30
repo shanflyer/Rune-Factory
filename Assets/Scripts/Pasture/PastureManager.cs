@@ -414,16 +414,34 @@ public class PastureManager : Singleton<PastureManager>
     {
         PastureData pastureData = await GameDataManager.instance.GetAsyncData<PastureData>(pastureSaveData.dataId);
         PastureLevelData pastureLevelData = pastureData.levelDatas[0];
+        int saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Pasture, pastureSaveData.instanceId);
+        int runtimeId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Pasture, saveId);
+        if (runtimeId == 0)
+        {
+            runtimeId = MyInstance.instance.Uid;
+        }
+        SaveRuntimeResolver.instance.Bind(SaveEntityKind.Pasture, saveId, runtimeId);
+        int foodPackage = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Package, pastureSaveData.foodPackage);
+        if (foodPackage == 0)
+        {
+            foodPackage = pastureSaveData.foodPackage;
+        }
+        int productPackage = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Package, pastureSaveData.productPackage);
+        if (productPackage == 0)
+        {
+            productPackage = pastureSaveData.productPackage;
+        }
 
         Pasture pasture = new Pasture
         {
-            instanceId = pastureSaveData.instanceId,
+            instanceId = runtimeId,
+            saveId = saveId,
             name = pastureSaveData.name,
             pastureState = pastureSaveData.pastureState,
             linkItem = pastureSaveData.linkItem,
-            foodPackage = pastureSaveData.foodPackage,
+            foodPackage = foodPackage,
             //waterPackage = waterPackageId,
-            productPackage = pastureSaveData.productPackage,
+            productPackage = productPackage,
             animals = new HashSet<int>(4),
             pastureData = pastureData,
             level = pastureLevelData.level,
@@ -442,7 +460,7 @@ public class PastureManager : Singleton<PastureManager>
 
         SetItemAnimation setItemAnimation = new SetItemAnimation
         {
-            id = pastureSaveData.instanceId,
+            id = pasture.instanceId,
             keyX = pastureLevelData.animationKey.x,
             keyY = pastureLevelData.animationKey.y,
         };
@@ -527,9 +545,13 @@ public class PastureManager : Singleton<PastureManager>
 
                                 void SetPackageInstanceId(int packageInstanceId)
                                 {
+                                    int pastureRuntimeId = MyInstance.instance.Uid;
+                                    int pastureSaveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Pasture, 0);
+                                    SaveRuntimeResolver.instance.Bind(SaveEntityKind.Pasture, pastureSaveId, pastureRuntimeId);
                                     Pasture pasture = new Pasture
                                     {
-                                        instanceId = MyInstance.instance.Uid,
+                                        instanceId = pastureRuntimeId,
+                                        saveId = pastureSaveId,
                                         name = string.IsNullOrEmpty(tryCreatPasture.pastureName) ? pastureData.pastureName : tryCreatPasture.pastureName,
                                         pastureState = PastureState.平常,
                                         linkItem = instanceId,
@@ -615,11 +637,24 @@ public class PastureManager : Singleton<PastureManager>
     public async System.Threading.Tasks.Task CreatAnimalAsync(AnimalSaveData animalSaveData)
     {
         AnimalData animalData = await GameDataManager.instance.GetAsyncData<AnimalData>(animalSaveData.dataId);
-        Animal animal = new Animal(animalData,animalSaveData.instaceId, animalSaveData.name,animalSaveData.linkCharacterData)
+        int saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Animal, animalSaveData.instaceId);
+        int runtimeId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Animal, saveId);
+        if (runtimeId == 0)
         {
+            runtimeId = MyInstance.instance.Uid;
+        }
+        SaveRuntimeResolver.instance.Bind(SaveEntityKind.Animal, saveId, runtimeId);
+        int pastureRuntimeId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Pasture, animalSaveData.pasture);
+        if (pastureRuntimeId == 0)
+        {
+            pastureRuntimeId = animalSaveData.pasture;
+        }
+        Animal animal = new Animal(animalData, runtimeId, animalSaveData.name,animalSaveData.linkCharacterData)
+        {
+            saveId = saveId,
             animalState = animalSaveData.animalState,
             animalData = animalData,
-            pasture= animalSaveData.pasture,
+            pasture= pastureRuntimeId,
             growthStage = animalSaveData.growthStage,
             growthDay=animalSaveData.growthDay,
             setFood=animalSaveData.setFood,
@@ -683,7 +718,13 @@ public class PastureManager : Singleton<PastureManager>
     private async System.Threading.Tasks.Task SampleCreatAnimalAsync(SampleCreatAnimal sampleCreatAnimal)
     {
         AnimalData animalData = await GameDataManager.instance.GetAsyncData<AnimalData>(sampleCreatAnimal.dataId);
-        Animal animal = new Animal(animalData,MyInstance.instance.Uid);
+        int animalRuntimeId = MyInstance.instance.Uid;
+        int animalSaveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Animal, 0);
+        SaveRuntimeResolver.instance.Bind(SaveEntityKind.Animal, animalSaveId, animalRuntimeId);
+        Animal animal = new Animal(animalData, animalRuntimeId)
+        {
+            saveId = animalSaveId
+        };
 
 
         animals.Add(animal.instanceId, animal);
@@ -722,7 +763,13 @@ public class PastureManager : Singleton<PastureManager>
     private async System.Threading.Tasks.Task TryCreatAnimalAsync(TryCreatAnimal tryCreatAnimal)
     {
         AnimalData animalData = await GameDataManager.instance.GetAsyncData<AnimalData>(tryCreatAnimal.dataId);
-        Animal animal = new Animal(animalData, MyInstance.instance.Uid);
+        int animalRuntimeId = MyInstance.instance.Uid;
+        int animalSaveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Animal, 0);
+        SaveRuntimeResolver.instance.Bind(SaveEntityKind.Animal, animalSaveId, animalRuntimeId);
+        Animal animal = new Animal(animalData, animalRuntimeId)
+        {
+            saveId = animalSaveId
+        };
 
         if (pastures.TryGetValue(tryCreatAnimal.roomId, out var pasture))
         {
@@ -827,6 +874,7 @@ public enum PastureState
 public class Pasture : IReferenceData
 {
     public int instanceId;
+    public int saveId;
     public int linkItem;
     public PastureState pastureState;
     public HashSet<int> animals;
@@ -852,6 +900,7 @@ public class Pasture : IReferenceData
 public class Animal
 {
     public int instanceId;
+    public int saveId;
     public string name=>string.IsNullOrEmpty(animalName)?animalData.animalName:animalName;
     private string animalName;
 
@@ -867,7 +916,7 @@ public class Animal
 
     public int GetPastureRoom()
     {
-        if(PastureManager.instance.GetPasture(instanceId,out var pasture))
+        if(PastureManager.instance.GetPasture(this.pasture,out var pasture))
         {
             return pasture.linkRoom;
         }

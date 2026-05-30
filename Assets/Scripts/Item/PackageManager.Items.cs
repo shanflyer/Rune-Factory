@@ -105,6 +105,7 @@ public partial class PackageManager
             gamePackage.instanceId = changePackageInnstance.newInstanceId;
             gamePackages.Remove(changePackageInnstance.oldInstanceId);
             gamePackages.Add(gamePackage.instanceId, gamePackage);
+            SaveRuntimeResolver.instance.Bind(SaveEntityKind.Package, gamePackage.saveId, gamePackage.instanceId);
 
             RefreshPackageMapDisplay(gamePackage.caseCount, gamePackage.itemCount, gamePackage.instanceId);
         }
