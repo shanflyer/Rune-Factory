@@ -68,6 +68,205 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     {
         UserGameSaveDataList.nowSaveData = new UserGameSaveData();
     }
+
+    private static void RestoreSavedInstanceUid(UserGameSaveData saveData)
+    {
+        if (saveData == null)
+        {
+            return;
+        }
+
+        MyInstance.instance.RestoreMaxUid(GetMaxSavedInstanceId(saveData));
+    }
+
+    private static int GetMaxSavedInstanceId(UserGameSaveData saveData)
+    {
+        int maxUid = 100_000;
+
+        void Include(int value)
+        {
+            if (value > maxUid)
+            {
+                maxUid = value;
+            }
+        }
+
+        Include(saveData.otherSaveData?.uid ?? 0);
+
+        void IncludeCharacterSaveData(CharacterSaveData characterSaveData)
+        {
+            if (characterSaveData == null)
+            {
+                return;
+            }
+
+            Include((int)((characterSaveData.d1 >> 0) & 0xFFFFF));
+            Include((int)((characterSaveData.d2 >> 23) & 0xFFFFF));
+        }
+
+        IncludeCharacterSaveData(saveData.playerData);
+        if (saveData.characterSaveDatas != null)
+        {
+            foreach (var characterSaveData in saveData.characterSaveDatas.Values)
+            {
+                IncludeCharacterSaveData(characterSaveData);
+            }
+        }
+
+        if (saveData.packageSaveDatas != null)
+        {
+            foreach (var packageSaveData in saveData.packageSaveDatas)
+            {
+                if (packageSaveData == null)
+                {
+                    continue;
+                }
+
+                Include((int)((packageSaveData.packed >> 8) & 0xFFFFF));
+                if (packageSaveData.items == null)
+                {
+                    continue;
+                }
+
+                for (int i = 0; i + 1 < packageSaveData.items.Count; i += 2)
+                {
+                    ulong itemData1 = packageSaveData.items[i];
+                    Include((int)((itemData1 >> 0) & 0xFFFFF));
+                    Include((int)((itemData1 >> 20) & 0xFFFFF));
+                }
+            }
+        }
+
+        if (saveData.mapHomeEquips != null)
+        {
+            foreach (var homeEquipSaveData in saveData.mapHomeEquips.Values)
+            {
+                if (homeEquipSaveData != null)
+                {
+                    Include((int)((homeEquipSaveData.data1 >> 0) & 0xFFFFF));
+                }
+            }
+        }
+
+        if (saveData.animals != null)
+        {
+            foreach (var animalSaveData in saveData.animals.Values)
+            {
+                if (animalSaveData == null)
+                {
+                    continue;
+                }
+
+                Include((int)((animalSaveData.data1 >> 0) & 0xFFFFF));
+                Include((int)((animalSaveData.data1 >> 20) & 0xFFFFF));
+            }
+        }
+
+        if (saveData.pastures != null)
+        {
+            foreach (var pastureSaveData in saveData.pastures.Values)
+            {
+                if (pastureSaveData == null)
+                {
+                    continue;
+                }
+
+                Include((int)((pastureSaveData.data1 >> 0) & 0xFFFFF));
+                Include((int)((pastureSaveData.data1 >> 20) & 0xFFFFF));
+                int foodLow = (int)((pastureSaveData.data1 >> 58) & 0x3F);
+                int foodHigh = (int)((pastureSaveData.data2 >> 0) & 0x3FFF);
+                Include((foodHigh << 6) | foodLow);
+                Include((int)((pastureSaveData.data2 >> 14) & 0xFFFFF));
+            }
+        }
+
+        if (saveData.manufatures != null)
+        {
+            foreach (var manufatureSaveData in saveData.manufatures.Values)
+            {
+                if (manufatureSaveData != null)
+                {
+                    Include((int)((manufatureSaveData.d1 >> 0) & 0xFFFFF));
+                }
+            }
+        }
+
+        if (saveData.storeCounters != null)
+        {
+            foreach (var storeCounterSaveData in saveData.storeCounters)
+            {
+                if (storeCounterSaveData != null)
+                {
+                    Include((int)((storeCounterSaveData.packed >> 25) & 0xFFFFF));
+                }
+            }
+        }
+
+        if (saveData.fields != null)
+        {
+            foreach (var fieldSaveData in saveData.fields.Values)
+            {
+                if (fieldSaveData == null)
+                {
+                    continue;
+                }
+
+                Include((int)((fieldSaveData.data1 >> 0) & 0xFFFFF));
+                Include((int)((fieldSaveData.data2 >> 26) & 0xFFFFF));
+            }
+        }
+
+        if (saveData.mapItemCoordinates != null)
+        {
+            foreach (ulong packed in saveData.mapItemCoordinates)
+            {
+                Include((int)((packed >> 0) & 0xFFFFF));
+            }
+        }
+
+        if (saveData.changeMapItems != null)
+        {
+            foreach (long packed in saveData.changeMapItems)
+            {
+                Include(DataPacker.LongUnpackInt3(packed).z);
+            }
+        }
+
+        if (saveData.animationStateMapItems != null)
+        {
+            foreach (int packed in saveData.animationStateMapItems)
+            {
+                Include(DataPacker.IntUnpackInt2(packed).x);
+            }
+        }
+
+        if (saveData.removeCollider != null)
+        {
+            foreach (int instanceId in saveData.removeCollider)
+            {
+                Include(instanceId);
+            }
+        }
+
+        if (saveData.mapItemOperates != null)
+        {
+            foreach (int packed in saveData.mapItemOperates)
+            {
+                Include(DataPacker.IntUnpackInt2(packed < 0 ? -packed : packed).x);
+            }
+        }
+
+        if (saveData.specialMapItemList != null)
+        {
+            foreach (long packed in saveData.specialMapItemList)
+            {
+                Include(DataPacker.LongUnpackInt3(packed).z);
+            }
+        }
+
+        return maxUid;
+    }
+
     public bool HaveSaveFileData(int id)
     {
         return UserGameSaveData.fields.ContainsKey(id);
@@ -76,6 +275,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     {
         if (loadDataIsNotNull && CharacterManager.instance.controllerCharacter == null)
         {
+            RestoreSavedInstanceUid(loadGameSaveData);
             await PackageManager.instance.InitFromSaveData(loadGameSaveData.packageSaveDatas);
             PackageManager.instance.playerPackages.AddRange(loadGameSaveData.otherSaveData.playerPackages);
 
@@ -176,7 +376,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         }
     }
     private bool loadCompleted = false;
-    public void AfterInitMapLoadSaveData()
+    public async Task AfterInitMapLoadSaveData()
     {
         if (loadDataIsNotNull)
         {
@@ -184,7 +384,8 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             {
                 while (e.MoveNext())
                 {
-                    FarmManager.instance.CreatField(e.Current);
+                    e.Current.Unpack();
+                    await FarmManager.instance.CreatFieldAsync(e.Current);
                 }
             }
 
@@ -199,7 +400,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                 while (e.MoveNext())
                 {
                     e.Current.Unpack();
-                    PastureManager.instance.CreatPasture(e.Current);
+                    await PastureManager.instance.CreatPastureAsync(e.Current);
                 }
             }
             using(var e = loadGameSaveData.animals.Values.GetEnumerator())
@@ -207,7 +408,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                 while (e.MoveNext())
                 {
                     e.Current.Unpack();
-                    PastureManager.instance.CreatAnimal(e.Current);
+                    await PastureManager.instance.CreatAnimalAsync(e.Current);
                 }
             }
             FriendManager.instance.InitFriendSaveData(loadGameSaveData.friendSaveData);

@@ -44,6 +44,20 @@ public class MyInstance : Singleton<MyInstance>
     }
     private int uid;
     public int MaxUid => uid;
+    public void RestoreMaxUid(int maxUid)
+    {
+        if (maxUid <= uid)
+        {
+            return;
+        }
+
+        uid = maxUid;
+        if (tempUid < uid)
+        {
+            tempUid = uid;
+        }
+    }
+
     public int CreateInstanceId()
     {
         while (true)

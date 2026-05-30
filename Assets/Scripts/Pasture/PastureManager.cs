@@ -625,6 +625,7 @@ public class PastureManager : Singleton<PastureManager>
             setFood=animalSaveData.setFood,
             nowCD =animalSaveData.nowCD,
         };
+        animals[animal.instanceId] = animal;
         if (pastures.TryGetValue(animal.pasture, out var pasture))
          {
             int2 nextCoordinate = MapCellController.instance.GetRandomRoomCell(pasture.linkRoom);
@@ -639,6 +640,7 @@ public class PastureManager : Singleton<PastureManager>
                 mapInstance = pasture.linkRoom,
                 coordinateX = nextCoordinate.x,
                 coordinateY = nextCoordinate.y,
+                instanceId = animal.instanceId,
                 hideData = true,
                 setResult= SetResult
             };
@@ -651,7 +653,6 @@ public class PastureManager : Singleton<PastureManager>
         }
         else
         {
-            pasture.animals.Add(animal.instanceId);
             Character character = CharacterManager.instance.controllerCharacter;
             CreatCharacter creatCharacter = new CreatCharacter
             {
@@ -659,6 +660,7 @@ public class PastureManager : Singleton<PastureManager>
                 mapInstance = character.mapInstance,
                 coordinateX = character.coordinate.x,
                 coordinateY = character.coordinate.y,
+                instanceId = animal.instanceId,
                 hideData = true,
                 setResult = SetResult
             };
@@ -666,7 +668,7 @@ public class PastureManager : Singleton<PastureManager>
 
             JoinTeam joinTeam = new JoinTeam
             {
-                characterId = animalData.linkCharacter,
+                characterId = animal.instanceId,
                 teamCharacterId = character.instanceId
             };
             GameActionManager.instance.QueueAction(joinTeam);

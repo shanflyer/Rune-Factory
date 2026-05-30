@@ -93,7 +93,12 @@ public class WorldMapController : MonoBehaviour
 
     void LoadMapCompleted(LoadMapCompleted loadMapCompleted)
     {
-        GameDataSaveManager.instance.AfterInitMapLoadSaveData();
+        AsyncTaskRunner.Run(LoadMapCompletedAsync(), nameof(LoadMapCompleted));
+    }
+
+    private async Task LoadMapCompletedAsync()
+    {
+        await GameDataSaveManager.instance.AfterInitMapLoadSaveData();
         UIManager.instance.CloseGamePanel<LoadingPanel>();
         WeatherManager.instance.RefreshWeather(GameTimeManager.instance.Hour);
     }
