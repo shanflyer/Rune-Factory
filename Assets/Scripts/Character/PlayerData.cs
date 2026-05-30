@@ -264,7 +264,7 @@ public class UserGameSaveData : IReferenceData
         }
 
         removeMapItemOperatesDic.Clear();
-        mapItemOperates.Clear();
+        addMapItemOperatesDic.Clear();
 
         foreach (var field in fields.Values) field.Unpack();
 
@@ -1156,7 +1156,12 @@ public class ManufatureSaveData
     public void Pack()
     {
         d1 = d2 = d3 = d4 = d5 = 0;
-        materials = new int2[4];
+        var packMaterials = new int2[4];
+        if (materials != null)
+        {
+            Array.Copy(materials, packMaterials, Math.Min(materials.Length, packMaterials.Length));
+        }
+        materials = packMaterials;
         // d1
         d1 |= (ulong)(instanceId & 0xFFFFF) << 0; // 20位
         d1 |= (ulong)(dataId & 0x3FFF) << 20; // 14位
@@ -1229,6 +1234,7 @@ public class ManufatureSaveData
         d2 = manufatureSaveData.d2;
         d3 = manufatureSaveData.d3;
         d4 = manufatureSaveData.d4;
+        d5 = manufatureSaveData.d5;
         Unpack();
     }
     public ManufatureSaveData(Manufature manufature)
