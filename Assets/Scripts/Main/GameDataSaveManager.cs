@@ -12,7 +12,7 @@ using VoxelBusters.EssentialKit;
 
 public class GameDataSaveManager : Singleton<GameDataSaveManager>
 {
-    private const int CurrentSaveVersion = 2;
+    private const int CurrentSaveVersion = 3;
     private const string CloudCommitValue = "committed";
     private const string CloudCommitMetaName = "__commit";
     private const string CloudChecksumMetaName = "__checksum";
@@ -364,7 +364,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                 GameActionManager.instance.QueueAction(changeMapItem);
             }
 
-            if (loadGameSaveData.AnimationStateMapItemsDic.TryGetValue(instanceId, out var data1))
+            if (loadGameSaveData.GetMapItemAnimation(instanceId, out var data1))
             {
                 SetItemAnimation setItemAnimation = new SetItemAnimation
                 {
@@ -663,6 +663,11 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                     version = 2;
                     break;
 
+                case 2:
+                    MigrateSaveDataListFrom2To3(saveDataList);
+                    version = 3;
+                    break;
+
                 default:
                     throw new InvalidDataException($"Unsupported save data migration version: {version}");
             }
@@ -693,6 +698,23 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         {
             diamond = diamond,
             saveVersion = 2
+        };
+        saveDataList.nowSaveData = UserGameSaveData.CreatSaveData(-1);
+        saveDataList.userGameSaveDatas = new List<UserGameSaveData>
+        {
+            UserGameSaveData.CreatSaveData(0),
+            UserGameSaveData.CreatSaveData(1),
+            UserGameSaveData.CreatSaveData(2)
+        };
+    }
+
+    private static void MigrateSaveDataListFrom2To3(UserGameSaveDataList saveDataList)
+    {
+        int diamond = saveDataList.commonSaveData?.diamond ?? 0;
+        saveDataList.commonSaveData = new CommonSaveData
+        {
+            diamond = diamond,
+            saveVersion = 3
         };
         saveDataList.nowSaveData = UserGameSaveData.CreatSaveData(-1);
         saveDataList.userGameSaveDatas = new List<UserGameSaveData>
@@ -743,6 +765,16 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         saveData.removeCollider ??= new List<int>();
         saveData.mapItemOperates ??= new List<int>();
         saveData.specialMapItemList ??= new List<long>();
+        saveData.mapItemCoordinateRefs ??= new List<MapItemCoordinateSaveData>();
+        RemoveNullEntries(saveData.mapItemCoordinateRefs);
+        saveData.mapItemAnimationRefs ??= new List<MapItemAnimationSaveData>();
+        RemoveNullEntries(saveData.mapItemAnimationRefs);
+        saveData.mapItemChangeRefs ??= new List<MapItemChangeSaveData>();
+        RemoveNullEntries(saveData.mapItemChangeRefs);
+        saveData.removeColliderRefs ??= new List<MapItemColliderSaveData>();
+        RemoveNullEntries(saveData.removeColliderRefs);
+        saveData.mapItemOperateRefs ??= new List<MapItemOperateSaveData>();
+        RemoveNullEntries(saveData.mapItemOperateRefs);
         saveData.saveIdCounters ??= new List<int2>();
     }
 

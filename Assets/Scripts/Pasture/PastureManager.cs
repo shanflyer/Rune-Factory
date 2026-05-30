@@ -431,6 +431,12 @@ public class PastureManager : Singleton<PastureManager>
         {
             productPackage = pastureSaveData.productPackage;
         }
+        int linkItem = pastureSaveData.linkItem;
+        if (pastureSaveData.linkItemRef.IsValid &&
+            SaveRuntimeResolver.instance.TryResolveMapItem(pastureSaveData.linkItemRef, out var runtimeLinkItem))
+        {
+            linkItem = runtimeLinkItem;
+        }
 
         Pasture pasture = new Pasture
         {
@@ -438,7 +444,7 @@ public class PastureManager : Singleton<PastureManager>
             saveId = saveId,
             name = pastureSaveData.name,
             pastureState = pastureSaveData.pastureState,
-            linkItem = pastureSaveData.linkItem,
+            linkItem = linkItem,
             foodPackage = foodPackage,
             //waterPackage = waterPackageId,
             productPackage = productPackage,
@@ -448,7 +454,10 @@ public class PastureManager : Singleton<PastureManager>
             animalCase = pastureLevelData.animalCase,
             linkRoom = pastureSaveData.linkRoom
         };
-        pastureLinkItems.Add(pasture.linkItem, pasture.instanceId);
+        if (pasture.linkItem != 0)
+        {
+            pastureLinkItems.Add(pasture.linkItem, pasture.instanceId);
+        }
 
 
         RefreshPasture refreshPasture = new RefreshPasture

@@ -291,6 +291,11 @@ public class UserGameSaveData : IReferenceData
         friendSaveData = userGameSaveData.friendSaveData;
         mapItemOperates.AddRange(userGameSaveData.mapItemOperates);
         removeCollider.AddRange(userGameSaveData.removeCollider);
+        mapItemCoordinateRefs.AddRange(userGameSaveData.mapItemCoordinateRefs);
+        mapItemAnimationRefs.AddRange(userGameSaveData.mapItemAnimationRefs);
+        mapItemChangeRefs.AddRange(userGameSaveData.mapItemChangeRefs);
+        removeColliderRefs.AddRange(userGameSaveData.removeColliderRefs);
+        mapItemOperateRefs.AddRange(userGameSaveData.mapItemOperateRefs);
         mapLineSaveData.CopyData(userGameSaveData.mapLineSaveData);
         chapters.CopyData(userGameSaveData.chapters);
         fishSaveDatas.CopyData(userGameSaveData.fishSaveDatas);
@@ -366,6 +371,11 @@ public class UserGameSaveData : IReferenceData
     public List<int> removeCollider = new();
     public List<int> mapItemOperates = new();
     public List<long> specialMapItemList = new();
+    public List<MapItemCoordinateSaveData> mapItemCoordinateRefs = new();
+    public List<MapItemAnimationSaveData> mapItemAnimationRefs = new();
+    public List<MapItemChangeSaveData> mapItemChangeRefs = new();
+    public List<MapItemColliderSaveData> removeColliderRefs = new();
+    public List<MapItemOperateSaveData> mapItemOperateRefs = new();
     public List<int2> saveIdCounters = new();
 
     public Dictionary<int, int2> AnimationStateMapItemsDic
@@ -394,16 +404,72 @@ public class UserGameSaveData : IReferenceData
     private HashSet<int> RemoveMapItemColliderSet = new HashSet<int>();
     private HashSet<int2> removeMapItemOperatesSet = new HashSet<int2>();
     private HashSet<int2> addMapItemOperatesSet = new HashSet<int2>();
+    private HashSet<MapItemSaveRef> removeColliderRefSet = new HashSet<MapItemSaveRef>();
+    private HashSet<MapItemOperateSaveKey> removeMapItemOperateRefSet = new HashSet<MapItemOperateSaveKey>();
+    private HashSet<MapItemOperateSaveKey> addMapItemOperateRefSet = new HashSet<MapItemOperateSaveKey>();
 
     private Dictionary<int, List<int>> removeMapItemOperatesDic = new Dictionary<int, List<int>>();
     private Dictionary<int, List<int>> addMapItemOperatesDic = new Dictionary<int, List<int>>();
+    private Dictionary<MapItemSaveRef, List<int>> removeMapItemOperateRefDic = new Dictionary<MapItemSaveRef, List<int>>();
+    private Dictionary<MapItemSaveRef, List<int>> addMapItemOperateRefDic = new Dictionary<MapItemSaveRef, List<int>>();
     private Dictionary<int2,int> specialMapItem = new Dictionary<int2, int>();
+    private Dictionary<MapItemSaveRef, MapItemCoordinateSaveData> mapItemCoordinateRefDic = new Dictionary<MapItemSaveRef, MapItemCoordinateSaveData>();
+    private Dictionary<MapItemSaveRef, MapItemAnimationSaveData> mapItemAnimationRefDic = new Dictionary<MapItemSaveRef, MapItemAnimationSaveData>();
+    private Dictionary<MapItemSaveRef, MapItemChangeSaveData> mapItemChangeRefDic = new Dictionary<MapItemSaveRef, MapItemChangeSaveData>();
 
 
     public bool GetChangeMapItem(int key, out int3 value)
     {
-        return changeMapItemsDic.TryGetValue(key, out value);
+        if (changeMapItemsDic.TryGetValue(key, out value))
+        {
+            return true;
+        }
+
+        var mapItemRef = SaveRuntimeResolver.instance.GetMapItemSaveRef(key);
+        if (mapItemRef.IsValid && mapItemChangeRefDic.TryGetValue(mapItemRef, out var saveData))
+        {
+            value = new int3(saveData.newDataId, saveData.animationKey);
+            return true;
+        }
+
+        return false;
     }
+
+    public bool GetMapItemAnimation(int key, out int2 value)
+    {
+        if (animationStateMapItemsDic.TryGetValue(key, out value))
+        {
+            return true;
+        }
+
+        var mapItemRef = SaveRuntimeResolver.instance.GetMapItemSaveRef(key);
+        if (mapItemRef.IsValid && mapItemAnimationRefDic.TryGetValue(mapItemRef, out var saveData))
+        {
+            value = saveData.animationKey;
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool GetMapItemCoordinate(int key, out ChangeMapItemCoordinate value)
+    {
+        if (ChangeMapItemCoordinate.TryGetValue(key, out value))
+        {
+            return true;
+        }
+
+        var mapItemRef = SaveRuntimeResolver.instance.GetMapItemSaveRef(key);
+        if (mapItemRef.IsValid && mapItemCoordinateRefDic.TryGetValue(mapItemRef, out var saveData))
+        {
+            value = new ChangeMapItemCoordinate(key, saveData.newMap, saveData.newCoordinate);
+            return true;
+        }
+
+        value = null;
+        return false;
+    }
+
     public bool GetSpecialMapItem(int2 key,out int value)
     {
         return specialMapItem.TryGetValue(key, out value);
@@ -424,6 +490,7 @@ public class UserGameSaveData : IReferenceData
     }
     public void InitMapItemSaveData(int id)
     {
+        var mapItemRef = SaveRuntimeResolver.instance.GetMapItemSaveRef(id);
         if(removeMapItemOperatesDic.TryGetValue(id,out var list))
         {
             for (int i = 0; i < list.Count; i++)
@@ -448,7 +515,39 @@ public class UserGameSaveData : IReferenceData
                 GameActionManager.instance.QueueAction(addMapItemOperate);
             }
         }
+        if (mapItemRef.IsValid && removeMapItemOperateRefDic.TryGetValue(mapItemRef, out list))
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                RemoveMapItemOperate removeMapItemOperate = new RemoveMapItemOperate
+                {
+                    mapItemId = id,
+                    removeOperateId = list[i]
+                };
+                GameActionManager.instance.QueueAction(removeMapItemOperate);
+            }
+        }
+        if (mapItemRef.IsValid && addMapItemOperateRefDic.TryGetValue(mapItemRef, out list))
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                AddMapItemOperate addMapItemOperate = new AddMapItemOperate
+                {
+                    mapItemId = id,
+                    addeOperateId = list[i]
+                };
+                GameActionManager.instance.QueueAction(addMapItemOperate);
+            }
+        }
         if (RemoveMapItemColliderSet.Contains(id))
+        {
+            RemoveMapItemCollider removeMapItemCollider = new RemoveMapItemCollider
+            {
+                mapItemInstanceId = id
+            };
+            GameActionManager.instance.QueueAction(removeMapItemCollider);
+        }
+        if (mapItemRef.IsValid && removeColliderRefSet.Contains(mapItemRef))
         {
             RemoveMapItemCollider removeMapItemCollider = new RemoveMapItemCollider
             {
@@ -526,6 +625,85 @@ public class UserGameSaveData : IReferenceData
         {
             var value = DataPacker.LongUnpackInt3(specialMapItemList[i]);
             specialMapItem[value.xy] = value.z;
+        }
+
+        mapItemCoordinateRefDic.Clear();
+        if (mapItemCoordinateRefs != null)
+        {
+            for (int i = 0; i < mapItemCoordinateRefs.Count; i++)
+            {
+                var saveData = mapItemCoordinateRefs[i];
+                if (saveData != null && saveData.mapItemRef.IsValid)
+                {
+                    mapItemCoordinateRefDic[saveData.mapItemRef] = saveData;
+                }
+            }
+        }
+
+        mapItemAnimationRefDic.Clear();
+        if (mapItemAnimationRefs != null)
+        {
+            for (int i = 0; i < mapItemAnimationRefs.Count; i++)
+            {
+                var saveData = mapItemAnimationRefs[i];
+                if (saveData != null && saveData.mapItemRef.IsValid)
+                {
+                    mapItemAnimationRefDic[saveData.mapItemRef] = saveData;
+                }
+            }
+        }
+
+        mapItemChangeRefDic.Clear();
+        if (mapItemChangeRefs != null)
+        {
+            for (int i = 0; i < mapItemChangeRefs.Count; i++)
+            {
+                var saveData = mapItemChangeRefs[i];
+                if (saveData != null && saveData.mapItemRef.IsValid)
+                {
+                    mapItemChangeRefDic[saveData.mapItemRef] = saveData;
+                }
+            }
+        }
+
+        removeColliderRefSet.Clear();
+        if (removeColliderRefs != null)
+        {
+            for (int i = 0; i < removeColliderRefs.Count; i++)
+            {
+                var saveData = removeColliderRefs[i];
+                if (saveData != null && saveData.mapItemRef.IsValid)
+                {
+                    removeColliderRefSet.Add(saveData.mapItemRef);
+                }
+            }
+        }
+
+        removeMapItemOperateRefSet.Clear();
+        addMapItemOperateRefSet.Clear();
+        removeMapItemOperateRefDic.Clear();
+        addMapItemOperateRefDic.Clear();
+        if (mapItemOperateRefs != null)
+        {
+            for (int i = 0; i < mapItemOperateRefs.Count; i++)
+            {
+                var saveData = mapItemOperateRefs[i];
+                if (saveData == null || !saveData.mapItemRef.IsValid)
+                {
+                    continue;
+                }
+
+                var key = new MapItemOperateSaveKey(saveData.mapItemRef, saveData.operateId);
+                var targetSet = saveData.add ? addMapItemOperateRefSet : removeMapItemOperateRefSet;
+                var targetDic = saveData.add ? addMapItemOperateRefDic : removeMapItemOperateRefDic;
+                targetSet.Add(key);
+                if (!targetDic.TryGetValue(saveData.mapItemRef, out var list))
+                {
+                    list = new List<int>();
+                    targetDic.Add(saveData.mapItemRef, list);
+                }
+                list.Add(saveData.operateId);
+            }
         }
 
         EnsureSaveIdCounters();
@@ -650,14 +828,19 @@ public class UserGameSaveData : IReferenceData
         ValidatePackedData("BeforeSaveData").LogWarnings();
 
         animationStateMapItems.Clear();
-        foreach (var animationData in animationStateMapItemsDic)
-            animationStateMapItems.Add(DataPacker.Int2PackInt(new int2(animationData.Key,
-                animationData.Value.x * 10 + animationData.Value.y)));
+        mapItemAnimationRefs.Clear();
+        foreach (var animationData in mapItemAnimationRefDic.Values)
+        {
+            mapItemAnimationRefs.Add(animationData);
+        }
 
 
         mapItemCoordinates.Clear();
-        foreach (var changeMapItemCoordinate in ChangeMapItemCoordinate.Values)
-            mapItemCoordinates.Add(changeMapItemCoordinate.Pack());
+        mapItemCoordinateRefs.Clear();
+        foreach (var changeMapItemCoordinate in mapItemCoordinateRefDic.Values)
+        {
+            mapItemCoordinateRefs.Add(changeMapItemCoordinate);
+        }
         NpcTimeData = new List<int>();
         foreach (var value in NpcTimeDataDic.Values)
         {
@@ -666,29 +849,30 @@ public class UserGameSaveData : IReferenceData
         }
 
         changeMapItems.Clear();
-        foreach (var changeMapItem in changeMapItemsDic)
-            changeMapItems.Add(DataPacker.Int3PackLong(changeMapItem.Value));
+        mapItemChangeRefs.Clear();
+        foreach (var changeMapItem in mapItemChangeRefDic.Values)
+        {
+            mapItemChangeRefs.Add(changeMapItem);
+        }
 
         removeCollider.Clear();
-        foreach (var itemId in RemoveMapItemColliderSet)
+        removeColliderRefs.Clear();
+        foreach (var itemRef in removeColliderRefSet)
         {
-            removeCollider.Add(itemId);
+            removeColliderRefs.Add(new MapItemColliderSaveData(itemRef));
         }
 
         mapItemOperates.Clear();
-        foreach (var id in removeMapItemOperatesSet)
+        mapItemOperateRefs.Clear();
+        foreach (var id in removeMapItemOperateRefSet)
         {
-            mapItemOperates.Add(-DataPacker.Int2PackInt(id));
+            mapItemOperateRefs.Add(new MapItemOperateSaveData(id.mapItemRef, id.operateId, false));
         }
-        foreach (var id in addMapItemOperatesSet)
+        foreach (var id in addMapItemOperateRefSet)
         {
-            mapItemOperates.Add(DataPacker.Int2PackInt(id));
+            mapItemOperateRefs.Add(new MapItemOperateSaveData(id.mapItemRef, id.operateId, true));
         }
         specialMapItemList.Clear();
-        foreach (var e in specialMapItem)
-        {
-            specialMapItemList.Add(DataPacker.Int3PackLong(new int3(e.Key, e.Value)));
-        }
         saveTime = DateTime.Now.ToString("s");
         ValidatePackedData(nameof(SaveData)).LogWarnings();
     }
@@ -773,6 +957,10 @@ public class UserGameSaveData : IReferenceData
     {
         AddSpecialMapItem(editorKey, instanceId);
         ChangeMapItemCoordinate[instanceId] = new ChangeMapItemCoordinate(instanceId, mapInstance, Coordinate);
+        if (TryCreateMapItemSaveRef(editorKey, instanceId, out var mapItemRef))
+        {
+            mapItemCoordinateRefDic[mapItemRef] = new MapItemCoordinateSaveData(mapItemRef, mapInstance, Coordinate);
+        }
     }
     public void RemoveMapItemOperate(int3 itemOperate,int instanceId)
     {
@@ -782,6 +970,14 @@ public class UserGameSaveData : IReferenceData
         int2 value = new int2(instanceId, itemOperate.z);
         removeMapItemOperatesSet.Add(value);
         addMapItemOperatesSet.Remove(value);
+        if (TryCreateMapItemSaveRef(itemOperate.xy, instanceId, out var mapItemRef))
+        {
+            var key = new MapItemOperateSaveKey(mapItemRef, itemOperate.z);
+            removeMapItemOperateRefSet.Add(key);
+            addMapItemOperateRefSet.Remove(key);
+            AddMapItemOperateRef(removeMapItemOperateRefDic, key);
+            RemoveMapItemOperateRef(addMapItemOperateRefDic, key);
+        }
     }
 
     public void AddMapItemOperate(int3 itemOperate, int instanceId)
@@ -792,6 +988,14 @@ public class UserGameSaveData : IReferenceData
         int2 value=new int2(instanceId,itemOperate.z);
         addMapItemOperatesSet.Add(value);
         removeMapItemOperatesSet.Remove(value);
+        if (TryCreateMapItemSaveRef(itemOperate.xy, instanceId, out var mapItemRef))
+        {
+            var key = new MapItemOperateSaveKey(mapItemRef, itemOperate.z);
+            addMapItemOperateRefSet.Add(key);
+            removeMapItemOperateRefSet.Remove(key);
+            AddMapItemOperateRef(addMapItemOperateRefDic, key);
+            RemoveMapItemOperateRef(removeMapItemOperateRefDic, key);
+        }
     }
 
     public void AddRemoveMapItemColliderData(int2 id, int instanceId)
@@ -800,6 +1004,10 @@ public class UserGameSaveData : IReferenceData
             return;
         specialMapItem[id] = instanceId;
         RemoveMapItemColliderSet.Add(instanceId);
+        if (TryCreateMapItemSaveRef(id, instanceId, out var mapItemRef))
+        {
+            removeColliderRefSet.Add(mapItemRef);
+        }
     }
     public void SaveSpecialMapItem(int2 id,int instanceId)
     {
@@ -811,6 +1019,10 @@ public class UserGameSaveData : IReferenceData
             return;
         specialMapItem[id] = instanceId;
         RemoveMapItemColliderSet.Remove(instanceId);
+        if (TryCreateMapItemSaveRef(id, instanceId, out var mapItemRef))
+        {
+            removeColliderRefSet.Remove(mapItemRef);
+        }
     }
 
     public void ReMoveHomeEquip(int id)
@@ -1018,6 +1230,47 @@ public class UserGameSaveData : IReferenceData
             return;
         specialMapItem[editorKey] = instanceId;
     }
+
+    private bool TryCreateMapItemSaveRef(int2 editorKey, int instanceId, out MapItemSaveRef mapItemRef)
+    {
+        if (editorKey.y != 0)
+        {
+            mapItemRef = MapItemSaveRef.Editor(editorKey.x, editorKey.y);
+            return mapItemRef.IsValid;
+        }
+
+        mapItemRef = SaveRuntimeResolver.instance.GetMapItemSaveRef(instanceId);
+        return mapItemRef.IsValid;
+    }
+
+    private static void AddMapItemOperateRef(Dictionary<MapItemSaveRef, List<int>> operateDic, MapItemOperateSaveKey key)
+    {
+        if (!operateDic.TryGetValue(key.mapItemRef, out var list))
+        {
+            list = new List<int>();
+            operateDic.Add(key.mapItemRef, list);
+        }
+
+        if (!list.Contains(key.operateId))
+        {
+            list.Add(key.operateId);
+        }
+    }
+
+    private static void RemoveMapItemOperateRef(Dictionary<MapItemSaveRef, List<int>> operateDic, MapItemOperateSaveKey key)
+    {
+        if (!operateDic.TryGetValue(key.mapItemRef, out var list))
+        {
+            return;
+        }
+
+        list.Remove(key.operateId);
+        if (list.Count == 0)
+        {
+            operateDic.Remove(key.mapItemRef);
+        }
+    }
+
     public void AddAnimationStateMapItem(int2 value,int2 editorKey,int instanceId)
     {
         if (editorKey.y == 0 || (value.x == 0 && value.y == 0))
@@ -1030,6 +1283,10 @@ public class UserGameSaveData : IReferenceData
 
         specialMapItem[editorKey] = instanceId;
         AnimationStateMapItemsDic[instanceId] = value;
+        if (TryCreateMapItemSaveRef(editorKey, instanceId, out var mapItemRef))
+        {
+            mapItemAnimationRefDic[mapItemRef] = new MapItemAnimationSaveData(mapItemRef, value);
+        }
     }
 
     public void AddChangeMapItem(int3 value,int2 editorKey,int instanceId)
@@ -1043,6 +1300,10 @@ public class UserGameSaveData : IReferenceData
             return;
         specialMapItem[editorKey] = instanceId;
         changeMapItemsDic[instanceId] = value;
+        if (TryCreateMapItemSaveRef(editorKey, instanceId, out var mapItemRef))
+        {
+            mapItemChangeRefDic[mapItemRef] = new MapItemChangeSaveData(mapItemRef, value.x, value.yz);
+        }
     }
 }
 
@@ -1093,6 +1354,112 @@ public class ChangeMapItemCoordinate
         packed |= (ulong)y << 45;
 
         return packed;
+    }
+}
+
+[Serializable]
+public class MapItemCoordinateSaveData
+{
+    public MapItemSaveRef mapItemRef;
+    public int newMap;
+    public int2 newCoordinate;
+
+    public MapItemCoordinateSaveData() { }
+
+    public MapItemCoordinateSaveData(MapItemSaveRef mapItemRef, int newMap, int2 newCoordinate)
+    {
+        this.mapItemRef = mapItemRef;
+        this.newMap = newMap;
+        this.newCoordinate = newCoordinate;
+    }
+}
+
+[Serializable]
+public class MapItemAnimationSaveData
+{
+    public MapItemSaveRef mapItemRef;
+    public int2 animationKey;
+
+    public MapItemAnimationSaveData() { }
+
+    public MapItemAnimationSaveData(MapItemSaveRef mapItemRef, int2 animationKey)
+    {
+        this.mapItemRef = mapItemRef;
+        this.animationKey = animationKey;
+    }
+}
+
+[Serializable]
+public class MapItemChangeSaveData
+{
+    public MapItemSaveRef mapItemRef;
+    public int newDataId;
+    public int2 animationKey;
+
+    public MapItemChangeSaveData() { }
+
+    public MapItemChangeSaveData(MapItemSaveRef mapItemRef, int newDataId, int2 animationKey)
+    {
+        this.mapItemRef = mapItemRef;
+        this.newDataId = newDataId;
+        this.animationKey = animationKey;
+    }
+}
+
+[Serializable]
+public class MapItemColliderSaveData
+{
+    public MapItemSaveRef mapItemRef;
+
+    public MapItemColliderSaveData() { }
+
+    public MapItemColliderSaveData(MapItemSaveRef mapItemRef)
+    {
+        this.mapItemRef = mapItemRef;
+    }
+}
+
+[Serializable]
+public class MapItemOperateSaveData
+{
+    public MapItemSaveRef mapItemRef;
+    public int operateId;
+    public bool add;
+
+    public MapItemOperateSaveData() { }
+
+    public MapItemOperateSaveData(MapItemSaveRef mapItemRef, int operateId, bool add)
+    {
+        this.mapItemRef = mapItemRef;
+        this.operateId = operateId;
+        this.add = add;
+    }
+}
+
+public struct MapItemOperateSaveKey : IEquatable<MapItemOperateSaveKey>
+{
+    public MapItemSaveRef mapItemRef;
+    public int operateId;
+
+    public MapItemOperateSaveKey(MapItemSaveRef mapItemRef, int operateId)
+    {
+        this.mapItemRef = mapItemRef;
+        this.operateId = operateId;
+    }
+
+    public bool Equals(MapItemOperateSaveKey other)
+    {
+        return mapItemRef.Equals(other.mapItemRef) && operateId == other.operateId;
+    }
+
+    public override bool Equals(object obj)
+    {
+        return obj is MapItemOperateSaveKey other && Equals(other);
+    }
+
+    public override int GetHashCode()
+    {
+        return (mapItemRef.GetHashCode() * 397) ^ operateId;
     }
 }
 
@@ -1245,6 +1612,7 @@ public class PastureSaveData
     [NonSerialized] public int animalCase; // ≤ 99
     [NonSerialized] public int linkRoom; // ≤ 9999
     public string name;
+    public MapItemSaveRef linkItemRef;
 
     // 压缩字段
     public ulong data1;
@@ -1292,6 +1660,7 @@ public class PastureSaveData
     public PastureSaveData(PastureSaveData pastureSaveData)
     {
         name = pastureSaveData.name;
+        linkItemRef = pastureSaveData.linkItemRef;
         data1 = pastureSaveData.data1;
         data2 = pastureSaveData.data2;
         Unpack();
@@ -1307,7 +1676,8 @@ public class PastureSaveData
         instanceId = pasture.saveId;
         level = pasture.level;
         index = pasture.index;
-        linkItem = pasture.linkItem;
+        linkItemRef = SaveRuntimeResolver.instance.GetMapItemSaveRef(pasture.linkItem);
+        linkItem = linkItemRef.IsValid ? 0 : pasture.linkItem;
         pastureState = pasture.pastureState;
         dataId = pasture.pastureData.id;
         foodPackage = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Package, pasture.foodPackage);

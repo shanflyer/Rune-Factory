@@ -681,7 +681,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         RuntimeMapItem runtimeMapItem = new RuntimeMapItem(instanceId, mapItem.instanceId, await GameDataManager.instance.GetAsyncData<MapItemData>(mapItem.id),
             mapId, mapItem.coordinate, mapItem.animationKey);
         SaveRuntimeResolver.instance.BindEditorMapItem(runtimeMapItem.mapInstanceId, runtimeMapItem.editorInstanceId, runtimeMapItem.instanceId);
-        if (GameDataSaveManager.instance.UserGameSaveData.ChangeMapItemCoordinate.TryGetValue(instanceId,
+        if (GameDataSaveManager.instance.UserGameSaveData.GetMapItemCoordinate(instanceId,
                 out var mapItemData))
         {
             runtimeMapItem.mapInstanceId = mapItemData.newMap;
@@ -941,10 +941,9 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 RefreshMapItemDisplay refreshMapItemDisplay = new RefreshMapItemDisplay { runtimeMapItem = runtimeMapItem };
                 GameActionManager.instance.QueueAction(refreshMapItemDisplay, true);
 
-                if (GameDataSaveManager.instance.loadDataIsNotNull)
-                    GameDataSaveManager.instance.loadGameSaveData.SetMapItemCoordinate(runtimeMapItem.editorKey,
-                        runtimeMapItem.instanceId,
-                        runtimeMapItem.mapInstanceId, runtimeMapItem.coordinate);
+                GameDataSaveManager.instance.UserGameSaveData.SetMapItemCoordinate(runtimeMapItem.editorKey,
+                    runtimeMapItem.instanceId,
+                    runtimeMapItem.mapInstanceId, runtimeMapItem.coordinate);
             }
 
             if (moveMapItem.setResult != null)
