@@ -83,8 +83,9 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         var homeEquipmentData =
             GameDataManager.instance.GetData<HomeEquipmentData>(homeEquipSaveData.equipDataId.ToString());
         HomeEquip homeEquip =
-            new HomeEquip(homeEquipSaveData.instanceId, homeEquipSaveData.mapEditorInstance,
+            new HomeEquip(homeEquipSaveData.instanceId, homeEquipSaveData.instanceId,
             homeEquipSaveData.characterId, homeEquipmentData);
+        homeEquip.mapEditorInstance = homeEquipSaveData.mapEditorInstance;
         homeEquips.Add(homeEquip.instanceId, homeEquip);
         homeEquip.mapInstance = homeEquipSaveData.mapInstance;
         homeEquip.coordinate = homeEquipSaveData.coordinate;
@@ -344,11 +345,17 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
                 mapItemInstanceId = homeEquip.mapItemInstance,
                 mapInstance = homeEquip.mapInstance,
                 coordinate = homeEquip.coordinate,
+                dataId = homeEquip.homeEquipmentData.mapItemDataId,
+                mapItemEditorInstanceId = homeEquip.mapEditorInstance,
                 setValue = SetMapItem
             };
             void SetMapItem(int itemInstance)
             {
                 homeEquip.mapItemInstance = itemInstance;
+                if (WorldMapManager.instance.GetRuntimeMapItem(itemInstance, out var runtimeMapItem))
+                {
+                    homeEquip.mapEditorInstance = runtimeMapItem.editorInstanceId;
+                }
             }
             GameActionManager.instance.QueueAction(moveMapItem, true);
         }
@@ -358,12 +365,18 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
             {
                 mapId = homeEquip.mapInstance,
                 coordinate = homeEquip.coordinate,
-                dataId = homeEquip.mapItemInstance,
+                dataId = homeEquip.homeEquipmentData.mapItemDataId,
+                instanceId = homeEquip.mapEditorInstance,
+                fixeInstanceId = homeEquip.instanceId,
                 setValue = SetMapItem
             };
             void SetMapItem(int itemInstance)
             {
                 homeEquip.mapItemInstance = itemInstance;
+                if (WorldMapManager.instance.GetRuntimeMapItem(itemInstance, out var runtimeMapItem))
+                {
+                    homeEquip.mapEditorInstance = runtimeMapItem.editorInstanceId;
+                }
             }
             GameActionManager.instance.QueueAction(addMapItem, true);
         }

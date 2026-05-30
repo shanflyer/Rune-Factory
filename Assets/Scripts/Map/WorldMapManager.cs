@@ -650,6 +650,10 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }else
         {
             instanceId = fixedInstance;
+            if (mapItem.instanceId != 0)
+            {
+                GameDataSaveManager.instance.SaveSpecialItem(new int2(mapId, mapItem.instanceId), instanceId);
+            }
         }
 
 
@@ -668,10 +672,10 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
 
         runtimeMapItems.Add(instanceId, runtimeMapItem);
-        if (!itemInMapDatas.TryGetValue(mapId, out var items))
+        if (!itemInMapDatas.TryGetValue(runtimeMapItem.mapInstanceId, out var items))
         {
             items = new MySet<int>();
-            itemInMapDatas.Add(mapId, items);
+            itemInMapDatas.Add(runtimeMapItem.mapInstanceId, items);
         }
         items.Add(instanceId);
 
@@ -868,7 +872,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
     {
         if (runtimeMapItems.TryGetValue(moveMapItem.mapItemInstanceId, out var runtimeMapItem))
         {
-            if (runtimeMapItem.mapInstanceId == moveMapItem.mapItemInstanceId &&
+            if (runtimeMapItem.mapInstanceId == moveMapItem.mapInstance &&
                 runtimeMapItem.coordinate.Equals(moveMapItem.coordinate))
             {
             }
@@ -937,7 +941,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 dataId = moveMapItem.dataId,
                 mapId = moveMapItem.mapInstance,
                 coordinate = moveMapItem.coordinate,
-                instanceId = moveMapItem.mapItemInstanceId,
+                instanceId = moveMapItem.mapItemEditorInstanceId,
+                fixeInstanceId = moveMapItem.mapItemInstanceId,
                 setValue=LinkHomeEquipId,
                 setResult=moveMapItem.setResult
             };

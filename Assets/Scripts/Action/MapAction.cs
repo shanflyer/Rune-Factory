@@ -1056,6 +1056,7 @@ public struct MoveMapItem : GameAction
     public int2 coordinate;
     public bool noneTryAdd;
     public int dataId;
+    public int mapItemEditorInstanceId;
 
     public void Init(List<Parameter> parameters, int source = 0, int target = 0, int value = -1,
         SetResult setResult = null, SetValue setValue = null, bool immediately = false)
