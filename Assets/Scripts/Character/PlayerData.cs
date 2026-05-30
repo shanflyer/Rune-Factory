@@ -887,14 +887,22 @@ public class UserGameSaveData : IReferenceData
 
     public void SetFieldData(Field field)
     {
-        if (fields.TryGetValue(field.instanceId, out var fieldSaveData))
+        int saveId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Field, field.instanceId);
+        if (saveId == 0)
+        {
+            saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Field, field.saveId);
+            SaveRuntimeResolver.instance.Bind(SaveEntityKind.Field, saveId, field.instanceId);
+        }
+        field.saveId = saveId;
+
+        if (fields.TryGetValue(saveId, out var fieldSaveData))
         {
             fieldSaveData.SetField(field);
         }
         else
         {
             fieldSaveData = new FieldSaveData(field);
-            fields.Add(field.instanceId, fieldSaveData);
+            fields.Add(saveId, fieldSaveData);
         }
     }
 
@@ -1414,7 +1422,7 @@ public class FieldSaveData
 
     public void SetField(Field field)
     {
-        instanceId = field.instanceId;
+        instanceId = field.saveId;
         mapInstance = field.mapInstance;
         editorInstanceId = field.editorInstanceId;
         fieldState = field.fieldState;
@@ -1428,7 +1436,13 @@ public class FieldSaveData
         }
         else
         {
-            PlantinstaceId = field.plant.instanceId;
+            PlantinstaceId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Plant, field.plant.instanceId);
+            if (PlantinstaceId == 0)
+            {
+                PlantinstaceId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Plant, field.plant.saveId);
+                SaveRuntimeResolver.instance.Bind(SaveEntityKind.Plant, PlantinstaceId, field.plant.instanceId);
+            }
+            field.plant.saveId = PlantinstaceId;
             PlantDataId = field.plant.PlantData.id;
             growthStage = field.plant.growthStage;
             growthHour = field.plant.growthHour;

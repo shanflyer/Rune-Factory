@@ -83,12 +83,27 @@ public class FarmManager : Singleton<FarmManager>
 
     public async System.Threading.Tasks.Task CreatFieldAsync(FieldSaveData fieldSaveData)
     {
-        int instanceId = fieldSaveData.instanceId;
+        int saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Field, fieldSaveData.instanceId);
+        int instanceId = 0;
+        if (WorldMapManager.instance.GetRuntimeMapItem(new int2(fieldSaveData.mapInstance, fieldSaveData.editorInstanceId), out var runtimeMapItem))
+        {
+            instanceId = runtimeMapItem.instanceId;
+        }
+        if (instanceId == 0)
+        {
+            instanceId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Field, saveId);
+        }
+        if (instanceId == 0)
+        {
+            instanceId = fieldSaveData.instanceId;
+        }
+        SaveRuntimeResolver.instance.Bind(SaveEntityKind.Field, saveId, instanceId);
         if (!fields.TryGetValue(instanceId,out var field))
         {
             field = new Field
             {
                 instanceId = instanceId,
+                saveId = saveId,
                 mapInstance = fieldSaveData.mapInstance,
                 editorInstanceId = fieldSaveData.editorInstanceId,
                 fieldState = fieldSaveData.fieldState,
@@ -102,14 +117,24 @@ public class FarmManager : Singleton<FarmManager>
             if (fieldSaveData.PlantinstaceId != 0)
             {
                 var PlantData = await GameDataManager.instance.GetAsyncData<PlantData>(fieldSaveData.PlantDataId);
-                field.plant = new Plant(fieldSaveData.PlantinstaceId, PlantData, field.instanceId, field.isSetWater,fieldSaveData.plantState,fieldSaveData.nowCycle);
+                int plantSaveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Plant, fieldSaveData.PlantinstaceId);
+                int plantRuntimeId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Plant, plantSaveId);
+                if (plantRuntimeId == 0)
+                {
+                    plantRuntimeId = MyInstance.instance.Uid;
+                }
+                SaveRuntimeResolver.instance.Bind(SaveEntityKind.Plant, plantSaveId, plantRuntimeId);
+                field.plant = new Plant(plantRuntimeId, PlantData, field.instanceId, field.isSetWater,fieldSaveData.plantState,fieldSaveData.nowCycle)
+                {
+                    saveId = plantSaveId
+                };
 
                 AddMapItem addMapItem = new AddMapItem
                 {
                     dataId = field.plant.PlantData.mapItem,
                     coordinate = field.coordinate,
                     mapId = field.mapInstance,
-                    fixeInstanceId = fieldSaveData.PlantinstaceId
+                    fixeInstanceId = plantRuntimeId
                 };
                 GameActionManager.instance.QueueAction(addMapItem);
             }
@@ -121,7 +146,14 @@ public class FarmManager : Singleton<FarmManager>
         {
             if (fieldSaveData.PlantinstaceId != 0)
             {
-                field.CreatePlant(fieldSaveData.PlantinstaceId, fieldSaveData.PlantDataId, fieldSaveData.growthHour, fieldSaveData.growthStage,
+                int plantSaveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Plant, fieldSaveData.PlantinstaceId);
+                int plantRuntimeId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Plant, plantSaveId);
+                if (plantRuntimeId == 0)
+                {
+                    plantRuntimeId = MyInstance.instance.Uid;
+                }
+                SaveRuntimeResolver.instance.Bind(SaveEntityKind.Plant, plantSaveId, plantRuntimeId);
+                field.CreatePlant(plantRuntimeId, fieldSaveData.PlantDataId, fieldSaveData.growthHour, fieldSaveData.growthStage,
                     fieldSaveData.plantState, fieldSaveData.nowCycle, fieldSaveData.isSetWater);
             }
             field.SetData(fieldSaveData.fieldState, fieldSaveData.isSetWater, fieldSaveData.waterHour);
@@ -139,11 +171,13 @@ public class FarmManager : Singleton<FarmManager>
                 Field field = new Field
                 {
                     instanceId = instanceId,
+                    saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Field, 0),
                     mapInstance = tryCreateField.roomId,
                     coordinate = runtimeMapItem.coordinate,
                     editorInstanceId = tryCreateField.editorInstanceId,
                     fieldState = FieldState.待平整
                 };
+                SaveRuntimeResolver.instance.Bind(SaveEntityKind.Field, field.saveId, field.instanceId);
                 fields.Add(instanceId, field);
             }
         }
@@ -239,16 +273,24 @@ public class FarmManager : Singleton<FarmManager>
         if (fields.TryGetValue(creatPlant.fieldId, out var field) &&
             WorldMapManager.instance.GetMapItemPos(field.instanceId, out var coordinate))
         {
+            int plantRuntimeId = MyInstance.instance.Uid;
+            int plantSaveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Plant, 0);
+            SaveRuntimeResolver.instance.Bind(SaveEntityKind.Plant, plantSaveId, plantRuntimeId);
             AddMapItem addMapItem = new AddMapItem
             {
                 dataId = plantData.mapItem,
                 coordinate = coordinate.xy,
                 mapId = coordinate.z,
+                fixeInstanceId = plantRuntimeId,
                 setValue = SetPlantInstanceId
             };
             void SetPlantInstanceId(int instanceId)
             {
-                Plant plant = new Plant(instanceId, plantData, field.instanceId, field.isSetWater);
+                SaveRuntimeResolver.instance.Bind(SaveEntityKind.Plant, plantSaveId, instanceId);
+                Plant plant = new Plant(instanceId, plantData, field.instanceId, field.isSetWater)
+                {
+                    saveId = plantSaveId
+                };
                 field.fieldState = FieldState.已平整;
                 field.plant = plant;
                 creatPlant.setResult(true);
@@ -334,6 +376,7 @@ public enum FieldState
 public class Field
 {
     public int instanceId;
+    public int saveId;
     public int mapInstance;
     public int editorInstanceId;
     public int2 coordinate;
@@ -368,7 +411,16 @@ public class Field
     public async System.Threading.Tasks.Task CreatePlantAsync(int instanceId,int dataId,float growthHour,int growthStage, PlantState plantState,int nowCycle,bool setWater)
     {
         var PlantData = await GameDataManager.instance.GetAsyncData<PlantData>(dataId);
-        _plant = new Plant(instanceId, PlantData, this.instanceId, setWater, plantState, nowCycle);
+        int plantSaveId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Plant, instanceId);
+        if (plantSaveId == 0)
+        {
+            plantSaveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Plant, 0);
+            SaveRuntimeResolver.instance.Bind(SaveEntityKind.Plant, plantSaveId, instanceId);
+        }
+        _plant = new Plant(instanceId, PlantData, this.instanceId, setWater, plantState, nowCycle)
+        {
+            saveId = plantSaveId
+        };
         plant.growthHour = growthHour;
         plant.growthStage = growthStage;
 
@@ -669,6 +721,7 @@ public enum PlantState
 public class Plant
 {
     public int instanceId;
+    public int saveId;
     public int field;
     public PlantData PlantData;
     public HashSet<Season> goodSeason=new HashSet<Season>();
