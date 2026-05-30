@@ -73,8 +73,8 @@ public struct Item : IReferenceData
     {
         saveId = (int)((d1 >> 0) & 0xFFFFF);
         packageSaveId = (int)((d1 >> 20) & 0xFFFFF);
-        instanceId = saveId;
-        packageId = packageSaveId;
+        instanceId = 0;
+        packageId = 0;
         dataId = (int)((d1 >> 40) & 0x3FFF);
         count = (int)((d1 >> 54) & 0x7F);
 

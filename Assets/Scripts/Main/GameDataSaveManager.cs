@@ -275,9 +275,10 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
     {
         if (loadDataIsNotNull && CharacterManager.instance.controllerCharacter == null)
         {
+            SaveRuntimeResolver.instance.BeginLoad(loadGameSaveData);
             RestoreSavedInstanceUid(loadGameSaveData);
             await PackageManager.instance.InitFromSaveData(loadGameSaveData.packageSaveDatas);
-            PackageManager.instance.playerPackages.AddRange(loadGameSaveData.otherSaveData.playerPackages);
+            PackageManager.instance.LoadPlayerPackagesFromSaveIds(loadGameSaveData.otherSaveData.playerPackages);
 
             await CharacterManager.instance.CreatePlayer((int)loadGameSaveData.playerData.gender,loadGameSaveData.playerData.name, 0, loadGameSaveData.playerData.instanceId);
 
@@ -316,8 +317,9 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
                     }
                     if (saveData.y != 0)
                     {
-                        Item item = PackageManager.instance.GetItemFromInstanceId(CharacterManager.instance.controllerCharacter.instanceId, saveData.y);
-                        if (item.instanceId == saveData.y)
+                        int runtimeItemId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Item, saveData.y);
+                        Item item = PackageManager.instance.GetItemFromInstanceId(CharacterManager.instance.controllerCharacter.characterPackage, runtimeItemId);
+                        if (item.instanceId == runtimeItemId)
                         {
                             SetShortcutItem setShortcutItem = new SetShortcutItem
                             {
@@ -844,7 +846,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         //包裹数据
         var packageSaveDatas = PackageManager.instance.GetPackageSaveData();
         UserGameSaveData.packageSaveDatas = packageSaveDatas;
-        UserGameSaveData.otherSaveData.playerPackages = PackageManager.instance.playerPackages;
+        UserGameSaveData.otherSaveData.playerPackages = PackageManager.instance.GetPlayerPackageSaveIds();
         //npc数据
         var characters = CharacterManager.instance.GetAllCharacters();
         UserGameSaveData.characterSaveDatas.Clear();
@@ -861,7 +863,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             }
         }
         //玩家数据
-        UserGameSaveData.otherSaveData.playerPackages = PackageManager.instance.playerPackages;
+        UserGameSaveData.otherSaveData.playerPackages = PackageManager.instance.GetPlayerPackageSaveIds();
 
         //时间
         UserGameSaveData.dateData = new GameDateSaveData
@@ -880,7 +882,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         {
             for (var i = 0; i < package.items.Length; i++)
                 UserGameSaveData.otherSaveData.shortcutItems.Add(new int2(package.items[i].dataId,
-                    package.items[i].instanceId));
+                    package.items[i].saveId));
         }
 
 

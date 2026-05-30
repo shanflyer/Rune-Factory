@@ -7,17 +7,21 @@ public partial class PackageManager
     {
         for (int i = 0; i < packageSaveDatas.Count; i++)
         {
-            packageSaveDatas[i].Unpack();
-            if (gamePackages.TryGetValue(packageSaveDatas[i].id,out var gamePackage))
+            var saveData = packageSaveDatas[i];
+            saveData.Unpack();
+            int packageRuntimeId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Package, saveData.id);
+            if (packageRuntimeId != 0 && gamePackages.TryGetValue(packageRuntimeId, out var gamePackage))
             {
-                gamePackage.caseCount = packageSaveDatas[i].caseCount;
-                gamePackage.level = packageSaveDatas[i].level;
-                gamePackage.name = packageSaveDatas[i].packageName;
+                gamePackage.saveId = saveData.id;
+                SaveRuntimeResolver.instance.Bind(SaveEntityKind.Package, saveData.id, gamePackage.instanceId);
+                gamePackage.caseCount = saveData.caseCount;
+                gamePackage.level = saveData.level;
+                gamePackage.name = saveData.packageName;
 
-                var dataCount = packageSaveDatas[i].items.Count / 2;
+                var dataCount = saveData.items.Count / 2;
                 for (var j = 0; j < dataCount; j++)
                 {
-                    var item = new Item(packageSaveDatas[i].items[j * 2], packageSaveDatas[i].items[j * 2 + 1]);
+                    var item = new Item(saveData.items[j * 2], saveData.items[j * 2 + 1]);
                     await gamePackage.SetItemInPackage(item);
                 }
 
@@ -28,11 +32,12 @@ public partial class PackageManager
             }
             else
             {
-                var saveData = packageSaveDatas[i];
                 var packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(saveData.dataId);
+                packageRuntimeId = packageRuntimeId != 0 ? packageRuntimeId : MyInstance.instance.Uid;
+                SaveRuntimeResolver.instance.Bind(SaveEntityKind.Package, saveData.id, packageRuntimeId);
 
                  gamePackage = new GamePackage(saveData.caseCount,
-                    saveData.packageName, saveData.id, packageSetData, saveData.level)
+                    saveData.packageName, packageRuntimeId, packageSetData, saveData.level, saveData.id)
                 {
                     itemPackage = saveData.itemPackage,
 
@@ -47,11 +52,44 @@ public partial class PackageManager
                 }
 
                 gamePackage.InitSaveItemList(items);
-                gamePackages.Add(saveData.id, gamePackage);
+                gamePackages.Add(packageRuntimeId, gamePackage);
                 RefreshPackageMapDisplay(gamePackage.caseCount, gamePackage.itemCount, gamePackage.instanceId);
             }
 
         }
+    }
+
+    public void LoadPlayerPackagesFromSaveIds(List<int> packageSaveIds)
+    {
+        playerPackages.Clear();
+        if (packageSaveIds == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < packageSaveIds.Count; i++)
+        {
+            int runtimeId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Package, packageSaveIds[i]);
+            if (runtimeId != 0)
+            {
+                AddPlayerPackage(runtimeId);
+            }
+        }
+    }
+
+    public List<int> GetPlayerPackageSaveIds()
+    {
+        List<int> packageSaveIds = new List<int>();
+        for (int i = 0; i < playerPackages.Count; i++)
+        {
+            int saveId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Package, playerPackages[i]);
+            if (saveId != 0)
+            {
+                packageSaveIds.Add(saveId);
+            }
+        }
+
+        return packageSaveIds;
     }
 
     public List<PackageSaveData> GetPackageSaveData()
@@ -62,9 +100,11 @@ public partial class PackageManager
             while (e.MoveNext())
             {
                 GamePackage gamePackage = e.Current.Value;
+                gamePackage.saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Package, gamePackage.saveId);
+                SaveRuntimeResolver.instance.Bind(SaveEntityKind.Package, gamePackage.saveId, gamePackage.instanceId);
                 PackageSaveData packageSaveData = new PackageSaveData
                 {
-                    id = gamePackage.instanceId,
+                    id = gamePackage.saveId,
                     caseCount = gamePackage.caseCount,
                     dataId = gamePackage.packageSetData.id,
                     level = gamePackage.level,
@@ -73,7 +113,7 @@ public partial class PackageManager
                     itemPackage = gamePackage.itemPackage,
                     items = new List<ulong>()
                 };
-                var items = gamePackage.GetItems();
+                var items = gamePackage.GetItemsForSave();
                 for (var i = 0; i < items.Count; i++)
                 {
                     var packed = items[i].Pack();

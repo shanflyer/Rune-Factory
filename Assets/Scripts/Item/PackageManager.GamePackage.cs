@@ -8,6 +8,7 @@ public partial class PackageManager
     {
         public string name;
         public int instanceId;
+        public int saveId;
         public PackageSetData packageSetData;
         public int caseCount;
         public bool singleCase => packageSetData != null && packageSetData.singleCase;
@@ -70,9 +71,10 @@ public partial class PackageManager
                 }
 
                 int index = this.items.Count;
+                Item saveItem = EnsureItemSaveState(items[i]);
                 ChangeItemCount(items[i].dataId, items[i].count);
                 AddItemIndex(items[i].dataId, index);
-                this.items.Add(items[i]);
+                this.items.Add(saveItem);
             }
             ValidateIndexes();
         }
@@ -117,10 +119,11 @@ public partial class PackageManager
             InitCollections();
         }
 
-        public GamePackage(int caseCount, string name, int instanceId, PackageSetData packageSetData, int level = 0 )
+        public GamePackage(int caseCount, string name, int instanceId, PackageSetData packageSetData, int level = 0, int saveId = 0)
         {
             InitCollections();
             this.instanceId = instanceId;
+            this.saveId = saveId;
             this.packageSetData= packageSetData;
             this.level = level;
             this.name = name;
@@ -417,6 +420,24 @@ public partial class PackageManager
             return results;
         }
 
+        public List<Item> GetItemsForSave()
+        {
+            List<Item> results = new List<Item>();
+            for (int i = 0; i < items.Count; i++)
+            {
+                if (emptySlots.Contains(i))
+                {
+                    continue;
+                }
+
+                Item item = EnsureItemSaveState(items[i]);
+                items[i] = item;
+                results.Add(item);
+            }
+
+            return results;
+        }
+
         public void ClearItem(int itemDataId)
         {
             if (packageItemIndexDatas.TryGetValue(itemDataId, out var indexs))
@@ -437,10 +458,6 @@ public partial class PackageManager
             if (caseCount < itemCount)
             {
                 return item.count;
-            }
-            if (item.instanceId == 0)
-            {
-                item.instanceId = MyInstance.instance.Uid;
             }
 
             ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId.ToString());
@@ -503,6 +520,8 @@ public partial class PackageManager
         private async Task<int> PutStackableItem(Item item, ItemData itemData, int groupCount)
         {
             int remaining = item.count;
+            int sourceSaveId = item.saveId;
+            int sourceRuntimeId = item.instanceId;
             while (remaining > 0)
             {
                 int index;
@@ -513,7 +532,9 @@ public partial class PackageManager
                         return remaining;
                     }
 
-                    index = await CreateItemSlot(itemData, item.value, 0);
+                    index = await CreateItemSlot(itemData, item.value, 0, sourceSaveId, sourceRuntimeId);
+                    sourceSaveId = 0;
+                    sourceRuntimeId = 0;
                 }
 
                 Item setItem = items[index];
@@ -537,9 +558,13 @@ public partial class PackageManager
         private async Task<int> PutSingleItems(Item item, ItemData itemData)
         {
             int remaining = item.count;
+            int sourceSaveId = item.saveId;
+            int sourceRuntimeId = item.instanceId;
             while (remaining > 0 && caseCount > itemCount)
             {
-                await CreateItemSlot(itemData, item.value, 1);
+                await CreateItemSlot(itemData, item.value, 1, sourceSaveId, sourceRuntimeId);
+                sourceSaveId = 0;
+                sourceRuntimeId = 0;
                 ChangeItemCount(itemData.id, 1);
                 remaining--;
             }
@@ -547,22 +572,44 @@ public partial class PackageManager
             return remaining;
         }
 
-        private async Task<int> CreateItemSlot(ItemData itemData, int value, int count)
+        private async Task<int> CreateItemSlot(ItemData itemData, int value, int count, int itemSaveId = 0, int itemRuntimeId = 0)
         {
             int index = TakeEmptySlot();
             Item item = new Item
             {
-                instanceId = MyInstance.instance.Uid,
+                instanceId = itemRuntimeId != 0 ? itemRuntimeId : MyInstance.instance.Uid,
+                saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Item, itemSaveId),
                 dataId = itemData.id,
                 packageId = instanceId,
+                packageSaveId = saveId,
                 isFresh = itemData.isFresh,
                 itemType = itemData.type,
                 count = count
             };
             item = await Item.SetValue(item, value);
+            BindItemSaveId(item);
             SetSlot(index, item);
             AddItemIndex(itemData.id, index);
             return index;
+        }
+
+        private Item EnsureItemSaveState(Item item)
+        {
+            item.saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Item, item.saveId);
+            if (item.instanceId == 0)
+            {
+                item.instanceId = MyInstance.instance.Uid;
+            }
+
+            item.packageId = instanceId;
+            item.packageSaveId = saveId;
+            BindItemSaveId(item);
+            return item;
+        }
+
+        private static void BindItemSaveId(Item item)
+        {
+            SaveRuntimeResolver.instance.Bind(SaveEntityKind.Item, item.saveId, item.instanceId);
         }
 
         private void DisplayItemInPackage(ItemData itemData, int count)

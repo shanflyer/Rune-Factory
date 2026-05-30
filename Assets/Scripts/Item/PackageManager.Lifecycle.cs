@@ -5,7 +5,7 @@ public partial class PackageManager
 {
     private async Task CreatPackageAsync(CreatPackage creatPackage)
     {
-        int instanceId = await CreatGamePackage(creatPackage.packageDataId, creatPackage.level, creatPackage.instanceId);
+        int instanceId = await CreatGamePackage(creatPackage.packageDataId, creatPackage.level, creatPackage.instanceId, creatPackage.saveId);
         if (instanceId == -1)
         {
             return;
@@ -40,15 +40,23 @@ public partial class PackageManager
         return default(PackageData);
     }
 
-    public async Task<int> CreatGamePackage(int dataId, int level, int instanceId = 0)
+    public async Task<int> CreatGamePackage(int dataId, int level, int instanceId = 0, int saveId = 0)
     {
         if (dataId == 0) return -1;
-        int packageInstanceId = instanceId == 0 ? MyInstance.instance.Uid : instanceId;
+        int packageSaveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Package, saveId);
+        int packageInstanceId = instanceId != 0
+            ? instanceId
+            : SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Package, packageSaveId);
+        if (packageInstanceId == 0)
+        {
+            packageInstanceId = MyInstance.instance.Uid;
+        }
         if (gamePackages.TryGetValue(packageInstanceId, out var _oldGamePackage))
         {
             RefreshPackageMapDisplay(_oldGamePackage.caseCount, _oldGamePackage.itemCount, _oldGamePackage.instanceId);
             return -1;
         }
+        SaveRuntimeResolver.instance.Bind(SaveEntityKind.Package, packageSaveId, packageInstanceId);
 
         PackageSetData packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(dataId);
         if (packageSetData == null)
@@ -57,7 +65,7 @@ public partial class PackageManager
             return -1;
         }
         int nowCount = packageSetData.count + packageSetData.levelUpAddCount * level;
-        GamePackage gamePackage = new GamePackage(nowCount, packageSetData.name, packageInstanceId, packageSetData,level);
+        GamePackage gamePackage = new GamePackage(nowCount, packageSetData.name, packageInstanceId, packageSetData, level, packageSaveId);
         gamePackages.Add(packageInstanceId, gamePackage);
 
         if (level <= 1)
