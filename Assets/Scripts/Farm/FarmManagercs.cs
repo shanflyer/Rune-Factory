@@ -109,7 +109,7 @@ public class FarmManager : Singleton<FarmManager>
                     dataId = field.plant.PlantData.mapItem,
                     coordinate = field.coordinate,
                     mapId = field.mapInstance,
-                    instanceId = fieldSaveData.PlantinstaceId
+                    fixeInstanceId = fieldSaveData.PlantinstaceId
                 };
                 GameActionManager.instance.QueueAction(addMapItem);
             }
@@ -141,7 +141,7 @@ public class FarmManager : Singleton<FarmManager>
                     instanceId = instanceId,
                     mapInstance = tryCreateField.roomId,
                     coordinate = runtimeMapItem.coordinate,
-                    editorInstanceId = tryCreateField.itemInstanceId,
+                    editorInstanceId = tryCreateField.editorInstanceId,
                     fieldState = FieldState.待平整
                 };
                 fields.Add(instanceId, field);
@@ -300,6 +300,7 @@ public class FarmManager : Singleton<FarmManager>
             var result = field.TrySicklePlant();
             if(trySicklePlant.setResult!=null)
                 trySicklePlant.setResult(result);
+            return;
         }
         if (trySicklePlant.setResult != null)
             trySicklePlant.setResult(false);
@@ -313,6 +314,7 @@ public class FarmManager : Singleton<FarmManager>
             var result = field.TryGetPlantFruit(out fruit);
             tryGetPlantFruit.setResult(result);
             tryGetPlantFruit.setValue(fruit);
+            return;
         }
         tryGetPlantFruit.setResult(false);
     }
@@ -372,7 +374,7 @@ public class Field
 
         AddMapItem addMapItem = new AddMapItem
         {
-            dataId = dataId,
+            dataId = PlantData.mapItem,
             coordinate = coordinate,
             mapId = mapInstance,
             fixeInstanceId = _plant.instanceId,
