@@ -1464,6 +1464,7 @@ public class PastureSaveData
         saveId = pasture.saveId;
         level = pasture.level;
         index = pasture.index;
+        animalCase = pasture.animalCase;
         linkItemRef = SaveRuntimeResolver.instance.GetMapItemSaveRef(pasture.linkItem);
         pastureState = pasture.pastureState;
         dataId = pasture.pastureData.id;

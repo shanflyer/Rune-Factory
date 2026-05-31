@@ -26,10 +26,11 @@ public class GetAnimalArea : Action
     {
         if (PastureManager.instance.GetAnimal(characterId.Value, out var animal))
         {
-            if (animal.pasture != 0)
+            int room = animal.GetPastureRoom();
+            if (room != 0)
             {
-                var cell = MapCellController.instance.GetRandomBehaviorCell(animal.pasture, behaviorAreaType);
-                result.SetValue(new int3(cell.xy, animal.pasture));
+                var cell = MapCellController.instance.GetRandomBehaviorCell(room, behaviorAreaType);
+                result.SetValue(new int3(cell.xy, room));
                 return TaskStatus.Success;
             }
 
