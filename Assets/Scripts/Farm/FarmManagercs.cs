@@ -95,7 +95,7 @@ public class FarmManager : Singleton<FarmManager>
         }
         if (instanceId == 0)
         {
-            instanceId = fieldSaveData.instanceId;
+            instanceId = MyInstance.instance.Uid;
         }
         SaveRuntimeResolver.instance.Bind(SaveEntityKind.Field, saveId, instanceId);
         if (!fields.TryGetValue(instanceId,out var field))
@@ -163,7 +163,6 @@ public class FarmManager : Singleton<FarmManager>
     {
         int2 editorKey = new int2(tryCreateField.roomId, tryCreateField.editorInstanceId);
         int instanceId = tryCreateField.itemInstanceId;
-        GameDataSaveManager.instance.UserGameSaveData.SaveSpecialMapItem(editorKey, instanceId);
         if (!fields.ContainsKey(instanceId))
         {
             if(WorldMapManager.instance.GetRuntimeMapItem(instanceId,out var runtimeMapItem))

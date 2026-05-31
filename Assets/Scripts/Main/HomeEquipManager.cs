@@ -73,7 +73,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
         }
 
         int runtimeId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Character, saveCharacterId);
-        return runtimeId != 0 ? runtimeId : saveCharacterId;
+        return runtimeId != 0 ? runtimeId : CharacterManager.instance.controllerCharacter.instanceId;
     }
 
     private int ResolveLinkedRuntimeId(int saveId, HomeEquipmentData homeEquipmentData)

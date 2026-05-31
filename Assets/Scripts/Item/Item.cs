@@ -19,8 +19,8 @@ public struct Item : IReferenceData
 
     public (ulong, ulong) Pack()
     {
-        int packedSaveId = saveId != 0 ? saveId : instanceId;
-        int packedPackageSaveId = packageSaveId != 0 ? packageSaveId : packageId;
+        int packedSaveId = saveId;
+        int packedPackageSaveId = packageSaveId;
         ValidatePackRange(packedSaveId, packedPackageSaveId);
 
         ulong d1, d2;

@@ -553,13 +553,6 @@ public class WorldMapManager : Singleton<WorldMapManager>
     }
 
 
-    public void SaveMapItemInstance(int instance)
-    {
-        if(runtimeMapItems.TryGetValue(instance,out var runtimeMapItem))
-        {
-            GameDataSaveManager.instance.UserGameSaveData.SaveSpecialMapItem(runtimeMapItem.editorKey, instance);
-        }
-    }
     public bool GetMapItemPos(int id, out int3 objCoordinate)
     {
         objCoordinate = int3.zero;
@@ -653,23 +646,10 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
         if (fixedInstance == 0)
         {
-            int2 itemkey = new int2(mapId, mapItem.instanceId);
-            if (mapItem.instanceId != 0)
-            {
-                instanceId = GameDataSaveManager.instance.GetSaveMapInstance(itemkey);
-            }
-            if (instanceId == 0)
-            {
-                instanceId = MyInstance.instance.Uid;
-                GameDataSaveManager.instance.SaveSpecialItem(itemkey, instanceId);
-            }
+            instanceId = MyInstance.instance.Uid;
         }else
         {
             instanceId = fixedInstance;
-            if (mapItem.instanceId != 0)
-            {
-                GameDataSaveManager.instance.SaveSpecialItem(new int2(mapId, mapItem.instanceId), instanceId);
-            }
         }
 
 

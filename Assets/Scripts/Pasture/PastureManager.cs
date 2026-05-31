@@ -422,16 +422,8 @@ public class PastureManager : Singleton<PastureManager>
         }
         SaveRuntimeResolver.instance.Bind(SaveEntityKind.Pasture, saveId, runtimeId);
         int foodPackage = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Package, pastureSaveData.foodPackage);
-        if (foodPackage == 0)
-        {
-            foodPackage = pastureSaveData.foodPackage;
-        }
         int productPackage = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Package, pastureSaveData.productPackage);
-        if (productPackage == 0)
-        {
-            productPackage = pastureSaveData.productPackage;
-        }
-        int linkItem = pastureSaveData.linkItem;
+        int linkItem = 0;
         if (pastureSaveData.linkItemRef.IsValid &&
             SaveRuntimeResolver.instance.TryResolveMapItem(pastureSaveData.linkItemRef, out var runtimeLinkItem))
         {
@@ -517,8 +509,6 @@ public class PastureManager : Singleton<PastureManager>
                     };
                     GameActionManager.instance.QueueAction(setItemAnimation);
                     SetValue(tryCreatPasture.itemInstanceId);
-
-                    WorldMapManager.instance.SaveMapItemInstance(tryCreatPasture.itemInstanceId);
                 }
                 else
                 {
@@ -654,10 +644,6 @@ public class PastureManager : Singleton<PastureManager>
         }
         SaveRuntimeResolver.instance.Bind(SaveEntityKind.Animal, saveId, runtimeId);
         int pastureRuntimeId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Pasture, animalSaveData.pasture);
-        if (pastureRuntimeId == 0)
-        {
-            pastureRuntimeId = animalSaveData.pasture;
-        }
         Animal animal = new Animal(animalData, runtimeId, animalSaveData.name,animalSaveData.linkCharacterData)
         {
             saveId = saveId,
