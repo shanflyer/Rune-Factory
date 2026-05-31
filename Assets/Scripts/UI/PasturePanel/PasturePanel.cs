@@ -38,6 +38,11 @@ public class PasturePanel : GamePanel<MyListInt>
         base.Awake();
         SetButton.onClick.AddListener(() =>
         {
+            if (selectPasture == null || animalId == 0)
+            {
+                return;
+            }
+
             SetAnimalToPasture setAnimalToPasture = new SetAnimalToPasture
             {
                 animalId = animalId,
@@ -80,7 +85,7 @@ public class PasturePanel : GamePanel<MyListInt>
         pastureInfos = gameObject.GetComponentsInChildren<PastureInfo>(true);
         pastureNameText = FindChildGameObject<TextMeshProUGUI>("PastureName");
         animalCaseText = FindChildGameObject<TextMeshProUGUI>("AnimalCase");
-        foodCaseText = FindChildGameObject<TextMeshProUGUI>("ProductCase");
+        foodCaseText = FindChildGameObject<TextMeshProUGUI>("FoodCase");
         waterCaseText = FindChildGameObject<TextMeshProUGUI>("WaterCase");
         productCaseText = FindChildGameObject<TextMeshProUGUI>("ProductCase");
         animalIcon = FindChildGameObject<Image>("AnimalIcon");
@@ -146,6 +151,13 @@ public class PasturePanel : GamePanel<MyListInt>
             if (animalId != 0)
             {
                 Character character = CharacterManager.instance.GetCharacter(animalId);
+                if (character == null)
+                {
+                    SetButton.transform.localScale = Vector3.zero;
+                    animalIcon.enabled = false;
+                    animalNameText.enabled = false;
+                    return;
+                }
                 character.characterData.head.SetImageSprite(animalIcon, animalIconSize,Vector2.zero);
                 //animalIcon.sprite = character.characterData.icon.sprite;
                 animalNameText.SetSWText(character.name);
@@ -211,7 +223,7 @@ public class PasturePanel : GamePanel<MyListInt>
 
     void RefreshPasture(RefreshPasture refreshPasturee)
     {
-        if (selectPasture.instanceId == refreshPasturee.instanceId)
+        if (selectPasture != null && selectPasture.instanceId == refreshPasturee.instanceId)
         {
            if(PastureManager.instance.GetPasture(selectPasture.instanceId,out selectPasture))
             {
@@ -235,7 +247,7 @@ public class PasturePanel : GamePanel<MyListInt>
         for(int i = 0; i < allPastures.Count; i++)
         {
             var p = allPastures[i];
-            if (p.index != 0)
+            if (p.index > 0 && p.index < pastureInfos.Length)
             {
                 pastureInfos[p.index].InitData(p, SelectPasture);
             }

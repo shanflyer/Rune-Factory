@@ -226,10 +226,12 @@ public class PastureManager : Singleton<PastureManager>
     {
         if (pastures.TryGetValue(getPastureLevel.pastureId, out var pasture))
         {
-            getPastureLevel.setValue(pasture.level);
+            getPastureLevel.setValue?.Invoke(pasture.level);
+            getPastureLevel.setResult?.Invoke(true);
             return;
         }
-        getPastureLevel.setValue(0);
+        getPastureLevel.setValue?.Invoke(0);
+        getPastureLevel.setResult?.Invoke(false);
     }
 
     private void RefreshAnimalPos(RefreshAnimalPos RefreshAnimalPos)
@@ -263,7 +265,7 @@ public class PastureManager : Singleton<PastureManager>
         {
             if (pasture.animals.Count >= pasture.animalCase)
             {
-                SetAnimalToPasture.setResult(false);
+                SetAnimalToPasture.setResult?.Invoke(false);
             }
             else
             {
@@ -274,7 +276,7 @@ public class PastureManager : Singleton<PastureManager>
                     instanceId = pasture.instanceId
                 };
                 GameActionManager.instance.QueueAction(refreshPasture, true);
-                SetAnimalToPasture.setResult(true);
+                SetAnimalToPasture.setResult?.Invoke(true);
 
 
                 var leaveTeam = new LeaveTeam
@@ -305,7 +307,7 @@ public class PastureManager : Singleton<PastureManager>
             GameDataSaveManager.instance.UserGameSaveData.SetAnimalData(animal);
             return;
         }
-        SetAnimalToPasture.setResult(false);
+        SetAnimalToPasture.setResult?.Invoke(false);
     }
 
     private void TrySetItemToPastureBox(TrySetItemToPastureBox trySetItemToPastureBox)
@@ -319,7 +321,10 @@ public class PastureManager : Singleton<PastureManager>
                 packageId = pasture.productPackage
             };
             GameActionManager.instance.QueueAction(addPackageItem);
+            trySetItemToPastureBox.setResult?.Invoke(true);
+            return;
         }
+        trySetItemToPastureBox.setResult?.Invoke(false);
     }
 
     private async System.Threading.Tasks.Task AnimalCostFoodAsync(AnimalCostFood animalCostFood)
@@ -403,7 +408,10 @@ public class PastureManager : Singleton<PastureManager>
             pasture.index = setPastureIndex.index;
 
             GameDataSaveManager.instance.UserGameSaveData.SetPastureData(pasture);
+            setPastureIndex.setResult?.Invoke(true);
+            return;
         }
+        setPastureIndex.setResult?.Invoke(false);
     }
 
     private void LinkPasturePackage(LinkPasturePackage linkPasturePackage)
@@ -428,7 +436,10 @@ public class PastureManager : Singleton<PastureManager>
             pasture.productPackage = linkPasturePackage.productPackage;
 
             GameDataSaveManager.instance.UserGameSaveData.SetPastureData(pasture);
+            linkPasturePackage.setResult?.Invoke(true);
+            return;
         }
+        linkPasturePackage.setResult?.Invoke(false);
     }
 
     public void CreatPasture(PastureSaveData pastureSaveData)
@@ -546,7 +557,7 @@ public class PastureManager : Singleton<PastureManager>
                 {
                     if (tryCreatPasture.setResult != null)
                     {
-                        tryCreatPasture.setResult(false);
+                        tryCreatPasture.setResult?.Invoke(false);
                     }
                 }
 
@@ -612,12 +623,12 @@ public class PastureManager : Singleton<PastureManager>
 
                                     if (tryCreatPasture.setValue != null)
                                     {
-                                        tryCreatPasture.setValue(pasture.instanceId);
+                                        tryCreatPasture.setValue?.Invoke(pasture.instanceId);
                                     }
 
                                     if (tryCreatPasture.setResult != null)
                                     {
-                                        tryCreatPasture.setResult(true);
+                                        tryCreatPasture.setResult?.Invoke(true);
                                     }
 
                                     GameDataSaveManager.instance.UserGameSaveData.SetPastureData(pasture);
@@ -634,7 +645,7 @@ public class PastureManager : Singleton<PastureManager>
         {
             if (tryCreatPasture.setResult != null)
             {
-                tryCreatPasture.setResult(false);
+                tryCreatPasture.setResult?.Invoke(false);
             }
         }
     }
@@ -841,7 +852,7 @@ public class PastureManager : Singleton<PastureManager>
                 */
                 GameDataSaveManager.instance.UserGameSaveData.SetAnimalData(animal);
             }
-            tryCreatAnimal.setValue(value);
+            tryCreatAnimal.setValue?.Invoke(value);
         }
         GameActionManager.instance.QueueAction(creatCharacter);
         // tryCreatAnimal.setValue(-1);
