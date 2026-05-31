@@ -60,10 +60,16 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
 
     private void SelectAction()
     {
-        if (SelectHomeEquip.equipDataId != 0)
+        if (SelectHomeEquip != null && SelectHomeEquip.equipDataId != 0)
         {
             if (SelectHomeEquip.mapInstance <= 0)
             {
+                if (!CanPlaceHomeEquip(SelectHomeEquip))
+                {
+                    waiteSetHomeEquip = false;
+                    SetActionState();
+                    return;
+                }
 
                 waiteSetHomeEquip = !waiteSetHomeEquip;
                 if (waiteSetHomeEquip)
@@ -131,15 +137,29 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
 
     void SetActionState()
     {
-        var homeEquipmentData = SelectHomeEquip.homeEquipmentData;
+        if (SelectHomeEquip == null || SelectHomeEquip.homeEquipmentData == null)
+        {
+            ActionButton.transform.localScale = Vector3.zero;
+            return;
+        }
+
         if (SelectHomeEquip.mapInstance <= 0)
         {
-            ActionButton.transform.localScale = homeEquipmentData.canSetMaps.Contains(WorldMapObjManager.instance.displayMap) ? Vector3.one : Vector3.zero;
+            ActionButton.transform.localScale = CanPlaceHomeEquip(SelectHomeEquip) ? Vector3.one : Vector3.zero;
         }
         else
         {
             ActionButton.transform.localScale = Vector3.one;
         }
+    }
+
+    private bool CanPlaceHomeEquip(HomeEquip homeEquip)
+    {
+        var homeEquipmentData = homeEquip?.homeEquipmentData;
+        return homeEquipmentData != null &&
+               homeEquipmentData.mapItemDataId > 0 &&
+               homeEquipmentData.canSetMaps != null &&
+               homeEquipmentData.canSetMaps.Contains(WorldMapObjManager.instance.displayMap);
     }
     private  void UnSetHomeEquipAsync(bool value)
     {
@@ -151,8 +171,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
             selectMapItemRuntimeObj = null;
             ActionName.SetSWText("布置");
             ActionImage.sprite = setSprite;
-            var homeEquipmentData =SelectHomeEquip.homeEquipmentData;
-            ActionButton.transform.localScale = homeEquipmentData.canSetMaps.Contains(WorldMapObjManager.instance.displayMap) ? Vector3.one : Vector3.zero;
+            SetActionState();
         }
     }
 
@@ -273,6 +292,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
     {
         base.InitReferenceData(v);
         moveHomeEquipItemSet.Clear();
+        mapData = null;
 
         // 家具列表绑定面板生命周期，关闭或重开后旧列表不再清选中状态。
         RunLifecycleTask(async token =>
@@ -294,7 +314,8 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         for (int i = 0; i < v.homeEquips.Count; i++)
         {
             var homeEquip = v.homeEquips[i];
-            if (homeEquip.mapInstance == WorldMapObjManager.instance.displayMap)
+            if (homeEquip.homeEquipmentData != null && homeEquip.homeEquipmentData.mapItemDataId > 0 &&
+                homeEquip.mapInstance == WorldMapObjManager.instance.displayMap)
             {
                 ChangeMapItemObjLayer changeMapItemObjLayer = new ChangeMapItemObjLayer
                 {
@@ -307,7 +328,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
 
         cameraValue.SetSWText("x1");
 
-        if (CanSetMaps.Contains(WorldMapObjManager.instance.displayMap))
+        if (CanSetMaps != null && CanSetMaps.Contains(WorldMapObjManager.instance.displayMap))
         {
             mapData = WorldMapObjManager.instance.DisplayMapRoomData;
             if (mapData.fixedCamera)
@@ -365,7 +386,8 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
         for (int i = 0; i < data.homeEquips.Count; i++)
         {
             var homeEquip = data.homeEquips[i];
-            if (homeEquip.mapInstance == WorldMapObjManager.instance.displayMap)
+            if (homeEquip.homeEquipmentData != null && homeEquip.homeEquipmentData.mapItemDataId > 0 &&
+                homeEquip.mapInstance == WorldMapObjManager.instance.displayMap)
             {
                 ChangeMapItemObjLayer changeMapItemObjLayer = new ChangeMapItemObjLayer
                 {
@@ -424,6 +446,13 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 Vector2 mouseWorldPos = CameraManager.ScreenPointToWorldPoint(mousePos, 0);
                 if (waiteSetHomeEquip)
                 {
+                    if (!CanPlaceHomeEquip(SelectHomeEquip))
+                    {
+                        waiteSetHomeEquip = false;
+                        SetActionState();
+                        return;
+                    }
+
                     int2 coordinate = GameCommon.GetMapCoordinateInt(mouseWorldPos);
                     TrySetMapItem trySetMapItem = new TrySetMapItem
                     {
@@ -456,6 +485,7 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                                         }
                                     }
                                 };
+                                GameActionManager.instance.QueueAction(creatControllerTempMapItem, true);
 
                             }
                             else
@@ -502,6 +532,12 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                             out var _selectMapItemRuntimeObj) &&
                         HomeEquipManager.instance.GetHomeEquip(_selectMapItemRuntimeObj.instanceId, out var equip))
                     {
+                        if (SelectHomeEquip == null || SelectHomeEquip.instanceId != equip.instanceId)
+                        {
+                            SelectHomeEquip = equip;
+                            EquipBoxs.Select(equip);
+                        }
+
                         if (_selectMapItemRuntimeObj != selectMapItemRuntimeObj)
                         {
                             if (selectMapItemRuntimeObj != null)
@@ -515,11 +551,12 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                     else if (selectMapItemRuntimeObj != null)
                     {
                         int2 coordinate = GameCommon.GetMapCoordinateInt(mouseWorldPos);
+                        int moveHomeEquipInstanceId = selectMapItemRuntimeObj.instanceId;
                         TrySetMapItem trySetMapItem = new TrySetMapItem
                         {
                             coordinate = coordinate,
                             mapInstance = WorldMapObjManager.instance.displayMap,
-                            mapItemInstanceId = selectMapItemRuntimeObj.instanceId,
+                            mapItemInstanceId = moveHomeEquipInstanceId,
                             dataId = selectMapItemRuntimeObj.mapItemData.id,
                             setResult = (value) =>
                             {
@@ -536,12 +573,22 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                                         selectMapItemRuntimeObj.SetLayer(GameCommon.GreenObjLayer);
                                     });
                                 }
+                                else if (HomeEquipManager.instance.GetHomeEquip(moveHomeEquipInstanceId, out var movedHomeEquip))
+                                {
+                                    movedHomeEquip.mapInstance = WorldMapObjManager.instance.displayMap;
+                                    movedHomeEquip.coordinate = coordinate;
+                                    movedHomeEquip.mapItemInstance = moveHomeEquipInstanceId;
+                                    SelectHomeEquip = movedHomeEquip;
+                                    EquipBoxs.SetSelectData(movedHomeEquip, SelectEquip, EquipSelectGroup);
+                                    SetActionState();
+                                }
                             },
                             setValue = (int instance) =>
                             {
-                                if (SelectHomeEquip.mapItemInstance != 0)
+                                if (HomeEquipManager.instance.GetHomeEquip(instance, out var movedHomeEquip))
                                 {
-                                    SelectHomeEquip.mapItemInstance = instance;
+                                    movedHomeEquip.mapItemInstance = instance;
+                                    SelectHomeEquip = movedHomeEquip;
                                 }
                             }
                         };
@@ -584,12 +631,17 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 waiteSetHomeEquip = false;
                 SelectHomeEquip = HomeEquip;
                 HomeEquipmentData homeEquipmentData = HomeEquip.homeEquipmentData;
+                if (homeEquipmentData == null)
+                {
+                    SetActionState();
+                    return;
+                }
                 ItemName.SetSWText(homeEquipmentData.equipmentName);
                 ActionName.SetSWText(HomeEquip.mapInstance <= 0 ? "布置" : "收回");
                 ActionImage.sprite = HomeEquip.mapInstance <= 0 ? setSprite : unSetSprite;
                 InfoButton.transform.localScale =  Vector3.one;
 
-                if (HomeEquip.mapInstance == WorldMapObjManager.instance.displayMap)
+                if (homeEquipmentData.mapItemDataId > 0 && HomeEquip.mapInstance == WorldMapObjManager.instance.displayMap)
                 {
                     ChangeMapItemObjLayer changeMapItemObjLayer = new ChangeMapItemObjLayer
                     {
@@ -606,13 +658,14 @@ public class PlayerHomeEquipPanel : GamePanel<HomeEquipList>
                 SetActionState();
             }
         }
-        else if (HomeEquip.instanceId == SelectHomeEquip.instanceId)
+        else if (SelectHomeEquip != null && HomeEquip.instanceId == SelectHomeEquip.instanceId)
         {
             InfoButton.transform.localScale = ActionButton.transform.localScale = Vector3.zero;
             ItemName.SetSWText("");
             UIManager.instance.CloseGamePanel<ItemInfoPanel>();
 
-            if (HomeEquip.mapInstance == WorldMapObjManager.instance.displayMap)
+            if (HomeEquip.homeEquipmentData != null && HomeEquip.homeEquipmentData.mapItemDataId > 0 &&
+                HomeEquip.mapInstance == WorldMapObjManager.instance.displayMap)
             {
                 ChangeMapItemObjLayer changeMapItemObjLayer = new ChangeMapItemObjLayer
                 {
