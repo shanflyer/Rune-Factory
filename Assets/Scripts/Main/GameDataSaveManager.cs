@@ -79,7 +79,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         {
             SaveRuntimeResolver.instance.BeginLoad(loadGameSaveData);
             await PackageManager.instance.InitFromSaveData(loadGameSaveData.packageSaveDatas);
-            PackageManager.instance.LoadPlayerPackagesFromSaveIds(loadGameSaveData.otherSaveData.playerPackages);
+            PackageManager.instance.LoadPlayerPackagesFromSaveIds(loadGameSaveData.otherSaveData.playerPackageSaveIds);
 
             await CharacterManager.instance.CreatePlayer((int)loadGameSaveData.playerData.gender,loadGameSaveData.playerData.name, 0);
 
@@ -512,7 +512,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         saveData.index = index;
         saveData.playerData ??= new CharacterSaveData();
         saveData.otherSaveData ??= new OtherSaveData();
-        saveData.otherSaveData.playerPackages ??= new List<int>();
+        saveData.otherSaveData.playerPackageSaveIds ??= new List<int>();
         saveData.otherSaveData.shortcutItems ??= new List<int2>();
         saveData.packageSaveDatas ??= new List<PackageSaveData>();
         RemoveNullEntries(saveData.packageSaveDatas);
@@ -653,7 +653,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
         //包裹数据
         var packageSaveDatas = PackageManager.instance.GetPackageSaveData();
         UserGameSaveData.packageSaveDatas = packageSaveDatas;
-        UserGameSaveData.otherSaveData.playerPackages = PackageManager.instance.GetPlayerPackageSaveIds();
+        UserGameSaveData.otherSaveData.playerPackageSaveIds = PackageManager.instance.GetPlayerPackageSaveIds();
         //npc数据
         var characters = CharacterManager.instance.GetAllCharacters();
         UserGameSaveData.characterSaveDatas.Clear();
@@ -675,7 +675,7 @@ public class GameDataSaveManager : Singleton<GameDataSaveManager>
             }
         }
         //玩家数据
-        UserGameSaveData.otherSaveData.playerPackages = PackageManager.instance.GetPlayerPackageSaveIds();
+        UserGameSaveData.otherSaveData.playerPackageSaveIds = PackageManager.instance.GetPlayerPackageSaveIds();
 
         //时间
         UserGameSaveData.dateData = new GameDateSaveData

@@ -9,11 +9,11 @@ public partial class PackageManager
         {
             var saveData = packageSaveDatas[i];
             saveData.Unpack();
-            int packageRuntimeId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Package, saveData.id);
+            int packageRuntimeId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Package, saveData.saveId);
             if (packageRuntimeId != 0 && gamePackages.TryGetValue(packageRuntimeId, out var gamePackage))
             {
-                gamePackage.saveId = saveData.id;
-                SaveRuntimeResolver.instance.Bind(SaveEntityKind.Package, saveData.id, gamePackage.instanceId);
+                gamePackage.saveId = saveData.saveId;
+                SaveRuntimeResolver.instance.Bind(SaveEntityKind.Package, saveData.saveId, gamePackage.instanceId);
                 gamePackage.caseCount = saveData.caseCount;
                 gamePackage.level = saveData.level;
                 gamePackage.name = saveData.packageName;
@@ -34,10 +34,10 @@ public partial class PackageManager
             {
                 var packageSetData = await GameDataManager.instance.GetAsyncData<PackageSetData>(saveData.dataId);
                 packageRuntimeId = packageRuntimeId != 0 ? packageRuntimeId : MyInstance.instance.Uid;
-                SaveRuntimeResolver.instance.Bind(SaveEntityKind.Package, saveData.id, packageRuntimeId);
+                SaveRuntimeResolver.instance.Bind(SaveEntityKind.Package, saveData.saveId, packageRuntimeId);
 
                  gamePackage = new GamePackage(saveData.caseCount,
-                    saveData.packageName, packageRuntimeId, packageSetData, saveData.level, saveData.id)
+                    saveData.packageName, packageRuntimeId, packageSetData, saveData.level, saveData.saveId)
                 {
                     itemPackage = saveData.itemPackage,
 
@@ -104,7 +104,7 @@ public partial class PackageManager
                 SaveRuntimeResolver.instance.Bind(SaveEntityKind.Package, gamePackage.saveId, gamePackage.instanceId);
                 PackageSaveData packageSaveData = new PackageSaveData
                 {
-                    id = gamePackage.saveId,
+                    saveId = gamePackage.saveId,
                     caseCount = gamePackage.caseCount,
                     dataId = gamePackage.packageSetData.id,
                     level = gamePackage.level,

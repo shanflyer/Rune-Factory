@@ -379,7 +379,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
         var storeData = await GameDataManager.instance.GetAsyncData<StoreCounterData>(storeCounterSaveData.dataId);
         if (storeData != null)
         {
-            int saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.StoreCounter, storeCounterSaveData.instanceId);
+            int saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.StoreCounter, storeCounterSaveData.saveId);
             int instanceId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.StoreCounter, saveId);
             if (instanceId == 0)
             {

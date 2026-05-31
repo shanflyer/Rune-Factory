@@ -141,7 +141,7 @@ public class HomeEquipManager : Singleton<HomeEquipManager>
     {
         var homeEquipmentData =
             GameDataManager.instance.GetData<HomeEquipmentData>(homeEquipSaveData.equipDataId.ToString());
-        int saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.HomeEquip, homeEquipSaveData.instanceId);
+        int saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.HomeEquip, homeEquipSaveData.saveId);
         int instanceId = 0;
         if (homeEquipSaveData.mapEditorInstance != 0 &&
             WorldMapManager.instance.GetRuntimeMapItem(new int2(homeEquipSaveData.mapInstance, homeEquipSaveData.mapEditorInstance), out var runtimeMapItem))

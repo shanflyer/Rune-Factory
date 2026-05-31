@@ -632,7 +632,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         if (mapItem.blindHomeEquipment != 0 && mapItem.instanceId != 0 &&
             GameDataSaveManager.instance.UserGameSaveData.TryGetHomeEquipSaveDataByMapItem(mapId, mapItem.instanceId, mapItem.blindHomeEquipment, out var homeEquipSaveData))
         {
-            homeEquipSaveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.HomeEquip, homeEquipSaveData.instanceId);
+            homeEquipSaveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.HomeEquip, homeEquipSaveData.saveId);
             if (fixedInstance == 0)
             {
                 fixedInstance = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.HomeEquip, homeEquipSaveId);

@@ -545,16 +545,16 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
     /// </summary>
     /// <param name="key">动画key</param>
     /// <param name="dataId">物体数据id</param>
-    /// <param name="instaceId">物体实例id</param>
+    /// <param name="instanceId">物体实例id</param>
     /// <returns></returns>
-    private async Task SetItemAimation(int2 key, int dataId, int instaceId)
+    private async Task SetItemAimation(int2 key, int dataId, int instanceId)
     {
         var animationData = await GameDataManager.instance.GetAsyncData<ItemAnimationData>(dataId);
         if (animationData != null)
         {
             if (animationData.nativeAnimator)
             {
-                if (GetRuntimeMapItemObj(instaceId, out MapItemRuntimeObj runtimeObj))
+                if (GetRuntimeMapItemObj(instanceId, out MapItemRuntimeObj runtimeObj))
                 {
                     animationData.PlayAnimator(runtimeObj.animator, key);
                 }
@@ -562,7 +562,7 @@ public class WorldMapObjManager : Singleton<WorldMapObjManager>
             else
             {
                 AnimationClip animationClip = animationData.GetAnimationClip(key, out int count);
-                MyAnimationController.instance.PlayAnimation(instaceId, animationClip);
+                MyAnimationController.instance.PlayAnimation(instanceId, animationClip);
             }
         }
     }

@@ -145,7 +145,7 @@ public class ManufactureManager : Singleton<ManufactureManager>
 
     public void CreatManufature(ManufatureSaveData manufatureSaveData)
     {
-        int saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Manufacture, manufatureSaveData.instanceId);
+        int saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Manufacture, manufatureSaveData.saveId);
         int instanceId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Manufacture, saveId);
         if (instanceId == 0)
         {

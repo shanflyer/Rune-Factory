@@ -83,7 +83,7 @@ public class FarmManager : Singleton<FarmManager>
 
     public async System.Threading.Tasks.Task CreatFieldAsync(FieldSaveData fieldSaveData)
     {
-        int saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Field, fieldSaveData.instanceId);
+        int saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Field, fieldSaveData.saveId);
         int instanceId = 0;
         if (WorldMapManager.instance.GetRuntimeMapItem(new int2(fieldSaveData.mapInstance, fieldSaveData.editorInstanceId), out var runtimeMapItem))
         {
@@ -114,10 +114,10 @@ public class FarmManager : Singleton<FarmManager>
             };
             fields.Add(instanceId, field);
 
-            if (fieldSaveData.PlantinstaceId != 0)
+            if (fieldSaveData.plantSaveId != 0)
             {
                 var PlantData = await GameDataManager.instance.GetAsyncData<PlantData>(fieldSaveData.PlantDataId);
-                int plantSaveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Plant, fieldSaveData.PlantinstaceId);
+                int plantSaveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Plant, fieldSaveData.plantSaveId);
                 int plantRuntimeId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Plant, plantSaveId);
                 if (plantRuntimeId == 0)
                 {
@@ -144,9 +144,9 @@ public class FarmManager : Singleton<FarmManager>
         }
         else
         {
-            if (fieldSaveData.PlantinstaceId != 0)
+            if (fieldSaveData.plantSaveId != 0)
             {
-                int plantSaveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Plant, fieldSaveData.PlantinstaceId);
+                int plantSaveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Plant, fieldSaveData.plantSaveId);
                 int plantRuntimeId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Plant, plantSaveId);
                 if (plantRuntimeId == 0)
                 {
@@ -471,7 +471,7 @@ public class Field
 
               DeleteMapItem deleteMapItem = new DeleteMapItem
               {
-                  mapItemInstanceId = plant.instaceId,
+                  mapItemInstanceId = plant.instanceId,
                   triggerClear = true
               };
               GameActionManager.instance.QueueAction(deleteMapItem);
@@ -491,7 +491,7 @@ public class Field
 
                     DeleteMapItem deleteMapItem = new DeleteMapItem
                     {
-                        mapItemInstanceId = plant.instaceId,
+                        mapItemInstanceId = plant.instanceId,
                         triggerClear = true
                     };
                     GameActionManager.instance.QueueAction(deleteMapItem);

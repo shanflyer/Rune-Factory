@@ -270,7 +270,7 @@ public class UserGameSaveData : IReferenceData
     {
         otherSaveData = new OtherSaveData
         {
-            playerPackages = new List<int>(),
+            playerPackageSaveIds = new List<int>(),
 
         };
         packageSaveDatas = new List<PackageSaveData>();
@@ -639,7 +639,7 @@ public class UserGameSaveData : IReferenceData
                 }
 
                 packageSaveData.Unpack();
-                EnsureSaveIdCounter(SaveEntityKind.Package, packageSaveData.id);
+                EnsureSaveIdCounter(SaveEntityKind.Package, packageSaveData.saveId);
                 if (packageSaveData.items == null)
                 {
                     continue;
@@ -657,43 +657,43 @@ public class UserGameSaveData : IReferenceData
             foreach (var saveData in mapHomeEquips.Values)
             {
                 saveData?.Unpack();
-                EnsureSaveIdCounter(SaveEntityKind.HomeEquip, saveData?.instanceId ?? 0);
+                EnsureSaveIdCounter(SaveEntityKind.HomeEquip, saveData?.saveId ?? 0);
             }
 
         if (animals != null)
             foreach (var saveData in animals.Values)
             {
                 saveData?.Unpack();
-                EnsureSaveIdCounter(SaveEntityKind.Animal, saveData?.instaceId ?? 0);
+                EnsureSaveIdCounter(SaveEntityKind.Animal, saveData?.saveId ?? 0);
             }
 
         if (pastures != null)
             foreach (var saveData in pastures.Values)
             {
                 saveData?.Unpack();
-                EnsureSaveIdCounter(SaveEntityKind.Pasture, saveData?.instanceId ?? 0);
+                EnsureSaveIdCounter(SaveEntityKind.Pasture, saveData?.saveId ?? 0);
             }
 
         if (fields != null)
             foreach (var saveData in fields.Values)
             {
                 saveData?.Unpack();
-                EnsureSaveIdCounter(SaveEntityKind.Field, saveData?.instanceId ?? 0);
-                EnsureSaveIdCounter(SaveEntityKind.Plant, saveData?.PlantinstaceId ?? 0);
+                EnsureSaveIdCounter(SaveEntityKind.Field, saveData?.saveId ?? 0);
+                EnsureSaveIdCounter(SaveEntityKind.Plant, saveData?.plantSaveId ?? 0);
             }
 
         if (manufatures != null)
             foreach (var saveData in manufatures.Values)
             {
                 saveData?.Unpack();
-                EnsureSaveIdCounter(SaveEntityKind.Manufacture, saveData?.instanceId ?? 0);
+                EnsureSaveIdCounter(SaveEntityKind.Manufacture, saveData?.saveId ?? 0);
             }
 
         if (storeCounters != null)
             foreach (var saveData in storeCounters)
             {
                 saveData?.Unpack();
-                EnsureSaveIdCounter(SaveEntityKind.StoreCounter, saveData?.instanceId ?? 0);
+                EnsureSaveIdCounter(SaveEntityKind.StoreCounter, saveData?.saveId ?? 0);
             }
     }
 
@@ -783,11 +783,11 @@ public class UserGameSaveData : IReferenceData
         }
 
         saveData.Unpack();
-        WarnOutOfRange(report, label, nameof(saveData.instanceId), saveData.instanceId, 0, 999999);
+        WarnOutOfRange(report, label, nameof(saveData.saveId), saveData.saveId, 0, 999999);
         WarnOutOfRange(report, label, nameof(saveData.dataId), saveData.dataId, 0, 9999);
         WarnOutOfRange(report, label, nameof(saveData.level), saveData.level, 0, 100);
         WarnOutOfRange(report, label, nameof(saveData.exp), saveData.exp, 0, 134217727);
-        WarnOutOfRange(report, label, nameof(saveData.packageId), saveData.packageId, 0, 999999);
+        WarnOutOfRange(report, label, nameof(saveData.packageSaveId), saveData.packageSaveId, 0, 999999);
         WarnOutOfRange(report, label, nameof(saveData.hp), saveData.hp, 0, 9999);
         WarnOutOfRange(report, label, nameof(saveData.mp), saveData.mp, 0, 9999);
         WarnOutOfRange(report, label, nameof(saveData.power), saveData.power, 0, 9999);
@@ -1060,7 +1060,7 @@ public class UserGameSaveData : IReferenceData
     {
         OtherSaveData otherSaveData = new OtherSaveData
         {
-            playerPackages = new List<int>(),
+            playerPackageSaveIds = new List<int>(),
 
         };
 
@@ -1306,7 +1306,7 @@ public class NpcTimeData
 public class AnimalSaveData
 {
     public string name;
-    [NonSerialized] public int instaceId; // ≤ 999999
+    [NonSerialized] public int saveId; // ≤ 999999
     [NonSerialized] public int pasture; // ≤ 999999
     [NonSerialized] public int dataId; // ≤ 9999
     [NonSerialized] public int growthStage; // ≤ 9
@@ -1328,7 +1328,7 @@ public class AnimalSaveData
         data1 = data2 = 0;
 
         // data1
-        data1 |= (ulong)(instaceId & 0xFFFFF) << 0; // 20
+        data1 |= (ulong)(saveId & 0xFFFFF) << 0; // 20
         data1 |= (ulong)(pasture & 0xFFFFF) << 20; // 20
         data1 |= (ulong)(dataId & 0x3FFF) << 40; // 14
         data1 |= (ulong)(growthStage & 0xF) << 54; // 4
@@ -1345,7 +1345,7 @@ public class AnimalSaveData
     public void Unpack()
     {
         // data1
-        instaceId = (int)((data1 >> 0) & 0xFFFFF);
+        saveId = (int)((data1 >> 0) & 0xFFFFF);
         pasture = (int)((data1 >> 20) & 0xFFFFF);
         dataId = (int)((data1 >> 40) & 0x3FFF);
         growthStage = (int)((data1 >> 54) & 0xF);
@@ -1376,7 +1376,7 @@ public class AnimalSaveData
 
     public void SetAnimal(Animal animal)
     {
-        instaceId = animal.saveId;
+        saveId = animal.saveId;
         name = animal.name;
         pasture = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Pasture, animal.pasture);
         growthStage = animal.growthStage;
@@ -1392,8 +1392,7 @@ public class AnimalSaveData
 
 public class PastureSaveData
 {
-    [NonSerialized] public int instanceId; // ≤ 999999
-    [NonSerialized] public int linkItem; // ≤ 999999
+    [NonSerialized] public int saveId; // ≤ 999999
     [NonSerialized] public PastureState pastureState; // ≤ 9
     [NonSerialized] public int dataId; // ≤ 9999
     [NonSerialized] public int foodPackage; // ≤ 999999
@@ -1414,8 +1413,7 @@ public class PastureSaveData
         data1 = data2 = 0;
 
         // data1
-        data1 |= (ulong)(instanceId & 0xFFFFF) << 0; // 20
-        data1 |= (ulong)(linkItem & 0xFFFFF) << 20; // 20
+        data1 |= (ulong)(saveId & 0xFFFFF) << 0; // 20
         data1 |= (ulong)((int)pastureState & 0xF) << 40; // 4
         data1 |= (ulong)(dataId & 0x3FFF) << 44; // 14
         data1 |= (ulong)(foodPackage & 0x3F) << 58; // 低6位
@@ -1432,8 +1430,7 @@ public class PastureSaveData
     public void Unpack()
     {
         // data1
-        instanceId = (int)((data1 >> 0) & 0xFFFFF);
-        linkItem = (int)((data1 >> 20) & 0xFFFFF);
+        saveId = (int)((data1 >> 0) & 0xFFFFF);
         pastureState = (PastureState)((data1 >> 40) & 0xF);
         dataId = (int)((data1 >> 44) & 0x3FFF);
         var foodLow = (int)((data1 >> 58) & 0x3F);
@@ -1464,11 +1461,10 @@ public class PastureSaveData
     public void SetParture(Pasture pasture)
     {
         name = pasture.name;
-        instanceId = pasture.saveId;
+        saveId = pasture.saveId;
         level = pasture.level;
         index = pasture.index;
         linkItemRef = SaveRuntimeResolver.instance.GetMapItemSaveRef(pasture.linkItem);
-        linkItem = 0;
         pastureState = pasture.pastureState;
         dataId = pasture.pastureData.id;
         foodPackage = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Package, pasture.foodPackage);
@@ -1501,7 +1497,7 @@ public class ShopListSaveData
 public class FieldSaveData
 {
     [NonSerialized]
-    public int instanceId;
+    public int saveId;
 
     [NonSerialized]
     public int mapInstance;
@@ -1522,7 +1518,7 @@ public class FieldSaveData
     public int waterHour;
 
     [NonSerialized]
-    public int PlantinstaceId;
+    public int plantSaveId;
 
     [NonSerialized]
     public int PlantDataId;
@@ -1553,7 +1549,7 @@ public class FieldSaveData
         data3 = 0;
 
         // data1
-        data1 |= ((ulong)instanceId & 0xFFFFFUL) << 0; // 20位
+        data1 |= ((ulong)saveId & 0xFFFFFUL) << 0; // 20位
         data1 |= ((ulong)mapInstance & 0x3FFFUL) << 20; // 14位
         data1 |= ((ulong)coordinate.x & 0x3FFUL) << 34; // 10位
         data1 |= ((ulong)coordinate.y & 0x3FFUL) << 44; // 10位
@@ -1564,7 +1560,7 @@ public class FieldSaveData
         data2 |= ((ulong)fieldState & 0xFUL) << 14; // 4位
         data2 |= (isSetWater ? 1UL : 0UL) << 18; // 1位
         data2 |= ((ulong)waterHour & 0x7FUL) << 19; // 7位
-        data2 |= ((ulong)PlantinstaceId & 0xFFFFFUL) << 26; // 20位
+        data2 |= ((ulong)plantSaveId & 0xFFFFFUL) << 26; // 20位
         data2 |= ((ulong)PlantDataId & 0x3FFFUL) << 46; // 14位
         data2 |= ((ulong)growthStage & 0xFUL) << 60; // 4位
 
@@ -1579,7 +1575,7 @@ public class FieldSaveData
     public void Unpack()
     {
         // data1
-        instanceId = (int)((data1 >> 0) & 0xFFFFFUL);
+        saveId = (int)((data1 >> 0) & 0xFFFFFUL);
         mapInstance = (int)((data1 >> 20) & 0x3FFFUL);
         coordinate = new int2(
             (int)((data1 >> 34) & 0x3FFUL),
@@ -1592,7 +1588,7 @@ public class FieldSaveData
         fieldState = (FieldState)((data2 >> 14) & 0xFUL);
         isSetWater = ((data2 >> 18) & 0x1UL) != 0;
         waterHour = (int)((data2 >> 19) & 0x7FUL);
-        PlantinstaceId = (int)((data2 >> 26) & 0xFFFFFUL);
+        plantSaveId = (int)((data2 >> 26) & 0xFFFFFUL);
         PlantDataId = (int)((data2 >> 46) & 0x3FFFUL);
         growthStage = (int)((data2 >> 60) & 0xFUL);
 
@@ -1617,7 +1613,7 @@ public class FieldSaveData
 
     public void SetField(Field field)
     {
-        instanceId = field.saveId;
+        saveId = field.saveId;
         mapInstance = field.mapInstance;
         editorInstanceId = field.editorInstanceId;
         fieldState = field.fieldState;
@@ -1626,18 +1622,18 @@ public class FieldSaveData
         waterHour = field.waterHour;
         if (field.plant == null)
         {
-            PlantinstaceId = 0;
+            plantSaveId = 0;
             PlantDataId = 0;
         }
         else
         {
-            PlantinstaceId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Plant, field.plant.instanceId);
-            if (PlantinstaceId == 0)
+            plantSaveId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Plant, field.plant.instanceId);
+            if (plantSaveId == 0)
             {
-                PlantinstaceId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Plant, field.plant.saveId);
-                SaveRuntimeResolver.instance.Bind(SaveEntityKind.Plant, PlantinstaceId, field.plant.instanceId);
+                plantSaveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Plant, field.plant.saveId);
+                SaveRuntimeResolver.instance.Bind(SaveEntityKind.Plant, plantSaveId, field.plant.instanceId);
             }
-            field.plant.saveId = PlantinstaceId;
+            field.plant.saveId = plantSaveId;
             PlantDataId = field.plant.PlantData.id;
             growthStage = field.plant.growthStage;
             growthHour = field.plant.growthHour;
@@ -1652,7 +1648,7 @@ public class FieldSaveData
 public class StoreCounterSaveData
 {
     [NonSerialized]
-    public int instanceId;
+    public int saveId;
 
     [NonSerialized]
     public int dataId;
@@ -1669,7 +1665,7 @@ public class StoreCounterSaveData
     {
         packed = 0;
         packed |= (count & 0x1FFFFFFL) << 0; // 25位
-        packed |= ((long)instanceId & 0xFFFFF) << 25; // 20位
+        packed |= ((long)saveId & 0xFFFFF) << 25; // 20位
         packed |= ((long)dataId & 0x1F) << 45; // 5位
         packed |= ((long)itemDataId & 0x3FFF) << 50; // 14位
     }
@@ -1677,14 +1673,14 @@ public class StoreCounterSaveData
     public void Unpack()
     {
         count = (int)((packed >> 0) & 0x1FFFFFFL);
-        instanceId = (int)((packed >> 25) & 0xFFFFF);
+        saveId = (int)((packed >> 25) & 0xFFFFF);
         dataId = (int)((packed >> 45) & 0x1F);
         itemDataId = (int)((packed >> 50) & 0x3FFF);
     }
     public StoreCounterSaveData() { }
     public StoreCounterSaveData(StoreCounterSaveData storeCounterSaveData)
     {
-        instanceId = storeCounterSaveData.instanceId;
+        saveId = storeCounterSaveData.saveId;
         dataId = storeCounterSaveData.dataId;
         itemDataId = storeCounterSaveData.itemDataId;
         count = storeCounterSaveData.count;
@@ -1697,13 +1693,13 @@ public class StoreCounterSaveData
 
     public void SetStoreCounterSaveData(RuntimeStoreCounter runtimeStoreCounter)
     {
-        instanceId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.StoreCounter, runtimeStoreCounter.instanceId);
-        if (instanceId == 0)
+        saveId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.StoreCounter, runtimeStoreCounter.instanceId);
+        if (saveId == 0)
         {
-            instanceId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.StoreCounter, runtimeStoreCounter.saveId);
-            SaveRuntimeResolver.instance.Bind(SaveEntityKind.StoreCounter, instanceId, runtimeStoreCounter.instanceId);
+            saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.StoreCounter, runtimeStoreCounter.saveId);
+            SaveRuntimeResolver.instance.Bind(SaveEntityKind.StoreCounter, saveId, runtimeStoreCounter.instanceId);
         }
-        runtimeStoreCounter.saveId = instanceId;
+        runtimeStoreCounter.saveId = saveId;
         dataId = runtimeStoreCounter.storeCounterData.id;
         itemDataId = 0;
         if (runtimeStoreCounter.itemData != null)
@@ -1718,7 +1714,7 @@ public class StoreCounterSaveData
 
 public class ManufatureSaveData
 {
-    [NonSerialized] public int instanceId; // ≤999999
+    [NonSerialized] public int saveId; // ≤999999
     [NonSerialized] public int dataId; // ≤9999
     [NonSerialized] public int2[] materials; // 固定4个, x≤9999, y≤999999
     [NonSerialized] public int3 product; // x≤9999, y≤99999, z≤9999
@@ -1738,7 +1734,7 @@ public class ManufatureSaveData
         }
         materials = packMaterials;
         // d1
-        d1 |= (ulong)(instanceId & 0xFFFFF) << 0; // 20位
+        d1 |= (ulong)(saveId & 0xFFFFF) << 0; // 20位
         d1 |= (ulong)(dataId & 0x3FFF) << 20; // 14位
         d1 |= (ulong)(materials[0].x & 0x3FFF) << 34; // 14位
         d1 |= (ulong)(materials[0].y & 0xFFFF) << 48; // y低16位
@@ -1770,7 +1766,7 @@ public class ManufatureSaveData
     {
         materials = new int2[4];
         // d1
-        instanceId = (int)((d1 >> 0) & 0xFFFFF);
+        saveId = (int)((d1 >> 0) & 0xFFFFF);
         dataId = (int)((d1 >> 20) & 0x3FFF);
         materials[0].x = (int)((d1 >> 34) & 0x3FFF);
         var m0yLow = (int)((d1 >> 48) & 0xFFFF);
@@ -1819,13 +1815,13 @@ public class ManufatureSaveData
 
     public void SetManufature(Manufature manufature)
     {
-        instanceId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Manufacture, manufature.instanceId);
-        if (instanceId == 0)
+        saveId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Manufacture, manufature.instanceId);
+        if (saveId == 0)
         {
-            instanceId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Manufacture, manufature.saveId);
-            SaveRuntimeResolver.instance.Bind(SaveEntityKind.Manufacture, instanceId, manufature.instanceId);
+            saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Manufacture, manufature.saveId);
+            SaveRuntimeResolver.instance.Bind(SaveEntityKind.Manufacture, saveId, manufature.instanceId);
         }
-        manufature.saveId = instanceId;
+        manufature.saveId = saveId;
         dataId = manufature.dataId;
         materials = manufature.materials != null ? manufature.materials.ToArray() : new int2[4];
         product = manufature.product;
@@ -1838,7 +1834,7 @@ public class ManufatureSaveData
 
 public class HomeEquipSaveData
 {
-    [NonSerialized] public int instanceId; // ≤ 999999
+    [NonSerialized] public int saveId; // ≤ 999999
     [NonSerialized] public int equipDataId; // ≤ 9999
     [NonSerialized] public int mapEditorInstance; // ≤ 9999999
     [NonSerialized] public int mapInstance; // ≤ 9999
@@ -1853,7 +1849,7 @@ public class HomeEquipSaveData
         data1 = data2 = 0;
 
         //    data1
-        data1 |= (ulong)(instanceId & 0xFFFFF) << 0; // 20
+        data1 |= (ulong)(saveId & 0xFFFFF) << 0; // 20
         data1 |= (ulong)(equipDataId & 0x3FFF) << 20; // 14
         data1 |= (ulong)(mapEditorInstance & 0xFFFFFF) << 34; // 24
         data1 |= (ulong)(mapInstance & 0x3F) << 58; // 低6位
@@ -1873,7 +1869,7 @@ public class HomeEquipSaveData
     public void Unpack()
     {
         //    data1
-        instanceId = (int)((data1 >> 0) & 0xFFFFF);
+        saveId = (int)((data1 >> 0) & 0xFFFFF);
         equipDataId = (int)((data1 >> 20) & 0x3FFF);
         mapEditorInstance = (int)((data1 >> 34) & 0xFFFFFF);
 
@@ -1907,13 +1903,13 @@ public class HomeEquipSaveData
 
     public void SetHomeEquip(HomeEquip homeEquip)
     {
-        instanceId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.HomeEquip, homeEquip.instanceId);
-        if (instanceId == 0)
+        saveId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.HomeEquip, homeEquip.instanceId);
+        if (saveId == 0)
         {
-            instanceId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.HomeEquip, homeEquip.saveId);
-            SaveRuntimeResolver.instance.Bind(SaveEntityKind.HomeEquip, instanceId, homeEquip.instanceId);
+            saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.HomeEquip, homeEquip.saveId);
+            SaveRuntimeResolver.instance.Bind(SaveEntityKind.HomeEquip, saveId, homeEquip.instanceId);
         }
-        homeEquip.saveId = instanceId;
+        homeEquip.saveId = saveId;
         equipDataId = homeEquip.equipDataId;
         mapEditorInstance = homeEquip.mapEditorInstance; mapInstance = homeEquip.mapInstance;
         coordinate = homeEquip.coordinate;
@@ -2018,7 +2014,7 @@ public class ChapterSave
 public class OtherSaveData
 {
     public int gold;
-    public List<int> playerPackages;
+    public List<int> playerPackageSaveIds;
     public bool isMarriedFood, isAnMo;
     public bool playerStoreOpen;
 
@@ -2030,8 +2026,8 @@ public class OtherSaveData
         gold = otherSaveData.gold;
         playerStoreOpen = otherSaveData.playerStoreOpen;
 
-        playerPackages = new List<int>();
-        playerPackages.AddRange(otherSaveData.playerPackages);
+        playerPackageSaveIds = new List<int>();
+        playerPackageSaveIds.AddRange(otherSaveData.playerPackageSaveIds);
         isMarriedFood = otherSaveData.isMarriedFood;
         isAnMo = otherSaveData.isAnMo;
         newDayActionIndex = otherSaveData.newDayActionIndex;
@@ -2054,13 +2050,13 @@ public struct FriendSaveData
 public class CharacterSaveData : IReferenceData
 {
     public string name;
-    [NonSerialized] public int instanceId; // ≤999999 (20bit)
+    [NonSerialized] public int saveId; // ≤999999 (20bit)
     [NonSerialized] public int dataId; // ≤9999   (14bit)
     [NonSerialized] public int level; // ≤100    (7bit)
     [NonSerialized] public int exp; // ≤99,999,999 (27bit)
     [NonSerialized] public Gender gender; // 0/1/2   (2bit)
     [NonSerialized] public BrithDay brithDay; // year(14)+season(2)+day(5)
-    [NonSerialized] public int packageId; // ≤999999 (20bit)
+    [NonSerialized] public int packageSaveId; // ≤999999 (20bit)
     [NonSerialized] public int2 weapon; // x(14)+y(7)
     [NonSerialized] public int2 clothes; // x(14)+y(7)
     [NonSerialized] public int2 shoe; // x(14)+y(7)
@@ -2079,7 +2075,7 @@ public class CharacterSaveData : IReferenceData
         d1 = d2 = d3 = d4 = d5 = 0;
 
         // d1
-        d1 |= (ulong)(instanceId & 0xFFFFF) << 0; // 20
+        d1 |= (ulong)(saveId & 0xFFFFF) << 0; // 20
         d1 |= (ulong)(dataId & 0x3FFF) << 20; // 14
         d1 |= (ulong)(level & 0x7F) << 34; // 7
         d1 |= (ulong)(exp & 0x7FFFFFF) << 41; // 27
@@ -2089,7 +2085,7 @@ public class CharacterSaveData : IReferenceData
         d2 |= (ulong)(brithDay.year & 0x3FFF) << 2; // 14
         d2 |= (ulong)((int)brithDay.season & 0x3) << 16; // 2
         d2 |= (ulong)(brithDay.day & 0x1F) << 18; // 5
-        d2 |= (ulong)(packageId & 0xFFFFF) << 23; // 20
+        d2 |= (ulong)(packageSaveId & 0xFFFFF) << 23; // 20
         d2 |= (ulong)(weapon.x & 0x3FFF) << 43; // 14
         d2 |= (ulong)(weapon.y & 0x7F) << 57; // 7
 
@@ -2112,7 +2108,7 @@ public class CharacterSaveData : IReferenceData
     public void Unpack()
     {
         // d1
-        instanceId = (int)((d1 >> 0) & 0xFFFFF);
+        saveId = (int)((d1 >> 0) & 0xFFFFF);
         dataId = (int)((d1 >> 20) & 0x3FFF);
         level = (int)((d1 >> 34) & 0x7F);
         exp = (int)((d1 >> 41) & 0x7FFFFFF);
@@ -2122,7 +2118,7 @@ public class CharacterSaveData : IReferenceData
         brithDay.year = (int)((d2 >> 2) & 0x3FFF);
         brithDay.season = (Season)((d2 >> 16) & 0x3);
         brithDay.day = (int)((d2 >> 18) & 0x1F);
-        packageId = (int)((d2 >> 23) & 0xFFFFF);
+        packageSaveId = (int)((d2 >> 23) & 0xFFFFF);
         weapon.x = (int)((d2 >> 43) & 0x3FFF);
         weapon.y = (int)((d2 >> 57) & 0x7F);
 
@@ -2171,11 +2167,11 @@ public class CharacterSaveData : IReferenceData
             name = overrideName;
         }
 
-        instanceId = character.dataId;
+        saveId = character.dataId;
         dataId = character.dataId;
         level = character.Level;
         exp = character.exp.nowExp;
-        packageId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Package, character.characterPackage);
+        packageSaveId = SaveRuntimeResolver.instance.GetSaveId(SaveEntityKind.Package, character.characterPackage);
         weapon = character.Equip.weapon;
         clothes = character.Equip.clothes;
         shoe = character.Equip.shoes;
@@ -2190,7 +2186,7 @@ public class CharacterSaveData : IReferenceData
 public class PackageSaveData
 {
     [NonSerialized] public int caseCount; // ≤200
-    [NonSerialized] public int id; // ≤999999 (6位十进制)
+    [NonSerialized] public int saveId; // ≤999999 (6位十进制)
     [NonSerialized] public int dataId; // ≤99 (2位十进制)
     [NonSerialized] public int level; // ≤8
     [NonSerialized] public PackageType packageType; // 0/1/2
@@ -2206,7 +2202,7 @@ public class PackageSaveData
     {
         packed = 0;
         packed |= (ulong)(caseCount & 0xFF) << 0; // 8
-        packed |= (ulong)(id & 0xFFFFF) << 8; // 20
+        packed |= (ulong)(saveId & 0xFFFFF) << 8; // 20
         packed |= (ulong)(dataId & 0x7F) << 28; // 7
         packed |= (ulong)(level & 0x7) << 35; // 3
         packed |= (ulong)((int)packageType & 0x3) << 38; // 2
@@ -2216,7 +2212,7 @@ public class PackageSaveData
     public void Unpack()
     {
         caseCount = (int)((packed >> 0) & 0xFF);
-        id = (int)((packed >> 8) & 0xFFFFF);
+        saveId = (int)((packed >> 8) & 0xFFFFF);
         dataId = (int)((packed >> 28) & 0x7F);
         level = (int)((packed >> 35) & 0x7);
         packageType = (PackageType)((packed >> 38) & 0x3);

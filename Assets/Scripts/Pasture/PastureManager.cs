@@ -414,7 +414,7 @@ public class PastureManager : Singleton<PastureManager>
     {
         PastureData pastureData = await GameDataManager.instance.GetAsyncData<PastureData>(pastureSaveData.dataId);
         PastureLevelData pastureLevelData = pastureData.levelDatas[0];
-        int saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Pasture, pastureSaveData.instanceId);
+        int saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Pasture, pastureSaveData.saveId);
         int runtimeId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Pasture, saveId);
         if (runtimeId == 0)
         {
@@ -636,7 +636,7 @@ public class PastureManager : Singleton<PastureManager>
     public async System.Threading.Tasks.Task CreatAnimalAsync(AnimalSaveData animalSaveData)
     {
         AnimalData animalData = await GameDataManager.instance.GetAsyncData<AnimalData>(animalSaveData.dataId);
-        int saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Animal, animalSaveData.instaceId);
+        int saveId = SaveRuntimeResolver.instance.EnsureSaveId(SaveEntityKind.Animal, animalSaveData.saveId);
         int runtimeId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Animal, saveId);
         if (runtimeId == 0)
         {
@@ -1051,7 +1051,7 @@ public class Animal
                 /*
                 TryDeleteAnimal tryDeleteAnimal = new TryDeleteAnimal
                 {
-                    animalId = instaceId,
+                    animalId = instanceId,
                 };
                 GameActionManager.instance.QueueAction(tryDeleteAnimal);*/
             }

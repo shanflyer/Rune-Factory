@@ -698,11 +698,7 @@ public partial class Character
         if (saveData != null)
         {
             name = saveData.name;
-            packageInstancId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Package, saveData.packageId);
-            if (packageInstancId == 0)
-            {
-                packageInstancId = saveData.packageId;
-            }
+            packageInstancId = SaveRuntimeResolver.instance.Resolve(SaveEntityKind.Package, saveData.packageSaveId);
             SetLevel(saveData.level, true);
             SetNowExp(saveData.exp);
             SetEquip(ItemType.武器, saveData.weapon);
