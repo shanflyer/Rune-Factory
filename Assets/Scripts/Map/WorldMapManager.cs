@@ -652,13 +652,19 @@ public class WorldMapManager : Singleton<WorldMapManager>
             instanceId = fixedInstance;
         }
 
+        MapItemData loadedMapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(mapItem.id);
+        if (loadedMapItemData == null)
+        {
+            return 0;
+        }
 
         int2 key = new int2(mapId, mapItem.instanceId);
         if (mapItem.instanceId != 0&&!editorItemRemapInstanceIds.ContainsKey(key))
         {
             editorItemRemapInstanceIds.Add(key, instanceId);
         }
-        RuntimeMapItem runtimeMapItem = new RuntimeMapItem(instanceId, mapItem.instanceId, await GameDataManager.instance.GetAsyncData<MapItemData>(mapItem.id),
+
+        RuntimeMapItem runtimeMapItem = new RuntimeMapItem(instanceId, mapItem.instanceId, loadedMapItemData,
             mapId, mapItem.coordinate, mapItem.animationKey);
         SaveRuntimeResolver.instance.BindEditorMapItem(runtimeMapItem.mapInstanceId, runtimeMapItem.editorInstanceId, runtimeMapItem.instanceId);
         if (GameDataSaveManager.instance.UserGameSaveData.GetMapItemCoordinate(instanceId,
@@ -690,8 +696,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
                     {
                         characterId = CharacterManager.instance.controllerCharacter.instanceId,
                         equipInstanceId = instanceId,
-                        mapInstanceId = mapId,
-                        coordinate = mapItem.coordinate,
+                        mapInstanceId = runtimeMapItem.mapInstanceId,
+                        coordinate = runtimeMapItem.coordinate,
                     };
                     GameActionManager.instance.QueueAction(setHomeEquipCoordinate, true);
                 }
@@ -756,6 +762,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
     {
         if (addMapItem.mapId>0&&!MapCellController.instance.ContainsRoom(addMapItem.mapId))
         {
+            addMapItem.setResult?.Invoke(false);
             return;
         }
 
@@ -768,6 +775,11 @@ public class WorldMapManager : Singleton<WorldMapManager>
         };
 
         int instanceId = await AddMapItem(mapItem, addMapItem.mapId,addMapItem.fixeInstanceId);
+        if (instanceId == 0)
+        {
+            addMapItem.setResult?.Invoke(false);
+            return;
+        }
 
         if (addMapItem.setValue != null)
         {
@@ -782,6 +794,11 @@ public class WorldMapManager : Singleton<WorldMapManager>
     private  void TrySetMapItem(TrySetMapItem TrySetMapItem)
     {
         var mapItemData = GameDataManager.instance.GetData<MapItemData>(TrySetMapItem.dataId.ToString());
+        if (mapItemData == null)
+        {
+            TrySetMapItem.setResult?.Invoke(false);
+            return;
+        }
         //var mapItemData = await GameDataManager.instance.GetAsyncData<MapItemData>(TrySetMapItem.dataId);
         HashSet<int2> newTriggers = new HashSet<int2>();
         HashSet<int2> oldTriggers = new HashSet<int2>();
@@ -790,8 +807,15 @@ public class WorldMapManager : Singleton<WorldMapManager>
         var triggerCells = GameCommon.GridToCells(mapItemData.colliderGrids, new int4(1, 1, 1, 1));
         if (runtimeMapItems.TryGetValue(TrySetMapItem.mapItemInstanceId, out var runtimeMapItem))
         {
-            if (runtimeMapItem.mapInstanceId == TrySetMapItem.mapItemInstanceId
-                && !runtimeMapItem.coordinate.Equals(TrySetMapItem.coordinate))
+            if (runtimeMapItem.mapInstanceId == TrySetMapItem.mapInstance &&
+                runtimeMapItem.coordinate.Equals(TrySetMapItem.coordinate))
+            {
+                TrySetMapItem.setValue?.Invoke(runtimeMapItem.instanceId);
+                TrySetMapItem.setResult?.Invoke(true);
+                return;
+            }
+
+            if (runtimeMapItem.mapInstanceId == TrySetMapItem.mapInstance)
             {
                 for (int i = 0; i < triggerCells.Count; i++)
                 {
@@ -892,8 +916,14 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 {
                     ints.Remove(runtimeMapItem.instanceId);
                 }
-                if(itemInMapDatas.TryGetValue(moveMapItem.mapInstance,out var ints1))
+                if(moveMapItem.mapInstance > 0)
                 {
+                    if(!itemInMapDatas.TryGetValue(moveMapItem.mapInstance,out var ints1))
+                    {
+                        ints1 = new MySet<int>();
+                        itemInMapDatas.Add(moveMapItem.mapInstance, ints1);
+                    }
+
                     ints1.Add(runtimeMapItem.instanceId);
                 }
 
@@ -933,6 +963,12 @@ public class WorldMapManager : Singleton<WorldMapManager>
         }
         else //if(moveMapItem.noneTryAdd)
         {
+            if (moveMapItem.dataId <= 0)
+            {
+                moveMapItem.setResult?.Invoke(false);
+                return;
+            }
+
             AddMapItem addMapItem = new AddMapItem
             {
                 dataId = moveMapItem.dataId,
@@ -952,6 +988,11 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 }
             }
         }
+        if (!HomeEquipManager.HasInstance || !HomeEquipManager.instance.GetHomeEquip(moveMapItem.mapItemInstanceId, out _))
+        {
+            return;
+        }
+
         SetHomeEquipCoordinate setHomeEquipCoordinate = new SetHomeEquipCoordinate
         {
             characterId = CharacterManager.instance.controllerCharacter.instanceId,
