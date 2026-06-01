@@ -20,6 +20,11 @@ public class SkillManager : Singleton<SkillManager>
     public async Task<SkillRuntime> CreateSkillRuntime(int skillId)
     {
         SkillData skillData=await GameDataManager.instance.GetAsyncData<SkillData>(skillId);
+        if (skillData == null)
+        {
+            Debug.LogError($"CreateSkillRuntime failed: missing skill data {skillId}.");
+            return null;
+        }
         SkillRuntime skillRuntime = new SkillRuntime(skillData, ExploreManager.instance.NewUid);
         return skillRuntime;
     }
@@ -27,6 +32,11 @@ public class SkillManager : Singleton<SkillManager>
     public async Task<BuffRuntime> CreateBuffRuntime(int buffId,FightCharacter fightCharacter, int2 overrideAddValue, int2 overrideMulValue, int overrideLifeTime = -1)
     {
         BuffData buffData = await GameDataManager.instance.GetAsyncData<BuffData>(buffId);
+        if (buffData == null || fightCharacter == null)
+        {
+            Debug.LogError($"CreateBuffRuntime failed: buffId={buffId}, fightCharacter={(fightCharacter == null ? "null" : fightCharacter.instanceId.ToString())}.");
+            return null;
+        }
         int randomValue = GameRandom.RandomInt(0, 100);
         randomValue = FightManager.instance.GetAttributeTypeRandomValue(buffData.attributeType, fightCharacter.AttackAttributeType, randomValue);
         if (randomValue < buffData.probability)
@@ -59,6 +69,10 @@ public class SkillRuntime
 
     public float GetTimeValue()
     {
+        if (skillData == null || skillData.cd <= 0)
+        {
+            return 0;
+        }
         return skillCd / (float)skillData.cd;
     }
 
@@ -140,7 +154,7 @@ public class BuffRuntime
         {
             lifeTime = buffData.lifeTime;
         }
-        if (overrideMulValue.Equals(int2.zero))
+        if (!overrideMulValue.Equals(int2.zero))
         {
             mulActionValue = overrideMulValue;
         }
@@ -148,7 +162,7 @@ public class BuffRuntime
         {
             mulActionValue = buffData.mulActionValue;
         }
-        if (overrideAddValue.Equals(int2.zero))
+        if (!overrideAddValue.Equals(int2.zero))
         {
             addActionValue = overrideAddValue;
         }
@@ -210,7 +224,14 @@ public class BuffRuntime
         nowActionIndex++;
         if (nowActionIndex >= lifeTime)
         {
-            buffActionBehavior.StopParticle();
+            if (buffActionBehavior)
+            {
+                buffActionBehavior.StopParticle();
+            }
+            else
+            {
+                RemoveBuff();
+            }
             return true;
         }
         return false;

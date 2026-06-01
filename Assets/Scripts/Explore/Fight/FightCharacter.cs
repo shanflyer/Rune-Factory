@@ -161,8 +161,12 @@ public class FightCharacter : IReferenceData
                 if (!buffPropertyDic.TryGetValue(buffRuntime.id, out var buffProperty))
                 {
                     buffProperty = new BuffProperty(buffRuntime);
+                    buffPropertyDic.Add(buffRuntime.id, buffProperty);
                 }
-                buffProperty.Add(buffRuntime);
+                else
+                {
+                    buffProperty.Add(buffRuntime);
+                }
                 buffAddProperty = default(CharacterProperty);
                 buffMulProperty = CharacterProperty.FullPercent;
                 for (int i = 0; i < buffPropertyDic.length; i++)
@@ -208,6 +212,13 @@ public class FightCharacter : IReferenceData
                     {
                         buffPropertyDic.Remove(buffRuntime.id);
                     }
+                }
+                buffAddProperty = default(CharacterProperty);
+                buffMulProperty = CharacterProperty.FullPercent;
+                for (int i = 0; i < buffPropertyDic.length; i++)
+                {
+                    buffAddProperty += buffPropertyDic[i].AddProperty;
+                    buffMulProperty += buffPropertyDic[i].MulProperty;
                 }
                 break;
 
@@ -273,9 +284,12 @@ public class FightCharacter : IReferenceData
                         waiteEnd = true;
                     }
 
-                    foreach (var skillRuntime in skillRuntimes)
+                    if (skillRuntimes != null)
                     {
-                        skillRuntime.Value.Update(1);
+                        foreach (var skillRuntime in skillRuntimes)
+                        {
+                            skillRuntime.Value.Update(1);
+                        }
                     }
 
                     if (buffRuntimes != null)
@@ -379,6 +393,10 @@ public class FightPlayer : FightCharacter
     {
         var character = CharacterManager.instance.GetCharacter(instanceId);
         Dictionary<FightType, List<int>> results = new Dictionary<FightType, List<int>>();
+        if (character == null || skillRuntimes == null)
+        {
+            return results;
+        }
         using (var e = skillRuntimes.GetEnumerator())
         {
             while (e.MoveNext())
@@ -419,7 +437,10 @@ public class FightPlayer : FightCharacter
         {
             int skillId = character.skills[i];
             SkillRuntime skillRuntime = await SkillManager.instance.CreateSkillRuntime(skillId);
-            skillRuntimes.Add(skillRuntime.instanceId, skillRuntime);
+            if (skillRuntime != null)
+            {
+                skillRuntimes.Add(skillRuntime.instanceId, skillRuntime);
+            }
         }
         equipSkill = 0;
         var equip = character.Equip;
@@ -431,9 +452,11 @@ public class FightPlayer : FightCharacter
             if (skillId != 0)
             {
                 SkillRuntime skillRuntime = await SkillManager.instance.CreateSkillRuntime(skillId);
-                skillRuntimes.Add(skillRuntime.instanceId, skillRuntime);
-
-                equipSkill = skillRuntime.instanceId;
+                if (skillRuntime != null)
+                {
+                    skillRuntimes.Add(skillRuntime.instanceId, skillRuntime);
+                    equipSkill = skillRuntime.instanceId;
+                }
             }
         }
         ItemData clothes = await GameDataManager.instance.GetAsyncData<ItemData>(equip.clothes.x);
@@ -443,7 +466,10 @@ public class FightPlayer : FightCharacter
             if (skillId != 0)
             {
                 SkillRuntime skillRuntime = await SkillManager.instance.CreateSkillRuntime(skillId);
-                skillRuntimes.Add(skillRuntime.instanceId, skillRuntime);
+                if (skillRuntime != null)
+                {
+                    skillRuntimes.Add(skillRuntime.instanceId, skillRuntime);
+                }
             }
         }
         ItemData shoes = await GameDataManager.instance.GetAsyncData<ItemData>(equip.shoes.x);
@@ -453,7 +479,10 @@ public class FightPlayer : FightCharacter
             if (skillId != 0)
             {
                 SkillRuntime skillRuntime = await SkillManager.instance.CreateSkillRuntime(skillId);
-                skillRuntimes.Add(skillRuntime.instanceId, skillRuntime);
+                if (skillRuntime != null)
+                {
+                    skillRuntimes.Add(skillRuntime.instanceId, skillRuntime);
+                }
             }
         }
     }
@@ -494,6 +523,10 @@ public class FightMonster : FightCharacter
     public override Dictionary<FightType, List<int>> GetReadySkills(FightType fightType = FightType.All)
     {
         Dictionary<FightType, List<int>> results = new Dictionary<FightType, List<int>>();
+        if (skillRuntimes == null)
+        {
+            return results;
+        }
 
         using (var e = skillRuntimes.GetEnumerator())
         {
@@ -544,7 +577,10 @@ public class FightMonster : FightCharacter
             {
                 int skillId = monsterData.skills[i];
                 SkillRuntime skillRuntime = await SkillManager.instance.CreateSkillRuntime(skillId);
-                skillRuntimes.Add(skillRuntime.instanceId, skillRuntime);
+                if (skillRuntime != null)
+                {
+                    skillRuntimes.Add(skillRuntime.instanceId, skillRuntime);
+                }
             }
         }
     }
