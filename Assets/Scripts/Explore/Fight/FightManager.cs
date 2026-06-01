@@ -22,6 +22,7 @@ public class FightManager : Singleton<FightManager>
     private Dictionary<int2, int> singleMonsterDic = new Dictionary<int2, int>();
     private Dictionary<int2, List<int>> horizontalMonsterDic = new Dictionary<int2, List<int>>();
     private Dictionary<int2, List<int>> verticalMonsterDic = new Dictionary<int2, List<int>>();
+    private readonly List<int> updateFightCharacterIds = new List<int>();
 
     private SkillRuntime useItemSkillRuntime;
     private Item nowUsedItem;
@@ -34,9 +35,28 @@ public class FightManager : Singleton<FightManager>
     {
         nowUsedItem = item;
         ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
+        if (itemData == null || itemData.fightUseSkill == 0)
+        {
+            nowUsedItem = default(Item);
+            return;
+        }
+        if (useItemSkillRuntime == null)
+        {
+            await CreateUseItemSkillAsync();
+        }
+        if (useItemSkillRuntime == null)
+        {
+            nowUsedItem = default(Item);
+            return;
+        }
         if (itemData.fightUseSkill != 0)
         {
             var skillData = await GameDataManager.instance.GetAsyncData<SkillData>(itemData.fightUseSkill);
+            if (skillData == null)
+            {
+                nowUsedItem = default(Item);
+                return;
+            }
             useItemSkillRuntime.ReBlindData(skillData);
         }
         SelectSkillAction selectSkillAction = new SelectSkillAction
@@ -49,6 +69,10 @@ public class FightManager : Singleton<FightManager>
     }
     public float GetUseItemCd()
     {
+        if (useItemSkillRuntime == null)
+        {
+            return 0;
+        }
         return useItemSkillRuntime.GetTimeValue();
     }
     public override void Init()
@@ -186,6 +210,17 @@ public class FightManager : Singleton<FightManager>
         verticalMonsterDic.Clear();
     }
 
+    private void ClearFightPlayers()
+    {
+        for (int i = 0; i < fightPlayers.Count; i++)
+        {
+            fightCharacters.Remove(fightPlayers[i]);
+        }
+        fightPlayers.Clear();
+        playerDic.Clear();
+        fightResult.fighterResults.Clear();
+    }
+
     public int GetAttackType(int id)
     {
         if (fightCharacters.TryGetValue(id, out var fightCharacter))
@@ -244,20 +279,38 @@ public class FightManager : Singleton<FightManager>
               {
                   if (fightMonsters.Contains(characterDeath.characterId))
                   {
-                      var monster = (FightMonster)fightCharacters[characterDeath.characterId];
+                      if (!fightCharacters.TryGetValue(characterDeath.characterId, out var character) || character is not FightMonster monster)
+                      {
+                          return;
+                      }
                       monster.DeathAction();
                       singleMonsterDic.Remove(monster.fightPos);
-                      horizontalMonsterDic.Remove(monster.fightPos.y);
-                      verticalMonsterDic.Remove(monster.fightPos.x);
-
-                      if (!fightMonsters.Remove(characterDeath.characterId))
+                      if (horizontalMonsterDic.TryGetValue(monster.fightPos.y, out var horizontalMonsters))
                       {
-                          fightCharacters.Remove(characterDeath.characterId);
+                          horizontalMonsters.Remove(characterDeath.characterId);
+                          if (horizontalMonsters.Count == 0)
+                          {
+                              horizontalMonsterDic.Remove(monster.fightPos.y);
+                          }
                       }
+                      if (verticalMonsterDic.TryGetValue(monster.fightPos.x, out var verticalMonsters))
+                      {
+                          verticalMonsters.Remove(characterDeath.characterId);
+                          if (verticalMonsters.Count == 0)
+                          {
+                              verticalMonsterDic.Remove(monster.fightPos.x);
+                          }
+                      }
+
+                      fightMonsters.Remove(characterDeath.characterId);
+                      fightCharacters.Remove(characterDeath.characterId);
                   }
                   else if (fightPlayers.Contains(characterDeath.characterId))
                   {
-                      var fightCharacter = fightCharacters[characterDeath.characterId];
+                      if (!fightCharacters.TryGetValue(characterDeath.characterId, out var fightCharacter))
+                      {
+                          return;
+                      }
                       fightCharacter.DeathAction();
                       fightPlayers.Remove(characterDeath.characterId);
                       fightCharacters.Remove(characterDeath.characterId);
@@ -296,9 +349,8 @@ public class FightManager : Singleton<FightManager>
     //死亡掉落
     private void MonsterDeathDrop(int characterId)
     {
-        if (fightMonsters.Contains(characterId))
+        if (fightMonsters.Contains(characterId) && fightCharacters.TryGetValue(characterId, out var character) && character is FightMonster fightMonster)
         {
-            var fightMonster = (FightMonster)fightCharacters[characterId];
             var dropResult = GameRandom.instance.GetRandomValue(fightMonster.monsterData.dropId);
 
             List<int2> items = new List<int2>();
@@ -347,8 +399,10 @@ public class FightManager : Singleton<FightManager>
             for (int i = 0; i < fightPlayers.Count; i++)
             {
                 int fightPlayerId = fightPlayers[i];
-                var fightPlayer = (FightPlayer)fightCharacters[fightPlayerId];
-                fightPlayer.character.AddExp(exp);
+                if (fightCharacters.TryGetValue(fightPlayerId, out var playerCharacter) && playerCharacter is FightPlayer fightPlayer)
+                {
+                    fightPlayer.character.AddExp(exp);
+                }
             }
         }
     }
@@ -377,10 +431,14 @@ public class FightManager : Singleton<FightManager>
     }
     private void CreatFightPlayerInstance(CreatFightPlayerInstance creatFightPlayerInstance)
     {
-        playerDic.Clear();
+        ClearFightPlayers();
         for (int i = 0; i < creatFightPlayerInstance.players.Count; i++)
         {
             Character character = CharacterManager.instance.GetCharacter(creatFightPlayerInstance.players[i]);
+            if (character == null)
+            {
+                continue;
+            }
 
             FightPlayer fightPlayer = new FightPlayer(character);
             fightPlayer.fightPos = i;
@@ -403,10 +461,14 @@ public class FightManager : Singleton<FightManager>
     }
     private void CreateFightPlayer(CreatFightPlayer creatFightPlayer)
     {
-        playerDic.Clear();
+        ClearFightPlayers();
         for (int i = 0; i < creatFightPlayer.players.Count; i++)
         {
             Character character = CharacterManager.instance.GetCharacterForDataId(creatFightPlayer.players[i]);
+            if (character == null)
+            {
+                continue;
+            }
 
             FightPlayer fightPlayer = new FightPlayer(character);
             fightPlayer.fightPos = i;
@@ -786,7 +848,10 @@ public class FightManager : Singleton<FightManager>
                             for (int j = 0; j < skillEstimateData.targets.Count; j++)
                             {
                                 int targetId = skillEstimateData.targets[j];
-                                FightCharacter tagetFighter = fightCharacters[targetId];
+                                if (!fightCharacters.TryGetValue(targetId, out var tagetFighter))
+                                {
+                                    continue;
+                                }
                                 int hurt = 0;
                                 if (skillData.skillActionType == SkillActionType.属性值)
                                 {
@@ -824,7 +889,10 @@ public class FightManager : Singleton<FightManager>
 
                             foreach (var targetHurtValue in targetHurtValueDic)
                             {
-                                FightCharacter tagetFighter = fightCharacters[targetHurtValue.Key];
+                                if (!fightCharacters.TryGetValue(targetHurtValue.Key, out var tagetFighter))
+                                {
+                                    continue;
+                                }
                                 float _hurtValue = (targetHurtValue.Value / tagetFighter.characterProperty.HP) * (1 - GameCommon.HurtUtlility) + GameCommon.HurtUtlility;
                                 _hurtValue = math.clamp(_hurtValue, 0, 1);
                                 skillEstimateData.utlilityValue += _hurtValue;
@@ -842,7 +910,10 @@ public class FightManager : Singleton<FightManager>
                             for (int j = 0; j < skillEstimateData.targets.Count; j++)
                             {
                                 int targetId = skillEstimateData.targets[j];
-                                FightCharacter tagetFighter = fightCharacters[targetId];
+                                if (!fightCharacters.TryGetValue(targetId, out var tagetFighter))
+                                {
+                                    continue;
+                                }
                                 var targetCureValue = 1 - 1 / 1 + math.pow(math.E * GameCommon.hpUtlility, (-tagetFighter.characterProperty.HP / tagetFighter.characterProperty.MaxHP * 12 + 6));
                                 cureValue += targetCureValue;
 
@@ -872,8 +943,7 @@ public class FightManager : Singleton<FightManager>
                 {
                     for (int i = 0; i < fightMonsters.Count; i++)
                     {
-                        var targetCharacter = fightCharacters[fightMonsters[i]];
-                        if (targetCharacter.characterProperty.HP > 0)
+                        if (fightCharacters.TryGetValue(fightMonsters[i], out var targetCharacter) && targetCharacter.characterProperty.HP > 0)
                         {
                             finalTargets.Add(targetCharacter.instanceId);
                         }
@@ -883,8 +953,7 @@ public class FightManager : Singleton<FightManager>
                 {
                     for (int i = 0; i < fightPlayers.Count; i++)
                     {
-                        var targetCharacter = fightCharacters[fightPlayers[i]];
-                        if (targetCharacter.characterProperty.HP > 0)
+                        if (fightCharacters.TryGetValue(fightPlayers[i], out var targetCharacter) && targetCharacter.characterProperty.HP > 0)
                         {
                             finalTargets.Add(targetCharacter.instanceId);
                         }
@@ -897,8 +966,7 @@ public class FightManager : Singleton<FightManager>
                 {
                     for (int i = 0; i < fightMonsters.Count; i++)
                     {
-                        var targetCharacter = fightCharacters[fightMonsters[i]];
-                        if (targetCharacter.characterProperty.HP > 0)
+                        if (fightCharacters.TryGetValue(fightMonsters[i], out var targetCharacter) && targetCharacter.characterProperty.HP > 0)
                         {
                             finalTargets.Add(targetCharacter.instanceId);
                         }
@@ -908,8 +976,7 @@ public class FightManager : Singleton<FightManager>
                 {
                     for (int i = 0; i < fightPlayers.Count; i++)
                     {
-                        var targetCharacter = fightCharacters[fightPlayers[i]];
-                        if (targetCharacter.characterProperty.HP > 0)
+                        if (fightCharacters.TryGetValue(fightPlayers[i], out var targetCharacter) && targetCharacter.characterProperty.HP > 0)
                         {
                             finalTargets.Add(targetCharacter.instanceId);
                         }
@@ -935,8 +1002,7 @@ public class FightManager : Singleton<FightManager>
                 {
                     for (int i = 0; i < fightMonsters.Count; i++)
                     {
-                        var targetCharacter = fightCharacters[fightMonsters[i]];
-                        if (targetCharacter.characterProperty.HP > 0)
+                        if (fightCharacters.TryGetValue(fightMonsters[i], out var targetCharacter) && targetCharacter.characterProperty.HP > 0)
                         {
                             targetCharacters.Add(targetCharacter);
                         }
@@ -946,8 +1012,7 @@ public class FightManager : Singleton<FightManager>
                 {
                     for (int i = 0; i < fightPlayers.Count; i++)
                     {
-                        var targetCharacter = fightCharacters[fightPlayers[i]];
-                        if (targetCharacter.characterProperty.HP > 0)
+                        if (fightCharacters.TryGetValue(fightPlayers[i], out var targetCharacter) && targetCharacter.characterProperty.HP > 0)
                         {
                             targetCharacters.Add(targetCharacter);
                         }
@@ -960,8 +1025,7 @@ public class FightManager : Singleton<FightManager>
                 {
                     for (int i = 0; i < fightMonsters.Count; i++)
                     {
-                        var targetCharacter = fightCharacters[fightMonsters[i]];
-                        if (targetCharacter.characterProperty.HP > 0)
+                        if (fightCharacters.TryGetValue(fightMonsters[i], out var targetCharacter) && targetCharacter.characterProperty.HP > 0)
                         {
                             targetCharacters.Add(targetCharacter);
                         }
@@ -971,8 +1035,7 @@ public class FightManager : Singleton<FightManager>
                 {
                     for (int i = 0; i < fightPlayers.Count; i++)
                     {
-                        var targetCharacter = fightCharacters[fightPlayers[i]];
-                        if (targetCharacter.characterProperty.HP > 0)
+                        if (fightCharacters.TryGetValue(fightPlayers[i], out var targetCharacter) && targetCharacter.characterProperty.HP > 0)
                         {
                             targetCharacters.Add(targetCharacter);
                         }
@@ -1098,20 +1161,28 @@ public class FightManager : Singleton<FightManager>
     {
         int skillId = nextActionSkillEstimate.skillId;
         int sourceId = nextActionSkillEstimate.sourceId;
-        FightCharacter source = fightCharacters[sourceId];
-        var skillRuntime = source.skillRuntimes[skillId];
+        if (!fightCharacters.TryGetValue(sourceId, out var source) || source.skillRuntimes == null || !source.skillRuntimes.TryGetValue(skillId, out var skillRuntime))
+        {
+            return;
+        }
         var skillData = skillRuntime.skillData;
         List<FightCharacter> targets = new List<FightCharacter>();
         for(int i = 0; i < nextActionSkillEstimate.targets.Count; i++)
         {
-            SkillAction(skillData.nextFightType,skillData.nextSkillActionType,skillData.nextActionValue, source, fightCharacters[nextActionSkillEstimate.targets[i]], nextActionSkillEstimate.displayHurt);
+            if (fightCharacters.TryGetValue(nextActionSkillEstimate.targets[i], out var target))
+            {
+                SkillAction(skillData.nextFightType,skillData.nextSkillActionType,skillData.nextActionValue, source, target, nextActionSkillEstimate.displayHurt);
+            }
         }
 
     }
 
     public  void BuffAction(BuffData buffData, int characterId, bool isDisplayHurt)
     {
-        FightCharacter target = fightCharacters[characterId];
+        if (buffData == null || !fightCharacters.TryGetValue(characterId, out var target))
+        {
+            return;
+        }
         switch (buffData.buffactionType)
         {
             case BuffActionType.伤害:
@@ -1204,6 +1275,10 @@ public class FightManager : Singleton<FightManager>
 
     public void FightHPChange(int changeValue,FightCharacter target,bool isDisplayHurt,HurtResultType hurtResultType)
     {
+        if (target == null || target.fightCharacterStaues != default(FightCharacterStaues))
+        {
+            return;
+        }
         ChangeCharacterProperty changeCharacterProperty = new ChangeCharacterProperty
         {
             characterId=target.instanceId,
@@ -1226,6 +1301,7 @@ public class FightManager : Singleton<FightManager>
         // Debug.Log($"角色HP：<color=blue>{target.Name}--{hp}</color>");
         if (hp <= 0)
         {
+            target.fightCharacterStaues = (FightCharacterStaues)1;
            // Debug.Log($"角色死亡：{target is FightMonster}");
             CharacterDeath characterDeath = new CharacterDeath
             {
@@ -1250,8 +1326,11 @@ public class FightManager : Singleton<FightManager>
         int targetId = actionSkillEstimate.targetId;
         int index = actionSkillEstimate.index;
 
-        FightCharacter source = fightCharacters[sourceId];
-        FightCharacter target = fightCharacters[targetId];
+        if (!fightCharacters.TryGetValue(sourceId, out var source) || !fightCharacters.TryGetValue(targetId, out var target))
+        {
+            cdTimeMoving = true;
+            return;
+        }
         SkillRuntime skillRuntime;
         if (useItemSkillRuntime != null && useItemSkillRuntime.instanceId == skillId)
         {
@@ -1259,7 +1338,11 @@ public class FightManager : Singleton<FightManager>
         }
         else
         {
-            skillRuntime = source.skillRuntimes[skillId];
+            if (source.skillRuntimes == null || !source.skillRuntimes.TryGetValue(skillId, out skillRuntime))
+            {
+                cdTimeMoving = true;
+                return;
+            }
         }
 
         var skillData = skillRuntime.skillData;
@@ -1370,9 +1453,9 @@ public class FightManager : Singleton<FightManager>
                 for (int i = 0; i < fightPlayers.Count; i++)
                 {
                     int id = fightPlayers[i];
-                    if (fightCharacters[id].CheckAction())
+                    if (fightCharacters.TryGetValue(id, out var fightCharacter) && fightCharacter.CheckAction())
                     {
-                        fightCharacters[id].fightStatus = FightStatus.准备;
+                        fightCharacter.fightStatus = FightStatus.准备;
                         nowFightCharacters.Enqueue(id);
                     }
                 }
@@ -1382,9 +1465,9 @@ public class FightManager : Singleton<FightManager>
                 for (int i = 0; i < fightMonsters.Count; i++)
                 {
                     int id = fightMonsters[i];
-                    if (fightCharacters[id].CheckAction())
+                    if (fightCharacters.TryGetValue(id, out var fightCharacter) && fightCharacter.CheckAction())
                     {
-                        fightCharacters[id].fightStatus = FightStatus.准备;
+                        fightCharacter.fightStatus = FightStatus.准备;
                         nowFightCharacters.Enqueue(id);
                     }
                 }
@@ -1564,18 +1647,31 @@ public class FightManager : Singleton<FightManager>
 
     public void EscapeAction()
     {
+        if (fightPlayers.Count == 0)
+        {
+            return;
+        }
+        if (fightMonsters.Count == 0)
+        {
+            ExploreManager.instance.StepFightSucceed();
+            return;
+        }
+
         int playerValue = 0;
         int monsterValue = 0;
 
-        foreach (var fightCharacter in fightCharacters)
+        for (int i = 0; i < fightPlayers.Count; i++)
         {
-            if (fightPlayers.Contains(fightCharacter.Key))
+            if (fightCharacters.TryGetValue(fightPlayers[i], out var fightCharacter))
             {
-                playerValue += fightCharacter.Value.characterProperty.Lucky;
+                playerValue += fightCharacter.characterProperty.Lucky;
             }
-            else
+        }
+        for (int i = 0; i < fightMonsters.Count; i++)
+        {
+            if (fightCharacters.TryGetValue(fightMonsters[i], out var fightCharacter))
             {
-                monsterValue += fightCharacter.Value.characterProperty.Lucky;
+                monsterValue += fightCharacter.characterProperty.Lucky;
             }
         }
         playerValue /= fightPlayers.Count;
@@ -1615,8 +1711,7 @@ public class FightManager : Singleton<FightManager>
             case TargetRangeType.Player:
                 if (playerDic.TryGetValue(key.x, out var player))
                 {
-                    var fightCharacter = fightCharacters[player];
-                    //if (fightCharacter.characterProperty.HP > 0)
+                    if (fightCharacters.TryGetValue(player, out var fightCharacter))
                     {
                         targets.Add(player);
                     }
@@ -1626,8 +1721,7 @@ public class FightManager : Singleton<FightManager>
                 targets = new List<int>();
                 for (int i = 0; i < fightMonsters.Count; i++)
                 {
-                    var fightCharacter = fightCharacters[fightMonsters[i]];
-                    if (fightCharacter.characterProperty.HP > 0)
+                    if (fightCharacters.TryGetValue(fightMonsters[i], out var fightCharacter) && fightCharacter.characterProperty.HP > 0)
                     {
                         targets.Add(fightMonsters[i]);
                     }
@@ -1637,8 +1731,7 @@ public class FightManager : Singleton<FightManager>
             case TargetRangeType.单体:
                 if (singleMonsterDic.TryGetValue(key, out var monster))
                 {
-                    var fightCharacter = fightCharacters[monster];
-                    if (fightCharacter.characterProperty.HP > 0)
+                    if (fightCharacters.TryGetValue(monster, out var fightCharacter) && fightCharacter.characterProperty.HP > 0)
                     {
                         targets = new List<int> { monster };
                     }
@@ -1651,8 +1744,7 @@ public class FightManager : Singleton<FightManager>
                     targets = new List<int>();
                     for (int i = 0; i < ints.Count; i++)
                     {
-                        var fightCharacter = fightCharacters[ints[i]];
-                        if (fightCharacter.characterProperty.HP > 0)
+                        if (fightCharacters.TryGetValue(ints[i], out var fightCharacter) && fightCharacter.characterProperty.HP > 0)
                         {
                             targets.Add(ints[i]);
                         }
@@ -1666,8 +1758,7 @@ public class FightManager : Singleton<FightManager>
                     targets = new List<int>();
                     for (int i = 0; i < ints.Count; i++)
                     {
-                        var fightCharacter = fightCharacters[ints[i]];
-                        if (fightCharacter.characterProperty.HP > 0)
+                        if (fightCharacters.TryGetValue(ints[i], out var fightCharacter) && fightCharacter.characterProperty.HP > 0)
                         {
                             targets.Add(ints[i]);
                         }
@@ -1684,19 +1775,26 @@ public class FightManager : Singleton<FightManager>
         base.Update();
         if (cdTimeMoving&&!pauseBehavior)
         {
+            updateFightCharacterIds.Clear();
             foreach (var fightCharacter in fightCharacters)
             {
-                if(fightCharacter.Value.characterProperty.HP > 0)
+                updateFightCharacterIds.Add(fightCharacter.Key);
+            }
+            for (int i = 0; i < updateFightCharacterIds.Count; i++)
+            {
+                if (fightCharacters.TryGetValue(updateFightCharacterIds[i], out var fightCharacter) && fightCharacter.characterProperty.HP > 0)
                 {
-                    fightCharacter.Value.UpData(Time.deltaTime);
+                    fightCharacter.UpData(Time.deltaTime);
                 }
-
             }
             useItemCd += Time.deltaTime;
             if (useItemCd >= GameCommon.DefaultPerRoundCd)
             {
                 useItemCd = 0;
-                useItemSkillRuntime.Update();
+                if (useItemSkillRuntime != null)
+                {
+                    useItemSkillRuntime.Update();
+                }
             }
         }
     }

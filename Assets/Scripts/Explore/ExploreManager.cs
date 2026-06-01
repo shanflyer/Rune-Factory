@@ -254,6 +254,10 @@ public class ExploreManager : Singleton<ExploreManager>
     {
         Debug.Log("ChapterStepAction!!!");
         UIManager.instance.CloseGamePanel<WarehousePanel>();
+        if (nowChapter == 0)
+        {
+            return;
+        }
         if (fightChapter==null||fightChapter.mapId != nowChapter)
         {
             if (!fightChapters.TryGetValue(nowChapter, out fightChapter))
@@ -265,9 +269,12 @@ public class ExploreManager : Singleton<ExploreManager>
         {
             nowFightMapData = await GameDataManager.instance.GetAsyncData<FightMapData>(nowChapter);
         }
+        if (nowFightMapData.id == 0 || nowFightMapData.monsterDeploys == null || nowFightMapData.monsterDeploys.Count == 0)
+        {
+            return;
+        }
         if (nowFightMapData.monsterDeploys.Count > nowStep)
         {
-            nowFightMapData = await GameDataManager.instance.GetAsyncData<FightMapData>(nowChapter);
             if (nowStep == nowFightMapData.monsterDeploys.Count - 1)
             {
                 AudioController.instance.PlayBGM(nowFightMapData.fightBGM, isLerp: true, audioClearType: AudioClearType.All, Group: BGMGroup.Battle.ToString());
@@ -305,6 +312,10 @@ public class ExploreManager : Singleton<ExploreManager>
 
     public void LerpExploreTime(float waitTime)
     {
+        if (nowFightMapData.id == 0 || nowFightMapData.monsterDeploys == null || nowFightMapData.monsterDeploys.Count == 0)
+        {
+            return;
+        }
         int perMinute = GameCommon.explorCostMinute / nowFightMapData.monsterDeploys.Count;
         int hour = GameTimeManager.instance.Hour;
         int minute = GameTimeManager.instance.Minute;
@@ -336,6 +347,10 @@ public class ExploreManager : Singleton<ExploreManager>
     }
     public void SetChapterFindItem(List<int2> items)
     {
+        if (fightChapter == null || items == null)
+        {
+            return;
+        }
         for(int i=0;i<items.Count; i++)
         {
             fightChapter.findItems.Add(items[i].x);
@@ -345,17 +360,23 @@ public class ExploreManager : Singleton<ExploreManager>
     public bool StepFightSucceed()
     {
         FightManager.instance.cdTimeMoving = false;
+        if (fightChapter == null)
+        {
+            return false;
+        }
 
         nowStep++;
-        float value = nowStep / (float)nowFightMapData.monsterDeploys.Count;
-        float itemValue = fightChapter.findItems.Count / (float)fightChapter.haveItems.Count;
+        int stepCount = nowFightMapData.monsterDeploys != null ? nowFightMapData.monsterDeploys.Count : 0;
+        int itemCount = fightChapter != null && fightChapter.haveItems != null ? fightChapter.haveItems.Count : 0;
+        float value = stepCount > 0 ? nowStep / (float)stepCount : 1;
+        float itemValue = itemCount > 0 ? fightChapter.findItems.Count / (float)itemCount : 1;
 
         fightChapter.completeValue = (int)(value * 50)+ (int)(itemValue * 50);
 
         EndNowRoundFight endNowRoundFight = new EndNowRoundFight { };
         GameActionManager.instance.QueueAction(endNowRoundFight, true);
 
-        if (nowStep >= nowFightMapData.monsterDeploys.Count)
+        if (nowStep >= stepCount)
         {
             ExploreSuccessful();
             return true;
