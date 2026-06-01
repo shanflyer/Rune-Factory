@@ -89,46 +89,62 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
     {
         if (WorldMapObjManager.instance.displayMap == GameCommon.MyPlayerStore)
         {
-            int storeCount = 0;
-            using (var e = RuntimeStoreCounters.Values.GetEnumerator())
-            {
-                while (e.MoveNext())
-                {
-                    if (e.Current.count > 0)
-                    {
-                        storeCount++;
-                    }
-                }
-            }
-            float cdValue = storeCount / 5.0f;
-            cdValue = math.clamp(cdValue, 1, 3);
-
-            float nowCd = GameRandom.RandomFloat(GameCommon.autoCustomerCD);
-            nowCd += timeCurve.Evaluate(GameTimeManager.instance.timeValue);
-            nowCd += weatherCurve.Evaluate(EnvironmentManger.instance.nowWaterFall);
-            nowCd = nowCd / cdValue;
-            return nowCd;
+            return CalculateCustomerCd(CountStockedCounters());
         }
         return 0;
+    }
+
+    private int CountStockedCounters()
+    {
+        int storeCount = 0;
+        using (var e = RuntimeStoreCounters.Values.GetEnumerator())
+        {
+            while (e.MoveNext())
+            {
+                if (e.Current.count > 0 && e.Current.itemData != null)
+                {
+                    storeCount++;
+                }
+            }
+        }
+        return storeCount;
+    }
+
+    private float CalculateCustomerCd(int storeCount)
+    {
+        float cdValue = storeCount / 5.0f;
+        cdValue = math.clamp(cdValue, 1, 3);
+
+        float nowCd = GameRandom.RandomFloat(GameCommon.autoCustomerCD);
+        if (timeCurve != null)
+        {
+            nowCd += timeCurve.Evaluate(GameTimeManager.instance.timeValue);
+        }
+        if (weatherCurve != null)
+        {
+            nowCd += weatherCurve.Evaluate(EnvironmentManger.instance.nowWaterFall);
+        }
+        return nowCd / cdValue;
     }
 
     GameObjectCurveController.FrameTaskHandle nowAutoTask;
     void StartAutoCustomerTask()
     {
         float timeValue = 0;
-        float nowCd = GameRandom.RandomFloat(GameCommon.autoCustomerCD);
+        float nowCd = CalculateCustomerCd(CountStockedCounters());
         List<RuntimeStoreCounter> nowRuntimeStoreCounters = new List<RuntimeStoreCounter>();
         nowAutoTask = GameObjectCurveController.instance.StartFrameTask((float deltaTime) =>
         {
             timeValue += deltaTime;
             if (timeValue > nowCd)
             {
+                timeValue = 0;
                 nowRuntimeStoreCounters.Clear();
                 using (var e= RuntimeStoreCounters.Values.GetEnumerator())
                 {
                     while (e.MoveNext())
                     {
-                        if (e.Current.count > 0)
+                        if (e.Current.count > 0 && e.Current.itemData != null)
                         {
                             nowRuntimeStoreCounters.Add(e.Current);
                         }
@@ -144,13 +160,7 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                     };
                     TryBuyPlayerGood(buyPlayerGood);
                 }
-                float cdValue = nowRuntimeStoreCounters.Count / 5.0f;
-                cdValue = math.clamp(cdValue, 1, 3);
-
-                nowCd = GameRandom.RandomFloat(GameCommon.autoCustomerCD);
-                nowCd += timeCurve.Evaluate(GameTimeManager.instance.timeValue);
-                nowCd += weatherCurve.Evaluate(EnvironmentManger.instance.nowWaterFall);
-                nowCd = nowCd / cdValue;
+                nowCd = CalculateCustomerCd(nowRuntimeStoreCounters.Count);
             }
             return true;
         }, () => nowAutoTask = default);
@@ -179,78 +189,75 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
     }
     private  void TryBuyPlayerGood(TryBuyPlayerGood buyPlayerGood)
     {
-        if (runtimeStoreCounters.TryGetValue(buyPlayerGood.storeCounterId, out var runtimeStoreCounter))
+        bool result = SellStoreCounterItem(buyPlayerGood.storeCounterId, recycleWhenEmpty: false);
+        if (buyPlayerGood.setResult != null)
         {
-            if (runtimeStoreCounter.count <= 0)
-            {
-                if (buyPlayerGood.setResult != null)
-                    buyPlayerGood.setResult(false);
-                return;
-            }
-            if (nowRuntimeStoreCounterObjs.TryGetValue(buyPlayerGood.storeCounterId, out var runtimeObj))
-            {
-                ShowCoin showCoin = new ShowCoin
-                {
-                    pos = (runtimeObj.obj as SellItem).transform.position,
-                };
-                GameActionManager.instance.QueueAction(showCoin);
-            }
-            ItemData itemData = runtimeStoreCounter.itemData;
-            PayManager.instance.AddGold(itemData.sellPrice);
-            runtimeStoreCounter.count--;
-            if (runtimeStoreCounter.count <= 0)
-            {
-                runtimeStoreCounter.itemData=null;
-                runtimeStoreCounter.count = 0;
-            }
-            if (runtimeObj!=null&&runtimeObj.obj != null)
-            {
-                (runtimeObj.obj as SellItem).SetItemCount(runtimeStoreCounter.count);
-            }
-
-            if (buyPlayerGood.setResult != null)
-                buyPlayerGood.setResult(true);
+            buyPlayerGood.setResult(result);
         }
     }
 
     private void BuyPlayerGood(BuyPlayerGood buyPlayerGood)
     {
-        if (runtimeStoreCounters.TryGetValue(buyPlayerGood.storeCounterId, out var runtimeStoreCounter))
+        bool result = SellStoreCounterItem(buyPlayerGood.storeCounterId, recycleWhenEmpty: true);
+        if (buyPlayerGood.setResult != null)
         {
-            if (runtimeStoreCounter.count <= 0)
-            {
-                return;
-            }
-            if (nowRuntimeStoreCounterObjs.TryGetValue(buyPlayerGood.storeCounterId, out var runtimeObj))
+            buyPlayerGood.setResult(result);
+        }
+    }
+
+    private bool SellStoreCounterItem(int storeCounterId, bool recycleWhenEmpty)
+    {
+        if (!runtimeStoreCounters.TryGetValue(storeCounterId, out var runtimeStoreCounter))
+        {
+            return false;
+        }
+        if (runtimeStoreCounter.count <= 0 || runtimeStoreCounter.itemData == null)
+        {
+            runtimeStoreCounter.count = math.max(runtimeStoreCounter.count, 0);
+            return false;
+        }
+
+        RuntimeObj runtimeObj = null;
+        SellItem sellItem = null;
+        if (nowRuntimeStoreCounterObjs.TryGetValue(storeCounterId, out runtimeObj))
+        {
+            sellItem = runtimeObj.obj as SellItem;
+            if (sellItem != null)
             {
                 ShowCoin showCoin = new ShowCoin
                 {
-                    pos = (runtimeObj.obj as SellItem).transform.position,
+                    pos = sellItem.transform.position,
                 };
                 GameActionManager.instance.QueueAction(showCoin);
             }
+        }
 
-            runtimeStoreCounter.count--;
-            if (runtimeStoreCounter.count > 0)
-            {
-                if (runtimeObj.obj != null)
-                {
-                    (runtimeObj.obj as SellItem).AddItemCount(-1);
-                }
+        PayManager.instance.AddGold(runtimeStoreCounter.itemData.sellPrice);
+        runtimeStoreCounter.count--;
 
-                ItemData itemData = runtimeStoreCounter.itemData;
-                PayManager.instance.AddGold(itemData.sellPrice);
-            }
-            else
+        if (runtimeStoreCounter.count <= 0)
+        {
+            runtimeStoreCounter.itemData = null;
+            runtimeStoreCounter.count = 0;
+            if (runtimeObj != null && runtimeObj.obj != null)
             {
-                runtimeStoreCounter.itemData = null;
-                runtimeStoreCounter.count = 0;
-                if (runtimeObj.obj != null)
+                if (recycleWhenEmpty)
                 {
                     GameRuntimeObjManager.instance.RecycleRuntimeObj(runtimeObj);
+                    nowRuntimeStoreCounterObjs.Remove(storeCounterId);
+                }
+                else if (sellItem != null)
+                {
+                    sellItem.SetItemCount(0);
                 }
             }
         }
+        else if (sellItem != null)
+        {
+            sellItem.SetItemCount(runtimeStoreCounter.count);
+        }
+
+        return true;
     }
 
     private async System.Threading.Tasks.Task SetStoreCounterAsync(SetStoreCounter setStoreCounter)
@@ -347,11 +354,15 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
     {
         if (runtimeStoreCounters.TryGetValue(setStoreCounterItem.storeCounterId, out var runtimeStoreCounter))
         {
-            runtimeStoreCounter.itemData =await GameDataManager.instance.GetAsyncData<ItemData>(setStoreCounterItem.itemId);
-            runtimeStoreCounter.count = setStoreCounterItem.count;
-            if (runtimeStoreCounter.count == 0)
+            runtimeStoreCounter.count = math.max(setStoreCounterItem.count, 0);
+            runtimeStoreCounter.itemData = null;
+            if (runtimeStoreCounter.count > 0 && setStoreCounterItem.itemId > 0)
             {
-                runtimeStoreCounter.itemData=null;
+                runtimeStoreCounter.itemData = await GameDataManager.instance.GetAsyncData<ItemData>(setStoreCounterItem.itemId);
+                if (runtimeStoreCounter.itemData == null)
+                {
+                    runtimeStoreCounter.count = 0;
+                }
             }
 
             if (nowRuntimeStoreCounterObjs.TryGetValue(setStoreCounterItem.storeCounterId, out var runtimeObj))
@@ -361,8 +372,8 @@ public class PlayerStoreManager : Singleton<PlayerStoreManager>
                 {
                     sellItem.InitReferenceData(new Item
                     {
-                        dataId = setStoreCounterItem.itemId,
-                        count = setStoreCounterItem.count
+                        dataId = runtimeStoreCounter.itemData != null ? runtimeStoreCounter.itemData.id : 0,
+                        count = runtimeStoreCounter.count
                     });
                 }
             }

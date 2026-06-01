@@ -1,5 +1,4 @@
 using TMPro;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class SellItem : GamePanel<Item>
@@ -11,10 +10,13 @@ public class SellItem : GamePanel<Item>
     private TextMeshPro count;
 
     private Vector3 defaultOffset;
+    private Item item;
+
     public void SetDefaultOffset(Vector3 offset)
     {
         defaultOffset = offset;
     }
+
     public override void SetPanelUISerializeObj()
     {
         base.SetPanelUISerializeObj();
@@ -24,30 +26,32 @@ public class SellItem : GamePanel<Item>
 
     public override void Close()
     {
-        //base.Close();
+        // The pooled store display is closed by its owner.
     }
 
     public override void OnEnable()
     {
         base.OnEnable();
-        icon.enabled = item.count > 0;
-        count.enabled = item.count > 0;
+        RefreshDisplay();
     }
 
     public override void OnDisable()
     {
         base.OnDisable();
-        item = default(Item);
+        item = default;
     }
 
     protected override void Awake()
     {
-        //base.Awake();
-        icon.enabled = false;
-        count.enabled = false;
+        if (icon != null)
+        {
+            icon.enabled = false;
+        }
+        if (count != null)
+        {
+            count.enabled = false;
+        }
     }
-
-    private Item item;
 
     public void AddItemCount(int count)
     {
@@ -63,29 +67,33 @@ public class SellItem : GamePanel<Item>
 
     public void RefreshDisplay()
     {
+        if (icon == null || count == null)
+        {
+            return;
+        }
+
         count.text = item.count.ToString();
-        if (item.count > 0)
-        {
-            icon.enabled = true;
-            count.enabled = true;
-        }
-        else
-        {
-            icon.enabled = false;
-            count.enabled = false;
-        }
+        bool hasItem = item.count > 0 && item.dataId > 0;
+        icon.enabled = hasItem;
+        count.enabled = hasItem;
     }
 
     public override void InitReferenceData(Item v)
     {
         base.InitReferenceData(v);
-        // 售卖展示入口保持同步，物品显示数据加载异常统一进入日志。
         AsyncTaskRunner.Run(InitReferenceDataAsync(v), nameof(InitReferenceData));
     }
 
     private async System.Threading.Tasks.Task InitReferenceDataAsync(Item v)
     {
         item = v;
+        if (item.count <= 0 || item.dataId <= 0)
+        {
+            transform.localPosition = defaultOffset;
+            RefreshDisplay();
+            return;
+        }
+
         ShopItemDisplayData shopItemDisplayData = await GameDataManager.instance.GetAsyncData<ShopItemDisplayData>(item.dataId);
         if (shopItemDisplayData == null)
         {
@@ -99,8 +107,7 @@ public class SellItem : GamePanel<Item>
         }
         else
         {
-            Vector3 offsetPos = shopItemDisplayData.offset;
-            transform.localPosition = offsetPos;
+            transform.localPosition = shopItemDisplayData.offset;
             if (shopItemDisplayData.itemCounts == null || shopItemDisplayData.itemCounts.Count == 0)
             {
                 ItemData itemData = await GameDataManager.instance.GetAsyncData<ItemData>(item.dataId);
@@ -113,10 +120,10 @@ public class SellItem : GamePanel<Item>
             {
                 icon.sprite = shopItemDisplayData.GetItemSprite(item.count);
             }
+
             float size = 0.32f * shopItemDisplayData.scale;
             icon.size = new Vector2(size, size);
         }
-        count.text = item.count.ToString();
 
         RefreshDisplay();
     }
