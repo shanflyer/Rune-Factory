@@ -65,6 +65,7 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedFloat.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Animator\SetIntegerParameter.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\Stop.cs" />
+    <Compile Include="Assets\Scripts\Item\PackageManager.Use.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\CheckItemValueNode.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\DeleteMapLinkNode.cs" />
     <Compile Include="Assets\Scripts\Action\GameCheckAction.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Assets\Scripts\Action\TypedNodes\RefreshEquipNode.cs" />
     <Compile Include="Assets\Scripts\UI\GamePanel.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\RefreshShortcutNode.cs" />
+    <Compile Include="Assets\Scripts\Character\CharacterManager.Factory.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\PlayerTalkItemNode.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetPriority.cs" />
     <Compile Include="Assets\Scripts\Data\MonsterDeloyList.cs" />
@@ -170,6 +172,7 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Vector2\SetValue.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetVelocityUpdateMode.cs" />
     <Compile Include="Assets\Scripts\Behavior\CharacterGroup\GroupCharacterMoveToEachOther.cs" />
+    <Compile Include="Assets\Scripts\Item\PackageManager.Level.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\GetFisherToolCoordinateBehavior.cs" />
     <Compile Include="Assets\Scripts\MySprite\MySpriteMeshRender.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Debug\DrawLine.cs" />
@@ -234,6 +237,7 @@
     <Compile Include="Assets\Scripts\Action\TypedNodes\AnimalCostFoodNode.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\LerpScreenCycleValueNode.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\TryUpPastureLevelNode.cs" />
+    <Compile Include="Assets\Scripts\Character\CharacterDataValidator.cs" />
     <Compile Include="Assets\Scripts\UI\SkillActionPanel.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\OpenPackageNode.cs" />
     <Compile Include="Assets\Scripts\Data\ObjPackageAnimationData.cs" />
@@ -243,6 +247,7 @@
     <Compile Include="Assets\Scripts\Action\TypedNodes\TrySetTempMapItemNode.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\TryUpDataCharacterEmoteNode.cs" />
     <Compile Include="Assets\Scripts\Behavior\Common\RandomEmoteBehavior.cs" />
+    <Compile Include="Assets\Scripts\Item\PackageManager.Animation.cs" />
     <Compile Include="Assets\Scripts\test\Test.cs" />
     <Compile Include="Assets\Scripts\UI\ManufacturePanel.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\GetDuration.cs" />
@@ -255,6 +260,7 @@
     <Compile Include="Assets\Scripts\UI\ZeroPanel.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\TryRecycleCharacterEmoteNode.cs" />
     <Compile Include="Assets\Scripts\Item\ShortcutManager.cs" />
+    <Compile Include="Assets\Tests\EditMode\GameInfrastructureTests.cs" />
     <Compile Include="Assets\Scripts\Scene\DynamicResolutionTest.cs" />
     <Compile Include="Assets\Scripts\Behavior\Variables\SharedSkillList.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\RefreshMapPackageItemRenderNode.cs" />
@@ -280,17 +286,6 @@
     <Compile Include="Assets\Scripts\Behavior\Map\GameRuntimeItemCreat.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\ReSetMapItemColliderNode.cs" />
     <Compile Include="Assets\Scripts\Item\PackageManager.cs" />
-    <Compile Include="Assets\Scripts\Item\PackageManager.Animation.cs" />
-    <Compile Include="Assets\Scripts\Item\PackageManager.Events.cs" />
-    <Compile Include="Assets\Scripts\Item\PackageManager.GamePackage.cs" />
-    <Compile Include="Assets\Scripts\Item\PackageManager.Items.cs" />
-    <Compile Include="Assets\Scripts\Item\PackageManager.Level.cs" />
-    <Compile Include="Assets\Scripts\Item\PackageManager.Lifecycle.cs" />
-    <Compile Include="Assets\Scripts\Item\PackageManager.Persistence.cs" />
-    <Compile Include="Assets\Scripts\Item\PackageManager.Refresh.cs" />
-    <Compile Include="Assets\Scripts\Item\PackageManager.Runtime.cs" />
-    <Compile Include="Assets\Scripts\Item\PackageManager.UI.cs" />
-    <Compile Include="Assets\Scripts\Item\PackageManager.Use.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\CapsuleCollider\GetCenter.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetLoop.cs" />
     <Compile Include="Assets\Scripts\Main\RingQueue.cs" />
@@ -299,7 +294,6 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\CompareSharedInt.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\GetCharacterToMapObjNearestCell.cs" />
     <Compile Include="Assets\Scripts\Main\GameController.cs" />
-    <Compile Include="Assets\Scripts\Main\ManagerStartupRegistry.cs" />
     <Compile Include="Assets\Scripts\Map\MapCellJobController.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Composites\Parallel.cs" />
     <Compile Include="Assets\OtherPackage\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />
@@ -372,6 +366,7 @@
     <Compile Include="Assets\Scripts\Action\TypedNodes\GetPastureLevelNode.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\SetGravityScale.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Physics2D\Circlecast.cs" />
+    <Compile Include="Assets\Scripts\Main\DataResourceRegistry.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\RefreshAnimalPosNode.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\RefreshTeamNode.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\AudioSource\SetVolume.cs" />
@@ -394,9 +389,11 @@
     <Compile Include="Assets\Scripts\Action\FightAction.cs" />
     <Compile Include="Assets\Resources\InputData\MyInputNameData.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\TraceCharacterResultNode.cs" />
+    <Compile Include="Assets\Scripts\Character\Character.Debug.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\UnSetHomeEquipNode.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\CloseMapObjTipsNode.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\IkGroup.cs" />
+    <Compile Include="Assets\Scripts\Main\SingletonPlayerLoopDriver.cs" />
     <Compile Include="Assets\Scripts\Action\GameVolumeAction.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\AudioSource\Stop.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Actions\StackedAction.cs" />
@@ -425,12 +422,14 @@
     <Compile Include="Assets\Scripts\Main\PlayerOperateManager.cs" />
     <Compile Include="Assets\OtherPackage\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
     <Compile Include="Assets\Scripts\Environment\WeatherManager.cs" />
-    <Compile Include="Assets\Scripts\Main\MyNativeData.cs" />
+    <Compile Include="Assets\Scripts\Item\PackageManager.Persistence.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\GameObject\Find.cs" />
+    <Compile Include="Assets\Scripts\Main\MyNativeData.cs" />
     <Compile Include="Assets\Scripts\MySprite\SpriteBone\SpriteBonePoseController.cs" />
     <Compile Include="Assets\Effect\Epic Toon FX\Demo\Scripts\VFX Library\PEButtonScript.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\GetFloat.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Decorators\TaskGuard.cs" />
+    <Compile Include="Assets\Scripts\Character\CharacterDebugSettings.cs" />
     <Compile Include="Assets\OtherPackage\TextMesh Pro\Examples &amp; Extras\Scripts\SkewTextExample.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Vector2\MoveTowards.cs" />
     <Compile Include="Assets\Effect\ProFlares\Demos\DemoScripts\SpinInput.cs" />
@@ -459,6 +458,7 @@
     <Compile Include="Assets\Scripts\UI\UIObjReference.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Timeline\IsPlaying.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Animator\SetLookAtWeight.cs" />
+    <Compile Include="Assets\Scripts\Item\PackageManager.UI.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CheckCharacterDistance.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Vector3\GetVector2.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\String\GetSubstring.cs" />
@@ -506,12 +506,14 @@
     <Compile Include="Assets\Scripts\Action\TypedNodes\CreatWeatherNode.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\ResetGameEventNode.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Physics2D\Linecast.cs" />
+    <Compile Include="Assets\Scripts\Item\PackageManager.Items.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\IkCCD2D.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\SetWaterFieldNode.cs" />
     <Compile Include="Assets\Scripts\Character\NPC\NPCBehaviorData.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Vector3\SetValue.cs" />
     <Compile Include="Assets\Scripts\Data\TalkData.cs" />
     <Compile Include="Assets\Scripts\Character\MulitiBehaviorData.cs" />
+    <Compile Include="Assets\Scripts\Character\Character.Stats.cs" />
     <Compile Include="Assets\Scripts\Behavior\Map\GetMapItemTriggerCells.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Vector2\Multiply.cs" />
     <Compile Include="Assets\Scripts\Data\TempMapData.cs" />
@@ -599,6 +601,7 @@
     <Compile Include="Assets\Scripts\Action\TypedNodes\ShopBuySuccessNode.cs" />
     <Compile Include="Assets\OtherPackage\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\CharacterController\GetCenter.cs" />
+    <Compile Include="Assets\Scripts\Item\PackageManager.Lifecycle.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\RefreshTempMapItemCoordinateNode.cs" />
     <Compile Include="Assets\Scripts\ECS\Components\EmoteComponent.cs" />
     <Compile Include="Assets\Scripts\UI\FilmPanel.cs" />
@@ -679,12 +682,6 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\String\Format.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\SetFilmUINode.cs" />
     <Compile Include="Assets\Scripts\Character\Character.cs" />
-    <Compile Include="Assets\Scripts\Character\Character.Interaction.cs" />
-    <Compile Include="Assets\Scripts\Character\Character.Movement.cs" />
-    <Compile Include="Assets\Scripts\Character\Character.Debug.cs" />
-    <Compile Include="Assets\Scripts\Character\CharacterDebugSettings.cs" />
-    <Compile Include="Assets\Scripts\Character\CharacterDebugSnapshot.cs" />
-    <Compile Include="Assets\Scripts\Character\Character.Stats.cs" />
     <Compile Include="Assets\Scripts\Behavior\PlayerStore\CheckPlayerStore.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\RefreshMapCameraNode.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\CheckCharacterPropertyChange.cs" />
@@ -854,6 +851,7 @@
     <Compile Include="Assets\Scripts\Data\ManufactureData.cs" />
     <Compile Include="Assets\Scripts\Animation\MyAnimationController.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\AddMapItemNode.cs" />
+    <Compile Include="Assets\Scripts\Item\PackageManager.Events.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetSpread.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\CheckGameGuideActionNode.cs" />
     <Compile Include="Assets\Scripts\PlayerStore\StoreCounterDataList.cs" />
@@ -1002,6 +1000,7 @@
     <Compile Include="Assets\Scripts\UI\StoreProductPanel.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\RefreshMapTempCharacterNode.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\SwitchInputMapNode.cs" />
+    <Compile Include="Assets\Scripts\Character\CharacterManager.Debug.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetVelocity.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Animator\SetFloatParameter.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Conditionals\Physics\HasExitedCollision.cs" />
@@ -1060,6 +1059,7 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\CharacterController\Move.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Vector3\Distance.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\WaitActionNode.cs" />
+    <Compile Include="Assets\Scripts\Character\Character.Interaction.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\PlayerPrefs\GetString.cs" />
     <Compile Include="Assets\OtherPackage\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
     <Compile Include="Assets\Scripts\Map\CellDebugDisplay.cs" />
@@ -1077,11 +1077,11 @@
     <Compile Include="Assets\Scripts\Map\SpecialMapLink.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\GetVelocity.cs" />
     <Compile Include="Assets\Scripts\Main\GameDataManager.cs" />
-    <Compile Include="Assets\Scripts\Main\DataResourceRegistry.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Timeline\Resume.cs" />
     <Compile Include="Assets\Scripts\Action\HomeEquipAction.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\SphereCollider\SetCenter.cs" />
     <Compile Include="Assets\Scripts\Data\CharacterAnimatorStateParameterData.cs" />
+    <Compile Include="Assets\Scripts\Item\PackageManager.Refresh.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Animator\StartPlayback.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Variables\SharedGameObjectList.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\NewHourNode.cs" />
@@ -1094,6 +1094,7 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\ParticleSystem\IsPlaying.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\SharedVariables\SharedGameObjectsToGameObjectList.cs" />
     <Compile Include="Assets\Scripts\Behavior\PlayerStore\GetStoreCounterPos.cs" />
+    <Compile Include="Assets\Scripts\Main\ManagerStartupRegistry.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\ZeroWorldNode.cs" />
     <Compile Include="Assets\Scripts\UI\SelectStartPanel.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\RefreshOperateCharacterNode.cs" />
@@ -1154,6 +1155,7 @@
     <Compile Include="Assets\Scripts\Action\TypedNodes\ChangeMapItemObjLayerNode.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Variables\SharedGameObject.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\AudioSource\Pause.cs" />
+    <Compile Include="Assets\Scripts\Item\PackageManager.GamePackage.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\IkLimb2D.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\ShowMapObjTipsNode.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\CapsuleCollider\SetDirection.cs" />
@@ -1220,7 +1222,6 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\GetLinearVelocity.cs" />
     <Compile Include="Assets\Scripts\Behavior\Variables\SharedInt2.cs" />
     <Compile Include="Assets\Scripts\Character\CharacterData.cs" />
-    <Compile Include="Assets\Scripts\Character\CharacterDataValidator.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\SphereCollider\SetRadius.cs" />
     <Compile Include="Assets\OtherPackage\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
     <Compile Include="Assets\Scripts\Behavior\PlayerStore\SelectPlayerStoreCounter.cs" />
@@ -1291,6 +1292,7 @@
     <Compile Include="Assets\Scripts\Action\TypedNodes\TimeRunNode.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\GetDestination.cs" />
     <Compile Include="Assets\Scripts\Main\CloudDataManager.cs" />
+    <Compile Include="Assets\Scripts\Item\PackageManager.Runtime.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\SetFixedPlayerShaderPosNode.cs" />
     <Compile Include="Assets\Scripts\Behavior\Common\RunGameActions.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Time\GetTime.cs" />
@@ -1334,6 +1336,7 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Conditionals\Physics\HasExitedTrigger2D.cs" />
     <Compile Include="Assets\Scripts\Behavior\Farm\CheckPackageItemBehavior.cs" />
     <Compile Include="Assets\Scripts\Behavior\Character\SetCharacterCoordinateBehavior.cs" />
+    <Compile Include="Assets\Scripts\Character\CharacterDebugSnapshot.cs" />
     <Compile Include="Assets\Scripts\UI\Item\WarehousePanel.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Variables\SharedObject.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\ChangeHomeEquipCharacterNode.cs" />
@@ -1361,9 +1364,6 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody2D\AddTorque.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Animator\GetStringToHash.cs" />
     <Compile Include="Assets\Scripts\Character\CharacterManager.cs" />
-    <Compile Include="Assets\Scripts\Character\CharacterManager.Factory.cs" />
-    <Compile Include="Assets\Scripts\Character\CharacterManager.Debug.cs" />
-    <Compile Include="Assets\Scripts\Character\CharacterManager.RuntimeView.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetAcceleration.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\CharacterController\SetCenter.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\CheckMapItemRightCharacterNode.cs" />
@@ -1379,6 +1379,7 @@
     <Compile Include="Assets\Scripts\Character\CharacterMoveState.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\CreatPackageNode.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\NavMeshAgent\SetAngularSpeed.cs" />
+    <Compile Include="Assets\Scripts\Character\CharacterManager.RuntimeView.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\SkillPauseActionNode.cs" />
     <Compile Include="Assets\OtherPackage\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Light\GetShadowStrength.cs" />
@@ -1416,6 +1417,7 @@
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Input\IsButtonUp.cs" />
     <Compile Include="Assets\Scripts\Action\TypedNodes\SetShortcutItemNode.cs" />
     <Compile Include="Assets\Scripts\UI\Item\ShortcutPanel.cs" />
+    <Compile Include="Assets\Scripts\Character\Character.Movement.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\Rigidbody\SetDrag.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Tasks\Unity\AudioSource\GetMaxDistance.cs" />
     <Compile Include="Assets\OtherPackage\Behavior Designer\Runtime\Variables\SharedVector4.cs" />
@@ -2724,6 +2726,9 @@
     <Reference Include="Unity.ScriptableBuildPipeline">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - 6.4\Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.2D.Animation.Editor">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - 6.4\Library\ScriptAssemblies\Unity.2D.Animation.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Scenes.Editor">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - 6.4\Library\ScriptAssemblies\Unity.Scenes.Editor.dll</HintPath>
     </Reference>
@@ -2756,9 +2761,6 @@
     </Reference>
     <Reference Include="Unity.Mathematics.Editor">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - 6.4\Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Animation.Editor">
-      <HintPath>D:\MyGame\Rune Factory\Rune Factory - 6.4\Library\ScriptAssemblies\Unity.2D.Animation.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Cinemachine.Editor">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - 6.4\Library\ScriptAssemblies\Unity.Cinemachine.Editor.dll</HintPath>

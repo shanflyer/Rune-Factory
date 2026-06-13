@@ -87,6 +87,7 @@
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\SpriteMeshPostprocessor.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\PoseManagerEditor.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Smoothing\ISmoother.cs" />
+    <Compile Include="Assets\Editor\Common\GameImageEditor.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Geometry\Edge.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\EditorExtra.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\AnimationWindowExtra\AnimationWindowImpl_56.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\OnionSkin\OnionLayer.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\Mesh.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\ToolsExtra.cs" />
+    <Compile Include="Assets\Editor\Common\GameActionNodeGenerator.cs" />
     <Compile Include="Assets\Editor\Common\ExportAssetBundles.cs" />
     <Compile Include="Assets\Editor\Tool\TransformPositionTools.cs" />
     <Compile Include="Assets\OtherPackage\Anima2D\Scripts\Editor\Triangle\IO\DebugWriter.cs" />
@@ -1330,6 +1332,9 @@
     <Reference Include="Unity.ScriptableBuildPipeline">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - 6.4\Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.2D.Animation.Editor">
+      <HintPath>D:\MyGame\Rune Factory\Rune Factory - 6.4\Library\ScriptAssemblies\Unity.2D.Animation.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Scenes.Editor">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - 6.4\Library\ScriptAssemblies\Unity.Scenes.Editor.dll</HintPath>
     </Reference>
@@ -1362,9 +1367,6 @@
     </Reference>
     <Reference Include="Unity.Mathematics.Editor">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - 6.4\Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Animation.Editor">
-      <HintPath>D:\MyGame\Rune Factory\Rune Factory - 6.4\Library\ScriptAssemblies\Unity.2D.Animation.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Cinemachine.Editor">
       <HintPath>D:\MyGame\Rune Factory\Rune Factory - 6.4\Library\ScriptAssemblies\Unity.Cinemachine.Editor.dll</HintPath>
