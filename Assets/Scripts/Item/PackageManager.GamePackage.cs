@@ -489,11 +489,11 @@ public partial class PackageManager
 
         private bool CanAcceptItem(ItemData itemData)
         {
-            if (packageType == PackageType.\u9c9c\u6d3b && !itemData.isFresh)
+            if (packageType == PackageType.鲜活 && !itemData.isFresh)
             {
                 return false;
             }
-            if (packageType == PackageType.\u975e\u9c9c\u6d3b && itemData.isFresh)
+            if (packageType == PackageType.非鲜活 && itemData.isFresh)
             {
                 return false;
             }
