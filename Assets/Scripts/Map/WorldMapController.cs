@@ -300,15 +300,6 @@ public class WorldMapController : MonoBehaviour
     {
     }
 
-#if UNITY_EDITOR
-    private void Update()
-    {
-        if (GameController.instance == null)
-        {
-            SingletonType.instance.Update();
-        }
-    }
-#endif
 }
 
 #if UNITY_EDITOR

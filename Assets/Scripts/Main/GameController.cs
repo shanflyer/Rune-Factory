@@ -476,21 +476,10 @@ if (result.Success)
 
         }
     }
-    private void LateUpdate()
-    {
-        SingletonType.instance.LateUpdate();
-    }
-
-    private void FixedUpdate()
-    {
-        SingletonType.instance.FixedUpdate();
-    }
-
+#if UNITY_EDITOR
     private void Update()
     {
         //GraphicsSettings.useScriptableRenderPipelineBatching = false;
-        SingletonType.instance.Update();
-#if UNITY_EDITOR
         seasonValue += Time.deltaTime * testSeasonSpeed;
         if(seasonValue>4)
         {
@@ -541,8 +530,8 @@ if (result.Success)
             myLanguage = SetSystemLanguage;
         }
         tempCount = TempCharacterManager.instance.totalCharacterCount;
-#endif
     }
+#endif
 #if UNITY_EDITOR
     Weather nowWeather;
     public bool autoTime;
