@@ -78,6 +78,75 @@ public class GameDataManager : Singleton<GameDataManager>
         await InitializationTask;
     }
 
+    public GameAction GameAction(
+        int id,
+        int source = 0,
+        int target = 0,
+        int value = -1,
+        SetResult setResult = null,
+        SetValue setValue = null,
+        bool immediately = false)
+    {
+        if (id <= 0)
+        {
+            return default;
+        }
+
+        return GameAction(id.ToString(), source, target, value, setResult, setValue, immediately);
+    }
+
+    public GameAction GameAction(
+        string key,
+        int source = 0,
+        int target = 0,
+        int value = -1,
+        SetResult setResult = null,
+        SetValue setValue = null,
+        bool immediately = false)
+    {
+        if (string.IsNullOrEmpty(key))
+        {
+            return default;
+        }
+
+        return GetData<GameActionAsset>(key)?.CreateAction(source, target, value, setResult, setValue, immediately);
+    }
+
+    public async Task<GameAction> GameActionAsync(
+        int id,
+        int source = 0,
+        int target = 0,
+        int value = -1,
+        SetResult setResult = null,
+        SetValue setValue = null,
+        bool immediately = false)
+    {
+        if (id <= 0)
+        {
+            return default;
+        }
+
+        return await GameActionAsync(id.ToString(), source, target, value, setResult, setValue, immediately);
+    }
+
+    public async Task<GameAction> GameActionAsync(
+        string key,
+        int source = 0,
+        int target = 0,
+        int value = -1,
+        SetResult setResult = null,
+        SetValue setValue = null,
+        bool immediately = false)
+    {
+        if (string.IsNullOrEmpty(key))
+        {
+            return default;
+        }
+
+        var asset = await GetAsyncData<GameActionAsset>(key);
+        return asset?.CreateAction(source, target, value, setResult, setValue, immediately);
+    }
+
     private static bool TryGetDataPath(Type type, out string path)
     {
         return DataResourceRegistry.TryGetDataPath(type, out path);

@@ -316,6 +316,33 @@ public class GameActionManager : Singleton<GameActionManager>
         }
     }
 
+    public GameAction QueueAction(int actionId, bool immediately = false)
+    {
+        if (SingletonType.Cleared || GameDataManager.instance == null)
+        {
+            return default;
+        }
+
+        return GameDataManager.instance.GameAction(actionId, immediately: immediately);
+    }
+
+    public GameAction QueueActionAsset(
+        int actionId,
+        int source = 0,
+        int target = 0,
+        int value = -1,
+        SetResult setResult = null,
+        SetValue setValue = null,
+        bool immediately = false)
+    {
+        if (SingletonType.Cleared || GameDataManager.instance == null)
+        {
+            return default;
+        }
+
+        return GameDataManager.instance.GameAction(actionId, source, target, value, setResult, setValue, immediately);
+    }
+
     public void QueueAction<T>(T gameAction, bool immediately = false) where T : GameAction
     {
         if (gameAction == null || SingletonType.Cleared)
