@@ -4,89 +4,21 @@ on:
   push:
     branches:
       - chatgpt-pc-ui-preview
-    paths:
-      - .github/workflows/chatgpt-ui-export.yml
+  pull_request:
+    branches:
+      - master
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  export-ui-assets:
+  smoke-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: chatgpt-pc-ui-preview
-          fetch-depth: 1
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install Pillow
-        run: python -m pip install pillow
-
-      - name: Build UI contact sheets
-        shell: bash
+      - name: Verify project and UI assets
         run: |
-          python - <<'PY'
-          from pathlib import Path
-          from PIL import Image, ImageDraw, ImageFont
-          import base64, math
-
-          out = Path('.github/ui-export')
-          out.mkdir(parents=True, exist_ok=True)
-
-          def make_sheet(root, name, max_files=240):
-              files = sorted([p for p in Path(root).rglob('*.png') if p.is_file()])[:max_files]
-              cell_w, cell_h = 220, 180
-              thumb_w, thumb_h = 190, 130
-              cols = 7
-              rows = max(1, math.ceil(len(files) / cols))
-              sheet = Image.new('RGBA', (cols*cell_w, rows*cell_h), (36, 31, 27, 255))
-              draw = ImageDraw.Draw(sheet)
-              font = ImageFont.load_default()
-              manifest = []
-              for i, p in enumerate(files):
-                  x = (i % cols)*cell_w
-                  y = (i // cols)*cell_h
-                  try:
-                      im = Image.open(p).convert('RGBA')
-                      manifest.append(f'{p.as_posix()}\t{im.width}x{im.height}')
-                      # checker-backed thumbnail to expose transparency
-                      checker = Image.new('RGBA', (thumb_w, thumb_h), (238, 224, 197, 255))
-                      cd = ImageDraw.Draw(checker)
-                      s=12
-                      for yy in range(0, thumb_h, s):
-                          for xx in range(0, thumb_w, s):
-                              if (xx//s + yy//s) % 2:
-                                  cd.rectangle((xx,yy,xx+s-1,yy+s-1), fill=(205,187,157,255))
-                      tmp = im.copy()
-                      tmp.thumbnail((thumb_w-8, thumb_h-8), Image.Resampling.NEAREST)
-                      ox=(thumb_w-tmp.width)//2; oy=(thumb_h-tmp.height)//2
-                      checker.alpha_composite(tmp,(ox,oy))
-                      sheet.alpha_composite(checker,(x+15,y+8))
-                      label=p.name
-                      if len(label)>30: label=label[:27]+'...'
-                      draw.text((x+15,y+142), label, fill=(255,245,222,255), font=font)
-                      draw.text((x+15,y+158), f'{im.width}x{im.height}', fill=(202,167,116,255), font=font)
-                  except Exception as e:
-                      manifest.append(f'{p.as_posix()}\tERROR {e}')
-              png = out / f'{name}.png'
-              sheet.save(png)
-              (out / f'{name}.png.b64').write_text(base64.b64encode(png.read_bytes()).decode('ascii'))
-              (out / f'{name}_manifest.txt').write_text('\n'.join(manifest), encoding='utf-8')
-              png.unlink()
-
-          make_sheet('Assets/Texture/UI', 'ui_contact')
-          make_sheet('Assets/Texture/PixelUI', 'pixelui_contact')
-          PY
-
-      - name: Commit exported previews
-        shell: bash
-        run: |
-          git config user.name "chatgpt-ui-preview"
-          git config user.email "chatgpt-ui-preview@users.noreply.github.com"
-          git add .github/ui-export
-          git commit -m "chore: export UI preview sheets" || exit 0
-          git push origin HEAD:chatgpt-pc-ui-preview
+          echo "runner ok"
+          test -f ProjectSettings/ProjectVersion.txt
+          test -d Assets/Resources/Prefabs/UI
+          find Assets/Resources/Prefabs/UI -maxdepth 1 -name '*.prefab' | head
