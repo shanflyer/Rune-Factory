@@ -1,0 +1,24 @@
+name: ChatGPT UI Asset Export
+
+on:
+  push:
+    branches:
+      - chatgpt-pc-ui-preview
+  pull_request:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify project and UI assets
+        run: |
+          echo "runner ok"
+          test -f ProjectSettings/ProjectVersion.txt
+          test -d Assets/Resources/Prefabs/UI
+          find Assets/Resources/Prefabs/UI -maxdepth 1 -name '*.prefab' | head
